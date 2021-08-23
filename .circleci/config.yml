@@ -7,11 +7,11 @@ orbs:
 parameters:
   alerts-slack-channel:
     type: string
-    default: hmpps_typescript_notifications
+    default: dps_alerts_security
 
   releases-slack-channel:
     type: string
-    default: hmpps_typescript_notifications
+    default: dps-releases
 
   node-version:
     type: string
@@ -168,33 +168,33 @@ workflows:
             - integration_test
             - build_docker
 
-#      - request-preprod-approval:
-#          type: approval
-#          requires:
-#            - deploy_dev
-#      - hmpps/deploy_env:
-#          name: deploy_preprod
-#          env: "preprod"
-#          context:
-#            - hmpps-common-vars
-#            - hmpps-welcome-people-into-prison-ui-preprod
-#          requires:
-#            - request-preprod-approval
-#      - request-prod-approval:
-#          type: approval
-#          requires:
-#            - deploy_preprod
-#      - hmpps/deploy_env:
-#          name: deploy_prod
-#          env: "prod"
-#          slack_notification: true
-#          slack_channel_name: << pipeline.parameters.releases-slack-channel >>
-#          context:
-#            - hmpps-common-vars
-#            - hmpps-welcome-people-into-prison-ui-prod
-#          requires:
-#            - request-prod-approval
-
+      - request-preprod-approval:
+          type: approval
+          requires:
+            - deploy_dev
+      - hmpps/deploy_env:
+          name: deploy_preprod
+          env: "preprod"
+          context:
+            - hmpps-common-vars
+            - hmpps-welcome-people-into-prison-ui-preprod
+          requires:
+            - request-preprod-approval
+      - request-prod-approval:
+          type: approval
+          requires:
+            - deploy_preprod
+      - hmpps/deploy_env:
+          name: deploy_prod
+          env: "prod"
+          slack_notification: true
+          slack_channel_name: << pipeline.parameters.releases-slack-channel >>
+          context:
+            - hmpps-common-vars
+            - hmpps-welcome-people-into-prison-ui-prod
+          requires:
+            - request-prod-approval
+            
   security:
     triggers:
       - schedule:

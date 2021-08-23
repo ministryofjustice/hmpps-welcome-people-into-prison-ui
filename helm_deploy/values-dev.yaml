@@ -6,7 +6,6 @@ generic-service:
 
   ingress:
     host: welcome-dev.prison.service.justice.gov.uk
-    tlsSecretName: hmpps-welcome-to-prison-dev-cert
 
   env:
     INGRESS_URL: "https://welcome-dev.prison.service.justice.gov.uk"
