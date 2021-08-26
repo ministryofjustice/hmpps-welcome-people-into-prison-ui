@@ -2,10 +2,11 @@
 import nunjucks from 'nunjucks'
 import express from 'express'
 import * as pathModule from 'path'
+import config from '../config'
 
 const production = process.env.NODE_ENV === 'production'
 
-export default function nunjucksSetup(app: express.Express, path: pathModule.PlatformPath): void {
+export default function nunjucksSetup(app: express.Express, path: pathModule.PlatformPath): nunjucks.Environment {
   app.set('view engine', 'njk')
 
   app.locals.asset_path = '/assets/'
@@ -45,4 +46,13 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     const array = fullName.split(' ')
     return `${array[0][0]}. ${array.reverse()[0]}`
   })
+
+  const {
+    analytics: { tagManagerContainerId, tagManagerEnvironment },
+  } = config
+
+  njkEnv.addGlobal('tagManagerContainerId', tagManagerContainerId)
+  njkEnv.addGlobal('tagManagerEnvironment', tagManagerEnvironment)
+
+  return njkEnv
 }

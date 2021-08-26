@@ -1,7 +1,9 @@
-import express from 'express'
+import express, { Response } from 'express'
 
 import path from 'path'
 import createError from 'http-errors'
+import crypto from 'crypto'
+import helmet from 'helmet'
 
 import indexRoutes from './routes'
 import nunjucksSetup from './utils/nunjucksSetup'
@@ -32,6 +34,32 @@ export default function createApp(userService: UserService): express.Application
   nunjucksSetup(app, path)
   app.use(setUpAuthentication())
   app.use(authorisationMiddleware())
+
+  app.use((req, res, next) => {
+    res.locals.cspNonce = crypto.randomBytes(16).toString('base64')
+    next()
+  })
+
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          // Hash allows inline script pulled in from https://github.com/alphagov/govuk-frontend/blob/master/src/govuk/template.njk
+          scriptSrc: [
+            "'self'",
+            (req, res: Response) => `'nonce-${res.locals.cspNonce}'`,
+            'code.jquery.com',
+            "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='",
+          ],
+          imgSrc: ["'self'", 'www.googletagmanager.com', 'www.google-analytics.com', 'https://code.jquery.com'],
+          connectSrc: ["'self'", 'www.googletagmanager.com', 'www.google-analytics.com'],
+          styleSrc: ["'self'", 'code.jquery.com'],
+          fontSrc: ["'self'"],
+        },
+      },
+    })
+  )
 
   app.use('/', indexRoutes(standardRouter(userService)))
 
