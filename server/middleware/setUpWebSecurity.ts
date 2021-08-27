@@ -20,7 +20,6 @@ export default function setUpWebSecurity(): Router {
             'code.jquery.com',
             "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='",
           ],
-          connectSrc: ["'self'", 'www.googletagmanager.com', 'www.google-analytics.com'],
           styleSrc: ["'self'", 'code.jquery.com'],
           fontSrc: ["'self'"],
         },
