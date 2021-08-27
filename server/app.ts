@@ -1,9 +1,8 @@
-import express, { Response } from 'express'
+import express from 'express'
 
 import path from 'path'
 import createError from 'http-errors'
 import crypto from 'crypto'
-import helmet from 'helmet'
 
 import indexRoutes from './routes'
 import nunjucksSetup from './utils/nunjucksSetup'
