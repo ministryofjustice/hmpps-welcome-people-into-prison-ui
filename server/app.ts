@@ -40,27 +40,6 @@ export default function createApp(userService: UserService): express.Application
     next()
   })
 
-  app.use(
-    helmet({
-      contentSecurityPolicy: {
-        directives: {
-          defaultSrc: ["'self'"],
-          // Hash allows inline script pulled in from https://github.com/alphagov/govuk-frontend/blob/master/src/govuk/template.njk
-          scriptSrc: [
-            "'self'",
-            (req, res: Response) => `'nonce-${res.locals.cspNonce}'`,
-            'code.jquery.com',
-            "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='",
-          ],
-          imgSrc: ["'self'", 'www.googletagmanager.com', 'www.google-analytics.com', 'https://code.jquery.com'],
-          connectSrc: ["'self'", 'www.googletagmanager.com', 'www.google-analytics.com'],
-          styleSrc: ["'self'", 'code.jquery.com'],
-          fontSrc: ["'self'"],
-        },
-      },
-    })
-  )
-
   app.use('/', indexRoutes(standardRouter(userService)))
 
   app.use((req, res, next) => next(createError(404, 'Not found')))
