@@ -2,7 +2,6 @@ import express from 'express'
 
 import path from 'path'
 import createError from 'http-errors'
-import crypto from 'crypto'
 
 import indexRoutes from './routes'
 import nunjucksSetup from './utils/nunjucksSetup'
@@ -33,11 +32,6 @@ export default function createApp(userService: UserService): express.Application
   nunjucksSetup(app, path)
   app.use(setUpAuthentication())
   app.use(authorisationMiddleware())
-
-  app.use((req, res, next) => {
-    res.locals.cspNonce = crypto.randomBytes(16).toString('base64')
-    next()
-  })
 
   app.use('/', indexRoutes(standardRouter(userService)))
 
