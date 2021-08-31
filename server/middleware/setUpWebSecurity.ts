@@ -1,6 +1,7 @@
-import express, { Router } from 'express'
+import express, { Response, Router } from 'express'
 import helmet from 'helmet'
 import crypto from 'crypto'
+import { IncomingMessage } from 'http'
 
 export default function setUpWebSecurity(): Router {
   const router = express.Router()
@@ -24,6 +25,7 @@ export default function setUpWebSecurity(): Router {
             "'self'",
             'www.googletagmanager.com',
             'www.google-analytics.com',
+            (req: IncomingMessage, res: Response) => `'nonce-${res.locals.cspNonce}'`,
             'code.jquery.com',
             "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='",
           ],
