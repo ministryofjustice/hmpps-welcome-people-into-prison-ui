@@ -1,3 +1,11 @@
+{% if tagManagerContainerId %}
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{tagManagerContainerid}}{{ tagManagerEnvironment | safe }}"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+{% endif %}
+
+
 <header class="govuk-header govuk-!-display-none-print" role="banner" data-module="govuk-header" >
   <div id="header-contents" class="govuk-width-container">
     <a href="/" class="govuk-header__link govuk-header__link--homepage no-underline  govuk-!-padding-top-1 govuk-!-padding-bottom-1">
