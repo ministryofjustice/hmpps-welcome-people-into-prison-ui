@@ -6,30 +6,7 @@ import path from 'path'
 import allRoutes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'
 import errorHandler from '../../errorHandler'
-import standardRouter from '../standardRouter'
-import UserService from '../../services/userService'
 import * as auth from '../../authentication/auth'
-
-const user = {
-  name: 'john smith',
-  firstName: 'john',
-  lastName: 'smith',
-  username: 'user1',
-  displayName: 'John Smith',
-}
-
-class MockUserService extends UserService {
-  constructor() {
-    super(undefined)
-  }
-
-  async getUser(token: string) {
-    return {
-      token,
-      ...user,
-    }
-  }
-}
 
 function appSetup(route: Router, production: boolean): Express {
   const app = express()
