@@ -1,0 +1,10 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% set pageTitle = applicationName + " - Home" %}
+{% block content %}
+    <main class="app-container govuk-body">
+        <h1>Select prisoner to add to the establishment roll</h1>
+        <h2>Prisoners arriving from court</h2>
+        {{ incomingMovements | dump }}
+    </main>
+{% endblock %}

@@ -67,6 +67,15 @@ export default {
       agent: new AgentConfig(),
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
     },
+    welcomeApi: {
+      url: get('WELCOME_API_URL', 'http://localhost:8100', requiredInProduction),
+      timeout: {
+        response: Number(get('WELCOME_API_TIMEOUT_RESPONSE', 5000)),
+        deadline: Number(get('WELCOME_API_TIMEOUT_DEADLINE', 5000)),
+      },
+      agent: new AgentConfig(),
+      enabled: get('WELCOME_ENABLED', 'false') === 'true',
+    },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
 
