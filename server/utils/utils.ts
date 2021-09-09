@@ -11,7 +11,15 @@ const isBlank = (str: string): boolean => !str || /^\s*$/.test(str)
  */
 const properCaseName = (name: string): string => (isBlank(name) ? '' : name.split('-').map(properCase).join('-'))
 
-const convertToTitleCase = (sentence: string): string =>
+export const convertToTitleCase = (sentence: string): string =>
   isBlank(sentence) ? '' : sentence.split(' ').map(properCaseName).join(' ')
 
-export default convertToTitleCase
+export const groupBy = <T, K>(items: T[], groupingFunction: (item: T) => K): Map<K, T[]> => {
+  return items.reduce((result, item) => {
+    const key = groupingFunction(item)
+    const currentValues = result.get(key) || []
+    currentValues.push(item)
+    result.set(key, currentValues)
+    return result
+  }, new Map<K, T[]>())
+}

@@ -74,7 +74,6 @@ export default {
         deadline: Number(get('WELCOME_API_TIMEOUT_DEADLINE', 5000)),
       },
       agent: new AgentConfig(),
-      enabled: get('WELCOME_ENABLED', 'false') === 'true',
     },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
