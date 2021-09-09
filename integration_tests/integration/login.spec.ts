@@ -7,7 +7,7 @@ context('SignIn', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
-    cy.task('stubIncomingMovements')
+    cy.task('stubIncomingMovements', 'MDI')
   })
 
   it('Unauthenticated user directed to auth', () => {
