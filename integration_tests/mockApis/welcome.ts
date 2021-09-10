@@ -1,4 +1,5 @@
 import { SuperAgentRequest } from 'superagent'
+import incomingMovements from './responses/incomingMovemnts'
 import { stubFor } from './wiremock'
 
 export default {
@@ -11,7 +12,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: [],
+        jsonBody: incomingMovements,
       },
     })
   },
