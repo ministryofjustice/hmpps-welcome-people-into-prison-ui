@@ -1,29 +1,18 @@
 import type { Movement } from 'welcome'
-import ChoosePrisonerController from './choosePrisonerController'
+import type { Express } from 'express'
+import request from 'supertest'
+import cheerio from 'cheerio'
+import { user, appWithAllRoutes } from './testutils/appSetup'
 import IncomingMovementsService from '../services/incomingMovementsService'
-import { mockRequest, mockResponse } from './testutils/requestTestUtils'
 
 jest.mock('../services/incomingMovementsService')
 
-describe('Choose Prisoner Controller', () => {
-  const incomingMovementsService = new IncomingMovementsService(null, null) as jest.Mocked<IncomingMovementsService>
+const incomingMovementsService = new IncomingMovementsService(null, null) as jest.Mocked<IncomingMovementsService>
 
-  let controller: ChoosePrisonerController
+let app: Express
 
-  const req = mockRequest({})
-  const res = mockResponse({ locals: { user: { username: 'USER-1', activeCaseLoadId: 'MDI' } } })
-
-  const incomingMovements: Movement[] = [
-    {
-      firstName: 'Bob',
-      lastName: 'Smith',
-      dateOfBirth: '1970-01-01',
-      prisonNumber: 'G0012BK',
-      pncNumber: '01/2345A',
-      date: '2021-09-01',
-      fromLocation: 'Wandsworth',
-      moveType: 'VIDEO_REMAND',
-    },
+const incomingMovementsGroupedByType = {
+  fromCourt: [
     {
       firstName: 'John',
       lastName: 'Doe',
@@ -32,7 +21,7 @@ describe('Choose Prisoner Controller', () => {
       pncNumber: '01/3456A',
       date: '2021-09-01',
       fromLocation: 'Reading',
-      moveType: 'PRISON_TRANSFER',
+      moveType: 'PRISON_REMAND',
     },
     {
       firstName: 'Sam',
@@ -44,6 +33,30 @@ describe('Choose Prisoner Controller', () => {
       fromLocation: 'Leeds',
       moveType: 'PRISON_REMAND',
     },
+  ],
+  fromCustodySuite: [
+    {
+      firstName: 'Mark',
+      lastName: 'Prisoner',
+      dateOfBirth: '1985-01-05',
+      prisonNumber: 'G0016GD',
+      pncNumber: '01/6789A',
+      date: '2021-09-01',
+      fromLocation: 'Coventry',
+      moveType: 'PRISON_RECALL',
+    },
+    {
+      firstName: 'Bob',
+      lastName: 'Smith',
+      dateOfBirth: '1970-01-01',
+      prisonNumber: 'G0012BK',
+      pncNumber: '01/2345A',
+      date: '2021-09-01',
+      fromLocation: 'Wandsworth',
+      moveType: 'VIDEO_REMAND',
+    },
+  ],
+  null: [
     {
       firstName: 'Karl',
       lastName: 'Offender',
@@ -54,28 +67,35 @@ describe('Choose Prisoner Controller', () => {
       fromLocation: 'Leeds',
       moveType: 'PRISON_TRANSFER',
     },
-  ]
+  ],
+} as unknown as Map<string, Movement[]>
 
-  beforeEach(() => {
-    jest.resetAllMocks()
+beforeEach(() => {
+  app = appWithAllRoutes({ incomingMovementsService })
+  incomingMovementsService.groupByMoveType.mockResolvedValue(incomingMovementsGroupedByType)
+})
 
-    controller = new ChoosePrisonerController(incomingMovementsService)
-    incomingMovementsService.getIncomingMovements.mockResolvedValue(incomingMovements)
+afterEach(() => {
+  jest.resetAllMocks()
+})
+
+describe('GET /confirm-arrival/choose-prisoner', () => {
+  it('should contain alphabetically sorted incoming movements grouped by type', () => {
+    return request(app)
+      .get('/confirm-arrival/choose-prisoner')
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(res => {
+        const $ = cheerio.load(res.text)
+        expect($('h1').text()).toContain('Select prisoner to add to the establishment roll')
+      })
   })
 
-  describe('view', () => {
-    it('should return incoming movements', async () => {
-      await controller.view()(req, res, null)
-
-      expect(res.render).toHaveBeenCalledWith('pages/choosePrisoner.njk', {
-        incomingMovements,
+  it('should call service method correctly', () => {
+    return request(app)
+      .get('/confirm-arrival/choose-prisoner')
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(res => {
+        expect(incomingMovementsService.groupByMoveType).toHaveBeenCalledWith(user.activeCaseLoadId)
       })
-    })
-
-    it('should call service method correctly', async () => {
-      await controller.view()(req, res, null)
-
-      expect(incomingMovementsService.getIncomingMovements).toHaveBeenCalledWith(res.locals.user.activeCaseLoadId)
-    })
   })
 })

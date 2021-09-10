@@ -18,16 +18,6 @@ describe('Incoming movements service', () => {
 
   const incomingMovements: Movement[] = [
     {
-      firstName: 'Bob',
-      lastName: 'Smith',
-      dateOfBirth: '1970-01-01',
-      prisonNumber: 'G0012BK',
-      pncNumber: '01/2345A',
-      date: '2021-09-01',
-      fromLocation: 'Wandsworth',
-      moveType: 'VIDEO_REMAND',
-    },
-    {
       firstName: 'John',
       lastName: 'Doe',
       dateOfBirth: '1971-01-01',
@@ -35,16 +25,6 @@ describe('Incoming movements service', () => {
       pncNumber: '01/3456A',
       date: '2021-09-01',
       fromLocation: 'Reading',
-      moveType: 'PRISON_TRANSFER',
-    },
-    {
-      firstName: 'Sam',
-      lastName: 'Smith',
-      dateOfBirth: '1970-02-01',
-      prisonNumber: 'G0014GM',
-      pncNumber: '01/4567A',
-      date: '2021-09-01',
-      fromLocation: 'Leeds',
       moveType: 'PRISON_REMAND',
     },
     {
@@ -57,31 +37,150 @@ describe('Incoming movements service', () => {
       fromLocation: 'Leeds',
       moveType: 'PRISON_TRANSFER',
     },
+    {
+      firstName: 'Mark',
+      lastName: 'Prisoner',
+      dateOfBirth: '1985-01-05',
+      prisonNumber: 'G0016GD',
+      pncNumber: '01/6789A',
+      date: '2021-09-01',
+      fromLocation: 'Coventry',
+      moveType: 'PRISON_RECALL',
+    },
+    {
+      firstName: 'Barry',
+      lastName: 'Smith',
+      dateOfBirth: '1970-01-01',
+      prisonNumber: 'G0012HK',
+      pncNumber: '01/2345A',
+      date: '2021-09-01',
+      fromLocation: 'Sheffield',
+      moveType: 'PRISON_RECALL',
+    },
+    {
+      firstName: 'Bob',
+      lastName: 'Smith',
+      dateOfBirth: '1970-01-01',
+      prisonNumber: 'G0012BK',
+      pncNumber: '01/2345A',
+      date: '2021-09-01',
+      fromLocation: 'Wandsworth',
+      moveType: 'VIDEO_REMAND',
+    },
+    {
+      firstName: 'Sam',
+      lastName: 'Smith',
+      dateOfBirth: '1970-02-01',
+      prisonNumber: 'G0014GM',
+      pncNumber: '01/4567A',
+      date: '2021-09-01',
+      fromLocation: 'Leeds',
+      moveType: 'PRISON_REMAND',
+    },
   ]
 
+  const incomingMovementsGroupedByType = new Map()
+  incomingMovementsGroupedByType.set('fromCourt', [
+    {
+      firstName: 'John',
+      lastName: 'Doe',
+      dateOfBirth: '1971-01-01',
+      prisonNumber: 'G0013AB',
+      pncNumber: '01/3456A',
+      date: '2021-09-01',
+      fromLocation: 'Reading',
+      moveType: 'PRISON_REMAND',
+    },
+    {
+      firstName: 'Sam',
+      lastName: 'Smith',
+      dateOfBirth: '1970-02-01',
+      prisonNumber: 'G0014GM',
+      pncNumber: '01/4567A',
+      date: '2021-09-01',
+      fromLocation: 'Leeds',
+      moveType: 'PRISON_REMAND',
+    },
+  ])
+  incomingMovementsGroupedByType.set(null, [
+    {
+      firstName: 'Karl',
+      lastName: 'Offender',
+      dateOfBirth: '1985-01-01',
+      prisonNumber: 'G0015GD',
+      pncNumber: '01/5678A',
+      date: '2021-09-01',
+      fromLocation: 'Leeds',
+      moveType: 'PRISON_TRANSFER',
+    },
+  ])
+  incomingMovementsGroupedByType.set('fromCustodySuite', [
+    {
+      firstName: 'Mark',
+      lastName: 'Prisoner',
+      dateOfBirth: '1985-01-05',
+      prisonNumber: 'G0016GD',
+      pncNumber: '01/6789A',
+      date: '2021-09-01',
+      fromLocation: 'Coventry',
+      moveType: 'PRISON_RECALL',
+    },
+    {
+      firstName: 'Barry',
+      lastName: 'Smith',
+      dateOfBirth: '1970-01-01',
+      prisonNumber: 'G0012HK',
+      pncNumber: '01/2345A',
+      date: '2021-09-01',
+      fromLocation: 'Sheffield',
+      moveType: 'PRISON_RECALL',
+    },
+    {
+      firstName: 'Bob',
+      lastName: 'Smith',
+      dateOfBirth: '1970-01-01',
+      prisonNumber: 'G0012BK',
+      pncNumber: '01/2345A',
+      date: '2021-09-01',
+      fromLocation: 'Wandsworth',
+      moveType: 'VIDEO_REMAND',
+    },
+  ])
+
+  const res = { locals: { user: { activeCaseLoadId: 'MDI' } } }
+
+  beforeEach(() => {
+    jest.resetAllMocks()
+    hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
+    welcomeApi = new WelcomeApi(token) as jest.Mocked<WelcomeApi>
+    welcomeApiFactory.mockReturnValue(welcomeApi)
+    service = new IncomingMovementsService(hmppsAuthClient, welcomeApiFactory)
+    hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
+    welcomeApi.getIncomingMovements.mockResolvedValue(incomingMovements)
+  })
+
   describe('getIncomingMovements', () => {
-    beforeEach(() => {
-      jest.resetAllMocks()
-      hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
-      welcomeApi = new WelcomeApi(token) as jest.Mocked<WelcomeApi>
-      welcomeApiFactory.mockReturnValue(welcomeApi)
-      service = new IncomingMovementsService(hmppsAuthClient, welcomeApiFactory)
-      hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
-      welcomeApi.getIncomingMovements.mockResolvedValue(incomingMovements)
-    })
-    it('Retrieves incoming movements', async () => {
+    it('Retrieves incoming movements sorted alphabetically by name', async () => {
       const today = moment.now().toString()
-      const result = await service.getIncomingMovements('MDI')
+      const result = await service.getIncomingMovements(res.locals.user.activeCaseLoadId)
 
       expect(result).toStrictEqual(incomingMovements)
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-      expect(welcomeApi.getIncomingMovements).toBeCalledWith('MDI', today)
+      expect(welcomeApi.getIncomingMovements).toBeCalledWith(res.locals.user.activeCaseLoadId, today)
     })
 
     it('WelcomeApiFactory is called with a token', async () => {
-      await service.getIncomingMovements('MDI')
+      await service.getIncomingMovements(res.locals.user.activeCaseLoadId)
 
       expect(welcomeApiFactory).toBeCalledWith(token)
+    })
+  })
+
+  describe('getSortedMovmentsByType', () => {
+    it('Retrieves incoming movements grouped by type', async () => {
+      const result = await service.groupByMoveType(res.locals.user.activeCaseLoadId)
+
+      expect(result).toEqual(incomingMovementsGroupedByType)
     })
   })
 })

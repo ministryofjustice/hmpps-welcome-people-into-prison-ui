@@ -7,8 +7,20 @@ import allRoutes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'
 import errorHandler from '../../errorHandler'
 import * as auth from '../../authentication/auth'
+import IncomingMovementsService from '../../services/incomingMovementsService'
 
-function appSetup(route: Router, production: boolean): Express {
+export const user = {
+  firstName: 'first',
+  lastName: 'last',
+  userId: 'id',
+  token: 'token',
+  username: 'user1',
+  displayName: 'First Last',
+  activeCaseLoadId: 'MDI',
+  authSource: 'NOMIS',
+}
+
+function appSetup(route: Router, production: boolean, userSupplier: () => Express.User): Express {
   const app = express()
 
   app.set('view engine', 'njk')
@@ -16,6 +28,7 @@ function appSetup(route: Router, production: boolean): Express {
   nunjucksSetup(app, path)
 
   app.use((req, res, next) => {
+    req.user = userSupplier()
     res.locals = {}
     res.locals.user = req.user
     next()
@@ -31,7 +44,15 @@ function appSetup(route: Router, production: boolean): Express {
   return app
 }
 
-export default function appWithAllRoutes({ production = false }: { production?: boolean }): Express {
+export function appWithAllRoutes({
+  production = false,
+  incomingMovementsService,
+  userSupplier = () => user,
+}: {
+  production?: boolean
+  incomingMovementsService?: IncomingMovementsService
+  userSupplier?: () => Express.User
+}): Express {
   auth.default.authenticationMiddleware = () => (req, res, next) => next()
-  return appSetup(allRoutes(null), production)
+  return appSetup(allRoutes(incomingMovementsService), production, userSupplier)
 }
