@@ -12,15 +12,15 @@ context('SignIn', () => {
   it('A user can view list of incoming movements from courts', () => {
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
-    indexPage.inComingMovementsFromCourt(1).should('contain.text', 'Doe, John')
-    indexPage.inComingMovementsFromCourt(2).should('contain.text', 'Smith, Sam')
+    indexPage.incomingMovementsFromCourt(1).should('contain.text', 'Doe, John')
+    indexPage.incomingMovementsFromCourt(2).should('contain.text', 'Smith, Sam')
   })
 
   it('A user can view list of incoming movements from custody suites', () => {
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
-    indexPage.inComingMovementsFromCustodySuite(1).should('contain.text', 'Prisoner, Mark')
-    indexPage.inComingMovementsFromCustodySuite(2).should('contain.text', 'Smith, Barry')
-    indexPage.inComingMovementsFromCustodySuite(3).should('contain.text', 'Smith, Bob')
+    indexPage.incomingMovementsFromCustodySuite(1).should('contain.text', 'Prisoner, Mark')
+    indexPage.incomingMovementsFromCustodySuite(2).should('contain.text', 'Smith, Barry')
+    indexPage.incomingMovementsFromCustodySuite(3).should('contain.text', 'Smith, Bob')
   })
 })
