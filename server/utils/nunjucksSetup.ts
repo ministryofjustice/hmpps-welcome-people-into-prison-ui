@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import nunjucks from 'nunjucks'
+import moment from 'moment'
 import express from 'express'
 import * as pathModule from 'path'
 import config from '../config'
@@ -10,7 +11,7 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   app.set('view engine', 'njk')
 
   app.locals.asset_path = '/assets/'
-  app.locals.applicationName = 'Hmpps Welcome People Into Prison Ui'
+  app.locals.applicationName = 'HMPPS Welcome People Into Prison'
 
   // Cachebusting version string
   if (production) {
@@ -45,6 +46,10 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     }
     const array = fullName.split(' ')
     return `${array[0][0]}. ${array.reverse()[0]}`
+  })
+
+  njkEnv.addFilter('formatDate', (value, format) => {
+    return value ? moment(value).format(format) : null
   })
 
   const {
