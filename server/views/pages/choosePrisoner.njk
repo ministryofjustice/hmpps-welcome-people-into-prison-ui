@@ -6,13 +6,13 @@
         <div class="govuk-width-container govuk-body">
             <h1>Select prisoner to add to the establishment roll</h1>
                 <h2 class="govuk-heading-m govuk-!-margin-top-9">Prisoners arriving from court</h2>
-                    {% for move in incomingMovements.get("fromCourt") %} 
-                        {{ incomingMovementCard(move, "fromCourt", loop.index)}}
+                    {% for move in incomingMovements.get("FROM_COURT") %} 
+                        {{ incomingMovementCard(move, "FROM_COURT", loop.index)}}
                     {% endfor %}
 
                 <h2 class="govuk-heading-m govuk-!-margin-top-9">Prisoners arriving from a custody suite</h2>
-                    {% for move in incomingMovements.get("fromCustodySuite") %} 
-                        {{ incomingMovementCard(move, "fromCustodySuite", loop.index)}}
+                    {% for move in incomingMovements.get("FROM_CUSTODY_SUITE") %} 
+                        {{ incomingMovementCard(move, "FROM_CUSTODY_SUITE", loop.index)}}
                     {% endfor %}
         </div>
     </div>
