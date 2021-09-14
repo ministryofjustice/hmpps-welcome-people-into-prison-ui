@@ -5,10 +5,10 @@ export default class IndexPage extends Page {
     super('Select prisoner to add to the establishment roll')
   }
 
-  incomingMovementsFromCourt = (index: number): PageElement => cy.get(`[data-qa=fromCourt-title-${index}]`)
+  incomingMovementsFromCourt = (index: number): PageElement => cy.get(`[data-qa=FROM_COURT-title-${index}]`)
 
   incomingMovementsFromCustodySuite = (index: number): PageElement =>
-    cy.get(`[data-qa=fromCustodySuite-title-${index}]`)
+    cy.get(`[data-qa=FROM_CUSTODY_SUITE-title-${index}]`)
 
   headerUserName = (): PageElement => cy.get('[data-qa=header-user-name]')
 

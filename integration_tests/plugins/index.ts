@@ -16,6 +16,6 @@ export default (on: (string, Record) => void): void => {
 
     stubTokenVerificationPing: tokenVerification.stubPing,
 
-    stubIncomingMovements: activeCaseLoadId => welcome.stubIncomingMovements(activeCaseLoadId),
+    stubIncomingMovements: welcome.stubIncomingMovements,
   })
 }

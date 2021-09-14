@@ -7,7 +7,7 @@ export default class ChoosePrisonerController {
   public view(): RequestHandler {
     return async (req, res) => {
       const { activeCaseLoadId } = res.locals.user
-      const incomingMovements = await this.incomingMovementsService.groupByMoveType(activeCaseLoadId)
+      const incomingMovements = await this.incomingMovementsService.getMovesForToday(activeCaseLoadId)
       return res.render('pages/choosePrisoner.njk', {
         incomingMovements,
       })

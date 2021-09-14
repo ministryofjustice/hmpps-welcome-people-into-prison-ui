@@ -80,7 +80,7 @@ describe('Incoming movements service', () => {
   ]
 
   const incomingMovementsGroupedByType = new Map()
-  incomingMovementsGroupedByType.set('fromCourt', [
+  incomingMovementsGroupedByType.set('FROM_COURT', [
     {
       firstName: 'John',
       lastName: 'Doe',
@@ -102,7 +102,7 @@ describe('Incoming movements service', () => {
       moveType: 'PRISON_REMAND',
     },
   ])
-  incomingMovementsGroupedByType.set(null, [
+  incomingMovementsGroupedByType.set('OTHER', [
     {
       firstName: 'Karl',
       lastName: 'Offender',
@@ -114,7 +114,7 @@ describe('Incoming movements service', () => {
       moveType: 'PRISON_TRANSFER',
     },
   ])
-  incomingMovementsGroupedByType.set('fromCustodySuite', [
+  incomingMovementsGroupedByType.set('FROM_CUSTODY_SUITE', [
     {
       firstName: 'Mark',
       lastName: 'Prisoner',
@@ -162,15 +162,15 @@ describe('Incoming movements service', () => {
   describe('getIncomingMovements', () => {
     it('Retrieves incoming movements sorted alphabetically by name', async () => {
       const today = moment.now().toString()
-      const result = await service.getIncomingMovements(res.locals.user.activeCaseLoadId)
+      const result = await service.getMovesForToday(res.locals.user.activeCaseLoadId)
 
-      expect(result).toStrictEqual(incomingMovements)
+      expect(result).toStrictEqual(incomingMovementsGroupedByType)
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       expect(welcomeApi.getIncomingMovements).toBeCalledWith(res.locals.user.activeCaseLoadId, today)
     })
 
     it('WelcomeApiFactory is called with a token', async () => {
-      await service.getIncomingMovements(res.locals.user.activeCaseLoadId)
+      await service.getMovesForToday(res.locals.user.activeCaseLoadId)
 
       expect(welcomeApiFactory).toBeCalledWith(token)
     })
@@ -178,7 +178,7 @@ describe('Incoming movements service', () => {
 
   describe('getSortedMovmentsByType', () => {
     it('Retrieves incoming movements grouped by type', async () => {
-      const result = await service.groupByMoveType(res.locals.user.activeCaseLoadId)
+      const result = await service.getMovesForToday(res.locals.user.activeCaseLoadId)
 
       expect(result).toEqual(incomingMovementsGroupedByType)
     })
