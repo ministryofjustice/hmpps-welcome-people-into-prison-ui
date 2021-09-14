@@ -11,7 +11,7 @@ const incomingMovementsService = new IncomingMovementsService(null, null) as jes
 let app: Express
 
 const incomingMovementsGroupedByType = new Map()
-incomingMovementsGroupedByType.set('fromCourt', [
+incomingMovementsGroupedByType.set('FROM_COURT', [
   {
     firstName: 'John',
     lastName: 'Doe',
@@ -33,7 +33,7 @@ incomingMovementsGroupedByType.set('fromCourt', [
     moveType: 'PRISON_REMAND',
   },
 ])
-incomingMovementsGroupedByType.set(null, [
+incomingMovementsGroupedByType.set('OTHER', [
   {
     firstName: 'Karl',
     lastName: 'Offender',
@@ -45,7 +45,7 @@ incomingMovementsGroupedByType.set(null, [
     moveType: 'PRISON_TRANSFER',
   },
 ])
-incomingMovementsGroupedByType.set('fromCustodySuite', [
+incomingMovementsGroupedByType.set('FROM_CUSTODY_SUITE', [
   {
     firstName: 'Mark',
     lastName: 'Prisoner',
@@ -80,7 +80,7 @@ incomingMovementsGroupedByType.set('fromCustodySuite', [
 
 beforeEach(() => {
   app = appWithAllRoutes({ incomingMovementsService })
-  incomingMovementsService.groupByMoveType.mockResolvedValue(incomingMovementsGroupedByType)
+  incomingMovementsService.getMovesForToday.mockResolvedValue(incomingMovementsGroupedByType)
 })
 
 afterEach(() => {
@@ -88,7 +88,7 @@ afterEach(() => {
 })
 
 describe('GET /confirm-arrival/choose-prisoner', () => {
-  it('should contain alphabetically sorted incoming movements grouped by type', () => {
+  it('should render /confirm-arrival/choose-prisoner page', () => {
     return request(app)
       .get('/confirm-arrival/choose-prisoner')
       .expect('Content-Type', 'text/html; charset=utf-8')
@@ -103,7 +103,7 @@ describe('GET /confirm-arrival/choose-prisoner', () => {
       .get('/confirm-arrival/choose-prisoner')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
-        expect(incomingMovementsService.groupByMoveType).toHaveBeenCalledWith(user.activeCaseLoadId)
+        expect(incomingMovementsService.getMovesForToday).toHaveBeenCalledWith(user.activeCaseLoadId)
       })
   })
 })
