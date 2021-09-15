@@ -1,5 +1,5 @@
 import type { Movement } from 'welcome'
-import moment from 'moment'
+import moment, { Moment } from 'moment'
 import { groupBy } from '../utils/utils'
 import type HmppsAuthClient from '../data/hmppsAuthClient'
 import WelcomeApi from '../api/welcomeApi'
@@ -30,15 +30,14 @@ export default class IncomingMovementsService {
     })
   }
 
-  private async getIncomingMovements(agencyId: string): Promise<Movement[]> {
-    const today = moment.now().toString()
+  private async getIncomingMovements(agencyId: string, now: Moment): Promise<Movement[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
-    const movements = await this.welcomeApiFactory(token).getIncomingMovements(agencyId, today)
+    const movements = await this.welcomeApiFactory(token).getIncomingMovements(agencyId, now)
     return this.sortAlphabetically(movements)
   }
 
-  public async getMovesForToday(agencyId: string): Promise<Map<string, Movement[]>> {
-    const movements = await this.getIncomingMovements(agencyId)
+  public async getMovesForToday(agencyId: string, now = () => moment()): Promise<Map<string, Movement[]>> {
+    const movements = await this.getIncomingMovements(agencyId, now())
     return groupBy(movements, (movement: Movement) => this.getMoveType(movement))
   }
 }
