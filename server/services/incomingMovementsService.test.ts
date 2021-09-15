@@ -161,8 +161,8 @@ describe('Incoming movements service', () => {
 
   describe('getIncomingMovements', () => {
     it('Retrieves incoming movements sorted alphabetically by name', async () => {
-      const today = moment.now().toString()
-      const result = await service.getMovesForToday(res.locals.user.activeCaseLoadId)
+      const today = moment()
+      const result = await service.getMovesForToday(res.locals.user.activeCaseLoadId, () => today)
 
       expect(result).toStrictEqual(incomingMovementsGroupedByType)
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
