@@ -79,7 +79,7 @@ incomingMovementsGroupedByType.set('FROM_CUSTODY_SUITE', [
 ])
 
 beforeEach(() => {
-  app = appWithAllRoutes({ incomingMovementsService })
+  app = appWithAllRoutes({ services: { incomingMovementsService } })
   incomingMovementsService.getMovesForToday.mockResolvedValue(incomingMovementsGroupedByType)
 })
 

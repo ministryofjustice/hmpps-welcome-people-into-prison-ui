@@ -152,7 +152,7 @@ describe('Incoming movements service', () => {
   beforeEach(() => {
     jest.resetAllMocks()
     hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
-    welcomeClient = new WelcomeClient(token) as jest.Mocked<WelcomeClient>
+    welcomeClient = new WelcomeClient(null) as jest.Mocked<WelcomeClient>
     WelcomeClientFactory.mockReturnValue(welcomeClient)
     service = new IncomingMovementsService(hmppsAuthClient, WelcomeClientFactory)
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)

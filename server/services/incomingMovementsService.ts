@@ -1,8 +1,7 @@
 import type { Movement } from 'welcome'
 import moment, { Moment } from 'moment'
 import { groupBy } from '../utils/utils'
-import type HmppsAuthClient from '../data/hmppsAuthClient'
-import WelcomeClient from '../data/welcomeClient'
+import type { RestClientBuilder, WelcomeClient, HmppsAuthClient } from '../data'
 
 export enum MoveType {
   FROM_COURT = 'FROM_COURT',
@@ -13,7 +12,7 @@ export enum MoveType {
 export default class IncomingMovementsService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
-    private readonly welcomeClientFactory: (token: string) => WelcomeClient
+    private readonly welcomeClientFactory: RestClientBuilder<WelcomeClient>
   ) {}
 
   private getMoveType(item: Movement): MoveType {
