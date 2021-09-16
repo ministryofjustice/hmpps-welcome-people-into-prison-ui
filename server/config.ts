@@ -67,7 +67,7 @@ export default {
       agent: new AgentConfig(),
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
     },
-    welcomeApi: {
+    welcome: {
       url: get('WELCOME_API_URL', 'http://localhost:8100', requiredInProduction),
       timeout: {
         response: Number(get('WELCOME_API_TIMEOUT_RESPONSE', 5000)),
