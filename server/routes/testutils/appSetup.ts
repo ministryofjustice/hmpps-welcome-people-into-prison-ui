@@ -7,7 +7,6 @@ import routes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'
 import errorHandler from '../../errorHandler'
 import * as auth from '../../authentication/auth'
-import IncomingMovementsService from '../../services/incomingMovementsService'
 import { Services } from '../../services'
 
 export const user = {
