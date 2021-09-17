@@ -6,6 +6,7 @@ import type { RestClientBuilder, WelcomeClient, HmppsAuthClient } from '../data'
 export enum MoveType {
   FROM_COURT = 'FROM_COURT',
   FROM_CUSTODY_SUITE = 'FROM_CUSTODY_SUITE',
+  FROM_ANOTHER_ESTABLISHMENT = 'FROM_ANOTHER_ESTABLISHMENT',
   OTHER = 'OTHER',
 }
 
@@ -19,6 +20,7 @@ export default class IncomingMovementsService {
     if (item.moveType === 'PRISON_REMAND') return MoveType.FROM_COURT
     if (item.moveType === 'PRISON_RECALL') return MoveType.FROM_CUSTODY_SUITE
     if (item.moveType === 'VIDEO_REMAND') return MoveType.FROM_CUSTODY_SUITE
+    if (item.moveType === 'PRISON_TRANSFER') return MoveType.FROM_ANOTHER_ESTABLISHMENT
     return MoveType.OTHER
   }
 

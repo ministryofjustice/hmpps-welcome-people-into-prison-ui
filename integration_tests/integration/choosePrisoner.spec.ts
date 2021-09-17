@@ -23,4 +23,10 @@ context('SignIn', () => {
     indexPage.incomingMovementsFromCustodySuite(2).should('contain.text', 'Smith, Barry')
     indexPage.incomingMovementsFromCustodySuite(3).should('contain.text', 'Smith, Bob')
   })
+
+  it('A user can view list of incoming movements from another establishement', () => {
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    indexPage.incomingMovementsFromAnotherEstablishment(1).should('contain.text', 'Offender, Karl')
+  })
 })
