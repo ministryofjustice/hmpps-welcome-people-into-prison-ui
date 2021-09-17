@@ -14,6 +14,11 @@
                     {% for move in incomingMovements.get("FROM_CUSTODY_SUITE") %} 
                         {{ incomingMovementCard(move, "FROM_CUSTODY_SUITE", loop.index)}}
                     {% endfor %}
+
+                 <h2 class="govuk-heading-m govuk-!-margin-top-9">Prisoners arriving from another establishment</h2>
+                    {% for move in incomingMovements.get("FROM_ANOTHER_ESTABLISHMENT") %} 
+                        {{ incomingMovementCard(move, "FROM_ANOTHER_ESTABLISHMENT", loop.index)}}
+                    {% endfor %}
         </div>
     </div>
 {% endblock %}

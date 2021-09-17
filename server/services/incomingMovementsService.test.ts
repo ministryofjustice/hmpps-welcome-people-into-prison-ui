@@ -77,6 +77,16 @@ describe('Incoming movements service', () => {
       fromLocation: 'Leeds',
       moveType: 'PRISON_REMAND',
     },
+    {
+      firstName: 'Steve',
+      lastName: 'Smith',
+      dateOfBirth: '1985-05-05',
+      prisonNumber: 'G0015GF',
+      pncNumber: '01/5568B',
+      date: '2021-09-01',
+      fromLocation: 'Manchester',
+      moveType: 'COURT_APPEARANCE',
+    },
   ]
 
   const incomingMovementsGroupedByType = new Map()
@@ -102,7 +112,7 @@ describe('Incoming movements service', () => {
       moveType: 'PRISON_REMAND',
     },
   ])
-  incomingMovementsGroupedByType.set('OTHER', [
+  incomingMovementsGroupedByType.set('FROM_ANOTHER_ESTABLISHMENT', [
     {
       firstName: 'Karl',
       lastName: 'Offender',
@@ -144,6 +154,18 @@ describe('Incoming movements service', () => {
       date: '2021-09-01',
       fromLocation: 'Wandsworth',
       moveType: 'VIDEO_REMAND',
+    },
+  ])
+  incomingMovementsGroupedByType.set('OTHER', [
+    {
+      firstName: 'Steve',
+      lastName: 'Smith',
+      dateOfBirth: '1985-05-05',
+      prisonNumber: 'G0015GF',
+      pncNumber: '01/5568B',
+      date: '2021-09-01',
+      fromLocation: 'Manchester',
+      moveType: 'COURT_APPEARANCE',
     },
   ])
 
