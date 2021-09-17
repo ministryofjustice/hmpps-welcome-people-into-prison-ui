@@ -1,13 +1,13 @@
-import express, { Router, Express } from 'express'
+import express, { Express } from 'express'
 import cookieSession from 'cookie-session'
 import createError from 'http-errors'
 import path from 'path'
 
-import allRoutes from '../index'
+import routes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'
 import errorHandler from '../../errorHandler'
 import * as auth from '../../authentication/auth'
-import IncomingMovementsService from '../../services/incomingMovementsService'
+import { Services } from '../../services'
 
 export const user = {
   firstName: 'first',
@@ -20,7 +20,7 @@ export const user = {
   authSource: 'NOMIS',
 }
 
-function appSetup(route: Router, production: boolean, userSupplier: () => Express.User): Express {
+function appSetup(services: Services, production: boolean, userSupplier: () => Express.User): Express {
   const app = express()
 
   app.set('view engine', 'njk')
@@ -37,7 +37,7 @@ function appSetup(route: Router, production: boolean, userSupplier: () => Expres
   app.use(cookieSession({ keys: [''] }))
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
-  app.use('/', route)
+  app.use(routes(services))
   app.use((req, res, next) => next(createError(404, 'Not found')))
   app.use(errorHandler(production))
 
@@ -46,13 +46,13 @@ function appSetup(route: Router, production: boolean, userSupplier: () => Expres
 
 export function appWithAllRoutes({
   production = false,
-  incomingMovementsService,
+  services = {},
   userSupplier = () => user,
 }: {
   production?: boolean
-  incomingMovementsService?: IncomingMovementsService
+  services?: Partial<Services>
   userSupplier?: () => Express.User
 }): Express {
   auth.default.authenticationMiddleware = () => (req, res, next) => next()
-  return appSetup(allRoutes(incomingMovementsService), production, userSupplier)
+  return appSetup(services as Services, production, userSupplier)
 }

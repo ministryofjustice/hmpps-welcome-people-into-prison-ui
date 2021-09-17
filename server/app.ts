@@ -3,12 +3,10 @@ import express from 'express'
 import path from 'path'
 import createError from 'http-errors'
 
-import indexRoutes from './routes'
+import routes from './routes'
 import nunjucksSetup from './utils/nunjucksSetup'
 import errorHandler from './errorHandler'
-import standardRouter from './routes/standardRouter'
-import type UserService from './services/userService'
-import IncomingMovementsService from './services/incomingMovementsService'
+import setUpCurrentUser from './middleware/setUpCurrentUser'
 
 import setUpWebSession from './middleware/setUpWebSession'
 import setUpStaticResources from './middleware/setUpStaticResources'
@@ -17,11 +15,9 @@ import setUpAuthentication from './middleware/setUpAuthentication'
 import setUpHealthChecks from './middleware/setUpHealthChecks'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
+import type { Services } from './services'
 
-export default function createApp(
-  userService: UserService,
-  incomingMovementsService: IncomingMovementsService
-): express.Application {
+export default function createApp(services: Services): express.Application {
   const app = express()
 
   app.set('json spaces', 2)
@@ -36,10 +32,9 @@ export default function createApp(
   nunjucksSetup(app, path)
   app.use(setUpAuthentication())
   app.use(authorisationMiddleware())
+  app.use(setUpCurrentUser(services))
 
-  app.use(standardRouter(userService))
-
-  app.use('/', indexRoutes(incomingMovementsService))
+  app.use(routes(services))
 
   app.use((req, res, next) => next(createError(404, 'Not found')))
   app.use(errorHandler(process.env.NODE_ENV === 'production'))

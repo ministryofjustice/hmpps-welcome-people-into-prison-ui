@@ -2,19 +2,19 @@ import moment from 'moment'
 import type { Movement } from 'welcome'
 import IncomingMovementsService from './incomingMovementsService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
-import WelcomeApi from '../api/welcomeApi'
+import WelcomeClient from '../data/welcomeClient'
 
 jest.mock('../data/hmppsAuthClient')
-jest.mock('../api/welcomeApi')
+jest.mock('../data/welcomeClient')
 
 const token = 'some token'
 
 describe('Incoming movements service', () => {
-  let welcomeApi: jest.Mocked<WelcomeApi>
+  let welcomeClient: jest.Mocked<WelcomeClient>
   let hmppsAuthClient: jest.Mocked<HmppsAuthClient>
   let service: IncomingMovementsService
 
-  const welcomeApiFactory = jest.fn()
+  const WelcomeClientFactory = jest.fn()
 
   const incomingMovements: Movement[] = [
     {
@@ -152,11 +152,11 @@ describe('Incoming movements service', () => {
   beforeEach(() => {
     jest.resetAllMocks()
     hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
-    welcomeApi = new WelcomeApi(token) as jest.Mocked<WelcomeApi>
-    welcomeApiFactory.mockReturnValue(welcomeApi)
-    service = new IncomingMovementsService(hmppsAuthClient, welcomeApiFactory)
+    welcomeClient = new WelcomeClient(null) as jest.Mocked<WelcomeClient>
+    WelcomeClientFactory.mockReturnValue(welcomeClient)
+    service = new IncomingMovementsService(hmppsAuthClient, WelcomeClientFactory)
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
-    welcomeApi.getIncomingMovements.mockResolvedValue(incomingMovements)
+    welcomeClient.getIncomingMovements.mockResolvedValue(incomingMovements)
   })
 
   describe('getIncomingMovements', () => {
@@ -166,13 +166,13 @@ describe('Incoming movements service', () => {
 
       expect(result).toStrictEqual(incomingMovementsGroupedByType)
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-      expect(welcomeApi.getIncomingMovements).toBeCalledWith(res.locals.user.activeCaseLoadId, today)
+      expect(welcomeClient.getIncomingMovements).toBeCalledWith(res.locals.user.activeCaseLoadId, today)
     })
 
-    it('WelcomeApiFactory is called with a token', async () => {
+    it('WelcomeClientFactory is called with a token', async () => {
       await service.getMovesForToday(res.locals.user.activeCaseLoadId)
 
-      expect(welcomeApiFactory).toBeCalledWith(token)
+      expect(WelcomeClientFactory).toBeCalledWith(token)
     })
   })
 

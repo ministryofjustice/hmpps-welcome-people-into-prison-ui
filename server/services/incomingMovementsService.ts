@@ -1,8 +1,7 @@
 import type { Movement } from 'welcome'
 import moment, { Moment } from 'moment'
 import { groupBy } from '../utils/utils'
-import type HmppsAuthClient from '../data/hmppsAuthClient'
-import WelcomeApi from '../api/welcomeApi'
+import type { RestClientBuilder, WelcomeClient, HmppsAuthClient } from '../data'
 
 export enum MoveType {
   FROM_COURT = 'FROM_COURT',
@@ -13,7 +12,7 @@ export enum MoveType {
 export default class IncomingMovementsService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
-    private readonly welcomeApiFactory: (token: string) => WelcomeApi
+    private readonly welcomeClientFactory: RestClientBuilder<WelcomeClient>
   ) {}
 
   private getMoveType(item: Movement): MoveType {
@@ -32,7 +31,7 @@ export default class IncomingMovementsService {
 
   private async getIncomingMovements(agencyId: string, now: Moment): Promise<Movement[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
-    const movements = await this.welcomeApiFactory(token).getIncomingMovements(agencyId, now)
+    const movements = await this.welcomeClientFactory(token).getIncomingMovements(agencyId, now)
     return this.sortAlphabetically(movements)
   }
 
