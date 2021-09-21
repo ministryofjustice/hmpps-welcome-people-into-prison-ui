@@ -3,13 +3,13 @@ import type { HealthCheckCallback, HealthCheckService } from './healthCheck'
 
 describe('Healthcheck', () => {
   it('Healthcheck reports healthy', done => {
-    const successfulChecks = [successfulCheck('check1'), successfulCheck('check2')]
+    const successfulChecks = [successfulCheck('check1'), successfulCheck('check2'), successfulCheck('check3')]
 
     const callback: HealthCheckCallback = result => {
       expect(result).toEqual(
         expect.objectContaining({
           healthy: true,
-          checks: { check1: 'some message', check2: 'some message' },
+          checks: { check1: 'some message', check2: 'some message', check3: 'some message' },
         })
       )
       done()
@@ -18,13 +18,13 @@ describe('Healthcheck', () => {
     healthCheck(callback, successfulChecks)
   })
   it('Healthcheck reports unhealthy', done => {
-    const successfulChecks = [successfulCheck('check1'), erroredCheck('check2')]
+    const successfulChecks = [successfulCheck('check1'), successfulCheck('check2'), erroredCheck('check3')]
 
     const callback: HealthCheckCallback = result => {
       expect(result).toEqual(
         expect.objectContaining({
           healthy: false,
-          checks: { check1: 'some message', check2: 'some error' },
+          checks: { check1: 'some message', check2: 'some message', check3: 'some error' },
         })
       )
       done()
