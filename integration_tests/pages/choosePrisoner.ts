@@ -1,6 +1,6 @@
 import Page, { PageElement } from './page'
 
-export default class IncomingMovements extends Page {
+export default class ChoosePrisonerPage extends Page {
   constructor() {
     super('Select prisoner to add to the establishment roll')
   }

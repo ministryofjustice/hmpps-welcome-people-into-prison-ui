@@ -1,7 +1,7 @@
 import TemporaryAbsencesPage from '../pages/temporaryAbsences'
 import Page from '../pages/page'
 
-context('SignIn', () => {
+context('A user can view all current temporary absences', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -12,7 +12,7 @@ context('SignIn', () => {
 
   it('A user can view list of temporary absences', () => {
     cy.signIn()
-    cy.visit('/confirm-arrival/return-from-temporary-absence')
+    TemporaryAbsencesPage.goTo()
     const temporaryAbsencesPage = Page.verifyOnPage(TemporaryAbsencesPage)
     temporaryAbsencesPage.temporaryAbsences(1).should('contain.text', 'Doe, John')
     temporaryAbsencesPage.temporaryAbsences(2).should('contain.text', 'Offender, Karl')

@@ -3,7 +3,7 @@
         <div class="app-card__content" style="margin-left: 115px">
             <header class="app-card__header">
                 <h2 class="app-card__title" data-qa="{{moveType}}-title-{{loopIndex}}">{{ movement.lastName }}, {{ movement.firstName }}</h2>
-                <span class="govuk-body">{{ movement.prisonNumber if movement.prisonNumber else "No prison number found" }}</span>
+                <span class="govuk-body">{{ movement.prisonNumber | default('No prison number found') }}</span>
             </header>
             <dl class="app-card__meta-list">
                 <div class="app-card__meta-list-item">
