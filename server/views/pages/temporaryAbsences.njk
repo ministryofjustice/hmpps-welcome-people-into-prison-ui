@@ -1,0 +1,13 @@
+{% extends "../partials/layout.njk" %}
+{% from  "../partials/temporaryAbsenceCardMacro.njk" import temporaryAbsenceCard %}
+{% set pageTitle = applicationName + " - Home" %}
+{% block content %}
+    <div class="govuk-!-margin-bottom-8">
+        <div class="govuk-width-container govuk-body">
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-9">Select prisoner returning from temporary absence</h1>
+                {% for absence in temporaryAbsences %} 
+                    {{ temporaryAbsenceCard(absence, loop.index)}}
+                {% endfor %}
+        </div>
+    </div>
+{% endblock %}

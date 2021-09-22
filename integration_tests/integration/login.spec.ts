@@ -1,4 +1,4 @@
-import IndexPage from '../pages/index'
+import IndexPage from '../pages/incomingMovements'
 import AuthSignInPage from '../pages/authSignIn'
 import Page from '../pages/page'
 

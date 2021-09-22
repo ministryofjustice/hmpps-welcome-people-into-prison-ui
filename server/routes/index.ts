@@ -3,6 +3,7 @@ import ChoosePrisonerController from './choosePrisonerController'
 
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import { Services } from '../services'
+import TemporaryAbsencesController from './temporaryAbsencesController'
 
 export default function routes(services: Services): Router {
   const router = express.Router()
@@ -14,6 +15,9 @@ export default function routes(services: Services): Router {
   get('/', (req, res, next) => {
     res.redirect('/confirm-arrival/choose-prisoner')
   })
+
+  const temporaryAbsencesController = new TemporaryAbsencesController(services.temporaryAbsencesService)
+  get('/confirm-arrival/return-from-temporary-absence', temporaryAbsencesController.view())
 
   return router
 }

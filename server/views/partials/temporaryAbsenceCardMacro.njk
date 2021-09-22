@@ -1,0 +1,28 @@
+{% macro temporaryAbsenceCard(temporaryAbsence, loopIndex) %}
+    <div class="app-card app-card--with-aside">
+        <div class="app-card__content" style="margin-left: 115px">
+            <header class="app-card__header">
+                <h2 class="app-card__title" data-qa="temporaryAbsence-title-{{loopIndex}}">{{ temporaryAbsence.lastName }}, {{ temporaryAbsence.firstName }}</h2>
+                <span class="govuk-body">{{ temporaryAbsence.prisonNumber if temporaryAbsence.prisonNumber else "No prison number found" }}</span>
+            </header>
+            <dl class="app-card__meta-list">
+                <div class="app-card__meta-list-item">
+                    <dt class="app-card__meta-list-key">
+                        Date of birth
+                    </dt>
+                    <dd class="app-card__meta-list-value">
+                        {{ temporaryAbsence.dateOfBirth | formatDate('D MMMM YYYY')}}
+                    </dd>
+                </div>
+                <div class="app-card__meta-list-item">
+                    <dt class="app-card__meta-list-key">
+                        Reason for absence
+                    </dt>
+                    <dd class="app-card__meta-list-value">
+                        {{ temporaryAbsence.reasonForAbsence }}
+                    </dd>
+                </div>
+            </dl>
+        </div>
+    </div>
+{%  endmacro %}
