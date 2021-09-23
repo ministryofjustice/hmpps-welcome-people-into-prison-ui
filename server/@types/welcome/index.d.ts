@@ -1,6 +1,14 @@
 declare module 'welcome' {
   export type Movement = schemas['Movement']
 
+  export type TemporaryAbsence = {
+    firstName: string
+    lastName: string
+    dateOfBirth: string
+    prisonNumber: string
+    reasonForAbsence: string
+  }
+
   export interface schemas {
     /** A movement into prison */
     Movement: {

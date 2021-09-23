@@ -1,9 +1,9 @@
-{% macro incomingMovementCard(movement, moveType, loopIndex) %}
+{% macro temporaryAbsenceCard(temporaryAbsence, loopIndex) %}
     <div class="app-card app-card--with-aside">
         <div class="app-card__content" style="margin-left: 115px">
             <header class="app-card__header">
-                <h2 class="app-card__title" data-qa="{{moveType}}-title-{{loopIndex}}">{{ movement.lastName }}, {{ movement.firstName }}</h2>
-                <span class="govuk-body">{{ movement.prisonNumber | default('No prison number found') }}</span>
+                <h2 class="app-card__title" data-qa="temporaryAbsence-title-{{loopIndex}}">{{ temporaryAbsence.lastName }}, {{ temporaryAbsence.firstName }}</h2>
+                <span class="govuk-body">{{ temporaryAbsence.prisonNumber }}</span>
             </header>
             <dl class="app-card__meta-list">
                 <div class="app-card__meta-list-item">
@@ -11,15 +11,15 @@
                         Date of birth
                     </dt>
                     <dd class="app-card__meta-list-value">
-                        {{ movement.dateOfBirth | formatDate('D MMMM YYYY')}}
+                        {{ temporaryAbsence.dateOfBirth | formatDate('D MMMM YYYY')}}
                     </dd>
                 </div>
                 <div class="app-card__meta-list-item">
                     <dt class="app-card__meta-list-key">
-                        Arriving from
+                        Reason for absence
                     </dt>
                     <dd class="app-card__meta-list-value">
-                        {{ movement.fromLocation }}
+                        {{ temporaryAbsence.reasonForAbsence }}
                     </dd>
                 </div>
             </dl>

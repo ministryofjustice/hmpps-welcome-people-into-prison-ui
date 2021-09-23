@@ -1,5 +1,5 @@
 import moment from 'moment'
-import type { Movement } from 'welcome'
+import type { Movement, TemporaryAbsence } from 'welcome'
 import config, { ApiConfig } from '../config'
 import RestClient from './restClient'
 import logger from '../../logger'
@@ -17,5 +17,12 @@ export default class WelcomeClient {
       path: `/incoming-moves/${agencyId}`,
       query: { date: date.format('YYYY-MM-DD') },
     }) as Promise<Movement[]>
+  }
+
+  async getTemporaryAbsences(agencyId: string): Promise<TemporaryAbsence[]> {
+    logger.info(`welcomeApi: getTemporaryAbsences(${agencyId})`)
+    return this.restClient.get({
+      path: `/temporary-absences/${agencyId}`,
+    }) as Promise<TemporaryAbsence[]>
   }
 }
