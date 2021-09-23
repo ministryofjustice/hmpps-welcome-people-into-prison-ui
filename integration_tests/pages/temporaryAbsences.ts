@@ -5,8 +5,9 @@ export default class TemporaryAbsencesPage extends Page {
     super('Select prisoner returning from temporary absence')
   }
 
-  static goTo(): Cypress.Chainable<Cypress.AUTWindow> {
-    return cy.visit('/confirm-arrival/return-from-temporary-absence')
+  static goTo(): TemporaryAbsencesPage {
+    cy.visit('/confirm-arrival/return-from-temporary-absence')
+    return Page.verifyOnPage(TemporaryAbsencesPage)
   }
 
   temporaryAbsences = (index: number): PageElement => cy.get(`[data-qa=temporaryAbsence-title-${index}]`)

@@ -1,5 +1,6 @@
 import type { TemporaryAbsence } from 'welcome'
 import type { RestClientBuilder, WelcomeClient, HmppsAuthClient } from '../data'
+import { compareByFullName } from '../utils/utils'
 
 export default class TemporaryAbsencesService {
   constructor(
@@ -7,14 +8,9 @@ export default class TemporaryAbsencesService {
     private readonly welcomeClientFactory: RestClientBuilder<WelcomeClient>
   ) {}
 
-  private compareByName(a: TemporaryAbsence, b: TemporaryAbsence): number {
-    const result = a.lastName.localeCompare(b.lastName)
-    return result !== 0 ? result : a.firstName.localeCompare(b.firstName)
-  }
-
   public async getTemporaryAbsences(agencyId: string): Promise<TemporaryAbsence[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const temporaryAbsences = await this.welcomeClientFactory(token).getTemporaryAbsences(agencyId)
-    return temporaryAbsences.sort(this.compareByName)
+    return temporaryAbsences.sort(compareByFullName)
   }
 }
