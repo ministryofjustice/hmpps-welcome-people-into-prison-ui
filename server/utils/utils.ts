@@ -1,3 +1,8 @@
+interface Person {
+  firstName: string
+  lastName: string
+}
+
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
 
@@ -22,4 +27,9 @@ export const groupBy = <T, K>(items: T[], groupingFunction: (item: T) => K): Map
     result.set(key, currentValues)
     return result
   }, new Map<K, T[]>())
+}
+
+export const compareByFullName = <T extends Person>(a: T, b: T): number => {
+  const result = a.lastName.localeCompare(b.lastName)
+  return result !== 0 ? result : a.firstName.localeCompare(b.firstName)
 }
