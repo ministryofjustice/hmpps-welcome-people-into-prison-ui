@@ -1,6 +1,20 @@
-{% macro temporaryAbsenceCard(temporaryAbsence, loopIndex) %}
-    <div class="app-card app-card--with-aside">
-        <div class="app-card__content" style="margin-left: 115px">
+{% macro incomingMovementCard(movement, moveType, loopIndex) %}
+
+    <div class="app-card app-card--with-aside flex-container">
+        <div class="govuk-!-margin-right-3">
+            <img
+                {% if movement.prisonNumber  %}
+                    src= "/prisoner/{{movement.prisonNumber}}/image" 
+                {% else %}
+                    src= "/assets/images/placeholder-image.png" 
+                {% endif %}                
+                height="150"
+                width="120"
+                alt="Headshot of {{ movement.lastName }}, {{ movement.firstName }}"
+                data-qa="offender-image"
+            />
+        </div>
+        <div class="app-card__content">
             <header class="app-card__header">
                 <h2 class="app-card__title" data-qa="temporaryAbsence-title-{{loopIndex}}">{{ temporaryAbsence.lastName }}, {{ temporaryAbsence.firstName }}</h2>
                 <span class="govuk-body">{{ temporaryAbsence.prisonNumber }}</span>
