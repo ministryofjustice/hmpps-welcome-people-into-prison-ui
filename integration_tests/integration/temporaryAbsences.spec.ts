@@ -1,5 +1,4 @@
 import TemporaryAbsencesPage from '../pages/temporaryAbsences'
-import Page from '../pages/page'
 
 context('A user can view all current temporary absences', () => {
   beforeEach(() => {
@@ -12,8 +11,7 @@ context('A user can view all current temporary absences', () => {
 
   it('A user can view list of temporary absences', () => {
     cy.signIn()
-    TemporaryAbsencesPage.goTo()
-    const temporaryAbsencesPage = Page.verifyOnPage(TemporaryAbsencesPage)
+    const temporaryAbsencesPage = TemporaryAbsencesPage.goTo()
     temporaryAbsencesPage.temporaryAbsences(1).should('contain.text', 'Doe, John')
     temporaryAbsencesPage.temporaryAbsences(2).should('contain.text', 'Offender, Karl')
   })

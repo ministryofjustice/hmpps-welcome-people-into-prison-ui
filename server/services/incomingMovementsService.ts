@@ -1,8 +1,7 @@
 import type { Movement } from 'welcome'
 import moment, { Moment } from 'moment'
 import type { Readable } from 'stream'
-
-import { groupBy } from '../utils/utils'
+import { groupBy, compareByFullName } from '../utils/utils'
 import type { RestClientBuilder, WelcomeClient, HmppsAuthClient } from '../data'
 
 export enum MoveType {
@@ -26,17 +25,10 @@ export default class IncomingMovementsService {
     return MoveType.OTHER
   }
 
-  private sortAlphabetically(movements: Movement[]): Movement[] {
-    return movements.sort((a, b) => {
-      const result = a.lastName.localeCompare(b.lastName)
-      return result !== 0 ? result : a.firstName.localeCompare(b.firstName)
-    })
-  }
-
   private async getIncomingMovements(agencyId: string, now: Moment): Promise<Movement[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const movements = await this.welcomeClientFactory(token).getIncomingMovements(agencyId, now)
-    return this.sortAlphabetically(movements)
+    return movements.sort(compareByFullName)
   }
 
   public async getMovesForToday(agencyId: string, now = () => moment()): Promise<Map<string, Movement[]>> {
