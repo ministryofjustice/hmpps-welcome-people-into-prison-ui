@@ -1,5 +1,6 @@
 import express, { RequestHandler, Router } from 'express'
 import ChoosePrisonerController from './choosePrisonerController'
+import ImageController from './imageController'
 
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import { Services } from '../services'
@@ -18,6 +19,9 @@ export default function routes(services: Services): Router {
 
   const temporaryAbsencesController = new TemporaryAbsencesController(services.temporaryAbsencesService)
   get('/confirm-arrival/return-from-temporary-absence', temporaryAbsencesController.view())
+
+  const imageController = new ImageController(services.incomingMovementsService)
+  get('/prisoner/:prisonNumber/image', imageController.getImage())
 
   return router
 }
