@@ -1,5 +1,6 @@
 import type { Movement } from 'welcome'
 import moment, { Moment } from 'moment'
+import type { Readable } from 'stream'
 import { groupBy, compareByFullName } from '../utils/utils'
 import type { RestClientBuilder, WelcomeClient, HmppsAuthClient } from '../data'
 
@@ -33,5 +34,11 @@ export default class IncomingMovementsService {
   public async getMovesForToday(agencyId: string, now = () => moment()): Promise<Map<string, Movement[]>> {
     const movements = await this.getIncomingMovements(agencyId, now())
     return groupBy(movements, (movement: Movement) => this.getMoveType(movement))
+  }
+
+  public async getImage(prisonNumber: string): Promise<Readable> {
+    const token = await this.hmppsAuthClient.getSystemClientToken()
+    const image = await this.welcomeClientFactory(token).getImage(prisonNumber)
+    return image
   }
 }

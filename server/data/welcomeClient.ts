@@ -1,5 +1,6 @@
 import moment from 'moment'
 import type { Movement, TemporaryAbsence } from 'welcome'
+import type { Readable } from 'stream'
 import config, { ApiConfig } from '../config'
 import RestClient from './restClient'
 import logger from '../../logger'
@@ -24,5 +25,12 @@ export default class WelcomeClient {
     return this.restClient.get({
       path: `/temporary-absences/${agencyId}`,
     }) as Promise<TemporaryAbsence[]>
+  }
+
+  async getImage(prisonNumber: string): Promise<Readable> {
+    logger.info(`welcomeApi: getImage(${prisonNumber})`)
+    return this.restClient.stream({
+      path: `/prison/prisoner/${prisonNumber}/image`,
+    }) as Promise<Readable>
   }
 }
