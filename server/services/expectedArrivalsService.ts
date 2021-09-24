@@ -10,7 +10,7 @@ export enum MoveType {
   OTHER = 'OTHER',
 }
 
-export default class IncomingMovementsService {
+export default class ExpectedArrivalsService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
     private readonly welcomeClientFactory: RestClientBuilder<WelcomeClient>
@@ -24,14 +24,14 @@ export default class IncomingMovementsService {
     return MoveType.OTHER
   }
 
-  private async getIncomingMovements(agencyId: string, now: Moment): Promise<Movement[]> {
+  private async getExpectedArrivals(agencyId: string, now: Moment): Promise<Movement[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
-    const movements = await this.welcomeClientFactory(token).getIncomingMovements(agencyId, now)
-    return movements.sort(compareByFullName)
+    const expectedArrivals = await this.welcomeClientFactory(token).getExpectedArrivals(agencyId, now)
+    return expectedArrivals.sort(compareByFullName)
   }
 
-  public async getMovesForToday(agencyId: string, now = () => moment()): Promise<Map<string, Movement[]>> {
-    const movements = await this.getIncomingMovements(agencyId, now())
-    return groupBy(movements, (movement: Movement) => this.getMoveType(movement))
+  public async getArrivalsForToday(agencyId: string, now = () => moment()): Promise<Map<string, Movement[]>> {
+    const expectedArrivals = await this.getExpectedArrivals(agencyId, now())
+    return groupBy(expectedArrivals, (arrival: Movement) => this.getMoveType(arrival))
   }
 }

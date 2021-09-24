@@ -1,5 +1,5 @@
 import { SuperAgentRequest } from 'superagent'
-import incomingMovements from './responses/incomingMovemnts'
+import expectedArrivals from './responses/expectedArrivals'
 import temporaryAbsences from './responses/temporaryAbsences'
 import { stubFor } from './wiremock'
 
@@ -17,7 +17,7 @@ export default {
       },
     })
   },
-  stubIncomingMovements: (activeCaseLoadId: string): SuperAgentRequest => {
+  stubExpectedArrivals: (activeCaseLoadId: string): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
@@ -26,7 +26,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: incomingMovements,
+        jsonBody: expectedArrivals,
       },
     })
   },

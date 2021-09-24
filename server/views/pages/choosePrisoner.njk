@@ -1,23 +1,23 @@
 {% extends "../partials/layout.njk" %}
-{% from  "../partials/incomingMovementCardMacro.njk" import incomingMovementCard %}
+{% from  "../partials/expectedArrivalCardMacro.njk" import expectedArrivalCardMacro %}
 {% set pageTitle = applicationName + " - Home" %}
 {% block content %}
     <div class="govuk-!-margin-bottom-8">
         <div class="govuk-width-container govuk-body">
             <h1>Select prisoner to add to the establishment roll</h1>
                 <h2 class="govuk-heading-m govuk-!-margin-top-9">Prisoners arriving from court</h2>
-                    {% for move in incomingMovements.get("FROM_COURT") %} 
-                        {{ incomingMovementCard(move, "FROM_COURT", loop.index)}}
+                    {% for arrival in expectedArrivals.get("FROM_COURT") %} 
+                        {{ expectedArrivalCardMacro(arrival, "FROM_COURT", loop.index)}}
                     {% endfor %}
 
                 <h2 class="govuk-heading-m govuk-!-margin-top-9">Prisoners arriving from a custody suite</h2>
-                    {% for move in incomingMovements.get("FROM_CUSTODY_SUITE") %} 
-                        {{ incomingMovementCard(move, "FROM_CUSTODY_SUITE", loop.index)}}
+                    {% for arrival in expectedArrivals.get("FROM_CUSTODY_SUITE") %} 
+                        {{ expectedArrivalCardMacro(arrival, "FROM_CUSTODY_SUITE", loop.index)}}
                     {% endfor %}
 
                  <h2 class="govuk-heading-m govuk-!-margin-top-9">Prisoners arriving from another establishment</h2>
-                    {% for move in incomingMovements.get("FROM_ANOTHER_ESTABLISHMENT") %} 
-                        {{ incomingMovementCard(move, "FROM_ANOTHER_ESTABLISHMENT", loop.index)}}
+                    {% for arrival in expectedArrivals.get("FROM_ANOTHER_ESTABLISHMENT") %} 
+                        {{ expectedArrivalCardMacro(arrival, "FROM_ANOTHER_ESTABLISHMENT", loop.index)}}
                     {% endfor %}
         </div>
     </div>

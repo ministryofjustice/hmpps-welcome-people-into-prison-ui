@@ -1,6 +1,6 @@
 import moment from 'moment'
 import type { Movement } from 'welcome'
-import IncomingMovementsService from './incomingMovementsService'
+import ExpectedArrivalsService from './expectedArrivalsService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import WelcomeClient from '../data/welcomeClient'
 
@@ -9,14 +9,14 @@ jest.mock('../data/welcomeClient')
 
 const token = 'some token'
 
-describe('Incoming movements service', () => {
+describe('Expected arrivals service', () => {
   let welcomeClient: jest.Mocked<WelcomeClient>
   let hmppsAuthClient: jest.Mocked<HmppsAuthClient>
-  let service: IncomingMovementsService
+  let service: ExpectedArrivalsService
 
   const WelcomeClientFactory = jest.fn()
 
-  const incomingMovements: Movement[] = [
+  const expectedArrivals: Movement[] = [
     {
       firstName: 'John',
       lastName: 'Doe',
@@ -89,8 +89,8 @@ describe('Incoming movements service', () => {
     },
   ]
 
-  const incomingMovementsGroupedByType = new Map()
-  incomingMovementsGroupedByType.set('FROM_COURT', [
+  const expectedArrivalsGroupedByType = new Map()
+  expectedArrivalsGroupedByType.set('FROM_COURT', [
     {
       firstName: 'John',
       lastName: 'Doe',
@@ -112,7 +112,7 @@ describe('Incoming movements service', () => {
       moveType: 'PRISON_REMAND',
     },
   ])
-  incomingMovementsGroupedByType.set('FROM_ANOTHER_ESTABLISHMENT', [
+  expectedArrivalsGroupedByType.set('FROM_ANOTHER_ESTABLISHMENT', [
     {
       firstName: 'Karl',
       lastName: 'Offender',
@@ -124,7 +124,7 @@ describe('Incoming movements service', () => {
       moveType: 'PRISON_TRANSFER',
     },
   ])
-  incomingMovementsGroupedByType.set('FROM_CUSTODY_SUITE', [
+  expectedArrivalsGroupedByType.set('FROM_CUSTODY_SUITE', [
     {
       firstName: 'Mark',
       lastName: 'Prisoner',
@@ -156,7 +156,7 @@ describe('Incoming movements service', () => {
       moveType: 'VIDEO_REMAND',
     },
   ])
-  incomingMovementsGroupedByType.set('OTHER', [
+  expectedArrivalsGroupedByType.set('OTHER', [
     {
       firstName: 'Steve',
       lastName: 'Smith',
@@ -176,33 +176,33 @@ describe('Incoming movements service', () => {
     hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
     welcomeClient = new WelcomeClient(null) as jest.Mocked<WelcomeClient>
     WelcomeClientFactory.mockReturnValue(welcomeClient)
-    service = new IncomingMovementsService(hmppsAuthClient, WelcomeClientFactory)
+    service = new ExpectedArrivalsService(hmppsAuthClient, WelcomeClientFactory)
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
-    welcomeClient.getIncomingMovements.mockResolvedValue(incomingMovements)
+    welcomeClient.getExpectedArrivals.mockResolvedValue(expectedArrivals)
   })
 
-  describe('getIncomingMovements', () => {
-    it('Retrieves incoming movements sorted alphabetically by name', async () => {
+  describe('getExpectedArrivals', () => {
+    it('Retrieves expected arrivals sorted alphabetically by name', async () => {
       const today = moment()
-      const result = await service.getMovesForToday(res.locals.user.activeCaseLoadId, () => today)
+      const result = await service.getArrivalsForToday(res.locals.user.activeCaseLoadId, () => today)
 
-      expect(result).toStrictEqual(incomingMovementsGroupedByType)
+      expect(result).toStrictEqual(expectedArrivalsGroupedByType)
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-      expect(welcomeClient.getIncomingMovements).toBeCalledWith(res.locals.user.activeCaseLoadId, today)
+      expect(welcomeClient.getExpectedArrivals).toBeCalledWith(res.locals.user.activeCaseLoadId, today)
     })
 
     it('WelcomeClientFactory is called with a token', async () => {
-      await service.getMovesForToday(res.locals.user.activeCaseLoadId)
+      await service.getArrivalsForToday(res.locals.user.activeCaseLoadId)
 
       expect(WelcomeClientFactory).toBeCalledWith(token)
     })
   })
 
-  describe('getSortedMovmentsByType', () => {
-    it('Retrieves incoming movements grouped by type', async () => {
-      const result = await service.getMovesForToday(res.locals.user.activeCaseLoadId)
+  describe('getSortedArrivalsByType', () => {
+    it('Retrieves expected arrivals grouped by type', async () => {
+      const result = await service.getArrivalsForToday(res.locals.user.activeCaseLoadId)
 
-      expect(result).toEqual(incomingMovementsGroupedByType)
+      expect(result).toEqual(expectedArrivalsGroupedByType)
     })
   })
 })

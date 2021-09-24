@@ -11,8 +11,8 @@ export default class WelcomeClient {
     this.restClient = new RestClient('welcomeClient', config.apis.welcome as ApiConfig, token)
   }
 
-  async getIncomingMovements(agencyId: string, date: moment.Moment): Promise<Movement[]> {
-    logger.info(`welcomeApi: getIncomingMovements(${agencyId}, ${date})`)
+  async getExpectedArrivals(agencyId: string, date: moment.Moment): Promise<Movement[]> {
+    logger.info(`welcomeApi: getExpectedArrivals(${agencyId}, ${date})`)
     return this.restClient.get({
       path: `/incoming-moves/${agencyId}`,
       query: { date: date.format('YYYY-MM-DD') },

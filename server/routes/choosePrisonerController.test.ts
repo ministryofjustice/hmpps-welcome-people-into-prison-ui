@@ -2,16 +2,16 @@ import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
 import { user, appWithAllRoutes } from './testutils/appSetup'
-import IncomingMovementsService from '../services/incomingMovementsService'
+import ExpectedArrivalsService from '../services/expectedArrivalsService'
 
-jest.mock('../services/incomingMovementsService')
+jest.mock('../services/expectedArrivalsService')
 
-const incomingMovementsService = new IncomingMovementsService(null, null) as jest.Mocked<IncomingMovementsService>
+const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
 
 let app: Express
 
-const incomingMovementsGroupedByType = new Map()
-incomingMovementsGroupedByType.set('FROM_COURT', [
+const expectedArrivalsGroupedByType = new Map()
+expectedArrivalsGroupedByType.set('FROM_COURT', [
   {
     firstName: 'John',
     lastName: 'Doe',
@@ -33,7 +33,7 @@ incomingMovementsGroupedByType.set('FROM_COURT', [
     moveType: 'PRISON_REMAND',
   },
 ])
-incomingMovementsGroupedByType.set('FROM_ANOTHER_ESTABLISHMENT', [
+expectedArrivalsGroupedByType.set('FROM_ANOTHER_ESTABLISHMENT', [
   {
     firstName: 'Karl',
     lastName: 'Offender',
@@ -45,7 +45,7 @@ incomingMovementsGroupedByType.set('FROM_ANOTHER_ESTABLISHMENT', [
     moveType: 'PRISON_TRANSFER',
   },
 ])
-incomingMovementsGroupedByType.set('FROM_CUSTODY_SUITE', [
+expectedArrivalsGroupedByType.set('FROM_CUSTODY_SUITE', [
   {
     firstName: 'Mark',
     lastName: 'Prisoner',
@@ -77,7 +77,7 @@ incomingMovementsGroupedByType.set('FROM_CUSTODY_SUITE', [
     moveType: 'VIDEO_REMAND',
   },
 ])
-incomingMovementsGroupedByType.set('OTHER', [
+expectedArrivalsGroupedByType.set('OTHER', [
   {
     firstName: 'Steve',
     lastName: 'Smith',
@@ -91,8 +91,8 @@ incomingMovementsGroupedByType.set('OTHER', [
 ])
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { incomingMovementsService } })
-  incomingMovementsService.getMovesForToday.mockResolvedValue(incomingMovementsGroupedByType)
+  app = appWithAllRoutes({ services: { expectedArrivalsService } })
+  expectedArrivalsService.getArrivalsForToday.mockResolvedValue(expectedArrivalsGroupedByType)
 })
 
 afterEach(() => {
@@ -115,7 +115,7 @@ describe('GET /confirm-arrival/choose-prisoner', () => {
       .get('/confirm-arrival/choose-prisoner')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
-        expect(incomingMovementsService.getMovesForToday).toHaveBeenCalledWith(user.activeCaseLoadId)
+        expect(expectedArrivalsService.getArrivalsForToday).toHaveBeenCalledWith(user.activeCaseLoadId)
       })
   })
 })

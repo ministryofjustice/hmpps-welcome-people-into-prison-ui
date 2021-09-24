@@ -1,9 +1,9 @@
-{% macro incomingMovementCard(movement, moveType, loopIndex) %}
+{% macro expectedArrivalCardMacro(arrival, moveType, loopIndex) %}
     <div class="app-card app-card--with-aside">
         <div class="app-card__content" style="margin-left: 115px">
             <header class="app-card__header">
-                <h2 class="app-card__title" data-qa="{{moveType}}-title-{{loopIndex}}">{{ movement.lastName }}, {{ movement.firstName }}</h2>
-                <span class="govuk-body">{{ movement.prisonNumber | default('No prison number found') }}</span>
+                <h2 class="app-card__title" data-qa="{{moveType}}-title-{{loopIndex}}">{{ arrival.lastName }}, {{ arrival.firstName }}</h2>
+                <span class="govuk-body">{{ arrival.prisonNumber | default('No prison number found') }}</span>
             </header>
             <dl class="app-card__meta-list">
                 <div class="app-card__meta-list-item">
@@ -11,7 +11,7 @@
                         Date of birth
                     </dt>
                     <dd class="app-card__meta-list-value">
-                        {{ movement.dateOfBirth | formatDate('D MMMM YYYY')}}
+                        {{ arrival.dateOfBirth | formatDate('D MMMM YYYY')}}
                     </dd>
                 </div>
                 <div class="app-card__meta-list-item">
@@ -19,7 +19,7 @@
                         Arriving from
                     </dt>
                     <dd class="app-card__meta-list-value">
-                        {{ movement.fromLocation }}
+                        {{ arrival.fromLocation }}
                     </dd>
                 </div>
             </dl>
