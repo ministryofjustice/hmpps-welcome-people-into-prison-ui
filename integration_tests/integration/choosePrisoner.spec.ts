@@ -6,27 +6,27 @@ context('SignIn', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
-    cy.task('stubIncomingMovements', 'MDI')
+    cy.task('stubExpectedArrivals', 'MDI')
   })
 
-  it('A user can view list of incoming movements from courts', () => {
+  it('A user can view list of expected arrivals from courts', () => {
     cy.signIn()
     const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
-    choosePrisonerPage.incomingMovementsFromCourt(1).should('contain.text', 'Doe, John')
-    choosePrisonerPage.incomingMovementsFromCourt(2).should('contain.text', 'Smith, Sam')
+    choosePrisonerPage.expectedArrivalsFromCourt(1).should('contain.text', 'Doe, John')
+    choosePrisonerPage.expectedArrivalsFromCourt(2).should('contain.text', 'Smith, Sam')
   })
 
-  it('A user can view list of incoming movements from custody suites', () => {
+  it('A user can view list of expected arrivals from custody suites', () => {
     cy.signIn()
     const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
-    choosePrisonerPage.incomingMovementsFromCustodySuite(1).should('contain.text', 'Prisoner, Mark')
-    choosePrisonerPage.incomingMovementsFromCustodySuite(2).should('contain.text', 'Smith, Barry')
-    choosePrisonerPage.incomingMovementsFromCustodySuite(3).should('contain.text', 'Smith, Bob')
+    choosePrisonerPage.expectedArrivalsFromCustodySuite(1).should('contain.text', 'Prisoner, Mark')
+    choosePrisonerPage.expectedArrivalsFromCustodySuite(2).should('contain.text', 'Smith, Barry')
+    choosePrisonerPage.expectedArrivalsFromCustodySuite(3).should('contain.text', 'Smith, Bob')
   })
 
-  it('A user can view list of incoming movements from another establishement', () => {
+  it('A user can view list of expected arrivals from another establishement', () => {
     cy.signIn()
     const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
-    choosePrisonerPage.incomingMovementsFromAnotherEstablishment(1).should('contain.text', 'Offender, Karl')
+    choosePrisonerPage.expectedArrivalsFromAnotherEstablishment(1).should('contain.text', 'Offender, Karl')
   })
 })

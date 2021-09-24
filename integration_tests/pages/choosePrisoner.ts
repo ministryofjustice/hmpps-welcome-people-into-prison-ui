@@ -5,12 +5,12 @@ export default class ChoosePrisonerPage extends Page {
     super('Select prisoner to add to the establishment roll')
   }
 
-  incomingMovementsFromCourt = (index: number): PageElement => cy.get(`[data-qa=FROM_COURT-title-${index}]`)
+  expectedArrivalsFromCourt = (index: number): PageElement => cy.get(`[data-qa=FROM_COURT-title-${index}]`)
 
-  incomingMovementsFromCustodySuite = (index: number): PageElement =>
+  expectedArrivalsFromCustodySuite = (index: number): PageElement =>
     cy.get(`[data-qa=FROM_CUSTODY_SUITE-title-${index}]`)
 
-  incomingMovementsFromAnotherEstablishment = (index: number): PageElement =>
+  expectedArrivalsFromAnotherEstablishment = (index: number): PageElement =>
     cy.get(`[data-qa=FROM_ANOTHER_ESTABLISHMENT-title-${index}]`)
 
   headerUserName = (): PageElement => cy.get('[data-qa=header-user-name]')

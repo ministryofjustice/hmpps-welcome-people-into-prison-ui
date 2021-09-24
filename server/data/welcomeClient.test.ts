@@ -24,18 +24,18 @@ describe('welcomeClient', () => {
     nock.cleanAll()
   })
 
-  describe('getIncomingMovements', () => {
+  describe('getExpectedArrivals', () => {
     const activeCaseLoadId = 'MDI'
     const date = moment()
-    const incomingMovements: Movement[] = []
+    const expectedArrivals: Movement[] = []
     it('should return data from api', async () => {
       fakeWelcomeApi
         .get(`/incoming-moves/${activeCaseLoadId}?date=${date.format('YYYY-MM-DD')}`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, incomingMovements)
+        .reply(200, expectedArrivals)
 
-      const output = await welcomeClient.getIncomingMovements(activeCaseLoadId, date)
-      expect(output).toEqual(incomingMovements)
+      const output = await welcomeClient.getExpectedArrivals(activeCaseLoadId, date)
+      expect(output).toEqual(expectedArrivals)
     })
   })
 })

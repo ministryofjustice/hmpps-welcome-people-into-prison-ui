@@ -5,7 +5,7 @@ context('A user can view all current temporary absences', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
-    cy.task('stubIncomingMovements', 'MDI')
+    cy.task('stubExpectedArrivals', 'MDI')
     cy.task('stubTemporaryAbsences', 'MDI')
   })
 
