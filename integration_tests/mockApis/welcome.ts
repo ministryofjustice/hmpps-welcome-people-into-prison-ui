@@ -1,4 +1,6 @@
 import { SuperAgentRequest } from 'superagent'
+import fs from 'fs'
+import path from 'path'
 import incomingMovements from './responses/incomingMovemnts'
 import temporaryAbsences from './responses/temporaryAbsences'
 import { stubFor } from './wiremock'
@@ -40,6 +42,23 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: temporaryAbsences,
+      },
+    })
+  },
+  stubPrisonerImage: (prisoner: Record<string, string>): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/welcome/prison/prisoner/${prisoner.prisonerNumber}/image`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'image/jpeg',
+        },
+        base64Body: Buffer.from(fs.readFileSync(path.join(__dirname, `../images/${prisoner.imageFile}`))).toString(
+          'base64'
+        ),
       },
     })
   },
