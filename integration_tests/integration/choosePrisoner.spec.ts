@@ -49,6 +49,11 @@ context('SignIn', () => {
       .then(altText => {
         expect(altText).equal('Headshot of Doe, John')
       })
+
+    cy.viewport(1280, 1162)
+
+    choosePrisonerPage.prisonerImage(0).matchImageSnapshot()
+    // cy.matchImageSnapshot()
   })
 
   it('A user can view placeholder image', () => {
@@ -70,5 +75,7 @@ context('SignIn', () => {
       .then(altText => {
         expect(altText).equal('Headshot of Smith, Sam')
       })
+
+    choosePrisonerPage.prisonerImage(1).matchImageSnapshot()
   })
 })
