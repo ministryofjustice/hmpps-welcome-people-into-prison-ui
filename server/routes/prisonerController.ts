@@ -1,10 +1,10 @@
 import { RequestHandler } from 'express'
 import path from 'path'
 
-import IncomingMovementsService from '../services/incomingMovementsService'
+import ExpectedArrivalsService from '../services/expectedArrivalsService'
 
 export default class PrisonerController {
-  public constructor(private readonly incomingMovementsService: IncomingMovementsService) {}
+  public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
 
   placeHolderImage = path.join(process.cwd(), '/assets/images/placeholder-image.png')
 
@@ -12,7 +12,7 @@ export default class PrisonerController {
     return async (req, res) => {
       const { prisonNumber } = req.params
 
-      await this.incomingMovementsService
+      await this.expectedArrivalsService
         .getImage(prisonNumber)
         .then(data => {
           res.type('image/jpeg')

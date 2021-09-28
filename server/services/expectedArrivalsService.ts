@@ -1,12 +1,7 @@
 import type { Movement } from 'welcome'
 import moment, { Moment } from 'moment'
 import type { Readable } from 'stream'
-<<<<<<< HEAD:server/services/expectedArrivalsService.ts
 import { groupBy, compareByFullName } from '../utils/utils'
-=======
-
-import { groupBy } from '../utils/utils'
->>>>>>> DCS-1187 diplays prisoner's actual image or a placeholder image:server/services/incomingMovementsService.ts
 import type { RestClientBuilder, WelcomeClient, HmppsAuthClient } from '../data'
 
 export enum MoveType {
@@ -39,12 +34,6 @@ export default class ExpectedArrivalsService {
   public async getArrivalsForToday(agencyId: string, now = () => moment()): Promise<Map<string, Movement[]>> {
     const expectedArrivals = await this.getExpectedArrivals(agencyId, now())
     return groupBy(expectedArrivals, (arrival: Movement) => this.getMoveType(arrival))
-  }
-
-  public async getImage(prisonNumber: string): Promise<Readable> {
-    const token = await this.hmppsAuthClient.getSystemClientToken()
-    const image = await this.welcomeClientFactory(token).getImage(prisonNumber)
-    return image
   }
 
   public async getImage(prisonNumber: string): Promise<Readable> {
