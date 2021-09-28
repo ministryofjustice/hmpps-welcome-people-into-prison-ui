@@ -3,14 +3,14 @@
     <div class="app-card app-card--with-aside flex-container">
         <div class="govuk-!-margin-right-3">
             <img
-                {% if movement.prisonNumber  %}
-                    src= "/prisoner/{{movement.prisonNumber}}/image" 
+                {% if arrival.prisonNumber  %}
+                    src= "/prisoner/{{arrival.prisonNumber}}/image" 
                 {% else %}
                     src= "/assets/images/placeholder-image.png" 
                 {% endif %}                
                 height="150"
                 width="120"
-                alt="Headshot of {{ movement.lastName }}, {{ movement.firstName }}"
+                alt="Headshot of {{ arrival.lastName }}, {{ arrival.firstName }}"
                 data-qa="prisoner-image"
             />
         </div>
