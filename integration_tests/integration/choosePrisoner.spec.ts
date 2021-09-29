@@ -29,4 +29,64 @@ context('SignIn', () => {
     const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
     choosePrisonerPage.expectedArrivalsFromAnotherEstablishment(1).should('contain.text', 'Offender, Karl')
   })
+
+  it("A user can view prisoner's actual image", () => {
+    cy.task('stubPrisonerImage', { prisonerNumber: 'G0013AB', imageFile: '/test-image.jpeg' })
+
+    cy.signIn()
+    const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
+    choosePrisonerPage
+      .prisonerImage(0)
+      .should('be.visible')
+      .should('have.attr', 'src')
+      .then(src => {
+        expect(src).equal('/prisoner/G0013AB/image')
+      })
+
+    choosePrisonerPage
+      .prisonerImage(0)
+      .should('have.attr', 'alt')
+      .then(altText => {
+        expect(altText).equal('Headshot of Doe, John')
+      })
+  })
+
+  it('A user will see placeholder image as prisoner has no image', () => {
+    cy.task('stubPrisonerImage', { prisonerNumber: 'G0014GM', imageFile: '/placeholder-image.png' })
+
+    cy.signIn()
+    const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
+    choosePrisonerPage
+      .prisonerImage(1)
+      .should('be.visible')
+      .should('have.attr', 'src')
+      .then(src => {
+        expect(src).equal('/prisoner/G0014GM/image')
+      })
+
+    choosePrisonerPage
+      .prisonerImage(1)
+      .should('have.attr', 'alt')
+      .then(altText => {
+        expect(altText).equal('Headshot of Smith, Sam')
+      })
+  })
+  it('A user will see placeholder image as there is no prisoner number', () => {
+    cy.signIn()
+    const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
+    choosePrisonerPage
+      .prisonerImage(2)
+      .should('be.visible')
+      .should('have.attr', 'src')
+      .then(src => {
+        expect(src).equal('/assets/images/placeholder-image.png')
+      })
+
+    choosePrisonerPage
+      .prisonerImage(2)
+      .should('have.attr', 'alt')
+      .then(altText => {
+        expect(altText).equal('Headshot of Stanton, Harry')
+      })
+  })
 })
