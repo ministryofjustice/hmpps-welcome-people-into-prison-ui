@@ -1,4 +1,6 @@
 declare module 'welcome' {
+  import { LocationType } from '../../services/expectedArrivalsService'
+
   export type Movement = schemas['Movement']
 
   export type TemporaryAbsence = {
@@ -19,7 +21,8 @@ declare module 'welcome' {
       pncNumber: string
       date: string
       fromLocation: string
-      moveType: 'PRISON_REMAND' | 'COURT_APPEARANCE' | 'PRISON_RECALL' | 'VIDEO_REMAND' | 'PRISON_TRANSFER'
+      moveType?: 'PRISON_REMAND' | 'COURT_APPEARANCE' | 'PRISON_RECALL' | 'VIDEO_REMAND' | 'PRISON_TRANSFER'
+      fromLocationType?: LocationType
     }
     ErrorResponse: {
       status: number
