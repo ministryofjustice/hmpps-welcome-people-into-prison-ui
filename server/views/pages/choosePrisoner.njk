@@ -6,18 +6,18 @@
         <div class="govuk-width-container govuk-body">
             <h1>Select prisoner to add to the establishment roll</h1>
                 <h2 class="govuk-heading-m govuk-!-margin-top-9">Prisoners arriving from court</h2>
-                    {% for arrival in expectedArrivals.get("FROM_COURT") %} 
-                        {{ expectedArrivalCardMacro(arrival, "FROM_COURT", loop.index)}}
+                    {% for arrival in expectedArrivals.get("COURT") %}
+                        {{ expectedArrivalCardMacro(arrival, "COURT", loop.index)}}
                     {% endfor %}
 
                 <h2 class="govuk-heading-m govuk-!-margin-top-9">Prisoners arriving from a custody suite</h2>
-                    {% for arrival in expectedArrivals.get("FROM_CUSTODY_SUITE") %} 
-                        {{ expectedArrivalCardMacro(arrival, "FROM_CUSTODY_SUITE", loop.index)}}
+                    {% for arrival in expectedArrivals.get("CUSTODY_SUITE") %}
+                        {{ expectedArrivalCardMacro(arrival, "CUSTODY_SUITE", loop.index)}}
                     {% endfor %}
 
                  <h2 class="govuk-heading-m govuk-!-margin-top-9">Prisoners arriving from another establishment</h2>
-                    {% for arrival in expectedArrivals.get("FROM_ANOTHER_ESTABLISHMENT") %} 
-                        {{ expectedArrivalCardMacro(arrival, "FROM_ANOTHER_ESTABLISHMENT", loop.index)}}
+                    {% for arrival in expectedArrivals.get("PRISON") %}
+                        {{ expectedArrivalCardMacro(arrival, "PRISON", loop.index)}}
                     {% endfor %}
         </div>
     </div>
