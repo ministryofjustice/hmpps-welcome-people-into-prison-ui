@@ -2,7 +2,7 @@ import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
 import { user, appWithAllRoutes } from './testutils/appSetup'
-import ExpectedArrivalsService from '../services/expectedArrivalsService'
+import ExpectedArrivalsService, { LocationType } from '../services/expectedArrivalsService'
 
 jest.mock('../services/expectedArrivalsService')
 
@@ -11,7 +11,7 @@ const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.
 let app: Express
 
 const expectedArrivalsGroupedByType = new Map()
-expectedArrivalsGroupedByType.set('FROM_COURT', [
+expectedArrivalsGroupedByType.set(LocationType.COURT, [
   {
     firstName: 'John',
     lastName: 'Doe',
@@ -33,7 +33,7 @@ expectedArrivalsGroupedByType.set('FROM_COURT', [
     moveType: 'PRISON_REMAND',
   },
 ])
-expectedArrivalsGroupedByType.set('FROM_ANOTHER_ESTABLISHMENT', [
+expectedArrivalsGroupedByType.set(LocationType.PRISON, [
   {
     firstName: 'Karl',
     lastName: 'Offender',
@@ -45,7 +45,7 @@ expectedArrivalsGroupedByType.set('FROM_ANOTHER_ESTABLISHMENT', [
     moveType: 'PRISON_TRANSFER',
   },
 ])
-expectedArrivalsGroupedByType.set('FROM_CUSTODY_SUITE', [
+expectedArrivalsGroupedByType.set(LocationType.CUSTODY_SUITE, [
   {
     firstName: 'Mark',
     lastName: 'Prisoner',
@@ -77,7 +77,7 @@ expectedArrivalsGroupedByType.set('FROM_CUSTODY_SUITE', [
     moveType: 'VIDEO_REMAND',
   },
 ])
-expectedArrivalsGroupedByType.set('OTHER', [
+expectedArrivalsGroupedByType.set(LocationType.OTHER, [
   {
     firstName: 'Steve',
     lastName: 'Smith',
