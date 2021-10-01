@@ -125,5 +125,7 @@ dist/
 test_results/
 integration_tests/videos/
 integration_tests/screenshots/
+integration_tests/snapshots/*/__diff_output__
+integration_tests/snapshots/All*
 */*.iml
 **/Chart.lock

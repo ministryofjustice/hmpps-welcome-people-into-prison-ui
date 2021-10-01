@@ -49,6 +49,8 @@ context('SignIn', () => {
       .then(altText => {
         expect(altText).equal('Headshot of Doe, John')
       })
+
+    choosePrisonerPage.prisonerImage(0).matchImageSnapshot()
   })
 
   it('A user will see placeholder image as prisoner has no image', () => {
@@ -70,6 +72,8 @@ context('SignIn', () => {
       .then(altText => {
         expect(altText).equal('Headshot of Smith, Sam')
       })
+
+    choosePrisonerPage.prisonerImage(1).matchImageSnapshot()
   })
   it('A user will see placeholder image as there is no prisoner number', () => {
     cy.signIn()
