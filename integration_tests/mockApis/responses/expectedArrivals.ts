@@ -7,7 +7,7 @@ export default [
     pncNumber: '01/3456A',
     date: '2021-09-01',
     fromLocation: 'Reading',
-    moveType: 'PRISON_REMAND',
+    fromLocationType: 'COURT',
   },
   {
     firstName: 'Karl',
@@ -17,7 +17,7 @@ export default [
     pncNumber: '01/5678A',
     date: '2021-09-01',
     fromLocation: 'Leeds',
-    moveType: 'PRISON_TRANSFER',
+    fromLocationType: 'PRISON',
   },
   {
     firstName: 'Mark',
@@ -27,7 +27,7 @@ export default [
     pncNumber: '01/6789A',
     date: '2021-09-01',
     fromLocation: 'Coventry',
-    moveType: 'PRISON_RECALL',
+    fromLocationType: 'CUSTODY_SUITE',
   },
   {
     firstName: 'Barry',
@@ -37,7 +37,7 @@ export default [
     pncNumber: '01/2345A',
     date: '2021-09-01',
     fromLocation: 'Sheffield',
-    moveType: 'PRISON_RECALL',
+    fromLocationType: 'CUSTODY_SUITE',
   },
   {
     firstName: 'Bob',
@@ -47,7 +47,7 @@ export default [
     pncNumber: '01/2345A',
     date: '2021-09-01',
     fromLocation: 'Wandsworth',
-    moveType: 'VIDEO_REMAND',
+    fromLocationType: 'CUSTODY_SUITE',
   },
   {
     firstName: 'Sam',
@@ -57,7 +57,7 @@ export default [
     pncNumber: '01/4567A',
     date: '2021-09-01',
     fromLocation: 'Leeds',
-    moveType: 'PRISON_REMAND',
+    fromLocationType: 'COURT',
   },
   {
     firstName: 'Steve',
@@ -67,7 +67,7 @@ export default [
     pncNumber: '01/5568B',
     date: '2021-09-01',
     fromLocation: 'Manchester',
-    moveType: 'COURT_APPEARANCE',
+    fromLocationType: 'OTHER',
   },
   {
     firstName: 'Harry',
@@ -77,6 +77,6 @@ export default [
     pncNumber: '01/3456A',
     date: '2021-09-01',
     fromLocation: 'Reading',
-    moveType: 'PRISON_REMAND',
+    fromLocationType: 'COURT',
   },
 ]
