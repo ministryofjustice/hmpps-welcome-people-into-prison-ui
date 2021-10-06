@@ -1,3 +1,5 @@
+$_image-width: 90px;
+
 .app-card {
   @include govuk-clearfix;
   border-top: 1px solid $govuk-border-colour;
@@ -49,4 +51,14 @@
   list-style: none;
   margin: govuk-spacing(2) 0 0;
   padding: 0;
+}
+
+.app-card__aside {
+  float: left;
+}
+
+.app-card__content {
+  .app-card--with-aside & {
+    margin-left: $_image-width + govuk-spacing(3);
+  }
 }
