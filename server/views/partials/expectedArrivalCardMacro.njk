@@ -1,42 +1,43 @@
 {% macro expectedArrivalCardMacro(arrival, moveType, loopIndex) %}
-
-    <div class="app-card app-card--with-aside flex-container">
-        <div class="govuk-!-margin-right-3">
-            <img
-                {% if arrival.prisonNumber  %}
-                    src= "/prisoner/{{arrival.prisonNumber}}/image" 
-                {% else %}
-                    src= "/assets/images/placeholder-image.png" 
-                {% endif %}                
-                height="150"
-                width="120"
-                alt="Headshot of {{ arrival.lastName }}, {{ arrival.firstName }}"
-                data-qa="prisoner-image"
-            />
-        </div>
-        <div class="app-card__content">
-            <header class="app-card__header">
-                <h2 class="app-card__title" data-qa="{{moveType}}-title-{{loopIndex}}">{{ arrival.lastName }}, {{ arrival.firstName }}</h2>
-                <span class="govuk-body">{{ arrival.prisonNumber | default('No prison number found') }}</span>
-            </header>
-            <dl class="app-card__meta-list">
-                <div class="app-card__meta-list-item">
-                    <dt class="app-card__meta-list-key">
-                        Date of birth
-                    </dt>
-                    <dd class="app-card__meta-list-value">
-                        {{ arrival.dateOfBirth | formatDate('D MMMM YYYY')}}
-                    </dd>
-                </div>
-                <div class="app-card__meta-list-item">
-                    <dt class="app-card__meta-list-key">
-                        Arriving from
-                    </dt>
-                    <dd class="app-card__meta-list-value">
-                        {{ arrival.fromLocation }}
-                    </dd>
-                </div>
-            </dl>
+    <div class='app-card__content'>
+        <div class="app-card app-card--with-aside">
+                <aside class="app-card__aside">
+                    <img
+                    {% if arrival.prisonNumber  %}
+                        src= "/prisoner/{{arrival.prisonNumber}}/image"
+                    {% else %}
+                        src= "/assets/images/placeholder-image.png"
+                    {% endif %}
+                    width="90px"
+                    class="app-card__image"
+                    alt="Headshot of {{ arrival.lastName }}, {{ arrival.firstName }}"
+                    data-qa="prisoner-image"
+                    />
+                </aside>
+            <div class="app-card__content">
+                <header class="app-card__header govuk-!-margin-bottom-4">
+                    <h2 class="app-card__title" data-qa="{{moveType}}-title-{{loopIndex}}">{{ arrival.lastName }}, {{ arrival.firstName }}</h2>
+                    <span class="govuk-body">{{ arrival.prisonNumber | default('No prison number found') }}</span>
+                </header>
+                <dl class="app-card__meta-list">
+                    <div class="app-card__meta-list-item">
+                        <dt class="app-card__meta-list-key">
+                            Date of birth
+                        </dt>
+                        <dd class="app-card__meta-list-value">
+                            {{ arrival.dateOfBirth | formatDate('D MMMM YYYY')}}
+                        </dd>
+                    </div>
+                    <div class="app-card__meta-list-item">
+                        <dt class="app-card__meta-list-key">
+                            Arriving from
+                        </dt>
+                        <dd class="app-card__meta-list-value">
+                            {{ arrival.fromLocation }}
+                        </dd>
+                    </div>
+                </dl>
+            </div>
         </div>
     </div>
 {%  endmacro %}
