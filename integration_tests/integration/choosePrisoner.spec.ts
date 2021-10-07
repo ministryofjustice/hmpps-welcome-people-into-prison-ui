@@ -1,4 +1,5 @@
 import ChoosePrisonerPage from '../pages/choosePrisoner'
+import ConfirmArrivalPage from '../pages/confirmArrival'
 import Page from '../pages/page'
 
 context('SignIn', () => {
@@ -88,5 +89,20 @@ context('SignIn', () => {
       .then(altText => {
         expect(altText).equal('Headshot of Stanton, Harry')
       })
+  })
+
+  it('Only the names and images of prisoners arriving from court and without a prisoner number will be clickable', () => {
+    cy.signIn()
+    const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
+
+    choosePrisonerPage.prisonerImageLink().should('have.length', 1)
+    choosePrisonerPage.prisonerImageLink().eq(0).click()
+    Page.verifyOnPage(ConfirmArrivalPage)
+
+    cy.go('back')
+
+    choosePrisonerPage.prisonerNameLink().should('have.length', 1)
+    choosePrisonerPage.prisonerNameLink().eq(0).click()
+    Page.verifyOnPage(ConfirmArrivalPage)
   })
 })

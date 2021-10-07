@@ -15,5 +15,9 @@ export default class ChoosePrisonerPage extends Page {
 
   courtRegisterLink = (): PageElement => cy.get('[href="/court-register"]')
 
-  prisonerImage = (child: number): PageElement => cy.get(`[data-qa=prisoner-image`).eq(child)
+  prisonerImage = (index: number): PageElement => cy.get(`[data-qa=prisoner-image]`).eq(index)
+
+  prisonerImageLink = (): PageElement => cy.get(`[data-qa=prisoner-image-link]`)
+
+  prisonerNameLink = (): PageElement => cy.get(`[data-qa=prisoner-name-link]`)
 }

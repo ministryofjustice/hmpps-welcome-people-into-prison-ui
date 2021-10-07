@@ -1,22 +1,38 @@
 {% macro expectedArrivalCardMacro(arrival, moveType, loopIndex) %}
+    {% if arrival.fromLocationType === 'COURT' and not arrival.prisonNumber %}
+        {% set isUnmatchedCourtArrival = true %}
+    {% endif %}
+
     <div class='app-card__content'>
         <div class="app-card app-card--with-aside">
                 <aside class="app-card__aside">
-                    <img
-                    {% if arrival.prisonNumber  %}
-                        src= "/prisoner/{{arrival.prisonNumber}}/image"
-                    {% else %}
-                        src= "/assets/images/placeholder-image.png"
+                    {% if isUnmatchedCourtArrival %}
+                      <a href="/prisoner/{{ arrival.id }}/confirm-arrival" data-qa="prisoner-image-link">
                     {% endif %}
-                    width="90px"
-                    class="app-card__image"
-                    alt="Headshot of {{ arrival.lastName }}, {{ arrival.firstName }}"
-                    data-qa="prisoner-image"
-                    />
+                        <img
+                            {% if arrival.prisonNumber  %}
+                                src= "/prisoner/{{arrival.prisonNumber}}/image"
+                            {% else %}
+                                src= "/assets/images/placeholder-image.png"
+                            {% endif %}
+                            width="90px"
+                            class="app-card__image"
+                            alt="Headshot of {{ arrival.lastName }}, {{ arrival.firstName }}"
+                            data-qa="prisoner-image"
+                        />
+                    {% if isUnmatchedCourtArrival %}
+                       </a>
+                    {% endif %}
                 </aside>
             <div class="app-card__content">
                 <header class="app-card__header govuk-!-margin-bottom-4">
-                    <h2 class="app-card__title" data-qa="{{moveType}}-title-{{loopIndex}}">{{ arrival.lastName }}, {{ arrival.firstName }}</h2>
+                    <h2 class="app-card__title" data-qa="{{moveType}}-title-{{loopIndex}}">
+                        {% if isUnmatchedCourtArrival %}
+                            <a href="/prisoner/{{ arrival.id }}/confirm-arrival" data-qa="prisoner-name-link"> {{ arrival.lastName }}, {{ arrival.firstName }}</a>
+                        {% else %}
+                            {{ arrival.lastName }}, {{ arrival.firstName }}
+                        {%  endif %}
+                    </h2>
                     <span class="govuk-body">{{ arrival.prisonNumber | default('No prison number found') }}</span>
                 </header>
                 <dl class="app-card__meta-list">

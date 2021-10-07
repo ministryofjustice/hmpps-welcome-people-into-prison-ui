@@ -22,6 +22,7 @@ export default function routes(services: Services): Router {
 
   const prisonerController = new PrisonerController(services.expectedArrivalsService)
   get('/prisoner/:prisonNumber/image', prisonerController.getImage())
+  get('/prisoner/:UUID/confirm-arrival', prisonerController.getPrisoner())
 
   return router
 }
