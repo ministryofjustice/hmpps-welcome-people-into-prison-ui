@@ -7,7 +7,7 @@
         <div class="app-card app-card--with-aside">
                 <aside class="app-card__aside">
                     {% if isUnmatchedCourtArrival %}
-                      <a href="/prisoner/{{ arrival.id }}/confirm-arrival" data-qa="prisoner-image-link">
+                      <a href="/prisoner/{{ arrival.id }}/confirm-arrival" class="app-card__image" data-qa="prisoner-image-link">
                     {% endif %}
                         <img
                             {% if arrival.prisonNumber  %}
@@ -28,7 +28,7 @@
                 <header class="app-card__header govuk-!-margin-bottom-4">
                     <h2 class="app-card__title" data-qa="{{moveType}}-title-{{loopIndex}}">
                         {% if isUnmatchedCourtArrival %}
-                            <a href="/prisoner/{{ arrival.id }}/confirm-arrival" data-qa="prisoner-name-link"> {{ arrival.lastName }}, {{ arrival.firstName }}</a>
+                            <a href="/prisoner/{{ arrival.id }}/confirm-arrival" class="govuk-link govuk-link--no-visited-state" data-qa="prisoner-name-link"> {{ arrival.lastName }}, {{ arrival.firstName }}</a>
                         {% else %}
                             {{ arrival.lastName }}, {{ arrival.firstName }}
                         {%  endif %}
