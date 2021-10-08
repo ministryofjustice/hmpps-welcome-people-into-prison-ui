@@ -1,6 +1,7 @@
 import express, { RequestHandler, Router } from 'express'
 import ChoosePrisonerController from './choosePrisonerController'
 import PrisonerController from './prisonerController'
+import ConfirmArrivalController from './confirmArrivalController'
 
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import { Services } from '../services'
@@ -22,7 +23,9 @@ export default function routes(services: Services): Router {
 
   const prisonerController = new PrisonerController(services.expectedArrivalsService)
   get('/prisoner/:prisonNumber/image', prisonerController.getImage())
-  get('/prisoner/:UUID/confirm-arrival', prisonerController.getPrisoner())
+
+  const confirmArrivalController = new ConfirmArrivalController()
+  get('/prisoner/:UUID/confirm-arrival', confirmArrivalController.confirmArrival())
 
   return router
 }

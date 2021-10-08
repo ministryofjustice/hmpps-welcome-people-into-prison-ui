@@ -91,18 +91,16 @@ context('SignIn', () => {
       })
   })
 
-  it('Only the names and images of prisoners arriving from court and without a prisoner number will be clickable', () => {
+  it('Only unmatched court arrivals will have a link leading to the Confirm arrival page', () => {
     cy.signIn()
     const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
 
-    choosePrisonerPage.prisonerImageLink().should('have.length', 1)
-    choosePrisonerPage.prisonerImageLink().eq(0).click()
-    Page.verifyOnPage(ConfirmArrivalPage)
+    choosePrisonerPage.arrivalFrom('PRISON')(1).confirm().should('not.exist')
+    choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(1).confirm().should('not.exist')
+    choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(2).confirm().should('not.exist')
+    choosePrisonerPage.arrivalFrom('COURT')(1).confirm().should('not.exist')
+    choosePrisonerPage.arrivalFrom('COURT')(3).confirm().should('exist').click()
 
-    cy.go('back')
-
-    choosePrisonerPage.prisonerNameLink().should('have.length', 1)
-    choosePrisonerPage.prisonerNameLink().eq(0).click()
     Page.verifyOnPage(ConfirmArrivalPage)
   })
 })

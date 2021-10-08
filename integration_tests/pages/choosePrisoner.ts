@@ -13,11 +13,11 @@ export default class ChoosePrisonerPage extends Page {
 
   headerUserName = (): PageElement => cy.get('[data-qa=header-user-name]')
 
-  courtRegisterLink = (): PageElement => cy.get('[href="/court-register"]')
-
   prisonerImage = (index: number): PageElement => cy.get(`[data-qa=prisoner-image]`).eq(index)
 
-  prisonerImageLink = (): PageElement => cy.get(`[data-qa=prisoner-image-link]`)
-
-  prisonerNameLink = (): PageElement => cy.get(`[data-qa=prisoner-name-link]`)
+  arrivalFrom =
+    (arrivalFromType: string) =>
+    (row: number): Record<string, () => PageElement> => ({
+      confirm: () => cy.get(`[data-qa=${arrivalFromType}-title-${row}]`).find(`[data-qa=confirm-arrival]`),
+    })
 }

@@ -23,10 +23,4 @@ export default class PrisonerController {
         })
     }
   }
-
-  public getPrisoner(): RequestHandler {
-    return async (req, res) => {
-      res.render('pages/confirmArrival.njk')
-    }
-  }
 }
