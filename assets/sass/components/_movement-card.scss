@@ -62,3 +62,8 @@ $_image-width: 90px;
     margin-left: $_image-width + govuk-spacing(3);
   }
 }
+
+.app-card__image {
+  display: block;
+  width: $_image-width;
+}

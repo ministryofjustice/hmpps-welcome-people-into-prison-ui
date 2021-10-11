@@ -1,4 +1,5 @@
 import ChoosePrisonerPage from '../pages/choosePrisoner'
+import ConfirmArrivalPage from '../pages/confirmArrival'
 import Page from '../pages/page'
 
 context('SignIn', () => {
@@ -88,5 +89,18 @@ context('SignIn', () => {
       .then(altText => {
         expect(altText).equal('Headshot of Stanton, Harry')
       })
+  })
+
+  it('Only unmatched court arrivals will have a link leading to the Confirm arrival page', () => {
+    cy.signIn()
+    const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
+
+    choosePrisonerPage.arrivalFrom('PRISON')(1).confirm().should('not.exist')
+    choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(1).confirm().should('not.exist')
+    choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(2).confirm().should('not.exist')
+    choosePrisonerPage.arrivalFrom('COURT')(1).confirm().should('not.exist')
+    choosePrisonerPage.arrivalFrom('COURT')(3).confirm().should('exist').click()
+
+    Page.verifyOnPage(ConfirmArrivalPage)
   })
 })
