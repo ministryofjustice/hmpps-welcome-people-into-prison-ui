@@ -6,7 +6,7 @@ export default class ConfirmArrivalPage extends Page {
   }
 
   static goTo(): ConfirmArrivalPage {
-    cy.visit('/prisoner/12345/confirm-arrival')
+    cy.visit('/prisoners/12345/confirm-arrival')
     return Page.verifyOnPage(ConfirmArrivalPage)
   }
 }
