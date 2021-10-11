@@ -59,7 +59,7 @@ $_image-width: 90px;
 
 .app-card__content {
   .app-card--with-aside & {
-    margin-left: $_image-width + govuk-spacing(3);
+    margin-left: $_image-width + govuk-spacing(5);
   }
 }
 
