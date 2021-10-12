@@ -32,4 +32,9 @@ export default class ExpectedArrivalsService {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     return this.welcomeClientFactory(token).getImage(prisonNumber)
   }
+
+  public async getMove(moveId: string): Promise<Movement> {
+    const token = await this.hmppsAuthClient.getSystemClientToken()
+    return this.welcomeClientFactory(token).getMove(moveId)
+  }
 }

@@ -3,13 +3,9 @@
         <div class="app-card app-card--with-aside">
             <aside class="app-card__aside">
                 <img
-                    {% if arrival.prisonNumber  %}
-                        src= "/prisoner/{{arrival.prisonNumber}}/image"
-                    {% else %}
-                        src= "/assets/images/placeholder-image.png"
-                    {% endif %}
+                    src="{{ '/prisoner/' + arrival.prisonNumber + '/image' if arrival.prisonNumber else '/assets/images/placeholder-image.png' }}"
                     class="app-card__image"
-                    alt="Headshot of {{ arrival.lastName }}, {{ arrival.firstName }}"
+                    alt="{{ arrival.lastName }}, {{ arrival.firstName }}"
                     data-qa="prisoner-image"
                 />
             </aside>

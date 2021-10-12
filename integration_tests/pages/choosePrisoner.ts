@@ -16,7 +16,7 @@ export default class ChoosePrisonerPage extends Page {
   prisonerImage = (index: number): PageElement => cy.get(`[data-qa=prisoner-image]`).eq(index)
 
   arrivalFrom =
-    (arrivalFromType: string) =>
+    (arrivalFromType: 'COURT' | 'PRISON' | 'CUSTODY_SUITE') =>
     (row: number): Record<string, () => PageElement> => ({
       confirm: () => cy.get(`[data-qa=${arrivalFromType}-title-${row}]`).find(`[data-qa=confirm-arrival]`),
     })

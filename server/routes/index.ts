@@ -2,6 +2,7 @@ import express, { RequestHandler, Router } from 'express'
 import ChoosePrisonerController from './choosePrisonerController'
 import PrisonerController from './prisonerController'
 import ConfirmArrivalController from './confirmArrivalController'
+import CheckAnswersController from './checkAnswersController'
 
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import { Services } from '../services'
@@ -24,8 +25,11 @@ export default function routes(services: Services): Router {
   const prisonerController = new PrisonerController(services.expectedArrivalsService)
   get('/prisoner/:prisonNumber/image', prisonerController.getImage())
 
-  const confirmArrivalController = new ConfirmArrivalController()
+  const confirmArrivalController = new ConfirmArrivalController(services.expectedArrivalsService)
   get('/prisoners/:UUID/confirm-arrival', confirmArrivalController.confirmArrival())
+
+  const checkAnswersController = new CheckAnswersController()
+  get('/prisoners/:UUID/check-answers', checkAnswersController.checkAnswers())
 
   return router
 }
