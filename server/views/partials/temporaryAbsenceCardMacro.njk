@@ -3,14 +3,10 @@
         <div class="app-card app-card--with-aside">
             <aside class="app-card__aside">
                 <img
-                    {% if movement.prisonNumber  %}
-                        src= "/prisoner/{{movement.prisonNumber}}/image" 
-                    {% else %}
-                        src= "/assets/images/placeholder-image.png" 
-                    {% endif %}                
+                    src= "/prisoner/{{temporaryAbsence.prisonNumber}}/image" 
                     class="app-card__image"
-                    alt="Headshot of {{ movement.lastName }}, {{ movement.firstName }}"
-                    data-qa="offender-image"
+                    alt="Headshot of {{ temporaryAbsence.lastName }}, {{ temporaryAbsence.firstName }}"
+                    data-qa="prisoner-image"
                 />
             </aside>
             <div class="app-card__content">

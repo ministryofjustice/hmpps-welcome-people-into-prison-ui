@@ -11,4 +11,6 @@ export default class TemporaryAbsencesPage extends Page {
   }
 
   temporaryAbsences = (index: number): PageElement => cy.get(`[data-qa=temporaryAbsence-title-${index}]`)
+
+  prisonerImage = (index: number): PageElement => cy.get(`[data-qa=prisoner-image]`).eq(index)
 }
