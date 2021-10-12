@@ -26,10 +26,10 @@ export default function routes(services: Services): Router {
   get('/prisoner/:prisonNumber/image', prisonerController.getImage())
 
   const confirmArrivalController = new ConfirmArrivalController(services.expectedArrivalsService)
-  get('/prisoners/:UUID/confirm-arrival', confirmArrivalController.confirmArrival())
+  get('/prisoners/:id/confirm-arrival', confirmArrivalController.confirmArrival())
 
   const checkAnswersController = new CheckAnswersController()
-  get('/prisoners/:UUID/check-answers', checkAnswersController.checkAnswers())
+  get('/prisoners/:id/check-answers', checkAnswersController.checkAnswers())
 
   return router
 }

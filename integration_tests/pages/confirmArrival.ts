@@ -2,7 +2,7 @@ import Page from './page'
 
 export default class ConfirmArrivalPage extends Page {
   constructor() {
-    super('Confirm arrival')
+    super('Check this record matches the person in reception')
   }
 
   static goTo(): ConfirmArrivalPage {

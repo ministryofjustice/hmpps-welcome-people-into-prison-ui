@@ -6,18 +6,8 @@ export default class ConfirmArrivalController {
 
   public confirmArrival(): RequestHandler {
     return async (req, res) => {
-      const { UUID } = req.params
-      const { firstName, lastName, dateOfBirth, prisonNumber, pncNumber } = await this.expectedArrivalsService.getMove(
-        UUID
-      )
-      const data = {
-        UUID,
-        firstName,
-        lastName,
-        dateOfBirth,
-        prisonNumber,
-        pncNumber,
-      }
+      const { id } = req.params
+      const data = await this.expectedArrivalsService.getMove(id)
       res.render('pages/confirmArrival.njk', { data })
     }
   }

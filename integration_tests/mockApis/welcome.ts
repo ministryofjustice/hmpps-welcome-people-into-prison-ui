@@ -1,6 +1,7 @@
 import { SuperAgentRequest } from 'superagent'
 import fs from 'fs'
 import path from 'path'
+import expectedArrival from './responses/expectedArrival'
 import expectedArrivals from './responses/expectedArrivals'
 import temporaryAbsences from './responses/temporaryAbsences'
 import { stubFor } from './wiremock'
@@ -16,6 +17,19 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: { status: 'UP' },
+      },
+    })
+  },
+  stubExpectedArrival: (moveId: string): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/welcome/arrivals/${moveId}`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: expectedArrival,
       },
     })
   },

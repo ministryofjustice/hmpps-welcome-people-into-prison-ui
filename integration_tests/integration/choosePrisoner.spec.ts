@@ -7,6 +7,7 @@ context('SignIn', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
+    cy.task('stubExpectedArrival', '12345')
     cy.task('stubExpectedArrivals', 'MDI')
     cy.task('stubMissingPrisonerImage')
   })
@@ -49,7 +50,7 @@ context('SignIn', () => {
       .prisonerImage(0)
       .should('have.attr', 'alt')
       .then(altText => {
-        expect(altText).equal('Headshot of Doe, John')
+        expect(altText).equal('Doe, John')
       })
   })
 
@@ -70,7 +71,7 @@ context('SignIn', () => {
       .prisonerImage(1)
       .should('have.attr', 'alt')
       .then(altText => {
-        expect(altText).equal('Headshot of Smith, Sam')
+        expect(altText).equal('Smith, Sam')
       })
   })
   it('A user will see placeholder image as there is no prisoner number', () => {
@@ -88,7 +89,7 @@ context('SignIn', () => {
       .prisonerImage(2)
       .should('have.attr', 'alt')
       .then(altText => {
-        expect(altText).equal('Headshot of Stanton, Harry')
+        expect(altText).equal('Stanton, Harry')
       })
   })
 
