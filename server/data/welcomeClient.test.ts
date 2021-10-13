@@ -38,4 +38,26 @@ describe('welcomeClient', () => {
       expect(output).toEqual(expectedArrivals)
     })
   })
+
+  describe('getMove', () => {
+    const id = '12345-67890'
+    const expectedArrival: Movement = {
+      id,
+      firstName: 'Jim',
+      lastName: 'Smith',
+      dateOfBirth: '1973-01-08',
+      prisonNumber: 'A12345AB',
+      pncNumber: '01/98644M',
+      date: '2021-10-13',
+      fromLocation: 'Some court',
+      fromLocationType: 'COURT',
+    }
+
+    it('should return data from api', async () => {
+      fakeWelcomeApi.get(`/arrivals/${id}`).matchHeader('authorization', `Bearer ${token}`).reply(200, expectedArrival)
+
+      const output = await welcomeClient.getMove(id)
+      expect(output).toEqual(expectedArrival)
+    })
+  })
 })

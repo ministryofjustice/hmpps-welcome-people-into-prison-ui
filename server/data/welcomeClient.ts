@@ -34,10 +34,10 @@ export default class WelcomeClient {
     }) as Promise<Readable>
   }
 
-  async getMove(moveId: string): Promise<Movement> {
-    logger.info(`welcomeApi: getMove(${moveId})`)
+  async getMove(id: string): Promise<Movement> {
+    logger.info(`welcomeApi: getMove(${id})`)
     return this.restClient.get({
-      path: `/arrivals/${moveId}`,
+      path: `/arrivals/${id}`,
     }) as Promise<Movement>
   }
 }

@@ -205,4 +205,13 @@ describe('Expected arrivals service', () => {
       expect(result).toEqual(expectedArrivalsGroupedByType)
     })
   })
+
+  describe('getMoves', () => {
+    it('Calls upstream service correctly', async () => {
+      await service.getMove('12345-67890')
+
+      expect(WelcomeClientFactory).toBeCalledWith(token)
+      expect(welcomeClient.getMove).toBeCalledWith('12345-67890')
+    })
+  })
 })
