@@ -14,6 +14,7 @@ declare module 'welcome' {
   export interface schemas {
     /** A movement into prison */
     Movement: {
+      id?: string
       firstName: string
       lastName: string
       dateOfBirth: string

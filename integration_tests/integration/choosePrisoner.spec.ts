@@ -2,11 +2,24 @@ import ChoosePrisonerPage from '../pages/choosePrisoner'
 import ConfirmArrivalPage from '../pages/confirmArrival'
 import Page from '../pages/page'
 
+const expectedArrival = {
+  id: '00000-11111',
+  firstName: 'Harry',
+  lastName: 'Stanton',
+  dateOfBirth: '1961-01-29',
+  prisonNumber: null,
+  pncNumber: '01/3456A',
+  date: '2021-09-01',
+  fromLocation: 'Reading',
+  fromLocationType: 'COURT',
+}
+
 context('SignIn', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
+    cy.task('stubExpectedArrival', expectedArrival)
     cy.task('stubExpectedArrivals', 'MDI')
     cy.task('stubMissingPrisonerImage')
   })
@@ -49,7 +62,7 @@ context('SignIn', () => {
       .prisonerImage(0)
       .should('have.attr', 'alt')
       .then(altText => {
-        expect(altText).equal('Headshot of Doe, John')
+        expect(altText).equal('Doe, John')
       })
   })
 
@@ -70,7 +83,7 @@ context('SignIn', () => {
       .prisonerImage(1)
       .should('have.attr', 'alt')
       .then(altText => {
-        expect(altText).equal('Headshot of Smith, Sam')
+        expect(altText).equal('Smith, Sam')
       })
   })
   it('A user will see placeholder image as there is no prisoner number', () => {
@@ -88,7 +101,7 @@ context('SignIn', () => {
       .prisonerImage(2)
       .should('have.attr', 'alt')
       .then(altText => {
-        expect(altText).equal('Headshot of Stanton, Harry')
+        expect(altText).equal('Stanton, Harry')
       })
   })
 

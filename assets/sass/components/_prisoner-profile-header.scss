@@ -1,0 +1,19 @@
+.prisoner-header {
+  margin-bottom: govuk-spacing(6);
+
+  @include govuk-media-query($from: tablet) {
+    display: flex;
+  }
+
+  &__image-container {
+    margin-bottom: govuk-spacing(3);
+
+    @include govuk-media-query($from: tablet) {
+      padding-right: $govuk-gutter * 2;
+    }
+  }
+}
+
+.prisoner-image {
+  width: 160px;
+}

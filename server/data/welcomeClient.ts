@@ -33,4 +33,11 @@ export default class WelcomeClient {
       path: `/prison/prisoner/${prisonNumber}/image`,
     }) as Promise<Readable>
   }
+
+  async getMove(id: string): Promise<Movement> {
+    logger.info(`welcomeApi: getMove(${id})`)
+    return this.restClient.get({
+      path: `/arrivals/${id}`,
+    }) as Promise<Movement>
+  }
 }
