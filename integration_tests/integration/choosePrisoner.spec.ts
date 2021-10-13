@@ -31,15 +31,6 @@ context('SignIn', () => {
     choosePrisonerPage.expectedArrivalsFromCourt(2).should('contain.text', 'Smith, Sam')
   })
 
-  it('Should handle no expected arrivals from courts', () => {
-    cy.task('stubNoExpectedArrivals', 'MDI')
-    cy.signIn()
-    const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
-    choosePrisonerPage
-      .noExpectedArrivalsFromCourt()
-      .should('contain.text', 'There are currently no prisoners booked to arrive from court today.')
-  })
-
   it('A user can view list of expected arrivals from custody suites', () => {
     cy.signIn()
     const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
@@ -48,25 +39,22 @@ context('SignIn', () => {
     choosePrisonerPage.expectedArrivalsFromCustodySuite(3).should('contain.text', 'Smith, Bob')
   })
 
-  it('Should handle no expected arrivals from custody suites', () => {
-    cy.task('stubNoExpectedArrivals', 'MDI')
-    cy.signIn()
-    const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
-    choosePrisonerPage
-      .noExpectedArrivalsFromCustodySuite()
-      .should('contain.text', 'There are currently no prisoners booked to arrive from a custody suite today.')
-  })
-
   it('A user can view list of expected arrivals from another establishement', () => {
     cy.signIn()
     const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
     choosePrisonerPage.expectedArrivalsFromAnotherEstablishment(1).should('contain.text', 'Offender, Karl')
   })
 
-  it('Should handle no expected arrivals from another establishement', () => {
+  it('Should handle no expected arrivals', () => {
     cy.task('stubNoExpectedArrivals', 'MDI')
     cy.signIn()
     const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
+    choosePrisonerPage
+      .noExpectedArrivalsFromCourt()
+      .should('contain.text', 'There are currently no prisoners booked to arrive from court today.')
+    choosePrisonerPage
+      .noExpectedArrivalsFromCustodySuite()
+      .should('contain.text', 'There are currently no prisoners booked to arrive from a custody suite today.')
     choosePrisonerPage
       .noExpectedArrivalsFromAnotherEstablishment()
       .should('contain.text', 'There are currently no prisoners booked to arrive from another establishment today.')
