@@ -45,6 +45,21 @@ context('SignIn', () => {
     choosePrisonerPage.expectedArrivalsFromAnotherEstablishment(1).should('contain.text', 'Offender, Karl')
   })
 
+  it('Should handle no expected arrivals', () => {
+    cy.task('stubNoExpectedArrivals', 'MDI')
+    cy.signIn()
+    const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
+    choosePrisonerPage
+      .noExpectedArrivalsFromCourt()
+      .should('contain.text', 'There are currently no prisoners booked to arrive from court today.')
+    choosePrisonerPage
+      .noExpectedArrivalsFromCustodySuite()
+      .should('contain.text', 'There are currently no prisoners booked to arrive from a custody suite today.')
+    choosePrisonerPage
+      .noExpectedArrivalsFromAnotherEstablishment()
+      .should('contain.text', 'There are currently no prisoners booked to arrive from another establishment today.')
+  })
+
   it("A user can view prisoner's actual image", () => {
     cy.task('stubPrisonerImage', { prisonerNumber: 'G0013AB', imageFile: '/test-image.jpeg' })
 

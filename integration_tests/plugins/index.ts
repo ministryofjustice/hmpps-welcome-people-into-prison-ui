@@ -18,6 +18,7 @@ export default (on: (string, Record) => void): void => {
 
     stubExpectedArrival: welcome.stubExpectedArrival,
     stubExpectedArrivals: welcome.stubExpectedArrivals,
+    stubNoExpectedArrivals: welcome.stubNoExpectedArrivals,
     stubWelcomeApiPing: welcome.stubPing,
     stubTemporaryAbsences: welcome.stubTemporaryAbsences,
     stubPrisonerImage: welcome.stubPrisonerImage,

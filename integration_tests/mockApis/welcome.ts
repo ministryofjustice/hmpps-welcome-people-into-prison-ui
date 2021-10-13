@@ -45,6 +45,19 @@ export default {
       },
     })
   },
+  stubNoExpectedArrivals: (activeCaseLoadId: string): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/welcome/incoming-moves/${activeCaseLoadId}\\?date=.*`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [],
+      },
+    })
+  },
   stubTemporaryAbsences: (activeCaseLoadId: string): SuperAgentRequest => {
     return stubFor({
       request: {
