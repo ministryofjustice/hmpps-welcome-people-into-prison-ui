@@ -37,25 +37,4 @@ context('A user can view all current temporary absences', () => {
         expect(altText).equal('Headshot of Doe, John')
       })
   })
-
-  it('A user will see placeholder image as prisoner has no image', () => {
-    cy.task('stubPrisonerImage', { prisonerNumber: 'G0015GD', imageFile: '/placeholder-image.png' })
-
-    cy.signIn()
-    const temporaryAbsencesPage = TemporaryAbsencesPage.goTo()
-    temporaryAbsencesPage
-      .prisonerImage(1)
-      .should('be.visible')
-      .should('have.attr', 'src')
-      .then(src => {
-        expect(src).equal('/prisoner/G0015GD/image')
-      })
-
-    temporaryAbsencesPage
-      .prisonerImage(1)
-      .should('have.attr', 'alt')
-      .then(altText => {
-        expect(altText).equal('Headshot of Offender, Karl')
-      })
-  })
 })
