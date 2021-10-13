@@ -2,12 +2,24 @@ import ChoosePrisonerPage from '../pages/choosePrisoner'
 import ConfirmArrivalPage from '../pages/confirmArrival'
 import Page from '../pages/page'
 
+const expectedArrival = {
+  id: '00000-11111',
+  firstName: 'Harry',
+  lastName: 'Stanton',
+  dateOfBirth: '1961-01-29',
+  prisonNumber: null,
+  pncNumber: '01/3456A',
+  date: '2021-09-01',
+  fromLocation: 'Reading',
+  fromLocationType: 'COURT',
+}
+
 context('SignIn', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
-    cy.task('stubExpectedArrival', '12345')
+    cy.task('stubExpectedArrival', expectedArrival)
     cy.task('stubExpectedArrivals', 'MDI')
     cy.task('stubMissingPrisonerImage')
   })

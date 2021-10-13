@@ -1,7 +1,6 @@
 import { SuperAgentRequest } from 'superagent'
 import fs from 'fs'
 import path from 'path'
-import expectedArrival from './responses/expectedArrival'
 import expectedArrivals from './responses/expectedArrivals'
 import temporaryAbsences from './responses/temporaryAbsences'
 import { stubFor } from './wiremock'
@@ -20,11 +19,11 @@ export default {
       },
     })
   },
-  stubExpectedArrival: (moveId: string): SuperAgentRequest => {
+  stubExpectedArrival: (expectedArrival: Record<string, string>): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/welcome/arrivals/${moveId}`,
+        urlPattern: `/welcome/arrivals/${expectedArrival.id}`,
       },
       response: {
         status: 200,
