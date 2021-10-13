@@ -62,4 +62,19 @@ export default {
       },
     })
   },
+
+  stubMissingPrisonerImage: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/welcome/prison/prisoner/.*?/image`,
+      },
+      response: {
+        status: 404,
+        headers: {
+          'Content-Type': 'image/jpeg',
+        },
+      },
+    })
+  },
 }

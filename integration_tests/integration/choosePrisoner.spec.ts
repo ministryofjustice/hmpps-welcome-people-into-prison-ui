@@ -8,6 +8,7 @@ context('SignIn', () => {
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
     cy.task('stubExpectedArrivals', 'MDI')
+    cy.task('stubMissingPrisonerImage')
   })
 
   it('A user can view list of expected arrivals from courts', () => {

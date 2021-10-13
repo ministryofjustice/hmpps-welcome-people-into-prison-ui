@@ -1,42 +1,38 @@
 {% macro temporaryAbsenceCard(temporaryAbsence, loopIndex) %}
-
-    <div class="app-card app-card--with-aside flex-container">
-        <div class="govuk-!-margin-right-3">
-            <img
-                {% if movement.prisonNumber  %}
-                    src= "/prisoner/{{movement.prisonNumber}}/image" 
-                {% else %}
-                    src= "/assets/images/placeholder-image.png" 
-                {% endif %}                
-                height="150"
-                width="120"
-                alt="Headshot of {{ movement.lastName }}, {{ movement.firstName }}"
-                data-qa="offender-image"
-            />
-        </div>
-        <div class="app-card__content">
-            <header class="app-card__header">
-                <h2 class="app-card__title" data-qa="temporaryAbsence-title-{{loopIndex}}">{{ temporaryAbsence.lastName }}, {{ temporaryAbsence.firstName }}</h2>
-                <span class="govuk-body">{{ temporaryAbsence.prisonNumber }}</span>
-            </header>
-            <dl class="app-card__meta-list">
-                <div class="app-card__meta-list-item">
-                    <dt class="app-card__meta-list-key">
-                        Date of birth
-                    </dt>
-                    <dd class="app-card__meta-list-value">
-                        {{ temporaryAbsence.dateOfBirth | formatDate('D MMMM YYYY')}}
-                    </dd>
-                </div>
-                <div class="app-card__meta-list-item">
-                    <dt class="app-card__meta-list-key">
-                        Reason for absence
-                    </dt>
-                    <dd class="app-card__meta-list-value">
-                        {{ temporaryAbsence.reasonForAbsence }}
-                    </dd>
-                </div>
-            </dl>
+    <div class='app-card__content'>
+        <div class="app-card app-card--with-aside">
+            <aside class="app-card__aside">
+                <img
+                    src= "/prisoner/{{temporaryAbsence.prisonNumber}}/image" 
+                    class="app-card__image"
+                    alt="Headshot of {{ temporaryAbsence.lastName }}, {{ temporaryAbsence.firstName }}"
+                    data-qa="prisoner-image"
+                />
+            </aside>
+            <div class="app-card__content">
+                <header class="app-card__header govuk-!-margin-bottom-4">
+                    <h2 class="app-card__title" data-qa="temporaryAbsence-title-{{loopIndex}}">{{ temporaryAbsence.lastName }}, {{ temporaryAbsence.firstName }}</h2>
+                    <span class="govuk-body">{{ temporaryAbsence.prisonNumber }}</span>
+                </header>
+                <dl class="app-card__meta-list">
+                    <div class="app-card__meta-list-item">
+                        <dt class="app-card__meta-list-key">
+                            Date of birth
+                        </dt>
+                        <dd class="app-card__meta-list-value">
+                            {{ temporaryAbsence.dateOfBirth | formatDate('D MMMM YYYY')}}
+                        </dd>
+                    </div>
+                    <div class="app-card__meta-list-item">
+                        <dt class="app-card__meta-list-key">
+                            Reason for absence
+                        </dt>
+                        <dd class="app-card__meta-list-value">
+                            {{ temporaryAbsence.reasonForAbsence }}
+                        </dd>
+                    </div>
+                </dl>
+            </div>
         </div>
     </div>
 {%  endmacro %}
