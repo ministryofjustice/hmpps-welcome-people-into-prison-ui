@@ -7,9 +7,16 @@ export default class ChoosePrisonerPage extends Page {
 
   expectedArrivalsFromCourt = (index: number): PageElement => cy.get(`[data-qa=COURT-title-${index}]`)
 
+  noExpectedArrivalsFromCourt = (): PageElement => cy.get('[data-qa=no-arrivals-from-court]')
+
   expectedArrivalsFromCustodySuite = (index: number): PageElement => cy.get(`[data-qa=CUSTODY_SUITE-title-${index}]`)
 
+  noExpectedArrivalsFromCustodySuite = (): PageElement => cy.get('[data-qa=no-arrivals-from-custody-suite]')
+
   expectedArrivalsFromAnotherEstablishment = (index: number): PageElement => cy.get(`[data-qa=PRISON-title-${index}]`)
+
+  noExpectedArrivalsFromAnotherEstablishment = (): PageElement =>
+    cy.get('[data-qa=no-arrivals-from-another-establishment]')
 
   headerUserName = (): PageElement => cy.get('[data-qa=header-user-name]')
 
