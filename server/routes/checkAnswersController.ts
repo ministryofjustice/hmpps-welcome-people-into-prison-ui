@@ -15,7 +15,6 @@ export default class CheckAnswersController {
   public addToRoll(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
-      const data = await this.expectedArrivalsService.getMove(id)
       res.redirect(`/prisoners/${id}/confirmation`)
     }
   }

@@ -14,7 +14,7 @@
                                 <dt class="govuk-summary-list__key">
                                     Name
                                 </dt>
-                                <dd class="govuk-summary-list__value">
+                                <dd class="govuk-summary-list__value" data-qa="prisoner-name">
                                     {{ data.firstName}} {{ data.lastName }}
                                 </dd>
                             </div>
@@ -22,7 +22,7 @@
                                 <dt class="govuk-summary-list__key">
                                     Date of birth
                                 </dt>
-                                <dd class="govuk-summary-list__value">
+                                <dd class="govuk-summary-list__value" data-qa="dob">
                                     {{ data.dateOfBirth | formatDate('D MMMM YYYY') }}
                                 </dd>
                             </div>
@@ -31,7 +31,7 @@
                                     <dt class="govuk-summary-list__key">
                                         Prison number
                                     </dt>
-                                    <dd class="govuk-summary-list__value">
+                                    <dd class="govuk-summary-list__value" data-qa="prison-number">
                                         {{ data.prisonNumber }}
                                     </dd>
                                 </div>
@@ -41,7 +41,7 @@
                                     <dt class="govuk-summary-list__key">
                                         PNC number
                                     </dt>
-                                    <dd class="govuk-summary-list__value">
+                                    <dd class="govuk-summary-list__value" data-qa="pnc-number">
                                         {{ data.pncNumber }}
                                     </dd>
                                 </div>
@@ -50,7 +50,7 @@
                                 <dt class="govuk-summary-list__key">
                                     Reason for imprisonment
                                 </dt>
-                                <dd class="govuk-summary-list__value">
+                                <dd class="govuk-summary-list__value" data-qa="reason">
                                     {{ data['reason-imprisonment']  if data['reason-imprisonment']  else "remand" }}
                                 </dd>
                             </div>
