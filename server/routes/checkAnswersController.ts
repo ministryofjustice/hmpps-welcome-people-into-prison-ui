@@ -1,9 +1,21 @@
 import { RequestHandler } from 'express'
+import ExpectedArrivalsService from '../services/expectedArrivalsService'
 
 export default class CheckAnswersController {
-  public checkAnswers(): RequestHandler {
+  public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
+
+  public view(): RequestHandler {
     return async (req, res) => {
-      return res.render('pages/checkAnswers.njk')
+      const { id } = req.params
+      const data = await this.expectedArrivalsService.getMove(id)
+      return res.render('pages/checkAnswers.njk', { data })
+    }
+  }
+
+  public addToRoll(): RequestHandler {
+    return async (req, res) => {
+      const { id } = req.params
+      res.redirect(`/prisoners/${id}/confirmation`)
     }
   }
 }

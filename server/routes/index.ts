@@ -3,6 +3,7 @@ import ChoosePrisonerController from './choosePrisonerController'
 import PrisonerController from './prisonerController'
 import ConfirmArrivalController from './confirmArrivalController'
 import CheckAnswersController from './checkAnswersController'
+import ConfirmAddedToRollController from './confirmAddedToRollController'
 
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import { Services } from '../services'
@@ -11,6 +12,7 @@ import TemporaryAbsencesController from './temporaryAbsencesController'
 export default function routes(services: Services): Router {
   const router = express.Router()
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
   const choosePrisonerController = new ChoosePrisonerController(services.expectedArrivalsService)
   get('/confirm-arrival/choose-prisoner', choosePrisonerController.view())
@@ -28,8 +30,12 @@ export default function routes(services: Services): Router {
   const confirmArrivalController = new ConfirmArrivalController(services.expectedArrivalsService)
   get('/prisoners/:id/confirm-arrival', confirmArrivalController.confirmArrival())
 
-  const checkAnswersController = new CheckAnswersController()
-  get('/prisoners/:id/check-answers', checkAnswersController.checkAnswers())
+  const checkAnswersController = new CheckAnswersController(services.expectedArrivalsService)
+  get('/prisoners/:id/check-answers', checkAnswersController.view())
+  post('/prisoners/:id/check-answers', checkAnswersController.addToRoll())
+
+  const confirmAddedToRollController = new ConfirmAddedToRollController()
+  get('/prisoners/:id/confirmation', confirmAddedToRollController.view())
 
   return router
 }
