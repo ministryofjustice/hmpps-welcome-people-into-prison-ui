@@ -103,4 +103,17 @@ export default {
       },
     })
   },
+  stubCreateOffenderRecordAndBooking: (arrivalId: string): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/welcome/arrivals/${arrivalId}/confirm`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: { prisonNumber: 'A12345AB' },
+      },
+    })
+  },
 }

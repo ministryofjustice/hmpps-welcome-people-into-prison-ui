@@ -1,6 +1,6 @@
 import nock from 'nock'
 import moment from 'moment'
-import type { Movement } from 'welcome'
+import type { Movement, NewOffenderBooking } from 'welcome'
 import WelcomeClient from './welcomeClient'
 import config from '../config'
 
@@ -9,6 +9,7 @@ describe('welcomeClient', () => {
   let welcomeClient: WelcomeClient
 
   const token = 'token-1'
+  const id = '12345-67890'
 
   beforeEach(() => {
     config.apis.welcome.url = 'http://localhost:8080'
@@ -40,7 +41,6 @@ describe('welcomeClient', () => {
   })
 
   describe('getMove', () => {
-    const id = '12345-67890'
     const expectedArrival: Movement = {
       id,
       firstName: 'Jim',
@@ -58,6 +58,28 @@ describe('welcomeClient', () => {
 
       const output = await welcomeClient.getMove(id)
       expect(output).toEqual(expectedArrival)
+    })
+  })
+
+  describe('createOffenderRecordAndBooking', () => {
+    const newOffender: NewOffenderBooking = {
+      firstName: 'Jim',
+      lastName: 'Smith',
+      dateOfBirth: '1973-01-08',
+      gender: 'M',
+      prisonId: 'MDI',
+      imprisonmentStatus: 'RX',
+      movementReasonCode: 'N',
+    }
+
+    it('should send data to api and return a prisoner number', async () => {
+      fakeWelcomeApi
+        .post(`/arrivals/${id}/confirm`, newOffender)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, { prisonNumber: 'A12345AB' })
+
+      const output = await welcomeClient.createOffenderRecordAndBooking(id, newOffender)
+      expect(output).toEqual({ prisonNumber: 'A12345AB' })
     })
   })
 })
