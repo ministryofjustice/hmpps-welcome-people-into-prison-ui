@@ -11,6 +11,16 @@ declare module 'welcome' {
     reasonForAbsence: string
   }
 
+  export type NewOffenderBooking = {
+    firstName: string
+    lastName: string
+    dateOfBirth: string
+    gender: string
+    prisonId: string
+    imprisonmentStatus: string
+    movementReasonCode: string
+  }
+
   export interface schemas {
     /** A movement into prison */
     Movement: {

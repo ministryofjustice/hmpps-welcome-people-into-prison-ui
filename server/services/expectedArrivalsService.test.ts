@@ -1,5 +1,5 @@
 import moment from 'moment'
-import type { Movement } from 'welcome'
+import type { Movement, NewOffenderBooking } from 'welcome'
 import ExpectedArrivalsService, { LocationType } from './expectedArrivalsService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import WelcomeClient from '../data/welcomeClient'
@@ -206,12 +206,42 @@ describe('Expected arrivals service', () => {
     })
   })
 
-  describe('getMoves', () => {
+  describe('getMove', () => {
     it('Calls upstream service correctly', async () => {
       await service.getMove('12345-67890')
 
       expect(WelcomeClientFactory).toBeCalledWith(token)
       expect(welcomeClient.getMove).toBeCalledWith('12345-67890')
+    })
+  })
+
+  describe('createOffenderRecordAndBooking', () => {
+    const newOffender: NewOffenderBooking = {
+      firstName: 'Jim',
+      lastName: 'Smith',
+      dateOfBirth: '1973-01-08',
+      gender: 'M',
+      prisonId: 'MDI',
+      imprisonmentStatus: 'RX',
+      movementReasonCode: 'N',
+    }
+
+    it('Calls hmppsAuth and welcome clients correctly', async () => {
+      const username = 'Bob'
+      await service.createOffenderRecordAndBooking(username, '12345-67890', newOffender)
+      await hmppsAuthClient.getSystemClientToken(username)
+
+      expect(WelcomeClientFactory).toBeCalledWith(token)
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith(username)
+      expect(welcomeClient.createOffenderRecordAndBooking).toBeCalledWith('12345-67890', {
+        firstName: 'Jim',
+        lastName: 'Smith',
+        dateOfBirth: '1973-01-08',
+        gender: 'M',
+        prisonId: 'MDI',
+        imprisonmentStatus: 'RX',
+        movementReasonCode: 'N',
+      })
     })
   })
 })

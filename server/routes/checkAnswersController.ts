@@ -15,6 +15,18 @@ export default class CheckAnswersController {
   public addToRoll(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
+      const { username, activeCaseLoadId } = res.locals.user
+      const data = await this.expectedArrivalsService.getMove(id)
+      const newOffender = {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        dateOfBirth: data.dateOfBirth,
+        gender: 'M',
+        prisonId: activeCaseLoadId,
+        imprisonmentStatus: 'RX',
+        movementReasonCode: 'N',
+      }
+      await this.expectedArrivalsService.createOffenderRecordAndBooking(username, id, newOffender)
       res.redirect(`/prisoners/${id}/confirmation`)
     }
   }
