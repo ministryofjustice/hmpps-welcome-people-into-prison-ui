@@ -42,7 +42,7 @@ export default class WelcomeClient {
   }
 
   async createOffenderRecordAndBooking(id: string, body: NewOffenderBooking): Promise<string> {
-    logger.info(`welcomeApi: createOffenderRecordAndBooking(${body})`)
+    logger.info(`welcomeApi: createOffenderRecordAndBooking(${id})`)
     return this.restClient.post({
       path: `/arrivals/${id}/confirm`,
       data: body,
