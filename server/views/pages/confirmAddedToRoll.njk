@@ -1,10 +1,30 @@
 {% extends "../partials/layout.njk" %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {% set pageTitle = "has been added to the establishment roll" %}
 
 {% block content %}
 <div class="govuk-width-container">
   <main class="govuk-main-wrapper">
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-7">has been added to the establishment roll</h1>
+    <div class="govuk-grid-column-two-thirds">
+      {{ govukPanel({
+        titleText: data.firstName + " " + data.lastName + " " + "has been added to the establishment roll",
+        html: "Prison number<br><strong>" + offenderNumber + "</strong>",
+        attributes: {
+          'data-qa': 'confirmation-banner'
+        } 
+      }) }}
+
+      <p data-qa="confirmation-paragraph">{{ data.firstName}} {{ data.lastName }} is now part of the {{ prison.longDescription }} establishment roll and is located in reception.</p>
+
+      {{ govukButton({
+        text: "Add another prisoner to the roll",
+        href: '/confirm-arrival/choose-prisoner',
+        attributes: {
+          'data-qa': 'add-another-to-roll'
+        } 
+      }) }}
+    </div>
   </main>
 </div>
 

@@ -215,6 +215,15 @@ describe('Expected arrivals service', () => {
     })
   })
 
+  describe('getPrison', () => {
+    it('Calls upstream service correctly', async () => {
+      await service.getPrison('MDI')
+
+      expect(WelcomeClientFactory).toBeCalledWith(token)
+      expect(welcomeClient.getPrison).toBeCalledWith('MDI')
+    })
+  })
+
   describe('createOffenderRecordAndBooking', () => {
     const newOffender: NewOffenderBooking = {
       firstName: 'Jim',

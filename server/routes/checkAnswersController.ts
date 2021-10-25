@@ -26,7 +26,12 @@ export default class CheckAnswersController {
         imprisonmentStatus: 'RX',
         movementReasonCode: 'N',
       }
-      await this.expectedArrivalsService.createOffenderRecordAndBooking(username, id, newOffender)
+      const offenderNumber = await this.expectedArrivalsService.createOffenderRecordAndBooking(
+        username,
+        id,
+        newOffender
+      )
+      req.flash('offenderNumber', offenderNumber.offenderNo)
       res.redirect(`/prisoners/${id}/confirmation`)
     }
   }

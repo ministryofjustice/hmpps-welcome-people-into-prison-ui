@@ -1,5 +1,5 @@
 import moment from 'moment'
-import type { Movement, TemporaryAbsence, NewOffenderBooking } from 'welcome'
+import type { Movement, TemporaryAbsence, NewOffenderBooking, Prison, OffenderNumber } from 'welcome'
 import type { Readable } from 'stream'
 import config, { ApiConfig } from '../config'
 import RestClient from './restClient'
@@ -41,11 +41,18 @@ export default class WelcomeClient {
     }) as Promise<Movement>
   }
 
-  async createOffenderRecordAndBooking(id: string, body: NewOffenderBooking): Promise<string> {
+  async getPrison(prisonId: string): Promise<Prison> {
+    logger.info(`welcomeApi: getPrison(${prisonId})`)
+    return this.restClient.get({
+      path: `/prison/${prisonId}`,
+    }) as Promise<Prison>
+  }
+
+  async createOffenderRecordAndBooking(id: string, body: NewOffenderBooking): Promise<OffenderNumber> {
     logger.info(`welcomeApi: createOffenderRecordAndBooking(${id})`)
     return this.restClient.post({
       path: `/arrivals/${id}/confirm`,
       data: body,
-    }) as Promise<string>
+    }) as Promise<OffenderNumber>
   }
 }

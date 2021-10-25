@@ -34,7 +34,7 @@ export default function routes(services: Services): Router {
   get('/prisoners/:id/check-answers', checkAnswersController.view())
   post('/prisoners/:id/check-answers', checkAnswersController.addToRoll())
 
-  const confirmAddedToRollController = new ConfirmAddedToRollController()
+  const confirmAddedToRollController = new ConfirmAddedToRollController(services.expectedArrivalsService)
   get('/prisoners/:id/confirmation', confirmAddedToRollController.view())
 
   return router
