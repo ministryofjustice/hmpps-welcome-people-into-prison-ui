@@ -21,6 +21,14 @@ declare module 'welcome' {
     movementReasonCode: string
   }
 
+  export type Prison = {
+    longDescription: string
+  }
+
+  export type OffenderNumber = {
+    offenderNo: string
+  }
+
   export interface schemas {
     /** A movement into prison */
     Movement: {

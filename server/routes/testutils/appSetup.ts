@@ -20,7 +20,17 @@ export const user = {
   authSource: 'NOMIS',
 }
 
-function appSetup(services: Services, production: boolean, userSupplier: () => Express.User): Express {
+function appSetup(
+  services: Services,
+  production: boolean,
+  userSupplier: () => Express.User,
+  flash: {
+    (): { [key: string]: string[] }
+    (message: string): string[]
+    (type: string, message: string | string[]): number
+    (type: string, format: string, ...args: unknown[]): number
+  }
+): Express {
   const app = express()
 
   app.set('view engine', 'njk')
@@ -29,6 +39,7 @@ function appSetup(services: Services, production: boolean, userSupplier: () => E
 
   app.use((req, res, next) => {
     req.user = userSupplier()
+    req.flash = flash
     res.locals = {}
     res.locals.user = req.user
     next()
@@ -48,11 +59,18 @@ export function appWithAllRoutes({
   production = false,
   services = {},
   userSupplier = () => user,
+  flash = jest.fn().mockReturnValue([]),
 }: {
   production?: boolean
   services?: Partial<Services>
   userSupplier?: () => Express.User
+  flash?: {
+    (): { [key: string]: string[] }
+    (message: string): string[]
+    (type: string, message: string | string[]): number
+    (type: string, format: string, ...args: unknown[]): number
+  }
 }): Express {
   auth.default.authenticationMiddleware = () => (req, res, next) => next()
-  return appSetup(services as Services, production, userSupplier)
+  return appSetup(services as Services, production, userSupplier, flash)
 }

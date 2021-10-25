@@ -8,18 +8,22 @@ import ExpectedArrivalsService from '../services/expectedArrivalsService'
 jest.mock('../services/expectedArrivalsService')
 const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
 let app: Express
+const flash = jest.fn()
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { expectedArrivalsService } })
+  app = appWithAllRoutes({ services: { expectedArrivalsService }, flash })
   expectedArrivalsService.getMove.mockResolvedValue({
     firstName: 'Jim',
     lastName: 'Smith',
     dateOfBirth: '1973-01-08',
-    prisonNumber: 'A12345AB',
+    prisonNumber: 'A1234AB',
     pncNumber: '01/98644M',
     date: '2021-10-13',
     fromLocation: 'Some court',
     fromLocationType: 'COURT',
+  })
+  expectedArrivalsService.createOffenderRecordAndBooking.mockResolvedValue({
+    offenderNo: 'A1234AB',
   })
 })
 
@@ -75,11 +79,14 @@ describe('POST /checkAnswers', () => {
       })
   })
 
-  it('should redirect /confirmation page', () => {
+  it('should redirect to /confirmation page and store offenderNumber in flash', () => {
     return request(app)
       .post('/prisoners/12345-67890/check-answers')
       .send(newOffender)
       .expect(302)
       .expect('Location', '/prisoners/12345-67890/confirmation')
+      .expect(() => {
+        expect(flash).toHaveBeenCalledWith('offenderNumber', 'A1234AB')
+      })
   })
 })

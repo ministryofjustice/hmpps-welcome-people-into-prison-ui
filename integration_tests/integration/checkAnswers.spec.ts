@@ -9,6 +9,7 @@ context('SignIn', () => {
     cy.task('stubAuthUser')
     cy.task('stubExpectedArrivals', 'MDI')
     cy.task('stubMissingPrisonerImage')
+    cy.task('stubPrison', 'MDI')
   })
 
   const expectedArrival = {
@@ -38,7 +39,7 @@ context('SignIn', () => {
     Page.verifyOnPage(ConfirmAddedToRollPage)
   })
 
-  it('Should not display prison or pnc numbers', () => {
+  it('Should not display prison or pnc numbers if none present', () => {
     expectedArrival.prisonNumber = null
     expectedArrival.pncNumber = null
 

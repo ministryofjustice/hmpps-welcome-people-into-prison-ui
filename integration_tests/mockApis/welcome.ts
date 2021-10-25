@@ -88,7 +88,6 @@ export default {
       },
     })
   },
-
   stubMissingPrisonerImage: (): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -103,6 +102,19 @@ export default {
       },
     })
   },
+  stubPrison: (activeCaseLoadId: string): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/welcome/prison/${activeCaseLoadId}`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: { longDescription: 'Moorland (HMP)' },
+      },
+    })
+  },
   stubCreateOffenderRecordAndBooking: (arrivalId: string): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -112,7 +124,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: { prisonNumber: 'A12345AB' },
+        jsonBody: { offenderNo: 'A1234AB' },
       },
     })
   },
