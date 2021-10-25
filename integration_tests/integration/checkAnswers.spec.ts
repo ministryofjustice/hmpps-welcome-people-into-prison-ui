@@ -33,7 +33,7 @@ context('SignIn', () => {
     checkAnswersPage.dob().should('contain.text', '29 January 1961')
     checkAnswersPage.prisonNumber().should('contain.text', 'A1234AB')
     checkAnswersPage.pncNumber().should('contain.text', '01/3456A')
-    checkAnswersPage.reason().should('contain.text', 'remand')
+    checkAnswersPage.reason().should('contain.text', "Remanded to Magistrates' Court - Unconvicted Remand")
     cy.task('stubCreateOffenderRecordAndBooking', '00000-11111')
     checkAnswersPage.addToRoll().click()
     Page.verifyOnPage(ConfirmAddedToRollPage)
