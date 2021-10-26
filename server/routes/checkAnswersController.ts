@@ -1,4 +1,5 @@
 import { RequestHandler } from 'express'
+import { Gender } from 'welcome'
 import ExpectedArrivalsService from '../services/expectedArrivalsService'
 
 export default class CheckAnswersController {
@@ -21,7 +22,7 @@ export default class CheckAnswersController {
         firstName: data.firstName,
         lastName: data.lastName,
         dateOfBirth: data.dateOfBirth,
-        gender: 'M',
+        gender: Gender.NOT_SPECIFIED,
         prisonId: activeCaseLoadId,
         imprisonmentStatus: 'RX',
         movementReasonCode: 'N',

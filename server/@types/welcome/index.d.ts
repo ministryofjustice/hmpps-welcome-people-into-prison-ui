@@ -11,11 +11,19 @@ declare module 'welcome' {
     reasonForAbsence: string
   }
 
+  export const enum Gender {
+    FEMALE = 'F',
+    MALE = 'M',
+    NOT_KNOWN = 'NK',
+    NOT_SPECIFIED = 'NS',
+    REFUSED = 'REF',
+  }
+
   export type NewOffenderBooking = {
     firstName: string
     lastName: string
     dateOfBirth: string
-    gender: string
+    gender: Gender
     prisonId: string
     imprisonmentStatus: string
     movementReasonCode: string

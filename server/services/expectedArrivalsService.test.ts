@@ -1,5 +1,5 @@
 import moment from 'moment'
-import type { Movement, NewOffenderBooking } from 'welcome'
+import { Gender, Movement, NewOffenderBooking } from 'welcome'
 import ExpectedArrivalsService, { LocationType } from './expectedArrivalsService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import WelcomeClient from '../data/welcomeClient'
@@ -229,7 +229,7 @@ describe('Expected arrivals service', () => {
       firstName: 'Jim',
       lastName: 'Smith',
       dateOfBirth: '1973-01-08',
-      gender: 'M',
+      gender: Gender.NOT_SPECIFIED,
       prisonId: 'MDI',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',
@@ -246,7 +246,7 @@ describe('Expected arrivals service', () => {
         firstName: 'Jim',
         lastName: 'Smith',
         dateOfBirth: '1973-01-08',
-        gender: 'M',
+        gender: 'NS',
         prisonId: 'MDI',
         imprisonmentStatus: 'RX',
         movementReasonCode: 'N',

@@ -1,6 +1,6 @@
 import nock from 'nock'
 import moment from 'moment'
-import type { Movement, NewOffenderBooking, Prison } from 'welcome'
+import { Gender, Movement, NewOffenderBooking, Prison } from 'welcome'
 import WelcomeClient from './welcomeClient'
 import config from '../config'
 
@@ -80,7 +80,7 @@ describe('welcomeClient', () => {
       firstName: 'Jim',
       lastName: 'Smith',
       dateOfBirth: '1973-01-08',
-      gender: 'M',
+      gender: Gender.NOT_SPECIFIED,
       prisonId: 'MDI',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',
