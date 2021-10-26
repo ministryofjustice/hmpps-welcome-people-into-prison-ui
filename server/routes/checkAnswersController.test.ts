@@ -1,5 +1,5 @@
 import type { Express } from 'express'
-import type { NewOffenderBooking } from 'welcome'
+import { Gender, NewOffenderBooking } from 'welcome'
 import request from 'supertest'
 import cheerio from 'cheerio'
 import { appWithAllRoutes, user } from './testutils/appSetup'
@@ -58,7 +58,7 @@ describe('POST /checkAnswers', () => {
     firstName: 'Jim',
     lastName: 'Smith',
     dateOfBirth: '1973-01-08',
-    gender: 'M',
+    gender: Gender.NOT_SPECIFIED,
     prisonId: 'MDI',
     imprisonmentStatus: 'RX',
     movementReasonCode: 'N',
