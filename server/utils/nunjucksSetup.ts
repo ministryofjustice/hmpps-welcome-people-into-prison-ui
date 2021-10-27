@@ -58,6 +58,7 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
 
   njkEnv.addGlobal('tagManagerContainerId', tagManagerContainerId)
   njkEnv.addGlobal('tagManagerEnvironment', tagManagerEnvironment)
+  njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)
 
   return njkEnv
 }
