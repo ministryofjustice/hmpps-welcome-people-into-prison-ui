@@ -11,7 +11,7 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   app.set('view engine', 'njk')
 
   app.locals.asset_path = '/assets/'
-  app.locals.applicationName = 'HMPPS Welcome People Into Prison'
+  app.locals.applicationName = 'Welcome People Into Prison'
 
   // Cachebusting version string
   if (production) {
