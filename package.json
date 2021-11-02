@@ -111,7 +111,8 @@
     "passport": "^0.5.0",
     "passport-oauth2": "^1.6.1",
     "redis": "^3.1.2",
-    "superagent": "^6.1.0"
+    "superagent": "^6.1.0",
+    "universal-analytics": "^0.4.23"
   },
   "devDependencies": {
     "@types/bunyan": "^1.8.7",
@@ -133,6 +134,7 @@
     "@types/redis": "^2.8.32",
     "@types/superagent": "^4.1.13",
     "@types/supertest": "^2.0.11",
+    "@types/universal-analytics": "^0.4.5",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "concurrently": "^6.3.0",
