@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express'
 import { Gender } from 'welcome'
 import ExpectedArrivalsService from '../services/expectedArrivalsService'
+import raiseAnalyticsEvent from '../raiseAnalyticsEvent'
 
 export default class CheckAnswersController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
@@ -27,11 +28,20 @@ export default class CheckAnswersController {
         imprisonmentStatus: 'RX',
         movementReasonCode: 'N',
       }
+
       const offenderNumber = await this.expectedArrivalsService.createOffenderRecordAndBooking(
         username,
         id,
         newOffender
       )
+
+      raiseAnalyticsEvent(
+        'Add to the establishment roll',
+        'Offender record and booking created',
+        `AgencyId: ${activeCaseLoadId}, From: ${data.fromLocation}, Type: ${data.fromLocationType},`,
+        req.hostname
+      )
+
       req.flash('offenderNumber', offenderNumber.offenderNo)
       res.redirect(`/prisoners/${id}/confirmation`)
     }

@@ -4,11 +4,14 @@ import request from 'supertest'
 import cheerio from 'cheerio'
 import { appWithAllRoutes, user } from './testutils/appSetup'
 import ExpectedArrivalsService from '../services/expectedArrivalsService'
+import raiseAnalyticsEvent from '../raiseAnalyticsEvent'
 
 jest.mock('../services/expectedArrivalsService')
 const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
 let app: Express
 const flash = jest.fn()
+
+jest.mock('../raiseAnalyticsEvent')
 
 beforeEach(() => {
   app = appWithAllRoutes({ services: { expectedArrivalsService }, flash })
@@ -79,7 +82,7 @@ describe('POST /checkAnswers', () => {
       })
   })
 
-  it('should redirect to /confirmation page and store offenderNumber in flash', () => {
+  it('should redirect to /confirmation page, store offenderNumber in flash and raise analytics event', () => {
     return request(app)
       .post('/prisoners/12345-67890/check-answers')
       .send(newOffender)
@@ -87,6 +90,12 @@ describe('POST /checkAnswers', () => {
       .expect('Location', '/prisoners/12345-67890/confirmation')
       .expect(() => {
         expect(flash).toHaveBeenCalledWith('offenderNumber', 'A1234AB')
+        expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
+          'Add to the establishment roll',
+          'Offender record and booking created',
+          'AgencyId: MDI, From: Some court, Type: COURT,',
+          '127.0.0.1'
+        )
       })
   })
 })
