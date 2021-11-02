@@ -50,6 +50,7 @@ export default [
     fromLocationType: 'OTHER',
   },
   {
+    id: '00000-222222',
     firstName: 'Sam',
     lastName: 'Smith',
     dateOfBirth: '1970-02-01',
@@ -58,6 +59,7 @@ export default [
     date: '2021-09-01',
     fromLocation: 'Leeds',
     fromLocationType: 'COURT',
+    isCurrentPrisoner: false,
   },
   {
     id: '67890',
@@ -69,6 +71,7 @@ export default [
     date: '2021-09-01',
     fromLocation: 'Reading',
     fromLocationType: 'COURT',
+    isCurrentPrisoner: true,
   },
   {
     id: '00000-11111',
@@ -80,5 +83,6 @@ export default [
     date: '2021-09-01',
     fromLocation: 'Reading',
     fromLocationType: 'COURT',
+    isCurrentPrisoner: false,
   },
 ]
