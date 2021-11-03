@@ -4,6 +4,8 @@ import PrisonerController from './prisonerController'
 import ConfirmArrivalController from './confirmArrivalController'
 import CheckAnswersController from './checkAnswersController'
 import ConfirmAddedToRollController from './confirmAddedToRollController'
+import ImprisonmentStatusesController from './imprisonmentStatusesController'
+import ImprisonmentReasonsController from './imprisonmentReasonsController'
 
 import authorisationForUrlMiddleware from '../middleware/authorisationForUrlMiddleware'
 import asyncMiddleware from '../middleware/asyncMiddleware'
@@ -40,6 +42,20 @@ export default function routes(services: Services): Router {
 
   const confirmAddedToRollController = new ConfirmAddedToRollController(services.expectedArrivalsService)
   get('/prisoners/:id/confirmation', confirmAddedToRollController.view(), [Role.PRISON_RECEPTION])
+
+  const imprisonmentStatusesController = new ImprisonmentStatusesController(
+    services.imprisonmentStatusesService,
+    services.expectedArrivalsService
+  )
+  get('/prisoners/:id/imprisonment-status', imprisonmentStatusesController.view())
+  post('/prisoners/:id/imprisonment-status', imprisonmentStatusesController.assignStatus())
+
+  const imprisonmentReasonsController = new ImprisonmentReasonsController(
+    services.imprisonmentStatusesService,
+    services.expectedArrivalsService
+  )
+  get('/prisoners/:id/imprisonment-status/:imprisonmentStatus', imprisonmentReasonsController.view())
+  post('/prisoners/:id/imprisonment-status/:imprisonmentStatus', imprisonmentReasonsController.assignReason())
 
   return router
 }

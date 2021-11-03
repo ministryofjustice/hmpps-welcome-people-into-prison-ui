@@ -1,4 +1,4 @@
-import { convertToTitleCase, groupBy, compareByFullName } from './utils'
+import { convertToTitleCase, groupBy, compareByFullName, getKeyByValue } from './utils'
 
 describe('Convert to title case', () => {
   it('null string', () => {
@@ -162,5 +162,11 @@ describe('compareByFullName', () => {
         }
       )
     ).toEqual(-1)
+  })
+})
+
+describe('getKeyByValue', () => {
+  it('should handle object with content', () => {
+    expect(getKeyByValue({ key1: 'value1', key2: 'value2', key3: 'value3' }, 'value2')).toEqual('key2')
   })
 })

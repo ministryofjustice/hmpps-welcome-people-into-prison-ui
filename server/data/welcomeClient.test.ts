@@ -1,6 +1,6 @@
 import nock from 'nock'
 import moment from 'moment'
-import { Gender, Movement, NewOffenderBooking, Prison } from 'welcome'
+import { Gender, ImprisonmentStatus, Movement, NewOffenderBooking, Prison } from 'welcome'
 import WelcomeClient from './welcomeClient'
 import config from '../config'
 
@@ -94,6 +94,41 @@ describe('welcomeClient', () => {
 
       const output = await welcomeClient.createOffenderRecordAndBooking(id, newOffender)
       expect(output).toEqual({ prisonNumber: 'A1234AB' })
+    })
+  })
+  describe('getImprisonmentStatuses', () => {
+    const mockResponse: ImprisonmentStatus[] = [
+      {
+        description: 'On remand',
+        imprisonmentStatusCode: 'RX',
+        movementReasons: [{ movementReasonCode: 'R' }],
+      },
+      {
+        description: 'Convicted unsentenced',
+        imprisonmentStatusCode: 'JR',
+        movementReasons: [{ movementReasonCode: 'V' }],
+      },
+      {
+        description: 'Determinate sentence',
+        imprisonmentStatusCode: 'SENT',
+        secondLevelTitle: 'What is the type of determinate sentence?',
+        movementReasons: [
+          { description: 'Extended sentence for public protection', movementReasonCode: '26' },
+          { description: 'Imprisonment without option of a fine', movementReasonCode: 'I' },
+          { description: 'Intermittent custodial sentence', movementReasonCode: 'INTER' },
+          { description: 'Partly suspended sentence', movementReasonCode: 'P' },
+        ],
+      },
+    ]
+
+    it('should get data in correct format', async () => {
+      fakeWelcomeApi
+        .get('/imprisonment-statuses')
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, mockResponse)
+
+      const output = await welcomeClient.getImprisonmentStatuses()
+      expect(output).toEqual(mockResponse)
     })
   })
 })

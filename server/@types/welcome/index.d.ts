@@ -58,4 +58,11 @@ declare module 'welcome' {
       moreInfo?: string
     }
   }
+
+  export interface ImprisonmentStatus {
+    description: string
+    imprisonmentStatusCode: string
+    secondLevelTitle?: string
+    movementReasons: { description?: string; movementReasonCode: string }[]
+  }
 }

@@ -33,3 +33,7 @@ export const compareByFullName = <T extends Person>(a: T, b: T): number => {
   const result = a.lastName.localeCompare(b.lastName)
   return result !== 0 ? result : a.firstName.localeCompare(b.firstName)
 }
+
+export const getKeyByValue = <T, V>(object: T, value: V): string => {
+  return Object.keys(object).find(key => object[key] === value)
+}

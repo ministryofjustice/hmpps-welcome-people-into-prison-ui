@@ -1,0 +1,36 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set pageTitle = "What is the reason for imprisonment?" %}
+{% block content %}
+    <div class="govuk-!-margin-bottom-8">
+        <div class="govuk-width-container govuk-body">
+            <span class="govuk-caption-xl">  Confirm arrival of {{ data.firstName}} {{ data.lastName }}</span>
+            <h1 class="govuk-heading-l">What is the reason for imprisonment?</h1>
+
+            <form method="post" action = "/prisoners/{{ data.id }}/imprisonment-status">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                    <div class="govuk-form-group">
+                        <fieldset class="govuk-fieldset">
+                            <div class="govuk-radios">
+                            {% for status in imprisonmentStatuses %}
+                                <div class="govuk-radios__item">
+                                    <input class="govuk-radios__input" id="imprisonment-status-{{loop.index}}" name="imprisonmentStatus" type="radio" value="{{status.description}}">
+                                    <label class="govuk-label govuk-radios__label" for="imprisonment-status-{{loop.index}}">
+                                        {{status.description}}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                            </div>
+                        </fieldset>
+                    </div>
+                    {{ govukButton({
+                        classes: "govuk-button govuk-!-margin-bottom-6",
+                        text: "Continue",
+                        attributes: {'data-qa': 'continue'},
+                        type: 'submit'
+                    }) }}
+            </form>
+         </div>
+    </div>
+{% endblock %}
