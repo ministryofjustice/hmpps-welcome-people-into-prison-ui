@@ -15,7 +15,7 @@ const flash = jest.fn()
 jest.mock('../raiseAnalyticsEvent')
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { expectedArrivalsService }, flash, roles: [Role.RECEPTION_USER] })
+  app = appWithAllRoutes({ services: { expectedArrivalsService }, flash, roles: [Role.PRISON_RECEPTION] })
   expectedArrivalsService.getMove.mockResolvedValue({
     firstName: 'Jim',
     lastName: 'Smith',

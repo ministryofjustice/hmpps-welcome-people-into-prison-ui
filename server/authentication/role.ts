@@ -1,5 +1,5 @@
 const enum Role {
-  RECEPTION_USER = 'RECEPTION_USER',
+  PRISON_RECEPTION = 'PRISON_RECEPTION',
 }
 
 export default Role

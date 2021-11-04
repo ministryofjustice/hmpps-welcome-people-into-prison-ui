@@ -43,7 +43,7 @@ const temporaryAbsences = [
 ]
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { temporaryAbsencesService }, roles: [Role.RECEPTION_USER] })
+  app = appWithAllRoutes({ services: { temporaryAbsencesService }, roles: [Role.PRISON_RECEPTION] })
   temporaryAbsencesService.getTemporaryAbsences.mockResolvedValue(temporaryAbsences)
 })
 

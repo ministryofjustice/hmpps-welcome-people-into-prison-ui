@@ -16,7 +16,7 @@ export default function authorisationMiddleware(authorisedRoles: string[] = []):
 
       res.locals.user = {
         roles,
-        isReceptionUser: roles.includes(Role.RECEPTION_USER),
+        isReceptionUser: roles.includes(Role.PRISON_RECEPTION),
         ...res.locals.user,
       }
       return next()

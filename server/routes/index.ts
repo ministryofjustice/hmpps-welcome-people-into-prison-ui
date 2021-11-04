@@ -26,20 +26,20 @@ export default function routes(services: Services): Router {
   })
 
   const temporaryAbsencesController = new TemporaryAbsencesController(services.temporaryAbsencesService)
-  get('/confirm-arrival/return-from-temporary-absence', temporaryAbsencesController.view(), [Role.RECEPTION_USER])
+  get('/confirm-arrival/return-from-temporary-absence', temporaryAbsencesController.view(), [Role.PRISON_RECEPTION])
 
   const prisonerController = new PrisonerController(services.expectedArrivalsService)
   get('/prisoner/:prisonNumber/image', prisonerController.getImage())
 
   const confirmArrivalController = new ConfirmArrivalController(services.expectedArrivalsService)
-  get('/prisoners/:id/confirm-arrival', confirmArrivalController.confirmArrival(), [Role.RECEPTION_USER])
+  get('/prisoners/:id/confirm-arrival', confirmArrivalController.confirmArrival(), [Role.PRISON_RECEPTION])
 
   const checkAnswersController = new CheckAnswersController(services.expectedArrivalsService)
-  get('/prisoners/:id/check-answers', checkAnswersController.view(), [Role.RECEPTION_USER])
-  post('/prisoners/:id/check-answers', checkAnswersController.addToRoll(), [Role.RECEPTION_USER])
+  get('/prisoners/:id/check-answers', checkAnswersController.view(), [Role.PRISON_RECEPTION])
+  post('/prisoners/:id/check-answers', checkAnswersController.addToRoll(), [Role.PRISON_RECEPTION])
 
   const confirmAddedToRollController = new ConfirmAddedToRollController(services.expectedArrivalsService)
-  get('/prisoners/:id/confirmation', confirmAddedToRollController.view(), [Role.RECEPTION_USER])
+  get('/prisoners/:id/confirmation', confirmAddedToRollController.view(), [Role.PRISON_RECEPTION])
 
   return router
 }

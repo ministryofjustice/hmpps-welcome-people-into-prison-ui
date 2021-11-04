@@ -9,7 +9,7 @@ const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.RECEPTION_USER] })
+  app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
   expectedArrivalsService.getMove.mockResolvedValue(null)
 })
 

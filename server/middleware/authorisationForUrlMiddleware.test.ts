@@ -21,7 +21,7 @@ describe('authorisationMiddlewareForUrl', () => {
   }
 
   it('should return next when no required roles', () => {
-    const res = createResWithRole(Role.RECEPTION_USER)
+    const res = createResWithRole(Role.PRISON_RECEPTION)
 
     const authorisationResponse = authorisationForUrlMiddleware()(req, res, next)
 
@@ -31,15 +31,15 @@ describe('authorisationMiddlewareForUrl', () => {
   it('should redirect when user has no authorised roles', () => {
     const res = createResWithRole()
 
-    const authorisationResponse = authorisationForUrlMiddleware([Role.RECEPTION_USER])(req, res, next)
+    const authorisationResponse = authorisationForUrlMiddleware([Role.PRISON_RECEPTION])(req, res, next)
 
     expect(authorisationResponse).toEqual('/autherror')
   })
 
   it('should return next when user has authorised role', () => {
-    const res = createResWithRole(Role.RECEPTION_USER)
+    const res = createResWithRole(Role.PRISON_RECEPTION)
 
-    const authorisationResponse = authorisationForUrlMiddleware([Role.RECEPTION_USER])(req, res, next)
+    const authorisationResponse = authorisationForUrlMiddleware([Role.PRISON_RECEPTION])(req, res, next)
 
     expect(authorisationResponse).toEqual(next())
   })

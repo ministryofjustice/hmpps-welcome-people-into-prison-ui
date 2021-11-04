@@ -7,7 +7,7 @@ import Role from '../../server/authentication/role'
 context('Confirm Added To Roll', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn', Role.RECEPTION_USER)
+    cy.task('stubSignIn', Role.PRISON_RECEPTION)
     cy.task('stubAuthUser')
     cy.task('stubExpectedArrivals', 'MDI')
     cy.task('stubMissingPrisonerImage')
