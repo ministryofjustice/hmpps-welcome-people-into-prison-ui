@@ -2,11 +2,12 @@ import Page from '../pages/page'
 import CheckAnswersPage from '../pages/checkAnswers'
 import ConfirmAddedToRollPage from '../pages/confirmAddedToRoll'
 import ChoosePrisonerPage from '../pages/choosePrisoner'
+import Role from '../../server/authentication/role'
 
-context('SignIn', () => {
+context('Confirm Added To Roll', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn')
+    cy.task('stubSignIn', Role.RECEPTION_USER)
     cy.task('stubAuthUser')
     cy.task('stubExpectedArrivals', 'MDI')
     cy.task('stubMissingPrisonerImage')

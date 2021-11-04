@@ -1,4 +1,4 @@
-{% macro expectedArrivalCardMacro(arrival, moveType, loopIndex) %}
+{% macro expectedArrivalCardMacro(arrival, moveType, loopIndex, user) %}
     <div class='app-card__content'>
         <div class="app-card app-card--with-aside">
             <aside class="app-card__aside">
@@ -12,7 +12,7 @@
             <div class="app-card__content">
                 <header class="app-card__header govuk-!-margin-bottom-4">
                     <h2 class="app-card__title" data-qa="{{moveType}}-title-{{loopIndex}}">
-                        {% if arrival.fromLocationType === 'COURT' and not arrival.isCurrentPrisoner %}
+                        {% if user.isReceptionUser and arrival.fromLocationType === 'COURT' and not arrival.isCurrentPrisoner %}
                             <a href="/prisoners/{{ arrival.id }}/confirm-arrival" class="govuk-link govuk-link--no-visited-state" data-qa="confirm-arrival"> {{ arrival.lastName }}, {{ arrival.firstName }}</a>
                         {% else %}
                             {{ arrival.lastName }}, {{ arrival.firstName }}

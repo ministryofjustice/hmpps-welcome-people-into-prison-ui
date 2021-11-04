@@ -1,9 +1,10 @@
 import TemporaryAbsencesPage from '../pages/temporaryAbsences'
+import Role from '../../server/authentication/role'
 
 context('A user can view all current temporary absences', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn')
+    cy.task('stubSignIn', Role.RECEPTION_USER)
     cy.task('stubAuthUser')
     cy.task('stubExpectedArrivals', 'MDI')
     cy.task('stubTemporaryAbsences', 'MDI')

@@ -5,6 +5,7 @@ import cheerio from 'cheerio'
 import { appWithAllRoutes, user } from './testutils/appSetup'
 import ExpectedArrivalsService from '../services/expectedArrivalsService'
 import raiseAnalyticsEvent from '../raiseAnalyticsEvent'
+import Role from '../authentication/role'
 
 jest.mock('../services/expectedArrivalsService')
 const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
@@ -14,7 +15,7 @@ const flash = jest.fn()
 jest.mock('../raiseAnalyticsEvent')
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { expectedArrivalsService }, flash })
+  app = appWithAllRoutes({ services: { expectedArrivalsService }, flash, roles: [Role.RECEPTION_USER] })
   expectedArrivalsService.getMove.mockResolvedValue({
     firstName: 'Jim',
     lastName: 'Smith',
@@ -35,6 +36,11 @@ afterEach(() => {
 })
 
 describe('GET /checkAnswers', () => {
+  it('should redirect to authentication error page for non reception users', () => {
+    app = appWithAllRoutes({ roles: [] })
+    return request(app).get('/prisoners/12345-67890/check-answers').expect(302).expect('Location', '/autherror')
+  })
+
   it('should call service method correctly', () => {
     return request(app)
       .get('/prisoners/12345-67890/check-answers')
@@ -66,6 +72,16 @@ describe('POST /checkAnswers', () => {
     imprisonmentStatus: 'RX',
     movementReasonCode: 'N',
   }
+
+  it('should redirect to authentication error page for non reception users', () => {
+    app = appWithAllRoutes({ services: { expectedArrivalsService }, flash, roles: [] })
+    return request(app)
+      .post('/prisoners/12345-67890/check-answers')
+      .send(newOffender)
+      .expect(302)
+      .expect('Location', '/autherror')
+  })
+
   it('should call service methods correctly', () => {
     return request(app)
       .post('/prisoners/12345-67890/check-answers')
