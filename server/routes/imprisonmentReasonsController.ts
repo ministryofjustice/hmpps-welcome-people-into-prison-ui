@@ -2,7 +2,7 @@ import { RequestHandler } from 'express'
 import ImprisonmentStatusesService from '../services/imprisonmentStatusesService'
 import ExpectedArrivalsService from '../services/expectedArrivalsService'
 import { getKeyByValue } from '../utils/utils'
-import getMapping from './urlMappings'
+import * as urlMappings from './urlMappings.json'
 
 export default class ImprisonmentStatusesController {
   public constructor(
@@ -13,8 +13,7 @@ export default class ImprisonmentStatusesController {
   public view(): RequestHandler {
     return async (req, res) => {
       const { id, imprisonmentStatus } = req.params
-      const mappings = getMapping()
-      const statusDescription = getKeyByValue(mappings, imprisonmentStatus)
+      const statusDescription = getKeyByValue(urlMappings, imprisonmentStatus)
       const { movementReasons, secondLevelTitle } = await this.imprisonmentStatusesService.getImprisonmentStatus(
         statusDescription
       )

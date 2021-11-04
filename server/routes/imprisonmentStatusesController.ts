@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express'
 import ImprisonmentStatusesService from '../services/imprisonmentStatusesService'
 import ExpectedArrivalsService from '../services/expectedArrivalsService'
-import getMapping from './urlMappings'
+import * as urlMappings from './urlMappings.json'
 
 export default class ImprisonmentStatusesController {
   public constructor(
@@ -23,10 +23,9 @@ export default class ImprisonmentStatusesController {
     return async (req, res) => {
       const { id } = req.params
       const { imprisonmentStatus } = req.body
-      const urlMapping = getMapping()
 
-      return urlMapping[`${imprisonmentStatus}`]
-        ? res.redirect(`/prisoners/${id}/imprisonment-status/${urlMapping[`${imprisonmentStatus}`]}`)
+      return urlMappings[`${imprisonmentStatus}`]
+        ? res.redirect(`/prisoners/${id}/imprisonment-status/${urlMappings[`${imprisonmentStatus}`]}`)
         : res.redirect(`/prisoners/${id}/check-answers`)
     }
   }
