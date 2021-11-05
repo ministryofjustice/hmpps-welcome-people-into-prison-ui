@@ -63,7 +63,7 @@ describe('welcomeClient', () => {
 
   describe('getPrison', () => {
     const prison: Prison = {
-      longDescription: 'Moorland (HMP)',
+      description: 'Moorland (HMP & YOI)',
     }
     const prisonId = 'MDI'
 
