@@ -52,14 +52,6 @@ afterEach(() => {
 })
 
 describe('GET /confirm-arrival/return-from-temporary-absence', () => {
-  it('should redirect to authentication error page for non reception users', () => {
-    app = appWithAllRoutes({ roles: [] })
-    return request(app)
-      .get('/confirm-arrival/return-from-temporary-absence')
-      .expect(302)
-      .expect('Location', '/autherror')
-  })
-
   it('should render /confirm-arrival/return-from-temporary-absence page', () => {
     return request(app)
       .get('/confirm-arrival/return-from-temporary-absence')
