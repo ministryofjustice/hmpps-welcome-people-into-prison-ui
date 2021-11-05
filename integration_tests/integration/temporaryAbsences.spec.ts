@@ -38,4 +38,15 @@ context('A user can view all current temporary absences', () => {
         expect(altText).equal('Headshot of Doe, John')
       })
   })
+
+  it('No links shown if not a reception user', () => {
+    cy.task('stubSignIn')
+    cy.signIn()
+    const temporaryAbsencesPage = TemporaryAbsencesPage.goTo()
+
+    temporaryAbsencesPage.temporaryAbsences(1).find(`[data-qa=confirm-arrival]`).should('not.exist')
+    temporaryAbsencesPage.temporaryAbsences(1).find(`[data-qa=confirm-arrival]`).should('not.exist')
+    temporaryAbsencesPage.temporaryAbsences(1).find(`[data-qa=confirm-arrival]`).should('not.exist')
+    temporaryAbsencesPage.temporaryAbsences(1).find(`[data-qa=confirm-arrival]`).should('not.exist')
+  })
 })
