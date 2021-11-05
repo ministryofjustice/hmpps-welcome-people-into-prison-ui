@@ -37,3 +37,8 @@ export const compareByFullName = <T extends Person>(a: T, b: T): number => {
 export const getKeyByValue = <T, V>(object: T, value: V): string => {
   return Object.keys(object).find(key => object[key] === value)
 }
+
+export const urlParse = (url: string, nthSegment: number): string => {
+  const urlSegments = url.split('/')
+  return urlSegments[urlSegments.length + nthSegment]
+}

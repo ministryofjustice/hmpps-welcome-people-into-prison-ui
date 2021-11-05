@@ -1,20 +1,39 @@
 {% extends "../partials/layout.njk" %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% set pageTitle = "What is the reason for imprisonment?" %}
+{% set pageTitle = secondLevelTitle %}
+{% set errorMessageText = errors[0].text %}
+
 {% block content %}
-    <div class="govuk-!-margin-bottom-8">
-        <div class="govuk-width-container govuk-body">
+    <div class="govuk-grid-row govuk-!-margin-bottom-8">
+        <div class="govuk-grid-column-two-thirds">
+
+            {% if errors.length %}
+                {{ govukErrorSummary({
+                    titleText: "There is a problem",
+                    errorList: errors,
+                    attributes: { 'data-qa-errors': true }
+                }) }}
+            {% endif %}
             <span class="govuk-caption-xl">  Confirm arrival of {{ data.firstName}} {{ data.lastName }}</span>
-            <h1 class="govuk-heading-l">{{secondLevelTitle}}</h1>
-              <form method="post" action = "/prisoners/{{ data.id }}/imprisonment-status/{{imprisonmentStatus}}">
+
+            <form method="post" action = "/prisoners/{{ data.id }}/imprisonment-status/{{imprisonmentStatus}}">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-                    <div class="govuk-form-group">
-                        <fieldset class="govuk-fieldset">
+                    <div class="govuk-form-group {%- if errorMessageText %} govuk-form-group--error {% endif %}">
+                        <fieldset class="govuk-fieldset" aria-describedby={{secondLevelTitle}}>
+                            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                                <h1 class="govuk-fieldset__heading"> {{secondLevelTitle}}</h1>
+                            </legend>
+
+                            {% if errorMessageText %}
+                                <span class="govuk-error-message">
+                                    <span class="govuk-visually-hidden">Error:</span>{{ errorMessageText }}
+                                </span>
+                            {% endif %}
+
                             <div class="govuk-radios">
                             {% for reason in movementReasons %}
                                 <div class="govuk-radios__item">
-                                    <input class="govuk-radios__input" id="movement-reason-{{loop.index}}" name="movementReason" type="radio" value="{{reason.description}}">
+                                    <input class="govuk-radios__input" id="movement-reason-{{loop.index}}" name="movementReason" type="radio" value="{{reason.description}}" data-qa="movement-reason-{{loop.index}}">
                                     <label class="govuk-label govuk-radios__label" for="movement-reason-{{loop.index}}">
                                         {{reason.description}}
                                     </label>
@@ -30,7 +49,6 @@
                         type: 'submit'
                     }) }}
             </form>
-
          </div>
     </div>
 {% endblock %}

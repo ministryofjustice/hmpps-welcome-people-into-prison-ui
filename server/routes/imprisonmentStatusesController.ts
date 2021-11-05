@@ -15,7 +15,7 @@ export default class ImprisonmentStatusesController {
       const imprisonmentStatuses = await this.imprisonmentStatusesService.getAllImprisonmentStatuses()
       const data = await this.expectedArrivalsService.getMove(id)
 
-      return res.render('pages/imprisonmentStatus.njk', { imprisonmentStatuses, data })
+      return res.render('pages/imprisonmentStatus.njk', { errors: req.flash('errors'), imprisonmentStatuses, data })
     }
   }
 
@@ -23,6 +23,11 @@ export default class ImprisonmentStatusesController {
     return async (req, res) => {
       const { id } = req.params
       const { imprisonmentStatus } = req.body
+
+      if (req.errors) {
+        req.flash('input', req.body)
+        return res.redirect(`/prisoners/${id}/imprisonment-status`)
+      }
 
       return urlMappings[`${imprisonmentStatus}`]
         ? res.redirect(`/prisoners/${id}/imprisonment-status/${urlMappings[`${imprisonmentStatus}`]}`)

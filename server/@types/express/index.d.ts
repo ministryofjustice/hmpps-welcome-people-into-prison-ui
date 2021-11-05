@@ -18,6 +18,10 @@ export declare global {
 
     interface Request {
       verified?: boolean
+      errors?: { text?: string; href: string }[]
+      flash(): { [key: string]: any[] }
+      flash(type: string, message: any): number
+      flash(message: string): any[]
     }
   }
 }

@@ -1,0 +1,9 @@
+{
+  "determinate-sentence": "Select the type of determinate sentence",
+  "indeterminate-sentence": "Select the type of indeterminate sentence",
+  "recall": "Select where the person is being recalled from",
+  "late-return": "Select the type of late return",
+  "transfer": "Select the type of transfer",
+  "temporary-stay": "Select why the person is staying at this establishment",
+  "civil-offence": "Select the civil offence"
+}

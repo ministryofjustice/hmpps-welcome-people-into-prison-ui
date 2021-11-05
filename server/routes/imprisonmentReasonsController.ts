@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express'
 import ImprisonmentStatusesService from '../services/imprisonmentStatusesService'
 import ExpectedArrivalsService from '../services/expectedArrivalsService'
-import { getKeyByValue } from '../utils/utils'
+import { getKeyByValue, urlParse } from '../utils/utils'
 import * as urlMappings from './urlMappings.json'
 
 export default class ImprisonmentStatusesController {
@@ -19,17 +19,27 @@ export default class ImprisonmentStatusesController {
       )
 
       const data = await this.expectedArrivalsService.getMove(id)
-      return res.render('pages/imprisonmentReason.njk', { imprisonmentStatus, secondLevelTitle, movementReasons, data })
+      return res.render('pages/imprisonmentReason.njk', {
+        errors: req.flash('errors'),
+        imprisonmentStatus,
+        secondLevelTitle,
+        movementReasons,
+        data,
+      })
     }
   }
 
   public assignReason(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
-      const { imprisonmentStatus } = req.body
-      const selectedStatus = await this.imprisonmentStatusesService.getImprisonmentStatus(imprisonmentStatus)
-      const data = await this.expectedArrivalsService.getMove(id)
-      return res.redirect(`/${imprisonmentStatus}`)
+
+      if (req.errors) {
+        const url = req.originalUrl
+        const redirectTo = urlParse(url, -1)
+        req.flash('input', req.body)
+        return res.redirect(`/prisoners/${id}/imprisonment-status/${redirectTo}`)
+      }
+      return res.redirect(`/prisoners/${id}/check-answers`)
     }
   }
 }
