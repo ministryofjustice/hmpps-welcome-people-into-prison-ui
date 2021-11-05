@@ -4,7 +4,7 @@
 {% set errorMessageText = errors[0].text %}
 
 {% block content %}
-    <div class="govuk-grid-row">
+    <div class="govuk-grid-row govuk-!-padding-top-7">
         <div class="govuk-grid-column-two-thirds">
 
             {% if errors.length %}
@@ -14,7 +14,6 @@
                     attributes: { 'data-qa-errors': true }
                 }) }}
             {% endif %}
-
             <span class="govuk-caption-xl">  Confirm arrival of {{ data.firstName}} {{ data.lastName }}</span>
 
             <form method="post" action = "/prisoners/{{ data.id }}/imprisonment-status">
