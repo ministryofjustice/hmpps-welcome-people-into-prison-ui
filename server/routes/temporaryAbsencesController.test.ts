@@ -1,8 +1,9 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
-import { user, appWithAllRoutes } from './testutils/appSetup'
+import { appWithAllRoutes, user } from './testutils/appSetup'
 import TemporaryAbsencesService from '../services/temporaryAbsencesService'
+import Role from '../authentication/role'
 
 jest.mock('../services/temporaryAbsencesService')
 
@@ -42,7 +43,7 @@ const temporaryAbsences = [
 ]
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { temporaryAbsencesService } })
+  app = appWithAllRoutes({ services: { temporaryAbsencesService }, roles: [Role.PRISON_RECEPTION] })
   temporaryAbsencesService.getTemporaryAbsences.mockResolvedValue(temporaryAbsences)
 })
 
@@ -51,6 +52,14 @@ afterEach(() => {
 })
 
 describe('GET /confirm-arrival/return-from-temporary-absence', () => {
+  it('should redirect to authentication error page for non reception users', () => {
+    app = appWithAllRoutes({ roles: [] })
+    return request(app)
+      .get('/confirm-arrival/return-from-temporary-absence')
+      .expect(302)
+      .expect('Location', '/autherror')
+  })
+
   it('should render /confirm-arrival/return-from-temporary-absence page', () => {
     return request(app)
       .get('/confirm-arrival/return-from-temporary-absence')

@@ -9,7 +9,7 @@ export default (on: (string, Record) => void): void => {
     reset: resetStubs,
 
     getSignInUrl: auth.getSignInUrl,
-    stubSignIn: auth.stubSignIn,
+    stubSignIn: role => auth.stubSignIn(role),
 
     stubAuthUser: auth.stubUser,
     stubAuthPing: auth.stubPing,

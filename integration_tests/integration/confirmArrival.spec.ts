@@ -1,9 +1,10 @@
 import ConfirmArrivalPage from '../pages/confirmArrival'
+import Role from '../../server/authentication/role'
 
-context('SignIn', () => {
+context('Confirm Arrival', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn')
+    cy.task('stubSignIn', Role.PRISON_RECEPTION)
     cy.task('stubAuthUser')
     cy.task('stubExpectedArrivals', 'MDI')
     cy.task('stubMissingPrisonerImage')

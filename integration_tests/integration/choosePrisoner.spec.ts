@@ -1,6 +1,7 @@
 import ChoosePrisonerPage from '../pages/choosePrisoner'
 import ConfirmArrivalPage from '../pages/confirmArrival'
 import Page from '../pages/page'
+import Role from '../../server/authentication/role'
 
 const expectedArrivalUnmatchedInNomis = {
   id: '00000-11111',
@@ -31,7 +32,7 @@ const expectedArrivalMatchedInNomisWithNoBooking = {
 context('Choose Prisoner', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn')
+    cy.task('stubSignIn', Role.PRISON_RECEPTION)
     cy.task('stubAuthUser')
     cy.task('stubExpectedArrivals', 'MDI')
     cy.task('stubMissingPrisonerImage')
@@ -153,5 +154,19 @@ context('Choose Prisoner', () => {
     cy.task('stubExpectedArrival', expectedArrivalUnmatchedInNomis)
     choosePrisonerPage.arrivalFrom('COURT')(3).confirm().should('exist').click()
     Page.verifyOnPage(ConfirmArrivalPage).prisonNumber().should('not.exist')
+  })
+
+  it('No links shown if not a reception user', () => {
+    cy.task('stubSignIn')
+    cy.signIn()
+    const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
+
+    choosePrisonerPage.arrivalFrom('PRISON')(1).confirm().should('not.exist')
+    choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(1).confirm().should('not.exist')
+    choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(2).confirm().should('not.exist')
+    choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(3).confirm().should('not.exist')
+    choosePrisonerPage.arrivalFrom('COURT')(1).confirm().should('not.exist')
+    choosePrisonerPage.arrivalFrom('COURT')(2).confirm().should('not.exist')
+    choosePrisonerPage.arrivalFrom('COURT')(3).confirm().should('not.exist')
   })
 })

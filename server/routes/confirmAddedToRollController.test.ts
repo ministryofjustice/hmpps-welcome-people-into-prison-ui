@@ -3,6 +3,7 @@ import request from 'supertest'
 import cheerio from 'cheerio'
 import { appWithAllRoutes } from './testutils/appSetup'
 import ExpectedArrivalsService from '../services/expectedArrivalsService'
+import Role from '../authentication/role'
 
 jest.mock('../services/expectedArrivalsService')
 const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
@@ -10,7 +11,7 @@ let app: Express
 const flash = jest.fn()
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { expectedArrivalsService }, flash })
+  app = appWithAllRoutes({ services: { expectedArrivalsService }, flash, roles: [Role.PRISON_RECEPTION] })
   expectedArrivalsService.getMove.mockResolvedValue({
     firstName: 'Jim',
     lastName: 'Smith',
@@ -31,6 +32,11 @@ afterEach(() => {
 })
 
 describe('GET /confirmation', () => {
+  it('should redirect to authentication error page for non reception users', () => {
+    app = appWithAllRoutes({ roles: [] })
+    return request(app).get('/prisoners/12345-67890/confirmation').expect(302).expect('Location', '/autherror')
+  })
+
   it('should call service methods correctly', () => {
     flash.mockReturnValue([{ offenderNo: 'A1234AB' }])
     return request(app)

@@ -8,6 +8,7 @@ import nunjucksSetup from '../../utils/nunjucksSetup'
 import errorHandler from '../../errorHandler'
 import * as auth from '../../authentication/auth'
 import { Services } from '../../services'
+import Role from '../../authentication/role'
 
 export const user = {
   firstName: 'first',
@@ -29,7 +30,8 @@ function appSetup(
     (message: string): string[]
     (type: string, message: string | string[]): number
     (type: string, format: string, ...args: unknown[]): number
-  }
+  },
+  roles: Role[]
 ): Express {
   const app = express()
 
@@ -41,10 +43,9 @@ function appSetup(
     req.user = userSupplier()
     req.flash = flash
     res.locals = {}
-    res.locals.user = req.user
+    res.locals.user = { ...req.user, roles }
     next()
   })
-
   app.use(cookieSession({ keys: [''] }))
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
@@ -60,6 +61,7 @@ export function appWithAllRoutes({
   services = {},
   userSupplier = () => user,
   flash = jest.fn().mockReturnValue([]),
+  roles = [] as Role[],
 }: {
   production?: boolean
   services?: Partial<Services>
@@ -70,7 +72,8 @@ export function appWithAllRoutes({
     (type: string, message: string | string[]): number
     (type: string, format: string, ...args: unknown[]): number
   }
+  roles?: Role[]
 }): Express {
   auth.default.authenticationMiddleware = () => (req, res, next) => next()
-  return appSetup(services as Services, production, userSupplier, flash)
+  return appSetup(services as Services, production, userSupplier, flash, roles)
 }

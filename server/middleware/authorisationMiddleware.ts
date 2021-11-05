@@ -2,6 +2,7 @@ import jwtDecode from 'jwt-decode'
 import { RequestHandler } from 'express'
 
 import logger from '../../logger'
+import Role from '../authentication/role'
 
 export default function authorisationMiddleware(authorisedRoles: string[] = []): RequestHandler {
   return (req, res, next) => {
@@ -13,6 +14,11 @@ export default function authorisationMiddleware(authorisedRoles: string[] = []):
         return res.redirect('/authError')
       }
 
+      res.locals.user = {
+        roles,
+        isReceptionUser: roles.includes(Role.PRISON_RECEPTION),
+        ...res.locals.user,
+      }
       return next()
     }
 
