@@ -4,7 +4,7 @@
 {% set errorMessageText = errors[0].text %}
 
 {% block content %}
-    <div class="govuk-grid-row govuk-!-margin-bottom-8">
+    <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
             {% if errors.length %}
@@ -43,7 +43,7 @@
                         </fieldset>
                     </div>
                     {{ govukButton({
-                        classes: "govuk-button govuk-!-margin-bottom-6",
+                        classes: "govuk-button govuk-!-margin-bottom-3",
                         text: "Continue",
                         attributes: {'data-qa': 'continue'},
                         type: 'submit'
