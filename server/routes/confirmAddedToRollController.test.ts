@@ -23,7 +23,7 @@ beforeEach(() => {
     fromLocationType: 'COURT',
   })
   expectedArrivalsService.getPrison.mockResolvedValue({
-    longDescription: 'HMP MOORLAND',
+    description: 'Moorland (HMP & YOI)',
   })
 })
 

@@ -36,7 +36,7 @@ context('Confirm Added To Roll', () => {
     confirmAddedToRollPage.confirmationBanner().should('contain.html', 'Harry Stanton')
     confirmAddedToRollPage.confirmationBanner().should('contain.html', 'A1234AB')
     confirmAddedToRollPage.confirmationParagraph().should('contain.html', 'Harry Stanton')
-    confirmAddedToRollPage.confirmationParagraph().should('contain.html', 'Moorland (HMP)')
+    confirmAddedToRollPage.confirmationParagraph().should('contain.html', 'Moorland (HMP &amp; YOI)')
     confirmAddedToRollPage.addAnotherToRoll().click()
     Page.verifyOnPage(ChoosePrisonerPage)
   })

@@ -30,7 +30,7 @@ declare module 'welcome' {
   }
 
   export type Prison = {
-    longDescription: string
+    description: string
   }
 
   export type OffenderNumber = {
