@@ -7,7 +7,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
   if (!movementReason) {
     const { originalUrl } = req
-    const segmentOfUrl = urlParse(originalUrl, -1)
+    const segmentOfUrl = urlParse(originalUrl, 1)
     const errorData = [{ text: mapUrlToError[segmentOfUrl], href: '#movement-reason-1' }]
     req.errors = errorData
     req.flash('errors', errorData)

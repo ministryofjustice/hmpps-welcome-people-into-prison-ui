@@ -35,7 +35,7 @@ export default class ImprisonmentStatusesController {
 
       if (req.errors) {
         const url = req.originalUrl
-        const redirectTo = urlParse(url, -1)
+        const redirectTo = urlParse(url, 1)
         req.flash('input', req.body)
         return res.redirect(`/prisoners/${id}/imprisonment-status/${redirectTo}`)
       }
