@@ -18,12 +18,12 @@ import Role from '../authentication/role'
 
 export default function routes(services: Services): Router {
   const router = express.Router()
+
   const get = (path: string, handler: RequestHandler, authorisedRoles?: Role[]) =>
     router.get(path, authorisationForUrlMiddleware(authorisedRoles), asyncMiddleware(handler))
+
   const post = (path: string, validation: RequestHandler, handler: RequestHandler, authorisedRoles?: Role[]) =>
     router.post(path, validation, authorisationForUrlMiddleware(authorisedRoles), asyncMiddleware(handler))
-  // const post = (path: string, validation: RequestHandler, handler: RequestHandler) =>
-  //   router.post(path, validation, asyncMiddleware(handler))
 
   const choosePrisonerController = new ChoosePrisonerController(services.expectedArrivalsService)
   get('/confirm-arrival/choose-prisoner', choosePrisonerController.view())
@@ -65,7 +65,7 @@ export default function routes(services: Services): Router {
 
   const checkAnswersController = new CheckAnswersController(services.expectedArrivalsService)
   get('/prisoners/:id/check-answers', checkAnswersController.view(), [Role.PRISON_RECEPTION])
-  post('/prisoners/:id/check-answers', checkAnswersController.addToRoll(), checkAnswersValidation, [
+  post('/prisoners/:id/check-answers', checkAnswersValidation, checkAnswersController.addToRoll(), [
     Role.PRISON_RECEPTION,
   ])
 
