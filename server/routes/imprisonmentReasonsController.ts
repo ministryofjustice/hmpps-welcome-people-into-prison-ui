@@ -17,8 +17,8 @@ export default class ImprisonmentStatusesController {
       const { movementReasons, secondLevelTitle } = await this.imprisonmentStatusesService.getImprisonmentStatus(
         statusDescription
       )
-
       const data = await this.expectedArrivalsService.getMove(id)
+
       return res.render('pages/imprisonmentReason.njk', {
         errors: req.flash('errors'),
         imprisonmentStatus,
@@ -36,9 +36,9 @@ export default class ImprisonmentStatusesController {
       if (req.errors) {
         const url = req.originalUrl
         const redirectTo = urlParse(url, 1)
-        req.flash('input', req.body)
         return res.redirect(`/prisoners/${id}/imprisonment-status/${redirectTo}`)
       }
+
       return res.redirect(`/prisoners/${id}/check-answers`)
     }
   }

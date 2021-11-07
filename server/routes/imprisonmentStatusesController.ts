@@ -25,7 +25,6 @@ export default class ImprisonmentStatusesController {
       const { imprisonmentStatus } = req.body
 
       if (req.errors) {
-        req.flash('input', req.body)
         return res.redirect(`/prisoners/${id}/imprisonment-status`)
       }
 
