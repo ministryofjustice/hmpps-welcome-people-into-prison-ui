@@ -1,4 +1,4 @@
-import { convertToTitleCase, groupBy, compareByFullName, getKeyByValue, urlParse } from './utils'
+import { convertToTitleCase, groupBy, compareByFullName } from './utils'
 
 describe('Convert to title case', () => {
   it('null string', () => {
@@ -162,23 +162,5 @@ describe('compareByFullName', () => {
         }
       )
     ).toEqual(-1)
-  })
-})
-
-describe('getKeyByValue', () => {
-  it('should handle object with content', () => {
-    expect(getKeyByValue({ key1: 'value1', key2: 'value2', key3: 'value3' }, 'value2')).toEqual('key2')
-  })
-})
-
-describe('urlParse', () => {
-  it('should return first segment from end of url', () => {
-    expect(urlParse('/prisoners/id/check-answers', 1)).toBe('check-answers')
-  })
-  it('should return second segment from end of url', () => {
-    expect(urlParse('/prisoners/id/check-answers', 2)).toBe('id')
-  })
-  it('should return third segment from end of ur', () => {
-    expect(urlParse('/prisoners/id/check-answers', 3)).toBe('prisoners')
   })
 })

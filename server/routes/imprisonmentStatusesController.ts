@@ -1,7 +1,6 @@
 import { RequestHandler } from 'express'
 import ImprisonmentStatusesService from '../services/imprisonmentStatusesService'
 import ExpectedArrivalsService from '../services/expectedArrivalsService'
-import * as urlMappings from './urlMappings.json'
 
 export default class ImprisonmentStatusesController {
   public constructor(
@@ -28,8 +27,12 @@ export default class ImprisonmentStatusesController {
         return res.redirect(`/prisoners/${id}/imprisonment-status`)
       }
 
-      return urlMappings[`${imprisonmentStatus}`]
-        ? res.redirect(`/prisoners/${id}/imprisonment-status/${urlMappings[`${imprisonmentStatus}`]}`)
+      const selectedImprisonmentStatus = await this.imprisonmentStatusesService.getImprisonmentStatus(
+        imprisonmentStatus
+      )
+
+      return selectedImprisonmentStatus.movementReasons.length > 1
+        ? res.redirect(`/prisoners/${id}/imprisonment-status/${imprisonmentStatus}`)
         : res.redirect(`/prisoners/${id}/check-answers`)
     }
   }

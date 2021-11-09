@@ -1,10 +1,8 @@
 import { RequestHandler } from 'express'
 import ImprisonmentStatusesService from '../services/imprisonmentStatusesService'
 import ExpectedArrivalsService from '../services/expectedArrivalsService'
-import { getKeyByValue, urlParse } from '../utils/utils'
-import * as urlMappings from './urlMappings.json'
 
-export default class ImprisonmentStatusesController {
+export default class MovementReasonsController {
   public constructor(
     private readonly imprisonmentStatusesService: ImprisonmentStatusesService,
     private readonly expectedArrivalsService: ExpectedArrivalsService
@@ -13,13 +11,13 @@ export default class ImprisonmentStatusesController {
   public view(): RequestHandler {
     return async (req, res) => {
       const { id, imprisonmentStatus } = req.params
-      const statusDescription = getKeyByValue(urlMappings, imprisonmentStatus)
+
       const { movementReasons, secondLevelTitle } = await this.imprisonmentStatusesService.getImprisonmentStatus(
-        statusDescription
+        imprisonmentStatus
       )
       const data = await this.expectedArrivalsService.getMove(id)
 
-      return res.render('pages/imprisonmentReason.njk', {
+      return res.render('pages/movementReason.njk', {
         errors: req.flash('errors'),
         imprisonmentStatus,
         secondLevelTitle,
@@ -31,15 +29,11 @@ export default class ImprisonmentStatusesController {
 
   public assignReason(): RequestHandler {
     return async (req, res) => {
-      const { id } = req.params
+      const { id, imprisonmentStatus } = req.params
 
-      if (req.errors) {
-        const url = req.originalUrl
-        const redirectTo = urlParse(url, 1)
-        return res.redirect(`/prisoners/${id}/imprisonment-status/${redirectTo}`)
-      }
-
-      return res.redirect(`/prisoners/${id}/check-answers`)
+      return req.errors
+        ? res.redirect(`/prisoners/${id}/imprisonment-status/${imprisonmentStatus}`)
+        : res.redirect(`/prisoners/${id}/check-answers`)
     }
   }
 }

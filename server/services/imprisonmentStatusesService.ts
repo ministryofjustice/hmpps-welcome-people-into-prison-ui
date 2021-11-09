@@ -12,9 +12,9 @@ export default class ImprisonmentStatusesService {
     return this.welcomeClientFactory(token).getImprisonmentStatuses()
   }
 
-  public async getImprisonmentStatus(statusDescription: string): Promise<ImprisonmentStatus> {
+  public async getImprisonmentStatus(code: string): Promise<ImprisonmentStatus> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const statuses = await this.welcomeClientFactory(token).getImprisonmentStatuses()
-    return statuses.filter(s => s.description === statusDescription)[0]
+    return statuses.filter(s => s.code === code)[0]
   }
 }

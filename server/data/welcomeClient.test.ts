@@ -99,19 +99,23 @@ describe('welcomeClient', () => {
   describe('getImprisonmentStatuses', () => {
     const mockResponse: ImprisonmentStatus[] = [
       {
+        code: 'on-remand',
         description: 'On remand',
         imprisonmentStatusCode: 'RX',
         movementReasons: [{ movementReasonCode: 'R' }],
       },
       {
+        code: 'convicted-unsentenced',
         description: 'Convicted unsentenced',
         imprisonmentStatusCode: 'JR',
         movementReasons: [{ movementReasonCode: 'V' }],
       },
       {
+        code: 'determinate-sentence',
         description: 'Determinate sentence',
         imprisonmentStatusCode: 'SENT',
         secondLevelTitle: 'What is the type of determinate sentence?',
+        secondLevelValidationMessage: 'Select the type of determinate sentence',
         movementReasons: [
           { description: 'Extended sentence for public protection', movementReasonCode: '26' },
           { description: 'Imprisonment without option of a fine', movementReasonCode: 'I' },

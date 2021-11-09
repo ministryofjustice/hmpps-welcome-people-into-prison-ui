@@ -60,9 +60,11 @@ declare module 'welcome' {
   }
 
   export interface ImprisonmentStatus {
+    code: string
     description: string
     imprisonmentStatusCode: string
     secondLevelTitle?: string
+    secondLevelValidationMessage?: string
     movementReasons: { description?: string; movementReasonCode: string }[]
   }
 }

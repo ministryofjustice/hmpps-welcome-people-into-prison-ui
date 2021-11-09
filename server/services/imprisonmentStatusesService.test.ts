@@ -17,19 +17,23 @@ describe('Imprisonment statuses service', () => {
 
   const imprisonmentStatuses: ImprisonmentStatus[] = [
     {
+      code: 'on-remand',
       description: 'On remand',
       imprisonmentStatusCode: 'RX',
       movementReasons: [{ movementReasonCode: 'R' }],
     },
     {
+      code: 'convicted-unsentenced',
       description: 'Convicted unsentenced',
       imprisonmentStatusCode: 'JR',
       movementReasons: [{ movementReasonCode: 'V' }],
     },
     {
+      code: 'determinate-sentence',
       description: 'Determinate sentence',
       imprisonmentStatusCode: 'SENT',
       secondLevelTitle: 'What is the type of determinate sentence?',
+      secondLevelValidationMessage: 'Select the type of determinate sentence',
       movementReasons: [
         { description: 'Extended sentence for public protection', movementReasonCode: '26' },
         { description: 'Imprisonment without option of a fine', movementReasonCode: 'I' },
@@ -49,59 +53,64 @@ describe('Imprisonment statuses service', () => {
     welcomeClient.getImprisonmentStatuses.mockResolvedValue(imprisonmentStatuses)
   })
 
-  describe('getAllImprisonmentStatuses', () => {
-    it('WelcomeClientFactory is called with a token', async () => {
-      await service.getAllImprisonmentStatuses()
+  describe('imprisonment statuses', () => {
+    describe('getAllImprisonmentStatuses', () => {
+      it('WelcomeClientFactory is called with a token', async () => {
+        await service.getAllImprisonmentStatuses()
 
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-    })
-    it('Retrieves all imprisonment statuses', async () => {
-      const result = await service.getAllImprisonmentStatuses()
+        expect(WelcomeClientFactory).toBeCalledWith(token)
+      })
+      it('Retrieves all imprisonment statuses', async () => {
+        const result = await service.getAllImprisonmentStatuses()
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-      expect(welcomeClient.getImprisonmentStatuses).toBeCalled()
-      expect(result).toStrictEqual(imprisonmentStatuses)
-    })
-  })
-
-  describe('getImprisonmentStatus', () => {
-    it('WelcomeClientFactory is called with a token', async () => {
-      await service.getImprisonmentStatus('Convicted unsentenced')
-
-      expect(WelcomeClientFactory).toBeCalledWith(token)
+        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+        expect(welcomeClient.getImprisonmentStatuses).toBeCalled()
+        expect(result).toStrictEqual(imprisonmentStatuses)
+      })
     })
 
-    it('should return imprisonment status with single movement reason', async () => {
-      const imprisonmentStatus = {
-        description: 'Convicted unsentenced',
-        imprisonmentStatusCode: 'JR',
-        movementReasons: [{ movementReasonCode: 'V' }],
-      }
+    describe('getImprisonmentStatus', () => {
+      it('WelcomeClientFactory is called with a token', async () => {
+        await service.getImprisonmentStatus('convicted-unsentenced')
 
-      const result = await service.getImprisonmentStatus('Convicted unsentenced')
+        expect(WelcomeClientFactory).toBeCalledWith(token)
+      })
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-      expect(welcomeClient.getImprisonmentStatuses).toBeCalled()
-      expect(result).toStrictEqual(imprisonmentStatus)
-    })
+      it('should return imprisonment status with single movement reason', async () => {
+        const imprisonmentStatus = {
+          code: 'convicted-unsentenced',
+          description: 'Convicted unsentenced',
+          imprisonmentStatusCode: 'JR',
+          movementReasons: [{ movementReasonCode: 'V' }],
+        }
 
-    it('should return imprisonment status with multiple movement reasons', async () => {
-      const imprisonmentStatus = {
-        description: 'Determinate sentence',
-        imprisonmentStatusCode: 'SENT',
-        secondLevelTitle: 'What is the type of determinate sentence?',
-        movementReasons: [
-          { description: 'Extended sentence for public protection', movementReasonCode: '26' },
-          { description: 'Imprisonment without option of a fine', movementReasonCode: 'I' },
-          { description: 'Intermittent custodial sentence', movementReasonCode: 'INTER' },
-          { description: 'Partly suspended sentence', movementReasonCode: 'P' },
-        ],
-      }
-      const result = await service.getImprisonmentStatus('Determinate sentence')
+        const result = await service.getImprisonmentStatus('convicted-unsentenced')
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-      expect(welcomeClient.getImprisonmentStatuses).toBeCalled()
-      expect(result).toStrictEqual(imprisonmentStatus)
+        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+        expect(welcomeClient.getImprisonmentStatuses).toBeCalled()
+        expect(result).toStrictEqual(imprisonmentStatus)
+      })
+
+      it('should return imprisonment status with multiple movement reasons', async () => {
+        const imprisonmentStatus = {
+          code: 'determinate-sentence',
+          description: 'Determinate sentence',
+          imprisonmentStatusCode: 'SENT',
+          secondLevelTitle: 'What is the type of determinate sentence?',
+          secondLevelValidationMessage: 'Select the type of determinate sentence',
+          movementReasons: [
+            { description: 'Extended sentence for public protection', movementReasonCode: '26' },
+            { description: 'Imprisonment without option of a fine', movementReasonCode: 'I' },
+            { description: 'Intermittent custodial sentence', movementReasonCode: 'INTER' },
+            { description: 'Partly suspended sentence', movementReasonCode: 'P' },
+          ],
+        }
+        const result = await service.getImprisonmentStatus('determinate-sentence')
+
+        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+        expect(welcomeClient.getImprisonmentStatuses).toBeCalled()
+        expect(result).toStrictEqual(imprisonmentStatus)
+      })
     })
   })
 })

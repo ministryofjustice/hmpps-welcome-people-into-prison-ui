@@ -19,9 +19,11 @@ const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.
 let app: Express
 
 const imprisonmentStatus: ImprisonmentStatus = {
+  code: 'determinate-sentence',
   description: 'Determinate sentence',
   imprisonmentStatusCode: 'SENT',
   secondLevelTitle: 'What is the type of determinate sentence?',
+  secondLevelValidationMessage: 'Select the type of determinate sentence',
   movementReasons: [
     { description: 'Extended sentence for public protection', movementReasonCode: '26' },
     { description: 'Imprisonment without option of a fine', movementReasonCode: 'I' },
@@ -44,6 +46,16 @@ afterEach(() => {
 
 describe('/determinate-sentence', () => {
   describe('view()', () => {
+    it('should call service methods correctly', () => {
+      return request(app)
+        .get('/prisoners/12345-67890/imprisonment-status/determinate-sentence')
+        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect(res => {
+          expect(imprisonmentStatusesService.getImprisonmentStatus).toHaveBeenCalledWith('determinate-sentence')
+          expect(expectedArrivalsService.getMove).toHaveBeenCalledTimes(1)
+          expect(expectedArrivalsService.getMove).toHaveBeenCalledWith('12345-67890')
+        })
+    })
     it('should render /determinate-sentence page', () => {
       return request(app)
         .get('/prisoners/12345-67890/imprisonment-status/determinate-sentence')
@@ -51,17 +63,6 @@ describe('/determinate-sentence', () => {
         .expect(res => {
           const $ = cheerio.load(res.text)
           expect($('h1').text()).toContain('What is the type of determinate sentence?')
-        })
-    })
-
-    it('should call service methods correctly', () => {
-      return request(app)
-        .get('/prisoners/12345-67890/imprisonment-status/determinate-sentence')
-        .expect('Content-Type', 'text/html; charset=utf-8')
-        .expect(res => {
-          expect(imprisonmentStatusesService.getImprisonmentStatus).toHaveBeenCalledWith('Determinate sentence')
-          expect(expectedArrivalsService.getMove).toHaveBeenCalledTimes(1)
-          expect(expectedArrivalsService.getMove).toHaveBeenCalledWith('12345-67890')
         })
     })
   })

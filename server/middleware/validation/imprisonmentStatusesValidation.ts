@@ -9,5 +9,5 @@ export default (req: Request, res: Response, next: NextFunction) => {
     req.flash('errors', errorData)
   }
 
-  next()
+  return next()
 }

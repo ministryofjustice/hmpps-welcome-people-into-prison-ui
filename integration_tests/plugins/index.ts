@@ -25,5 +25,6 @@ export default (on: (string, Record) => void): void => {
     stubPrisonerImage: welcome.stubPrisonerImage,
     stubMissingPrisonerImage: welcome.stubMissingPrisonerImage,
     stubCreateOffenderRecordAndBooking: welcome.stubCreateOffenderRecordAndBooking,
+    stubImprisonmentStatus: welcome.stubImprisonmentStatus,
   })
 }

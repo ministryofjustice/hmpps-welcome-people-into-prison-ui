@@ -14,7 +14,7 @@
                     attributes: { 'data-qa-errors': true }
                 }) }}
             {% endif %}
-            <span class="govuk-caption-xl">  Confirm arrival of {{ data.firstName}} {{ data.lastName }}</span>
+            <span class="govuk-caption-xl" data-qa="prisoner-name">  Confirm arrival of {{ data.firstName}} {{ data.lastName }}</span>
 
             <form method="post" action = "/prisoners/{{ data.id }}/imprisonment-status">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
@@ -33,7 +33,7 @@
                             <div class="govuk-radios">
                             {% for status in imprisonmentStatuses %}
                                 <div class="govuk-radios__item">
-                                    <input class="govuk-radios__input" id="imprisonment-status-{{loop.index}}" name="imprisonmentStatus" type="radio" value="{{status.description}}" data-qa="imprisonment-status-{{loop.index}}">
+                                    <input class="govuk-radios__input" id="imprisonment-status-{{loop.index}}" name="imprisonmentStatus" type="radio" value="{{status.code}}" data-qa="imprisonment-status-{{loop.index}}">
                                     <label class="govuk-label govuk-radios__label" for="imprisonment-status-{{loop.index}}">
                                         {{status.description}}
                                     </label>

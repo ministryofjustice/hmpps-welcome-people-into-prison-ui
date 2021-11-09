@@ -18,25 +18,6 @@ const flash = jest.fn()
 
 let app: Express
 
-const imprisonmentStatusesWithSubType = [
-  { 'Determinate sentence': 'determinate-sentence' },
-  { 'Indeterminate sentence': 'indeterminate-sentence' },
-  { 'Recall from licence or temporary release': 'recall' },
-  { 'Late return from licence': 'late-return' },
-  { 'Transfer from another establishment': 'transfer' },
-  { 'Temporary stay enroute to another establishment': 'temporary-stay' },
-  { 'Civil offence': 'civil-offence' },
-]
-
-const imprisonmentStatusesWithoutSubType = [
-  'On remand',
-  'Convicted unsentenced',
-  'Awaiting transfer to hospital',
-  'Detention under immigration powers',
-  'Detention in Youth Offender Institution',
-  'Recapture after escape',
-]
-
 beforeEach(() => {
   app = appWithAllRoutes({ services: { imprisonmentStatusesService, expectedArrivalsService }, flash })
   expectedArrivalsService.getMove.mockResolvedValue(null)
@@ -86,26 +67,49 @@ describe('/imprisonment-status', () => {
         })
     })
 
-    imprisonmentStatusesWithSubType.forEach(status => {
-      const key = Object.keys(status)
-      const value = Object.values(status)
-      it(`selecting ${key} should redirect to ${value}`, () => {
-        return request(app)
-          .post('/prisoners/12345-67890/imprisonment-status')
-          .send({ imprisonmentStatus: key })
-          .expect(302)
-          .expect('Location', `/prisoners/12345-67890/imprisonment-status/${value}`)
+    it('should redirect to /check-answers when single movement reason', () => {
+      imprisonmentStatusesService.getImprisonmentStatus.mockResolvedValue({
+        code: 'recapture',
+        description: 'Recapture after escape',
+        imprisonmentStatusCode: 'SENT03',
+        movementReasons: [
+          {
+            movementReasonCode: 'RECA',
+          },
+        ],
       })
+
+      return request(app)
+        .post('/prisoners/12345-67890/imprisonment-status')
+        .send({ imprisonmentStatus: 'recapture' })
+        .expect(302)
+        .expect('Location', '/prisoners/12345-67890/check-answers')
     })
 
-    imprisonmentStatusesWithoutSubType.forEach(reason => {
-      it(`selecting the '${reason}' reason should redirect to /check-answers`, () => {
-        return request(app)
-          .post('/prisoners/12345-67890/imprisonment-status')
-          .send({ imprisonmentStatus: reason })
-          .expect(302)
-          .expect('Location', '/prisoners/12345-67890/check-answers')
+    it('should redirect to /imprisonment-status/:imprisonmentStatus when multiple movement reasons', () => {
+      imprisonmentStatusesService.getImprisonmentStatus.mockResolvedValue({
+        code: 'civil-offence',
+        description: 'Civil offence',
+        imprisonmentStatusCode: 'CIVIL',
+        secondLevelTitle: 'What is the civil offence?',
+        secondLevelValidationMessage: 'Select the civil offence',
+        movementReasons: [
+          {
+            description: 'Civil committal',
+            movementReasonCode: 'C',
+          },
+          {
+            description: 'Non-payment of a fine',
+            movementReasonCode: 'F',
+          },
+        ],
       })
+
+      return request(app)
+        .post('/prisoners/12345-67890/imprisonment-status')
+        .send({ imprisonmentStatus: 'civil-offence' })
+        .expect(302)
+        .expect('Location', '/prisoners/12345-67890/imprisonment-status/civil-offence')
     })
   })
 })

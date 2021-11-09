@@ -3,6 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import expectedArrivals from './responses/expectedArrivals'
 import temporaryAbsences from './responses/temporaryAbsences'
+import imprisonmentStatuses from './responses/imprisonmentStatuses'
 import { stubFor } from './wiremock'
 
 export default {
@@ -125,6 +126,19 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: { offenderNo: 'A1234AB' },
+      },
+    })
+  },
+  stubImprisonmentStatus: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/welcome/imprisonment-statuses`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: imprisonmentStatuses,
       },
     })
   },
