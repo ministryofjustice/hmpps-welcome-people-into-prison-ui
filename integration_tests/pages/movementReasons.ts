@@ -18,7 +18,7 @@ export default class MovementReasonsPage extends Page {
 
   prisonerName = (): PageElement => cy.get(`[data-qa=prisoner-name]`)
 
-  movementReasonRadioButton = (): PageElement => cy.get(`[data-qa=movement-reason-1]`)
+  movementReasonRadioButton = (value): PageElement => cy.get('.govuk-radios__input[type="radio"]').check(value)
 
   continue = (): PageElement => cy.get(`[data-qa=continue]`)
 }

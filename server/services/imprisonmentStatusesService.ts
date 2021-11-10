@@ -15,6 +15,6 @@ export default class ImprisonmentStatusesService {
   public async getImprisonmentStatus(code: string): Promise<ImprisonmentStatus> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const statuses = await this.welcomeClientFactory(token).getImprisonmentStatuses()
-    return statuses.filter(s => s.code === code)[0]
+    return statuses.find(s => s.code === code)
   }
 }

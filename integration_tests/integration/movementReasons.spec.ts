@@ -33,7 +33,7 @@ context('Movement reasons', () => {
   it('Selecting an option takes user through to check answers', () => {
     cy.signIn()
     const movementReasonsPage = MovementReasonsPage.goTo(expectedArrival.id, 'civil-offence')
-    movementReasonsPage.movementReasonRadioButton().click()
+    movementReasonsPage.movementReasonRadioButton('C').click()
     movementReasonsPage.continue().click()
     Page.verifyOnPage(CheckAnswersPage)
   })
