@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import validation from './imprisonmentStatusesValidation'
 
-describe('Validation middleware', () => {
+describe('Imprisonment status validation middleware', () => {
   let req = { body: {}, flash: jest.fn() } as unknown as Request
   const res = {} as Response
   const next = jest.fn()

@@ -60,7 +60,7 @@ export default function routes(services: Services): Router {
   )
   get('/prisoners/:id/imprisonment-status/:imprisonmentStatus', movementReasonsController.view())
   post('/prisoners/:id/imprisonment-status/:imprisonmentStatus', [
-    movementReasonsValidation(services),
+    movementReasonsValidation(services.imprisonmentStatusesService),
     movementReasonsController.assignReason(),
   ])
 
