@@ -23,8 +23,6 @@ context('Imprisonment status', () => {
     cy.task('stubExpectedArrivals', 'MDI')
     cy.task('stubExpectedArrival', expectedArrival)
     cy.task('stubImprisonmentStatus')
-    cy.task('stubMissingPrisonerImage')
-    cy.task('stubPrison', 'MDI')
   })
 
   it("Should display prisoner's name", () => {
@@ -33,19 +31,28 @@ context('Imprisonment status', () => {
     imprisonmentStatusPage.prisonerName().should('contain.text', 'Harry Stanton')
   })
 
-  it('Selecting On remand takes user straight through to check answers', () => {
+  it('Selecting an option with a single movement reason takes user straight through to check answers', () => {
     cy.signIn()
     const imprisonmentStatusPage = ImprisonmentStatusPage.goTo(expectedArrival.id)
-    imprisonmentStatusPage.onRemandRadioButton().click()
+    imprisonmentStatusPage.imprisonmentStatusRadioButton().click()
     imprisonmentStatusPage.continue().click()
     Page.verifyOnPage(CheckAnswersPage)
   })
 
-  it('Selecting Determinate sentence radio takes user to the determinate-sentence page', () => {
+  it('Selecting an option with multiple movement reasons takes user to the movement reasons page', () => {
     cy.signIn()
     const imprisonmentStatusPage = ImprisonmentStatusPage.goTo(expectedArrival.id)
     imprisonmentStatusPage.determinateSentenceRadioButton().click()
     imprisonmentStatusPage.continue().click()
     Page.verifyOnPage(MovementReasonsPage)
+  })
+
+  it('Should display validation error if no imprisonment status selected', () => {
+    cy.signIn()
+    const imprisonmentStatusPage = ImprisonmentStatusPage.goTo(expectedArrival.id)
+    imprisonmentStatusPage.continue().click()
+    imprisonmentStatusPage.errorSummaryTitle().contains('There is a problem')
+    imprisonmentStatusPage.errorSummaryBody().contains('Select a reason for imprisonment')
+    imprisonmentStatusPage.errorSummaryMessage().contains('Select a reason for imprisonment')
   })
 })

@@ -10,9 +10,15 @@ export default class ImprisonmentStatusPage extends Page {
     return Page.verifyOnPage(ImprisonmentStatusPage)
   }
 
+  errorSummaryTitle = (): PageElement => cy.get('#error-summary-title')
+
+  errorSummaryBody = (): PageElement => cy.get('.govuk-error-summary__body')
+
+  errorSummaryMessage = (): PageElement => cy.get('.govuk-error-message')
+
   prisonerName = (): PageElement => cy.get(`[data-qa=prisoner-name]`)
 
-  onRemandRadioButton = (): PageElement => cy.get(`[data-qa=imprisonment-status-1]`)
+  imprisonmentStatusRadioButton = (): PageElement => cy.get(`[data-qa=imprisonment-status-1]`)
 
   determinateSentenceRadioButton = (): PageElement => cy.get(`[data-qa=imprisonment-status-3]`)
 
