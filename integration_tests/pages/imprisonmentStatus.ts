@@ -18,9 +18,9 @@ export default class ImprisonmentStatusPage extends Page {
 
   prisonerName = (): PageElement => cy.get(`[data-qa=prisoner-name]`)
 
-  imprisonmentStatusRadioButton = (): PageElement => cy.get(`[data-qa=imprisonment-status-1]`)
+  imprisonmentStatusSingleReasonRadioButton = (): PageElement => cy.get(`[data-qa=imprisonment-status-1]`)
 
-  determinateSentenceRadioButton = (): PageElement => cy.get(`[data-qa=imprisonment-status-3]`)
+  imprisonmentStatusMultipleReasonRadioButton = (): PageElement => cy.get(`[data-qa=imprisonment-status-3]`)
 
   continue = (): PageElement => cy.get(`[data-qa=continue]`)
 }

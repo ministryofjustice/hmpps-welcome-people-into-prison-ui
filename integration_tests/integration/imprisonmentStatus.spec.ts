@@ -34,7 +34,7 @@ context('Imprisonment status', () => {
   it('Selecting an option with a single movement reason takes user straight through to check answers', () => {
     cy.signIn()
     const imprisonmentStatusPage = ImprisonmentStatusPage.goTo(expectedArrival.id)
-    imprisonmentStatusPage.imprisonmentStatusRadioButton().click()
+    imprisonmentStatusPage.imprisonmentStatusSingleReasonRadioButton().click()
     imprisonmentStatusPage.continue().click()
     Page.verifyOnPage(CheckAnswersPage)
   })
@@ -42,7 +42,7 @@ context('Imprisonment status', () => {
   it('Selecting an option with multiple movement reasons takes user to the movement reasons page', () => {
     cy.signIn()
     const imprisonmentStatusPage = ImprisonmentStatusPage.goTo(expectedArrival.id)
-    imprisonmentStatusPage.determinateSentenceRadioButton().click()
+    imprisonmentStatusPage.imprisonmentStatusMultipleReasonRadioButton().click()
     imprisonmentStatusPage.continue().click()
     Page.verifyOnPage(MovementReasonsPage)
   })
