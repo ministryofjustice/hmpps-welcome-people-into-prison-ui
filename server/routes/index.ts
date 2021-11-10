@@ -8,6 +8,7 @@ import ImprisonmentStatusesController from './imprisonmentStatusesController'
 import MovementReasonsController from './movementReasonsController'
 import imprisonmentStatusesValidation from '../middleware/validation/imprisonmentStatusesValidation'
 import movementReasonsValidation from '../middleware/validation/movementReasonsValidation'
+import validationMiddleware from '../middleware/validationMiddleware'
 
 import authorisationForUrlMiddleware from '../middleware/authorisationForUrlMiddleware'
 import asyncMiddleware from '../middleware/asyncMiddleware'
@@ -50,7 +51,7 @@ export default function routes(services: Services): Router {
   )
   get('/prisoners/:id/imprisonment-status', imprisonmentStatusesController.view())
   post('/prisoners/:id/imprisonment-status', [
-    imprisonmentStatusesValidation,
+    validationMiddleware(imprisonmentStatusesValidation),
     imprisonmentStatusesController.assignStatus(),
   ])
 
@@ -60,7 +61,7 @@ export default function routes(services: Services): Router {
   )
   get('/prisoners/:id/imprisonment-status/:imprisonmentStatus', movementReasonsController.view())
   post('/prisoners/:id/imprisonment-status/:imprisonmentStatus', [
-    movementReasonsValidation(services.imprisonmentStatusesService),
+    validationMiddleware(movementReasonsValidation(services.imprisonmentStatusesService)),
     movementReasonsController.assignReason(),
   ])
 

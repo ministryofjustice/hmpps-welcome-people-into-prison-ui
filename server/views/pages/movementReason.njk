@@ -18,6 +18,7 @@
 
             <form method="post" action = "/prisoners/{{ data.id }}/imprisonment-status/{{imprisonmentStatus}}">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                <input type="hidden" name="imprisonmentStatus" value="{{imprisonmentStatus}}" />
                     <div class="govuk-form-group {%- if errorMessageText %} govuk-form-group--error {% endif %}">
                         <fieldset class="govuk-fieldset" aria-describedby={{secondLevelTitle}}>
                             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">

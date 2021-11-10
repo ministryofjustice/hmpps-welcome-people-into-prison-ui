@@ -1,13 +1,6 @@
-import { Request, Response, NextFunction } from 'express'
+import type { ValidationError } from '../validationMiddleware'
 
-export default (req: Request, res: Response, next: NextFunction) => {
-  const { imprisonmentStatus } = req.body
-  const errorData = [{ text: 'Select a reason for imprisonment', href: '#imprisonment-status-1' }]
-
-  if (!imprisonmentStatus) {
-    req.errors = errorData
-    req.flash('errors', errorData)
-  }
-
-  return next()
+export default (body: Record<string, string>): ValidationError[] => {
+  const { imprisonmentStatus } = body
+  return !imprisonmentStatus ? [{ text: 'Select a reason for imprisonment', href: '#imprisonment-status-1' }] : []
 }

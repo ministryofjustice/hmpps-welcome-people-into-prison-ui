@@ -1,4 +1,3 @@
-import { Request, Response } from 'express'
 import validation from './movementReasonsValidation'
 import ImprisonmentStatusesService from '../../services/imprisonmentStatusesService'
 
@@ -10,17 +9,9 @@ const imprisonmentStatusesService = new ImprisonmentStatusesService(
 ) as jest.Mocked<ImprisonmentStatusesService>
 
 describe('Movement reasons validation middleware', () => {
-  let req = {
-    body: {},
-    params: {},
-    flash: jest.fn(),
-  } as unknown as Request
-  const res = {} as Response
-  const next = jest.fn()
-
   beforeEach(() => {
     jest.resetAllMocks()
-    imprisonmentStatusesService.getImprisonmentStatus = jest.fn().mockResolvedValue({
+    imprisonmentStatusesService.getImprisonmentStatus.mockResolvedValue({
       code: 'transfer',
       description: 'Transfer from another establishment',
       imprisonmentStatusCode: 'SENT',
@@ -40,27 +31,15 @@ describe('Movement reasons validation middleware', () => {
   })
 
   it('should return an error when a movementReason is not selected', async () => {
-    req = {
-      body: {},
-      params: { imprisonmentStatus: 'transfer' },
-      flash: jest.fn(),
-    } as unknown as Request
-
-    await validation(imprisonmentStatusesService)(req, res, next)
-
-    expect(req.errors).toEqual([{ text: 'Select the type of transfer', href: '#movement-reason-1' }])
-    expect(req.flash).toHaveBeenCalledWith('errors', [
-      { text: 'Select the type of transfer', href: '#movement-reason-1' },
-    ])
+    const result = await validation(imprisonmentStatusesService)({ imprisonmentStatus: 'transfer' })
+    expect(result).toEqual([{ text: 'Select the type of transfer', href: '#movement-reason-1' }])
   })
 
   it('should not return an error when a movementReason is selected ', async () => {
-    req = {
-      body: { movementReason: 'INT' },
-      params: { imprisonmentStatus: 'transfer' },
-    } as unknown as Request
-
-    await validation(imprisonmentStatusesService)(req, res, next)
-    expect(req.errors).toBeUndefined()
+    const result = await validation(imprisonmentStatusesService)({
+      movementReason: 'INT',
+      imprisonmentStatus: 'transfer',
+    })
+    expect(result).toEqual([])
   })
 })
