@@ -1,0 +1,54 @@
+{% extends "../partials/layout.njk" %}
+
+{% set pageTitle = secondLevelTitle %}
+{% set errorMessageText = errors[0].text %}
+
+{% block content %}
+    <div class="govuk-grid-row govuk-!-padding-top-7">
+        <div class="govuk-grid-column-two-thirds">
+
+            {% if errors.length %}
+                {{ govukErrorSummary({
+                    titleText: "There is a problem",
+                    errorList: errors,
+                    attributes: { 'data-qa-errors': true }
+                }) }}
+            {% endif %}
+            <span class="govuk-caption-xl" data-qa="prisoner-name">  Confirm arrival of {{ data.firstName}} {{ data.lastName }}</span>
+
+            <form method="post" action = "/prisoners/{{ data.id }}/imprisonment-status/{{imprisonmentStatus}}">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                    <div class="govuk-form-group {%- if errorMessageText %} govuk-form-group--error {% endif %}">
+                        <fieldset class="govuk-fieldset" aria-describedby={{secondLevelTitle}}>
+                            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                                <h1 class="govuk-fieldset__heading"> {{secondLevelTitle}}</h1>
+                            </legend>
+
+                            {% if errorMessageText %}
+                                <span class="govuk-error-message">
+                                    <span class="govuk-visually-hidden">Error:</span>{{ errorMessageText }}
+                                </span>
+                            {% endif %}
+
+                            <div class="govuk-radios">
+                            {% for reason in movementReasons %}
+                                <div class="govuk-radios__item">
+                                    <input class="govuk-radios__input" id="movement-reason-{{loop.index}}" name="movementReason" type="radio" value="{{reason.movementReasonCode}}" data-qa="movement-reason-{{loop.index}}">
+                                    <label class="govuk-label govuk-radios__label" for="movement-reason-{{loop.index}}">
+                                        {{reason.description}}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                            </div>
+                        </fieldset>
+                    </div>
+                    {{ govukButton({
+                        classes: "govuk-button govuk-!-margin-bottom-3",
+                        text: "Continue",
+                        attributes: {'data-qa': 'continue'},
+                        type: 'submit'
+                    }) }}
+            </form>
+         </div>
+    </div>
+{% endblock %}

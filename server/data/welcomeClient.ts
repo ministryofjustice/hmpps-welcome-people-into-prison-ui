@@ -1,5 +1,12 @@
 import moment from 'moment'
-import type { Movement, TemporaryAbsence, NewOffenderBooking, Prison, OffenderNumber } from 'welcome'
+import type {
+  Movement,
+  TemporaryAbsence,
+  NewOffenderBooking,
+  Prison,
+  OffenderNumber,
+  ImprisonmentStatus,
+} from 'welcome'
 import type { Readable } from 'stream'
 import config, { ApiConfig } from '../config'
 import RestClient from './restClient'
@@ -54,5 +61,12 @@ export default class WelcomeClient {
       path: `/arrivals/${id}/confirm`,
       data: body,
     }) as Promise<OffenderNumber>
+  }
+
+  async getImprisonmentStatuses(): Promise<ImprisonmentStatus[]> {
+    logger.info(`welcomeApi: getImprisonmentStatuses()`)
+    return this.restClient.get({
+      path: `/imprisonment-statuses`,
+    }) as Promise<ImprisonmentStatus[]>
   }
 }
