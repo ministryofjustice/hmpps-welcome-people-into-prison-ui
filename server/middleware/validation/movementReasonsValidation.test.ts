@@ -32,7 +32,7 @@ describe('Movement reasons validation middleware', () => {
 
   it('should return an error when a movementReason is not selected', async () => {
     const result = await validation(imprisonmentStatusesService)({ imprisonmentStatus: 'transfer' })
-    expect(result).toEqual([{ text: 'Select the type of transfer', href: '#movement-reason-1' }])
+    expect(result).toEqual([{ text: 'Select the type of transfer', href: '#movement-reason-0' }])
   })
 
   it('should not return an error when a movementReason is selected ', async () => {
