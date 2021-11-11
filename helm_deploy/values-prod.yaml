@@ -6,6 +6,8 @@ generic-service:
 
   ingress:
     host: welcome.prison.service.justice.gov.uk
+    annotations:
+      external-dns.alpha.kubernetes.io/set-identifier: hmpps-welcome-people-into-prison-ui-prod-blue
 
   env:
     INGRESS_URL: "https://welcome.prison.service.justice.gov.uk"
