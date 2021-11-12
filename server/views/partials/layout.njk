@@ -60,7 +60,7 @@
 
 <title>
   {% block pageTitle %}  
-    {% if errors.length %}Error:{% endif %} {{title | default(applicationName)}} 
+    {% if errors.length %}Error:{% endif %} {{pageTitle | default(applicationName)}} 
   {% endblock %}
 </title>
 

@@ -1,6 +1,6 @@
 {% extends "../partials/layout.njk" %}
 
-{% set title = secondLevelTitle %}
+{% set pageTitle = secondLevelTitle %}
 
 {% block content %}
     <div class="govuk-grid-row govuk-!-padding-top-7">
@@ -25,7 +25,7 @@
                     name: "movementReason",
                     fieldset: {
                         legend: {
-                        text: secondLevelTitle,
+                        text: pageTitle,
                         isPageHeading: true,
                         classes: "govuk-fieldset__legend--l"
                         }
