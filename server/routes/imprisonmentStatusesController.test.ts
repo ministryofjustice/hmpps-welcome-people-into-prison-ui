@@ -62,7 +62,7 @@ describe('/imprisonment-status', () => {
         .expect(() => {
           expect(flash).toHaveBeenCalledTimes(1)
           expect(flash.mock.calls).toEqual([
-            ['errors', [{ href: '#imprisonment-status-1', text: 'Select a reason for imprisonment' }]],
+            ['errors', [{ href: '#imprisonment-status-0', text: 'Select a reason for imprisonment' }]],
           ])
         })
     })

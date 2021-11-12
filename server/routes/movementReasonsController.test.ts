@@ -70,13 +70,13 @@ describe('/determinate-sentence', () => {
     it('should call flash and redirect back to /determinate-sentence', () => {
       return request(app)
         .post('/prisoners/12345-67890/imprisonment-status/determinate-sentence')
-        .send({ movementReason: undefined })
+        .send({ imprisonmentStatus: 'determinate-sentence', movementReason: undefined })
         .expect(302)
         .expect('Location', '/prisoners/12345-67890/imprisonment-status/determinate-sentence')
         .expect(() => {
           expect(flash).toHaveBeenCalledTimes(1)
           expect(flash.mock.calls).toEqual([
-            ['errors', [{ href: '#movement-reason-1', text: 'Select the type of determinate sentence' }]],
+            ['errors', [{ href: '#movement-reason-0', text: 'Select the type of determinate sentence' }]],
           ])
         })
     })
