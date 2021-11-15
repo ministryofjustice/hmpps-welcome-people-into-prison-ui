@@ -52,6 +52,26 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     return value ? moment(value).format(format) : null
   })
 
+  njkEnv.addFilter('toOptions', (array, id: string, valueKey, textKey) => {
+    return array.map((item: Record<string, string>, index: number) => ({
+      value: item[valueKey],
+      text: item[textKey],
+      id: `${id}-${index}`,
+      attributes: { 'data-qa': `${id}-${index}` },
+    }))
+  })
+
+  njkEnv.addFilter('findError', (array, formFieldId) => {
+    if (!array) return null
+    const item = array.find((error: { href: string }) => error.href === `#${formFieldId}`)
+    if (item) {
+      return {
+        text: item.text,
+      }
+    }
+    return null
+  })
+
   const {
     analytics: { googleAnalyticsId, tagManagerContainerId, tagManagerEnvironment },
   } = config

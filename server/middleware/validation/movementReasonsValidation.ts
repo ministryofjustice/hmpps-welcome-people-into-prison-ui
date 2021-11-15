@@ -5,7 +5,6 @@ export default (imprisonmentStatusesService: ImprisonmentStatusesService) => {
   return async (body: Record<string, string>): Promise<ValidationError[]> => {
     const { movementReason, imprisonmentStatus } = body
     const status = await imprisonmentStatusesService.getImprisonmentStatus(imprisonmentStatus)
-
-    return !movementReason ? [{ text: status.secondLevelValidationMessage, href: '#movement-reason-1' }] : []
+    return !movementReason ? [{ text: status.secondLevelValidationMessage, href: '#movement-reason-0' }] : []
   }
 }

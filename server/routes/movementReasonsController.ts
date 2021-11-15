@@ -29,7 +29,8 @@ export default class MovementReasonsController {
 
   public assignReason(): RequestHandler {
     return async (req, res) => {
-      const { id, imprisonmentStatus } = req.params
+      const { id } = req.params
+      const { imprisonmentStatus } = req.body
 
       return req.errors
         ? res.redirect(`/prisoners/${id}/imprisonment-status/${imprisonmentStatus}`)
