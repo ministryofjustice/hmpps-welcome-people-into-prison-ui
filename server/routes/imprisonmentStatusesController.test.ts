@@ -53,7 +53,7 @@ describe('/imprisonment-status', () => {
   })
 
   describe('assignStatus()', () => {
-    it('should call flash and redirect back to /imprisonment-status', () => {
+    it('should call flash and redirect back to /imprisonment-status when errors present', () => {
       return request(app)
         .post('/prisoners/12345-67890/imprisonment-status')
         .send({ imprisonmentStatus: undefined })
@@ -67,7 +67,33 @@ describe('/imprisonment-status', () => {
         })
     })
 
-    it('should redirect to /check-answers when single movement reason', () => {
+    it('should call service method correctly', () => {
+      imprisonmentStatusesService.getImprisonmentStatus.mockResolvedValue({
+        code: 'civil-offence',
+        description: 'Civil offence',
+        imprisonmentStatusCode: 'CIVIL',
+        secondLevelTitle: 'What is the civil offence?',
+        secondLevelValidationMessage: 'Select the civil offence',
+        movementReasons: [
+          {
+            description: 'Civil committal',
+            movementReasonCode: 'C',
+          },
+          {
+            description: 'Non-payment of a fine',
+            movementReasonCode: 'F',
+          },
+        ],
+      })
+      return request(app)
+        .post('/prisoners/12345-67890/imprisonment-status')
+        .send({ imprisonmentStatus: 'civil-offence' })
+        .expect(res => {
+          expect(imprisonmentStatusesService.getImprisonmentStatus).toHaveBeenCalledWith('civil-offence')
+        })
+    })
+
+    it('should redirect to /check-answers and when single movement reason', () => {
       imprisonmentStatusesService.getImprisonmentStatus.mockResolvedValue({
         code: 'recapture',
         description: 'Recapture after escape',
@@ -84,6 +110,31 @@ describe('/imprisonment-status', () => {
         .send({ imprisonmentStatus: 'recapture' })
         .expect(302)
         .expect('Location', '/prisoners/12345-67890/check-answers')
+    })
+
+    it('should set cookie when single movement reason', () => {
+      imprisonmentStatusesService.getImprisonmentStatus.mockResolvedValue({
+        code: 'recapture',
+        description: 'Recapture after escape',
+        imprisonmentStatusCode: 'SENT03',
+        movementReasons: [
+          {
+            movementReasonCode: 'RECA',
+          },
+        ],
+      })
+
+      return request(app)
+        .post('/prisoners/12345-67890/imprisonment-status')
+        .send({ imprisonmentStatus: 'recapture' })
+        .expect(302)
+        .expect(res => {
+          expect(res.header['set-cookie'][0]).toContain(
+            encodeURIComponent(
+              JSON.stringify({ code: 'recapture', imprisonmentStatus: 'SENT03', movementReasonCode: 'RECA' })
+            )
+          )
+        })
     })
 
     it('should redirect to /imprisonment-status/:imprisonmentStatus when multiple movement reasons', () => {

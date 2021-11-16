@@ -33,3 +33,18 @@ export const compareByFullName = <T extends Person>(a: T, b: T): number => {
   const result = a.lastName.localeCompare(b.lastName)
   return result !== 0 ? result : a.firstName.localeCompare(b.firstName)
 }
+
+export function assertHasStringValues<K extends keyof Record<string, unknown>>(
+  obj: Record<string, unknown>,
+  keysToCheck: K[]
+): asserts obj is Record<K, string> {
+  const matches = obj && typeof obj === 'object'
+
+  if (!matches) {
+    throw Error('Not a record')
+  }
+  const invalidKeys = keysToCheck.filter(k => typeof obj[k] !== 'string')
+  if (invalidKeys.length) {
+    throw Error(`Missing or invalid keys: ${invalidKeys}`)
+  }
+}

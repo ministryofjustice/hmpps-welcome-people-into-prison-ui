@@ -32,4 +32,18 @@ describe('GET /confirmArrival', () => {
         expect(expectedArrivalsService.getMove).toHaveBeenCalledWith('12345-67890')
       })
   })
+
+  it('should clear cookie', () => {
+    return request(app)
+      .get('/prisoners/12345-67890/confirm-arrival')
+      .expect(res => {
+        expect(res.header['set-cookie'][0]).not.toContain('code')
+      })
+      .expect(res => {
+        expect(res.header['set-cookie'][0]).not.toContain('imprisonmentStatus')
+      })
+      .expect(res => {
+        expect(res.header['set-cookie'][0]).not.toContain('movementReasonCode')
+      })
+  })
 })

@@ -2,9 +2,9 @@ import { NextFunction, Request, Response } from 'express'
 import { ValidationError } from '../../middleware/validationMiddleware'
 
 const exampleUserDetails = {
-  username: 'COURT_USER',
+  username: 'USER1',
   active: true,
-  name: 'Court User',
+  name: 'User 1',
   authSource: 'nomis',
   staffId: 123456,
   userId: '654321',

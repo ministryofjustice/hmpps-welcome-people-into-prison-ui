@@ -1,4 +1,4 @@
-import type { ImprisonmentStatus } from 'welcome'
+import type { ImprisonmentStatus, StatusAndReasons } from 'welcome'
 import type { RestClientBuilder, WelcomeClient, HmppsAuthClient } from '../data'
 
 export default class ImprisonmentStatusesService {
@@ -16,5 +16,16 @@ export default class ImprisonmentStatusesService {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const statuses = await this.welcomeClientFactory(token).getImprisonmentStatuses()
     return statuses.find(s => s.code === code)
+  }
+
+  public async getReasonForImprisonment(statusAndReason: StatusAndReasons): Promise<string> {
+    const imprisonmentStatus = await this.getImprisonmentStatus(statusAndReason.code)
+    if (imprisonmentStatus.movementReasons.length === 1) {
+      return `${imprisonmentStatus.description}`
+    }
+    const movementReason = imprisonmentStatus.movementReasons.find(
+      r => r.movementReasonCode === statusAndReason.movementReasonCode
+    )
+    return `${imprisonmentStatus.description} - ${movementReason.description}`
   }
 }

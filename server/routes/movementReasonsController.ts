@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express'
 import ImprisonmentStatusesService from '../services/imprisonmentStatusesService'
 import ExpectedArrivalsService from '../services/expectedArrivalsService'
+import { setImprisonmentStatus } from './state'
 
 export default class MovementReasonsController {
   public constructor(
@@ -29,12 +30,24 @@ export default class MovementReasonsController {
 
   public assignReason(): RequestHandler {
     return async (req, res) => {
-      const { id } = req.params
-      const { imprisonmentStatus } = req.body
+      const { id, imprisonmentStatus } = req.params
+      const { movementReason } = req.body
 
-      return req.errors
-        ? res.redirect(`/prisoners/${id}/imprisonment-status/${imprisonmentStatus}`)
-        : res.redirect(`/prisoners/${id}/check-answers`)
+      if (req.errors) {
+        return res.redirect(`/prisoners/${id}/imprisonment-status/${imprisonmentStatus}`)
+      }
+
+      const selectedImprisonmentStatus = await this.imprisonmentStatusesService.getImprisonmentStatus(
+        imprisonmentStatus
+      )
+
+      setImprisonmentStatus(res, {
+        code: selectedImprisonmentStatus.code,
+        imprisonmentStatus: selectedImprisonmentStatus.imprisonmentStatusCode,
+        movementReasonCode: movementReason,
+      })
+
+      return res.redirect(`/prisoners/${id}/check-answers`)
     }
   }
 }

@@ -112,5 +112,28 @@ describe('Imprisonment statuses service', () => {
         expect(result).toStrictEqual(imprisonmentStatus)
       })
     })
+
+    describe('getReasonForImprisonment', () => {
+      it('should include imprisonment status description only when singular movement reason selected', async () => {
+        const statusAndReason = {
+          code: 'convicted-unsentenced',
+          imprisonmentStatus: 'JR',
+          movementReasonCode: 'V',
+        }
+        const result = await service.getReasonForImprisonment(statusAndReason)
+
+        expect(result).toStrictEqual('Convicted unsentenced')
+      })
+      it('should include movement reason description when one of multiple movement reasons selected', async () => {
+        const statusAndReason = {
+          code: 'determinate-sentence',
+          imprisonmentStatus: 'SENT',
+          movementReasonCode: 'I',
+        }
+        const result = await service.getReasonForImprisonment(statusAndReason)
+
+        expect(result).toStrictEqual('Determinate sentence - Imprisonment without option of a fine')
+      })
+    })
   })
 })

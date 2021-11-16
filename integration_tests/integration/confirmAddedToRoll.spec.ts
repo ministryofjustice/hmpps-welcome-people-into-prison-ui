@@ -12,6 +12,7 @@ context('Confirm Added To Roll', () => {
     cy.task('stubExpectedArrivals', 'MDI')
     cy.task('stubMissingPrisonerImage')
     cy.task('stubPrison', 'MDI')
+    cy.task('stubImprisonmentStatus')
   })
 
   const expectedArrival = {
@@ -29,6 +30,11 @@ context('Confirm Added To Roll', () => {
   it('Should contain correctly formatted move data on confirmation page', () => {
     cy.task('stubExpectedArrival', expectedArrival)
     cy.signIn()
+    cy.setCookie(
+      'status-and-reason',
+      's%3Aj%3A%7B%22code%22%3A%22determinate-sentence%22%2C%22imprisonmentStatus%22%3A%22SENT%22%2C%22movementReasonCode%22%3A%2226%22%7D.QEx%2B2EcyCfMkSknBJwkaVswIBLsUTbGFLkXur2qN%2Fro',
+      { httpOnly: true, sameSite: 'lax' }
+    )
     const checkAnswersPage = CheckAnswersPage.goTo(expectedArrival.id)
     cy.task('stubCreateOffenderRecordAndBooking', '00000-11111')
     checkAnswersPage.addToRoll().click()
