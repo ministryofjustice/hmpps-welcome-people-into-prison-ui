@@ -8,6 +8,7 @@ import ExpectedArrivalsService from '../services/expectedArrivalsService'
 import ImprisonmentStatusesService from '../services/imprisonmentStatusesService'
 import raiseAnalyticsEvent from '../raiseAnalyticsEvent'
 import Role from '../authentication/role'
+import config from '../config'
 
 jest.mock('../services/expectedArrivalsService')
 jest.mock('../services/imprisonmentStatusesService')
@@ -27,6 +28,7 @@ beforeEach(() => {
     flash,
     roles: [Role.PRISON_RECEPTION],
   })
+  config.session.secret = 'sdksdfkdfs'
   expectedArrivalsService.getMove.mockResolvedValue({
     firstName: 'Jim',
     lastName: 'Smith',
