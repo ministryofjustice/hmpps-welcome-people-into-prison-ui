@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express'
-import ImprisonmentStatusesService from '../services/imprisonmentStatusesService'
-import ExpectedArrivalsService from '../services/expectedArrivalsService'
+import type ImprisonmentStatusesService from '../services/imprisonmentStatusesService'
+import type ExpectedArrivalsService from '../services/expectedArrivalsService'
 import { setImprisonmentStatus } from './state'
 
 export default class ImprisonmentStatusesController {

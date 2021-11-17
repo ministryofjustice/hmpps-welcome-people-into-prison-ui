@@ -1,5 +1,7 @@
-import CheckAnswersPage from '../pages/checkAnswers'
 import Page from '../pages/page'
+import ConfirmArrivalPage from '../pages/confirmArrival'
+import ImprisonmentStatusPage from '../pages/imprisonmentStatus'
+import CheckAnswersPage from '../pages/checkAnswers'
 import ConfirmAddedToRollPage from '../pages/confirmAddedToRoll'
 import Role from '../../server/authentication/role'
 
@@ -29,18 +31,20 @@ context('Check Answers', () => {
   it('Should contain a full set of correctly formatted move data', () => {
     cy.task('stubExpectedArrival', expectedArrival)
     cy.signIn()
-    cy.setCookie(
-      'status-and-reason',
-      's%3Aj%3A%7B%22code%22%3A%22determinate-sentence%22%2C%22imprisonmentStatus%22%3A%22SENT%22%2C%22movementReasonCode%22%3A%2226%22%7D.QEx%2B2EcyCfMkSknBJwkaVswIBLsUTbGFLkXur2qN%2Fro',
-      { httpOnly: true, sameSite: 'lax' }
-    )
+    const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
+    confirmArrivalPage.continue().click()
+
+    const imprisonmentStatusPage = ImprisonmentStatusPage.goTo(expectedArrival.id)
+    imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()
+    imprisonmentStatusPage.continue().click()
+
     const checkAnswersPage = CheckAnswersPage.goTo(expectedArrival.id)
 
     checkAnswersPage.name().should('contain.text', 'Harry Stanton')
     checkAnswersPage.dob().should('contain.text', '29 January 1961')
     checkAnswersPage.prisonNumber().should('contain.text', 'A1234AB')
     checkAnswersPage.pncNumber().should('contain.text', '01/3456A')
-    checkAnswersPage.reason().should('contain.text', 'Determinate sentence - Extended sentence for public protection')
+    checkAnswersPage.reason().should('contain.text', 'On remand')
     cy.task('stubCreateOffenderRecordAndBooking', '00000-11111')
     checkAnswersPage.addToRoll().click()
     Page.verifyOnPage(ConfirmAddedToRollPage)
@@ -52,11 +56,13 @@ context('Check Answers', () => {
 
     cy.task('stubExpectedArrival', expectedArrival)
     cy.signIn()
-    cy.setCookie(
-      'status-and-reason',
-      's%3Aj%3A%7B%22code%22%3A%22determinate-sentence%22%2C%22imprisonmentStatus%22%3A%22SENT%22%2C%22movementReasonCode%22%3A%2226%22%7D.QEx%2B2EcyCfMkSknBJwkaVswIBLsUTbGFLkXur2qN%2Fro',
-      { httpOnly: true, sameSite: 'lax' }
-    )
+    const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
+    confirmArrivalPage.continue().click()
+
+    const imprisonmentStatusPage = ImprisonmentStatusPage.goTo(expectedArrival.id)
+    imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()
+    imprisonmentStatusPage.continue().click()
+
     const checkAnswersPage = CheckAnswersPage.goTo(expectedArrival.id)
     checkAnswersPage.prisonNumber().should('not.exist')
     checkAnswersPage.pncNumber().should('not.exist')

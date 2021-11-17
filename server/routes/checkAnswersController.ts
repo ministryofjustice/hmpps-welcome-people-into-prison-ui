@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express'
 import { Gender } from 'welcome'
-import ExpectedArrivalsService from '../services/expectedArrivalsService'
-import ImprisonmentStatusesService from '../services/imprisonmentStatusesService'
+import type ExpectedArrivalsService from '../services/expectedArrivalsService'
+import type ImprisonmentStatusesService from '../services/imprisonmentStatusesService'
 import raiseAnalyticsEvent from '../raiseAnalyticsEvent'
 import { getImprisonmentStatus } from './state'
 

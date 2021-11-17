@@ -82,11 +82,7 @@ describe('GET /confirmation', () => {
       .get('/prisoners/12345-67890/confirmation')
       .expect(res => {
         expect(res.header['set-cookie'][0]).not.toContain('code')
-      })
-      .expect(res => {
         expect(res.header['set-cookie'][0]).not.toContain('imprisonmentStatus')
-      })
-      .expect(res => {
         expect(res.header['set-cookie'][0]).not.toContain('movementReasonCode')
       })
   })
