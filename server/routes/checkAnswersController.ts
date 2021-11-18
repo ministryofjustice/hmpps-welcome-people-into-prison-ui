@@ -46,7 +46,7 @@ export default class CheckAnswersController {
 
       raiseAnalyticsEvent(
         'Add to the establishment roll',
-        'Offender record and booking created',
+        'Confirmed arrival',
         `AgencyId: ${activeCaseLoadId}, From: ${data.fromLocation}, Type: ${data.fromLocationType},`,
         req.hostname
       )
