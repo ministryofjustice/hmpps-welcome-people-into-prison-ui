@@ -50,24 +50,16 @@ context('Choose Prisoner', () => {
     cy.task('stubMissingPrisonerImage')
   })
 
-  it('A user can view list of expected arrivals from courts', () => {
+  it('A user can view list of expected arrivals', () => {
     cy.signIn()
     const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
     choosePrisonerPage.expectedArrivalsFromCourt(1).should('contain.text', 'Doe, John')
     choosePrisonerPage.expectedArrivalsFromCourt(2).should('contain.text', 'Smith, Sam')
-  })
 
-  it('A user can view list of expected arrivals from custody suites', () => {
-    cy.signIn()
-    const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
     choosePrisonerPage.expectedArrivalsFromCustodySuite(1).should('contain.text', 'Prisoner, Mark')
     choosePrisonerPage.expectedArrivalsFromCustodySuite(2).should('contain.text', 'Smith, Barry')
     choosePrisonerPage.expectedArrivalsFromCustodySuite(3).should('contain.text', 'Smith, Bob')
-  })
 
-  it('A user can view list of expected arrivals from another establishement', () => {
-    cy.signIn()
-    const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
     choosePrisonerPage.expectedArrivalsFromAnotherEstablishment(1).should('contain.text', 'Offender, Karl')
   })
 
@@ -146,18 +138,18 @@ context('Choose Prisoner', () => {
       })
   })
 
-  it.only('Only court arrivals with no current booking and arrivals from custody suites will have a link leading to the Confirm arrival page', () => {
+  it('Only court arrivals with no current booking and arrivals from custody suites will have a link leading to the Confirm arrival page', () => {
     cy.signIn()
     const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
 
     choosePrisonerPage.arrivalFrom('PRISON')(1).confirm().should('not.exist')
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().should('not.exist')
 
-    confirmLinkIsClickableFor(choosePrisonerPage, expectedArrivalMatchedInNomisWithNoBooking, 'COURT', 2)
-    confirmLinkIsClickableFor(choosePrisonerPage, expectedArrivalUnmatchedInNomis, 'COURT', 3)
+    canStartToConfirmArrival(choosePrisonerPage, expectedArrivalMatchedInNomisWithNoBooking, 'COURT', 2)
+    canStartToConfirmArrival(choosePrisonerPage, expectedArrivalUnmatchedInNomis, 'COURT', 3)
 
-    confirmLinkIsClickableFor(choosePrisonerPage, expectedArrivalFromCustodySuite, 'CUSTODY_SUITE')
-    confirmLinkIsClickableFor(choosePrisonerPage, expectedArrivalFromCustodySuite, 'CUSTODY_SUITE', 2)
+    canStartToConfirmArrival(choosePrisonerPage, expectedArrivalFromCustodySuite, 'CUSTODY_SUITE', 1)
+    canStartToConfirmArrival(choosePrisonerPage, expectedArrivalFromCustodySuite, 'CUSTODY_SUITE', 2)
   })
 
   it('No links shown if not a reception user', () => {
@@ -174,11 +166,11 @@ context('Choose Prisoner', () => {
     choosePrisonerPage.arrivalFrom('COURT')(3).confirm().should('not.exist')
   })
 
-  function confirmLinkIsClickableFor(
+  function canStartToConfirmArrival(
     choosePrisonerPage: ChoosePrisonerPage,
     stub: Record<string, string | boolean>,
     arrivalType: 'COURT' | 'PRISON' | 'CUSTODY_SUITE',
-    rowNumber = 1
+    rowNumber: number
   ) {
     cy.task('stubExpectedArrival', stub)
     choosePrisonerPage.arrivalFrom(arrivalType)(rowNumber).confirm().should('exist').click()

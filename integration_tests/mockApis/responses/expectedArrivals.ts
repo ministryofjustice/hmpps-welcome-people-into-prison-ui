@@ -10,7 +10,7 @@ export default [
     fromLocationType: 'PRISON',
   },
   {
-    id: '00000-333333',
+    id: '11111-333333',
     firstName: 'Mark',
     lastName: 'Prisoner',
     dateOfBirth: '1985-01-05',
@@ -21,7 +21,7 @@ export default [
     fromLocationType: 'CUSTODY_SUITE',
   },
   {
-    id: '00000-333333',
+    id: '22222-333333',
     firstName: 'Barry',
     lastName: 'Smith',
     dateOfBirth: '1970-01-01',
@@ -52,7 +52,7 @@ export default [
     fromLocationType: 'OTHER',
   },
   {
-    id: '00000-222222',
+    id: '33333-222222',
     firstName: 'Sam',
     lastName: 'Smith',
     dateOfBirth: '1970-02-01',
