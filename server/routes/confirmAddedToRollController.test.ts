@@ -76,6 +76,17 @@ describe('GET /confirmation', () => {
       })
   })
 
+  it('should clear cookie', () => {
+    flash.mockReturnValue([{ offenderNo: 'A1234AB' }])
+    return request(app)
+      .get('/prisoners/12345-67890/confirmation')
+      .expect(res => {
+        expect(res.header['set-cookie'][0]).not.toContain('code')
+        expect(res.header['set-cookie'][0]).not.toContain('imprisonmentStatus')
+        expect(res.header['set-cookie'][0]).not.toContain('movementReasonCode')
+      })
+  })
+
   it('should render /confirmAddedToRoll page', () => {
     flash.mockReturnValue([{ offenderNo: 'A1234AB' }])
     return request(app)

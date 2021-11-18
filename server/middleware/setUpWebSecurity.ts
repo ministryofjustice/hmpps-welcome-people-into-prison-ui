@@ -2,6 +2,9 @@ import express, { Response, Router } from 'express'
 import helmet from 'helmet'
 import crypto from 'crypto'
 import { IncomingMessage } from 'http'
+import cookieParser from 'cookie-parser'
+
+import config from '../config'
 
 export default function setUpWebSecurity(): Router {
   const router = express.Router()
@@ -36,6 +39,8 @@ export default function setUpWebSecurity(): Router {
       },
     })
   )
+
+  router.use(cookieParser(config.session.secret))
 
   return router
 }

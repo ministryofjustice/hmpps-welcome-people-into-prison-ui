@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express'
-import ImprisonmentStatusesService from '../services/imprisonmentStatusesService'
-import ExpectedArrivalsService from '../services/expectedArrivalsService'
+import type ImprisonmentStatusesService from '../services/imprisonmentStatusesService'
+import type ExpectedArrivalsService from '../services/expectedArrivalsService'
+import { setImprisonmentStatus } from './state'
 
 export default class ImprisonmentStatusesController {
   public constructor(
@@ -31,9 +32,17 @@ export default class ImprisonmentStatusesController {
         imprisonmentStatus
       )
 
-      return selectedImprisonmentStatus.movementReasons.length > 1
-        ? res.redirect(`/prisoners/${id}/imprisonment-status/${imprisonmentStatus}`)
-        : res.redirect(`/prisoners/${id}/check-answers`)
+      if (selectedImprisonmentStatus.movementReasons.length === 1) {
+        setImprisonmentStatus(res, {
+          code: selectedImprisonmentStatus.code,
+          imprisonmentStatus: selectedImprisonmentStatus.imprisonmentStatusCode,
+          movementReasonCode: selectedImprisonmentStatus.movementReasons[0].movementReasonCode,
+        })
+
+        return res.redirect(`/prisoners/${id}/check-answers`)
+      }
+
+      return res.redirect(`/prisoners/${id}/imprisonment-status/${imprisonmentStatus}`)
     }
   }
 }

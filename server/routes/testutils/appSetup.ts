@@ -1,7 +1,9 @@
 import express, { Express } from 'express'
+import cookieParser from 'cookie-parser'
 import cookieSession from 'cookie-session'
 import createError from 'http-errors'
 import path from 'path'
+import config from '../../config'
 
 import routes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'
@@ -46,6 +48,7 @@ function appSetup(
     res.locals.user = { ...req.user, roles }
     next()
   })
+  app.use(cookieParser(config.session.secret))
   app.use(cookieSession({ keys: [''] }))
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))

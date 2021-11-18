@@ -41,6 +41,8 @@ export default {
     tls_enabled: get('REDIS_TLS_ENABLED', 'false'),
   },
   session: {
+    name: process.env.HMPPS_COOKIE_NAME || 'hmpps-session-dev',
+    domain: process.env.HMPPS_COOKIE_DOMAIN || 'localhost',
     secret: get('SESSION_SECRET', 'app-insecure-default-session', requiredInProduction),
     expiryMinutes: Number(get('WEB_SESSION_TIMEOUT_IN_MINUTES', 120)),
   },

@@ -9,6 +9,7 @@ import MovementReasonsController from './movementReasonsController'
 import imprisonmentStatusesValidation from '../middleware/validation/imprisonmentStatusesValidation'
 import movementReasonsValidation from '../middleware/validation/movementReasonsValidation'
 import validationMiddleware from '../middleware/validationMiddleware'
+import { ensureImprisonmentStatusPresentMiddleware } from './state'
 
 import authorisationForUrlMiddleware from '../middleware/authorisationForUrlMiddleware'
 import asyncMiddleware from '../middleware/asyncMiddleware'
@@ -19,8 +20,14 @@ import Role from '../authentication/role'
 export default function routes(services: Services): Router {
   const router = express.Router()
 
-  const get = (path: string, handler: RequestHandler, authorisedRoles?: Role[]) =>
-    router.get(path, authorisationForUrlMiddleware(authorisedRoles), asyncMiddleware(handler))
+  const checkImprisonmentStatusPresent = ensureImprisonmentStatusPresentMiddleware('/confirm-arrival/choose-prisoner')
+
+  const get = (path: string, handlers: RequestHandler[], authorisedRoles?: Role[]) =>
+    router.get(
+      path,
+      authorisationForUrlMiddleware(authorisedRoles),
+      handlers.map(handler => asyncMiddleware(handler))
+    )
 
   const post = (path: string, handlers: RequestHandler[], authorisedRoles?: Role[]) =>
     router.post(
@@ -30,26 +37,28 @@ export default function routes(services: Services): Router {
     )
 
   const choosePrisonerController = new ChoosePrisonerController(services.expectedArrivalsService)
-  get('/confirm-arrival/choose-prisoner', choosePrisonerController.view())
+  get('/confirm-arrival/choose-prisoner', [choosePrisonerController.view()])
 
-  get('/', (req, res, next) => {
-    res.redirect('/confirm-arrival/choose-prisoner')
-  })
+  get('/', [
+    (req, res, next) => {
+      res.redirect('/confirm-arrival/choose-prisoner')
+    },
+  ])
 
   const temporaryAbsencesController = new TemporaryAbsencesController(services.temporaryAbsencesService)
-  get('/confirm-arrival/return-from-temporary-absence', temporaryAbsencesController.view())
+  get('/confirm-arrival/return-from-temporary-absence', [temporaryAbsencesController.view()])
 
   const prisonerController = new PrisonerController(services.expectedArrivalsService)
-  get('/prisoner/:prisonNumber/image', prisonerController.getImage())
+  get('/prisoner/:prisonNumber/image', [prisonerController.getImage()])
 
   const confirmArrivalController = new ConfirmArrivalController(services.expectedArrivalsService)
-  get('/prisoners/:id/confirm-arrival', confirmArrivalController.confirmArrival(), [Role.PRISON_RECEPTION])
+  get('/prisoners/:id/confirm-arrival', [confirmArrivalController.confirmArrival()], [Role.PRISON_RECEPTION])
 
   const imprisonmentStatusesController = new ImprisonmentStatusesController(
     services.imprisonmentStatusesService,
     services.expectedArrivalsService
   )
-  get('/prisoners/:id/imprisonment-status', imprisonmentStatusesController.view())
+  get('/prisoners/:id/imprisonment-status', [imprisonmentStatusesController.view()])
   post('/prisoners/:id/imprisonment-status', [
     validationMiddleware(imprisonmentStatusesValidation),
     imprisonmentStatusesController.assignStatus(),
@@ -59,18 +68,29 @@ export default function routes(services: Services): Router {
     services.imprisonmentStatusesService,
     services.expectedArrivalsService
   )
-  get('/prisoners/:id/imprisonment-status/:imprisonmentStatus', movementReasonsController.view())
+  get('/prisoners/:id/imprisonment-status/:imprisonmentStatus', [movementReasonsController.view()])
   post('/prisoners/:id/imprisonment-status/:imprisonmentStatus', [
     validationMiddleware(movementReasonsValidation(services.imprisonmentStatusesService)),
     movementReasonsController.assignReason(),
   ])
 
-  const checkAnswersController = new CheckAnswersController(services.expectedArrivalsService)
-  get('/prisoners/:id/check-answers', checkAnswersController.view(), [Role.PRISON_RECEPTION])
-  post('/prisoners/:id/check-answers', [checkAnswersController.addToRoll()], [Role.PRISON_RECEPTION])
+  const checkAnswersController = new CheckAnswersController(
+    services.expectedArrivalsService,
+    services.imprisonmentStatusesService
+  )
+  get(
+    '/prisoners/:id/check-answers',
+    [checkImprisonmentStatusPresent, checkAnswersController.view()],
+    [Role.PRISON_RECEPTION]
+  )
+  post(
+    '/prisoners/:id/check-answers',
+    [checkImprisonmentStatusPresent, checkAnswersController.addToRoll()],
+    [Role.PRISON_RECEPTION]
+  )
 
   const confirmAddedToRollController = new ConfirmAddedToRollController(services.expectedArrivalsService)
-  get('/prisoners/:id/confirmation', confirmAddedToRollController.view(), [Role.PRISON_RECEPTION])
+  get('/prisoners/:id/confirmation', [confirmAddedToRollController.view()], [Role.PRISON_RECEPTION])
 
   return router
 }

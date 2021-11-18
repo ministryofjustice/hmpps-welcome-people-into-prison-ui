@@ -1,15 +1,23 @@
 import { RequestHandler } from 'express'
 import { Gender } from 'welcome'
-import ExpectedArrivalsService from '../services/expectedArrivalsService'
+import type ExpectedArrivalsService from '../services/expectedArrivalsService'
+import type ImprisonmentStatusesService from '../services/imprisonmentStatusesService'
 import raiseAnalyticsEvent from '../raiseAnalyticsEvent'
+import { getImprisonmentStatus } from './state'
 
 export default class CheckAnswersController {
-  public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
+  public constructor(
+    private readonly expectedArrivalsService: ExpectedArrivalsService,
+    private readonly imprisonmentStatusesService: ImprisonmentStatusesService
+  ) {}
 
   public view(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
-      const data = await this.expectedArrivalsService.getMove(id)
+      const statusAndReason = getImprisonmentStatus(req)
+      const moveData = await this.expectedArrivalsService.getMove(id)
+      const reasonImprisonment = await this.imprisonmentStatusesService.getReasonForImprisonment(statusAndReason)
+      const data = { reasonImprisonment, ...moveData }
       return res.render('pages/checkAnswers.njk', { data })
     }
   }
@@ -19,14 +27,15 @@ export default class CheckAnswersController {
       const { id } = req.params
       const { username, activeCaseLoadId } = res.locals.user
       const data = await this.expectedArrivalsService.getMove(id)
+      const statusAndReason = getImprisonmentStatus(req)
       const newOffender = {
         firstName: data.firstName,
         lastName: data.lastName,
         dateOfBirth: data.dateOfBirth,
         gender: Gender.NOT_SPECIFIED,
         prisonId: activeCaseLoadId,
-        imprisonmentStatus: 'RX',
-        movementReasonCode: 'N',
+        imprisonmentStatus: statusAndReason.imprisonmentStatus,
+        movementReasonCode: statusAndReason.movementReasonCode,
       }
 
       const offenderNumber = await this.expectedArrivalsService.createOffenderRecordAndBooking(

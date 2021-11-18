@@ -1,4 +1,6 @@
 import Page from '../pages/page'
+import ConfirmArrivalPage from '../pages/confirmArrival'
+import ImprisonmentStatusPage from '../pages/imprisonmentStatus'
 import CheckAnswersPage from '../pages/checkAnswers'
 import ConfirmAddedToRollPage from '../pages/confirmAddedToRoll'
 import ChoosePrisonerPage from '../pages/choosePrisoner'
@@ -12,6 +14,7 @@ context('Confirm Added To Roll', () => {
     cy.task('stubExpectedArrivals', 'MDI')
     cy.task('stubMissingPrisonerImage')
     cy.task('stubPrison', 'MDI')
+    cy.task('stubImprisonmentStatus')
   })
 
   const expectedArrival = {
@@ -29,6 +32,13 @@ context('Confirm Added To Roll', () => {
   it('Should contain correctly formatted move data on confirmation page', () => {
     cy.task('stubExpectedArrival', expectedArrival)
     cy.signIn()
+    const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
+    confirmArrivalPage.continue().click()
+
+    const imprisonmentStatusPage = ImprisonmentStatusPage.goTo(expectedArrival.id)
+    imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()
+    imprisonmentStatusPage.continue().click()
+
     const checkAnswersPage = CheckAnswersPage.goTo(expectedArrival.id)
     cy.task('stubCreateOffenderRecordAndBooking', '00000-11111')
     checkAnswersPage.addToRoll().click()

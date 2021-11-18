@@ -29,6 +29,12 @@ declare module 'welcome' {
     movementReasonCode: string
   }
 
+  export type StatusAndReasons = {
+    code: string
+    imprisonmentStatus: string
+    movementReasonCode: string
+  }
+
   export type Prison = {
     description: string
   }

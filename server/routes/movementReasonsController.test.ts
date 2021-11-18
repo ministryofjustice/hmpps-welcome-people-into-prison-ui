@@ -56,6 +56,7 @@ describe('/determinate-sentence', () => {
           expect(expectedArrivalsService.getMove).toHaveBeenCalledWith('12345-67890')
         })
     })
+
     it('should render /determinate-sentence page', () => {
       return request(app)
         .get('/prisoners/12345-67890/imprisonment-status/determinate-sentence')
@@ -66,11 +67,12 @@ describe('/determinate-sentence', () => {
         })
     })
   })
+
   describe('assignReason()', () => {
-    it('should call flash and redirect back to /determinate-sentence', () => {
+    it('should call flash and redirect back to /determinate-sentence if errors present', () => {
       return request(app)
         .post('/prisoners/12345-67890/imprisonment-status/determinate-sentence')
-        .send({ imprisonmentStatus: 'determinate-sentence', movementReason: undefined })
+        .send({ movementReason: undefined })
         .expect(302)
         .expect('Location', '/prisoners/12345-67890/imprisonment-status/determinate-sentence')
         .expect(() => {
@@ -81,10 +83,24 @@ describe('/determinate-sentence', () => {
         })
     })
 
+    it('should set cookie', () => {
+      return request(app)
+        .post('/prisoners/12345-67890/imprisonment-status/determinate-sentence')
+        .send({ movementReason: '26' })
+        .expect(302)
+        .expect(res => {
+          expect(res.header['set-cookie'][0]).toContain(
+            encodeURIComponent(
+              JSON.stringify({ code: 'determinate-sentence', imprisonmentStatus: 'SENT', movementReasonCode: '26' })
+            )
+          )
+        })
+    })
+
     it('should redirect to /check-answers', () => {
       return request(app)
         .post('/prisoners/12345-67890/imprisonment-status/determinate-sentence')
-        .send({ movementReason: 'Extended sentence for public protection' })
+        .send({ movementReason: '26' })
         .expect(302)
         .expect('Location', '/prisoners/12345-67890/check-answers')
     })

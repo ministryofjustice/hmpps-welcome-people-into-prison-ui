@@ -1,4 +1,4 @@
-import { convertToTitleCase, groupBy, compareByFullName } from './utils'
+import { convertToTitleCase, groupBy, compareByFullName, assertHasStringValues } from './utils'
 
 describe('Convert to title case', () => {
   it('null string', () => {
@@ -162,5 +162,67 @@ describe('compareByFullName', () => {
         }
       )
     ).toEqual(-1)
+  })
+})
+
+describe('assertHasStringValues', () => {
+  it('Has required fields', () => {
+    const record: Record<string, unknown> = { name: 'Jo', role: 'dev' }
+
+    assertHasStringValues(record, ['name', 'role'])
+
+    expect(record.name).toEqual('Jo')
+  })
+
+  it('Has more than required fields', () => {
+    const record: Record<string, unknown> = { name: 'Jo', role: 'dev' }
+
+    assertHasStringValues(record, ['name'])
+
+    expect(record.name).toEqual('Jo')
+  })
+
+  it('Has less than required fields', () => {
+    const record: Record<string, unknown> = { name: 'Jo' }
+
+    expect(() => assertHasStringValues(record, ['name', 'role'])).toThrowError('Missing or invalid keys: role')
+  })
+
+  it('Has no required fields', () => {
+    const record: Record<string, unknown> = {}
+
+    expect(() => assertHasStringValues(record, ['name', 'role'])).toThrowError('Missing or invalid keys: name,role')
+  })
+
+  it('Is null', () => {
+    const record: Record<string, unknown> = null
+
+    expect(() => assertHasStringValues(record, ['name', 'role'])).toThrowError('Not a record')
+  })
+
+  it('Has empty fields', () => {
+    const record: Record<string, unknown> = { name: '', role: '' }
+
+    assertHasStringValues(record, ['name', 'role'])
+
+    expect(record.name).toEqual('')
+  })
+
+  it('Has non-string fields', () => {
+    const record: Record<string, unknown> = { name: 1, role: true }
+
+    expect(() => assertHasStringValues(record, ['name', 'role'])).toThrowError('Missing or invalid keys: name,role')
+  })
+
+  it('Has null fields', () => {
+    const record: Record<string, unknown> = { name: null, role: 'true' }
+
+    expect(() => assertHasStringValues(record, ['name', 'role'])).toThrowError('Missing or invalid keys: name')
+  })
+
+  it('Has undefined fields', () => {
+    const record: Record<string, unknown> = { name: undefined, role: 'true' }
+
+    expect(() => assertHasStringValues(record, ['name', 'role'])).toThrowError('Missing or invalid keys: name')
   })
 })
