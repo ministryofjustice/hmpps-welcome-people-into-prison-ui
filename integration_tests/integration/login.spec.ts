@@ -9,7 +9,7 @@ context('SignIn', () => {
     cy.task('reset')
     cy.task('stubSignIn', Role.PRISON_RECEPTION)
     cy.task('stubAuthUser')
-    cy.task('stubExpectedArrivals', 'MDI')
+    cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [] })
     cy.task('stubMissingPrisonerImage')
   })
 

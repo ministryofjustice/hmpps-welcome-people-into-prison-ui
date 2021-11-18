@@ -1,7 +1,6 @@
 import { SuperAgentRequest } from 'superagent'
 import fs from 'fs'
 import path from 'path'
-import expectedArrivals from './responses/expectedArrivals'
 import temporaryAbsences from './responses/temporaryAbsences'
 import imprisonmentStatuses from './responses/imprisonmentStatuses'
 import { stubFor } from './wiremock'
@@ -33,16 +32,22 @@ export default {
       },
     })
   },
-  stubExpectedArrivals: (activeCaseLoadId: string): SuperAgentRequest => {
+  stubExpectedArrivals: ({
+    caseLoadId,
+    arrivals,
+  }: {
+    caseLoadId: string
+    arrivals: Record<string, unknown>[]
+  }): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/welcome/incoming-moves/${activeCaseLoadId}\\?date=.*`,
+        urlPattern: `/welcome/incoming-moves/${caseLoadId}\\?date=.*`,
       },
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: expectedArrivals,
+        jsonBody: arrivals,
       },
     })
   },

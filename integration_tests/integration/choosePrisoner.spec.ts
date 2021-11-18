@@ -2,51 +2,26 @@ import ChoosePrisonerPage from '../pages/choosePrisoner'
 import ConfirmArrivalPage from '../pages/confirmArrival'
 import Page from '../pages/page'
 import Role from '../../server/authentication/role'
-
-const expectedArrivalUnmatchedInNomis = {
-  id: '00000-11111',
-  firstName: 'Harry',
-  lastName: 'Stanton',
-  dateOfBirth: '1961-01-29',
-  prisonNumber: null,
-  pncNumber: '01/3456A',
-  date: '2021-09-01',
-  fromLocation: 'Reading',
-  fromLocationType: 'COURT',
-  isCurrentPrisoner: false,
-}
-
-const expectedArrivalMatchedInNomisWithNoBooking = {
-  id: '00000-222222',
-  firstName: 'Sam',
-  lastName: 'Smith',
-  dateOfBirth: '1970-02-01',
-  prisonNumber: 'G0014GM',
-  pncNumber: '01/4567A',
-  date: '2021-09-01',
-  fromLocation: 'Leeds',
-  fromLocationType: 'COURT',
-  isCurrentPrisoner: false,
-}
-
-const expectedArrivalFromCustodySuite = {
-  id: '00000-333333',
-  firstName: 'Mark',
-  lastName: 'Prisoner',
-  dateOfBirth: '1985-01-05',
-  prisonNumber: 'G0016GD',
-  pncNumber: '01/6789A',
-  date: '2021-09-01',
-  fromLocation: 'Coventry',
-  fromLocationType: 'CUSTODY_SUITE',
-}
+import expectedArrivals from '../mockApis/responses/expectedArrivals'
 
 context('Choose Prisoner', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', Role.PRISON_RECEPTION)
     cy.task('stubAuthUser')
-    cy.task('stubExpectedArrivals', 'MDI')
+    cy.task('stubExpectedArrivals', {
+      caseLoadId: 'MDI',
+      arrivals: [
+        expectedArrivals.prisonTransfer,
+        expectedArrivals.custodySuite.current,
+        expectedArrivals.custodySuite.notCurrent,
+        expectedArrivals.custodySuite.notMatched,
+        expectedArrivals.other,
+        expectedArrivals.court.current,
+        expectedArrivals.court.notCurrent,
+        expectedArrivals.court.notMatched,
+      ],
+    })
     cy.task('stubMissingPrisonerImage')
   })
 
@@ -144,12 +119,13 @@ context('Choose Prisoner', () => {
 
     choosePrisonerPage.arrivalFrom('PRISON')(1).confirm().should('not.exist')
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().should('not.exist')
+    choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(1).confirm().should('not.exist')
 
-    canStartToConfirmArrival(choosePrisonerPage, expectedArrivalMatchedInNomisWithNoBooking, 'COURT', 2)
-    canStartToConfirmArrival(choosePrisonerPage, expectedArrivalUnmatchedInNomis, 'COURT', 3)
+    canStartToConfirmArrival(choosePrisonerPage, expectedArrivals.court.notCurrent, 'COURT', 2)
+    canStartToConfirmArrival(choosePrisonerPage, expectedArrivals.court.notMatched, 'COURT', 3)
 
-    canStartToConfirmArrival(choosePrisonerPage, expectedArrivalFromCustodySuite, 'CUSTODY_SUITE', 1)
-    canStartToConfirmArrival(choosePrisonerPage, expectedArrivalFromCustodySuite, 'CUSTODY_SUITE', 2)
+    canStartToConfirmArrival(choosePrisonerPage, expectedArrivals.custodySuite.notCurrent, 'CUSTODY_SUITE', 2)
+    canStartToConfirmArrival(choosePrisonerPage, expectedArrivals.custodySuite.notMatched, 'CUSTODY_SUITE', 3)
   })
 
   it('No links shown if not a reception user', () => {
