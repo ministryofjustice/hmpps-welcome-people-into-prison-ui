@@ -149,7 +149,7 @@ describe('/checkAnswers', () => {
           expect(flash).toHaveBeenCalledWith('offenderNumber', 'A1234AB')
           expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
             'Add to the establishment roll',
-            'Offender record and booking created',
+            'Confirmed arrival',
             'AgencyId: MDI, From: Some court, Type: COURT,',
             '127.0.0.1'
           )
