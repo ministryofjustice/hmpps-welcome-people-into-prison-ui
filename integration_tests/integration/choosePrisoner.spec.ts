@@ -2,60 +2,39 @@ import ChoosePrisonerPage from '../pages/choosePrisoner'
 import ConfirmArrivalPage from '../pages/confirmArrival'
 import Page from '../pages/page'
 import Role from '../../server/authentication/role'
-
-const expectedArrivalUnmatchedInNomis = {
-  id: '00000-11111',
-  firstName: 'Harry',
-  lastName: 'Stanton',
-  dateOfBirth: '1961-01-29',
-  prisonNumber: null,
-  pncNumber: '01/3456A',
-  date: '2021-09-01',
-  fromLocation: 'Reading',
-  fromLocationType: 'COURT',
-  isCurrentPrisoner: false,
-}
-
-const expectedArrivalMatchedInNomisWithNoBooking = {
-  id: '00000-222222',
-  firstName: 'Sam',
-  lastName: 'Smith',
-  dateOfBirth: '1970-02-01',
-  prisonNumber: 'G0014GM',
-  pncNumber: '01/4567A',
-  date: '2021-09-01',
-  fromLocation: 'Leeds',
-  fromLocationType: 'COURT',
-  isCurrentPrisoner: false,
-}
+import expectedArrivals from '../mockApis/responses/expectedArrivals'
 
 context('Choose Prisoner', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', Role.PRISON_RECEPTION)
     cy.task('stubAuthUser')
-    cy.task('stubExpectedArrivals', 'MDI')
+    cy.task('stubExpectedArrivals', {
+      caseLoadId: 'MDI',
+      arrivals: [
+        expectedArrivals.prisonTransfer,
+        expectedArrivals.custodySuite.current,
+        expectedArrivals.custodySuite.notCurrent,
+        expectedArrivals.custodySuite.notMatched,
+        expectedArrivals.other,
+        expectedArrivals.court.current,
+        expectedArrivals.court.notCurrent,
+        expectedArrivals.court.notMatched,
+      ],
+    })
     cy.task('stubMissingPrisonerImage')
   })
 
-  it('A user can view list of expected arrivals from courts', () => {
+  it('A user can view list of expected arrivals', () => {
     cy.signIn()
     const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
     choosePrisonerPage.expectedArrivalsFromCourt(1).should('contain.text', 'Doe, John')
     choosePrisonerPage.expectedArrivalsFromCourt(2).should('contain.text', 'Smith, Sam')
-  })
 
-  it('A user can view list of expected arrivals from custody suites', () => {
-    cy.signIn()
-    const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
     choosePrisonerPage.expectedArrivalsFromCustodySuite(1).should('contain.text', 'Prisoner, Mark')
     choosePrisonerPage.expectedArrivalsFromCustodySuite(2).should('contain.text', 'Smith, Barry')
     choosePrisonerPage.expectedArrivalsFromCustodySuite(3).should('contain.text', 'Smith, Bob')
-  })
 
-  it('A user can view list of expected arrivals from another establishement', () => {
-    cy.signIn()
-    const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
     choosePrisonerPage.expectedArrivalsFromAnotherEstablishment(1).should('contain.text', 'Offender, Karl')
   })
 
@@ -134,26 +113,19 @@ context('Choose Prisoner', () => {
       })
   })
 
-  it('Only court arrivals with no current booking will have a link leading to the Confirm arrival page', () => {
+  it('Only court arrivals with no current booking and arrivals from custody suites will have a link leading to the Confirm arrival page', () => {
     cy.signIn()
     const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
 
     choosePrisonerPage.arrivalFrom('PRISON')(1).confirm().should('not.exist')
-    choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(1).confirm().should('not.exist')
-    choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(2).confirm().should('not.exist')
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().should('not.exist')
+    choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(1).confirm().should('not.exist')
 
-    cy.task('stubExpectedArrival', expectedArrivalMatchedInNomisWithNoBooking)
-    choosePrisonerPage.arrivalFrom('COURT')(2).confirm().should('exist').click()
-    Page.verifyOnPage(ConfirmArrivalPage)
-      .prisonNumber()
-      .should('contain.text', expectedArrivalMatchedInNomisWithNoBooking.prisonNumber)
+    canStartToConfirmArrival(choosePrisonerPage, expectedArrivals.court.notCurrent, 'COURT', 2)
+    canStartToConfirmArrival(choosePrisonerPage, expectedArrivals.court.notMatched, 'COURT', 3)
 
-    cy.go('back')
-
-    cy.task('stubExpectedArrival', expectedArrivalUnmatchedInNomis)
-    choosePrisonerPage.arrivalFrom('COURT')(3).confirm().should('exist').click()
-    Page.verifyOnPage(ConfirmArrivalPage).prisonNumber().should('not.exist')
+    canStartToConfirmArrival(choosePrisonerPage, expectedArrivals.custodySuite.notCurrent, 'CUSTODY_SUITE', 2)
+    canStartToConfirmArrival(choosePrisonerPage, expectedArrivals.custodySuite.notMatched, 'CUSTODY_SUITE', 3)
   })
 
   it('No links shown if not a reception user', () => {
@@ -169,4 +141,16 @@ context('Choose Prisoner', () => {
     choosePrisonerPage.arrivalFrom('COURT')(2).confirm().should('not.exist')
     choosePrisonerPage.arrivalFrom('COURT')(3).confirm().should('not.exist')
   })
+
+  function canStartToConfirmArrival(
+    choosePrisonerPage: ChoosePrisonerPage,
+    stub: Record<string, string | boolean>,
+    arrivalType: 'COURT' | 'PRISON' | 'CUSTODY_SUITE',
+    rowNumber: number
+  ) {
+    cy.task('stubExpectedArrival', stub)
+    choosePrisonerPage.arrivalFrom(arrivalType)(rowNumber).confirm().should('exist').click()
+    Page.verifyOnPage(ConfirmArrivalPage).name().should('contain.text', `${stub.firstName} ${stub.lastName}`)
+    cy.go('back')
+  }
 })

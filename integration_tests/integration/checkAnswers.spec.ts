@@ -4,29 +4,20 @@ import ImprisonmentStatusPage from '../pages/imprisonmentStatus'
 import CheckAnswersPage from '../pages/checkAnswers'
 import ConfirmAddedToRollPage from '../pages/confirmAddedToRoll'
 import Role from '../../server/authentication/role'
+import expectedArrivals from '../mockApis/responses/expectedArrivals'
+
+const expectedArrival = expectedArrivals.court.notCurrent
 
 context('Check Answers', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', Role.PRISON_RECEPTION)
     cy.task('stubAuthUser')
-    cy.task('stubExpectedArrivals', 'MDI')
+    cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [] })
     cy.task('stubMissingPrisonerImage')
     cy.task('stubPrison', 'MDI')
     cy.task('stubImprisonmentStatus')
   })
-
-  const expectedArrival = {
-    id: '00000-11111',
-    firstName: 'Harry',
-    lastName: 'Stanton',
-    dateOfBirth: '1961-01-29',
-    prisonNumber: 'A1234AB',
-    pncNumber: '01/3456A',
-    date: '2021-09-01',
-    fromLocation: 'Reading',
-    fromLocationType: 'COURT',
-  }
 
   it('Should contain a full set of correctly formatted move data', () => {
     cy.task('stubExpectedArrival', expectedArrival)
@@ -40,12 +31,12 @@ context('Check Answers', () => {
 
     const checkAnswersPage = CheckAnswersPage.goTo(expectedArrival.id)
 
-    checkAnswersPage.name().should('contain.text', 'Harry Stanton')
-    checkAnswersPage.dob().should('contain.text', '29 January 1961')
-    checkAnswersPage.prisonNumber().should('contain.text', 'A1234AB')
-    checkAnswersPage.pncNumber().should('contain.text', '01/3456A')
+    checkAnswersPage.name().should('contain.text', 'Sam Smith')
+    checkAnswersPage.dob().should('contain.text', '1 February 1970')
+    checkAnswersPage.prisonNumber().should('contain.text', 'G0014GM')
+    checkAnswersPage.pncNumber().should('contain.text', '01/4567A')
     checkAnswersPage.reason().should('contain.text', 'On remand')
-    cy.task('stubCreateOffenderRecordAndBooking', '00000-11111')
+    cy.task('stubCreateOffenderRecordAndBooking', expectedArrival.id)
     checkAnswersPage.addToRoll().click()
     Page.verifyOnPage(ConfirmAddedToRollPage)
   })
@@ -66,7 +57,7 @@ context('Check Answers', () => {
     const checkAnswersPage = CheckAnswersPage.goTo(expectedArrival.id)
     checkAnswersPage.prisonNumber().should('not.exist')
     checkAnswersPage.pncNumber().should('not.exist')
-    cy.task('stubCreateOffenderRecordAndBooking', '00000-11111')
+    cy.task('stubCreateOffenderRecordAndBooking', expectedArrival.id)
     checkAnswersPage.addToRoll().click()
     Page.verifyOnPage(ConfirmAddedToRollPage)
   })

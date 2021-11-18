@@ -11,8 +11,13 @@
             </aside>
             <div class="app-card__content">
                 <header class="app-card__header govuk-!-margin-bottom-4">
-                    <h2 class="app-card__title" data-qa="{{moveType}}-title-{{loopIndex}}">
-                        {% if user.isReceptionUser and arrival.fromLocationType === 'COURT' and not arrival.isCurrentPrisoner %}
+                    <h2 class="app-card__title" data-qa="{{moveType}}-title-{{loopIndex}}">           
+                        {% if user.isReceptionUser and 
+                            (
+                                ['COURT', 'CUSTODY_SUITE'].includes(arrival.fromLocationType) 
+                                and not arrival.isCurrentPrisoner
+                            ) 
+                        %}
                             <a href="/prisoners/{{ arrival.id }}/confirm-arrival" class="govuk-link govuk-link--no-visited-state" data-qa="confirm-arrival"> {{ arrival.lastName }}, {{ arrival.firstName }}</a>
                         {% else %}
                             {{ arrival.lastName }}, {{ arrival.firstName }}
