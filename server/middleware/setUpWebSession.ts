@@ -20,6 +20,7 @@ export default function setUpWebSession(): Router {
   router.use(
     session({
       store: new RedisStore({ client }),
+      name: config.session.name,
       cookie: {
         domain: config.session.domain,
         httpOnly: true,
