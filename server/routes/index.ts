@@ -36,14 +36,14 @@ export default function routes(services: Services): Router {
       handlers.map(handler => asyncMiddleware(handler))
     )
 
-  const choosePrisonerController = new ChoosePrisonerController(services.expectedArrivalsService)
-  get('/confirm-arrival/choose-prisoner', [choosePrisonerController.view()])
-
   get('/', [
     (req, res, next) => {
-      res.redirect('/confirm-arrival/choose-prisoner')
+      res.render('home.njk')
     },
   ])
+
+  const choosePrisonerController = new ChoosePrisonerController(services.expectedArrivalsService)
+  get('/confirm-arrival/choose-prisoner', [choosePrisonerController.view()])
 
   const temporaryAbsencesController = new TemporaryAbsencesController(services.temporaryAbsencesService)
   get('/confirm-arrival/return-from-temporary-absence', [temporaryAbsencesController.view()])

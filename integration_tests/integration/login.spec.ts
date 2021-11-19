@@ -1,4 +1,4 @@
-import IndexPage from '../pages/choosePrisoner'
+import HomePage from '../pages/homePage'
 import AuthSignInPage from '../pages/authSignIn'
 import AuthManageDetailsPage from '../pages/authManageDetails'
 import Page from '../pages/page'
@@ -20,23 +20,23 @@ context('SignIn', () => {
 
   it('User name visible in header', () => {
     cy.signIn()
-    const indexPage = Page.verifyOnPage(IndexPage)
-    indexPage.headerUserName().should('contain.text', 'J. Smith')
+    const homePage = Page.verifyOnPage(HomePage)
+    homePage.loggedInName().should('contain.text', 'J. Smith')
   })
 
   it('User can log out', () => {
     cy.signIn()
-    const indexPage = Page.verifyOnPage(IndexPage)
-    indexPage.signOut().click()
+    const homePage = Page.verifyOnPage(HomePage)
+    homePage.signOut().click()
     Page.verifyOnPage(AuthSignInPage)
   })
 
   it('User can manage their details', () => {
     cy.signIn()
-    const indexPage = Page.verifyOnPage(IndexPage)
+    const homePage = Page.verifyOnPage(HomePage)
 
-    indexPage.manageDetails().get('a').invoke('removeAttr', 'target')
-    indexPage.manageDetails().click()
+    homePage.manageDetails().get('a').invoke('removeAttr', 'target')
+    homePage.manageDetails().click()
     Page.verifyOnPage(AuthManageDetailsPage)
   })
 })
