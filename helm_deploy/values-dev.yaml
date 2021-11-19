@@ -13,7 +13,7 @@ generic-service:
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
     WELCOME_API_URL: "https://welcome-api-dev.prison.service.justice.gov.uk"
     HMPPS_COOKIE_NAME: hmpps-session-dev
-    HMPPS_COOKIE_DOMAIN: welcome-api-dev.prison.service.justice.gov.uk
+    HMPPS_COOKIE_DOMAIN: welcome-dev.prison.service.justice.gov.uk
 
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service-dev
