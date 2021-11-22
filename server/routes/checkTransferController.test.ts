@@ -2,31 +2,27 @@ import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
 import { appWithAllRoutes } from './testutils/appSetup'
-import ExpectedArrivalsService, { LocationType } from '../services/expectedArrivalsService'
+import TransfersService from '../services/transfersService'
 
 import Role from '../authentication/role'
 
-jest.mock('../services/expectedArrivalsService')
-const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
+jest.mock('../services/transfersService')
+const transfersService = new TransfersService(null, null) as jest.Mocked<TransfersService>
 let app: Express
 
-const expectedTransfers = new Map()
-expectedTransfers.set(LocationType.PRISON, [
-  {
-    firstName: 'Karl',
-    lastName: 'Offender',
-    dateOfBirth: '1985-01-01',
-    prisonNumber: 'A1234AB',
-    pncNumber: '01/5678A',
-    date: '2021-09-01',
-    fromLocation: 'Leeds',
-    moveType: 'PRISON_TRANSFER',
-  },
-])
+const transfer = {
+  firstName: 'Karl',
+  lastName: 'Offender',
+  dateOfBirth: '1985-01-01',
+  prisonNumber: 'A1234AB',
+  pncNumber: '01/5678A',
+  date: '2021-09-01',
+  fromLocation: 'Leeds',
+}
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
-  expectedArrivalsService.getArrivalsForToday.mockResolvedValue(expectedTransfers)
+  app = appWithAllRoutes({ services: { transfersService }, roles: [Role.PRISON_RECEPTION] })
+  transfersService.getTransfer.mockResolvedValue(transfer)
 })
 
 afterEach(() => {
@@ -43,9 +39,9 @@ describe('GET checkTransfer', () => {
     return request(app)
       .get('/prisoners/A1234AB/check-transfer')
       .expect('Content-Type', 'text/html; charset=utf-8')
-      .expect(res => {
-        expect(expectedArrivalsService.getArrivalsForToday).toHaveBeenCalledTimes(1)
-        expect(expectedArrivalsService.getArrivalsForToday).toHaveBeenCalledWith('MDI')
+      .expect(() => {
+        expect(transfersService.getTransfer).toHaveBeenCalledTimes(1)
+        expect(transfersService.getTransfer).toHaveBeenCalledWith('MDI', 'A1234AB')
       })
   })
 

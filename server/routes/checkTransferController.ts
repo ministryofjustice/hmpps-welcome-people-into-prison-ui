@@ -1,17 +1,14 @@
 import { RequestHandler } from 'express'
-import ExpectedArrivalsService, { LocationType } from '../services/expectedArrivalsService'
+import TransfersService from '../services/transfersService'
 
 export default class CheckTransferController {
-  public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
+  public constructor(private readonly transfersService: TransfersService) {}
 
   public checkTransfer(): RequestHandler {
     return async (req, res) => {
       const { activeCaseLoadId } = res.locals.user
       const { prisonNumber } = req.params
-      const expectedArrivals = await this.expectedArrivalsService.getArrivalsForToday(activeCaseLoadId)
-      const data = expectedArrivals
-        .get('PRISON' as LocationType.PRISON)
-        .find(item => item.prisonNumber === prisonNumber)
+      const data = await this.transfersService.getTransfer(activeCaseLoadId, prisonNumber)
       return res.render('pages/checkTransfer.njk', { data })
     }
   }
