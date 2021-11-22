@@ -6,7 +6,6 @@ context('A user can view all current temporary absences', () => {
     cy.task('reset')
     cy.task('stubSignIn', Role.PRISON_RECEPTION)
     cy.task('stubAuthUser')
-    cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [] })
     cy.task('stubTemporaryAbsences', 'MDI')
     cy.task('stubMissingPrisonerImage')
   })

@@ -1,5 +1,11 @@
-import type { ImprisonmentStatus, StatusAndReasons } from 'welcome'
+import type { ImprisonmentStatus } from 'welcome'
 import type { RestClientBuilder, WelcomeClient, HmppsAuthClient } from '../data'
+
+export type StatusAndReasons = {
+  code: string
+  imprisonmentStatus: string
+  movementReasonCode: string
+}
 
 export default class ImprisonmentStatusesService {
   constructor(

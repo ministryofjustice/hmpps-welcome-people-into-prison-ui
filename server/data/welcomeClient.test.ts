@@ -31,7 +31,7 @@ describe('welcomeClient', () => {
     const expectedArrivals: Movement[] = []
     it('should return data from api', async () => {
       fakeWelcomeApi
-        .get(`/incoming-moves/${activeCaseLoadId}?date=${date.format('YYYY-MM-DD')}`)
+        .get(`/prisons/${activeCaseLoadId}/arrivals?date=${date.format('YYYY-MM-DD')}`)
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, expectedArrivals)
 
@@ -40,7 +40,21 @@ describe('welcomeClient', () => {
     })
   })
 
-  describe('getMove', () => {
+  describe('getTransfers', () => {
+    const activeCaseLoadId = 'MDI'
+    const expectedArrivals: Movement[] = []
+    it('should return data from api', async () => {
+      fakeWelcomeApi
+        .get(`/prisons/${activeCaseLoadId}/transfers/enroute`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, expectedArrivals)
+
+      const output = await welcomeClient.getTransfers(activeCaseLoadId)
+      expect(output).toEqual(expectedArrivals)
+    })
+  })
+
+  describe('getArrival', () => {
     const expectedArrival: Movement = {
       id,
       firstName: 'Jim',
@@ -56,7 +70,7 @@ describe('welcomeClient', () => {
     it('should return data from api', async () => {
       fakeWelcomeApi.get(`/arrivals/${id}`).matchHeader('authorization', `Bearer ${token}`).reply(200, expectedArrival)
 
-      const output = await welcomeClient.getMove(id)
+      const output = await welcomeClient.getArrival(id)
       expect(output).toEqual(expectedArrival)
     })
   })

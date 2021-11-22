@@ -42,7 +42,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/welcome/incoming-moves/${caseLoadId}\\?date=.*`,
+        urlPattern: `/welcome/prisons/${caseLoadId}/arrivals\\?date=.*`,
       },
       response: {
         status: 200,
@@ -51,16 +51,22 @@ export default {
       },
     })
   },
-  stubNoExpectedArrivals: (activeCaseLoadId: string): SuperAgentRequest => {
+  stubTransfers: ({
+    caseLoadId,
+    transfers,
+  }: {
+    caseLoadId: string
+    transfers: Record<string, unknown>[]
+  }): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/welcome/incoming-moves/${activeCaseLoadId}\\?date=.*`,
+        urlPattern: `/welcome/prisons/${caseLoadId}/transfers/enroute`,
       },
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: [],
+        jsonBody: transfers,
       },
     })
   },

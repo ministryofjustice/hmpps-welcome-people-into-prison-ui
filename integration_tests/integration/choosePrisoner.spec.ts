@@ -12,7 +12,6 @@ context('Choose Prisoner', () => {
     cy.task('stubExpectedArrivals', {
       caseLoadId: 'MDI',
       arrivals: [
-        expectedArrivals.prisonTransfer,
         expectedArrivals.custodySuite.current,
         expectedArrivals.custodySuite.notCurrent,
         expectedArrivals.custodySuite.notMatched,
@@ -22,6 +21,7 @@ context('Choose Prisoner', () => {
         expectedArrivals.court.notMatched,
       ],
     })
+    cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [expectedArrivals.prisonTransfer] })
     cy.task('stubMissingPrisonerImage')
   })
 
@@ -39,7 +39,8 @@ context('Choose Prisoner', () => {
   })
 
   it('Should handle no expected arrivals', () => {
-    cy.task('stubNoExpectedArrivals', 'MDI')
+    cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [] })
+    cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [] })
     cy.signIn()
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage
@@ -113,11 +114,11 @@ context('Choose Prisoner', () => {
       })
   })
 
-  it('Only court arrivals with no current booking and arrivals from custody suites will have a link leading to the Confirm arrival page', () => {
+  it('Only court arrivals without a current booking, arrivals from custody suites and prison transfers will have a link leading to the Confirm arrival page', () => {
     cy.signIn()
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
 
-    choosePrisonerPage.arrivalFrom('PRISON')(1).confirm().should('not.exist')
+    choosePrisonerPage.arrivalFrom('PRISON')(1).confirm().should('exist')
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().should('not.exist')
     choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(1).confirm().should('not.exist')
 

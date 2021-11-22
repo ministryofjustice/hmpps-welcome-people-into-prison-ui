@@ -29,7 +29,7 @@ beforeEach(() => {
     roles: [Role.PRISON_RECEPTION],
   })
   config.session.secret = 'sdksdfkdfs'
-  expectedArrivalsService.getMove.mockResolvedValue({
+  expectedArrivalsService.getArrival.mockResolvedValue({
     firstName: 'Jim',
     lastName: 'Smith',
     dateOfBirth: '1973-01-08',
@@ -69,9 +69,7 @@ describe('/checkAnswers', () => {
         )
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
-          expect(expectedArrivalsService.getMove).toHaveBeenCalledTimes(1)
-          expect(expectedArrivalsService.getMove).toHaveBeenCalledWith('12345-67890')
-          expect(imprisonmentStatusesService.getReasonForImprisonment).toHaveBeenCalledTimes(1)
+          expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
           expect(imprisonmentStatusesService.getReasonForImprisonment).toHaveBeenCalledWith({
             code: 'determinate-sentence',
             imprisonmentStatus: 'SENT',
@@ -125,8 +123,7 @@ describe('/checkAnswers', () => {
         .send(newOffender)
         .expect(302)
         .expect(() => {
-          expect(expectedArrivalsService.getMove).toHaveBeenCalledTimes(1)
-          expect(expectedArrivalsService.getMove).toHaveBeenCalledWith('12345-67890')
+          expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
           expect(expectedArrivalsService.createOffenderRecordAndBooking).toHaveBeenCalledWith(
             user.username,
             '12345-67890',

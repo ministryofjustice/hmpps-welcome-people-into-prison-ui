@@ -1,15 +1,11 @@
 declare module 'welcome' {
-  import { LocationType } from '../../services/expectedArrivalsService'
-
   export type Movement = schemas['Movement']
-
-  export type TemporaryAbsence = {
-    firstName: string
-    lastName: string
-    dateOfBirth: string
-    prisonNumber: string
-    reasonForAbsence: string
-  }
+  export type Transfer = schemas['Transfer']
+  export type TemporaryAbsence = schemas['TemporaryAbsence']
+  export type NewOffenderBooking = schemas['NewOffenderBooking']
+  export type ImprisonmentStatus = schemas['ImprisonmentStatus']
+  export type Prison = schemas['Prison']
+  export type OffenderNumber = schemas['OffenderNumber']
 
   export const enum Gender {
     FEMALE = 'F',
@@ -17,30 +13,6 @@ declare module 'welcome' {
     NOT_KNOWN = 'NK',
     NOT_SPECIFIED = 'NS',
     REFUSED = 'REF',
-  }
-
-  export type NewOffenderBooking = {
-    firstName: string
-    lastName: string
-    dateOfBirth: string
-    gender: Gender
-    prisonId: string
-    imprisonmentStatus: string
-    movementReasonCode: string
-  }
-
-  export type StatusAndReasons = {
-    code: string
-    imprisonmentStatus: string
-    movementReasonCode: string
-  }
-
-  export type Prison = {
-    description: string
-  }
-
-  export type OffenderNumber = {
-    offenderNo: string
   }
 
   export interface schemas {
@@ -56,6 +28,22 @@ declare module 'welcome' {
       fromLocation: string
       fromLocationType: LocationType
     }
+    Transfer: {
+      firstName: string
+      lastName: string
+      dateOfBirth: string
+      prisonNumber: string
+      pncNumber: string
+      date: string
+      fromLocation: string
+    }
+    TemporaryAbsence: {
+      firstName: string
+      lastName: string
+      dateOfBirth: string
+      prisonNumber: string
+      reasonForAbsence: string
+    }
     ErrorResponse: {
       status: number
       errorCode?: number
@@ -63,14 +51,28 @@ declare module 'welcome' {
       developerMessage?: string
       moreInfo?: string
     }
-  }
-
-  export interface ImprisonmentStatus {
-    code: string
-    description: string
-    imprisonmentStatusCode: string
-    secondLevelTitle?: string
-    secondLevelValidationMessage?: string
-    movementReasons: { description?: string; movementReasonCode: string }[]
+    NewOffenderBooking: {
+      firstName: string
+      lastName: string
+      dateOfBirth: string
+      gender: Gender
+      prisonId: string
+      imprisonmentStatus: string
+      movementReasonCode: string
+    }
+    ImprisonmentStatus: {
+      code: string
+      description: string
+      imprisonmentStatusCode: string
+      secondLevelTitle?: string
+      secondLevelValidationMessage?: string
+      movementReasons: { description?: string; movementReasonCode: string }[]
+    }
+    Prison: {
+      description: string
+    }
+    OffenderNumber: {
+      offenderNo: string
+    }
   }
 }
