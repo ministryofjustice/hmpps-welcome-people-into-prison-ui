@@ -1,0 +1,33 @@
+{% extends "../partials/layout.njk" %}
+{% from  "../partials/checkThisRecordMacro.njk" import checkThisRecordMacro %}
+{% set pageTitle = "Check transfer" %}
+
+
+{% block content %}
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+          <span class="govuk-caption-xl"> Confirm arrival of {{ data.firstName}} {{ data.lastName }} </span>
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-7">Check this record matches the person in reception</h1>     
+            <div>
+                {{ checkThisRecordMacro(data) }}
+
+                <form method="post" action = "/prisoners/{{ data.prisonNumber }}/check-transfer">
+                    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                    {{ govukButton({
+                        classes: "govuk-button govuk-!-margin-bottom-6",
+                        text: "Add to the establishment roll",
+                        attributes: {'data-qa': 'add-to-roll'},
+                        type: 'submit'
+                    }) }}
+                </form>
+
+                <p>
+                    <a class="govuk-body govuk-link govuk-link--no-visited-state" href="/confirm-arrival/choose-prisoner" data-qa="choose-prisoner">
+                        Select a different prisoner
+                    </a>
+                </p>
+            </div>
+        </main>
+    </div>
+{% endblock %}
+
