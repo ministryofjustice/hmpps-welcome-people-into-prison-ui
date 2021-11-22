@@ -1,13 +1,6 @@
 import type { Transfer } from 'welcome'
 import type { RestClientBuilder, WelcomeClient, HmppsAuthClient } from '../data'
 
-export enum LocationType {
-  COURT = 'COURT',
-  CUSTODY_SUITE = 'CUSTODY_SUITE',
-  PRISON = 'PRISON',
-  OTHER = 'OTHER',
-}
-
 export default class TransfersService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
