@@ -5,6 +5,11 @@ export default class ChoosePrisonerPage extends Page {
     super('Select prisoner to add to the establishment roll')
   }
 
+  static goTo(): ChoosePrisonerPage {
+    cy.visit(`/confirm-arrival/choose-prisoner`)
+    return Page.verifyOnPage(ChoosePrisonerPage)
+  }
+
   expectedArrivalsFromCourt = (index: number): PageElement => cy.get(`[data-qa=COURT-title-${index}]`)
 
   noExpectedArrivalsFromCourt = (): PageElement => cy.get('[data-qa=no-arrivals-from-court]')
@@ -17,8 +22,6 @@ export default class ChoosePrisonerPage extends Page {
 
   noExpectedArrivalsFromAnotherEstablishment = (): PageElement =>
     cy.get('[data-qa=no-arrivals-from-another-establishment]')
-
-  headerUserName = (): PageElement => cy.get('[data-qa=header-user-name]')
 
   prisonerImage = (index: number): PageElement => cy.get(`[data-qa=prisoner-image]`).eq(index)
 

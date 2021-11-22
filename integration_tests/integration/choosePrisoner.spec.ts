@@ -27,7 +27,7 @@ context('Choose Prisoner', () => {
 
   it('A user can view list of expected arrivals', () => {
     cy.signIn()
-    const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
+    const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage.expectedArrivalsFromCourt(1).should('contain.text', 'Doe, John')
     choosePrisonerPage.expectedArrivalsFromCourt(2).should('contain.text', 'Smith, Sam')
 
@@ -41,7 +41,7 @@ context('Choose Prisoner', () => {
   it('Should handle no expected arrivals', () => {
     cy.task('stubNoExpectedArrivals', 'MDI')
     cy.signIn()
-    const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
+    const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage
       .noExpectedArrivalsFromCourt()
       .should('contain.text', 'There are currently no prisoners booked to arrive from court today.')
@@ -57,7 +57,7 @@ context('Choose Prisoner', () => {
     cy.task('stubPrisonerImage', { prisonerNumber: 'G0013AB', imageFile: '/test-image.jpeg' })
 
     cy.signIn()
-    const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
+    const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage
       .prisonerImage(0)
       .should('be.visible')
@@ -78,7 +78,7 @@ context('Choose Prisoner', () => {
     cy.task('stubPrisonerImage', { prisonerNumber: 'G0014GM', imageFile: '/placeholder-image.png' })
 
     cy.signIn()
-    const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
+    const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage
       .prisonerImage(1)
       .should('be.visible')
@@ -96,7 +96,7 @@ context('Choose Prisoner', () => {
   })
   it('A user will see placeholder image as there is no prisoner number', () => {
     cy.signIn()
-    const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
+    const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage
       .prisonerImage(2)
       .should('be.visible')
@@ -115,7 +115,7 @@ context('Choose Prisoner', () => {
 
   it('Only court arrivals with no current booking and arrivals from custody suites will have a link leading to the Confirm arrival page', () => {
     cy.signIn()
-    const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
+    const choosePrisonerPage = ChoosePrisonerPage.goTo()
 
     choosePrisonerPage.arrivalFrom('PRISON')(1).confirm().should('not.exist')
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().should('not.exist')
@@ -131,7 +131,7 @@ context('Choose Prisoner', () => {
   it('No links shown if not a reception user', () => {
     cy.task('stubSignIn')
     cy.signIn()
-    const choosePrisonerPage = Page.verifyOnPage(ChoosePrisonerPage)
+    const choosePrisonerPage = ChoosePrisonerPage.goTo()
 
     choosePrisonerPage.arrivalFrom('PRISON')(1).confirm().should('not.exist')
     choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(1).confirm().should('not.exist')
