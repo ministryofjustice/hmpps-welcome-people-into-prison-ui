@@ -1,33 +1,75 @@
 {% extends "../partials/layout.njk" %}
-{% from  "../partials/checkThisRecordMacro.njk" import checkThisRecordMacro %}
 {% set pageTitle = "Check transfer" %}
-
 
 {% block content %}
     <div class="govuk-width-container">
         <main class="govuk-main-wrapper">
-          <span class="govuk-caption-xl"> Confirm arrival of {{ data.firstName}} {{ data.lastName }} </span>
-            <h1 class="govuk-heading-l govuk-!-margin-bottom-7">Check this record matches the person in reception</h1>     
-            <div>
-                {{ checkThisRecordMacro(data) }}
-
-                <form method="post" action = "/prisoners/{{ data.prisonNumber }}/check-transfer">
-                    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-                    {{ govukButton({
-                        classes: "govuk-button govuk-!-margin-bottom-6",
-                        text: "Add to the establishment roll",
-                        attributes: {'data-qa': 'add-to-roll'},
-                        type: 'submit'
-                    }) }}
-                </form>
-
-                <p>
-                    <a class="govuk-body govuk-link govuk-link--no-visited-state" href="/confirm-arrival/choose-prisoner" data-qa="choose-prisoner">
-                        Select a different prisoner
-                    </a>
-                </p>
+            <span class="govuk-caption-xl"> Confirm arrival of {{ data.firstName}} {{ data.lastName }} </span>
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-7">Check this record matches the person in reception</h1>
+            <div class="prisoner-header">
+                <div class="prisoner-header__image-container">
+                    <img
+                    src="{{ '/prisoner/' + data.prisonNumber + '/image' if data.prisonNumber else '/assets/images/placeholder-image.png' }}"
+                    class="prisoner-image"
+                    alt="{{ data.lastName }}, {{ data.firstName }}"
+                    data-qa="prisoner-image"
+                    />
+                </div>
+                <div class="govuk-grid-column-two-thirds">
+                    <dl class="govuk-summary-list">
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Name
+                            </dt>
+                            <dd class="govuk-summary-list__value" data-qa="prisoner-name">
+                                {{ data.firstName}} {{ data.lastName }}
+                            </dd>
+                        </div>
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Date of birth
+                            </dt>
+                            <dd class="govuk-summary-list__value" data-qa="dob">
+                                {{ data.dateOfBirth | formatDate('D MMMM YYYY') }}
+                            </dd>
+                        </div>
+                        {% if data.prisonNumber %}
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                Prison number
+                            </dt>
+                            <dd class="govuk-summary-list__value" data-qa="prison-number">
+                                {{ data.prisonNumber }}
+                            </dd>
+                        </div>
+                        {% endif %}
+                        {%  if data.pncNumber %}
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                PNC number
+                            </dt>
+                            <dd class="govuk-summary-list__value" data-qa="pnc-number">
+                                {{ data.pncNumber }}
+                            </dd>
+                        </div>
+                        {% endif %}
+                    </dl>
+                </div>
             </div>
+            <form method="post" action = "/prisoners/{{ data.prisonNumber }}/check-transfer">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                {{ govukButton({
+                classes: "govuk-button govuk-!-margin-bottom-6",
+                text: "Add to the establishment roll",
+                attributes: {'data-qa': 'add-to-roll'},
+                type: 'submit'
+                }) }}
+            </form>
+            <p>
+                <a class="govuk-body govuk-link govuk-link--no-visited-state" href="/confirm-arrival/choose-prisoner" data-qa="choose-prisoner">
+                Select a different prisoner
+                </a>
+            </p>
         </main>
     </div>
 {% endblock %}
-
