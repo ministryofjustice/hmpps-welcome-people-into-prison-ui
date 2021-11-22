@@ -13,7 +13,7 @@ export default class ConfirmAddedToRollController {
       }
       const { id } = req.params
       const { activeCaseLoadId } = res.locals.user
-      const data = await this.expectedArrivalsService.getMove(id)
+      const data = await this.expectedArrivalsService.getArrival(id)
       const prison = await this.expectedArrivalsService.getPrison(activeCaseLoadId)
       clearImprisonmentStatus(res)
       return res.render('pages/confirmAddedToRoll', { data, prison, offenderNumber })

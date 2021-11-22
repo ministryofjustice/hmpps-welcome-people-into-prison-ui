@@ -8,7 +8,7 @@ export default class ConfirmArrivalController {
   public confirmArrival(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
-      const data = await this.expectedArrivalsService.getMove(id)
+      const data = await this.expectedArrivalsService.getArrival(id)
       clearImprisonmentStatus(res)
       res.render('pages/confirmArrival.njk', { data })
     }

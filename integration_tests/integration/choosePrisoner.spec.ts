@@ -39,7 +39,7 @@ context('Choose Prisoner', () => {
   })
 
   it('Should handle no expected arrivals', () => {
-    cy.task('stubNoExpectedArrivals', 'MDI')
+    cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [] })
     cy.signIn()
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage

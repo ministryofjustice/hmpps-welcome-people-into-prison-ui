@@ -15,7 +15,7 @@ export default class CheckAnswersController {
     return async (req, res) => {
       const { id } = req.params
       const statusAndReason = getImprisonmentStatus(req)
-      const moveData = await this.expectedArrivalsService.getMove(id)
+      const moveData = await this.expectedArrivalsService.getArrival(id)
       const reasonImprisonment = await this.imprisonmentStatusesService.getReasonForImprisonment(statusAndReason)
       const data = { reasonImprisonment, ...moveData }
       return res.render('pages/checkAnswers.njk', { data })
@@ -26,7 +26,7 @@ export default class CheckAnswersController {
     return async (req, res) => {
       const { id } = req.params
       const { username, activeCaseLoadId } = res.locals.user
-      const data = await this.expectedArrivalsService.getMove(id)
+      const data = await this.expectedArrivalsService.getArrival(id)
       const statusAndReason = getImprisonmentStatus(req)
       const newOffender = {
         firstName: data.firstName,

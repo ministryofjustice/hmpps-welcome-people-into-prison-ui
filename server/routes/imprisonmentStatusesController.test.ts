@@ -20,7 +20,7 @@ let app: Express
 
 beforeEach(() => {
   app = appWithAllRoutes({ services: { imprisonmentStatusesService, expectedArrivalsService }, flash })
-  expectedArrivalsService.getMove.mockResolvedValue(null)
+  expectedArrivalsService.getArrival.mockResolvedValue(null)
   imprisonmentStatusesService.getAllImprisonmentStatuses.mockResolvedValue([] as ImprisonmentStatus[])
 })
 
@@ -46,8 +46,7 @@ describe('/imprisonment-status', () => {
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           expect(imprisonmentStatusesService.getAllImprisonmentStatuses).toHaveBeenCalled()
-          expect(expectedArrivalsService.getMove).toHaveBeenCalledTimes(1)
-          expect(expectedArrivalsService.getMove).toHaveBeenCalledWith('12345-67890')
+          expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
         })
     })
   })
@@ -60,7 +59,6 @@ describe('/imprisonment-status', () => {
         .expect(302)
         .expect('Location', '/prisoners/12345-67890/imprisonment-status')
         .expect(() => {
-          expect(flash).toHaveBeenCalledTimes(1)
           expect(flash.mock.calls).toEqual([
             ['errors', [{ href: '#imprisonment-status-0', text: 'Select a reason for imprisonment' }]],
           ])

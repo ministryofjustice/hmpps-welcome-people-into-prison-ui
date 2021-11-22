@@ -36,7 +36,7 @@ const flash = jest.fn()
 
 beforeEach(() => {
   app = appWithAllRoutes({ services: { imprisonmentStatusesService, expectedArrivalsService }, flash })
-  expectedArrivalsService.getMove.mockResolvedValue({} as Movement)
+  expectedArrivalsService.getArrival.mockResolvedValue({} as Movement)
   imprisonmentStatusesService.getImprisonmentStatus.mockResolvedValue(imprisonmentStatus)
 })
 
@@ -52,8 +52,7 @@ describe('/determinate-sentence', () => {
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           expect(imprisonmentStatusesService.getImprisonmentStatus).toHaveBeenCalledWith('determinate-sentence')
-          expect(expectedArrivalsService.getMove).toHaveBeenCalledTimes(1)
-          expect(expectedArrivalsService.getMove).toHaveBeenCalledWith('12345-67890')
+          expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
         })
     })
 
@@ -76,7 +75,6 @@ describe('/determinate-sentence', () => {
         .expect(302)
         .expect('Location', '/prisoners/12345-67890/imprisonment-status/determinate-sentence')
         .expect(() => {
-          expect(flash).toHaveBeenCalledTimes(1)
           expect(flash.mock.calls).toEqual([
             ['errors', [{ href: '#movement-reason-0', text: 'Select the type of determinate sentence' }]],
           ])
