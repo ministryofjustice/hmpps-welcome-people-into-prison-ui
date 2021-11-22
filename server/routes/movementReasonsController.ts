@@ -16,7 +16,7 @@ export default class MovementReasonsController {
       const { movementReasons, secondLevelTitle } = await this.imprisonmentStatusesService.getImprisonmentStatus(
         imprisonmentStatus
       )
-      const data = await this.expectedArrivalsService.getMove(id)
+      const data = await this.expectedArrivalsService.getArrival(id)
 
       return res.render('pages/movementReason.njk', {
         errors: req.flash('errors'),

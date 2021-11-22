@@ -1,5 +1,5 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express'
-import { StatusAndReasons } from 'welcome'
+import { StatusAndReasons } from '../services/imprisonmentStatusesService'
 import { assertHasStringValues } from '../utils/utils'
 import { clearState, Codec, getState, isStatePresent, setState } from '../utils/state'
 

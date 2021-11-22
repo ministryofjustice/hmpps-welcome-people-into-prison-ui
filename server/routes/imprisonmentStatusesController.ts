@@ -13,7 +13,7 @@ export default class ImprisonmentStatusesController {
     return async (req, res) => {
       const { id } = req.params
       const imprisonmentStatuses = await this.imprisonmentStatusesService.getAllImprisonmentStatuses()
-      const data = await this.expectedArrivalsService.getMove(id)
+      const data = await this.expectedArrivalsService.getArrival(id)
 
       return res.render('pages/imprisonmentStatus.njk', { errors: req.flash('errors'), imprisonmentStatuses, data })
     }

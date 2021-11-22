@@ -10,7 +10,7 @@ let app: Express
 
 beforeEach(() => {
   app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
-  expectedArrivalsService.getMove.mockResolvedValue(null)
+  expectedArrivalsService.getArrival.mockResolvedValue(null)
 })
 
 afterEach(() => {
@@ -28,8 +28,7 @@ describe('GET /confirmArrival', () => {
       .get('/prisoners/12345-67890/confirm-arrival')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
-        expect(expectedArrivalsService.getMove).toHaveBeenCalledTimes(1)
-        expect(expectedArrivalsService.getMove).toHaveBeenCalledWith('12345-67890')
+        expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
       })
   })
 
