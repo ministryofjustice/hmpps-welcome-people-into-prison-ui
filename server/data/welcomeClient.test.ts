@@ -1,6 +1,6 @@
 import nock from 'nock'
 import moment from 'moment'
-import { Gender, ImprisonmentStatus, Movement, NewOffenderBooking, Prison } from 'welcome'
+import { Gender, ImprisonmentStatus, Movement, Transfer, NewOffenderBooking, Prison } from 'welcome'
 import WelcomeClient from './welcomeClient'
 import config from '../config'
 
@@ -51,6 +51,29 @@ describe('welcomeClient', () => {
 
       const output = await welcomeClient.getTransfers(activeCaseLoadId)
       expect(output).toEqual(expectedArrivals)
+    })
+  })
+
+  describe('get Transfer', () => {
+    const activeCaseLoadId = 'MDI'
+    const prisonNumber = 'A1234AB'
+    const expectedArrival: Transfer = {
+      firstName: 'Sam',
+      lastName: 'Smith',
+      dateOfBirth: '1971-02-01',
+      prisonNumber: 'A1234AA',
+      pncNumber: '01/1234X',
+      date: '2020-02-23',
+      fromLocation: 'Kingston-upon-Hull Crown Court',
+    }
+    it('should return single a transfer from api', async () => {
+      fakeWelcomeApi
+        .get(`/prisons/${activeCaseLoadId}/transfers/enroute/${prisonNumber}`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, expectedArrival)
+
+      const output = await welcomeClient.getTransfer(activeCaseLoadId, prisonNumber)
+      expect(output).toEqual(expectedArrival)
     })
   })
 

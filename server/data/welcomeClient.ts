@@ -1,6 +1,7 @@
 import moment from 'moment'
 import type {
   Movement,
+  Transfer,
   TemporaryAbsence,
   NewOffenderBooking,
   Prison,
@@ -39,6 +40,13 @@ export default class WelcomeClient {
     return this.restClient.get({
       path: `/prisons/${agencyId}/transfers/enroute`,
     }) as Promise<Movement[]>
+  }
+
+  async getTransfer(agencyId: string, prisonNumber: string): Promise<Transfer> {
+    logger.info(`welcomeApi: getTransfer(${agencyId} ${prisonNumber})`)
+    return this.restClient.get({
+      path: `/prisons/${agencyId}/transfers/enroute/${prisonNumber}`,
+    }) as Promise<Transfer>
   }
 
   async getTemporaryAbsences(agencyId: string): Promise<TemporaryAbsence[]> {
