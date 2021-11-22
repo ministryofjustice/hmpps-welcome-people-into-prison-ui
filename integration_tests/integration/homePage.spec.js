@@ -13,7 +13,6 @@ context('A user can view the home page', () => {
     cy.task('stubExpectedArrivals', {
       caseLoadId: 'MDI',
       arrivals: [
-        expectedArrivals.prisonTransfer,
         expectedArrivals.custodySuite.current,
         expectedArrivals.custodySuite.notCurrent,
         expectedArrivals.custodySuite.notMatched,
@@ -23,6 +22,7 @@ context('A user can view the home page', () => {
         expectedArrivals.court.notMatched,
       ],
     })
+    cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [expectedArrivals.prisonTransfer] })
     cy.task('stubTemporaryAbsences', 'MDI')
     cy.task('stubMissingPrisonerImage')
 

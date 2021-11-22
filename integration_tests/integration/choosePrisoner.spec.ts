@@ -12,7 +12,6 @@ context('Choose Prisoner', () => {
     cy.task('stubExpectedArrivals', {
       caseLoadId: 'MDI',
       arrivals: [
-        expectedArrivals.prisonTransfer,
         expectedArrivals.custodySuite.current,
         expectedArrivals.custodySuite.notCurrent,
         expectedArrivals.custodySuite.notMatched,
@@ -22,6 +21,7 @@ context('Choose Prisoner', () => {
         expectedArrivals.court.notMatched,
       ],
     })
+    cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [expectedArrivals.prisonTransfer] })
     cy.task('stubMissingPrisonerImage')
   })
 
@@ -40,6 +40,7 @@ context('Choose Prisoner', () => {
 
   it('Should handle no expected arrivals', () => {
     cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [] })
+    cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [] })
     cy.signIn()
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage
