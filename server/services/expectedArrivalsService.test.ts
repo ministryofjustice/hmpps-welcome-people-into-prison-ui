@@ -16,7 +16,7 @@ describe('Expected arrivals service', () => {
 
   const WelcomeClientFactory = jest.fn()
 
-  const expectedArrivals: Movement[] = [
+  const arrivals: Movement[] = [
     {
       firstName: 'John',
       lastName: 'Doe',
@@ -26,16 +26,6 @@ describe('Expected arrivals service', () => {
       date: '2021-09-01',
       fromLocation: 'Reading',
       fromLocationType: 'COURT',
-    },
-    {
-      firstName: 'Karl',
-      lastName: 'Offender',
-      dateOfBirth: '1985-01-01',
-      prisonNumber: 'G0015GD',
-      pncNumber: '01/5678A',
-      date: '2021-09-01',
-      fromLocation: 'Leeds',
-      fromLocationType: 'PRISON',
     },
     {
       firstName: 'Mark',
@@ -86,6 +76,19 @@ describe('Expected arrivals service', () => {
       date: '2021-09-01',
       fromLocation: 'Manchester',
       fromLocationType: 'OTHER',
+    },
+  ]
+
+  const transfers: Movement[] = [
+    {
+      firstName: 'Karl',
+      lastName: 'Offender',
+      dateOfBirth: '1985-01-01',
+      prisonNumber: 'G0015GD',
+      pncNumber: '01/5678A',
+      date: '2021-09-01',
+      fromLocation: 'Leeds',
+      fromLocationType: 'PRISON',
     },
   ]
 
@@ -178,7 +181,8 @@ describe('Expected arrivals service', () => {
     WelcomeClientFactory.mockReturnValue(welcomeClient)
     service = new ExpectedArrivalsService(hmppsAuthClient, WelcomeClientFactory)
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
-    welcomeClient.getExpectedArrivals.mockResolvedValue(expectedArrivals)
+    welcomeClient.getExpectedArrivals.mockResolvedValue(arrivals)
+    welcomeClient.getTransfers.mockResolvedValue(transfers)
   })
 
   describe('getExpectedArrivals', () => {
@@ -189,6 +193,7 @@ describe('Expected arrivals service', () => {
       expect(result).toStrictEqual(expectedArrivalsGroupedByType)
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       expect(welcomeClient.getExpectedArrivals).toBeCalledWith(res.locals.user.activeCaseLoadId, today)
+      expect(welcomeClient.getTransfers).toBeCalledWith(res.locals.user.activeCaseLoadId)
     })
 
     it('WelcomeClientFactory is called with a token', async () => {
@@ -206,12 +211,12 @@ describe('Expected arrivals service', () => {
     })
   })
 
-  describe('getMove', () => {
+  describe('getArrival', () => {
     it('Calls upstream service correctly', async () => {
-      await service.getMove('12345-67890')
+      await service.getArrival('12345-67890')
 
       expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.getMove).toBeCalledWith('12345-67890')
+      expect(welcomeClient.getArrival).toBeCalledWith('12345-67890')
     })
   })
 

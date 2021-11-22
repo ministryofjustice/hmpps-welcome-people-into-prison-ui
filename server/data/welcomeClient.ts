@@ -22,8 +22,22 @@ export default class WelcomeClient {
   async getExpectedArrivals(agencyId: string, date: moment.Moment): Promise<Movement[]> {
     logger.info(`welcomeApi: getExpectedArrivals(${agencyId}, ${date})`)
     return this.restClient.get({
-      path: `/incoming-moves/${agencyId}`,
+      path: `/prisons/${agencyId}/arrivals`,
       query: { date: date.format('YYYY-MM-DD') },
+    }) as Promise<Movement[]>
+  }
+
+  async getArrival(id: string): Promise<Movement> {
+    logger.info(`welcomeApi: getArrival(${id})`)
+    return this.restClient.get({
+      path: `/arrivals/${id}`,
+    }) as Promise<Movement>
+  }
+
+  async getTransfers(agencyId: string): Promise<Movement[]> {
+    logger.info(`welcomeApi: getTransfers(${agencyId})`)
+    return this.restClient.get({
+      path: `/prisons/${agencyId}/transfers/enroute`,
     }) as Promise<Movement[]>
   }
 
@@ -39,13 +53,6 @@ export default class WelcomeClient {
     return this.restClient.stream({
       path: `/prison/prisoner/${prisonNumber}/image`,
     }) as Promise<Readable>
-  }
-
-  async getMove(id: string): Promise<Movement> {
-    logger.info(`welcomeApi: getMove(${id})`)
-    return this.restClient.get({
-      path: `/arrivals/${id}`,
-    }) as Promise<Movement>
   }
 
   async getPrison(prisonId: string): Promise<Prison> {

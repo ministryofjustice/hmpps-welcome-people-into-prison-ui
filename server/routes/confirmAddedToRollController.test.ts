@@ -12,7 +12,7 @@ const flash = jest.fn()
 
 beforeEach(() => {
   app = appWithAllRoutes({ services: { expectedArrivalsService }, flash, roles: [Role.PRISON_RECEPTION] })
-  expectedArrivalsService.getMove.mockResolvedValue({
+  expectedArrivalsService.getArrival.mockResolvedValue({
     firstName: 'Jim',
     lastName: 'Smith',
     dateOfBirth: '1973-01-08',
@@ -43,9 +43,7 @@ describe('GET /confirmation', () => {
       .get('/prisoners/12345-67890/confirmation')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
-        expect(expectedArrivalsService.getMove).toHaveBeenCalledTimes(1)
-        expect(expectedArrivalsService.getMove).toHaveBeenCalledWith('12345-67890')
-        expect(expectedArrivalsService.getPrison).toHaveBeenCalledTimes(1)
+        expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
         expect(expectedArrivalsService.getPrison).toHaveBeenCalledWith('MDI')
       })
   })
@@ -58,10 +56,6 @@ describe('GET /confirmation', () => {
       .expect(() => {
         expect(flash).toHaveBeenCalledWith('offenderNumber')
       })
-      .expect(res => {
-        expect(expectedArrivalsService.getMove).toHaveBeenCalledTimes(1)
-        expect(expectedArrivalsService.getPrison).toHaveBeenCalledTimes(1)
-      })
   })
 
   it('should redirect to /choose-prisoner page if no offenderNumber present', () => {
@@ -71,7 +65,7 @@ describe('GET /confirmation', () => {
       .expect('Content-Type', 'text/plain; charset=utf-8')
       .expect('Location', '/confirm-arrival/choose-prisoner')
       .expect(res => {
-        expect(expectedArrivalsService.getMove).not.toHaveBeenCalled()
+        expect(expectedArrivalsService.getArrival).not.toHaveBeenCalled()
         expect(expectedArrivalsService.getPrison).not.toHaveBeenCalled()
       })
   })

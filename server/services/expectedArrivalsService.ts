@@ -19,13 +19,24 @@ export default class ExpectedArrivalsService {
 
   private async getExpectedArrivals(agencyId: string, now: Moment): Promise<Movement[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
-    const expectedArrivals = await this.welcomeClientFactory(token).getExpectedArrivals(agencyId, now)
+    const welcomeClient = this.welcomeClientFactory(token)
+    const expectedArrivals = await welcomeClient.getExpectedArrivals(agencyId, now)
     return expectedArrivals.sort(compareByFullName)
   }
 
+  private async getTransfers(agencyId: string): Promise<Movement[]> {
+    const token = await this.hmppsAuthClient.getSystemClientToken()
+    const welcomeClient = this.welcomeClientFactory(token)
+    const transfers = await welcomeClient.getTransfers(agencyId)
+    return transfers.map(transfer => ({ ...transfer, fromLocationType: LocationType.PRISON })).sort(compareByFullName)
+  }
+
   public async getArrivalsForToday(agencyId: string, now = () => moment()): Promise<Map<LocationType, Movement[]>> {
-    const expectedArrivals = await this.getExpectedArrivals(agencyId, now())
-    return groupBy(expectedArrivals, (arrival: Movement) => arrival.fromLocationType)
+    const [expectedArrivals, transfers] = await Promise.all([
+      this.getExpectedArrivals(agencyId, now()),
+      this.getTransfers(agencyId),
+    ])
+    return groupBy([...expectedArrivals, ...transfers], (arrival: Movement) => arrival.fromLocationType)
   }
 
   public async getImage(prisonNumber: string): Promise<Readable> {
@@ -33,9 +44,9 @@ export default class ExpectedArrivalsService {
     return this.welcomeClientFactory(token).getImage(prisonNumber)
   }
 
-  public async getMove(id: string): Promise<Movement> {
+  public async getArrival(id: string): Promise<Movement> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
-    return this.welcomeClientFactory(token).getMove(id)
+    return this.welcomeClientFactory(token).getArrival(id)
   }
 
   public async getPrison(activeCaseLoadId: string): Promise<Prison> {
