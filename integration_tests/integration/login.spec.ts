@@ -25,6 +25,12 @@ context('SignIn', () => {
     homePage.loggedInName().should('contain.text', 'J. Smith')
   })
 
+  it('User caseLoad visible in location banner', () => {
+    cy.signIn()
+    const homePage = Page.verifyOnPage(HomePage)
+    homePage.activeCaseLoad().should('contain.text', 'Moorland (HMP & YOI')
+  })
+
   it('User can log out', () => {
     cy.signIn()
     const homePage = Page.verifyOnPage(HomePage)
