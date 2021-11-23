@@ -34,6 +34,7 @@ export interface ApiConfig {
 export default {
   https: production,
   staticResourceCacheDuration: 20,
+  phaseName: process.env.SYSTEM_PHASE,
   redis: {
     host: process.env.REDIS_HOST,
     port: parseInt(process.env.REDIS_PORT, 10) || 6379,

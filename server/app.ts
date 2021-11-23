@@ -3,10 +3,12 @@ import express from 'express'
 import path from 'path'
 import createError from 'http-errors'
 
+import config from './config'
 import routes from './routes'
 import nunjucksSetup from './utils/nunjucksSetup'
 import errorHandler from './errorHandler'
 import setUpCurrentUser from './middleware/setUpCurrentUser'
+import phaseNameSetup from './phaseNameSetup'
 
 import setUpWebSession from './middleware/setUpWebSession'
 import setUpStaticResources from './middleware/setUpStaticResources'
@@ -30,6 +32,7 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpWebRequestParsing())
   app.use(setUpStaticResources())
   nunjucksSetup(app, path)
+  phaseNameSetup(app, config.phaseName)
   app.use(setUpAuthentication())
   app.use(authorisationMiddleware())
   app.use(setUpCurrentUser(services))
