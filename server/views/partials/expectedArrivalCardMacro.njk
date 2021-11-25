@@ -11,15 +11,22 @@
             </aside>
             <div class="app-card__content">
                 <header class="app-card__header govuk-!-margin-bottom-4">
-                    <h2 class="app-card__title" data-qa="{{moveType}}-title-{{loopIndex}}">     
+                    <h2 class="app-card__title" data-qa="{{moveType}}-title-{{loopIndex}}">
                         {% if user.isReceptionUser %}
-                            {% if arrival.fromLocationType === 'PRISON' %}
-                                    <a href="/prisoners/{{ arrival.prisonNumber }}/check-transfer" class="govuk-link govuk-link--no-visited-state" data-qa="confirm-arrival"> {{ arrival.lastName }}, {{ arrival.firstName }}</a> 
-                            {% elif not arrival.isCurrentPrisoner %}
-                                    <a href="/prisoners/{{ arrival.id }}/confirm-arrival" class="govuk-link govuk-link--no-visited-state" data-qa="confirm-arrival"> {{ arrival.lastName }}, {{ arrival.firstName }}</a>
-                            {% else  %}
-                                    {{ arrival.lastName }}, {{ arrival.firstName }}
+                            {% if arrival.fromLocationType === 'COURT' and not arrival.isCurrentPrisoner %}
+                                <a href="/prisoners/{{ arrival.id }}/confirm-arrival" class="govuk-link govuk-link--no-visited-state" data-qa="confirm-arrival"> {{ arrival.lastName }}, {{ arrival.firstName }}</a>
+
+                            {% elif arrival.fromLocationType === 'CUSTODY_SUITE' and not arrival.isCurrentPrisoner %}
+                                <a href="/prisoners/{{ arrival.id }}/confirm-arrival" class="govuk-link govuk-link--no-visited-state" data-qa="confirm-arrival"> {{ arrival.lastName }}, {{ arrival.firstName }}</a>
+
+                            {% elif arrival.fromLocationType === 'PRISON' %}
+                                <a href="/prisoners/{{ arrival.prisonNumber }}/check-transfer" class="govuk-link govuk-link--no-visited-state" data-qa="confirm-arrival"> {{ arrival.lastName }}, {{ arrival.firstName }}</a>
+
+                            {% else %}
+                                {{ arrival.lastName }}, {{ arrival.firstName }}
                             {%  endif %}
+                        {% else  %}
+                            {{ arrival.lastName }}, {{ arrival.firstName }}
                         {%  endif %}
                     </h2>
                     <span class="govuk-body">{{ arrival.prisonNumber | default('No prison number found') }}</span>
