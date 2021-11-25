@@ -77,6 +77,18 @@ describe('welcomeClient', () => {
     })
   })
 
+  describe('confirmTransfer', () => {
+    const prisonNumber = 'A1234AB'
+    it('should call rest client successfully', async () => {
+      fakeWelcomeApi
+        .post(`/transfers/${prisonNumber}/confirm`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, {})
+
+      return expect(welcomeClient.confirmTransfer(prisonNumber)).resolves.toStrictEqual({})
+    })
+  })
+
   describe('getArrival', () => {
     const expectedArrival: Movement = {
       id,
