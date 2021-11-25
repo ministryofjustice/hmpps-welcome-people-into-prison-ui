@@ -57,4 +57,14 @@ describe('Transfers service', () => {
       })
     })
   })
+
+  describe('confirmTransfer', () => {
+    it('Calls upstream services correctly', async () => {
+      await service.confirmTransfer('user1', 'G0015GD')
+
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith('user1')
+      expect(WelcomeClientFactory).toBeCalledWith(token)
+      expect(welcomeClient.confirmTransfer).toBeCalledWith('G0015GD')
+    })
+  })
 })
