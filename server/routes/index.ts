@@ -3,6 +3,7 @@ import ChoosePrisonerController from './choosePrisonerController'
 import PrisonerController from './prisonerController'
 import ConfirmArrivalController from './confirmArrivalController'
 import CheckTransferController from './checkTransferController'
+import ConfirmTransferAddedToRollController from './confirmTransferAddedToRollController'
 import CheckAnswersController from './checkAnswersController'
 import ConfirmAddedToRollController from './confirmAddedToRollController'
 import ImprisonmentStatusesController from './imprisonmentStatusesController'
@@ -58,6 +59,16 @@ export default function routes(services: Services): Router {
   const checkTransferController = new CheckTransferController(services.transfersService)
   get('/prisoners/:prisonNumber/check-transfer', [checkTransferController.checkTransfer()], [Role.PRISON_RECEPTION])
   post('/prisoners/:prisonNumber/check-transfer', [checkTransferController.addToRoll()], [Role.PRISON_RECEPTION])
+
+  const confirmTransferAddedToRollController = new ConfirmTransferAddedToRollController(
+    services.expectedArrivalsService,
+    services.transfersService
+  )
+  get(
+    '/prisoners/:prisonNumber/confirm-transfer',
+    [confirmTransferAddedToRollController.view()],
+    [Role.PRISON_RECEPTION]
+  )
 
   const imprisonmentStatusesController = new ImprisonmentStatusesController(
     services.imprisonmentStatusesService,
