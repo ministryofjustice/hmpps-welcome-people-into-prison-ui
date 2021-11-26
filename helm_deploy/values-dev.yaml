@@ -5,7 +5,8 @@ generic-service:
   replicaCount: 2
 
   ingress:
-    host: welcome-dev.prison.service.justice.gov.uk$NL    contextColour: green
+    host: welcome-dev.prison.service.justice.gov.uk
+    contextColour: green
 
   allowlist: false
 
