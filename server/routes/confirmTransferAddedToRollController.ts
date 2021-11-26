@@ -1,12 +1,8 @@
 import { RequestHandler } from 'express'
 import ExpectedArrivalsService from '../services/expectedArrivalsService'
-import TransfersService from '../services/transfersService'
 
 export default class CheckTransferController {
-  public constructor(
-    private readonly expectedArrivalsService: ExpectedArrivalsService,
-    private readonly transfersService: TransfersService
-  ) {}
+  public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
 
   public view(): RequestHandler {
     return async (req, res) => {
@@ -19,6 +15,7 @@ export default class CheckTransferController {
       }
 
       const prison = await this.expectedArrivalsService.getPrison(activeCaseLoadId)
+
       return res.render('pages/confirmTransferAddedToRoll.njk', {
         firstName,
         lastName,
