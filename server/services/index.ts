@@ -6,7 +6,7 @@ import ImprisonmentStatusesService from './imprisonmentStatusesService'
 import TransfersService from './transfersService'
 
 const { hmppsAuthClient, welcomeClientBuilder } = dataAccess
-const userService = new UserService(hmppsAuthClient)
+const userService = new UserService(hmppsAuthClient, welcomeClientBuilder)
 const expectedArrivalsService = new ExpectedArrivalsService(hmppsAuthClient, welcomeClientBuilder)
 const temporaryAbsencesService = new TemporaryAbsencesService(hmppsAuthClient, welcomeClientBuilder)
 const imprisonmentStatusesService = new ImprisonmentStatusesService(hmppsAuthClient, welcomeClientBuilder)

@@ -16,8 +16,16 @@ export default function populateCurrentUser(
           const returnUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`
           const clientID = config.apis.hmppsAuth.apiClientId
           const activeCaseLoad = await expectedArrivalsServices.getPrison(user.activeCaseLoadId)
+          const userCaseLoads = await userService.getUserCaseLoads(res.locals.user.token)
 
-          res.locals.user = { ...user, ...res.locals.user, returnUrl, clientID, activeCaseLoad }
+          res.locals.user = {
+            ...user,
+            ...res.locals.user,
+            returnUrl,
+            clientID,
+            activeCaseLoad,
+            userCaseLoads,
+          }
         } else {
           logger.info('No user available')
         }

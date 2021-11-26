@@ -7,6 +7,7 @@ import type {
   Prison,
   OffenderNumber,
   ImprisonmentStatus,
+  UserCaseLoad,
 } from 'welcome'
 import type { Readable } from 'stream'
 import config, { ApiConfig } from '../config'
@@ -90,5 +91,12 @@ export default class WelcomeClient {
     return this.restClient.get({
       path: `/imprisonment-statuses`,
     }) as Promise<ImprisonmentStatus[]>
+  }
+
+  async getUserCaseLoads(): Promise<UserCaseLoad[]> {
+    logger.info(`welcomeApi: getUserCaseLoads()`)
+    return this.restClient.get({
+      path: '/prison/users/me/caseLoads',
+    }) as Promise<UserCaseLoad[]>
   }
 }

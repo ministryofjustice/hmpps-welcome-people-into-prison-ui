@@ -8,6 +8,7 @@ context('SignIn', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', Role.PRISON_RECEPTION)
+    cy.task('stubUserCaseLoads')
     cy.task('stubPrison', 'MDI')
     cy.task('stubAuthUser')
     cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [] })
@@ -28,7 +29,25 @@ context('SignIn', () => {
   it('User caseLoad visible in location banner', () => {
     cy.signIn()
     const homePage = Page.verifyOnPage(HomePage)
-    homePage.activeCaseLoad().should('contain.text', 'Moorland (HMP & YOI')
+    homePage.activeCaseLoad().should('contain.text', 'Moorland (HMP & YOI)')
+  })
+
+  it('Link to change location displayed in location banner for users with multiple caseloads', () => {
+    cy.signIn()
+    const homePage = Page.verifyOnPage(HomePage)
+    homePage.changeLocationLink().should('be.visible')
+  })
+
+  it('Link to change location not displayed in location banner for users with a single caseLoad', () => {
+    cy.task('stubUserCaseLoads', [
+      {
+        caseLoadId: 'MDI',
+        description: 'Moorland Closed (HMP & YOI)',
+      },
+    ])
+    cy.signIn()
+    const homePage = Page.verifyOnPage(HomePage)
+    homePage.changeLocationLink().should('not.be.exist')
   })
 
   it('User can log out', () => {

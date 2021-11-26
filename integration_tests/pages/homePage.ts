@@ -17,4 +17,6 @@ export default class HomePage extends Page {
   loggedInName = (): PageElement => cy.get('[data-qa="header-user-name"]')
 
   activeCaseLoad = (): PageElement => cy.get('[data-qa="active-case-load"]')
+
+  changeLocationLink = (): PageElement => cy.get('[data-qa="change-location-link"]')
 }

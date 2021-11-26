@@ -1,6 +1,6 @@
 import nock from 'nock'
 import moment from 'moment'
-import { Gender, ImprisonmentStatus, Movement, Transfer, NewOffenderBooking, Prison } from 'welcome'
+import { Gender, ImprisonmentStatus, Movement, Transfer, NewOffenderBooking, Prison, UserCaseLoad } from 'welcome'
 import WelcomeClient from './welcomeClient'
 import config from '../config'
 
@@ -23,6 +23,19 @@ describe('welcomeClient', () => {
       throw new Error('Not all nock interceptors were used!')
     }
     nock.cleanAll()
+  })
+
+  describe('getUserCaseLoads', () => {
+    const userCaseLoads: UserCaseLoad[] = []
+    it('should return data from api', async () => {
+      fakeWelcomeApi
+        .get('/prison/users/me/caseLoads')
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, userCaseLoads)
+
+      const output = await welcomeClient.getUserCaseLoads()
+      expect(output).toEqual(userCaseLoads)
+    })
   })
 
   describe('getExpectedArrivals', () => {

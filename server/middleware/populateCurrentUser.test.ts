@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express'
+import { UserCaseLoad } from 'welcome'
 import UserService from '../services/userService'
 import ExpectedArrivalsService from '../services/expectedArrivalsService'
 import populateCurrentUser from './populateCurrentUser'
@@ -6,10 +7,22 @@ import populateCurrentUser from './populateCurrentUser'
 jest.mock('../services/userService')
 jest.mock('../services/expectedArrivalsService')
 
-const userService = new UserService(null) as jest.Mocked<UserService>
+const userService = new UserService(null, null) as jest.Mocked<UserService>
 const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
 
+const userCaseLoads: UserCaseLoad[] = [
+  {
+    caseLoadId: 'MDI',
+    description: 'Moorland Closed (HMP & YOI)',
+  },
+  {
+    caseLoadId: 'NMI',
+    description: 'Nottingham (HMP)',
+  },
+]
+
 userService.getUser = jest.fn().mockResolvedValue({})
+userService.getUserCaseLoads = jest.fn().mockResolvedValue(userCaseLoads)
 expectedArrivalsService.getPrison = jest.fn().mockResolvedValue({ description: 'Moorland (HMP & YOI)' })
 
 describe('populateCurrentUser', () => {
@@ -36,6 +49,12 @@ describe('populateCurrentUser', () => {
     const res = { locals: { user: {} } } as unknown as Response
     await populateCurrentUser(userService, expectedArrivalsService)(req, res, next)
     expect(res.locals.user.activeCaseLoad).toEqual({ description: 'Moorland (HMP & YOI)' })
+  })
+
+  it('should store userCaseloads in response', async () => {
+    const res = { locals: { user: {} } } as unknown as Response
+    await populateCurrentUser(userService, expectedArrivalsService)(req, res, next)
+    expect(res.locals.user.userCaseLoads).toEqual(userCaseLoads)
   })
 
   it('should catch error', async () => {
