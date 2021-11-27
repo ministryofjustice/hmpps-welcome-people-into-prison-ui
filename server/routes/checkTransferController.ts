@@ -28,12 +28,10 @@ export default class CheckTransferController {
         req.hostname
       )
 
-      req.flash('prisoner', [
-        {
-          firstName: data.firstName,
-          lastName: data.lastName,
-        },
-      ])
+      req.flash('prisoner', {
+        firstName: data.firstName,
+        lastName: data.lastName,
+      })
 
       await this.transfersService.confirmTransfer(username, prisonNumber)
       res.redirect(`/prisoners/${prisonNumber}/confirm-transfer`)

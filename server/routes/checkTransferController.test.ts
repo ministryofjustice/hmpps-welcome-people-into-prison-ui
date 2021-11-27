@@ -86,7 +86,7 @@ describe('POST addToRoll', () => {
     return request(app)
       .post('/prisoners/A1234AB/check-transfer')
       .expect(() => {
-        expect(flash).toHaveBeenCalledWith('prisoner', [{ firstName: 'Karl', lastName: 'Offender' }])
+        expect(flash).toHaveBeenCalledWith('prisoner', { firstName: 'Karl', lastName: 'Offender' })
       })
   })
 
