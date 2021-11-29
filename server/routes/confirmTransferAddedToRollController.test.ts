@@ -3,15 +3,22 @@ import request from 'supertest'
 import cheerio from 'cheerio'
 import { appWithAllRoutes } from './testutils/appSetup'
 import ExpectedArrivalsService from '../services/expectedArrivalsService'
+import PrisonService from '../services/prisonService'
 import Role from '../authentication/role'
 
 jest.mock('../services/expectedArrivalsService')
+jest.mock('../services/prisonService')
 const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
+const prisonService = new PrisonService(null, null) as jest.Mocked<PrisonService>
 let app: Express
 const flash = jest.fn()
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { expectedArrivalsService }, flash, roles: [Role.PRISON_RECEPTION] })
+  app = appWithAllRoutes({
+    services: { expectedArrivalsService, prisonService },
+    flash,
+    roles: [Role.PRISON_RECEPTION],
+  })
   expectedArrivalsService.getArrival.mockResolvedValue({
     firstName: 'Jim',
     lastName: 'Smith',
@@ -22,7 +29,7 @@ beforeEach(() => {
     fromLocation: 'Some court',
     fromLocationType: 'COURT',
   })
-  expectedArrivalsService.getPrison.mockResolvedValue({
+  prisonService.getPrison.mockResolvedValue({
     description: 'Moorland (HMP & YOI)',
   })
 })
@@ -43,7 +50,7 @@ describe('GET /view', () => {
       .get('/prisoners/A1234AB/confirm-transfer')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
-        expect(expectedArrivalsService.getPrison).toHaveBeenCalledWith('MDI')
+        expect(prisonService.getPrison).toHaveBeenCalledWith('MDI')
       })
   })
 
@@ -66,7 +73,7 @@ describe('GET /view', () => {
       .expect('Content-Type', 'text/plain; charset=utf-8')
       .expect('Location', '/confirm-arrival/choose-prisoner')
       .expect(res => {
-        expect(expectedArrivalsService.getPrison).not.toHaveBeenCalled()
+        expect(prisonService.getPrison).not.toHaveBeenCalled()
       })
   })
 

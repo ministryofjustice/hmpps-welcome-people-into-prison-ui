@@ -1,9 +1,12 @@
 import { RequestHandler } from 'express'
-import ExpectedArrivalsService from '../services/expectedArrivalsService'
+import type { ExpectedArrivalsService, PrisonService } from '../services'
 import { clearImprisonmentStatus } from './state'
 
 export default class ConfirmAddedToRollController {
-  public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
+  public constructor(
+    private readonly expectedArrivalsService: ExpectedArrivalsService,
+    private readonly prisonService: PrisonService
+  ) {}
 
   public view(): RequestHandler {
     return async (req, res) => {
@@ -14,7 +17,7 @@ export default class ConfirmAddedToRollController {
       const { id } = req.params
       const { activeCaseLoadId } = res.locals.user
       const data = await this.expectedArrivalsService.getArrival(id)
-      const prison = await this.expectedArrivalsService.getPrison(activeCaseLoadId)
+      const prison = await this.prisonService.getPrison(activeCaseLoadId)
       clearImprisonmentStatus(res)
       return res.render('pages/confirmAddedToRoll', { data, prison, offenderNumber })
     }

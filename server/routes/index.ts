@@ -61,7 +61,8 @@ export default function routes(services: Services): Router {
   post('/prisoners/:prisonNumber/check-transfer', [checkTransferController.addToRoll()], [Role.PRISON_RECEPTION])
 
   const confirmTransferAddedToRollController = new ConfirmTransferAddedToRollController(
-    services.expectedArrivalsService
+    services.expectedArrivalsService,
+    services.prisonService
   )
   get(
     '/prisoners/:prisonNumber/confirm-transfer',
@@ -104,7 +105,10 @@ export default function routes(services: Services): Router {
     [Role.PRISON_RECEPTION]
   )
 
-  const confirmAddedToRollController = new ConfirmAddedToRollController(services.expectedArrivalsService)
+  const confirmAddedToRollController = new ConfirmAddedToRollController(
+    services.expectedArrivalsService,
+    services.prisonService
+  )
   get('/prisoners/:id/confirmation', [confirmAddedToRollController.view()], [Role.PRISON_RECEPTION])
 
   return router

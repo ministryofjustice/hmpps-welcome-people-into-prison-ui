@@ -1,3 +1,4 @@
+{%- from "govuk/components/tag/macro.njk" import govukTag -%}
 {% if tagManagerContainerId %}
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{tagManagerContainerid}}{{ tagManagerEnvironment | safe }}"
@@ -245,3 +246,18 @@
     </nav>
   </div>
 </header>
+
+<div class="location-bar">
+    <span class="location-bar__location" data-qa="active-location">
+        {% if phaseName %}
+            {{ govukTag({
+                text: phaseName,
+                classes: 'govuk-!-margin-right-1 ' + phaseNameColour
+            }) }}
+        {% endif %}
+        <span class="gtm-active-case-load" data-qa="active-case-load">{{ user.activeCaseLoad.description }}</span>
+    </span>
+    {% if user.userCaseLoads.length > 1 %}
+      <a class="location-bar__link" href="{{ dpsUrl }}/change-caseload" data-qa="change-location-link">Change your location</a>
+    {% endif %}
+</div>

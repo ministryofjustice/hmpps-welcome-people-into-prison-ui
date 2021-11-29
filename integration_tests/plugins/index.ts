@@ -16,6 +16,7 @@ export default (on: (string, Record) => void): void => {
 
     stubTokenVerificationPing: tokenVerification.stubPing,
 
+    stubUserCaseLoads: welcome.stubUserCaseLoads,
     stubExpectedArrival: welcome.stubExpectedArrival,
     stubExpectedArrivals: welcome.stubExpectedArrivals,
     stubTransfers: welcome.stubTransfers,

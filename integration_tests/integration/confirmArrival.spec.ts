@@ -8,7 +8,9 @@ context('Confirm Arrival', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', Role.PRISON_RECEPTION)
+    cy.task('stubPrison', 'MDI')
     cy.task('stubAuthUser')
+    cy.task('stubUserCaseLoads')
     cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [] })
     cy.task('stubMissingPrisonerImage')
   })

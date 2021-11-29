@@ -1,9 +1,9 @@
 import { RequestHandler } from 'express'
 import logger from '../../logger'
-import UserService from '../services/userService'
+import type { UserService, PrisonService } from '../services'
 import config from '../config'
 
-export default function populateCurrentUser(userService: UserService): RequestHandler {
+export default function populateCurrentUser(userService: UserService, prisonService: PrisonService): RequestHandler {
   return async (req, res, next) => {
     try {
       if (res.locals.user) {
@@ -11,7 +11,17 @@ export default function populateCurrentUser(userService: UserService): RequestHa
         if (user) {
           const returnUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`
           const clientID = config.apis.hmppsAuth.apiClientId
-          res.locals.user = { ...user, ...res.locals.user, returnUrl, clientID }
+          const activeCaseLoad = await prisonService.getPrison(user.activeCaseLoadId)
+          const userCaseLoads = await userService.getUserCaseLoads(res.locals.user.token)
+
+          res.locals.user = {
+            ...user,
+            ...res.locals.user,
+            returnUrl,
+            clientID,
+            activeCaseLoad,
+            userCaseLoads,
+          }
         } else {
           logger.info('No user available')
         }

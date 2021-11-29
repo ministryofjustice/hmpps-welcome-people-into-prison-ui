@@ -1,6 +1,7 @@
 import { SuperAgentRequest } from 'superagent'
 import fs from 'fs'
 import path from 'path'
+import defaultUserCaseLoads from './responses/userCaseLoads'
 import temporaryAbsences from './responses/temporaryAbsences'
 import imprisonmentStatuses from './responses/imprisonmentStatuses'
 import { stubFor } from './wiremock'
@@ -16,6 +17,19 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: { status: 'UP' },
+      },
+    })
+  },
+  stubUserCaseLoads: (userCaseLoads: Record<string, string>[] = defaultUserCaseLoads): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/welcome/prison/users/me/caseLoads',
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: userCaseLoads,
       },
     })
   },
