@@ -21,6 +21,13 @@ export default class CheckTransferController {
       const { activeCaseLoadId } = res.locals.user
       const data = await this.transfersService.getTransfer(activeCaseLoadId, prisonNumber)
 
+      await this.transfersService.confirmTransfer(username, prisonNumber)
+
+      req.flash('prisoner', {
+        firstName: data.firstName,
+        lastName: data.lastName,
+      })
+
       raiseAnalyticsEvent(
         'Add to the establishment roll',
         'Confirmed transfer',
@@ -28,12 +35,6 @@ export default class CheckTransferController {
         req.hostname
       )
 
-      req.flash('prisoner', {
-        firstName: data.firstName,
-        lastName: data.lastName,
-      })
-
-      await this.transfersService.confirmTransfer(username, prisonNumber)
       res.redirect(`/prisoners/${prisonNumber}/confirm-transfer`)
     }
   }
