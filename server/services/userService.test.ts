@@ -18,7 +18,7 @@ describe('User service', () => {
   const userCaseLoads: UserCaseLoad[] = [
     {
       caseLoadId: 'MDI',
-      description: 'Moorland Closed (HMP & YOI)',
+      description: 'Moorland (HMP & YOI)',
     },
     {
       caseLoadId: 'NMI',
@@ -63,7 +63,7 @@ describe('User service', () => {
       expect(result).toStrictEqual([
         {
           caseLoadId: 'MDI',
-          description: 'Moorland Closed (HMP & YOI)',
+          description: 'Moorland (HMP & YOI)',
         },
         {
           caseLoadId: 'NMI',

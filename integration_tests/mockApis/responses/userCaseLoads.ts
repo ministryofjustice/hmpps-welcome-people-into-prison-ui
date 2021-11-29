@@ -1,7 +1,7 @@
 export default [
   {
     caseLoadId: 'MDI',
-    description: 'Moorland Closed (HMP & YOI)',
+    description: 'Moorland (HMP & YOI)',
   },
   {
     caseLoadId: 'NMI',

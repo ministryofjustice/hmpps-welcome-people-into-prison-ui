@@ -1,13 +1,9 @@
 import { RequestHandler } from 'express'
 import logger from '../../logger'
-import type UserService from '../services/userService'
-import type ExpectedArrivalsServices from '../services/expectedArrivalsService'
+import type { UserService, PrisonService } from '../services'
 import config from '../config'
 
-export default function populateCurrentUser(
-  userService: UserService,
-  expectedArrivalsServices: ExpectedArrivalsServices
-): RequestHandler {
+export default function populateCurrentUser(userService: UserService, prisonService: PrisonService): RequestHandler {
   return async (req, res, next) => {
     try {
       if (res.locals.user) {
@@ -15,7 +11,7 @@ export default function populateCurrentUser(
         if (user) {
           const returnUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`
           const clientID = config.apis.hmppsAuth.apiClientId
-          const activeCaseLoad = await expectedArrivalsServices.getPrison(user.activeCaseLoadId)
+          const activeCaseLoad = await prisonService.getPrison(user.activeCaseLoadId)
           const userCaseLoads = await userService.getUserCaseLoads(res.locals.user.token)
 
           res.locals.user = {
