@@ -1,5 +1,6 @@
 import { RequestHandler } from 'express'
 import TransfersService from '../services/transfersService'
+import raiseAnalyticsEvent from '../raiseAnalyticsEvent'
 
 export default class CheckTransferController {
   public constructor(private readonly transfersService: TransfersService) {}
@@ -16,8 +17,25 @@ export default class CheckTransferController {
   public addToRoll(): RequestHandler {
     return async (req, res) => {
       const { prisonNumber } = req.params
-      // TODO: implement post action in next ticket
-      res.redirect(`/prisoners/${prisonNumber}/confirmation`)
+      const { username } = req.user
+      const { activeCaseLoadId } = res.locals.user
+      const data = await this.transfersService.getTransfer(activeCaseLoadId, prisonNumber)
+
+      await this.transfersService.confirmTransfer(username, prisonNumber)
+
+      req.flash('prisoner', {
+        firstName: data.firstName,
+        lastName: data.lastName,
+      })
+
+      raiseAnalyticsEvent(
+        'Add to the establishment roll',
+        'Confirmed transfer',
+        `AgencyId: ${activeCaseLoadId}, From: ${data.fromLocation}, Type: 'PRISON',`,
+        req.hostname
+      )
+
+      res.redirect(`/prisoners/${prisonNumber}/confirm-transfer`)
     }
   }
 }
