@@ -1,11 +1,8 @@
 import { RequestHandler } from 'express'
-import type { ExpectedArrivalsService, PrisonService } from '../services'
+import type { PrisonService } from '../services'
 
-export default class CheckTransferController {
-  public constructor(
-    private readonly expectedArrivalsService: ExpectedArrivalsService,
-    private readonly prisonService: PrisonService
-  ) {}
+export default class ConfirmTransferAddedToRollController {
+  public constructor(private readonly prisonService: PrisonService) {}
 
   public view(): RequestHandler {
     return async (req, res) => {

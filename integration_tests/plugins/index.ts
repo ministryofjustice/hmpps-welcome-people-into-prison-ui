@@ -20,6 +20,8 @@ export default (on: (string, Record) => void): void => {
     stubExpectedArrival: welcome.stubExpectedArrival,
     stubExpectedArrivals: welcome.stubExpectedArrivals,
     stubTransfers: welcome.stubTransfers,
+    stubTransfer: welcome.stubTransfer,
+    stubConfirmTransfer: welcome.stubConfirmTransfer,
     stubWelcomeApiPing: welcome.stubPing,
     stubTemporaryAbsences: welcome.stubTemporaryAbsences,
     stubPrison: welcome.stubPrison,

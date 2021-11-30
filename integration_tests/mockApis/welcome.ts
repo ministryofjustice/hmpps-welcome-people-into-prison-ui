@@ -65,6 +65,27 @@ export default {
       },
     })
   },
+  stubTransfer: ({
+    caseLoadId,
+    prisonNumber,
+    transfer,
+  }: {
+    caseLoadId: string
+    prisonNumber: string
+    transfer: Record<string, string>
+  }): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/welcome/prisons/${caseLoadId}/transfers/enroute/${prisonNumber}`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: transfer,
+      },
+    })
+  },
   stubTransfers: ({
     caseLoadId,
     transfers,
@@ -84,6 +105,21 @@ export default {
       },
     })
   },
+
+  stubConfirmTransfer: (prisonNumber: string): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/welcome/transfers/${prisonNumber}/confirm`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
+
   stubTemporaryAbsences: (activeCaseLoadId: string): SuperAgentRequest => {
     return stubFor({
       request: {
