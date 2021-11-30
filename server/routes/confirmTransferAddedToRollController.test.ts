@@ -2,33 +2,22 @@ import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
 import { appWithAllRoutes } from './testutils/appSetup'
-import ExpectedArrivalsService from '../services/expectedArrivalsService'
 import PrisonService from '../services/prisonService'
 import Role from '../authentication/role'
 
 jest.mock('../services/expectedArrivalsService')
 jest.mock('../services/prisonService')
-const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
 const prisonService = new PrisonService(null, null) as jest.Mocked<PrisonService>
 let app: Express
 const flash = jest.fn()
 
 beforeEach(() => {
   app = appWithAllRoutes({
-    services: { expectedArrivalsService, prisonService },
+    services: { prisonService },
     flash,
     roles: [Role.PRISON_RECEPTION],
   })
-  expectedArrivalsService.getArrival.mockResolvedValue({
-    firstName: 'Jim',
-    lastName: 'Smith',
-    dateOfBirth: '1973-01-08',
-    prisonNumber: 'A1234AB',
-    pncNumber: '01/98644M',
-    date: '2021-10-13',
-    fromLocation: 'Some court',
-    fromLocationType: 'COURT',
-  })
+
   prisonService.getPrison.mockResolvedValue({
     description: 'Moorland (HMP & YOI)',
   })
