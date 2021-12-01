@@ -26,6 +26,18 @@ context('SignIn', () => {
     homePage.loggedInName().should('contain.text', 'J. Smith')
   })
 
+  it('Digital Prison Services link should be visible in header with the correct href', () => {
+    cy.signIn()
+    const homePage = Page.verifyOnPage(HomePage)
+    homePage
+      .digitalPrisonServices()
+      .should('contain', 'Digital Prison Services')
+      .should('have.attr', 'href')
+      .then(href => {
+        expect(href).to.equal('https://digital-dev.prison.service.justice.gov.uk')
+      })
+  })
+
   it('User caseLoad visible in location banner', () => {
     cy.signIn()
     const homePage = Page.verifyOnPage(HomePage)

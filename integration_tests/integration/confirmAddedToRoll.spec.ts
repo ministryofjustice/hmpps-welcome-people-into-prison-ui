@@ -24,7 +24,7 @@ context('Confirm Added To Roll', () => {
     cy.task('stubExpectedArrival', expectedArrival)
   })
 
-  it('Should contain correctly formatted move data on confirmation page', () => {
+  it('Should contain correctly formatted move data and Back to Digital Prisons Services link on confirmation page', () => {
     cy.signIn()
     const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
     confirmArrivalPage.continue().click()
@@ -41,6 +41,13 @@ context('Confirm Added To Roll', () => {
     confirmAddedToRollPage.confirmationBanner().should('contain.html', 'A1234AB')
     confirmAddedToRollPage.confirmationParagraph().should('contain.html', 'Sam Smith')
     confirmAddedToRollPage.confirmationParagraph().should('contain.html', 'Moorland (HMP &amp; YOI)')
+    confirmAddedToRollPage
+      .backToDigitalPrisonServices()
+      .should('contain', 'Back to Digital Prison Services')
+      .should('have.attr', 'href')
+      .then(href => {
+        expect(href).to.equal('https://digital-dev.prison.service.justice.gov.uk')
+      })
     confirmAddedToRollPage.addAnotherToRoll().click()
     Page.verifyOnPage(ChoosePrisonerPage)
   })

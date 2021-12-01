@@ -11,4 +11,6 @@ export default class ConfirmTransferAddedToRollPage extends Page {
   }
 
   addAnotherToRoll = (): PageElement => cy.get(`[data-qa=add-another-to-roll]`)
+
+  backToDigitalPrisonServices = (): PageElement => cy.get('[data-qa=back-to-dps]')
 }

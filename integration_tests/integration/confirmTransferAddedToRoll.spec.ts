@@ -34,4 +34,17 @@ context('Confirm transfer added To roll', () => {
     confirmTransferAddedToRollPage.addAnotherToRoll().click()
     Page.verifyOnPage(ChoosePrisonerPage)
   })
+
+  it('Should display Back to Digital Prisons Services link with the correct href', () => {
+    const checkTransferPage = CheckTransferPage.goTo(expectedArrivals.prisonTransfer.prisonNumber)
+    checkTransferPage.addToRoll().click()
+    const confirmTransferAddedToRollPage = Page.verifyOnPage(ConfirmTransferAddedToRollPage)
+    confirmTransferAddedToRollPage
+      .backToDigitalPrisonServices()
+      .should('contain', 'Back to Digital Prison Services')
+      .should('have.attr', 'href')
+      .then(href => {
+        expect(href).to.equal('https://digital-dev.prison.service.justice.gov.uk')
+      })
+  })
 })
