@@ -10,6 +10,8 @@ export default class HomePage extends Page {
     return Page.verifyOnPage(HomePage)
   }
 
+  digitalPrisonServices = (): PageElement => cy.get('[data-qa=digital-prison-services]')
+
   arrivalsTitle = (): PageElement => cy.get('[data-qa=choose-prisoner]')
 
   returnFromTemporaryAbsenceTitle = (): PageElement => cy.get('[data-qa=return-from-temporary-absence]')
