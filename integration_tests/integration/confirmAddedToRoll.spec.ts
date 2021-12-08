@@ -42,6 +42,13 @@ context('Confirm Added To Roll', () => {
     confirmAddedToRollPage.confirmationParagraph().should('contain.html', 'Sam Smith')
     confirmAddedToRollPage.confirmationParagraph().should('contain.html', 'Moorland (HMP &amp; YOI)')
     confirmAddedToRollPage
+      .viewEstablishmentRoll()
+      .should('contain', 'View establishment roll')
+      .should('have.attr', 'href')
+      .then(href => {
+        expect(href).to.equal('https://digital-dev.prison.service.justice.gov.uk/establishment-roll')
+      })
+    confirmAddedToRollPage
       .backToDigitalPrisonServices()
       .should('contain', 'Back to Digital Prison Services')
       .should('have.attr', 'href')

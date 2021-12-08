@@ -15,13 +15,24 @@
 
             <p data-qa="confirmation-paragraph">{{ firstName}} {{ lastName }} is now part of the {{ prison.description }} establishment roll and is located in reception.</p>
 
-            {{ govukButton({
-                text: "Add another prisoner to the roll",
-                href: '/confirm-arrival/choose-prisoner',
-                attributes: {
-                'data-qa': 'add-another-to-roll'
-                } 
-            }) }}
+            <div class="govuk-button-group">
+                {{ govukButton({
+                    text: "Add another prisoner to the roll",
+                    href: '/confirm-arrival/choose-prisoner',
+                    attributes: {
+                        'data-qa': 'add-another-to-roll'
+                    } 
+                }) }}
+
+                {{ govukButton({
+                    text: "View establishment roll",
+                    href: dpsUrl + "/establishment-roll",
+                    classes: "govuk-button--secondary",
+                    attributes: {
+                        'data-qa': 'view-establishment-roll'
+                    }
+                }) }}
+            </div>
 
             <p>
                 <a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ dpsUrl }}" data-qa="back-to-dps">
