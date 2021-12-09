@@ -86,4 +86,5 @@ export default {
     tagManagerContainerId: get('TAG_MANAGER_CONTAINER_ID', ''),
     tagManagerEnvironment: get('TAG_MANAGER_ENVIRONMENT', ''),
   },
+  enabledPrisons: process.env.ENABLED_PRISONS,
 }

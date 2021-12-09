@@ -53,7 +53,7 @@ export const mockRequest = ({
     errors,
   } as unknown as jest.Mocked<Request>)
 
-export const mockResponse = ({ locals = { context: {} } }: ResponseParams): jest.Mocked<Response> =>
+export const mockResponse = ({ locals = { context: {}, user: {} } }: ResponseParams): jest.Mocked<Response> =>
   ({
     locals,
     sendStatus: jest.fn(),
