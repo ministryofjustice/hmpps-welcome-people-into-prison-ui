@@ -18,6 +18,7 @@ import setUpHealthChecks from './middleware/setUpHealthChecks'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
 import type { Services } from './services'
+import caseloadCheckMiddleware from './middleware/caseloadCheckMiddleware'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -36,7 +37,7 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpAuthentication())
   app.use(authorisationMiddleware())
   app.use(setUpCurrentUser(services))
-
+  app.use(caseloadCheckMiddleware(config.enabledPrisons))
   app.use(routes(services))
 
   app.use((req, res, next) => next(createError(404, 'Not found')))

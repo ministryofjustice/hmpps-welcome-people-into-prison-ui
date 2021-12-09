@@ -19,6 +19,7 @@ generic-service:
     HMPPS_COOKIE_NAME: hmpps-session-dev
     HMPPS_COOKIE_DOMAIN: welcome-dev.prison.service.justice.gov.uk
     SYSTEM_PHASE: DEV
+    ENABLED_PRISONS: NMI,MDI
 
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service-dev
