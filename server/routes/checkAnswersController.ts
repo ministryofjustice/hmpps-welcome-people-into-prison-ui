@@ -3,7 +3,7 @@ import { Gender } from 'welcome'
 import type ExpectedArrivalsService from '../services/expectedArrivalsService'
 import type ImprisonmentStatusesService from '../services/imprisonmentStatusesService'
 import raiseAnalyticsEvent from '../raiseAnalyticsEvent'
-import { getImprisonmentStatus } from './state'
+import { getImprisonmentStatus, getSex } from './state'
 
 export default class CheckAnswersController {
   public constructor(
@@ -15,9 +15,10 @@ export default class CheckAnswersController {
     return async (req, res) => {
       const { id } = req.params
       const statusAndReason = getImprisonmentStatus(req)
+      const sex = getSex(req)
       const moveData = await this.expectedArrivalsService.getArrival(id)
       const reasonImprisonment = await this.imprisonmentStatusesService.getReasonForImprisonment(statusAndReason)
-      const data = { reasonImprisonment, ...moveData }
+      const data = { sex, reasonImprisonment, ...moveData }
       return res.render('pages/checkAnswers.njk', { data })
     }
   }
