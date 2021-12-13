@@ -18,6 +18,8 @@ import asyncMiddleware from '../middleware/asyncMiddleware'
 import { Services } from '../services'
 import TemporaryAbsencesController from './temporaryAbsencesController'
 import Role from '../authentication/role'
+import redirectIfDisabledMiddleware from '../middleware/redirectIfDisabledMiddleware'
+import config from '../config'
 
 export default function routes(services: Services): Router {
   const router = express.Router()
@@ -57,8 +59,16 @@ export default function routes(services: Services): Router {
   get('/prisoners/:id/confirm-arrival', [confirmArrivalController.confirmArrival()], [Role.PRISON_RECEPTION])
 
   const checkTransferController = new CheckTransferController(services.transfersService)
-  get('/prisoners/:prisonNumber/check-transfer', [checkTransferController.checkTransfer()], [Role.PRISON_RECEPTION])
-  post('/prisoners/:prisonNumber/check-transfer', [checkTransferController.addToRoll()], [Role.PRISON_RECEPTION])
+  get(
+    '/prisoners/:prisonNumber/check-transfer',
+    [redirectIfDisabledMiddleware(config.confirmEnabled), checkTransferController.checkTransfer()],
+    [Role.PRISON_RECEPTION]
+  )
+  post(
+    '/prisoners/:prisonNumber/check-transfer',
+    [redirectIfDisabledMiddleware(config.confirmEnabled), checkTransferController.addToRoll()],
+    [Role.PRISON_RECEPTION]
+  )
 
   const confirmTransferAddedToRollController = new ConfirmTransferAddedToRollController(services.prisonService)
   get(
@@ -93,12 +103,20 @@ export default function routes(services: Services): Router {
   )
   get(
     '/prisoners/:id/check-answers',
-    [checkImprisonmentStatusPresent, checkAnswersController.view()],
+    [
+      checkImprisonmentStatusPresent,
+      redirectIfDisabledMiddleware(config.confirmEnabled),
+      checkAnswersController.view(),
+    ],
     [Role.PRISON_RECEPTION]
   )
   post(
     '/prisoners/:id/check-answers',
-    [checkImprisonmentStatusPresent, checkAnswersController.addToRoll()],
+    [
+      checkImprisonmentStatusPresent,
+      redirectIfDisabledMiddleware(config.confirmEnabled),
+      checkAnswersController.addToRoll(),
+    ],
     [Role.PRISON_RECEPTION]
   )
 
@@ -108,5 +126,6 @@ export default function routes(services: Services): Router {
   )
   get('/prisoners/:id/confirmation', [confirmAddedToRollController.view()], [Role.PRISON_RECEPTION])
 
+  get('/feature-not-available', [(req, res) => res.render('pages/featureNotAvailable')], [])
   return router
 }
