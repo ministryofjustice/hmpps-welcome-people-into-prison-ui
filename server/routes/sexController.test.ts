@@ -41,39 +41,34 @@ describe('/sex', () => {
       return request(app).get('/prisoners/12345-67890/sex').expect(302).expect('Location', '/autherror')
     })
 
-    it('should render /sex page when Arrival gender is not MALE or FEMALE', () => {
-      expectedArrivalsService.getArrival.mockResolvedValue({ gender: GenderKeys.NOT_KNOWN } as Movement)
-      return request(app)
-        .get('/prisoners/12345-67890/sex')
-        .expect(200)
-        .expect('Content-Type', 'text/html; charset=utf-8')
-        .expect(res => {
-          const $ = cheerio.load(res.text)
-          expect($('h1').text()).toContain('What is their sex?')
-        })
-    })
+    it.each([{ gender: GenderKeys.NOT_KNOWN }, { gender: undefined }])(
+      'should render /sex page when Arrival gender is not MALE or FEMALE',
+      ({ gender }) => {
+        expectedArrivalsService.getArrival.mockResolvedValue({ gender } as Movement)
+        return request(app)
+          .get('/prisoners/12345-67890/sex')
+          .expect(200)
+          .expect('Content-Type', 'text/html; charset=utf-8')
+          .expect(res => {
+            const $ = cheerio.load(res.text)
+            expect($('h1').text()).toContain('What is their sex?')
+          })
+      }
+    )
 
-    it('should render /imprisonment-status page when Arrival gender is MALE', () => {
-      expectedArrivalsService.getArrival.mockResolvedValue({ gender: GenderKeys.MALE } as Movement)
-      return request(app)
-        .get('/prisoners/12345-67890/sex')
-        .expect(302)
-        .expect('Content-Type', 'text/plain; charset=utf-8')
-        .expect(res => {
-          expect(res.text).toContain('Found. Redirecting to /prisoners/12345-67890/imprisonment-status')
-        })
-    })
-
-    it('should render /imprisonment-status page when Arrival gender is FEMALE', () => {
-      expectedArrivalsService.getArrival.mockResolvedValue({ gender: GenderKeys.FEMALE } as Movement)
-      return request(app)
-        .get('/prisoners/12345-67890/sex')
-        .expect(302)
-        .expect('Content-Type', 'text/plain; charset=utf-8')
-        .expect(res => {
-          expect(res.text).toContain('Found. Redirecting to /prisoners/12345-67890/imprisonment-status')
-        })
-    })
+    it.each([{ gender: GenderKeys.MALE }, { gender: GenderKeys.FEMALE }])(
+      'should render /imprisonment-status page when Arrival gender is MALE or FEMALE',
+      ({ gender }) => {
+        expectedArrivalsService.getArrival.mockResolvedValue({ gender } as Movement)
+        return request(app)
+          .get('/prisoners/12345-67890/sex')
+          .expect(302)
+          .expect('Content-Type', 'text/plain; charset=utf-8')
+          .expect(res => {
+            expect(res.text).toContain('Found. Redirecting to /prisoners/12345-67890/imprisonment-status')
+          })
+      }
+    )
   })
 
   describe('assignSex()', () => {
@@ -105,7 +100,7 @@ describe('/sex', () => {
 
     it('should redirect to /imprisonment-status', () => {
       return request(app)
-        .post('/prisoners/12345-67890/imprisonment-status')
+        .post('/prisoners/12345-67890/sex')
         .send({ sex: 'M' })
         .expect(302)
         .expect('Location', '/prisoners/12345-67890/imprisonment-status')

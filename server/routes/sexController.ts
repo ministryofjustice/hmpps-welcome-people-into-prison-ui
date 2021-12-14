@@ -41,8 +41,8 @@ export default class SexController {
   }
 
   private convertGenderKeyToValue(value: string): string {
-    if (value.toUpperCase() === 'MALE') return 'M'
-    if (value.toUpperCase() === 'FEMALE') return 'F'
+    if (value?.toUpperCase() === 'MALE') return 'M'
+    if (value?.toUpperCase() === 'FEMALE') return 'F'
     return null
   }
 }
