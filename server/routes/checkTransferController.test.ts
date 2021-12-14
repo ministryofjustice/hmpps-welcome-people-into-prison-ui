@@ -6,6 +6,7 @@ import TransfersService from '../services/transfersService'
 import raiseAnalyticsEvent from '../raiseAnalyticsEvent'
 
 import Role from '../authentication/role'
+import config from '../config'
 
 jest.mock('../services/transfersService')
 const transfersService = new TransfersService(null, null) as jest.Mocked<TransfersService>
@@ -26,6 +27,7 @@ const transfer = {
 
 beforeEach(() => {
   app = appWithAllRoutes({ services: { transfersService }, flash, roles: [Role.PRISON_RECEPTION] })
+  config.confirmEnabled = true
   transfersService.getTransfer.mockResolvedValue(transfer)
 })
 

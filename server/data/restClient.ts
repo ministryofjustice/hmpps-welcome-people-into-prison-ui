@@ -113,7 +113,7 @@ export default class RestClient {
         .set(headers)
         .end((error, response) => {
           if (error) {
-            logger.warn(sanitiseError(error), `Error calling ${this.name}`)
+            logger.warn(sanitiseError(error), `Error calling ${this.name}, streaming path: ${path}`)
             reject(error)
           } else if (response) {
             const s = new Readable()

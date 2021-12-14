@@ -29,6 +29,7 @@ beforeEach(() => {
     roles: [Role.PRISON_RECEPTION],
   })
   config.session.secret = 'sdksdfkdfs'
+  config.confirmEnabled = true
   expectedArrivalsService.getArrival.mockResolvedValue({
     firstName: 'Jim',
     lastName: 'Smith',
