@@ -18,15 +18,17 @@
                         "data-qa": "choose-prisoner"
                     }) }}
                 </li>
-                <li class="govuk-grid-column-one-third card-group__item">
-                    {{ card({
-                        "href": '/confirm-arrival/return-from-temporary-absence',
-                        "clickable": "true",
-                        "heading": 'Prisoners returning from temporary absence',
-                        "description": 'Confirm the return of prisoners out on temporary absence.',
-                        "data-qa": "return-from-temporary-absence"
-                    }) }}
-                </li>
+                {% if temporaryAbsencesEnabled %}
+                    <li class="govuk-grid-column-one-third card-group__item">
+                        {{ card({
+                            "href": '/confirm-arrival/return-from-temporary-absence',
+                            "clickable": "true",
+                            "heading": 'Prisoners returning from temporary absence',
+                            "description": 'Confirm the return of prisoners out on temporary absence.',
+                            "data-qa": "return-from-temporary-absence"
+                        }) }}
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>

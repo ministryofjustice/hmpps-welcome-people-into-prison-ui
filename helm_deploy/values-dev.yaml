@@ -21,6 +21,7 @@ generic-service:
     SYSTEM_PHASE: DEV
     ENABLED_PRISONS: NMI,MDI
     CONFIRM_ENABLED: 'true'
+    TEMPORARY_ABSENCE_ENABLED: 'true'
 
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service-dev
