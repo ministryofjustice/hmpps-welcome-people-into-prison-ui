@@ -94,4 +94,16 @@ export default {
       isCurrentPrisoner: false,
     },
   },
+  withFemaleGender: {
+    id: '00000-123456',
+    firstName: 'Steve',
+    lastName: 'Smith',
+    dateOfBirth: '1985-05-05',
+    prisonNumber: 'G0015GF',
+    pncNumber: '01/5568B',
+    date: '2021-09-01',
+    fromLocation: 'Manchester',
+    fromLocationType: 'OTHER',
+    gender: 'FEMALE',
+  },
 }
