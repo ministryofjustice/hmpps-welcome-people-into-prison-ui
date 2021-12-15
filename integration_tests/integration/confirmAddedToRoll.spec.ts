@@ -7,6 +7,7 @@ import ChoosePrisonerPage from '../pages/choosePrisoner'
 import Role from '../../server/authentication/role'
 
 import expectedArrivals from '../mockApis/responses/expectedArrivals'
+import SexPage from '../pages/sexPage'
 
 const expectedArrival = expectedArrivals.court.notCurrent
 
@@ -28,6 +29,10 @@ context('Confirm Added To Roll', () => {
     cy.signIn()
     const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
     confirmArrivalPage.continue().click()
+
+    const sexPage = SexPage.goTo(expectedArrival.id) as SexPage
+    sexPage.sexRadioButtons('F').click()
+    sexPage.continue().click()
 
     const imprisonmentStatusPage = ImprisonmentStatusPage.goTo(expectedArrival.id)
     imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()

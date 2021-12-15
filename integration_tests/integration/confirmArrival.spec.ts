@@ -24,7 +24,7 @@ context('Confirm Arrival', () => {
     confirmArrivalPage.dob().should('contain.text', '1 February 1970')
     confirmArrivalPage.prisonNumber().should('contain.text', 'G0014GM')
     confirmArrivalPage.pncNumber().should('contain.text', '01/4567A')
-    confirmArrivalPage.continue().should('have.attr', 'href', `/prisoners/${expectedArrival.id}/imprisonment-status`)
+    confirmArrivalPage.continue().should('have.attr', 'href', `/prisoners/${expectedArrival.id}/sex`)
     confirmArrivalPage.prisonerImage().should('have.attr', 'src', `/prisoner/${expectedArrival.prisonNumber}/image`)
   })
 

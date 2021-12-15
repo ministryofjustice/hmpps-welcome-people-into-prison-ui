@@ -4,8 +4,9 @@ import MovementReasonsPage from '../pages/movementReasons'
 import CheckAnswersPage from '../pages/checkAnswers'
 import Role from '../../server/authentication/role'
 import expectedArrivals from '../mockApis/responses/expectedArrivals'
+import SexPage from '../pages/sexPage'
 
-const expectedArrival = expectedArrivals.court.notCurrent
+const expectedArrival = expectedArrivals.withFemaleGender
 
 context('Imprisonment status', () => {
   beforeEach(() => {
@@ -20,13 +21,13 @@ context('Imprisonment status', () => {
 
   it("Should display prisoner's name", () => {
     cy.signIn()
-    const imprisonmentStatusPage = ImprisonmentStatusPage.goTo(expectedArrival.id)
-    imprisonmentStatusPage.prisonerName().should('contain.text', 'Sam Smith')
+    const imprisonmentStatusPage = SexPage.goTo(expectedArrival.id, true) as ImprisonmentStatusPage
+    imprisonmentStatusPage.prisonerName().should('contain.text', 'Steve Smith')
   })
 
   it('Selecting an option with a single movement reason takes user straight through to check answers', () => {
     cy.signIn()
-    const imprisonmentStatusPage = ImprisonmentStatusPage.goTo(expectedArrival.id)
+    const imprisonmentStatusPage = SexPage.goTo(expectedArrival.id, true) as ImprisonmentStatusPage
     imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()
     imprisonmentStatusPage.continue().click()
     Page.verifyOnPage(CheckAnswersPage)
