@@ -30,11 +30,7 @@ context('Confirm Added To Roll', () => {
     const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
     confirmArrivalPage.continue().click()
 
-    const sexPage = SexPage.goTo(expectedArrival.id) as SexPage
-    sexPage.sexRadioButtons('F').click()
-    sexPage.continue().click()
-
-    const imprisonmentStatusPage = ImprisonmentStatusPage.goTo(expectedArrival.id)
+    const imprisonmentStatusPage = SexPage.goToWithRedirect(expectedArrival.id)
     imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()
     imprisonmentStatusPage.continue().click()
 

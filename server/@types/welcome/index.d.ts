@@ -19,9 +19,6 @@ declare module 'welcome' {
   export const enum GenderKeys {
     FEMALE = 'FEMALE',
     MALE = 'MALE',
-    NOT_KNOWN = 'NOT_KNOWN',
-    NOT_SPECIFIED = 'NOT_SPECIFIED',
-    REFUSED = 'REFUSED',
   }
 
   export interface schemas {

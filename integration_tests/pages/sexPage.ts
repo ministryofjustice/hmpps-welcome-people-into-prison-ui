@@ -6,9 +6,14 @@ export default class SexPage extends Page {
     super('What is their sex?')
   }
 
-  static goTo(id: string, expectRedirect = false): SexPage | ImprisonmentStatusPage {
+  static goTo(id: string): SexPage {
     cy.visit(`/prisoners/${id}/sex`)
-    return expectRedirect ? Page.verifyOnPage(ImprisonmentStatusPage) : Page.verifyOnPage(SexPage)
+    return Page.verifyOnPage(SexPage)
+  }
+
+  static goToWithRedirect(id: string): ImprisonmentStatusPage {
+    cy.visit(`/prisoners/${id}/sex`)
+    return Page.verifyOnPage(ImprisonmentStatusPage)
   }
 
   errorSummaryTitle = (): PageElement => cy.get('#error-summary-title')

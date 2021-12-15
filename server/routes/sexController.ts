@@ -14,7 +14,7 @@ export default class SexController {
       const genderValue = this.convertGenderKeyToValue(data.gender)
 
       if (genderValue) {
-        setSex(res, this.convertGenderKeyToValue(data.gender))
+        setSex(res, genderValue)
         return res.redirect(`/prisoners/${id}/imprisonment-status`)
       }
 

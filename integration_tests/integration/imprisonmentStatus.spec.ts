@@ -21,13 +21,13 @@ context('Imprisonment status', () => {
 
   it("Should display prisoner's name", () => {
     cy.signIn()
-    const imprisonmentStatusPage = SexPage.goTo(expectedArrival.id, true) as ImprisonmentStatusPage
+    const imprisonmentStatusPage = SexPage.goToWithRedirect(expectedArrival.id)
     imprisonmentStatusPage.prisonerName().should('contain.text', 'Steve Smith')
   })
 
   it('Selecting an option with a single movement reason takes user straight through to check answers', () => {
     cy.signIn()
-    const imprisonmentStatusPage = SexPage.goTo(expectedArrival.id, true) as ImprisonmentStatusPage
+    const imprisonmentStatusPage = SexPage.goToWithRedirect(expectedArrival.id)
     imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()
     imprisonmentStatusPage.continue().click()
     Page.verifyOnPage(CheckAnswersPage)

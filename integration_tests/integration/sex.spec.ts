@@ -26,7 +26,7 @@ context('Sex', () => {
 
   it('Selecting Male or Female takes user to /imprisonment-status page', () => {
     cy.signIn()
-    const sexPage = SexPage.goTo(expectedArrival.id) as SexPage
+    const sexPage = SexPage.goTo(expectedArrival.id)
     sexPage.sexRadioButtons('M')
     sexPage.continue().click()
     Page.verifyOnPage(ImprisonmentStatusPage)
@@ -35,12 +35,12 @@ context('Sex', () => {
   it('If Arrival provided by API has gender of MALE or FEMALE, automatically redirects to /imprisonment-status page', () => {
     cy.signIn()
     cy.task('stubExpectedArrival', expectedArrivalWithMaleGender)
-    SexPage.goTo(expectedArrivalWithMaleGender.id, true) as ImprisonmentStatusPage
+    SexPage.goToWithRedirect(expectedArrivalWithMaleGender.id)
   })
 
   it('Should display validation error if no imprisonment status selected', () => {
     cy.signIn()
-    const sexPage = SexPage.goTo(expectedArrival.id) as SexPage
+    const sexPage = SexPage.goTo(expectedArrival.id)
     sexPage.continue().click()
     sexPage.errorSummaryTitle().contains('There is a problem')
     sexPage.errorSummaryBody().contains('Select a sex')

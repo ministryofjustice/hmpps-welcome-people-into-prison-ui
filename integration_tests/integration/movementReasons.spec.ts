@@ -27,7 +27,7 @@ context('Movement reasons', () => {
 
   it('Selecting an option takes user through to check answers', () => {
     cy.signIn()
-    SexPage.goTo(expectedArrival.id, true) as ImprisonmentStatusPage
+    SexPage.goToWithRedirect(expectedArrival.id)
     const movementReasonsPage = MovementReasonsPage.goTo(expectedArrival.id, 'civil-offence')
     movementReasonsPage.movementReasonRadioButton('C').click()
     movementReasonsPage.continue().click()
