@@ -8,7 +8,7 @@ import Role from '../../server/authentication/role'
 import expectedArrivals from '../mockApis/responses/expectedArrivals'
 import SexPage from '../pages/sexPage'
 
-const expectedArrival = expectedArrivals.court.notCurrent
+const expectedArrival = expectedArrivals.withFemaleGender
 
 context('Confirm Added To Roll', () => {
   beforeEach(() => {
@@ -37,9 +37,9 @@ context('Confirm Added To Roll', () => {
     cy.task('stubCreateOffenderRecordAndBooking', expectedArrival.id)
     checkAnswersPage.addToRoll().click()
     const confirmAddedToRollPage = Page.verifyOnPage(ConfirmAddedToRollPage)
-    confirmAddedToRollPage.confirmationBanner().should('contain.html', 'Sam Smith')
+    confirmAddedToRollPage.confirmationBanner().should('contain.html', 'Steve Smith')
     confirmAddedToRollPage.confirmationBanner().should('contain.html', 'A1234AB')
-    confirmAddedToRollPage.confirmationParagraph().should('contain.html', 'Sam Smith')
+    confirmAddedToRollPage.confirmationParagraph().should('contain.html', 'Steve Smith')
     confirmAddedToRollPage.confirmationParagraph().should('contain.html', 'Moorland (HMP &amp; YOI)')
     confirmAddedToRollPage
       .viewEstablishmentRoll()
