@@ -41,7 +41,7 @@ describe('/sex', () => {
       return request(app).get('/prisoners/12345-67890/sex').expect(302).expect('Location', '/autherror')
     })
 
-    it.each([{ gender: GenderKeys.NOT_KNOWN }, { gender: undefined }])(
+    it.each([{ gender: 'blas' as GenderKeys }, { gender: undefined }])(
       'should render /sex page when Arrival gender is not MALE or FEMALE',
       ({ gender }) => {
         expectedArrivalsService.getArrival.mockResolvedValue({ gender } as Movement)

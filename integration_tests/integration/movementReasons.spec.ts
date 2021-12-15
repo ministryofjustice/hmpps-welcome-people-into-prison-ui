@@ -4,7 +4,6 @@ import CheckAnswersPage from '../pages/checkAnswers'
 import Role from '../../server/authentication/role'
 import expectedArrivals from '../mockApis/responses/expectedArrivals'
 import SexPage from '../pages/sexPage'
-import ImprisonmentStatusPage from '../pages/imprisonmentStatus'
 
 context('Movement reasons', () => {
   const expectedArrival = expectedArrivals.withFemaleGender

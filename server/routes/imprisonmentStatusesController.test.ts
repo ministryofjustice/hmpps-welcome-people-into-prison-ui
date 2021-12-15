@@ -5,7 +5,6 @@ import { ImprisonmentStatus } from 'welcome'
 import { appWithAllRoutes } from './testutils/appSetup'
 import ImprisonmentStatusesService from '../services/imprisonmentStatusesService'
 import ExpectedArrivalsService from '../services/expectedArrivalsService'
-import config from '../config'
 
 jest.mock('../services/imprisonmentStatusesService')
 jest.mock('../services/expectedArrivalsService')

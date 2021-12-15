@@ -1,6 +1,5 @@
 import Page from '../pages/page'
 import ConfirmArrivalPage from '../pages/confirmArrival'
-import ImprisonmentStatusPage from '../pages/imprisonmentStatus'
 import CheckAnswersPage from '../pages/checkAnswers'
 import ConfirmAddedToRollPage from '../pages/confirmAddedToRoll'
 import ChoosePrisonerPage from '../pages/choosePrisoner'
