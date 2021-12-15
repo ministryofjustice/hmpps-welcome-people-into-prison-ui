@@ -29,11 +29,12 @@ export default class CheckAnswersController {
       const { username, activeCaseLoadId } = res.locals.user
       const data = await this.expectedArrivalsService.getArrival(id)
       const statusAndReason = getImprisonmentStatus(req)
+      const sex = getSex(req) as Gender
       const newOffender = {
         firstName: data.firstName,
         lastName: data.lastName,
         dateOfBirth: data.dateOfBirth,
-        gender: Gender.NOT_SPECIFIED,
+        gender: sex,
         prisonId: activeCaseLoadId,
         imprisonmentStatus: statusAndReason.imprisonmentStatus,
         movementReasonCode: statusAndReason.movementReasonCode,
