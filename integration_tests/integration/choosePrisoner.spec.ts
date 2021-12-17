@@ -40,7 +40,7 @@ context('Choose Prisoner', () => {
     choosePrisonerPage.expectedArrivalsFromAnotherEstablishment(1).should('contain.text', 'Offender, Karl')
   })
 
-  it.only('Should handle prison numbers and PNC numbers both present and unavailable', () => {
+  it('Should handle prison numbers and PNC numbers both present and unavailable', () => {
     cy.signIn()
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage.prisonNumber(1, 'COURT').should('contain.text', 'G0013AB')
