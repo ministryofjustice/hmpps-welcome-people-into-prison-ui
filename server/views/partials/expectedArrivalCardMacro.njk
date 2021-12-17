@@ -10,7 +10,7 @@
                 />
             </aside>
             <div class="app-card__content">
-                <header class="app-card__header govuk-!-margin-bottom-4">
+                <header class="app-card__header">
                     <h2 class="app-card__title" data-qa="{{moveType}}-title-{{loopIndex}}">
                         {% if user.isReceptionUser %}
                             {% if arrival.fromLocationType === 'COURT' and not arrival.isCurrentPrisoner %}
@@ -29,7 +29,6 @@
                             {{ arrival.lastName }}, {{ arrival.firstName }}
                         {%  endif %}
                     </h2>
-                    <span class="govuk-body">{{ arrival.prisonNumber | default('No prison number found') }}</span>
                 </header>
                 <dl class="app-card__meta-list">
                     <div class="app-card__meta-list-item">
@@ -48,6 +47,26 @@
                             {{ arrival.fromLocation }}
                         </dd>
                     </div>
+                    {% if arrival.prisonNumber %}
+                        <div class="app-card__meta-list-item">
+                            <dt class="app-card__meta-list-key">
+                                Prison number
+                            </dt>
+                            <dd class="app-card__meta-list-value" data-qa="{{moveType}}-prison-number-{{loopIndex}}">
+                                {{ arrival.prisonNumber }}
+                            </dd>
+                        </div>
+                    {%  endif %}
+                    {% if arrival.pncNumber %}
+                        <div class="app-card__meta-list-item">
+                            <dt class="app-card__meta-list-key">
+                                PNC number
+                            </dt>
+                            <dd class="app-card__meta-list-value" data-qa="{{moveType}}-pnc-number-{{loopIndex}}">
+                                {{ arrival.pncNumber }}
+                            </dd>
+                        </div>
+                    {%  endif %}
                 </dl>
             </div>
         </div>

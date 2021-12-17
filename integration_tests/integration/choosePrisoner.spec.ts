@@ -40,6 +40,19 @@ context('Choose Prisoner', () => {
     choosePrisonerPage.expectedArrivalsFromAnotherEstablishment(1).should('contain.text', 'Offender, Karl')
   })
 
+  it.only('Should handle prison numbers and PNC numbers both present and unavailable', () => {
+    cy.signIn()
+    const choosePrisonerPage = ChoosePrisonerPage.goTo()
+    choosePrisonerPage.prisonNumber(1, 'COURT').should('contain.text', 'G0013AB')
+    choosePrisonerPage.pncNumber(1, 'COURT').should('contain.text', '01/3456A')
+
+    choosePrisonerPage.pncNumber(3, 'COURT').should('contain.text', '01/3456A')
+    choosePrisonerPage.prisonNumber(3, 'COURT').should('not.exist')
+
+    choosePrisonerPage.prisonNumber(1, 'CUSTODY_SUITE').should('contain.text', 'G0016GD')
+    choosePrisonerPage.pncNumber(1, 'CUSTODY_SUITE').should('not.exist')
+  })
+
   it('Should handle no expected arrivals', () => {
     cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [] })
     cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [] })
@@ -97,6 +110,7 @@ context('Choose Prisoner', () => {
         expect(altText).equal('Smith, Sam')
       })
   })
+
   it('A user will see placeholder image as there is no prisoner number', () => {
     cy.signIn()
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
