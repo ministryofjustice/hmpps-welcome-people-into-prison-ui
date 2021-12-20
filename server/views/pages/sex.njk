@@ -1,4 +1,6 @@
 {% extends "../partials/layout.njk" %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
 
 {% set pageTitle = "What is their sex?" %}
 
@@ -17,6 +19,12 @@
             <span class="govuk-caption-xl"
                   data-qa="prisoner-name">Confirm arrival of {{ data.firstName }} {{ data.lastName }}</span>
 
+            {% if data.gender === 'TRANS' %}
+                {{ govukInsetText({
+                    text:  data.firstName + " " + data.lastName + " was identified as transgender on their Person Escort Record. Their registered sex at birth is required to confirm their arrival into this establishment."
+                }) }}
+            {% endif %}
+
             <form method="post" action="/prisoners/{{ data.id }}/sex">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
@@ -28,6 +36,9 @@
                             isPageHeading: true,
                             classes: "govuk-fieldset__legend--l"
                         }
+                    },
+                    hint: {
+                        text: "This is the sex recorded on the person's birth certificate or Gender Recognition Certificate."
                     },
                     items: [
                         {
@@ -41,6 +52,7 @@
                     ],
                     errorMessage: errors | findError("sex")
                 }) }}
+
 
                 {{ govukButton({
                     text: "Continue",
