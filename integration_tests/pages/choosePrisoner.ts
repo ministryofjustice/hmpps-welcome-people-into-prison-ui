@@ -25,6 +25,11 @@ export default class ChoosePrisonerPage extends Page {
 
   prisonerImage = (index: number): PageElement => cy.get(`[data-qa=prisoner-image]`).eq(index)
 
+  prisonNumber = (index: number, moveType: string): PageElement =>
+    cy.get(`[data-qa=${moveType}-prison-number-${index}]`)
+
+  pncNumber = (index: number, moveType: string): PageElement => cy.get(`[data-qa=${moveType}-pnc-number-${index}]`)
+
   arrivalFrom =
     (arrivalFromType: 'COURT' | 'PRISON' | 'CUSTODY_SUITE') =>
     (row: number): Record<string, () => PageElement> => ({
