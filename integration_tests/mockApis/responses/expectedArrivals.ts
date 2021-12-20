@@ -37,7 +37,7 @@ export default {
       lastName: 'Prisoner',
       dateOfBirth: '1985-01-05',
       prisonNumber: 'G0016GD',
-      pncNumber: '01/6789A',
+      pncNumber: null,
       date: '2021-09-01',
       fromLocation: 'Coventry',
       fromLocationType: 'CUSTODY_SUITE',
