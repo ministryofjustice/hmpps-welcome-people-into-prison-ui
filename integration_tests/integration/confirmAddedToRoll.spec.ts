@@ -6,7 +6,7 @@ import ChoosePrisonerPage from '../pages/choosePrisoner'
 import Role from '../../server/authentication/role'
 
 import expectedArrivals from '../mockApis/responses/expectedArrivals'
-import SexPage from '../pages/sexPage'
+import ImprisonmentStatusPage from '../pages/imprisonmentStatus'
 
 const expectedArrival = expectedArrivals.withFemaleGender
 
@@ -29,7 +29,7 @@ context('Confirm Added To Roll', () => {
     const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
     confirmArrivalPage.continue().click()
 
-    const imprisonmentStatusPage = SexPage.goToWithRedirect(expectedArrival.id)
+    const imprisonmentStatusPage = Page.verifyOnPage(ImprisonmentStatusPage)
     imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()
     imprisonmentStatusPage.continue().click()
 

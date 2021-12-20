@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express'
 import ExpectedArrivalsService from '../services/expectedArrivalsService'
-import { clearImprisonmentStatus } from './state'
+import { clearImprisonmentStatus, clearSex } from './state'
 
 export default class ConfirmArrivalController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
@@ -10,6 +10,7 @@ export default class ConfirmArrivalController {
       const { id } = req.params
       const data = await this.expectedArrivalsService.getArrival(id)
       clearImprisonmentStatus(res)
+      clearSex(res)
       res.render('pages/confirmArrival.njk', { data })
     }
   }

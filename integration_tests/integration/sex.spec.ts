@@ -1,5 +1,3 @@
-import Page from '../pages/page'
-import ImprisonmentStatusPage from '../pages/imprisonmentStatus'
 import Role from '../../server/authentication/role'
 import expectedArrivals from '../mockApis/responses/expectedArrivals'
 import SexPage from '../pages/sexPage'
@@ -16,20 +14,6 @@ context('Sex', () => {
     cy.task('stubUserCaseLoads')
     cy.task('stubExpectedArrival', expectedArrival)
     cy.task('stubImprisonmentStatus')
-  })
-
-  it("Should display prisoner's name", () => {
-    cy.signIn()
-    const sexPage = SexPage.goTo(expectedArrival.id)
-    sexPage.prisonerName().should('contain.text', 'Sam Smith')
-  })
-
-  it('Selecting Male or Female takes user to /imprisonment-status page', () => {
-    cy.signIn()
-    const sexPage = SexPage.goTo(expectedArrival.id)
-    sexPage.sexRadioButtons('M')
-    sexPage.continue().click()
-    Page.verifyOnPage(ImprisonmentStatusPage)
   })
 
   it('If Arrival provided by API has gender of MALE or FEMALE, automatically redirects to /imprisonment-status page', () => {

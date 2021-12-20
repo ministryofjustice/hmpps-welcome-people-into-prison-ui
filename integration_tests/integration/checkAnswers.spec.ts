@@ -26,7 +26,7 @@ context('Check Answers', () => {
     const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
     confirmArrivalPage.continue().click()
 
-    const sexPage = SexPage.goTo(expectedArrival.id)
+    const sexPage = Page.verifyOnPage(SexPage)
     sexPage.sexRadioButtons('F').click()
     sexPage.continue().click()
 
@@ -56,7 +56,7 @@ context('Check Answers', () => {
     const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
     confirmArrivalPage.continue().click()
 
-    const sexPage = SexPage.goTo(expectedArrival.id)
+    const sexPage = Page.verifyOnPage(SexPage)
     sexPage.sexRadioButtons('M').click()
     sexPage.continue().click()
 
