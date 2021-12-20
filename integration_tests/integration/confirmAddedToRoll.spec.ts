@@ -1,14 +1,14 @@
 import Page from '../pages/page'
 import ConfirmArrivalPage from '../pages/confirmArrival'
-import ImprisonmentStatusPage from '../pages/imprisonmentStatus'
 import CheckAnswersPage from '../pages/checkAnswers'
 import ConfirmAddedToRollPage from '../pages/confirmAddedToRoll'
 import ChoosePrisonerPage from '../pages/choosePrisoner'
 import Role from '../../server/authentication/role'
 
 import expectedArrivals from '../mockApis/responses/expectedArrivals'
+import ImprisonmentStatusPage from '../pages/imprisonmentStatus'
 
-const expectedArrival = expectedArrivals.court.notCurrent
+const expectedArrival = expectedArrivals.withFemaleGender
 
 context('Confirm Added To Roll', () => {
   beforeEach(() => {
@@ -29,7 +29,7 @@ context('Confirm Added To Roll', () => {
     const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
     confirmArrivalPage.continue().click()
 
-    const imprisonmentStatusPage = ImprisonmentStatusPage.goTo(expectedArrival.id)
+    const imprisonmentStatusPage = Page.verifyOnPage(ImprisonmentStatusPage)
     imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()
     imprisonmentStatusPage.continue().click()
 
@@ -37,9 +37,9 @@ context('Confirm Added To Roll', () => {
     cy.task('stubCreateOffenderRecordAndBooking', expectedArrival.id)
     checkAnswersPage.addToRoll().click()
     const confirmAddedToRollPage = Page.verifyOnPage(ConfirmAddedToRollPage)
-    confirmAddedToRollPage.confirmationBanner().should('contain.html', 'Sam Smith')
+    confirmAddedToRollPage.confirmationBanner().should('contain.html', 'Steve Smith')
     confirmAddedToRollPage.confirmationBanner().should('contain.html', 'A1234AB')
-    confirmAddedToRollPage.confirmationParagraph().should('contain.html', 'Sam Smith')
+    confirmAddedToRollPage.confirmationParagraph().should('contain.html', 'Steve Smith')
     confirmAddedToRollPage.confirmationParagraph().should('contain.html', 'Moorland (HMP &amp; YOI)')
     confirmAddedToRollPage
       .viewEstablishmentRoll()

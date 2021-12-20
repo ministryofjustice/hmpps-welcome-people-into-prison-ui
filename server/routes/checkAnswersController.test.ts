@@ -1,5 +1,4 @@
 import type { Express } from 'express'
-import moment from 'moment'
 import { Gender, NewOffenderBooking } from 'welcome'
 import request from 'supertest'
 import cheerio from 'cheerio'
@@ -27,6 +26,14 @@ beforeEach(() => {
     services: { expectedArrivalsService, imprisonmentStatusesService },
     flash,
     roles: [Role.PRISON_RECEPTION],
+    signedCookies: {
+      sex: { data: 'M' },
+      'status-and-reason': {
+        code: 'determinate-sentence',
+        imprisonmentStatus: 'SENT',
+        movementReasonCode: '26',
+      },
+    },
   })
   config.session.secret = 'sdksdfkdfs'
   config.confirmEnabled = true
@@ -52,8 +59,6 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-const hourFromNow = moment().add(1, 'hour').format('ddd, D MMM yyyy HH:mm:ss [GMT]').toString()
-
 describe('/checkAnswers', () => {
   describe('view()', () => {
     it('should redirect to authentication error page for non reception users', () => {
@@ -64,10 +69,7 @@ describe('/checkAnswers', () => {
     it('should get status and reason from cookie and call service methods correctly', () => {
       return request(app)
         .get('/prisoners/12345-67890/check-answers')
-        .set(
-          'cookie',
-          `status-and-reason=s%3Aj%3A%7B%22code%22%3A%22determinate-sentence%22%2C%22imprisonmentStatus%22%3A%22SENT%22%2C%22movementReasonCode%22%3A%2226%22%7D.QEx%2B2EcyCfMkSknBJwkaVswIBLsUTbGFLkXur2qN%2Fro; Max-Age=7200; Domain=localhost; Path=/; Expires=${hourFromNow}; HttpOnly; SameSite=Lax`
-        )
+        .expect(200)
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
@@ -82,10 +84,7 @@ describe('/checkAnswers', () => {
     it('should render /check-answers page', () => {
       return request(app)
         .get('/prisoners/12345-67890/check-answers')
-        .set(
-          'cookie',
-          `status-and-reason=s%3Aj%3A%7B%22code%22%3A%22determinate-sentence%22%2C%22imprisonmentStatus%22%3A%22SENT%22%2C%22movementReasonCode%22%3A%2226%22%7D.QEx%2B2EcyCfMkSknBJwkaVswIBLsUTbGFLkXur2qN%2Fro; Max-Age=7200; Domain=localhost; Path=/; Expires=${hourFromNow}; HttpOnly; SameSite=Lax`
-        )
+        .expect(200)
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           const $ = cheerio.load(res.text)
@@ -99,7 +98,7 @@ describe('/checkAnswers', () => {
       firstName: 'Jim',
       lastName: 'Smith',
       dateOfBirth: '1973-01-08',
-      gender: Gender.NOT_SPECIFIED,
+      gender: Gender.MALE,
       prisonId: 'MDI',
       imprisonmentStatus: 'SENT',
       movementReasonCode: '26',
@@ -117,10 +116,6 @@ describe('/checkAnswers', () => {
     it('should call service methods correctly', () => {
       return request(app)
         .post('/prisoners/12345-67890/check-answers')
-        .set(
-          'cookie',
-          `status-and-reason=s%3Aj%3A%7B%22code%22%3A%22determinate-sentence%22%2C%22imprisonmentStatus%22%3A%22SENT%22%2C%22movementReasonCode%22%3A%2226%22%7D.QEx%2B2EcyCfMkSknBJwkaVswIBLsUTbGFLkXur2qN%2Fro; Max-Age=7200; Domain=localhost; Path=/; Expires=${hourFromNow}; HttpOnly; SameSite=Lax`
-        )
         .send(newOffender)
         .expect(302)
         .expect(() => {
@@ -136,10 +131,6 @@ describe('/checkAnswers', () => {
     it('should redirect to /confirmation page, store offenderNumber in flash and raise analytics event', () => {
       return request(app)
         .post('/prisoners/12345-67890/check-answers')
-        .set(
-          'cookie',
-          `status-and-reason=s%3Aj%3A%7B%22code%22%3A%22determinate-sentence%22%2C%22imprisonmentStatus%22%3A%22SENT%22%2C%22movementReasonCode%22%3A%2226%22%7D.QEx%2B2EcyCfMkSknBJwkaVswIBLsUTbGFLkXur2qN%2Fro; Max-Age=7200; Domain=localhost; Path=/; Expires=${hourFromNow}; HttpOnly; SameSite=Lax`
-        )
         .send(newOffender)
         .expect(302)
         .expect('Location', '/prisoners/12345-67890/confirmation')

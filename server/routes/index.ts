@@ -11,13 +11,15 @@ import MovementReasonsController from './movementReasonsController'
 import imprisonmentStatusesValidation from '../middleware/validation/imprisonmentStatusesValidation'
 import movementReasonsValidation from '../middleware/validation/movementReasonsValidation'
 import validationMiddleware from '../middleware/validationMiddleware'
-import { ensureImprisonmentStatusPresentMiddleware } from './state'
+import { ensureImprisonmentStatusPresentMiddleware, ensureSexPresentMiddleware } from './state'
 
 import authorisationForUrlMiddleware from '../middleware/authorisationForUrlMiddleware'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import { Services } from '../services'
 import TemporaryAbsencesController from './temporaryAbsencesController'
 import Role from '../authentication/role'
+import SexController from './sexController'
+import sexValidation from '../middleware/validation/sexValidation'
 import redirectIfDisabledMiddleware from '../middleware/redirectIfDisabledMiddleware'
 import config from '../config'
 
@@ -25,6 +27,7 @@ export default function routes(services: Services): Router {
   const router = express.Router()
 
   const checkImprisonmentStatusPresent = ensureImprisonmentStatusPresentMiddleware('/confirm-arrival/choose-prisoner')
+  const checkSexPresent = ensureSexPresentMiddleware('/confirm-arrival/choose-prisoner')
 
   const get = (path: string, handlers: RequestHandler[], authorisedRoles?: Role[]) =>
     router.get(
@@ -77,6 +80,10 @@ export default function routes(services: Services): Router {
     [Role.PRISON_RECEPTION]
   )
 
+  const sexController = new SexController(services.expectedArrivalsService)
+  get('/prisoners/:id/sex', [sexController.view()], [Role.PRISON_RECEPTION])
+  post('/prisoners/:id/sex', [validationMiddleware(sexValidation), sexController.assignSex()], [Role.PRISON_RECEPTION])
+
   const imprisonmentStatusesController = new ImprisonmentStatusesController(
     services.imprisonmentStatusesService,
     services.expectedArrivalsService
@@ -104,6 +111,7 @@ export default function routes(services: Services): Router {
   get(
     '/prisoners/:id/check-answers',
     [
+      checkSexPresent,
       checkImprisonmentStatusPresent,
       redirectIfDisabledMiddleware(config.confirmEnabled),
       checkAnswersController.view(),
@@ -113,6 +121,7 @@ export default function routes(services: Services): Router {
   post(
     '/prisoners/:id/check-answers',
     [
+      checkSexPresent,
       checkImprisonmentStatusPresent,
       redirectIfDisabledMiddleware(config.confirmEnabled),
       checkAnswersController.addToRoll(),

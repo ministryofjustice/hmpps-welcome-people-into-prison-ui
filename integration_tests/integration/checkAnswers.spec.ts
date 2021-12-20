@@ -5,6 +5,7 @@ import CheckAnswersPage from '../pages/checkAnswers'
 import ConfirmAddedToRollPage from '../pages/confirmAddedToRoll'
 import Role from '../../server/authentication/role'
 import expectedArrivals from '../mockApis/responses/expectedArrivals'
+import SexPage from '../pages/sexPage'
 
 const expectedArrival = expectedArrivals.court.notCurrent
 
@@ -25,6 +26,10 @@ context('Check Answers', () => {
     const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
     confirmArrivalPage.continue().click()
 
+    const sexPage = Page.verifyOnPage(SexPage)
+    sexPage.sexRadioButtons('F').click()
+    sexPage.continue().click()
+
     const imprisonmentStatusPage = ImprisonmentStatusPage.goTo(expectedArrival.id)
     imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()
     imprisonmentStatusPage.continue().click()
@@ -35,6 +40,7 @@ context('Check Answers', () => {
     checkAnswersPage.dob().should('contain.text', '1 February 1970')
     checkAnswersPage.prisonNumber().should('contain.text', 'G0014GM')
     checkAnswersPage.pncNumber().should('contain.text', '01/4567A')
+    checkAnswersPage.sex().should('contain.text', 'Female')
     checkAnswersPage.reason().should('contain.text', 'On remand')
     cy.task('stubCreateOffenderRecordAndBooking', expectedArrival.id)
     checkAnswersPage.addToRoll().click()
@@ -49,6 +55,10 @@ context('Check Answers', () => {
     cy.signIn()
     const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
     confirmArrivalPage.continue().click()
+
+    const sexPage = Page.verifyOnPage(SexPage)
+    sexPage.sexRadioButtons('M').click()
+    sexPage.continue().click()
 
     const imprisonmentStatusPage = ImprisonmentStatusPage.goTo(expectedArrival.id)
     imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()

@@ -18,6 +18,8 @@ export default class CheckAnswersPage extends Page {
 
   pncNumber = (): PageElement => cy.get(`[data-qa=pnc-number]`)
 
+  sex = (): PageElement => cy.get(`[data-qa=sex]`)
+
   reason = (): PageElement => cy.get(`[data-qa=reason]`)
 
   addToRoll = (): PageElement => cy.get(`[data-qa=add-to-roll]`)

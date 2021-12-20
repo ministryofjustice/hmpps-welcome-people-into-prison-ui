@@ -16,6 +16,11 @@ declare module 'welcome' {
     REFUSED = 'REF',
   }
 
+  export const enum GenderKeys {
+    FEMALE = 'FEMALE',
+    MALE = 'MALE',
+  }
+
   export interface schemas {
     /** A movement into prison */
     Movement: {
@@ -28,6 +33,7 @@ declare module 'welcome' {
       date: string
       fromLocation: string
       fromLocationType: LocationType
+      gender?: GenderKeys
     }
     Transfer: {
       firstName: string

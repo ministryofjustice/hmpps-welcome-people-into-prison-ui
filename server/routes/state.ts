@@ -38,3 +38,30 @@ export const ensureImprisonmentStatusPresentMiddleware =
   (req: Request, res: Response, next: NextFunction) => {
     return isStatePresent(COOKIE_NAME)(req) ? next() : res.redirect(redirectUrl)
   }
+
+export const SexCodec: Codec<string> = {
+  write: (value: string): Record<string, string> => {
+    return {
+      data: value,
+    }
+  },
+
+  read(record: Record<string, unknown>): string {
+    assertHasStringValues(record, ['data'])
+    return record.data
+  },
+}
+
+const SEX_COOKIE_NAME = 'sex'
+
+export const clearSex = clearState('sex')
+
+export const setSex = (res: Response, data: string): void => setState(SEX_COOKIE_NAME, SexCodec)(res, data)
+
+export const getSex = (req: Request): string | undefined => getState(SEX_COOKIE_NAME, SexCodec)(req)
+
+export const ensureSexPresentMiddleware =
+  (redirectUrl: string): RequestHandler =>
+  (req: Request, res: Response, next: NextFunction) => {
+    return isStatePresent(SEX_COOKIE_NAME)(req) ? next() : res.redirect(redirectUrl)
+  }

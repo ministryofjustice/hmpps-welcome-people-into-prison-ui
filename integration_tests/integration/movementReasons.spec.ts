@@ -3,9 +3,10 @@ import MovementReasonsPage from '../pages/movementReasons'
 import CheckAnswersPage from '../pages/checkAnswers'
 import Role from '../../server/authentication/role'
 import expectedArrivals from '../mockApis/responses/expectedArrivals'
+import SexPage from '../pages/sexPage'
 
 context('Movement reasons', () => {
-  const expectedArrival = expectedArrivals.court.notCurrent
+  const expectedArrival = expectedArrivals.withFemaleGender
 
   beforeEach(() => {
     cy.task('reset')
@@ -20,11 +21,12 @@ context('Movement reasons', () => {
   it("Should display prisoner's name", () => {
     cy.signIn()
     const movementReasonsPage = MovementReasonsPage.goTo(expectedArrival.id, 'civil-offence')
-    movementReasonsPage.prisonerName().should('contain.text', 'Sam Smith')
+    movementReasonsPage.prisonerName().should('contain.text', 'Steve Smith')
   })
 
   it('Selecting an option takes user through to check answers', () => {
     cy.signIn()
+    SexPage.goToWithRedirect(expectedArrival.id)
     const movementReasonsPage = MovementReasonsPage.goTo(expectedArrival.id, 'civil-offence')
     movementReasonsPage.movementReasonRadioButton('C').click()
     movementReasonsPage.continue().click()

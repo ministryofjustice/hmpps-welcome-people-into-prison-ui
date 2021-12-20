@@ -1,4 +1,4 @@
-import { CookieOptions, Response, Request } from 'express'
+import { CookieOptions, Request, Response } from 'express'
 import config from '../config'
 
 export type Codec<T> = {
