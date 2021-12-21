@@ -18,6 +18,7 @@
 
             <span class="govuk-caption-xl"
                   data-qa="prisoner-name">Confirm arrival of {{ data.firstName }} {{ data.lastName }}</span>
+            <h1 class="govuk-fieldset__legend--l govuk-!-margin-0">{{ pageTitle }}</h1>
 
             {% if data.gender === 'TRANS' %}
                 {{ govukInsetText({
@@ -30,13 +31,6 @@
 
                 {{ govukRadios({
                     name: "sex",
-                    fieldset: {
-                        legend: {
-                            text: pageTitle,
-                            isPageHeading: true,
-                            classes: "govuk-fieldset__legend--l"
-                        }
-                    },
                     hint: {
                         text: "This is the sex recorded on the person's birth certificate or Gender Recognition Certificate."
                     },
