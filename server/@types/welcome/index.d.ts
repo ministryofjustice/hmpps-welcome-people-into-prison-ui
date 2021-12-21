@@ -19,6 +19,7 @@ declare module 'welcome' {
   export const enum GenderKeys {
     FEMALE = 'FEMALE',
     MALE = 'MALE',
+    TRANS = 'TRANS',
   }
 
   export interface schemas {

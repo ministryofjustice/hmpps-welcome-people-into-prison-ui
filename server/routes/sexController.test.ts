@@ -41,7 +41,7 @@ describe('/sex', () => {
       return request(app).get('/prisoners/12345-67890/sex').expect(302).expect('Location', '/autherror')
     })
 
-    it.each([{ gender: 'blas' as GenderKeys }, { gender: undefined }])(
+    it.each([{ gender: 'blas' as GenderKeys }, { gender: undefined }, { gender: GenderKeys.TRANS }])(
       'should render /sex page when Arrival gender is not MALE or FEMALE',
       ({ gender }) => {
         expectedArrivalsService.getArrival.mockResolvedValue({ gender } as Movement)
@@ -65,10 +65,32 @@ describe('/sex', () => {
           .expect(302)
           .expect('Content-Type', 'text/plain; charset=utf-8')
           .expect(res => {
+            const $ = cheerio.load(res.text)
             expect(res.text).toContain('Found. Redirecting to /prisoners/12345-67890/imprisonment-status')
+            expect($('.govuk-inset-text').text()).not.toContain(
+              'was identified as transgender on their Person Escort Record. Their registered sex at birth is required to confirm their arrival into this establishment.'
+            )
           })
       }
     )
+
+    it('contains additional hint for TRANS response', () => {
+      expectedArrivalsService.getArrival.mockResolvedValue({
+        gender: GenderKeys.TRANS,
+        firstName: 'john',
+        lastName: 'smith',
+      } as Movement)
+      return request(app)
+        .get('/prisoners/12345-67890/sex')
+        .expect(200)
+        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect(res => {
+          const $ = cheerio.load(res.text)
+          expect($('.govuk-inset-text').text()).toContain(
+            'john smith was identified as transgender on their Person Escort Record. Their registered sex at birth is required to confirm their arrival into this establishment.'
+          )
+        })
+    })
   })
 
   describe('assignSex()', () => {
