@@ -1,5 +1,5 @@
-import healthCheck from './healthCheck'
 import type { HealthCheckCallback, HealthCheckService } from './healthCheck'
+import healthCheck from './healthCheck'
 
 describe('Healthcheck', () => {
   it('Healthcheck reports healthy', done => {
@@ -36,22 +36,22 @@ describe('Healthcheck', () => {
 
 function successfulCheck(name: string): HealthCheckService {
   return () =>
-    new Promise((resolve, _reject) =>
+    new Promise((resolve, _reject) => {
       resolve({
         name: `${name}`,
         status: 'ok',
         message: 'some message',
       })
-    )
+    })
 }
 
 function erroredCheck(name: string): HealthCheckService {
   return () =>
-    new Promise((resolve, _reject) =>
+    new Promise((resolve, _reject) => {
       resolve({
         name: `${name}`,
         status: 'ERROR',
         message: 'some error',
       })
-    )
+    })
 }
