@@ -1,4 +1,4 @@
-# hmpps-template-typescript
+# hmpps-welcome-people-into-prison-ui
 Template github repo used for new Typescript based projects.
 
 # Instructions
