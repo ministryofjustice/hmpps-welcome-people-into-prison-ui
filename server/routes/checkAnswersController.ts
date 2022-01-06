@@ -24,7 +24,7 @@ export default class CheckAnswersController {
   }
 
   public addToRoll(): RequestHandler {
-    return async (req, res) => {
+    return async (req, res, next) => {
       const { id } = req.params
       const { username, activeCaseLoadId } = res.locals.user
       const data = await this.expectedArrivalsService.getArrival(id)
@@ -39,12 +39,16 @@ export default class CheckAnswersController {
         imprisonmentStatus: statusAndReason.imprisonmentStatus,
         movementReasonCode: statusAndReason.movementReasonCode,
       }
+      let offenderNumber
 
-      const offenderNumber = await this.expectedArrivalsService.createOffenderRecordAndBooking(
-        username,
-        id,
-        newOffender
-      )
+      try {
+        offenderNumber = await this.expectedArrivalsService.createOffenderRecordAndBooking(username, id, newOffender)
+      } catch (error) {
+        if (error.status >= 400 && error.status < 500) {
+          return res.redirect('/feature-not-available')
+        }
+        return next(error)
+      }
 
       raiseAnalyticsEvent(
         'Add to the establishment roll',
@@ -54,7 +58,7 @@ export default class CheckAnswersController {
       )
 
       req.flash('offenderNumber', offenderNumber.offenderNo)
-      res.redirect(`/prisoners/${id}/confirmation`)
+      return res.redirect(`/prisoners/${id}/confirmation`)
     }
   }
 }
