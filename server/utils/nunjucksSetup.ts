@@ -4,6 +4,7 @@ import moment from 'moment'
 import express from 'express'
 import * as pathModule from 'path'
 import config from '../config'
+import { convertToTitleCase } from './utils'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -46,6 +47,10 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     }
     const array = fullName.split(' ')
     return `${array[0][0]}. ${array.reverse()[0]}`
+  })
+
+  njkEnv.addFilter('formatName', (name: string) => {
+    return convertToTitleCase(name)
   })
 
   njkEnv.addFilter('formatDate', (value, format) => {

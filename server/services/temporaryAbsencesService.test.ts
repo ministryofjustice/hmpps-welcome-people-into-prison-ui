@@ -16,8 +16,8 @@ describe('Temporary absences service', () => {
   const WelcomeClientFactory = jest.fn()
 
   const temporaryAbsence: TemporaryAbsence = {
-    firstName: 'John',
-    lastName: 'Doe',
+    firstName: 'JOHN',
+    lastName: 'DOE',
     dateOfBirth: '1971-01-01',
     prisonNumber: 'G0013AB',
     reasonForAbsence: 'Hospital appointment',
@@ -118,7 +118,7 @@ describe('Temporary absences service', () => {
       expect(welcomeClient.getTemporaryAbsence).toBeCalledWith('MDI', 'G0013AB')
     })
 
-    it('Should return correct data', async () => {
+    it('Should format and return correct data', async () => {
       const result = await service.getTemporaryAbsence('MDI', 'G0013AB')
 
       expect(result).toStrictEqual({
