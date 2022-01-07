@@ -39,15 +39,15 @@ export default class CheckAnswersController {
         imprisonmentStatus: statusAndReason.imprisonmentStatus,
         movementReasonCode: statusAndReason.movementReasonCode,
       }
-      let offenderNumber
 
-      try {
-        offenderNumber = await this.expectedArrivalsService.createOffenderRecordAndBooking(username, id, newOffender)
-      } catch (error) {
-        if (error.status >= 400 && error.status < 500) {
-          return res.redirect('/feature-not-available')
-        }
-        return next(error)
+      const offenderNumber = await this.expectedArrivalsService.createOffenderRecordAndBooking(
+        username,
+        id,
+        newOffender
+      )
+
+      if (!offenderNumber) {
+        return res.redirect('/feature-not-available')
       }
 
       raiseAnalyticsEvent(

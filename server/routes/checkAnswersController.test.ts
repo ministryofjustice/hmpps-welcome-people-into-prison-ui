@@ -2,16 +2,13 @@ import type { Express } from 'express'
 import { Gender, NewOffenderBooking } from 'welcome'
 import request from 'supertest'
 import cheerio from 'cheerio'
-import createError from 'http-errors'
+
 import { appWithAllRoutes, user } from './testutils/appSetup'
 import ExpectedArrivalsService from '../services/expectedArrivalsService'
 import ImprisonmentStatusesService from '../services/imprisonmentStatusesService'
 import raiseAnalyticsEvent from '../raiseAnalyticsEvent'
 import Role from '../authentication/role'
 import config from '../config'
-import { mockNext, mockRequest, mockResponse } from './testutils/requestTestUtils'
-import CheckAnswersController from './checkAnswersController'
-import * as state from './state'
 
 jest.mock('../services/expectedArrivalsService')
 jest.mock('../services/imprisonmentStatusesService')
@@ -109,43 +106,13 @@ describe('/checkAnswers', () => {
     }
 
     it('should redirect to /feature-not-available ', () => {
-      const error = createError(404, 'Not found')
-      expectedArrivalsService.createOffenderRecordAndBooking.mockRejectedValue(error)
+      expectedArrivalsService.createOffenderRecordAndBooking.mockResolvedValue(null)
 
       return request(app)
         .post('/prisoners/12345-67890/check-answers')
         .send(newOffender)
         .expect(302)
         .expect('Location', '/feature-not-available')
-    })
-
-    it('should catch non-4xx errors', () => {
-      const error = createError(500, 'Internal Server Error')
-      expectedArrivalsService.createOffenderRecordAndBooking.mockRejectedValue(error)
-
-      return request(app).post('/prisoners/12345-67890/check-answers').send(newOffender).expect(500)
-    })
-
-    it('should call next() for non-4xx errors', async () => {
-      const req = mockRequest({})
-      const res = mockResponse({})
-      const next = mockNext()
-      const error = createError(500, 'Internal Server Error')
-      expectedArrivalsService.createOffenderRecordAndBooking.mockRejectedValue(error)
-
-      const mockGetImprisonmentStatus = jest.spyOn(state, 'getImprisonmentStatus')
-      mockGetImprisonmentStatus.mockReturnValue({
-        code: 'determinate-sentence',
-        imprisonmentStatus: 'SENT',
-        movementReasonCode: '26',
-      })
-
-      const controller = new CheckAnswersController(expectedArrivalsService, imprisonmentStatusesService)
-      await controller.addToRoll()(req, res, next)
-
-      expect(res.redirect).not.toHaveBeenCalled()
-      expect(next).toHaveBeenCalledWith(error)
-      mockGetImprisonmentStatus.mockRestore()
     })
 
     it('should redirect to authentication error page for non reception users', () => {
