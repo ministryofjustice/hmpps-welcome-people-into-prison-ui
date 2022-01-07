@@ -182,6 +182,16 @@ describe('welcomeClient', () => {
         expect(err.status).toBe(500)
       }
     })
+    it('server error thrown', async () => {
+      fakeWelcomeApi
+        .post(`/arrivals/${id}/confirm`, newOffender)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(500)
+
+      await expect(welcomeClient.createOffenderRecordAndBooking(id, newOffender)).rejects.toThrow(
+        'Internal Server Error'
+      )
+    })
   })
   describe('getImprisonmentStatuses', () => {
     const mockResponse: ImprisonmentStatus[] = [
