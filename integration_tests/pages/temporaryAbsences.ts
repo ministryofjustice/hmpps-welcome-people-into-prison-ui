@@ -6,7 +6,7 @@ export default class TemporaryAbsencesPage extends Page {
   }
 
   static goTo(): TemporaryAbsencesPage {
-    cy.visit('/confirm-arrival/return-from-temporary-absence')
+    cy.visit('/prisoners-returning')
     return Page.verifyOnPage(TemporaryAbsencesPage)
   }
 

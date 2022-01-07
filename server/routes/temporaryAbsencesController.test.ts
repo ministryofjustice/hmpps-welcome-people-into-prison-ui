@@ -51,10 +51,10 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET /confirm-arrival/return-from-temporary-absence', () => {
-  it('should render /confirm-arrival/return-from-temporary-absence page', () => {
+describe('GET /prisoners-returning', () => {
+  it('should render /prisoners-returning page', () => {
     return request(app)
-      .get('/confirm-arrival/return-from-temporary-absence')
+      .get('/prisoners-returning')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
         const $ = cheerio.load(res.text)
@@ -64,7 +64,7 @@ describe('GET /confirm-arrival/return-from-temporary-absence', () => {
 
   it('should call service method correctly', () => {
     return request(app)
-      .get('/confirm-arrival/return-from-temporary-absence')
+      .get('/prisoners-returning')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
         expect(temporaryAbsencesService.getTemporaryAbsences).toHaveBeenCalledWith(user.activeCaseLoadId)

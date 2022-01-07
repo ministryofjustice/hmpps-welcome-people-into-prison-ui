@@ -53,7 +53,7 @@ export default function routes(services: Services): Router {
   get('/confirm-arrival/choose-prisoner', [choosePrisonerController.view()])
 
   const temporaryAbsencesController = new TemporaryAbsencesController(services.temporaryAbsencesService)
-  get('/confirm-arrival/return-from-temporary-absence', [temporaryAbsencesController.view()])
+  get('/prisoners-returning', [temporaryAbsencesController.view()])
 
   const prisonerController = new PrisonerController(services.expectedArrivalsService)
   get('/prisoner/:prisonNumber/image', [prisonerController.getImage()])
