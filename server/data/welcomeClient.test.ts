@@ -1,6 +1,15 @@
 import nock from 'nock'
 import moment from 'moment'
-import { Gender, ImprisonmentStatus, Movement, Transfer, NewOffenderBooking, Prison, UserCaseLoad } from 'welcome'
+import {
+  Gender,
+  ImprisonmentStatus,
+  Movement,
+  Transfer,
+  NewOffenderBooking,
+  Prison,
+  UserCaseLoad,
+  TemporaryAbsence,
+} from 'welcome'
 import WelcomeClient from './welcomeClient'
 import config from '../config'
 
@@ -87,6 +96,41 @@ describe('welcomeClient', () => {
 
       const output = await welcomeClient.getTransfer(activeCaseLoadId, prisonNumber)
       expect(output).toEqual(expectedArrival)
+    })
+  })
+
+  describe('getTemporaryAbsences', () => {
+    const activeCaseLoadId = 'MDI'
+    const temporaryAbsences: TemporaryAbsence[] = []
+    it('should return data from api', async () => {
+      fakeWelcomeApi
+        .get(`/temporary-absences/${activeCaseLoadId}`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, temporaryAbsences)
+
+      const output = await welcomeClient.getTemporaryAbsences(activeCaseLoadId)
+      expect(output).toEqual(temporaryAbsences)
+    })
+  })
+
+  describe('getTemporaryAbsence', () => {
+    const activeCaseLoadId = 'MDI'
+    const prisonNumber = 'A1234AB'
+    const temporaryAbsence: TemporaryAbsence = {
+      firstName: 'Sam',
+      lastName: 'Smith',
+      dateOfBirth: '1971-02-01',
+      prisonNumber: 'A1234AA',
+      reasonForAbsence: 'Hospital appointment',
+    }
+    it('should return single a transfer from api', async () => {
+      fakeWelcomeApi
+        .get(`/temporary-absences/${activeCaseLoadId}/${prisonNumber}`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, temporaryAbsence)
+
+      const output = await welcomeClient.getTemporaryAbsence(activeCaseLoadId, prisonNumber)
+      expect(output).toEqual(temporaryAbsence)
     })
   })
 
