@@ -15,6 +15,14 @@ describe('Temporary absences service', () => {
 
   const WelcomeClientFactory = jest.fn()
 
+  const temporaryAbsence: TemporaryAbsence = {
+    firstName: 'John',
+    lastName: 'Doe',
+    dateOfBirth: '1971-01-01',
+    prisonNumber: 'G0013AB',
+    reasonForAbsence: 'Hospital appointment',
+  }
+
   const temporaryAbsences: TemporaryAbsence[] = [
     {
       firstName: 'Mark',
@@ -54,6 +62,7 @@ describe('Temporary absences service', () => {
     service = new TemporaryAbsencesService(hmppsAuthClient, WelcomeClientFactory)
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
     welcomeClient.getTemporaryAbsences.mockResolvedValue(temporaryAbsences)
+    welcomeClient.getTemporaryAbsence.mockResolvedValue(temporaryAbsence)
   })
 
   describe('getTemporaryAbsences', () => {
@@ -98,6 +107,27 @@ describe('Temporary absences service', () => {
       await service.getTemporaryAbsences(res.locals.user.activeCaseLoadId)
 
       expect(WelcomeClientFactory).toBeCalledWith(token)
+    })
+  })
+
+  describe('getTemporaryAbsence', () => {
+    it('Calls upstream service correctly', async () => {
+      await service.getTemporaryAbsence('MDI', 'G0013AB')
+
+      expect(WelcomeClientFactory).toBeCalledWith(token)
+      expect(welcomeClient.getTemporaryAbsence).toBeCalledWith('MDI', 'G0013AB')
+    })
+
+    it('Should return correct data', async () => {
+      const result = await service.getTemporaryAbsence('MDI', 'G0013AB')
+
+      expect(result).toStrictEqual({
+        firstName: 'John',
+        lastName: 'Doe',
+        dateOfBirth: '1971-01-01',
+        prisonNumber: 'G0013AB',
+        reasonForAbsence: 'Hospital appointment',
+      })
     })
   })
 })
