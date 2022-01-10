@@ -168,20 +168,6 @@ describe('welcomeClient', () => {
       return expect(output).toBe(null)
     })
 
-    it('server error', async () => {
-      fakeWelcomeApi
-        .post(`/arrivals/${id}/confirm`, newOffender)
-        .matchHeader('authorization', `Bearer ${token}`)
-        .reply(500)
-
-      expect.assertions(2)
-      try {
-        await welcomeClient.createOffenderRecordAndBooking(id, newOffender)
-      } catch (err) {
-        expect(err.message).toBe('Internal Server Error')
-        expect(err.status).toBe(500)
-      }
-    })
     it('server error thrown', async () => {
       fakeWelcomeApi
         .post(`/arrivals/${id}/confirm`, newOffender)
