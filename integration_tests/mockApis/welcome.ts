@@ -190,6 +190,20 @@ export default {
       },
     })
   },
+  stubCreateOffenderRecordAndBookingReturnsError: ({
+    arrivalId,
+    status,
+  }: Record<string, number>): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/welcome/arrivals/${arrivalId}/confirm`,
+      },
+      response: {
+        status,
+      },
+    })
+  },
   stubImprisonmentStatus: (): SuperAgentRequest => {
     return stubFor({
       request: {

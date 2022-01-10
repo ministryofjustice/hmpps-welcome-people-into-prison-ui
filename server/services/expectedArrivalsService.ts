@@ -53,7 +53,7 @@ export default class ExpectedArrivalsService {
     username: string,
     id: string,
     body: NewOffenderBooking
-  ): Promise<OffenderNumber> {
+  ): Promise<OffenderNumber | null> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
     return this.welcomeClientFactory(token).createOffenderRecordAndBooking(id, body)
   }
