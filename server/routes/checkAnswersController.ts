@@ -24,7 +24,7 @@ export default class CheckAnswersController {
   }
 
   public addToRoll(): RequestHandler {
-    return async (req, res) => {
+    return async (req, res, next) => {
       const { id } = req.params
       const { username, activeCaseLoadId } = res.locals.user
       const data = await this.expectedArrivalsService.getArrival(id)
@@ -46,6 +46,10 @@ export default class CheckAnswersController {
         newOffender
       )
 
+      if (!offenderNumber) {
+        return res.redirect('/feature-not-available')
+      }
+
       raiseAnalyticsEvent(
         'Add to the establishment roll',
         'Confirmed arrival',
@@ -54,7 +58,7 @@ export default class CheckAnswersController {
       )
 
       req.flash('offenderNumber', offenderNumber.offenderNo)
-      res.redirect(`/prisoners/${id}/confirmation`)
+      return res.redirect(`/prisoners/${id}/confirmation`)
     }
   }
 }

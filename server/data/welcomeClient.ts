@@ -85,12 +85,19 @@ export default class WelcomeClient {
     }) as Promise<Prison>
   }
 
-  async createOffenderRecordAndBooking(id: string, body: NewOffenderBooking): Promise<OffenderNumber> {
+  async createOffenderRecordAndBooking(id: string, body: NewOffenderBooking): Promise<OffenderNumber | null> {
     logger.info(`welcomeApi: createOffenderRecordAndBooking(${id})`)
-    return this.restClient.post({
-      path: `/arrivals/${id}/confirm`,
-      data: body,
-    }) as Promise<OffenderNumber>
+    try {
+      return (await this.restClient.post({
+        path: `/arrivals/${id}/confirm`,
+        data: body,
+      })) as Promise<OffenderNumber>
+    } catch (error) {
+      if (error.status >= 400 && error.status < 500) {
+        return null
+      }
+      throw error
+    }
   }
 
   async getImprisonmentStatuses(): Promise<ImprisonmentStatus[]> {

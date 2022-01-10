@@ -31,6 +31,7 @@ describe('welcomeClient', () => {
       nock.cleanAll()
       throw new Error('Not all nock interceptors were used!')
     }
+    nock.abortPendingRequests()
     nock.cleanAll()
   })
 
@@ -200,6 +201,26 @@ describe('welcomeClient', () => {
 
       const output = await welcomeClient.createOffenderRecordAndBooking(id, newOffender)
       expect(output).toEqual({ prisonNumber: 'A1234AB' })
+    })
+    it('should return null', async () => {
+      fakeWelcomeApi
+        .post(`/arrivals/${id}/confirm`, newOffender)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(400)
+
+      const output = await welcomeClient.createOffenderRecordAndBooking(id, newOffender)
+      return expect(output).toBe(null)
+    })
+
+    it('server error thrown', async () => {
+      fakeWelcomeApi
+        .post(`/arrivals/${id}/confirm`, newOffender)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(500)
+
+      await expect(welcomeClient.createOffenderRecordAndBooking(id, newOffender)).rejects.toThrow(
+        'Internal Server Error'
+      )
     })
   })
   describe('getImprisonmentStatuses', () => {

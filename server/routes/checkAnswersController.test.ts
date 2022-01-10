@@ -2,6 +2,7 @@ import type { Express } from 'express'
 import { Gender, NewOffenderBooking } from 'welcome'
 import request from 'supertest'
 import cheerio from 'cheerio'
+
 import { appWithAllRoutes, user } from './testutils/appSetup'
 import ExpectedArrivalsService from '../services/expectedArrivalsService'
 import ImprisonmentStatusesService from '../services/imprisonmentStatusesService'
@@ -103,6 +104,16 @@ describe('/checkAnswers', () => {
       imprisonmentStatus: 'SENT',
       movementReasonCode: '26',
     }
+
+    it('should redirect to /feature-not-available ', () => {
+      expectedArrivalsService.createOffenderRecordAndBooking.mockResolvedValue(null)
+
+      return request(app)
+        .post('/prisoners/12345-67890/check-answers')
+        .send(newOffender)
+        .expect(302)
+        .expect('Location', '/feature-not-available')
+    })
 
     it('should redirect to authentication error page for non reception users', () => {
       app = appWithAllRoutes({ services: { expectedArrivalsService }, flash, roles: [] })
