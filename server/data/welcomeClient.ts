@@ -64,6 +64,13 @@ export default class WelcomeClient {
     }) as Promise<TemporaryAbsence[]>
   }
 
+  async getTemporaryAbsence(agencyId: string, prisonNumber: string): Promise<TemporaryAbsence> {
+    logger.info(`welcomeApi: getTemporaryAbsence(${agencyId} ${prisonNumber})`)
+    return this.restClient.get({
+      path: `/temporary-absences/${agencyId}/${prisonNumber}`,
+    }) as Promise<TemporaryAbsence>
+  }
+
   async getImage(prisonNumber: string): Promise<Readable> {
     logger.info(`welcomeApi: getImage(${prisonNumber})`)
     return this.restClient.stream({

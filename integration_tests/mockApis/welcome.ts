@@ -119,7 +119,27 @@ export default {
       },
     })
   },
-
+  stubTemporaryAbsence: ({
+    activeCaseLoadId,
+    prisonNumber,
+    temporaryAbsence,
+  }: {
+    activeCaseLoadId: string
+    prisonNumber: string
+    temporaryAbsence: Record<string, string>
+  }): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/welcome/temporary-absences/${activeCaseLoadId}/${prisonNumber}`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: temporaryAbsence,
+      },
+    })
+  },
   stubTemporaryAbsences: (activeCaseLoadId: string): SuperAgentRequest => {
     return stubFor({
       request: {

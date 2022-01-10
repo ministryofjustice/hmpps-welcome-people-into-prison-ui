@@ -17,6 +17,8 @@ import authorisationForUrlMiddleware from '../middleware/authorisationForUrlMidd
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import { Services } from '../services'
 import TemporaryAbsencesController from './temporaryAbsencesController'
+import CheckTemporaryAbsenceController from './checkTemporaryAbsenceController'
+import ConfirmTemporaryAbsenceAddedToRollController from './confirmTemporaryAbsenceAddedToRollController'
 import Role from '../authentication/role'
 import SexController from './sexController'
 import sexValidation from '../middleware/validation/sexValidation'
@@ -51,9 +53,6 @@ export default function routes(services: Services): Router {
 
   const choosePrisonerController = new ChoosePrisonerController(services.expectedArrivalsService)
   get('/confirm-arrival/choose-prisoner', [choosePrisonerController.view()])
-
-  const temporaryAbsencesController = new TemporaryAbsencesController(services.temporaryAbsencesService)
-  get('/confirm-arrival/return-from-temporary-absence', [temporaryAbsencesController.view()])
 
   const prisonerController = new PrisonerController(services.expectedArrivalsService)
   get('/prisoner/:prisonNumber/image', [prisonerController.getImage()])
@@ -136,5 +135,27 @@ export default function routes(services: Services): Router {
   get('/prisoners/:id/confirmation', [confirmAddedToRollController.view()], [Role.PRISON_RECEPTION])
 
   get('/feature-not-available', [(req, res) => res.render('pages/featureNotAvailable')], [])
+
+  const temporaryAbsencesController = new TemporaryAbsencesController(services.temporaryAbsencesService)
+  get('/prisoners-returning', [temporaryAbsencesController.view()])
+
+  const checkTemporaryAbsenceController = new CheckTemporaryAbsenceController(services.temporaryAbsencesService)
+  get(
+    '/prisoners/:prisonNumber/check-temporary-absence',
+    [redirectIfDisabledMiddleware(config.confirmEnabled), checkTemporaryAbsenceController.checkTemporaryAbsence()],
+    [Role.PRISON_RECEPTION]
+  )
+  post(
+    '/prisoners/:prisonNumber/check-temporary-absence',
+    [redirectIfDisabledMiddleware(config.confirmEnabled), checkTemporaryAbsenceController.addToRoll()],
+    [Role.PRISON_RECEPTION]
+  )
+
+  const confirmTemporaryAbsenceAddedToRollController = new ConfirmTemporaryAbsenceAddedToRollController()
+  get(
+    '/prisoners/:prisonNumber/prisoner-returned',
+    [confirmTemporaryAbsenceAddedToRollController.view()],
+    [Role.PRISON_RECEPTION]
+  )
   return router
 }

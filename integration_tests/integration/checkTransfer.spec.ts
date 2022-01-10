@@ -23,7 +23,6 @@ context('Check Transfer', () => {
       transfer: expectedArrivals.prisonTransfer,
     })
     cy.task('stubConfirmTransfer', expectedArrivals.prisonTransfer.prisonNumber)
-    cy.task('stubPrison', 'MDI')
     cy.signIn()
   })
 
