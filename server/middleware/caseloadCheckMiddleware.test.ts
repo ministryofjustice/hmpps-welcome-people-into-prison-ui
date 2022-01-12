@@ -1,5 +1,5 @@
 import caseloadCheck from './caseloadCheckMiddleware'
-import { mockNext, mockRequest, mockResponse } from '../routes/testutils/requestTestUtils'
+import { mockNext, mockRequest, mockResponse } from '../routes/__testutils/requestTestUtils'
 
 describe('caseloadCheck', () => {
   const req = mockRequest({})

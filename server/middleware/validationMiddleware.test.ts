@@ -1,7 +1,7 @@
 import { Request } from 'express'
 import validationMiddleware from './validationMiddleware'
 import type { ValidationError, Validator } from './validationMiddleware'
-import { mockRequest, mockResponse, mockNext } from '../routes/testutils/requestTestUtils'
+import { mockRequest, mockResponse, mockNext } from '../routes/__testutils/requestTestUtils'
 
 describe('Validation middleware', () => {
   let req: Request = mockRequest({})

@@ -1,7 +1,7 @@
 import type { Express } from 'express'
 import { Readable } from 'stream'
 import request from 'supertest'
-import { appWithAllRoutes } from './testutils/appSetup'
+import { appWithAllRoutes } from './__testutils/appSetup'
 import ExpectedArrivalsService from '../services/expectedArrivalsService'
 
 jest.mock('../services/expectedArrivalsService')

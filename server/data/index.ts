@@ -11,15 +11,13 @@ import WelcomeClient from './welcomeClient'
 initialiseAppInsights()
 buildAppInsightsClient()
 
-const hmppsAuthClient = new HmppsAuthClient(new TokenStore())
-
 type RestClientBuilder<T> = (token: string) => T
 
-export const dataAccess = {
-  hmppsAuthClient,
+export const dataAccess = () => ({
+  hmppsAuthClient: new HmppsAuthClient(new TokenStore()),
   welcomeClientBuilder: ((token: string) => new WelcomeClient(token)) as RestClientBuilder<WelcomeClient>,
-}
+})
 
-export type DataAccess = typeof dataAccess
+export type DataAccess = ReturnType<typeof dataAccess>
 
 export { WelcomeClient, HmppsAuthClient, RestClientBuilder }

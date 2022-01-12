@@ -1,0 +1,45 @@
+{% extends "../../../partials/layout.njk" %}
+
+{% set pageTitle = "What is the reason for imprisonment?" %}
+
+{% block content %}
+    <div class="govuk-grid-row govuk-!-padding-top-7">
+        <div class="govuk-grid-column-two-thirds">
+
+            {% if errors.length %}
+                {{ govukErrorSummary({
+                    titleText: "There is a problem",
+                    errorList: errors,
+                    attributes: { 'data-qa-errors': true }
+                    }) 
+                }}
+            {% endif %}
+
+            <span class="govuk-caption-xl" data-qa="prisoner-name">  Confirm arrival of {{ data.firstName}} {{ data.lastName }}</span>
+
+            <form method="post" action = "/prisoners/{{ data.id }}/imprisonment-status">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+                {{ govukRadios({
+                    name: "imprisonmentStatus",
+                    fieldset: {
+                        legend: {
+                        text: pageTitle,
+                        isPageHeading: true,
+                        classes: "govuk-fieldset__legend--l"
+                        }
+                    },
+                    items: imprisonmentStatuses | toOptions('imprisonment-status', 'code', 'description'),
+                    errorMessage: errors | findError("imprisonment-status-0")
+                }) }}
+
+                {{ govukButton({
+                    text: "Continue",
+                    attributes: {"data-qa": "continue"},
+                    type: "submit"
+                }) }}
+
+            </form>
+        </div>
+    </div>
+{% endblock %}
