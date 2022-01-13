@@ -1,5 +1,5 @@
 import redirectIfDisabledMiddleware from './redirectIfDisabledMiddleware'
-import { mockNext, mockRequest, mockResponse } from '../routes/testutils/requestTestUtils'
+import { mockNext, mockRequest, mockResponse } from '../routes/__testutils/requestTestUtils'
 
 describe('redirectIfDisabledMiddleware', () => {
   const req = mockRequest({})

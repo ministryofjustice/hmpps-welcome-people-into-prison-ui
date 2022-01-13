@@ -1,0 +1,60 @@
+{% extends "../../../partials/layout.njk" %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+
+{% set pageTitle = "What is their sex?" %}
+
+{% block content %}
+    <div class="govuk-grid-row govuk-!-padding-top-7">
+        <div class="govuk-grid-column-two-thirds">
+
+            {% if errors.length %}
+                {{ govukErrorSummary({
+                    titleText: "There is a problem",
+                    errorList: errors,
+                    attributes: { 'data-qa-errors': true }
+                }) }}
+            {% endif %}
+
+            <span class="govuk-caption-xl"
+                    data-qa="prisoner-name">Confirm arrival of {{ data.firstName }} {{ data.lastName }}</span>
+            <h1 class="govuk-fieldset__legend--l govuk-!-margin-0">{{ pageTitle }}</h1>
+
+            {% if data.gender === 'TRANS' %}
+                {{ govukInsetText({
+                    text:  data.firstName + " " + data.lastName + " was identified as transgender on their Person Escort Record. Their registered sex at birth is required to confirm their arrival into this establishment."
+                }) }}
+            {% endif %}
+
+            <form method="post" action="/prisoners/{{ data.id }}/sex">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+                {{ govukRadios({
+                    name: "sex",
+                    hint: {
+                        text: "This is the sex recorded on the person's birth certificate or Gender Recognition Certificate."
+                    },
+                    items: [
+                        {
+                            value: "F",
+                            text: "Female"
+                        },
+                        {
+                            value: "M",
+                            text: "Male"
+                        }
+                    ],
+                    errorMessage: errors | findError("sex")
+                }) }}
+
+
+                {{ govukButton({
+                    text: "Continue",
+                    attributes: {"data-qa": "continue"},
+                    type: "submit"
+                }) }}
+
+            </form>
+        </div>
+    </div>
+{% endblock %}
