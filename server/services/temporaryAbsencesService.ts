@@ -1,4 +1,4 @@
-import type { TemporaryAbsence } from 'welcome'
+import type { AgencyId, TemporaryAbsence } from 'welcome'
 import type { RestClientBuilder, WelcomeClient, HmppsAuthClient } from '../data'
 import { compareByFullName } from '../utils/utils'
 
@@ -18,5 +18,10 @@ export default class TemporaryAbsencesService {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const temporaryAbsence = await this.welcomeClientFactory(token).getTemporaryAbsence(agencyId, prisonNumber)
     return temporaryAbsence
+  }
+
+  public async confirmTemporaryAbsence(username: string, prisonNumber: string, agencyId: AgencyId): Promise<void> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(username)
+    return this.welcomeClientFactory(token).confirmTemporaryAbsence(prisonNumber, agencyId)
   }
 }

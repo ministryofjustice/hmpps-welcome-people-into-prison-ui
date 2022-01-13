@@ -8,6 +8,7 @@ import type {
   OffenderNumber,
   ImprisonmentStatus,
   UserCaseLoad,
+  AgencyId,
 } from 'welcome'
 import type { Readable } from 'stream'
 import config, { ApiConfig } from '../config'
@@ -71,10 +72,11 @@ export default class WelcomeClient {
     }) as Promise<TemporaryAbsence>
   }
 
-  async confirmTemporaryAbsence(prisonNumber: string): Promise<void> {
+  async confirmTemporaryAbsence(prisonNumber: string, body: AgencyId): Promise<void> {
     logger.info(`welcomeApi: confirmTemporaryAbsence ${prisonNumber})`)
     return this.restClient.post({
       path: `/temporary-absences/${prisonNumber}/confirm`,
+      data: body,
     }) as Promise<void>
   }
 

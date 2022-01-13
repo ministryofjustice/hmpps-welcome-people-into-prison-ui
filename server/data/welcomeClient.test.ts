@@ -9,6 +9,7 @@ import {
   Prison,
   UserCaseLoad,
   TemporaryAbsence,
+  AgencyId,
 } from 'welcome'
 import WelcomeClient from './welcomeClient'
 import config from '../config'
@@ -137,13 +138,18 @@ describe('welcomeClient', () => {
 
   describe('confirmTemporaryAbsence', () => {
     const prisonNumber = 'A1234AB'
+    const agencyId: AgencyId = {
+      agencyId: 'MDI',
+    }
     it('should call rest client successfully', async () => {
       fakeWelcomeApi
         .post(`/temporary-absences/${prisonNumber}/confirm`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, {})
+        .reply(200, { prisonNumber: 'A1234AB' })
 
-      return expect(welcomeClient.confirmTemporaryAbsence(prisonNumber)).resolves.toStrictEqual({})
+      return expect(welcomeClient.confirmTemporaryAbsence(prisonNumber, agencyId)).resolves.toStrictEqual({
+        prisonNumber: 'A1234AB',
+      })
     })
   })
 

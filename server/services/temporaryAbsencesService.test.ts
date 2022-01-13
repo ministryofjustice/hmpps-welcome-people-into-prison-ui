@@ -122,4 +122,14 @@ describe('Temporary absences service', () => {
       })
     })
   })
+
+  describe('confirmTemporaryAbsence', () => {
+    it('Calls upstream services correctly', async () => {
+      await service.confirmTemporaryAbsence('user1', 'G0015GD', { agencyId: 'MDI' })
+
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith('user1')
+      expect(WelcomeClientFactory).toBeCalledWith(token)
+      expect(welcomeClient.confirmTemporaryAbsence).toBeCalledWith('G0015GD', { agencyId: 'MDI' })
+    })
+  })
 })
