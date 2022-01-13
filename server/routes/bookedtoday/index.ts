@@ -1,4 +1,4 @@
-import express, { type Router } from 'express'
+import express, { Router } from 'express'
 import ChoosePrisonerController from './choosePrisonerController'
 
 import type { Services } from '../../services'
