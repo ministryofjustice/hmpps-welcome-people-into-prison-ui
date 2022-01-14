@@ -42,7 +42,9 @@ export default function routes(services: Services): Router {
     [Role.PRISON_RECEPTION]
   )
 
-  const confirmTemporaryAbsenceAddedToRollController = new ConfirmTemporaryAbsenceAddedToRollController()
+  const confirmTemporaryAbsenceAddedToRollController = new ConfirmTemporaryAbsenceAddedToRollController(
+    services.prisonService
+  )
   get(
     '/prisoners/:prisonNumber/prisoner-returned',
     [confirmTemporaryAbsenceAddedToRollController.view()],
