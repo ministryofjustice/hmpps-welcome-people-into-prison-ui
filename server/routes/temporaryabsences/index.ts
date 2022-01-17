@@ -47,7 +47,7 @@ export default function routes(services: Services): Router {
   )
   get(
     '/prisoners/:prisonNumber/prisoner-returned',
-    [confirmTemporaryAbsenceAddedToRollController.view()],
+    [redirectIfDisabledMiddleware(config.confirmEnabled), confirmTemporaryAbsenceAddedToRollController.view()],
     [Role.PRISON_RECEPTION]
   )
   return router

@@ -10,11 +10,11 @@ export default class ConfirmTemporaryAbsenceAddedToRollController {
       const { activeCaseLoadId } = res.locals.user
       const { firstName, lastName } = req.flash('prisoner')?.[0] as Record<string, string>
 
-      if (!firstName && !lastName) {
+      const prison = await this.prisonService.getPrison(activeCaseLoadId)
+
+      if (!firstName || !lastName || !prisonNumber || !prison) {
         return res.redirect('/prisoners-returning')
       }
-
-      const prison = await this.prisonService.getPrison(activeCaseLoadId)
 
       return res.render('pages/temporaryabsences/confirmTemporaryAbsenceAddedToRoll.njk', {
         firstName,

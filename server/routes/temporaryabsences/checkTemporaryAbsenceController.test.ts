@@ -77,9 +77,7 @@ describe('POST addToRoll', () => {
       .expect('Content-Type', 'text/plain; charset=utf-8')
       .expect(() => {
         expect(temporaryAbsencesService.confirmTemporaryAbsence).toHaveBeenCalledTimes(1)
-        expect(temporaryAbsencesService.confirmTemporaryAbsence).toHaveBeenCalledWith('user1', 'G0013AB', {
-          agencyId: 'MDI',
-        })
+        expect(temporaryAbsencesService.confirmTemporaryAbsence).toHaveBeenCalledWith('user1', 'G0013AB', 'MDI')
       })
   })
 
