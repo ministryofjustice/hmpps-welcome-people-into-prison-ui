@@ -53,7 +53,7 @@ describe('GET /view', () => {
       })
   })
 
-  it('should redirect to /prisoners-returning page if both firstname and lastname absent', () => {
+  it('should redirect to /prisoners-returning page if any firstname lastname absent', () => {
     flash.mockReturnValue([{}])
     return request(app)
       .get('/prisoners/A1234AB/prisoner-returned')
