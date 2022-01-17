@@ -4,6 +4,7 @@ import cheerio from 'cheerio'
 import { appWithAllRoutes } from '../__testutils/appSetup'
 import PrisonService from '../../services/prisonService'
 import Role from '../../authentication/role'
+import config from '../../config'
 
 jest.mock('../../services/prisonService')
 const prisonService = new PrisonService(null, null) as jest.Mocked<PrisonService>
@@ -21,6 +22,8 @@ describe('confirmTemporaryAbsenceAddedToRollController', () => {
     prisonService.getPrison.mockResolvedValue({
       description: 'Moorland (HMP & YOI)',
     })
+
+    config.confirmEnabled = true
   })
 
   afterEach(() => {
