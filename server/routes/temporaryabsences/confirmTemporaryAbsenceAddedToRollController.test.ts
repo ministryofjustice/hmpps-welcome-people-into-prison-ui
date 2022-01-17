@@ -61,7 +61,7 @@ describe('GET /view', () => {
       .expect('Content-Type', 'text/plain; charset=utf-8')
       .expect('Location', '/prisoners-returning')
       .expect(res => {
-        expect(prisonService.getPrison).not.toHaveBeenCalled()
+        expect(prisonService.getPrison).toHaveBeenCalled()
       })
   })
 
