@@ -1,11 +1,10 @@
 import Page from '../pages/page'
 import Role from '../../server/authentication/role'
 import temporaryAbsences from '../mockApis/responses/temporaryAbsences'
-import TemporaryAbsencesPage from '../pages/temporaryAbsences'
 import CheckTemporaryAbsencePage from '../pages/checkTemporaryAbsence'
 import ConfirmTemporaryAbsenceAddedToRollPage from '../pages/confirmTemporaryAbsenceAddedToRoll'
 
-context('Check Temporary Absence', () => {
+context('Confirm temporary absence added To roll', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', Role.PRISON_RECEPTION)
@@ -22,15 +21,23 @@ context('Check Temporary Absence', () => {
     cy.signIn()
   })
 
-  it('Should go to prisoner-returned page when clicking add to roll button', () => {
+  it('Should display View establishment roll button and Back to Digital Prisons Services link with correct hrefs', () => {
     const checkTemporaryAbsencePage = CheckTemporaryAbsencePage.goTo(temporaryAbsences[0].prisonNumber)
     checkTemporaryAbsencePage.addToRoll().click()
-    Page.verifyOnPage(ConfirmTemporaryAbsenceAddedToRollPage)
-  })
-
-  it('Should return to prisoners-returning page when clicking Return to list link', () => {
-    const checkTemporaryAbsencePage = CheckTemporaryAbsencePage.goTo(temporaryAbsences[0].prisonNumber)
-    checkTemporaryAbsencePage.returnToTemporaryAbsencesList().click()
-    Page.verifyOnPage(TemporaryAbsencesPage)
+    const confirmTemporaryAbsenceAddedToRollPage = Page.verifyOnPage(ConfirmTemporaryAbsenceAddedToRollPage)
+    confirmTemporaryAbsenceAddedToRollPage
+      .viewEstablishmentRoll()
+      .should('contain', 'View establishment roll')
+      .should('have.attr', 'href')
+      .then(href => {
+        expect(href).to.equal('https://digital-dev.prison.service.justice.gov.uk/establishment-roll')
+      })
+    confirmTemporaryAbsenceAddedToRollPage
+      .backToDigitalPrisonServices()
+      .should('contain', 'Back to Digital Prison Services')
+      .should('have.attr', 'href')
+      .then(href => {
+        expect(href).to.equal('https://digital-dev.prison.service.justice.gov.uk')
+      })
   })
 })

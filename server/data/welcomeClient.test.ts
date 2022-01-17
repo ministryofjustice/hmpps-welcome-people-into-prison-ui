@@ -135,6 +135,21 @@ describe('welcomeClient', () => {
     })
   })
 
+  describe('confirmTemporaryAbsence', () => {
+    const prisonNumber = 'A1234AB'
+
+    it('should call rest client successfully', async () => {
+      fakeWelcomeApi
+        .post(`/temporary-absences/${prisonNumber}/confirm`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, { prisonNumber: 'A1234AB' })
+
+      return expect(welcomeClient.confirmTemporaryAbsence(prisonNumber, 'MDI')).resolves.toStrictEqual({
+        prisonNumber: 'A1234AB',
+      })
+    })
+  })
+
   describe('confirmTransfer', () => {
     const prisonNumber = 'A1234AB'
     it('should call rest client successfully', async () => {

@@ -153,6 +153,19 @@ export default {
       },
     })
   },
+  stubConfirmTemporaryAbsence: (prisonNumber: string): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/welcome/temporary-absences/${prisonNumber}/confirm`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
   stubPrisonerImage: (prisoner: Record<string, string>): SuperAgentRequest => {
     return stubFor({
       request: {

@@ -3,6 +3,7 @@ import request from 'supertest'
 import cheerio from 'cheerio'
 import { appWithAllRoutes } from '../__testutils/appSetup'
 import TemporaryAbsencesService from '../../services/temporaryAbsencesService'
+import raiseAnalyticsEvent from '../../raiseAnalyticsEvent'
 
 import Role from '../../authentication/role'
 import config from '../../config'
@@ -10,6 +11,9 @@ import config from '../../config'
 jest.mock('../../services/temporaryAbsencesService')
 const temporaryAbsencesService = new TemporaryAbsencesService(null, null) as jest.Mocked<TemporaryAbsencesService>
 let app: Express
+const flash = jest.fn()
+
+jest.mock('../../raiseAnalyticsEvent')
 
 const temporaryAbsence = {
   firstName: 'John',
@@ -20,7 +24,7 @@ const temporaryAbsence = {
 }
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { temporaryAbsencesService }, roles: [Role.PRISON_RECEPTION] })
+  app = appWithAllRoutes({ services: { temporaryAbsencesService }, flash, roles: [Role.PRISON_RECEPTION] })
   config.confirmEnabled = true
   temporaryAbsencesService.getTemporaryAbsence.mockResolvedValue(temporaryAbsence)
 })
@@ -64,14 +68,45 @@ describe('GET checkTemporaryAbsence', () => {
 describe('POST addToRoll', () => {
   it('should redirect to authentication error page for non reception users', () => {
     app = appWithAllRoutes({ roles: [] })
-    return request(app).post('/prisoners/A1234AB/check-temporary-absence').expect(302).expect('Location', '/autherror')
+    return request(app).post('/prisoners/G0013AB/check-temporary-absence').expect(302).expect('Location', '/autherror')
+  })
+
+  it('should call service to confirm the transfer', () => {
+    return request(app)
+      .post('/prisoners/G0013AB/check-temporary-absence')
+      .expect('Content-Type', 'text/plain; charset=utf-8')
+      .expect(() => {
+        expect(temporaryAbsencesService.confirmTemporaryAbsence).toHaveBeenCalledTimes(1)
+        expect(temporaryAbsencesService.confirmTemporaryAbsence).toHaveBeenCalledWith('user1', 'G0013AB', 'MDI')
+      })
+  })
+
+  it('should set flash with correct args', () => {
+    return request(app)
+      .post('/prisoners/G0013AB/check-temporary-absence')
+      .expect(() => {
+        expect(flash).toHaveBeenCalledWith('prisoner', { firstName: 'John', lastName: 'Doe' })
+      })
+  })
+
+  it('should call google analytics', () => {
+    return request(app)
+      .post('/prisoners/G0013AB/check-temporary-absence')
+      .expect(() => {
+        expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
+          'Add to the establishment roll',
+          'Confirmed temporary absence returned',
+          "AgencyId: MDI, Reason: Hospital appointment, Type: 'PRISON',",
+          '127.0.0.1'
+        )
+      })
   })
 
   it('should redirect to added to roll confirmation page', () => {
     return request(app)
-      .post('/prisoners/A1234AB/check-temporary-absence')
+      .post('/prisoners/G0013AB/check-temporary-absence')
       .expect('Content-Type', 'text/plain; charset=utf-8')
       .expect(302)
-      .expect('Location', '/prisoners/A1234AB/prisoner-returned')
+      .expect('Location', '/prisoners/G0013AB/prisoner-returned')
   })
 })
