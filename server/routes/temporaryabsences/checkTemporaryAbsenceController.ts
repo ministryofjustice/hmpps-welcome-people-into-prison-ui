@@ -21,9 +21,7 @@ export default class CheckTemporaryAbsenceController {
       const { activeCaseLoadId } = res.locals.user
       const data = await this.temporaryAbsencesService.getTemporaryAbsence(activeCaseLoadId, prisonNumber)
 
-      await this.temporaryAbsencesService.confirmTemporaryAbsence(username, prisonNumber, {
-        agencyId: activeCaseLoadId,
-      })
+      await this.temporaryAbsencesService.confirmTemporaryAbsence(username, prisonNumber, activeCaseLoadId)
 
       req.flash('prisoner', {
         firstName: data.firstName,

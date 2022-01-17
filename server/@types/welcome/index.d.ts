@@ -7,7 +7,6 @@ declare module 'welcome' {
   export type Prison = schemas['Prison']
   export type OffenderNumber = schemas['OffenderNumber']
   export type UserCaseLoad = schemas['UserCaseLoad']
-  export type AgencyId = schemas['AgencyId']
 
   export const enum Gender {
     FEMALE = 'F',
@@ -86,9 +85,6 @@ declare module 'welcome' {
     UserCaseLoad: {
       caseLoadId: string
       description: string
-    }
-    AgencyId: {
-      agencyId: string
     }
   }
 }
