@@ -12,7 +12,7 @@ export default class ConfirmTemporaryAbsenceAddedToRollController {
 
       const prison = await this.prisonService.getPrison(activeCaseLoadId)
 
-      if (!firstName || !lastName || !prisonNumber || !prison) {
+      if (!firstName || !lastName) {
         return res.redirect('/prisoners-returning')
       }
 
