@@ -6,7 +6,7 @@
         <div class="govuk-width-container govuk-body">
             <h1 class="govuk-heading-l govuk-!-margin-bottom-9">Select prisoner returning from temporary absence</h1>
                 {% for absence in temporaryAbsences %} 
-                    {{ temporaryAbsenceCard(absence, loop.index)}}
+                    {{ temporaryAbsenceCard(absence, loop.index, user)}}
                 {% endfor %}
         </div>
     </div>

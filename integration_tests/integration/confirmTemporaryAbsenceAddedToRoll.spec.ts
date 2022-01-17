@@ -1,8 +1,9 @@
 import Page from '../pages/page'
 import Role from '../../server/authentication/role'
 import temporaryAbsences from '../mockApis/responses/temporaryAbsences'
-import CheckTemporaryAbsencePage from '../pages/checkTemporaryAbsence'
+import TemporaryAbsencePage from '../pages/temporaryAbsences'
 import ConfirmTemporaryAbsenceAddedToRollPage from '../pages/confirmTemporaryAbsenceAddedToRoll'
+import CheckTemporaryAbsencePage from '../pages/checkTemporaryAbsence'
 
 context('Confirm temporary absence added To roll', () => {
   beforeEach(() => {
@@ -22,8 +23,12 @@ context('Confirm temporary absence added To roll', () => {
   })
 
   it('Should display View establishment roll button and Back to Digital Prisons Services link with correct hrefs', () => {
-    const checkTemporaryAbsencePage = CheckTemporaryAbsencePage.goTo(temporaryAbsences[0].prisonNumber)
+    const temporaryAbsencePage = TemporaryAbsencePage.goTo()
+    temporaryAbsencePage.temporaryAbsences(1).confirm().click()
+
+    const checkTemporaryAbsencePage = Page.verifyOnPage(CheckTemporaryAbsencePage)
     checkTemporaryAbsencePage.addToRoll().click()
+
     const confirmTemporaryAbsenceAddedToRollPage = Page.verifyOnPage(ConfirmTemporaryAbsenceAddedToRollPage)
     confirmTemporaryAbsenceAddedToRollPage
       .viewEstablishmentRoll()
