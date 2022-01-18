@@ -10,7 +10,10 @@ export default class TemporaryAbsencesPage extends Page {
     return Page.verifyOnPage(TemporaryAbsencesPage)
   }
 
-  temporaryAbsences = (index: number): PageElement => cy.get(`[data-qa=temporaryAbsence-title-${index}]`)
+  temporaryAbsences = (row: number): Record<string, () => PageElement> => ({
+    confirm: () => cy.get(`[data-qa=temporaryAbsence-title-${row}]`),
+    name: () => cy.get(`[data-qa=temporaryAbsence-title-${row}]`),
+  })
 
   prisonerImage = (index: number): PageElement => cy.get(`[data-qa=prisoner-image]`).eq(index)
 }

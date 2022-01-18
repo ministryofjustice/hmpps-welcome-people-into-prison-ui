@@ -1,4 +1,4 @@
-{% macro temporaryAbsenceCard(temporaryAbsence, loopIndex) %}
+{% macro temporaryAbsenceCard(temporaryAbsence, loopIndex, user) %}
     <div class='app-card__content'>
         <div class="app-card app-card--with-aside">
             <aside class="app-card__aside">
@@ -11,8 +11,11 @@
             </aside>
             <div class="app-card__content">
                 <header class="app-card__header govuk-!-margin-bottom-4">
-                    <h2 class="app-card__title" data-qa="temporaryAbsence-title-{{loopIndex}}">{{ temporaryAbsence.lastName }}, {{ temporaryAbsence.firstName }}</h2>
-                    <span class="govuk-body">{{ temporaryAbsence.prisonNumber }}</span>
+                {% if user.isReceptionUser %}
+                    <a href="/prisoners/{{ temporaryAbsence.prisonNumber }}/check-temporary-absence" class="govuk-link govuk-link--no-visited-state" data-qa="temporaryAbsence-title-{{loopIndex}}"> {{ temporaryAbsence.lastName }}, {{ temporaryAbsence.firstName }}</a>
+                {% else  %}
+                    {{ temporaryAbsence.lastName }}, {{ temporaryAbsence.firstName }}
+                {%  endif %}
                 </header>
                 <dl class="app-card__meta-list">
                     <div class="app-card__meta-list-item">
@@ -21,6 +24,14 @@
                         </dt>
                         <dd class="app-card__meta-list-value">
                             {{ temporaryAbsence.dateOfBirth | formatDate('D MMMM YYYY')}}
+                        </dd>
+                    </div>
+                    <div class="app-card__meta-list-item">
+                        <dt class="app-card__meta-list-key">
+                            Prison number
+                        </dt>
+                        <dd class="app-card__meta-list-value">
+                            {{ temporaryAbsence.prisonNumber }}
                         </dd>
                     </div>
                     <div class="app-card__meta-list-item">

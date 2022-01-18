@@ -15,8 +15,8 @@ context('A user can view all current temporary absences', () => {
   it('A user can view list of temporary absences', () => {
     cy.signIn()
     const temporaryAbsencesPage = TemporaryAbsencesPage.goTo()
-    temporaryAbsencesPage.temporaryAbsences(1).should('contain.text', 'Doe, John')
-    temporaryAbsencesPage.temporaryAbsences(2).should('contain.text', 'Offender, Karl')
+    temporaryAbsencesPage.temporaryAbsences(1).name().should('contain.text', 'Doe, John')
+    temporaryAbsencesPage.temporaryAbsences(2).name().should('contain.text', 'Offender, Karl')
   })
 
   it("A user can view prisoner's actual image", () => {
@@ -45,9 +45,9 @@ context('A user can view all current temporary absences', () => {
     cy.signIn()
     const temporaryAbsencesPage = TemporaryAbsencesPage.goTo()
 
-    temporaryAbsencesPage.temporaryAbsences(1).find(`[data-qa=confirm-arrival]`).should('not.exist')
-    temporaryAbsencesPage.temporaryAbsences(1).find(`[data-qa=confirm-arrival]`).should('not.exist')
-    temporaryAbsencesPage.temporaryAbsences(1).find(`[data-qa=confirm-arrival]`).should('not.exist')
-    temporaryAbsencesPage.temporaryAbsences(1).find(`[data-qa=confirm-arrival]`).should('not.exist')
+    temporaryAbsencesPage.temporaryAbsences(1).confirm().should('not.exist')
+    temporaryAbsencesPage.temporaryAbsences(1).confirm().should('not.exist')
+    temporaryAbsencesPage.temporaryAbsences(1).confirm().should('not.exist')
+    temporaryAbsencesPage.temporaryAbsences(1).confirm().should('not.exist')
   })
 })

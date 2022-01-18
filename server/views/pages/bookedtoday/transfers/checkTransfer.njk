@@ -16,49 +16,49 @@
                             <div>
                                 {{ govukSummaryList({
                                 attributes: {'data-qa':"list" },
-                                classes: "govuk-!-margin-bottom-0",
+                                classes: "govuk-!-margin-bottom-0 govuk-summary-list--no-border",
                                 rows: [
                                     {
                                     key: {
                                         text: "Name",
-                                        classes: "no-border-bottom govuk-!-padding-bottom-0"
+                                        classes: "govuk-!-padding-bottom-0"
                                     },
                                     value: {
                                         text: data.firstName + ' ' + data.lastName,
-                                        classes: "no-border-bottom govuk-!-padding-bottom-0 data-qa-name"
+                                        classes: "govuk-!-padding-bottom-0 data-qa-name"
                                     }
                                     },
                                     {
                                     key: {
                                         text: "Date of birth",
-                                        classes: "no-border-bottom govuk-!-padding-bottom-0"
+                                        classes: "govuk-!-padding-bottom-0"
 
                                     },
                                     value: {
                                         text:  data.dateOfBirth | formatDate('D MMMM YYYY'),
-                                        classes: "no-border-bottom govuk-!-padding-bottom-0 data-qa-dob"
+                                        classes: "govuk-!-padding-bottom-0 data-qa-dob"
                                     }
 
                                     },
                                     {
                                     key: {
                                         text: "Prison number",
-                                        classes: "no-border-bottom govuk-!-padding-bottom-0"
+                                        classes: "govuk-!-padding-bottom-0"
                                     },
                                     value: {
                                         html:  data.prisonNumber,
-                                        classes: "no-border-bottom govuk-!-padding-bottom-0 data-qa-prison-number"
+                                        classes: "govuk-!-padding-bottom-0 data-qa-prison-number"
                                     }
                                     },
                                     
                                     {
                                     key: {
                                         text: "PNC number" if  data.pncNumber,
-                                        classes: "no-border-bottom govuk-!-padding-bottom-0"
+                                        classes: "govuk-!-padding-bottom-0"
                                     },
                                     value: {
                                         html:  data.pncNumber,
-                                        classes: "no-border-bottom govuk-!-padding-bottom-0 data-qa-pnc-number"
+                                        classes: "govuk-!-padding-bottom-0 data-qa-pnc-number"
                                     }
                                     }
                                 ]
