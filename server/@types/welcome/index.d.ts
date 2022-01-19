@@ -51,6 +51,7 @@ declare module 'welcome' {
       dateOfBirth: string
       prisonNumber: string
       reasonForAbsence: string
+      movementDateTime: string
     }
     ErrorResponse: {
       status: number

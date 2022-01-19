@@ -21,6 +21,7 @@ const temporaryAbsence = {
   dateOfBirth: '1971-01-01',
   prisonNumber: 'G0013AB',
   reasonForAbsence: 'Hospital appointment',
+  movementDateTime: '2022-01-17T14:20:00',
 }
 
 beforeEach(() => {
