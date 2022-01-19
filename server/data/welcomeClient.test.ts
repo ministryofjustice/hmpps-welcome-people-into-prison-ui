@@ -123,6 +123,7 @@ describe('welcomeClient', () => {
       dateOfBirth: '1971-02-01',
       prisonNumber: 'A1234AA',
       reasonForAbsence: 'Hospital appointment',
+      movementDateTime: '2022-01-17T14:20:00',
     }
     it('should return single a transfer from api', async () => {
       fakeWelcomeApi

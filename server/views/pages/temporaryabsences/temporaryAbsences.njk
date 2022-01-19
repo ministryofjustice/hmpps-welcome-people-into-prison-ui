@@ -1,5 +1,6 @@
 {% extends "../../partials/layout.njk" %}
 {% from  "../../partials/temporaryAbsenceCardMacro.njk" import temporaryAbsenceCard %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% set pageTitle = "Select prisoner returning from temporary absence" %}
 {% block content %}
     <div class="govuk-!-margin-bottom-8">
@@ -8,6 +9,9 @@
                 {% for absence in temporaryAbsences %} 
                     {{ temporaryAbsenceCard(absence, loop.index, user)}}
                 {% endfor %}
+            {{ govukInsetText({
+                html: "<p class='govuk-body'>If the prisoner is returning from court, they may be listed as <a href='/confirm-arrival/choose-prisoner' class='govuk-link govuk-link--no-visited-state' data-qa='linkToExpectedArrivals'>booked to arrive into prison</a>.</p>"
+            }) }}
         </div>
     </div>
 {% endblock %}
