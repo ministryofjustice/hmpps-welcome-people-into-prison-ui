@@ -6,7 +6,6 @@ generic-service:
 
   ingress:
     host: welcome-dev.prison.service.justice.gov.uk
-    contextColour: green
 
   allowlist: false
 
@@ -25,4 +24,3 @@ generic-service:
 
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service-dev
-
