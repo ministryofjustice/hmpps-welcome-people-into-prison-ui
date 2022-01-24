@@ -57,4 +57,9 @@ export default class ExpectedArrivalsService {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
     return this.welcomeClientFactory(token).createOffenderRecordAndBooking(id, body)
   }
+
+  public async confirmCourtReturn(username: string, prisonNumber: string, agencyId: string): Promise<void> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(username)
+    return this.welcomeClientFactory(token).confirmCourtReturn(prisonNumber, agencyId)
+  }
 }

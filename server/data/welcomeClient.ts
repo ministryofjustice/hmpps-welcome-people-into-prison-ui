@@ -36,6 +36,14 @@ export default class WelcomeClient {
     }) as Promise<Movement>
   }
 
+  async confirmCourtReturn(prisonNumber: string, agencyId: string): Promise<void> {
+    logger.info(`welcomeApi: confirmCourtReturn ${prisonNumber})`)
+    return this.restClient.post({
+      path: `/court-returns/${prisonNumber}/confirm`,
+      data: { agencyId },
+    }) as Promise<void>
+  }
+
   async getTransfers(agencyId: string): Promise<Movement[]> {
     logger.info(`welcomeApi: getTransfers(${agencyId})`)
     return this.restClient.get({
