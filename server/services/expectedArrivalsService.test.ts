@@ -250,25 +250,6 @@ describe('Expected arrivals service', () => {
     })
   })
 
-  describe('getCourtReturn', () => {
-    it('Retrieves court return by prison number', async () => {
-      const today = moment()
-      const prisonNumber = 'G0013AB'
-      const result = await service.getCourtReturn(prisonNumber, res.locals.user.activeCaseLoadId, () => today)
-
-      expect(result).toEqual({
-        firstName: 'John',
-        lastName: 'Doe',
-        dateOfBirth: '1971-01-01',
-        prisonNumber: 'G0013AB',
-        pncNumber: '01/3456A',
-        date: '2021-09-01',
-        fromLocation: 'Reading',
-        fromLocationType: 'COURT',
-      })
-    })
-  })
-
   describe('confirmCourtReturn', () => {
     it('Calls upstream services correctly', async () => {
       await service.confirmCourtReturn('user1', '12345-67890', 'MDI')

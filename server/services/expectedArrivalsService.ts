@@ -39,11 +39,6 @@ export default class ExpectedArrivalsService {
     return groupBy([...expectedArrivals, ...transfers], (arrival: Movement) => arrival.fromLocationType)
   }
 
-  public async getCourtReturn(prisonNumber: string, agencyId: string, now = () => moment()): Promise<Movement> {
-    const expectedArrivals = await this.getExpectedArrivals(agencyId, now())
-    return expectedArrivals.find(a => prisonNumber === a.prisonNumber)
-  }
-
   public async getImage(prisonNumber: string): Promise<Readable> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     return this.welcomeClientFactory(token).getImage(prisonNumber)
