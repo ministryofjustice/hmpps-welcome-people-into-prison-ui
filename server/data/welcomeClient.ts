@@ -6,6 +6,7 @@ import type {
   NewOffenderBooking,
   Prison,
   OffenderNumber,
+  PrisonNumber,
   ImprisonmentStatus,
   UserCaseLoad,
 } from 'welcome'
@@ -36,12 +37,12 @@ export default class WelcomeClient {
     }) as Promise<Movement>
   }
 
-  async confirmCourtReturn(prisonNumber: string, agencyId: string): Promise<void> {
-    logger.info(`welcomeApi: confirmCourtReturn ${prisonNumber})`)
+  async confirmCourtReturn(id: string, body: string): Promise<PrisonNumber> {
+    logger.info(`welcomeApi: confirmCourtReturn ${id})`)
     return this.restClient.post({
-      path: `/court-returns/${prisonNumber}/confirm`,
-      data: { agencyId },
-    }) as Promise<void>
+      path: `/court-returns/${id}/confirm`,
+      data: { prisonId: body },
+    }) as Promise<PrisonNumber>
   }
 
   async getTransfers(agencyId: string): Promise<Movement[]> {

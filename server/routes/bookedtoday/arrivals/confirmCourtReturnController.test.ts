@@ -34,15 +34,15 @@ describe('confirmCourtReturnController', () => {
     it('should redirect to authentication error page for non reception users', () => {
       app = appWithAllRoutes({ roles: [] })
       return request(app)
-        .get('/prisoners/A1234AB/prisoner-returned-from-court')
+        .get('/prisoners/12345-67890/prisoner-returned-from-court')
         .expect(302)
         .expect('Location', '/autherror')
     })
 
     it('should call service methods correctly', () => {
-      flash.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith' }])
+      flash.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith', prisonNumber: 'A1234AB' }])
       return request(app)
-        .get('/prisoners/A1234AB/prisoner-returned-from-court')
+        .get('/prisoners/12345-67890/prisoner-returned-from-court')
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           expect(prisonService.getPrison).toHaveBeenCalledWith('MDI')
@@ -50,9 +50,9 @@ describe('confirmCourtReturnController', () => {
     })
 
     it('should retrieve prisoner details from flash', () => {
-      flash.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith' }])
+      flash.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith', prisonNumber: 'A1234AB' }])
       return request(app)
-        .get('/prisoners/A1234AB/prisoner-returned-from-court')
+        .get('/prisoners/12345-67890/prisoner-returned-from-court')
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(() => {
           expect(flash).toHaveBeenCalledTimes(1)
@@ -63,7 +63,7 @@ describe('confirmCourtReturnController', () => {
     it('should redirect to /choose-prisoner page if any firstname lastname absent', () => {
       flash.mockReturnValue([{}])
       return request(app)
-        .get('/prisoners/A1234AB/prisoner-returned-from-court')
+        .get('/prisoners/12345-67890/prisoner-returned-from-court')
         .expect(302)
         .expect('Content-Type', 'text/plain; charset=utf-8')
         .expect('Location', '/confirm-arrival/choose-prisoner')
@@ -73,10 +73,10 @@ describe('confirmCourtReturnController', () => {
     })
 
     it('should render /confirmCourtReturnAddedToRoll page with correct data', () => {
-      flash.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith' }])
+      flash.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith', prisonNumber: 'A1234AB' }])
 
       return request(app)
-        .get('/prisoners/A1234AB/prisoner-returned-from-court')
+        .get('/prisoners/12345-67890/prisoner-returned-from-court')
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           const $ = cheerio.load(res.text)

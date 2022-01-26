@@ -100,19 +100,19 @@ export default function routes(services: Services): Router {
 
   const checkCourtReturnController = new CheckCourtReturnController(services.expectedArrivalsService)
   get(
-    '/prisoners/:prisonNumber/check-court-return',
+    '/prisoners/:id/check-court-return',
     [redirectIfDisabledMiddleware(config.confirmEnabled), checkCourtReturnController.checkCourtReturn()],
     [Role.PRISON_RECEPTION]
   )
   post(
-    '/prisoners/:prisonNumber/check-court-return',
+    '/prisoners/:id/check-court-return',
     [redirectIfDisabledMiddleware(config.confirmEnabled), checkCourtReturnController.addToRoll()],
     [Role.PRISON_RECEPTION]
   )
 
   const confirmCourtReturnController = new ConfirmCourtReturnController(services.prisonService)
   get(
-    '/prisoners/:prisonNumber/prisoner-returned-from-court',
+    '/prisoners/:id/prisoner-returned-from-court',
     [redirectIfDisabledMiddleware(config.confirmEnabled), confirmCourtReturnController.view()],
     [Role.PRISON_RECEPTION]
   )

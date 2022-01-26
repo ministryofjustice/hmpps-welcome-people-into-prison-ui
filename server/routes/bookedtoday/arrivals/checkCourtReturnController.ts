@@ -7,18 +7,20 @@ export default class CheckCourtReturnController {
 
   public checkCourtReturn(): RequestHandler {
     return async (req, res) => {
-      const { prisonNumber } = req.params
-      const { activeCaseLoadId } = res.locals.user
-      const data = await this.expectedArrivalsService.getCourtReturn(prisonNumber, activeCaseLoadId)
-      return res.render('pages/bookedtoday/arrivals/checkCourtReturn.njk', { data })
+      const { id } = req.params
+      const data = await this.expectedArrivalsService.getArrival(id)
+      return res.render('pages/bookedtoday/arrivals/checkCourtReturn.njk', { data, id })
     }
   }
 
   public addToRoll(): RequestHandler {
     return async (req, res) => {
-      const { prisonNumber } = req.params
+      const { id } = req.params
+      const { username } = req.user
       const { activeCaseLoadId } = res.locals.user
-      const data = await this.expectedArrivalsService.getCourtReturn(prisonNumber, activeCaseLoadId)
+      const data = await this.expectedArrivalsService.getArrival(id)
+
+      const prisonNumber = await this.expectedArrivalsService.confirmCourtReturn(username, id, activeCaseLoadId)
 
       if (!prisonNumber) {
         return res.redirect('/feature-not-available')
@@ -27,6 +29,7 @@ export default class CheckCourtReturnController {
       req.flash('prisoner', {
         firstName: data.firstName,
         lastName: data.lastName,
+        prisonNumber: prisonNumber.prisonNumber,
       })
 
       raiseAnalyticsEvent(
@@ -36,7 +39,7 @@ export default class CheckCourtReturnController {
         req.hostname
       )
 
-      return res.redirect(`/prisoners/${prisonNumber}/prisoner-returned-from-court`)
+      return res.redirect(`/prisoners/${id}/prisoner-returned-from-court`)
     }
   }
 }

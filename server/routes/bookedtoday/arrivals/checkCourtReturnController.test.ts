@@ -29,7 +29,10 @@ const courtReturn = {
 beforeEach(() => {
   app = appWithAllRoutes({ services: { expectedArrivalsService }, flash, roles: [Role.PRISON_RECEPTION] })
   config.confirmEnabled = true
-  expectedArrivalsService.getCourtReturn.mockResolvedValue(courtReturn)
+  expectedArrivalsService.getArrival.mockResolvedValue(courtReturn)
+  expectedArrivalsService.confirmCourtReturn.mockResolvedValue({
+    prisonNumber: 'A1234AB',
+  })
 })
 
 afterEach(() => {
@@ -40,21 +43,21 @@ describe('checkCourtReturnController', () => {
   describe('GET view', () => {
     it('should redirect to authentication error page for non reception users', () => {
       app = appWithAllRoutes({ roles: [] })
-      return request(app).get('/prisoners/A1234AB/check-court-return').expect(302).expect('Location', '/autherror')
+      return request(app).get('/prisoners/12345-67890/check-court-return').expect(302).expect('Location', '/autherror')
     })
 
     it('should call service method correctly', () => {
       return request(app)
-        .get('/prisoners/A1234AB/check-court-return')
+        .get('/prisoners/12345-67890/check-court-return')
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(() => {
-          expect(expectedArrivalsService.getCourtReturn).toHaveBeenCalledWith('A1234AB', 'MDI')
+          expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
         })
     })
 
     it('should render the correct data in /check-court-return page', () => {
       return request(app)
-        .get('/prisoners/A1234AB/check-court-return')
+        .get('/prisoners/12345-67890/check-court-return')
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           const $ = cheerio.load(res.text)
@@ -64,7 +67,7 @@ describe('checkCourtReturnController', () => {
           expect($('.data-qa-prison-number').text()).toContain('A1234AB')
           expect($('.data-qa-pnc-number').text()).toContain('01/98644M')
           expect($('[data-qa = "add-to-roll"]').text()).toContain('Confirm prisoner has returned')
-          expect(res.text).toContain('/prisoners/A1234AB/check-court-return')
+          expect(res.text).toContain('/prisoners/12345-67890/check-court-return')
         })
     })
   })
@@ -72,20 +75,24 @@ describe('checkCourtReturnController', () => {
   describe('POST addToRoll', () => {
     it('should redirect to authentication error page for non reception users', () => {
       app = appWithAllRoutes({ roles: [] })
-      return request(app).post('/prisoners/A1234AB/check-court-return').expect(302).expect('Location', '/autherror')
+      return request(app).post('/prisoners/12345-67890/check-court-return').expect(302).expect('Location', '/autherror')
     })
 
     it('should set flash with correct args', () => {
       return request(app)
-        .post('/prisoners/A1234AB/check-court-return')
+        .post('/prisoners/12345-67890/check-court-return')
         .expect(() => {
-          expect(flash).toHaveBeenCalledWith('prisoner', { firstName: 'Jim', lastName: 'Smith' })
+          expect(flash).toHaveBeenCalledWith('prisoner', {
+            firstName: 'Jim',
+            lastName: 'Smith',
+            prisonNumber: 'A1234AB',
+          })
         })
     })
 
     it('should call google analytics', () => {
       return request(app)
-        .post('/prisoners/A1234AB/check-court-return')
+        .post('/prisoners/12345-67890/check-court-return')
         .expect(() => {
           expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
             'Add to the establishment roll',
@@ -98,10 +105,10 @@ describe('checkCourtReturnController', () => {
 
     it('should redirect to added to roll confirmation page', () => {
       return request(app)
-        .post('/prisoners/A1234AB/check-court-return')
+        .post('/prisoners/12345-67890/check-court-return')
         .expect('Content-Type', 'text/plain; charset=utf-8')
         .expect(302)
-        .expect('Location', '/prisoners/A1234AB/prisoner-returned-from-court')
+        .expect('Location', '/prisoners/12345-67890/prisoner-returned-from-court')
     })
   })
 })

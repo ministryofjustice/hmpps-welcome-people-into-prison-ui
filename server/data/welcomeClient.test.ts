@@ -185,15 +185,13 @@ describe('welcomeClient', () => {
   })
 
   describe('confirmCourtReturn', () => {
-    const prisonNumber = 'A1234AB'
-
     it('should call rest client successfully', async () => {
       fakeWelcomeApi
-        .post(`/court-returns/${prisonNumber}/confirm`)
+        .post(`/court-returns/${id}/confirm`)
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, { prisonNumber: 'A1234AB' })
 
-      return expect(welcomeClient.confirmCourtReturn(prisonNumber, 'MDI')).resolves.toStrictEqual({
+      return expect(welcomeClient.confirmCourtReturn(id, 'MDI')).resolves.toStrictEqual({
         prisonNumber: 'A1234AB',
       })
     })

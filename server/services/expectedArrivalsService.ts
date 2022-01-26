@@ -1,4 +1,4 @@
-import type { Movement, NewOffenderBooking, OffenderNumber } from 'welcome'
+import type { Movement, NewOffenderBooking, OffenderNumber, PrisonNumber } from 'welcome'
 import moment, { Moment } from 'moment'
 import type { Readable } from 'stream'
 import { groupBy, compareByFullName } from '../utils/utils'
@@ -63,8 +63,8 @@ export default class ExpectedArrivalsService {
     return this.welcomeClientFactory(token).createOffenderRecordAndBooking(id, body)
   }
 
-  public async confirmCourtReturn(username: string, prisonNumber: string, agencyId: string): Promise<void> {
+  public async confirmCourtReturn(username: string, id: string, prisonId: string): Promise<PrisonNumber> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    return this.welcomeClientFactory(token).confirmCourtReturn(prisonNumber, agencyId)
+    return this.welcomeClientFactory(token).confirmCourtReturn(id, prisonId)
   }
 }
