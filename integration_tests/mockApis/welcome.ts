@@ -166,6 +166,19 @@ export default {
       },
     })
   },
+  stubConfirmCourtReturn: (arrivalId: string): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/welcome/court-returns/${arrivalId}/confirm`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: { prisonNumber: 'A1234AB' },
+      },
+    })
+  },
   stubPrisonerImage: (prisoner: Record<string, string>): SuperAgentRequest => {
     return stubFor({
       request: {
