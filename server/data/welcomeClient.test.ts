@@ -184,6 +184,19 @@ describe('welcomeClient', () => {
     })
   })
 
+  describe('confirmCourtReturn', () => {
+    it('should call rest client successfully', async () => {
+      fakeWelcomeApi
+        .post(`/court-returns/${id}/confirm`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, { prisonNumber: 'A1234AB' })
+
+      return expect(welcomeClient.confirmCourtReturn(id, 'MDI')).resolves.toStrictEqual({
+        prisonNumber: 'A1234AB',
+      })
+    })
+  })
+
   describe('getPrison', () => {
     const prison: Prison = {
       description: 'Moorland (HMP & YOI)',

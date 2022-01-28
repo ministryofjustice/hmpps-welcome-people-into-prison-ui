@@ -26,6 +26,7 @@ export default (on: (string, Record) => void): void => {
     stubTemporaryAbsences: welcome.stubTemporaryAbsences,
     stubTemporaryAbsence: welcome.stubTemporaryAbsence,
     stubConfirmTemporaryAbsence: welcome.stubConfirmTemporaryAbsence,
+    stubConfirmCourtReturn: welcome.stubConfirmCourtReturn,
     stubPrison: welcome.stubPrison,
     stubPrisonerImage: welcome.stubPrisonerImage,
     stubMissingPrisonerImage: welcome.stubMissingPrisonerImage,
