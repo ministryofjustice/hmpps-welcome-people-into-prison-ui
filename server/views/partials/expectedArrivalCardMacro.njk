@@ -16,6 +16,9 @@
                             {% if arrival.fromLocationType === 'COURT' and not arrival.isCurrentPrisoner %}
                                 <a href="/prisoners/{{ arrival.id }}/confirm-arrival" class="govuk-link govuk-link--no-visited-state" data-qa="confirm-arrival"> {{ arrival.lastName }}, {{ arrival.firstName }}</a>
 
+                            {% elif arrival.fromLocationType === 'COURT' and arrival.isCurrentPrisoner %}
+                                <a href="/prisoners/{{ arrival.id }}/check-court-return" class="govuk-link govuk-link--no-visited-state" data-qa="confirm-arrival"> {{ arrival.lastName }}, {{ arrival.firstName }}</a>
+
                             {% elif arrival.fromLocationType === 'CUSTODY_SUITE' and not arrival.isCurrentPrisoner %}
                                 <a href="/prisoners/{{ arrival.id }}/confirm-arrival" class="govuk-link govuk-link--no-visited-state" data-qa="confirm-arrival"> {{ arrival.lastName }}, {{ arrival.firstName }}</a>
 
