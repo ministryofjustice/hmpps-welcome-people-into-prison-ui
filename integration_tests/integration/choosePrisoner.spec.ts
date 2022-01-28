@@ -1,5 +1,6 @@
 import ChoosePrisonerPage from '../pages/choosePrisoner'
 import ConfirmArrivalPage from '../pages/confirmArrival'
+import CheckCourtReturnPage from '../pages/checkCourtReturn'
 import Page from '../pages/page'
 import Role from '../../server/authentication/role'
 import expectedArrivals from '../mockApis/responses/expectedArrivals'
@@ -135,7 +136,6 @@ context('Choose Prisoner', () => {
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
 
     choosePrisonerPage.arrivalFrom('PRISON')(1).confirm().should('exist')
-    choosePrisonerPage.arrivalFrom('COURT')(1).confirm().should('not.exist')
     choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(1).confirm().should('not.exist')
 
     canStartToConfirmArrival(choosePrisonerPage, expectedArrivals.court.notCurrent, 'COURT', 2)
@@ -143,6 +143,20 @@ context('Choose Prisoner', () => {
 
     canStartToConfirmArrival(choosePrisonerPage, expectedArrivals.custodySuite.notCurrent, 'CUSTODY_SUITE', 2)
     canStartToConfirmArrival(choosePrisonerPage, expectedArrivals.custodySuite.notMatched, 'CUSTODY_SUITE', 3)
+  })
+
+  it.only('Only court arrivals with a current booking will have a link leading to the check court return page', () => {
+    cy.signIn()
+    const choosePrisonerPage = ChoosePrisonerPage.goTo()
+
+    choosePrisonerPage.arrivalFrom('COURT')(1).confirm().should('exist')
+
+    cy.task('stubExpectedArrival', expectedArrivals.court.current)
+    choosePrisonerPage.arrivalFrom('COURT')(1).confirm().should('exist').click()
+    const checkCourtReturnPage = Page.verifyOnPage(CheckCourtReturnPage)
+    checkCourtReturnPage
+      .list()
+      .should('contain.text', `${expectedArrivals.court.current.firstName} ${expectedArrivals.court.current.lastName}`)
   })
 
   it('No links shown if not a reception user', () => {

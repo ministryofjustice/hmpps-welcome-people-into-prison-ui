@@ -10,6 +10,8 @@ export default class CheckCourtReturnPage extends Page {
     return Page.verifyOnPage(CheckCourtReturnPage)
   }
 
+  list = (): PageElement => cy.get(`[data-qa=list]`)
+
   addToRoll = (): PageElement => cy.get(`[data-qa=add-to-roll]`)
 
   returnToArrivalsList = (): PageElement => cy.get(`[data-qa=return-to-arrivals-list]`)
