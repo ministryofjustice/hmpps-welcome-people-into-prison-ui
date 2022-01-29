@@ -32,17 +32,6 @@ describe('Validation middleware', () => {
     expect(next).toHaveBeenCalled()
   })
 
-  it.skip('should handle unexpected exceptions', async () => {
-    const alwaysFailsValidator: Validator = async () => {
-      throw new Error('Unexpected error')
-    }
-    await validationMiddleware(alwaysFailsValidator)(req, res, next)
-
-    expect(next).toHaveBeenCalledWith(new Error('Unexpected error'))
-    expect(req.flash).not.toHaveBeenCalled()
-    expect(req.errors).toBeUndefined()
-  })
-
   it('should not add any errors to request object when no errors are present', async () => {
     const neverFailsValidator: Validator = () => []
     await validationMiddleware(neverFailsValidator)(req, res, next)
