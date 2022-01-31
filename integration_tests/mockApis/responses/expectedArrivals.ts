@@ -92,6 +92,7 @@ export default {
       fromLocation: 'Leeds',
       fromLocationType: 'COURT',
       isCurrentPrisoner: false,
+      potentialMatches: [],
     },
   },
   withFemaleGender: {

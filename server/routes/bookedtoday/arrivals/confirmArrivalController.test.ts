@@ -1,5 +1,7 @@
 import type { Express } from 'express'
 import request from 'supertest'
+import { Movement } from 'welcome'
+import cheerio from 'cheerio'
 import { appWithAllRoutes } from '../../__testutils/appSetup'
 import { ExpectedArrivalsService } from '../../../services'
 import Role from '../../../authentication/role'
@@ -40,6 +42,49 @@ describe('GET /confirmArrival', () => {
         expect(res.header['set-cookie'][0]).not.toContain('code')
         expect(res.header['set-cookie'][0]).not.toContain('imprisonmentStatus')
         expect(res.header['set-cookie'][0]).not.toContain('movementReasonCode')
+      })
+  })
+
+  it('should display correct page heading when there is NOT an existing prisoner record', () => {
+    expectedArrivalsService.getArrival.mockResolvedValue({
+      firstName: 'James',
+      lastName: 'Smyth',
+      dateOfBirth: '1973-01-08',
+      prisonNumber: 'A1234AB',
+      pncNumber: '99/98644M',
+      potentialMatches: [],
+    } as Movement)
+
+    return request(app)
+      .get('/prisoners/12345-67890/confirm-arrival')
+      .expect(res => {
+        const $ = cheerio.load(res.text)
+        expect($('h1').text()).toContain('This person does not have an existing prisoner record')
+      })
+  })
+  it('should display correct page heading when there IS an existing record', () => {
+    expectedArrivalsService.getArrival.mockResolvedValue({
+      firstName: 'James',
+      lastName: 'Smyth',
+      dateOfBirth: '1973-01-08',
+      prisonNumber: 'A1234AB',
+      pncNumber: '99/98644M',
+      potentialMatches: [
+        {
+          firstName: 'Jim',
+          lastName: 'Smyth',
+          dateOfBirth: '1973-01-08',
+          prisonNumber: 'A00000BC',
+          pncNumber: '99/98644M',
+        },
+      ],
+    } as Movement)
+
+    return request(app)
+      .get('/prisoners/12345-67890/confirm-arrival')
+      .expect(res => {
+        const $ = cheerio.load(res.text)
+        expect($('h1').text()).toContain('This person has an existing prisoner record')
       })
   })
 })
