@@ -1,0 +1,54 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro prisonerSummaryDetail(data, dataQa) %}
+    <div>
+      {{ govukSummaryList({
+      attributes: {'data-qa': dataQa},
+      classes: "govuk-!-margin-bottom-0 govuk-summary-list--no-border",
+      rows: [
+          {
+          key: {
+              text: "Name",
+              classes: "govuk-!-padding-bottom-0"
+          },
+          value: {
+              text: data.firstName + ' ' + data.lastName,
+              classes: "govuk-!-padding-bottom-0 data-qa-"+ dataQa +"-prisoner-name"
+          }
+          },
+          {
+          key: {
+              text: "Date of birth",
+              classes: "govuk-!-padding-bottom-0"
+
+          },
+          value: {
+              text:  data.dateOfBirth | formatDate('D MMMM YYYY'),
+              classes: "govuk-!-padding-bottom-0 data-qa-"+ dataQa +"-dob"
+          }
+
+          },
+          {
+          key: {
+              text: "Prison number" if  data.prisonNumber,
+              classes: "govuk-!-padding-bottom-0"
+          },
+          value: {
+              html:  data.prisonNumber if  data.prisonNumber,
+              classes: "govuk-!-padding-bottom-0 data-qa-"+ dataQa +"-prison-number"
+          }
+          },
+          {
+          key: {
+              text: "PNC number" if  data.pncNumber,
+              classes: "govuk-!-padding-bottom-0"
+          },
+          value: {
+              html:  data.pncNumber if  data.pncNumber,
+              classes: "govuk-!-padding-bottom-0 data-qa-"+ dataQa +"-pnc-number"
+          }
+          }
+      ]
+      }) }}
+  </div>
+{% endmacro %}

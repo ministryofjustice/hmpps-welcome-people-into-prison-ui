@@ -2,7 +2,7 @@ import Page, { PageElement } from './page'
 
 export default class ConfirmArrivalPage extends Page {
   constructor() {
-    super('Check this record matches the person in reception')
+    super(' an existing prisoner record')
   }
 
   static goTo(id: string): ConfirmArrivalPage {
@@ -10,15 +10,23 @@ export default class ConfirmArrivalPage extends Page {
     return Page.verifyOnPage(ConfirmArrivalPage)
   }
 
+  perName = (): PageElement => cy.get(`.data-qa-per-record-prisoner-name`)
+
+  perDob = (): PageElement => cy.get(`.data-qa-per-record-dob`)
+
+  perPrisonNumber = (): PageElement => cy.get(`.data-qa-per-record-prison-number`)
+
+  perPncNumber = (): PageElement => cy.get(`.data-qa-per-record-pnc-number`)
+
+  existingName = (): PageElement => cy.get(`.data-qa-existing-record-prisoner-name`)
+
+  existingDob = (): PageElement => cy.get(`.data-qa-existing-record-dob`)
+
+  existingPrisonNumber = (): PageElement => cy.get(`.data-qa-existing-record-prison-number`)
+
+  existingPncNumber = (): PageElement => cy.get(`.data-qa-existing-record-pnc-number`)
+
   prisonerImage = (): PageElement => cy.get(`[data-qa=prisoner-image]`)
-
-  name = (): PageElement => cy.get(`[data-qa=prisoner-name]`)
-
-  dob = (): PageElement => cy.get(`[data-qa=dob]`)
-
-  prisonNumber = (): PageElement => cy.get(`[data-qa=prison-number]`)
-
-  pncNumber = (): PageElement => cy.get(`[data-qa=pnc-number]`)
 
   continue = (): PageElement => cy.get(`[data-qa=continue]`)
 }

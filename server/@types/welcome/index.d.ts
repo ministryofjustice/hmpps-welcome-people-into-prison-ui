@@ -23,6 +23,14 @@ declare module 'welcome' {
     TRANS = 'TRANS',
   }
 
+  type PotentialMatch = {
+    firstName: string
+    lastName: string
+    dateOfBirth: string
+    prisonNumber?: string
+    pncNumber?: string
+  }
+
   export interface schemas {
     /** A movement into prison */
     Movement: {
@@ -36,6 +44,7 @@ declare module 'welcome' {
       fromLocation: string
       fromLocationType: LocationType
       gender?: GenderKeys
+      potentialMatches?: PotentialMatch[]
     }
     Transfer: {
       firstName: string

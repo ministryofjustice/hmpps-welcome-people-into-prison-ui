@@ -16,6 +16,26 @@ describe('Expected arrivals service', () => {
 
   const WelcomeClientFactory = jest.fn()
 
+  const arrival: Movement = {
+    firstName: 'James',
+    lastName: 'Smyth',
+    dateOfBirth: '1973-01-08',
+    prisonNumber: 'A1234AB',
+    pncNumber: '01/3456A',
+    date: '2021-09-01',
+    fromLocation: 'Reading',
+    fromLocationType: 'COURT',
+    potentialMatches: [
+      {
+        firstName: 'James',
+        lastName: 'Smyth',
+        dateOfBirth: '1973-01-08',
+        prisonNumber: 'A1234AB',
+        pncNumber: '99/98644M',
+      },
+    ],
+  }
+
   const arrivals: Movement[] = [
     {
       firstName: 'John',
@@ -181,6 +201,7 @@ describe('Expected arrivals service', () => {
     WelcomeClientFactory.mockReturnValue(welcomeClient)
     service = new ExpectedArrivalsService(hmppsAuthClient, WelcomeClientFactory)
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
+    welcomeClient.getArrival.mockResolvedValue(arrival)
     welcomeClient.getExpectedArrivals.mockResolvedValue(arrivals)
     welcomeClient.getTransfers.mockResolvedValue(transfers)
   })
@@ -217,6 +238,17 @@ describe('Expected arrivals service', () => {
 
       expect(WelcomeClientFactory).toBeCalledWith(token)
       expect(welcomeClient.getArrival).toBeCalledWith('12345-67890')
+    })
+    it('handles potential matches', async () => {
+      const { potentialMatches } = await service.getArrival('')
+
+      expect(potentialMatches[0]).toEqual({
+        dateOfBirth: '1973-01-08',
+        firstName: 'James',
+        lastName: 'Smyth',
+        pncNumber: '99/98644M',
+        prisonNumber: 'A1234AB',
+      })
     })
   })
 

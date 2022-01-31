@@ -15,28 +15,89 @@ context('Confirm Arrival', () => {
     cy.task('stubMissingPrisonerImage')
   })
 
-  it('Should contain a full set of correctly formatted move data', () => {
+  it('PER record should contain a full set of correctly formatted move data', () => {
     cy.task('stubExpectedArrival', expectedArrival)
     cy.signIn()
     const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
 
-    confirmArrivalPage.name().should('contain.text', 'Sam Smith')
-    confirmArrivalPage.dob().should('contain.text', '1 February 1970')
-    confirmArrivalPage.prisonNumber().should('contain.text', 'G0014GM')
-    confirmArrivalPage.pncNumber().should('contain.text', '01/4567A')
+    confirmArrivalPage.perName().should('contain.text', 'Sam Smith')
+    confirmArrivalPage.perDob().should('contain.text', '1 February 1970')
+    confirmArrivalPage.perPrisonNumber().should('contain.text', 'G0014GM')
+    confirmArrivalPage.perPncNumber().should('contain.text', '01/4567A')
     confirmArrivalPage.continue().should('have.attr', 'href', `/prisoners/${expectedArrival.id}/sex`)
-    confirmArrivalPage.prisonerImage().should('have.attr', 'src', `/prisoner/${expectedArrival.prisonNumber}/image`)
   })
 
-  it('Should not display prison or pnc numbers', () => {
+  it('PER record should not display prison number', () => {
     expectedArrival.prisonNumber = null
+
+    cy.task('stubExpectedArrival', expectedArrival)
+    cy.signIn()
+    const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
+    confirmArrivalPage.perPrisonNumber().should('contain.text', '')
+  })
+
+  it('PER record should not display pnc number', () => {
     expectedArrival.pncNumber = null
 
     cy.task('stubExpectedArrival', expectedArrival)
     cy.signIn()
     const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
-    confirmArrivalPage.prisonNumber().should('not.exist')
-    confirmArrivalPage.pncNumber().should('not.exist')
-    confirmArrivalPage.prisonerImage().should('have.attr', 'src', '/assets/images/placeholder-image.png')
+    confirmArrivalPage.perPncNumber().should('contain.text', '')
+  })
+
+  it('Existing record should contain a full set of correctly formatted move data', () => {
+    expectedArrival.potentialMatches = [
+      {
+        firstName: 'Sam',
+        lastName: 'Smith',
+        dateOfBirth: '1970-02-01',
+        prisonNumber: 'A1234BC',
+        pncNumber: '01/4567A',
+      },
+    ]
+
+    cy.task('stubExpectedArrival', expectedArrival)
+    cy.signIn()
+    const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
+
+    confirmArrivalPage.existingName().should('contain.text', 'Sam Smith')
+    confirmArrivalPage.existingDob().should('contain.text', '1 February 1970')
+    confirmArrivalPage.existingPrisonNumber().should('contain.text', 'A1234BC')
+    confirmArrivalPage.existingPncNumber().should('contain.text', '01/4567A')
+    confirmArrivalPage
+      .prisonerImage()
+      .should('have.attr', 'src', `/prisoner/${expectedArrival.potentialMatches[0].prisonNumber}/image`)
+    confirmArrivalPage.continue().should('have.attr', 'href', `/prisoners/${expectedArrival.id}/sex`)
+  })
+
+  it('Existing record should not contain prison number', () => {
+    expectedArrival.potentialMatches = [
+      {
+        firstName: 'Sam',
+        lastName: 'Smith',
+        dateOfBirth: '1970-02-01',
+        pncNumber: '01/4567A',
+      },
+    ]
+
+    cy.task('stubExpectedArrival', expectedArrival)
+    cy.signIn()
+    const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
+    confirmArrivalPage.existingPrisonNumber().should('contain.text', '')
+  })
+  it('Existing record should not contain pnc number', () => {
+    expectedArrival.potentialMatches = [
+      {
+        firstName: 'Sam',
+        lastName: 'Smith',
+        dateOfBirth: '1970-02-01',
+        prisonNumber: 'A1234BC',
+      },
+    ]
+
+    cy.task('stubExpectedArrival', expectedArrival)
+    cy.signIn()
+    const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
+    confirmArrivalPage.existingPncNumber().should('contain.text', '')
   })
 })
