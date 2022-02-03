@@ -6,6 +6,8 @@ import CheckCourtReturnController from './checkCourtReturnController'
 import ConfirmCourtReturnController from './confirmCourtReturnController'
 import ImprisonmentStatusesController from './imprisonmentStatusesController'
 import MovementReasonsController from './movementReasonsController'
+import searchForExistingRecordRoutes from './searchforexisting'
+
 import imprisonmentStatusesValidation from '../../../middleware/validation/imprisonmentStatusesValidation'
 import movementReasonsValidation from '../../../middleware/validation/movementReasonsValidation'
 import validationMiddleware from '../../../middleware/validationMiddleware'
@@ -116,6 +118,8 @@ export default function routes(services: Services): Router {
     [redirectIfDisabledMiddleware(config.confirmEnabled), confirmCourtReturnController.view()],
     [Role.PRISON_RECEPTION]
   )
+
+  router.use(searchForExistingRecordRoutes(services))
 
   return router
 }
