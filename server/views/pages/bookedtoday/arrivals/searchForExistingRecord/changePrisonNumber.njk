@@ -9,8 +9,20 @@
                 <span class="govuk-caption-xl">Confirm a prisoner's arrival</span>
                 <h1 class="govuk-heading-l">{{pageTitle}}</h1>
 
+                {{ govukInput({
+                    id: 'prison-number',
+                    label: {
+                        html: 'Prison number'
+                    },
+                    hint: {
+                        text: "For example, A8337DY."
+                    },
+                    classes: "govuk-!-width-one-quarter",
+                    name: "prisonNumber"
+                }) }}
+
                 {{ govukButton({
-                        classes: "govuk-button govuk-!-margin-top-9 govuk-!-margin-bottom-3",
+                        classes: "govuk-button govuk-!-margin-bottom-3",
                         text: "Save and continue",
                         attributes: {'data-qa': 'save'}
                 }) }}
