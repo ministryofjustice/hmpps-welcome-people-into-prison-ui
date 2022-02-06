@@ -3,7 +3,7 @@ import { Gender, NewOffenderBooking } from 'welcome'
 import request from 'supertest'
 import cheerio from 'cheerio'
 
-import { appWithAllRoutes, user } from '../../__testutils/appSetup'
+import { appWithAllRoutes, user, signedCookiesProvider } from '../../__testutils/appSetup'
 import ExpectedArrivalsService from '../../../services/expectedArrivalsService'
 import ImprisonmentStatusesService from '../../../services/imprisonmentStatusesService'
 import raiseAnalyticsEvent from '../../../raiseAnalyticsEvent'
@@ -24,18 +24,18 @@ const flash = jest.fn()
 jest.mock('../../../raiseAnalyticsEvent')
 
 beforeEach(() => {
+  signedCookiesProvider.mockReturnValue({
+    sex: { data: 'M' },
+    'status-and-reason': {
+      code: 'determinate-sentence',
+      imprisonmentStatus: 'SENT',
+      movementReasonCode: '26',
+    },
+  })
   app = appWithAllRoutes({
     services: { expectedArrivalsService, imprisonmentStatusesService },
     flash,
     roles: [Role.PRISON_RECEPTION],
-    signedCookies: {
-      sex: { data: 'M' },
-      'status-and-reason': {
-        code: 'determinate-sentence',
-        imprisonmentStatus: 'SENT',
-        movementReasonCode: '26',
-      },
-    },
   })
   config.session.secret = 'sdksdfkdfs'
   config.confirmEnabled = true

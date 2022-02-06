@@ -8,24 +8,27 @@
             <div class="govuk-grid-column-two-thirds">
                 <span class="govuk-caption-xl">Confirm a prisoner's arrival</span>
                 <h1 class="govuk-heading-l">{{pageTitle}}</h1>
+                <form method="post">
+                    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                    {{ govukInput({
+                        id: 'pnc-number',
+                        label: {
+                            html: 'PNC number'
+                        },
+                        hint: {
+                            text: "For example, 01/123456A."
+                        },
+                        classes: "govuk-!-width-one-quarter",
+                        name: "pncNumber",
+                        value: data.pncNumber
+                    }) }}
 
-                {{ govukInput({
-                    id: 'pnc-number',
-                    label: {
-                        html: 'PNC number'
-                    },
-                    hint: {
-                        text: "For example, 01/123456A."
-                    },
-                    classes: "govuk-!-width-one-quarter",
-                    name: "pncNumber"
-                }) }}
-
-                {{ govukButton({
-                        classes: "govuk-button govuk-!-margin-bottom-3",
-                        text: "Save and continue",
-                        attributes: {'data-qa': 'save'}
-                }) }}
+                    {{ govukButton({
+                            classes: "govuk-button govuk-!-margin-bottom-3",
+                            text: "Save and continue",
+                            attributes: {'data-qa': 'save'}
+                    }) }}
+                </form>
             </div>
         </div>
     </div>
