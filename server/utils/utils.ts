@@ -48,3 +48,18 @@ export function assertHasStringValues<K extends keyof Record<string, unknown>>(
     throw Error(`Missing or invalid keys: ${invalidKeys}`)
   }
 }
+
+export function assertHasOptionalStringValues<K extends string>(
+  obj: unknown,
+  keysToCheck: K[]
+): asserts obj is Record<K, string | undefined> {
+  const matches = obj && typeof obj === 'object'
+
+  if (!matches) {
+    throw Error('Not a record')
+  }
+  const invalidKeys = keysToCheck.filter(k => obj[k as string] && typeof obj[k as string] !== 'string')
+  if (invalidKeys.length) {
+    throw Error(`Non string keys: ${invalidKeys}`)
+  }
+}

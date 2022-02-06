@@ -1,6 +1,6 @@
 import type { RequestHandler } from 'express'
 import type { ExpectedArrivalsService, ImprisonmentStatusesService } from '../../../services'
-import { setImprisonmentStatus } from './state'
+import { State } from './state'
 
 export default class MovementReasonsController {
   public constructor(
@@ -40,7 +40,7 @@ export default class MovementReasonsController {
         imprisonmentStatus
       )
 
-      setImprisonmentStatus(res, {
+      State.imprisonmentStatus.set(res, {
         code: selectedImprisonmentStatus.code,
         imprisonmentStatus: selectedImprisonmentStatus.imprisonmentStatusCode,
         movementReasonCode: movementReason,

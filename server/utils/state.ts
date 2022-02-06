@@ -1,4 +1,4 @@
-import { CookieOptions, Request, Response } from 'express'
+import { CookieOptions, NextFunction, Request, RequestHandler, Response } from 'express'
 import config from '../config'
 
 export type Codec<T> = {
@@ -15,27 +15,46 @@ export const cookieOptions: CookieOptions = {
   signed: true,
 }
 
-export const clearState =
+const clearState =
   (name: string) =>
   (res: Response): void => {
     res.clearCookie(name, cookieOptions)
   }
 
-export const setState =
+const setState =
   <T>(name: string, codec: Codec<T>) =>
   (res: Response, data: T): void => {
     res.cookie(name, codec.write(data), cookieOptions)
   }
 
-export const getState =
+const getState =
   <T>(name: string, codec: Codec<T>) =>
   (req: Request): T | undefined => {
     const result = req.signedCookies[name]
     return result ? codec.read(result) : undefined
   }
 
-export const isStatePresent =
+const isStatePresent =
   (name: string) =>
   (req: Request): boolean => {
     return Boolean(req.signedCookies[name])
   }
+
+export const stateOperations = <T>(cookieName: string, codec: Codec<T>) => ({
+  clear: clearState(cookieName),
+
+  set: (res: Response, data: T): void => setState(cookieName, codec)(res, data),
+
+  get: (req: Request): T | undefined => getState(cookieName, codec)(req),
+
+  read: (record: Record<string, unknown>) => codec.read(record),
+
+  write: (value: T) => codec.write(value),
+
+  isStatePresent: isStatePresent(cookieName),
+
+  ensurePresent:
+    (redirectUrl: string): RequestHandler =>
+    (req: Request, res: Response, next: NextFunction) =>
+      isStatePresent(cookieName)(req) ? next() : res.redirect(redirectUrl),
+})

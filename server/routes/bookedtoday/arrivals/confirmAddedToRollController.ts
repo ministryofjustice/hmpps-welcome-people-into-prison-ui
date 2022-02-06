@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express'
 import type { ExpectedArrivalsService, PrisonService } from '../../../services'
-import { clearImprisonmentStatus, clearSex } from './state'
+import { State } from './state'
 
 export default class ConfirmAddedToRollController {
   public constructor(
@@ -18,8 +18,8 @@ export default class ConfirmAddedToRollController {
       const { activeCaseLoadId } = res.locals.user
       const data = await this.expectedArrivalsService.getArrival(id)
       const prison = await this.prisonService.getPrison(activeCaseLoadId)
-      clearImprisonmentStatus(res)
-      clearSex(res)
+      State.imprisonmentStatus.clear(res)
+      State.sex.clear(res)
       return res.render('pages/bookedtoday/arrivals/confirmAddedToRoll.njk', { data, prison, offenderNumber })
     }
   }
