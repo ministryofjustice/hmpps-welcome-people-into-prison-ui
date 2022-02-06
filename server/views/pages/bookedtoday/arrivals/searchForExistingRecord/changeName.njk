@@ -8,32 +8,33 @@
             <div class="govuk-grid-column-two-thirds">
                 <span class="govuk-caption-xl">Confirm a prisoner's arrival</span>
                 <h1 class="govuk-heading-l">{{pageTitle}}</h1>
+                <form method="post">
+                    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                    {% call govukFieldset({ legend: {} }) %}
+                        {{ govukInput({
+                            label: { text: 'First names' },
+                            id: "first-name",
+                            name: "firstName",
+                            classes: 'govuk-input--width-20',
+                            value: data.firstName
+                        }) }}
 
+                        {{ govukInput({
+                            label: { text: 'Last name' },
+                            id: "last-name",
+                            name: "lastName",
+                            classes: 'govuk-input--width-20',
+                            value: data.lastName
+                        }) }}
 
-                {% call govukFieldset({ legend: {} }) %}
-                    {{ govukInput({
-                        label: { text: 'First names' },
-                        id: "first-name",
-                        name: "firstName",
-                        classes: 'govuk-input--width-20',
-                        value: data.firstName
+                    {% endcall %}
+
+                    {{ govukButton({
+                            classes: "govuk-button govuk-!-margin-bottom-3",
+                            text: "Save and continue",
+                            attributes: {'data-qa': 'save'}
                     }) }}
-
-                    {{ govukInput({
-                        label: { text: 'Last name' },
-                        id: "last-name",
-                        name: "lastName",
-                        classes: 'govuk-input--width-20',
-                        value: data.lastName
-                    }) }}
-
-                {% endcall %}
-
-                {{ govukButton({
-                        classes: "govuk-button govuk-!-margin-bottom-3",
-                        text: "Save and continue",
-                        attributes: {'data-qa': 'save'}
-                }) }}
+                </form>
             </div>
         </div>
     </div>

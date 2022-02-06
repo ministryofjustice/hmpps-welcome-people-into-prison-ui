@@ -23,6 +23,8 @@ export const user = {
   authSource: 'NOMIS',
 }
 
+export const signedCookiesProvider = jest.fn()
+
 function appSetup(
   services: Services,
   production: boolean,
@@ -33,8 +35,7 @@ function appSetup(
     (type: string, message: string | string[]): number
     (type: string, format: string, ...args: unknown[]): number
   },
-  roles: Role[],
-  signedCookies: Record<string, Record<string, string>>
+  roles: Role[]
 ): Express {
   const app = express()
 
@@ -46,8 +47,7 @@ function appSetup(
   app.use((req, res, next) => {
     req.user = userSupplier()
     req.flash = flash
-    req.cookies = signedCookies
-    req.signedCookies = signedCookies
+    req.signedCookies = signedCookiesProvider()
     res.locals = {}
     res.locals.user = { ...req.user, roles }
     next()
@@ -67,7 +67,6 @@ export function appWithAllRoutes({
   userSupplier = () => user,
   flash = jest.fn().mockReturnValue([]),
   roles = [] as Role[],
-  signedCookies = {},
 }: {
   production?: boolean
   services?: Partial<Services>
@@ -79,8 +78,8 @@ export function appWithAllRoutes({
     (type: string, format: string, ...args: unknown[]): number
   }
   roles?: Role[]
-  signedCookies?: Record<string, Record<string, string>>
+  signedCookies?: () => Record<string, Record<string, string>>
 }): Express {
   auth.default.authenticationMiddleware = () => (req, res, next) => next()
-  return appSetup(services as Services, production, userSupplier, flash, roles, signedCookies)
+  return appSetup(services as Services, production, userSupplier, flash, roles)
 }

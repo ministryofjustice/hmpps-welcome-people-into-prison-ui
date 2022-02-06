@@ -2,7 +2,7 @@ import type { Express } from 'express'
 import request from 'supertest'
 import { Movement } from 'welcome'
 import cheerio from 'cheerio'
-import { appWithAllRoutes } from '../../../__testutils/appSetup'
+import { appWithAllRoutes, signedCookiesProvider } from '../../../__testutils/appSetup'
 import { ExpectedArrivalsService } from '../../../../services'
 import Role from '../../../../authentication/role'
 
@@ -22,6 +22,7 @@ afterEach(() => {
 
 describe('GET /search-for-existing-record', () => {
   it('should redirect to authentication error page for non reception users', () => {
+    signedCookiesProvider.mockReturnValue({})
     app = appWithAllRoutes({ roles: [] })
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record')
@@ -30,6 +31,7 @@ describe('GET /search-for-existing-record', () => {
   })
 
   it('should call service method correctly', () => {
+    signedCookiesProvider.mockReturnValue({})
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record')
       .expect('Content-Type', 'text/html; charset=utf-8')
@@ -38,7 +40,8 @@ describe('GET /search-for-existing-record', () => {
       })
   })
 
-  it('should render page', () => {
+  it('should render page when no cookie state', () => {
+    signedCookiesProvider.mockReturnValue({})
     expectedArrivalsService.getArrival.mockResolvedValue({
       firstName: 'James',
       lastName: 'Smyth',
@@ -47,6 +50,53 @@ describe('GET /search-for-existing-record', () => {
       pncNumber: '99/98644M',
       potentialMatches: [],
     } as Movement)
+
+    return request(app)
+      .get('/prisoners/12345-67890/search-for-existing-record')
+      .expect(res => {
+        const $ = cheerio.load(res.text)
+        expect($('h1').text()).toContain('Search for an existing prisoner record')
+      })
+  })
+
+  it('cookie is set from retrieved data', () => {
+    signedCookiesProvider.mockReturnValue({})
+    expectedArrivalsService.getArrival.mockResolvedValue({
+      firstName: 'James',
+      lastName: 'Smyth',
+      dateOfBirth: '1973-01-08',
+      prisonNumber: 'A1234AB',
+      pncNumber: '99/98644M',
+      potentialMatches: [],
+    } as Movement)
+
+    return request(app)
+      .get('/prisoners/12345-67890/search-for-existing-record')
+      .expect(res => {
+        expect(res.header['set-cookie'][0]).toContain(
+          encodeURIComponent(
+            JSON.stringify({
+              firstName: 'James',
+              lastName: 'Smyth',
+              dateOfBirth: '1973-01-08',
+              pncNumber: '99/98644M',
+              prisonNumber: 'A1234AB',
+            })
+          )
+        )
+      })
+  })
+
+  it('should render page with cookie state', () => {
+    signedCookiesProvider.mockReturnValue({
+      'search-details': {
+        firstName: 'James',
+        lastName: 'Smyth',
+        dateOfBirth: '1973-01-08',
+        prisonNumber: 'A1234AB',
+        pncNumber: '99/98644M',
+      },
+    })
 
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record')
