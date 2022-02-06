@@ -2,7 +2,7 @@ import { RequestHandler } from 'express'
 import { Gender } from 'welcome'
 import type { ImprisonmentStatusesService, ExpectedArrivalsService } from '../../../services'
 import raiseAnalyticsEvent from '../../../raiseAnalyticsEvent'
-import { getImprisonmentStatus, getSex } from './state'
+import { State } from './state'
 
 export default class CheckAnswersController {
   public constructor(
@@ -13,8 +13,8 @@ export default class CheckAnswersController {
   public view(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
-      const statusAndReason = getImprisonmentStatus(req)
-      const sex = getSex(req)
+      const statusAndReason = State.imprisonmentStatus.get(req)
+      const sex = State.sex.get(req)
       const moveData = await this.expectedArrivalsService.getArrival(id)
       const reasonImprisonment = await this.imprisonmentStatusesService.getReasonForImprisonment(statusAndReason)
       const data = { sex, reasonImprisonment, ...moveData }
@@ -27,13 +27,14 @@ export default class CheckAnswersController {
       const { id } = req.params
       const { username, activeCaseLoadId } = res.locals.user
       const data = await this.expectedArrivalsService.getArrival(id)
-      const statusAndReason = getImprisonmentStatus(req)
-      const sex = getSex(req) as Gender
+      const statusAndReason = State.imprisonmentStatus.get(req)
+      const sex = State.sex.get(req)
+
       const newOffender = {
         firstName: data.firstName,
         lastName: data.lastName,
         dateOfBirth: data.dateOfBirth,
-        gender: sex,
+        gender: sex as Gender,
         prisonId: activeCaseLoadId,
         imprisonmentStatus: statusAndReason.imprisonmentStatus,
         movementReasonCode: statusAndReason.movementReasonCode,

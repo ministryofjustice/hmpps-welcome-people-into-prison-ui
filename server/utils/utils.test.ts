@@ -1,4 +1,10 @@
-import { convertToTitleCase, groupBy, compareByFullName, assertHasStringValues } from './utils'
+import {
+  convertToTitleCase,
+  groupBy,
+  compareByFullName,
+  assertHasStringValues,
+  assertHasOptionalStringValues,
+} from './utils'
 
 describe('Convert to title case', () => {
   it('null string', () => {
@@ -224,5 +230,55 @@ describe('assertHasStringValues', () => {
     const record: Record<string, unknown> = { name: undefined, role: 'true' }
 
     expect(() => assertHasStringValues(record, ['name', 'role'])).toThrowError('Missing or invalid keys: name')
+  })
+})
+
+describe('assertHasOptionalStringValues', () => {
+  it('Has required fields', () => {
+    const record: Record<string, unknown> = { name: 'Jo', role: 'dev' }
+
+    assertHasOptionalStringValues(record, ['name', 'role'])
+
+    expect(record.name).toEqual('Jo')
+  })
+
+  it('Has more than required fields', () => {
+    const record: Record<string, unknown> = { name: 'Jo', role: 'dev' }
+
+    assertHasOptionalStringValues(record, ['name'])
+
+    expect(record.name).toEqual('Jo')
+  })
+
+  it('Has less than required fields', () => {
+    const record: Record<string, unknown> = { name: 'Jo' }
+
+    assertHasOptionalStringValues(record, ['name', 'role'])
+  })
+
+  it('Has no required fields', () => {
+    const record: Record<string, unknown> = {}
+
+    assertHasOptionalStringValues(record, ['name', 'role'])
+  })
+
+  it('Has empty fields', () => {
+    const record: Record<string, unknown> = { name: '', role: '' }
+
+    assertHasOptionalStringValues(record, ['name', 'role'])
+
+    expect(record.name).toEqual('')
+  })
+
+  it('Has non-string fields', () => {
+    const record: Record<string, unknown> = { name: 1, role: true }
+
+    expect(() => assertHasOptionalStringValues(record, ['name', 'role'])).toThrowError('Non string keys: name,role')
+  })
+
+  it('is null', () => {
+    const record: Record<string, unknown> = null
+
+    expect(() => assertHasOptionalStringValues(record, ['name', 'role'])).toThrowError('Not a record')
   })
 })

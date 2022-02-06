@@ -1,6 +1,6 @@
 import type { RequestHandler } from 'express'
 import type { ExpectedArrivalsService } from '../../../services'
-import { setSex } from './state'
+import { State } from './state'
 
 export default class SexController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
@@ -14,7 +14,7 @@ export default class SexController {
       const genderValue = this.convertGenderKeyToValue(data.gender)
 
       if (genderValue) {
-        setSex(res, genderValue)
+        State.sex.set(res, genderValue)
         return res.redirect(`/prisoners/${id}/imprisonment-status`)
       }
 
@@ -34,7 +34,7 @@ export default class SexController {
         return res.redirect(`/prisoners/${id}/sex`)
       }
 
-      setSex(res, sex)
+      State.sex.set(res, sex)
 
       return res.redirect(`/prisoners/${id}/imprisonment-status`)
     }

@@ -11,7 +11,7 @@ import searchForExistingRecordRoutes from './searchforexisting'
 import imprisonmentStatusesValidation from '../../../middleware/validation/imprisonmentStatusesValidation'
 import movementReasonsValidation from '../../../middleware/validation/movementReasonsValidation'
 import validationMiddleware from '../../../middleware/validationMiddleware'
-import { ensureImprisonmentStatusPresentMiddleware, ensureSexPresentMiddleware } from './state'
+import { State } from './state'
 
 import authorisationForUrlMiddleware from '../../../middleware/authorisationForUrlMiddleware'
 import asyncMiddleware from '../../../middleware/asyncMiddleware'
@@ -25,8 +25,8 @@ import config from '../../../config'
 export default function routes(services: Services): Router {
   const router = express.Router()
 
-  const checkImprisonmentStatusPresent = ensureImprisonmentStatusPresentMiddleware('/confirm-arrival/choose-prisoner')
-  const checkSexPresent = ensureSexPresentMiddleware('/confirm-arrival/choose-prisoner')
+  const checkImprisonmentStatusPresent = State.imprisonmentStatus.ensurePresent('/confirm-arrival/choose-prisoner')
+  const checkSexPresent = State.sex.ensurePresent('/confirm-arrival/choose-prisoner')
 
   const get = (path: string, handlers: RequestHandler[], authorisedRoles?: Role[]) =>
     router.get(

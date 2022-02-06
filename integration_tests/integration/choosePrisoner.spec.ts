@@ -175,13 +175,15 @@ context('Choose Prisoner', () => {
 
   function canStartToConfirmArrival(
     choosePrisonerPage: ChoosePrisonerPage,
-    stub: Record<string, string | boolean>,
+    arrival: Record<string, string | boolean | unknown[]>,
     arrivalType: 'COURT' | 'PRISON' | 'CUSTODY_SUITE',
     rowNumber: number
   ) {
-    cy.task('stubExpectedArrival', stub)
+    cy.task('stubExpectedArrival', arrival)
     choosePrisonerPage.arrivalFrom(arrivalType)(rowNumber).confirm().should('exist').click()
-    Page.verifyOnPage(ConfirmArrivalPage).name().should('contain.text', `${stub.firstName} ${stub.lastName}`)
+    Page.verifyOnPage(ConfirmArrivalPage)
+      .existingName()
+      .should('contain.text', `${arrival.firstName} ${arrival.lastName}`)
     cy.go('back')
   }
 })
