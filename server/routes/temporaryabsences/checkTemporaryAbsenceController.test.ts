@@ -43,7 +43,7 @@ describe('GET checkTemporaryAbsence', () => {
   it('should call service method correctly', () => {
     return request(app)
       .get('/prisoners/G0013AB/check-temporary-absence')
-      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect('Content-Type', /text\/html/)
       .expect(() => {
         expect(temporaryAbsencesService.getTemporaryAbsence).toHaveBeenCalledWith('MDI', 'G0013AB')
       })

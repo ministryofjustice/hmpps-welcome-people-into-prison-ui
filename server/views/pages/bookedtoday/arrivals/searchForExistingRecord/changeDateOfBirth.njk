@@ -8,36 +8,38 @@
             <div class="govuk-grid-column-two-thirds">
                 <span class="govuk-caption-xl">Confirm a prisoner's arrival</span>
                 <h1 class="govuk-heading-l">{{pageTitle}}</h1>
-
-                {{ govukDateInput({
-                    id: "date-of-birth",
-                    hint: {
-                        text: "For example, 31 3 1980."
-                    },
-                    items: [
-                        {
-                        classes: "govuk-input--width-2",
-                        name: "day",
-                        value: data.dateOfBirth | formatDate('DD')
+                <form method="post">
+                    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                    {{ govukDateInput({
+                        id: "date-of-birth",
+                        hint: {
+                            text: "For example, 31 3 1980."
                         },
-                        {
-                        classes: "govuk-input--width-2",
-                        name: "month",
-                        value: data.dateOfBirth | formatDate('MM')
-                        },
-                        {
-                        classes: "govuk-input--width-4",
-                        name: "year",
-                        value: data.dateOfBirth | formatDate('YYYY')
-                        }
-                    ]
-                }) }}
+                        items: [
+                            {
+                            classes: "govuk-input--width-2",
+                            name: "day",
+                            value: data.dateOfBirth | formatDate('DD')
+                            },
+                            {
+                            classes: "govuk-input--width-2",
+                            name: "month",
+                            value: data.dateOfBirth | formatDate('MM')
+                            },
+                            {
+                            classes: "govuk-input--width-4",
+                            name: "year",
+                            value: data.dateOfBirth | formatDate('YYYY')
+                            }
+                        ]
+                    }) }}
 
-                {{ govukButton({
-                        classes: "govuk-button govuk-!-margin-bottom-3",
-                        text: "Save and continue",
-                        attributes: {'data-qa': 'save'}
-                }) }}
+                    {{ govukButton({
+                            classes: "govuk-button govuk-!-margin-bottom-3",
+                            text: "Save and continue",
+                            attributes: {'data-qa': 'save'}
+                    }) }}
+                </form>
             </div>
         </div>
     </div>
