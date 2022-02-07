@@ -13,8 +13,7 @@ export default class ChangeNameController {
     return async (req, res) => {
       const { id } = req.params
       const { firstName, lastName } = req.body
-      const data = State.searchDetails.get(req)
-      State.searchDetails.set(res, { ...data, firstName, lastName })
+      State.searchDetails.update(req, res, { firstName, lastName })
       res.redirect(`/prisoners/${id}/search-for-existing-record`)
     }
   }

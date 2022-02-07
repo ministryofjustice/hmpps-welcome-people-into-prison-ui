@@ -36,12 +36,16 @@
                     {   key:     { text: "PNC number" },
                         value:   { text: data.pncNumber | default('Not entered') },
                         actions: { items: [
-                            { href: baseUrl + '/change-pnc-number', text: "Change" if data.pncNumber else "Add", visuallyHiddenText: "PNC number" }]}
+                            { href: baseUrl + '/change-pnc-number', text: "Change" if data.pncNumber else "Add", visuallyHiddenText: "PNC number", show: true },
+                            { href: baseUrl + '/remove-pnc-number', text: "Remove" if data.pncNumber, visuallyHiddenText: "PNC number", show: data.pncNumber }]
+                            | selectattr("show")}
                     },
                     {   key:     { text: "Prison number" },
                         value:   { text: data.prisonNumber | default('Not entered') },
                         actions: { items: [
-                            { href: baseUrl + '/change-prison-number', text: "Change" if data.prisonNumber else "Add", visuallyHiddenText: "Prison number" }]}
+                            { href: baseUrl + '/change-prison-number', text: "Change" if data.prisonNumber else "Add", visuallyHiddenText: "Prison number", show: true },
+                            { href: baseUrl + '/remove-prison-number', text: "Remove", visuallyHiddenText: "Prison number", show: data.prisonNumber }]
+                            | selectattr("show")}
                     }
                 ]%}
 

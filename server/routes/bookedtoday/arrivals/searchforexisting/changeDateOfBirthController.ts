@@ -13,9 +13,9 @@ export default class ChangeDateOfBirthController {
     return async (req, res) => {
       const { id } = req.params
       const { day, month, year } = req.body
-      const data = State.searchDetails.get(req)
       // TODO build and validate
-      State.searchDetails.set(res, { ...data, dateOfBirth: `${year}-${month}-${day}` })
+      State.searchDetails.update(req, res, { dateOfBirth: `${year}-${month}-${day}` })
+
       res.redirect(`/prisoners/${id}/search-for-existing-record`)
     }
   }
