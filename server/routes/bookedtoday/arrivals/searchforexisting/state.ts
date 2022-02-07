@@ -26,5 +26,4 @@ const SearchDetailsCodec: Codec<SearchDetails> = {
   },
 }
 
-
 export const State = { searchDetails: stateOperations('search-details', SearchDetailsCodec) }
