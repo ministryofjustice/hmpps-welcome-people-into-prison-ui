@@ -102,3 +102,50 @@ describe('POST /search-for-existing-record/change-prison-number', () => {
       .expect('Location', '/prisoners/12345-67890/search-for-existing-record')
   })
 })
+
+describe('GET /search-for-existing-record/remove-prison-number', () => {
+  it('should redirect to authentication error page for non reception users', () => {
+    app = appWithAllRoutes({ roles: [] })
+    return request(app)
+      .get('/prisoners/12345-67890/search-for-existing-record/remove-prison-number')
+      .expect(302)
+      .expect('Location', '/autherror')
+  })
+
+  it('should redirect when no cookie present', () => {
+    signedCookiesProvider.mockReturnValue({})
+
+    return request(app)
+      .get('/prisoners/12345-67890/search-for-existing-record/remove-prison-number')
+      .expect(302)
+      .expect('Location', '/')
+  })
+
+  it('should update prison number in cookie', () => {
+    signedCookiesProvider.mockReturnValue({ 'search-details': searchDetails })
+
+    return request(app)
+      .get('/prisoners/12345-67890/search-for-existing-record/remove-prison-number')
+      .expect(res => {
+        expect(res.header['set-cookie'][0]).toContain(
+          encodeURIComponent(
+            JSON.stringify({
+              firstName: 'James',
+              lastName: 'Smyth',
+              dateOfBirth: '1973-01-08',
+              pncNumber: '99/98644M',
+            })
+          )
+        )
+      })
+  })
+
+  it('should redirect after successful update', () => {
+    signedCookiesProvider.mockReturnValue({ 'search-details': searchDetails })
+
+    return request(app)
+      .get('/prisoners/12345-67890/search-for-existing-record/remove-prison-number')
+      .expect(302)
+      .expect('Location', '/prisoners/12345-67890/search-for-existing-record')
+  })
+})

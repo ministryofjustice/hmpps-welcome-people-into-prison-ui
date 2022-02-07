@@ -107,6 +107,36 @@ describe('state', () => {
     })
   })
 
+  describe('updateState', () => {
+    it('sets signed cookie', () => {
+      const res = { cookie: jest.fn() } as unknown as Response<unknown>
+
+      const req = {
+        signedCookies: {
+          test: {
+            firstName: 'Jim',
+            lastName: 'Smith',
+            prisonId: 'MDI',
+          },
+        },
+      } as unknown as Request
+
+      fixture.update(req, res, {
+        firstName: 'James',
+      })
+
+      expect(res.cookie).toHaveBeenCalledWith(
+        'test',
+        {
+          firstName: 'James',
+          lastName: 'Smith',
+          prisonId: 'MDI',
+        },
+        cookieOptions
+      )
+    })
+  })
+
   describe('isStatePresent', () => {
     it('when present', () => {
       const req = {

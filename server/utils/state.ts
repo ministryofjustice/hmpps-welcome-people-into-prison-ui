@@ -53,6 +53,13 @@ export const stateOperations = <T>(cookieName: string, codec: Codec<T>) => ({
 
   isStatePresent: isStatePresent(cookieName),
 
+  update: (req: Request, res: Response, update: Partial<T>) => {
+    const val = getState(cookieName, codec)(req)
+    const newValue = { ...val, ...update }
+    setState(cookieName, codec)(res, newValue)
+    return newValue
+  },
+
   ensurePresent:
     (redirectUrl: string): RequestHandler =>
     (req: Request, res: Response, next: NextFunction) =>
