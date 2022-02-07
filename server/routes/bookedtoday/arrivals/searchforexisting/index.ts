@@ -44,10 +44,12 @@ export default function routes(services: Services): Router {
   const changePrisonNumberController = new ChangePrisonNumberController()
   get('/change-prison-number', [checkSearchDetailsPresent, changePrisonNumberController.showChangePrisonNumber()])
   post('/change-prison-number', [checkSearchDetailsPresent, changePrisonNumberController.changePrisonNumber()])
+  get('/remove-prison-number', [checkSearchDetailsPresent, changePrisonNumberController.removePrisonNumber()])
 
   const changePncNumberController = new ChangePncNumberController()
   get('/change-pnc-number', [checkSearchDetailsPresent, changePncNumberController.showChangePncNumber()])
   post('/change-pnc-number', [checkSearchDetailsPresent, changePncNumberController.changePncNumber()])
+  get('/remove-pnc-number', [checkSearchDetailsPresent, changePncNumberController.removePncNumber()])
 
   return router
 }

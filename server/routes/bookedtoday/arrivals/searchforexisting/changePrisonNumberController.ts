@@ -18,4 +18,13 @@ export default class ChangePrisonNumberController {
       res.redirect(`/prisoners/${id}/search-for-existing-record`)
     }
   }
+
+  public removePrisonNumber(): RequestHandler {
+    return async (req, res) => {
+      const { id } = req.params
+      const data = State.searchDetails.get(req)
+      State.searchDetails.set(res, { ...data, prisonNumber: undefined })
+      res.redirect(`/prisoners/${id}/search-for-existing-record`)
+    }
+  }
 }
