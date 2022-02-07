@@ -1,14 +1,9 @@
 import { mockNext, mockRequest, mockResponse } from '../../__testutils/requestTestUtils'
-import {
-  StatusAndReasonsCodec,
-  ensureImprisonmentStatusPresentMiddleware,
-  SexCodec,
-  ensureSexPresentMiddleware,
-} from './state'
+import { State } from './state'
 
 describe('StatusAndReasonsCodec', () => {
   test('read', () => {
-    const result = StatusAndReasonsCodec.read({
+    const result = State.imprisonmentStatus.read({
       code: 'on remand',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',
@@ -22,7 +17,7 @@ describe('StatusAndReasonsCodec', () => {
   })
 
   test('write', () => {
-    const result = StatusAndReasonsCodec.write({
+    const result = State.imprisonmentStatus.write({
       code: 'on remand',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',
@@ -44,7 +39,7 @@ describe('ensureImprisonmentStatusPresentMiddleware', () => {
 
     req.signedCookies = { 'status-and-reason': 'some content' }
 
-    ensureImprisonmentStatusPresentMiddleware('/redirect')(req, res, next)
+    State.imprisonmentStatus.ensurePresent('/redirect')(req, res, next)
 
     expect(res.redirect).not.toHaveBeenCalled()
     expect(next).toHaveBeenCalled()
@@ -57,7 +52,7 @@ describe('ensureImprisonmentStatusPresentMiddleware', () => {
 
     req.signedCookies = { 'offender-booking-creation': '' }
 
-    ensureImprisonmentStatusPresentMiddleware('/redirect')(req, res, next)
+    State.imprisonmentStatus.ensurePresent('/redirect')(req, res, next)
 
     expect(res.redirect).toHaveBeenCalledWith('/redirect')
     expect(next).not.toHaveBeenCalled()
@@ -70,7 +65,7 @@ describe('ensureImprisonmentStatusPresentMiddleware', () => {
 
     req.signedCookies = {}
 
-    ensureImprisonmentStatusPresentMiddleware('/redirect')(req, res, next)
+    State.imprisonmentStatus.ensurePresent('/redirect')(req, res, next)
 
     expect(res.redirect).toHaveBeenCalledWith('/redirect')
     expect(next).not.toHaveBeenCalled()
@@ -79,13 +74,13 @@ describe('ensureImprisonmentStatusPresentMiddleware', () => {
 
 describe('SexCodec', () => {
   test('read', () => {
-    const result = SexCodec.read({ data: 'M' })
+    const result = State.sex.read({ data: 'M' })
 
     expect(result).toStrictEqual('M')
   })
 
   test('write', () => {
-    const result = SexCodec.write('M')
+    const result = State.sex.write('M')
 
     expect(result).toStrictEqual({ data: 'M' })
   })
@@ -99,7 +94,7 @@ describe('ensureSexPresentMiddleware', () => {
 
     req.signedCookies = { sex: 'some content' }
 
-    ensureSexPresentMiddleware('/redirect')(req, res, next)
+    State.sex.ensurePresent('/redirect')(req, res, next)
 
     expect(res.redirect).not.toHaveBeenCalled()
     expect(next).toHaveBeenCalled()
@@ -112,7 +107,7 @@ describe('ensureSexPresentMiddleware', () => {
 
     req.signedCookies = { data: '' }
 
-    ensureSexPresentMiddleware('/redirect')(req, res, next)
+    State.sex.ensurePresent('/redirect')(req, res, next)
 
     expect(res.redirect).toHaveBeenCalledWith('/redirect')
     expect(next).not.toHaveBeenCalled()
@@ -125,7 +120,7 @@ describe('ensureSexPresentMiddleware', () => {
 
     req.signedCookies = {}
 
-    ensureSexPresentMiddleware('/redirect')(req, res, next)
+    State.sex.ensurePresent('/redirect')(req, res, next)
 
     expect(res.redirect).toHaveBeenCalledWith('/redirect')
     expect(next).not.toHaveBeenCalled()

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { assertHasStringValues } from './utils'
-import { cookieOptions, Codec, clearState, getState, setState, isStatePresent } from './state'
+import { cookieOptions, Codec, stateOperations } from './state'
 
 type TestType = {
   firstName: string
@@ -27,12 +27,14 @@ const TestCodec: Codec<TestType> = {
   },
 }
 
+const fixture = stateOperations('test', TestCodec)
+
 describe('state', () => {
   describe('clearUpdate', () => {
     it('interacts with response', () => {
       const res = { clearCookie: jest.fn() } as unknown as Response<unknown>
 
-      clearState('test')(res)
+      fixture.clear(res)
 
       expect(res.clearCookie).toBeCalledWith('test', cookieOptions)
     })
@@ -50,7 +52,7 @@ describe('state', () => {
         },
       } as unknown as Request
 
-      const result = getState('test', TestCodec)(req)
+      const result = fixture.get(req)
 
       expect(result).toStrictEqual({
         firstName: 'Jim',
@@ -64,7 +66,7 @@ describe('state', () => {
         signedCookies: {},
       } as unknown as Request
 
-      const result = getState('test', TestCodec)(req)
+      const result = fixture.get(req)
 
       expect(result).toStrictEqual(undefined)
     })
@@ -79,7 +81,7 @@ describe('state', () => {
         },
       } as unknown as Request
 
-      expect(() => getState('test', TestCodec)(req)).toThrowError('Missing or invalid keys: lastName')
+      expect(() => fixture.get(req)).toThrowError('Missing or invalid keys: lastName')
     })
   })
 
@@ -87,7 +89,7 @@ describe('state', () => {
     it('sets signed cookie', () => {
       const res = { cookie: jest.fn() } as unknown as Response<unknown>
 
-      setState('test', TestCodec)(res, {
+      fixture.set(res, {
         firstName: 'Jim',
         lastName: 'Smith',
         prisonId: 'MDI',
@@ -111,7 +113,7 @@ describe('state', () => {
         signedCookies: { test: 'blah' },
       } as unknown as Request
 
-      const result = isStatePresent('test')(req)
+      const result = fixture.isStatePresent(req)
 
       expect(result).toStrictEqual(true)
     })
@@ -121,7 +123,7 @@ describe('state', () => {
         signedCookies: { test: '' },
       } as unknown as Request
 
-      const result = isStatePresent('test')(req)
+      const result = fixture.isStatePresent(req)
 
       expect(result).toStrictEqual(false)
     })
@@ -131,7 +133,7 @@ describe('state', () => {
         signedCookies: {},
       } as unknown as Request
 
-      const result = isStatePresent('test')(req)
+      const result = fixture.isStatePresent(req)
 
       expect(result).toStrictEqual(false)
     })
