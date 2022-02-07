@@ -18,4 +18,13 @@ export default class ChangePncNumberController {
       res.redirect(`/prisoners/${id}/search-for-existing-record`)
     }
   }
+
+  public removePncNumber(): RequestHandler {
+    return async (req, res) => {
+      const { id } = req.params
+      const data = State.searchDetails.get(req)
+      State.searchDetails.set(res, { ...data, pncNumber: undefined })
+      res.redirect(`/prisoners/${id}/search-for-existing-record`)
+    }
+  }
 }
