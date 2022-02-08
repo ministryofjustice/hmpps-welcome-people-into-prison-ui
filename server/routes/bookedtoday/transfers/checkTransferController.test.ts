@@ -1,7 +1,7 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
-import { appWithAllRoutes } from '../../__testutils/appSetup'
+import { appWithAllRoutes, flashProvider } from '../../__testutils/appSetup'
 import TransfersService from '../../../services/transfersService'
 import raiseAnalyticsEvent from '../../../raiseAnalyticsEvent'
 
@@ -12,7 +12,6 @@ jest.mock('../../../services/transfersService')
 
 const transfersService = new TransfersService(null, null) as jest.Mocked<TransfersService>
 let app: Express
-const flash = jest.fn()
 
 jest.mock('../../../raiseAnalyticsEvent')
 
@@ -27,7 +26,7 @@ const transfer = {
 }
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { transfersService }, flash, roles: [Role.PRISON_RECEPTION] })
+  app = appWithAllRoutes({ services: { transfersService }, roles: [Role.PRISON_RECEPTION] })
   config.confirmEnabled = true
   transfersService.getTransfer.mockResolvedValue(transfer)
 })
@@ -47,7 +46,6 @@ describe('GET checkTransfer', () => {
       .get('/prisoners/A1234AB/check-transfer')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(() => {
-        expect(transfersService.getTransfer).toHaveBeenCalledTimes(1)
         expect(transfersService.getTransfer).toHaveBeenCalledWith('MDI', 'A1234AB')
       })
   })
@@ -80,7 +78,6 @@ describe('POST addToRoll', () => {
       .post('/prisoners/A1234AB/check-transfer')
       .expect('Content-Type', 'text/plain; charset=utf-8')
       .expect(() => {
-        expect(transfersService.confirmTransfer).toHaveBeenCalledTimes(1)
         expect(transfersService.confirmTransfer).toHaveBeenCalledWith('user1', 'A1234AB')
       })
   })
@@ -89,7 +86,7 @@ describe('POST addToRoll', () => {
     return request(app)
       .post('/prisoners/A1234AB/check-transfer')
       .expect(() => {
-        expect(flash).toHaveBeenCalledWith('prisoner', { firstName: 'Karl', lastName: 'Offender' })
+        expect(flashProvider).toHaveBeenCalledWith('prisoner', { firstName: 'Karl', lastName: 'Offender' })
       })
   })
 

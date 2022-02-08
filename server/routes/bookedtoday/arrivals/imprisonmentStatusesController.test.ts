@@ -2,7 +2,7 @@ import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
 import { ImprisonmentStatus } from 'welcome'
-import { appWithAllRoutes } from '../../__testutils/appSetup'
+import { appWithAllRoutes, flashProvider } from '../../__testutils/appSetup'
 import ImprisonmentStatusesService from '../../../services/imprisonmentStatusesService'
 import ExpectedArrivalsService from '../../../services/expectedArrivalsService'
 
@@ -14,12 +14,11 @@ const imprisonmentStatusesService = new ImprisonmentStatusesService(
   null
 ) as jest.Mocked<ImprisonmentStatusesService>
 const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
-const flash = jest.fn()
 
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { imprisonmentStatusesService, expectedArrivalsService }, flash })
+  app = appWithAllRoutes({ services: { imprisonmentStatusesService, expectedArrivalsService } })
   expectedArrivalsService.getArrival.mockResolvedValue(null)
   imprisonmentStatusesService.getAllImprisonmentStatuses.mockResolvedValue([] as ImprisonmentStatus[])
 })
@@ -59,7 +58,7 @@ describe('/imprisonment-status', () => {
         .expect(302)
         .expect('Location', '/prisoners/12345-67890/imprisonment-status')
         .expect(() => {
-          expect(flash.mock.calls).toEqual([
+          expect(flashProvider.mock.calls).toEqual([
             ['errors', [{ href: '#imprisonment-status-0', text: 'Select a reason for imprisonment' }]],
           ])
         })

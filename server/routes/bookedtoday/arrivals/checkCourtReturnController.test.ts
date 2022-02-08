@@ -1,7 +1,7 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
-import { appWithAllRoutes } from '../../__testutils/appSetup'
+import { appWithAllRoutes, flashProvider } from '../../__testutils/appSetup'
 import ExpectedArrivalsService from '../../../services/expectedArrivalsService'
 import raiseAnalyticsEvent from '../../../raiseAnalyticsEvent'
 import Role from '../../../authentication/role'
@@ -11,7 +11,6 @@ jest.mock('../../../services/expectedArrivalsService')
 
 const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
 let app: Express
-const flash = jest.fn()
 
 jest.mock('../../../raiseAnalyticsEvent')
 
@@ -27,7 +26,7 @@ const courtReturn = {
 }
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { expectedArrivalsService }, flash, roles: [Role.PRISON_RECEPTION] })
+  app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
   config.confirmEnabled = true
   expectedArrivalsService.getArrival.mockResolvedValue(courtReturn)
   expectedArrivalsService.confirmCourtReturn.mockResolvedValue({
@@ -82,7 +81,7 @@ describe('checkCourtReturnController', () => {
       return request(app)
         .post('/prisoners/12345-67890/check-court-return')
         .expect(() => {
-          expect(flash).toHaveBeenCalledWith('prisoner', {
+          expect(flashProvider).toHaveBeenCalledWith('prisoner', {
             firstName: 'Jim',
             lastName: 'Smith',
             prisonNumber: 'A1234AB',

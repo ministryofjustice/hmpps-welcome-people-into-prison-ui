@@ -2,7 +2,7 @@ import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
 import { GenderKeys, Movement } from 'welcome'
-import { appWithAllRoutes } from '../../__testutils/appSetup'
+import { appWithAllRoutes, flashProvider } from '../../__testutils/appSetup'
 import ImprisonmentStatusesService from '../../../services/imprisonmentStatusesService'
 import ExpectedArrivalsService from '../../../services/expectedArrivalsService'
 import Role from '../../../authentication/role'
@@ -19,12 +19,9 @@ const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.
 
 let app: Express
 
-const flash = jest.fn()
-
 beforeEach(() => {
   app = appWithAllRoutes({
     services: { imprisonmentStatusesService, expectedArrivalsService },
-    flash,
     roles: [Role.PRISON_RECEPTION],
   })
   expectedArrivalsService.getArrival.mockResolvedValue({} as Movement)
@@ -106,7 +103,7 @@ describe('/sex', () => {
         .expect(302)
         .expect('Location', '/prisoners/12345-67890/sex')
         .expect(() => {
-          expect(flash.mock.calls).toEqual([['errors', [{ href: '#sex', text: 'Select a sex' }]]])
+          expect(flashProvider.mock.calls).toEqual([['errors', [{ href: '#sex', text: 'Select a sex' }]]])
         })
     })
 

@@ -1,7 +1,7 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
-import { appWithAllRoutes } from '../../__testutils/appSetup'
+import { appWithAllRoutes, flashProvider } from '../../__testutils/appSetup'
 import PrisonService from '../../../services/prisonService'
 import Role from '../../../authentication/role'
 import config from '../../../config'
@@ -9,13 +9,11 @@ import config from '../../../config'
 jest.mock('../../../services/prisonService')
 const prisonService = new PrisonService(null, null) as jest.Mocked<PrisonService>
 let app: Express
-const flash = jest.fn()
 
 describe('confirmCourtReturnController', () => {
   beforeEach(() => {
     app = appWithAllRoutes({
       services: { prisonService },
-      flash,
       roles: [Role.PRISON_RECEPTION],
     })
 
@@ -40,7 +38,7 @@ describe('confirmCourtReturnController', () => {
     })
 
     it('should call service methods correctly', () => {
-      flash.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith', prisonNumber: 'A1234AB' }])
+      flashProvider.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith', prisonNumber: 'A1234AB' }])
       return request(app)
         .get('/prisoners/12345-67890/prisoner-returned-from-court')
         .expect('Content-Type', 'text/html; charset=utf-8')
@@ -50,18 +48,17 @@ describe('confirmCourtReturnController', () => {
     })
 
     it('should retrieve prisoner details from flash', () => {
-      flash.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith', prisonNumber: 'A1234AB' }])
+      flashProvider.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith', prisonNumber: 'A1234AB' }])
       return request(app)
         .get('/prisoners/12345-67890/prisoner-returned-from-court')
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(() => {
-          expect(flash).toHaveBeenCalledTimes(1)
-          expect(flash).toHaveBeenCalledWith('prisoner')
+          expect(flashProvider).toHaveBeenCalledWith('prisoner')
         })
     })
 
     it('should redirect to /choose-prisoner page if any firstname lastname absent', () => {
-      flash.mockReturnValue([{}])
+      flashProvider.mockReturnValue([{}])
       return request(app)
         .get('/prisoners/12345-67890/prisoner-returned-from-court')
         .expect(302)
@@ -73,7 +70,7 @@ describe('confirmCourtReturnController', () => {
     })
 
     it('should render /confirmCourtReturnAddedToRoll page with correct data', () => {
-      flash.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith', prisonNumber: 'A1234AB' }])
+      flashProvider.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith', prisonNumber: 'A1234AB' }])
 
       return request(app)
         .get('/prisoners/12345-67890/prisoner-returned-from-court')

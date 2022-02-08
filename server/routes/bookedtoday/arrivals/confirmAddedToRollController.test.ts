@@ -1,7 +1,7 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
-import { appWithAllRoutes } from '../../__testutils/appSetup'
+import { appWithAllRoutes, flashProvider } from '../../__testutils/appSetup'
 import ExpectedArrivalsService from '../../../services/expectedArrivalsService'
 import PrisonService from '../../../services/prisonService'
 import Role from '../../../authentication/role'
@@ -12,12 +12,10 @@ jest.mock('../../../services/prisonService')
 const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
 const prisonService = new PrisonService(null, null) as jest.Mocked<PrisonService>
 let app: Express
-const flash = jest.fn()
 
 beforeEach(() => {
   app = appWithAllRoutes({
     services: { expectedArrivalsService, prisonService },
-    flash,
     roles: [Role.PRISON_RECEPTION],
   })
   expectedArrivalsService.getArrival.mockResolvedValue({
@@ -46,7 +44,7 @@ describe('GET /confirmation', () => {
   })
 
   it('should call service methods correctly', () => {
-    flash.mockReturnValue([{ offenderNo: 'A1234AB' }])
+    flashProvider.mockReturnValue([{ offenderNo: 'A1234AB' }])
     return request(app)
       .get('/prisoners/12345-67890/confirmation')
       .expect('Content-Type', 'text/html; charset=utf-8')
@@ -57,17 +55,17 @@ describe('GET /confirmation', () => {
   })
 
   it('should retrieve offenderNumber from flash', () => {
-    flash.mockReturnValue([{ offenderNo: 'A1234AB' }])
+    flashProvider.mockReturnValue([{ offenderNo: 'A1234AB' }])
     return request(app)
       .get('/prisoners/12345-67890/confirmation')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(() => {
-        expect(flash).toHaveBeenCalledWith('offenderNumber')
+        expect(flashProvider).toHaveBeenCalledWith('offenderNumber')
       })
   })
 
   it('should redirect to /choose-prisoner page if no offenderNumber present', () => {
-    flash.mockReturnValue([])
+    flashProvider.mockReturnValue([])
     return request(app)
       .get('/prisoners/12345-67890/confirmation')
       .expect('Content-Type', 'text/plain; charset=utf-8')
@@ -79,7 +77,7 @@ describe('GET /confirmation', () => {
   })
 
   it('should clear cookie', () => {
-    flash.mockReturnValue([{ offenderNo: 'A1234AB' }])
+    flashProvider.mockReturnValue([{ offenderNo: 'A1234AB' }])
     return request(app)
       .get('/prisoners/12345-67890/confirmation')
       .expect(res => {
@@ -90,7 +88,7 @@ describe('GET /confirmation', () => {
   })
 
   it('should render /confirmAddedToRoll page', () => {
-    flash.mockReturnValue([{ offenderNo: 'A1234AB' }])
+    flashProvider.mockReturnValue([{ offenderNo: 'A1234AB' }])
     return request(app)
       .get('/prisoners/12345-67890/confirmation')
       .expect('Content-Type', 'text/html; charset=utf-8')

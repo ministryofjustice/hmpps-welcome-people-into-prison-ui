@@ -3,6 +3,8 @@ import SearchForExistingRecordController from './searchForExistingRecordControll
 
 import authorisationForUrlMiddleware from '../../../../middleware/authorisationForUrlMiddleware'
 import asyncMiddleware from '../../../../middleware/asyncMiddleware'
+import validationMiddleware from '../../../../middleware/validationMiddleware'
+
 import type { Services } from '../../../../services'
 import Role from '../../../../authentication/role'
 import ChangeNameController from './changeNameController'
@@ -10,6 +12,7 @@ import ChangeDateOfBirthController from './changeDateOfBirthController'
 import ChangePrisonNumberController from './changePrisonNumberController'
 import ChangePncNumberController from './changePncNumberController'
 import { State } from './state'
+import NameValidator from './validation/nameValidation'
 
 export default function routes(services: Services): Router {
   const router = express.Router()
@@ -35,7 +38,11 @@ export default function routes(services: Services): Router {
 
   const changeNameController = new ChangeNameController()
   get('/change-name', [checkSearchDetailsPresent, changeNameController.showChangeName()])
-  post('/change-name', [checkSearchDetailsPresent, changeNameController.changeName()])
+  post('/change-name', [
+    checkSearchDetailsPresent,
+    validationMiddleware(NameValidator),
+    changeNameController.changeName(),
+  ])
 
   const changeDateOfBirthController = new ChangeDateOfBirthController()
   get('/change-date-of-birth', [checkSearchDetailsPresent, changeDateOfBirthController.showChangeDateOfBirth()])

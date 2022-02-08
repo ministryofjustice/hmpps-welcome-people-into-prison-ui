@@ -3,7 +3,7 @@ import { Gender, NewOffenderBooking } from 'welcome'
 import request from 'supertest'
 import cheerio from 'cheerio'
 
-import { appWithAllRoutes, user, signedCookiesProvider } from '../../__testutils/appSetup'
+import { appWithAllRoutes, user, signedCookiesProvider, flashProvider } from '../../__testutils/appSetup'
 import ExpectedArrivalsService from '../../../services/expectedArrivalsService'
 import ImprisonmentStatusesService from '../../../services/imprisonmentStatusesService'
 import raiseAnalyticsEvent from '../../../raiseAnalyticsEvent'
@@ -19,7 +19,6 @@ const imprisonmentStatusesService = new ImprisonmentStatusesService(
   null
 ) as jest.Mocked<ImprisonmentStatusesService>
 let app: Express
-const flash = jest.fn()
 
 jest.mock('../../../raiseAnalyticsEvent')
 
@@ -34,7 +33,6 @@ beforeEach(() => {
   })
   app = appWithAllRoutes({
     services: { expectedArrivalsService, imprisonmentStatusesService },
-    flash,
     roles: [Role.PRISON_RECEPTION],
   })
   config.session.secret = 'sdksdfkdfs'
@@ -117,7 +115,7 @@ describe('/checkAnswers', () => {
     })
 
     it('should redirect to authentication error page for non reception users', () => {
-      app = appWithAllRoutes({ services: { expectedArrivalsService }, flash, roles: [] })
+      app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [] })
       return request(app)
         .post('/prisoners/12345-67890/check-answers')
         .send(newOffender)
@@ -147,7 +145,7 @@ describe('/checkAnswers', () => {
         .expect(302)
         .expect('Location', '/prisoners/12345-67890/confirmation')
         .expect(() => {
-          expect(flash).toHaveBeenCalledWith('offenderNumber', 'A1234AB')
+          expect(flashProvider).toHaveBeenCalledWith('offenderNumber', 'A1234AB')
           expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
             'Add to the establishment roll',
             'Confirmed arrival',
