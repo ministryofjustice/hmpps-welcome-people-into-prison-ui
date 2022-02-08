@@ -6,6 +6,13 @@
     <div class="govuk-width-container">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
+                {% if errors.length %}
+                    {{ govukErrorSummary({
+                        titleText: "There is a problem",
+                        errorList: errors,
+                        attributes: { 'data-qa-errors': true }
+                }) }}
+            {% endif %}
                 <span class="govuk-caption-xl">Confirm a prisoner's arrival</span>
                 <h1 class="govuk-heading-l">{{pageTitle}}</h1>
                 <form method="post">
@@ -16,7 +23,8 @@
                             id: "first-name",
                             name: "firstName",
                             classes: 'govuk-input--width-20',
-                            value: data.firstName
+                            value: data.firstName,
+                            errorMessage: errors | findError("first-name")
                         }) }}
 
                         {{ govukInput({
@@ -24,7 +32,8 @@
                             id: "last-name",
                             name: "lastName",
                             classes: 'govuk-input--width-20',
-                            value: data.lastName
+                            value: data.lastName,
+                            errorMessage: errors | findError("last-name")
                         }) }}
 
                     {% endcall %}

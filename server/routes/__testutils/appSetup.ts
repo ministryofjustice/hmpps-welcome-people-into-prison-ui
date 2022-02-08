@@ -24,19 +24,9 @@ export const user = {
 }
 
 export const signedCookiesProvider = jest.fn()
+export const flashProvider = jest.fn()
 
-function appSetup(
-  services: Services,
-  production: boolean,
-  userSupplier: () => Express.User,
-  flash: {
-    (): { [key: string]: string[] }
-    (message: string): string[]
-    (type: string, message: string | string[]): number
-    (type: string, format: string, ...args: unknown[]): number
-  },
-  roles: Role[]
-): Express {
+function appSetup(services: Services, production: boolean, userSupplier: () => Express.User, roles: Role[]): Express {
   const app = express()
 
   app.set('view engine', 'njk')
@@ -46,7 +36,7 @@ function appSetup(
   app.use(cookieSession({ keys: [''] }))
   app.use((req, res, next) => {
     req.user = userSupplier()
-    req.flash = flash
+    req.flash = flashProvider
     req.signedCookies = signedCookiesProvider()
     res.locals = {}
     res.locals.user = { ...req.user, roles }
@@ -65,21 +55,14 @@ export function appWithAllRoutes({
   production = false,
   services = {},
   userSupplier = () => user,
-  flash = jest.fn().mockReturnValue([]),
   roles = [] as Role[],
 }: {
   production?: boolean
   services?: Partial<Services>
   userSupplier?: () => Express.User
-  flash?: {
-    (): { [key: string]: string[] }
-    (message: string): string[]
-    (type: string, message: string | string[]): number
-    (type: string, format: string, ...args: unknown[]): number
-  }
   roles?: Role[]
   signedCookies?: () => Record<string, Record<string, string>>
 }): Express {
   auth.default.authenticationMiddleware = () => (req, res, next) => next()
-  return appSetup(services as Services, production, userSupplier, flash, roles)
+  return appSetup(services as Services, production, userSupplier, roles)
 }

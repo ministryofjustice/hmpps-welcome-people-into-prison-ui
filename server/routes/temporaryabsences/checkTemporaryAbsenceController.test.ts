@@ -1,7 +1,7 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
-import { appWithAllRoutes } from '../__testutils/appSetup'
+import { appWithAllRoutes, flashProvider } from '../__testutils/appSetup'
 import TemporaryAbsencesService from '../../services/temporaryAbsencesService'
 import raiseAnalyticsEvent from '../../raiseAnalyticsEvent'
 
@@ -11,7 +11,6 @@ import config from '../../config'
 jest.mock('../../services/temporaryAbsencesService')
 const temporaryAbsencesService = new TemporaryAbsencesService(null, null) as jest.Mocked<TemporaryAbsencesService>
 let app: Express
-const flash = jest.fn()
 
 jest.mock('../../raiseAnalyticsEvent')
 
@@ -25,7 +24,7 @@ const temporaryAbsence = {
 }
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { temporaryAbsencesService }, flash, roles: [Role.PRISON_RECEPTION] })
+  app = appWithAllRoutes({ services: { temporaryAbsencesService }, roles: [Role.PRISON_RECEPTION] })
   config.confirmEnabled = true
   temporaryAbsencesService.getTemporaryAbsence.mockResolvedValue(temporaryAbsence)
 })
@@ -77,7 +76,6 @@ describe('POST addToRoll', () => {
       .post('/prisoners/G0013AB/check-temporary-absence')
       .expect('Content-Type', 'text/plain; charset=utf-8')
       .expect(() => {
-        expect(temporaryAbsencesService.confirmTemporaryAbsence).toHaveBeenCalledTimes(1)
         expect(temporaryAbsencesService.confirmTemporaryAbsence).toHaveBeenCalledWith('user1', 'G0013AB', 'MDI')
       })
   })
@@ -86,7 +84,7 @@ describe('POST addToRoll', () => {
     return request(app)
       .post('/prisoners/G0013AB/check-temporary-absence')
       .expect(() => {
-        expect(flash).toHaveBeenCalledWith('prisoner', { firstName: 'John', lastName: 'Doe' })
+        expect(flashProvider).toHaveBeenCalledWith('prisoner', { firstName: 'John', lastName: 'Doe' })
       })
   })
 

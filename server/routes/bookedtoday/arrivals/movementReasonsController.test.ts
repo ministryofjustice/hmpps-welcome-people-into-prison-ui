@@ -2,7 +2,7 @@ import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
 import { Movement, ImprisonmentStatus } from 'welcome'
-import { appWithAllRoutes } from '../../__testutils/appSetup'
+import { appWithAllRoutes, flashProvider } from '../../__testutils/appSetup'
 import ImprisonmentStatusesService from '../../../services/imprisonmentStatusesService'
 import ExpectedArrivalsService from '../../../services/expectedArrivalsService'
 
@@ -32,10 +32,8 @@ const imprisonmentStatus: ImprisonmentStatus = {
   ],
 }
 
-const flash = jest.fn()
-
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { imprisonmentStatusesService, expectedArrivalsService }, flash })
+  app = appWithAllRoutes({ services: { imprisonmentStatusesService, expectedArrivalsService } })
   expectedArrivalsService.getArrival.mockResolvedValue({} as Movement)
   imprisonmentStatusesService.getImprisonmentStatus.mockResolvedValue(imprisonmentStatus)
 })
@@ -75,7 +73,7 @@ describe('/determinate-sentence', () => {
         .expect(302)
         .expect('Location', '/prisoners/12345-67890/imprisonment-status/determinate-sentence')
         .expect(() => {
-          expect(flash.mock.calls).toEqual([
+          expect(flashProvider.mock.calls).toEqual([
             ['errors', [{ href: '#movement-reason-0', text: 'Select the type of determinate sentence' }]],
           ])
         })

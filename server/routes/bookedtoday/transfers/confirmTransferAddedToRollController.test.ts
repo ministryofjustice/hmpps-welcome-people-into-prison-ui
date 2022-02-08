@@ -1,19 +1,17 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
-import { appWithAllRoutes } from '../../__testutils/appSetup'
+import { appWithAllRoutes, flashProvider } from '../../__testutils/appSetup'
 import PrisonService from '../../../services/prisonService'
 import Role from '../../../authentication/role'
 
 jest.mock('../../../services/prisonService')
 const prisonService = new PrisonService(null, null) as jest.Mocked<PrisonService>
 let app: Express
-const flash = jest.fn()
 
 beforeEach(() => {
   app = appWithAllRoutes({
     services: { prisonService },
-    flash,
     roles: [Role.PRISON_RECEPTION],
   })
 
@@ -33,7 +31,7 @@ describe('GET /view', () => {
   })
 
   it('should call service methods correctly', () => {
-    flash.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith' }])
+    flashProvider.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith' }])
     return request(app)
       .get('/prisoners/A1234AB/confirm-transfer')
       .expect('Content-Type', 'text/html; charset=utf-8')
@@ -43,18 +41,17 @@ describe('GET /view', () => {
   })
 
   it('should retrieve prisoner details from flash', () => {
-    flash.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith' }])
+    flashProvider.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith' }])
     return request(app)
       .get('/prisoners/A1234AB/confirm-transfer')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(() => {
-        expect(flash).toHaveBeenCalledTimes(1)
-        expect(flash).toHaveBeenCalledWith('prisoner')
+        expect(flashProvider).toHaveBeenCalledWith('prisoner')
       })
   })
 
   it('should redirect to /choose-prisoner page if both firstname and lastname absent', () => {
-    flash.mockReturnValue([{}])
+    flashProvider.mockReturnValue([{}])
     return request(app)
       .get('/prisoners/A1234AB/confirm-transfer')
       .expect(302)
@@ -66,7 +63,7 @@ describe('GET /view', () => {
   })
 
   it('should render /confirmTransferAddedToRoll page with correct data', () => {
-    flash.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith' }])
+    flashProvider.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith' }])
 
     return request(app)
       .get('/prisoners/A1234AB/confirm-transfer')
