@@ -18,6 +18,7 @@ export declare global {
 
     interface Request {
       verified?: boolean
+      id: string
       errors?: { text?: string; href: string }[]
       flash(): { [key: string]: unknown[] }
       flash(type: string, message: unknown): number
