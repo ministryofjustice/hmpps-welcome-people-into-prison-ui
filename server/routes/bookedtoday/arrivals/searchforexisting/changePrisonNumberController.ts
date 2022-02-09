@@ -4,17 +4,24 @@ import { State } from './state'
 export default class ChangePrisonNumberController {
   public showChangePrisonNumber(): RequestHandler {
     return async (req, res) => {
-      const data = State.searchDetails.get(req)
-      res.render('pages/bookedtoday/arrivals/searchForExistingRecord/changePrisonNumber.njk', { data })
+      const data = req.flash('input')[0] || State.searchDetails.get(req)
+      res.render('pages/bookedtoday/arrivals/searchForExistingRecord/changePrisonNumber.njk', {
+        data,
+        errors: req.flash('errors'),
+      })
     }
   }
 
   public changePrisonNumber(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
+      if (req.errors) {
+        req.flash('input', req.body)
+        return res.redirect(`/prisoners/${id}/search-for-existing-record/change-prison-number`)
+      }
       const { prisonNumber } = req.body
       State.searchDetails.update(req, res, { prisonNumber })
-      res.redirect(`/prisoners/${id}/search-for-existing-record`)
+      return res.redirect(`/prisoners/${id}/search-for-existing-record`)
     }
   }
 
