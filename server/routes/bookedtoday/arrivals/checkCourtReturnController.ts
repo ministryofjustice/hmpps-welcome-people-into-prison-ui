@@ -1,9 +1,11 @@
 import { RequestHandler } from 'express'
-import type { ExpectedArrivalsService } from '../../../services'
-import raiseAnalyticsEvent from '../../../raiseAnalyticsEvent'
+import type { ExpectedArrivalsService, RaiseAnalyticsEvent } from '../../../services'
 
 export default class CheckCourtReturnController {
-  public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
+  public constructor(
+    private readonly expectedArrivalsService: ExpectedArrivalsService,
+    private readonly raiseAnalyticsEvent: RaiseAnalyticsEvent
+  ) {}
 
   public checkCourtReturn(): RequestHandler {
     return async (req, res) => {
@@ -32,7 +34,7 @@ export default class CheckCourtReturnController {
         prisonNumber: prisonNumber.prisonNumber,
       })
 
-      raiseAnalyticsEvent(
+      this.raiseAnalyticsEvent(
         'Add to the establishment roll',
         'Confirmed court return returned',
         `AgencyId: ${activeCaseLoadId}, From: ${data.fromLocation}, Type: ${data.fromLocationType},`,

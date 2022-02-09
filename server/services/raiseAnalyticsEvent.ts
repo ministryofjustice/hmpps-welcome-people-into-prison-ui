@@ -1,12 +1,12 @@
 import ua from 'universal-analytics'
-import config from './config'
+import config from '../config'
 
-export default function raiseAnalyticsEvent(
+export const raiseAnalyticsEvent = (
   category: string,
   action: string,
   label: string,
   hostname: string
-): void | Promise<void> {
+): void | Promise<void> => {
   if (!config.analytics.googleAnalyticsId) return Promise.resolve()
   const ga = ua(config.analytics.googleAnalyticsId)
   const data = {
@@ -18,3 +18,5 @@ export default function raiseAnalyticsEvent(
 
   return ga.event(data).send()
 }
+
+export type RaiseAnalyticsEvent = typeof raiseAnalyticsEvent
