@@ -2,8 +2,7 @@ import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
 import { appWithAllRoutes, flashProvider } from '../__testutils/appSetup'
-import TemporaryAbsencesService from '../../services/temporaryAbsencesService'
-import raiseAnalyticsEvent from '../../raiseAnalyticsEvent'
+import { TemporaryAbsencesService, RaiseAnalyticsEvent } from '../../services'
 
 import Role from '../../authentication/role'
 import config from '../../config'
@@ -11,8 +10,7 @@ import config from '../../config'
 jest.mock('../../services/temporaryAbsencesService')
 const temporaryAbsencesService = new TemporaryAbsencesService(null, null) as jest.Mocked<TemporaryAbsencesService>
 let app: Express
-
-jest.mock('../../raiseAnalyticsEvent')
+const raiseAnalyticsEvent = jest.fn() as RaiseAnalyticsEvent
 
 const temporaryAbsence = {
   firstName: 'John',
@@ -24,7 +22,10 @@ const temporaryAbsence = {
 }
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { temporaryAbsencesService }, roles: [Role.PRISON_RECEPTION] })
+  app = appWithAllRoutes({
+    services: { temporaryAbsencesService, raiseAnalyticsEvent },
+    roles: [Role.PRISON_RECEPTION],
+  })
   config.confirmEnabled = true
   temporaryAbsencesService.getTemporaryAbsence.mockResolvedValue(temporaryAbsence)
 })
@@ -67,7 +68,7 @@ describe('GET checkTemporaryAbsence', () => {
 
 describe('POST addToRoll', () => {
   it('should redirect to authentication error page for non reception users', () => {
-    app = appWithAllRoutes({ roles: [] })
+    app = appWithAllRoutes({ roles: [], raiseAnalyticsEvent })
     return request(app).post('/prisoners/G0013AB/check-temporary-absence').expect(302).expect('Location', '/autherror')
   })
 

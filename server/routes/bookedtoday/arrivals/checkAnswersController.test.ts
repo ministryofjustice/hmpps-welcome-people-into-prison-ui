@@ -4,9 +4,7 @@ import request from 'supertest'
 import cheerio from 'cheerio'
 
 import { appWithAllRoutes, user, signedCookiesProvider, flashProvider } from '../../__testutils/appSetup'
-import ExpectedArrivalsService from '../../../services/expectedArrivalsService'
-import ImprisonmentStatusesService from '../../../services/imprisonmentStatusesService'
-import raiseAnalyticsEvent from '../../../raiseAnalyticsEvent'
+import { ExpectedArrivalsService, ImprisonmentStatusesService, RaiseAnalyticsEvent } from '../../../services'
 import Role from '../../../authentication/role'
 import config from '../../../config'
 
@@ -19,8 +17,7 @@ const imprisonmentStatusesService = new ImprisonmentStatusesService(
   null
 ) as jest.Mocked<ImprisonmentStatusesService>
 let app: Express
-
-jest.mock('../../../raiseAnalyticsEvent')
+const raiseAnalyticsEvent = jest.fn() as RaiseAnalyticsEvent
 
 beforeEach(() => {
   signedCookiesProvider.mockReturnValue({
@@ -32,7 +29,7 @@ beforeEach(() => {
     },
   })
   app = appWithAllRoutes({
-    services: { expectedArrivalsService, imprisonmentStatusesService },
+    services: { expectedArrivalsService, imprisonmentStatusesService, raiseAnalyticsEvent },
     roles: [Role.PRISON_RECEPTION],
   })
   config.session.secret = 'sdksdfkdfs'

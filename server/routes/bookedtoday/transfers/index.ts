@@ -26,7 +26,7 @@ export default function routes(services: Services): Router {
       handlers.map(handler => asyncMiddleware(handler))
     )
 
-  const checkTransferController = new CheckTransferController(services.transfersService)
+  const checkTransferController = new CheckTransferController(services.transfersService, services.raiseAnalyticsEvent)
   get(
     '/prisoners/:prisonNumber/check-transfer',
     [redirectIfDisabledMiddleware(config.confirmEnabled), checkTransferController.checkTransfer()],

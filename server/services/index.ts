@@ -5,6 +5,7 @@ import TemporaryAbsencesService from './temporaryAbsencesService'
 import ImprisonmentStatusesService from './imprisonmentStatusesService'
 import TransfersService from './transfersService'
 import PrisonService from './prisonService'
+import { raiseAnalyticsEvent, type RaiseAnalyticsEvent } from './raiseAnalyticsEvent'
 
 export const services = () => {
   const { hmppsAuthClient, welcomeClientBuilder } = dataAccess()
@@ -23,6 +24,7 @@ export const services = () => {
     imprisonmentStatusesService,
     transfersService,
     prisonService,
+    raiseAnalyticsEvent,
   }
 }
 
@@ -35,4 +37,5 @@ export {
   ImprisonmentStatusesService,
   TransfersService,
   PrisonService,
+  RaiseAnalyticsEvent,
 }

@@ -30,7 +30,10 @@ export default function routes(services: Services): Router {
   const temporaryAbsencesController = new TemporaryAbsencesController(services.temporaryAbsencesService)
   get('/prisoners-returning', [temporaryAbsencesController.view()])
 
-  const checkTemporaryAbsenceController = new CheckTemporaryAbsenceController(services.temporaryAbsencesService)
+  const checkTemporaryAbsenceController = new CheckTemporaryAbsenceController(
+    services.temporaryAbsencesService,
+    services.raiseAnalyticsEvent
+  )
   get(
     '/prisoners/:prisonNumber/check-temporary-absence',
     [redirectIfDisabledMiddleware(config.confirmEnabled), checkTemporaryAbsenceController.checkTemporaryAbsence()],

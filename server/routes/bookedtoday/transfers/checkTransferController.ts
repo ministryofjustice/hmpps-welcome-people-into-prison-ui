@@ -1,9 +1,11 @@
 import type { RequestHandler } from 'express'
-import type { TransfersService } from '../../../services'
-import raiseAnalyticsEvent from '../../../raiseAnalyticsEvent'
+import type { TransfersService, RaiseAnalyticsEvent } from '../../../services'
 
 export default class CheckTransferController {
-  public constructor(private readonly transfersService: TransfersService) {}
+  public constructor(
+    private readonly transfersService: TransfersService,
+    private readonly raiseAnalyticsEvent: RaiseAnalyticsEvent
+  ) {}
 
   public checkTransfer(): RequestHandler {
     return async (req, res) => {
@@ -28,7 +30,7 @@ export default class CheckTransferController {
         lastName: data.lastName,
       })
 
-      raiseAnalyticsEvent(
+      this.raiseAnalyticsEvent(
         'Add to the establishment roll',
         'Confirmed transfer',
         `AgencyId: ${activeCaseLoadId}, From: ${data.fromLocation}, Type: 'PRISON',`,
