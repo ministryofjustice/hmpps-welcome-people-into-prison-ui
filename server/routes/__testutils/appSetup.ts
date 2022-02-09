@@ -61,7 +61,6 @@ export function appWithAllRoutes({
   services?: Partial<Services>
   userSupplier?: () => Express.User
   roles?: Role[]
-  raiseAnalyticsEvent?: (category: string, action: string, label: string, hostname: string) => void
   signedCookies?: () => Record<string, Record<string, string>>
 }): Express {
   auth.default.authenticationMiddleware = () => (req, res, next) => next()

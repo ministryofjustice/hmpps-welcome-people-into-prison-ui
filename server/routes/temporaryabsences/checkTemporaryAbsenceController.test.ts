@@ -68,7 +68,7 @@ describe('GET checkTemporaryAbsence', () => {
 
 describe('POST addToRoll', () => {
   it('should redirect to authentication error page for non reception users', () => {
-    app = appWithAllRoutes({ roles: [], raiseAnalyticsEvent })
+    app = appWithAllRoutes({ roles: [] })
     return request(app).post('/prisoners/G0013AB/check-temporary-absence').expect(302).expect('Location', '/autherror')
   })
 
