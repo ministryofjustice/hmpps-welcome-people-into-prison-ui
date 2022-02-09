@@ -1,13 +1,13 @@
 import { RequestHandler } from 'express'
 import { Gender } from 'welcome'
-import type { ImprisonmentStatusesService, ExpectedArrivalsService } from '../../../services'
-import raiseAnalyticsEvent from '../../../raiseAnalyticsEvent'
+import type { ImprisonmentStatusesService, ExpectedArrivalsService, RaiseAnalyticsEvent } from '../../../services'
 import { State } from './state'
 
 export default class CheckAnswersController {
   public constructor(
     private readonly expectedArrivalsService: ExpectedArrivalsService,
-    private readonly imprisonmentStatusesService: ImprisonmentStatusesService
+    private readonly imprisonmentStatusesService: ImprisonmentStatusesService,
+    private readonly raiseAnalyticsEvent: RaiseAnalyticsEvent
   ) {}
 
   public view(): RequestHandler {
@@ -50,7 +50,7 @@ export default class CheckAnswersController {
         return res.redirect('/feature-not-available')
       }
 
-      raiseAnalyticsEvent(
+      this.raiseAnalyticsEvent(
         'Add to the establishment roll',
         'Confirmed arrival',
         `AgencyId: ${activeCaseLoadId}, From: ${data.fromLocation}, Type: ${data.fromLocationType},`,

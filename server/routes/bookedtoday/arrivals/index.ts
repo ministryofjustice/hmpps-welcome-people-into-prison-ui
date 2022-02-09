@@ -71,7 +71,8 @@ export default function routes(services: Services): Router {
 
   const checkAnswersController = new CheckAnswersController(
     services.expectedArrivalsService,
-    services.imprisonmentStatusesService
+    services.imprisonmentStatusesService,
+    services.raiseAnalyticsEvent
   )
   get(
     '/prisoners/:id/check-answers',
@@ -100,7 +101,10 @@ export default function routes(services: Services): Router {
   )
   get('/prisoners/:id/confirmation', [confirmAddedToRollController.view()], [Role.PRISON_RECEPTION])
 
-  const checkCourtReturnController = new CheckCourtReturnController(services.expectedArrivalsService)
+  const checkCourtReturnController = new CheckCourtReturnController(
+    services.expectedArrivalsService,
+    services.raiseAnalyticsEvent
+  )
   get(
     '/prisoners/:id/check-court-return',
     [redirectIfDisabledMiddleware(config.confirmEnabled), checkCourtReturnController.checkCourtReturn()],

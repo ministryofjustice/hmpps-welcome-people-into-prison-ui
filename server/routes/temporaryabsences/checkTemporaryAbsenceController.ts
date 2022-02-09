@@ -1,9 +1,11 @@
 import { RequestHandler } from 'express'
-import type { TemporaryAbsencesService } from '../../services'
-import raiseAnalyticsEvent from '../../raiseAnalyticsEvent'
+import type { TemporaryAbsencesService, RaiseAnalyticsEvent } from '../../services'
 
 export default class CheckTemporaryAbsenceController {
-  public constructor(private readonly temporaryAbsencesService: TemporaryAbsencesService) {}
+  public constructor(
+    private readonly temporaryAbsencesService: TemporaryAbsencesService,
+    private readonly raiseAnalyticsEvent: RaiseAnalyticsEvent
+  ) {}
 
   public checkTemporaryAbsence(): RequestHandler {
     return async (req, res) => {
@@ -28,7 +30,7 @@ export default class CheckTemporaryAbsenceController {
         lastName: data.lastName,
       })
 
-      raiseAnalyticsEvent(
+      this.raiseAnalyticsEvent(
         'Add to the establishment roll',
         'Confirmed temporary absence returned',
         `AgencyId: ${activeCaseLoadId}, Reason: ${data.reasonForAbsence}, Type: 'PRISON',`,
