@@ -13,6 +13,7 @@ import ChangePrisonNumberController from './changePrisonNumberController'
 import ChangePncNumberController from './changePncNumberController'
 import { State } from './state'
 import NameValidator from './validation/nameValidation'
+import DateOfBirthValidator from './validation/dateOfBirthValidation'
 
 export default function routes(services: Services): Router {
   const router = express.Router()
@@ -46,7 +47,11 @@ export default function routes(services: Services): Router {
 
   const changeDateOfBirthController = new ChangeDateOfBirthController()
   get('/change-date-of-birth', [checkSearchDetailsPresent, changeDateOfBirthController.showChangeDateOfBirth()])
-  post('/change-date-of-birth', [checkSearchDetailsPresent, changeDateOfBirthController.changeDateOfBirth()])
+  post('/change-date-of-birth', [
+    checkSearchDetailsPresent,
+    validationMiddleware(DateOfBirthValidator),
+    changeDateOfBirthController.changeDateOfBirth(),
+  ])
 
   const changePrisonNumberController = new ChangePrisonNumberController()
   get('/change-prison-number', [checkSearchDetailsPresent, changePrisonNumberController.showChangePrisonNumber()])

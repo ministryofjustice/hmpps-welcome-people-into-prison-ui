@@ -4,6 +4,7 @@ import {
   compareByFullName,
   assertHasStringValues,
   assertHasOptionalStringValues,
+  zip,
 } from './utils'
 
 describe('Convert to title case', () => {
@@ -280,5 +281,29 @@ describe('assertHasOptionalStringValues', () => {
     const record: Record<string, unknown> = null
 
     expect(() => assertHasOptionalStringValues(record, ['name', 'role'])).toThrowError('Not a record')
+  })
+})
+
+describe('zip', () => {
+  it('empty arrays', () => {
+    expect(zip([], [])).toEqual([])
+  })
+
+  it('equal length', () => {
+    expect(zip(['aaa', 'bbb'], [1, 2])).toEqual([
+      ['aaa', 1],
+      ['bbb', 2],
+    ])
+  })
+
+  it('unequal lengths, first smaller, provides a value per first array', () => {
+    expect(zip(['aaa'], [1, 2])).toEqual([['aaa', 1]])
+  })
+
+  it('unequal lengths, second smaller, fills in second value with undefined ', () => {
+    expect(zip(['aaa', 'bbb'], [1])).toEqual([
+      ['aaa', 1],
+      ['bbb', undefined],
+    ])
   })
 })
