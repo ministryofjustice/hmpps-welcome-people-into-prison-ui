@@ -1,6 +1,6 @@
+import type { Arrival } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
-import { Movement } from 'welcome'
 import cheerio from 'cheerio'
 import { appWithAllRoutes, signedCookiesProvider } from '../../../__testutils/appSetup'
 import { ExpectedArrivalsService } from '../../../../services'
@@ -18,6 +18,18 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.resetAllMocks()
+})
+
+describe('GET /search-for-existing-record/new', () => {
+  it('should redirect and clear cookie', () => {
+    signedCookiesProvider.mockReturnValue({})
+
+    return request(app)
+      .get('/prisoners/12345-67890/search-for-existing-record/new')
+      .expect(302)
+      .expect('Location', '/prisoners/12345-67890/search-for-existing-record')
+      .expect(res => expect(res.header['set-cookie'][0]).toContain('s%3A.'))
+  })
 })
 
 describe('GET /search-for-existing-record', () => {
@@ -49,7 +61,7 @@ describe('GET /search-for-existing-record', () => {
       prisonNumber: 'A1234AB',
       pncNumber: '99/98644M',
       potentialMatches: [],
-    } as Movement)
+    } as Arrival)
 
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record')
@@ -68,7 +80,7 @@ describe('GET /search-for-existing-record', () => {
       prisonNumber: 'A1234AB',
       pncNumber: '99/98644M',
       potentialMatches: [],
-    } as Movement)
+    } as Arrival)
 
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record')

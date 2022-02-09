@@ -1,5 +1,5 @@
 import type { Express } from 'express'
-import { Gender, NewOffenderBooking } from 'welcome'
+import { type Arrival, Gender, type NewOffenderBooking } from 'welcome'
 import request from 'supertest'
 import cheerio from 'cheerio'
 
@@ -43,7 +43,7 @@ beforeEach(() => {
     date: '2021-10-13',
     fromLocation: 'Some court',
     fromLocationType: 'COURT',
-  })
+  } as Arrival)
   expectedArrivalsService.createOffenderRecordAndBooking.mockResolvedValue({
     offenderNo: 'A1234AB',
   })

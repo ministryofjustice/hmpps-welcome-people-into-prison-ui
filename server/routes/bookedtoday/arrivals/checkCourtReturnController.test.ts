@@ -1,3 +1,4 @@
+import type { Arrival } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
@@ -21,7 +22,7 @@ const courtReturn = {
   date: '2021-10-13',
   fromLocation: 'Some court',
   fromLocationType: 'COURT',
-}
+} as Arrival
 
 beforeEach(() => {
   app = appWithAllRoutes({ services: { expectedArrivalsService, raiseAnalyticsEvent }, roles: [Role.PRISON_RECEPTION] })
