@@ -1,7 +1,7 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
-import { appWithAllRoutes, signedCookiesProvider } from '../../../__testutils/appSetup'
+import { appWithAllRoutes, flashProvider, signedCookiesProvider } from '../../../__testutils/appSetup'
 import Role from '../../../../authentication/role'
 
 let app: Express
@@ -32,6 +32,7 @@ describe('GET /search-for-existing-record/change-prison-number', () => {
   })
 
   it('should render page', () => {
+    flashProvider.mockReturnValue([])
     signedCookiesProvider.mockReturnValue({ 'search-details': searchDetails })
 
     return request(app)
@@ -100,6 +101,22 @@ describe('POST /search-for-existing-record/change-prison-number', () => {
       .send({ day: '01', month: '02', year: '2003' })
       .expect(302)
       .expect('Location', '/prisoners/12345-67890/search-for-existing-record')
+  })
+
+  it('should redirect when validation error', () => {
+    signedCookiesProvider.mockReturnValue({ 'search-details': searchDetails })
+
+    return request(app)
+      .post('/prisoners/12345-67890/search-for-existing-record/change-prison-number')
+      .send({ prisonNumber: 'AAAAAA' })
+      .expect(302)
+      .expect('Location', '/prisoners/12345-67890/search-for-existing-record/change-prison-number')
+      .expect(() => {
+        expect(flashProvider).toHaveBeenCalledWith('errors', [
+          { href: '#prison-number', text: 'Enter a prison number in the correct format' },
+        ])
+        expect(flashProvider).toHaveBeenCalledWith('input', { prisonNumber: 'AAAAAA' })
+      })
   })
 })
 

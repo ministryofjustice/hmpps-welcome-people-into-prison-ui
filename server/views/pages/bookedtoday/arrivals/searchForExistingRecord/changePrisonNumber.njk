@@ -6,6 +6,13 @@
     <div class="govuk-width-container">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
+                {% if errors.length %}
+                    {{ govukErrorSummary({
+                        titleText: "There is a problem",
+                        errorList: errors,
+                        attributes: { 'data-qa-errors': true }
+                    }) }}
+                {% endif %}
                 <span class="govuk-caption-xl">Confirm a prisoner's arrival</span>
                 <h1 class="govuk-heading-l">{{pageTitle}}</h1>
                 <form method="post">
@@ -20,7 +27,8 @@
                         },
                         classes: "govuk-!-width-one-quarter",
                         name: "prisonNumber",
-                        value: data.prisonNumber
+                        value: data.prisonNumber,
+                        errorMessage: errors | findError("prison-number")
                     }) }}
 
                     {{ govukButton({

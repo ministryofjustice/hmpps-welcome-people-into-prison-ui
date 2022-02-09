@@ -19,7 +19,7 @@ const DateOfBirthValidator: Validator = ({ day: d, month: m, year: y }: Record<s
   }
 
   if (day && month && year && !isValidDate(d, m, y)) {
-    return [{ text: "Enter this person's date of birth", href: '#date-of-birth-day' }]
+    return [{ text: 'Date of birth must be a real date', href: '#date-of-birth-day' }]
   }
 
   const missingFieldNames = zip(fields, [day, month, year])

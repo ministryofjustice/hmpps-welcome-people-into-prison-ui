@@ -1,20 +1,18 @@
 {% extends "../../../../partials/layout.njk" %}
-
 {% set pageTitle = "Search for an existing prisoner record" %}
-{% set baseUrl = '/prisoners/' + data.id + '/search-for-existing-record'%}
-
+{% set baseUrl = '/prisoners/' + data.id + '/search-for-existing-record' %}
 {% block content %}
     <div class="govuk-width-container">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
                 <span class="govuk-caption-xl">Confirm a prisoner's arrival</span>
-                <h1 class="govuk-heading-l">{{pageTitle}}</h1>
-                <p>We could not check if this person has an existing prisoner record because the Person Escort Record does not include a valid PNC or prison number.</p>
-                <p>Check their personal details are correct and add a PNC or prison number if you have one. This information will be used to search for an existing prisoner record.</p>
-
+                <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+                <p>We could not check if this person has an existing prisoner record because the Person Escort Record does not include a
+                    valid PNC or prison number.</p>
+                <p>Check their personal details are correct and add a PNC or prison number if you have one. This information will be
+                    used to search for an existing prisoner record.</p>
                 <h2 class="govuk-heading-m">Information from the Person Escort Record</h2>
                 <h3 class="govuk-heading-m">Personal details</h3>
-
                 {% set details = [
                     {   key:     { text: "Name" },
                         value:   { text: data.firstName + " " + data.lastName },
@@ -26,31 +24,26 @@
                         actions: { items: [
                             { href: baseUrl + '/change-date-of-birth', text: "Change", visuallyHiddenText: "date of birth" }]}
                     }
-                ]%}
-
+                ] %}
                 {{ govukSummaryList({ rows: details }) }}
-                
                 <h3 class="govuk-heading-m">Identifiers</h3>
-
                 {% set identifiers = [
                     {   key:     { text: "PNC number" },
-                        value:   { text: data.pncNumber | default('Not entered') },
+                        value:   { text: data.pncNumber | default('Not entered', true) },
                         actions: { items: [
                             { href: baseUrl + '/change-pnc-number', text: "Change" if data.pncNumber else "Add", visuallyHiddenText: "PNC number", show: true },
                             { href: baseUrl + '/remove-pnc-number', text: "Remove" if data.pncNumber, visuallyHiddenText: "PNC number", show: data.pncNumber }]
                             | selectattr("show")}
                     },
                     {   key:     { text: "Prison number" },
-                        value:   { text: data.prisonNumber | default('Not entered') },
+                        value:   { text: data.prisonNumber | default('Not entered', true) },
                         actions: { items: [
                             { href: baseUrl + '/change-prison-number', text: "Change" if data.prisonNumber else "Add", visuallyHiddenText: "Prison number", show: true },
                             { href: baseUrl + '/remove-prison-number', text: "Remove", visuallyHiddenText: "Prison number", show: data.prisonNumber }]
                             | selectattr("show")}
                     }
-                ]%}
-
+                ] %}
                 {{ govukSummaryList({ rows: identifiers }) }}
-            
                 {{ govukButton({
                         classes: "govuk-button govuk-!-margin-top-9 govuk-!-margin-bottom-3",
                         text: "Search",
