@@ -97,7 +97,7 @@ describe('DateOfBirthValidator', () => {
       [
         {
           href: '#date-of-birth-day',
-          text: "Enter this person's date of birth",
+          text: 'Date of birth must be a real date',
         },
       ],
     ],
