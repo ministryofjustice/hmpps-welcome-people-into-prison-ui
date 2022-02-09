@@ -63,3 +63,5 @@ export function assertHasOptionalStringValues<K extends string>(
     throw Error(`Non string keys: ${invalidKeys}`)
   }
 }
+
+export const zip = <A, B>(a: A[], b: B[]): [A, B][] => a.map((k, i) => [k, b[i]])

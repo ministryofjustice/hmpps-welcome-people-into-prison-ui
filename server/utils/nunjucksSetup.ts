@@ -72,6 +72,17 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     return null
   })
 
+  njkEnv.addFilter('findFirstError', (array, formFieldIds: string[]) => {
+    if (!array) return null
+    const item = array.find((error: { href: string }) => formFieldIds.find(id => error.href === `#${id}`))
+    if (item) {
+      return {
+        text: item.text,
+      }
+    }
+    return null
+  })
+
   const {
     analytics: { googleAnalyticsId, tagManagerContainerId, tagManagerEnvironment },
   } = config

@@ -6,6 +6,13 @@
     <div class="govuk-width-container">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
+                {% if errors.length %}
+                    {{ govukErrorSummary({
+                        titleText: "There is a problem",
+                        errorList: errors,
+                        attributes: { 'data-qa-errors': true }
+                    }) }}
+                {% endif %}
                 <span class="govuk-caption-xl">Confirm a prisoner's arrival</span>
                 <h1 class="govuk-heading-l">{{pageTitle}}</h1>
                 <form method="post">
@@ -15,21 +22,22 @@
                         hint: {
                             text: "For example, 31 3 1980."
                         },
+                        errorMessage: errors | findFirstError(["date-of-birth-day", "date-of-birth-month", "date-of-birth-year"]),
                         items: [
                             {
                             classes: "govuk-input--width-2",
                             name: "day",
-                            value: data.dateOfBirth | formatDate('DD')
+                            value: data.day | default(data.dateOfBirth | formatDate('DD'))
                             },
                             {
                             classes: "govuk-input--width-2",
                             name: "month",
-                            value: data.dateOfBirth | formatDate('MM')
+                            value: data.month | default(data.dateOfBirth | formatDate('MM'))
                             },
                             {
                             classes: "govuk-input--width-4",
                             name: "year",
-                            value: data.dateOfBirth | formatDate('YYYY')
+                            value: data.year | default(data.dateOfBirth | formatDate('YYYY'))
                             }
                         ]
                     }) }}
