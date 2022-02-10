@@ -59,11 +59,11 @@ export default class WelcomeClient {
     }) as Promise<Transfer>
   }
 
-  async confirmTransfer(prisonNumber: string): Promise<void> {
+  async confirmTransfer(prisonNumber: string): Promise<ArrivalResponse> {
     logger.info(`welcomeApi: confirmTransfer ${prisonNumber})`)
     return this.restClient.post({
       path: `/transfers/${prisonNumber}/confirm`,
-    }) as Promise<void>
+    }) as Promise<ArrivalResponse>
   }
 
   async getTemporaryAbsences(agencyId: string): Promise<TemporaryAbsence[]> {

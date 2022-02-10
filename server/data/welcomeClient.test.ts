@@ -158,9 +158,12 @@ describe('welcomeClient', () => {
       fakeWelcomeApi
         .post(`/transfers/${prisonNumber}/confirm`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, {})
+        .reply(200, { prisonNumber: 'A1234AB', location: 'Reception' })
 
-      return expect(welcomeClient.confirmTransfer(prisonNumber)).resolves.toStrictEqual({})
+      return expect(welcomeClient.confirmTransfer(prisonNumber)).resolves.toStrictEqual({
+        prisonNumber: 'A1234AB',
+        location: 'Reception',
+      })
     })
   })
 

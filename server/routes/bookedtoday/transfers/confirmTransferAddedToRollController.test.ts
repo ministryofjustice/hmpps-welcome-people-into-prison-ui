@@ -31,7 +31,7 @@ describe('GET /view', () => {
   })
 
   it('should call service methods correctly', () => {
-    flashProvider.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith' }])
+    flashProvider.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith', location: 'Reception' }])
     return request(app)
       .get('/prisoners/A1234AB/confirm-transfer')
       .expect('Content-Type', 'text/html; charset=utf-8')
@@ -41,7 +41,7 @@ describe('GET /view', () => {
   })
 
   it('should retrieve prisoner details from flash', () => {
-    flashProvider.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith' }])
+    flashProvider.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith', location: 'Reception' }])
     return request(app)
       .get('/prisoners/A1234AB/confirm-transfer')
       .expect('Content-Type', 'text/html; charset=utf-8')
@@ -63,7 +63,7 @@ describe('GET /view', () => {
   })
 
   it('should render /confirmTransferAddedToRoll page with correct data', () => {
-    flashProvider.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith' }])
+    flashProvider.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith', location: 'Reception' }])
 
     return request(app)
       .get('/prisoners/A1234AB/confirm-transfer')

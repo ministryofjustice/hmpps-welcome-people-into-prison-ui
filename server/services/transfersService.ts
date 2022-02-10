@@ -1,4 +1,4 @@
-import type { Transfer } from 'welcome'
+import type { Transfer, ArrivalResponse } from 'welcome'
 import type { RestClientBuilder, WelcomeClient, HmppsAuthClient } from '../data'
 
 export default class TransfersService {
@@ -14,7 +14,7 @@ export default class TransfersService {
     return transfer
   }
 
-  public async confirmTransfer(username: string, prisonNumber: string): Promise<void> {
+  public async confirmTransfer(username: string, prisonNumber: string): Promise<ArrivalResponse> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
     return this.welcomeClientFactory(token).confirmTransfer(prisonNumber)
   }
