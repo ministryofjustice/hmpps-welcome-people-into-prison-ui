@@ -73,6 +73,7 @@ describe('GET /view', () => {
         expect($('h1').text()).toContain('Jim Smith has been added to the establishment roll')
         expect($('[data-qa=confirmation-banner]').text()).toContain('A1234AB')
         expect($('[data-qa=confirmation-paragraph]').text()).toContain('Moorland (HMP & YOI)')
+        expect($('[data-qa=location-paragraph]').text()).toContain('Their location is Reception.')
       })
   })
 })

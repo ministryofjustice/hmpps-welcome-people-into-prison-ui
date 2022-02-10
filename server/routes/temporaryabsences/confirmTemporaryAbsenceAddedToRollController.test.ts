@@ -77,6 +77,7 @@ describe('confirmTemporaryAbsenceAddedToRollController', () => {
           expect($('h1').text()).toContain('Jim Smith has returned to Moorland (HMP & YOI)')
           expect($('[data-qa=confirmation-banner]').text()).toContain('A1234AB')
           expect($('[data-qa=confirmation-paragraph]').text()).toContain('Jim Smith is on the establishment roll.')
+          expect($('[data-qa=location-paragraph]').text()).toContain('Their location is Reception.')
         })
     })
   })

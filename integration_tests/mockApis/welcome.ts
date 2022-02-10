@@ -115,7 +115,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {},
+        jsonBody: { prisonNumber: 'A1234AB', location: 'Reception' },
       },
     })
   },
@@ -162,7 +162,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {},
+        jsonBody: { prisonNumber: 'A1234AB', location: 'Reception' },
       },
     })
   },
@@ -232,7 +232,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: { offenderNo: 'A1234AB' },
+        jsonBody: { prisonNumber: 'A1234AB', location: 'Reception' },
       },
     })
   },

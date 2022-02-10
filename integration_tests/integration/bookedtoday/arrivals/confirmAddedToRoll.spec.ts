@@ -41,6 +41,7 @@ context('Confirm Added To Roll', () => {
     confirmAddedToRollPage.confirmationBanner().should('contain.html', 'A1234AB')
     confirmAddedToRollPage.confirmationParagraph().should('contain.html', 'Steve Smith')
     confirmAddedToRollPage.confirmationParagraph().should('contain.html', 'Moorland (HMP &amp; YOI)')
+    confirmAddedToRollPage.locationParagraph().should('contain.html', 'Reception')
     confirmAddedToRollPage
       .viewEstablishmentRoll()
       .should('contain', 'View establishment roll')
