@@ -193,10 +193,11 @@ describe('welcomeClient', () => {
       fakeWelcomeApi
         .post(`/court-returns/${id}/confirm`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, { prisonNumber: 'A1234AB' })
+        .reply(200, { prisonNumber: 'A1234AB', location: 'Reception' })
 
       return expect(welcomeClient.confirmCourtReturn(id, 'MDI')).resolves.toStrictEqual({
         prisonNumber: 'A1234AB',
+        location: 'Reception',
       })
     })
   })

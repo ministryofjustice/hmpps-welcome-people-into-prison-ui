@@ -5,7 +5,6 @@ import type {
   TemporaryAbsence,
   NewOffenderBooking,
   Prison,
-  PrisonNumber,
   ImprisonmentStatus,
   UserCaseLoad,
 } from 'welcome'
@@ -37,12 +36,12 @@ export default class WelcomeClient {
     }) as Promise<Arrival>
   }
 
-  async confirmCourtReturn(id: string, body: string): Promise<PrisonNumber> {
+  async confirmCourtReturn(id: string, body: string): Promise<ArrivalResponse> {
     logger.info(`welcomeApi: confirmCourtReturn ${id})`)
     return this.restClient.post({
       path: `/court-returns/${id}/confirm`,
       data: { prisonId: body },
-    }) as Promise<PrisonNumber>
+    }) as Promise<ArrivalResponse>
   }
 
   async getTransfers(agencyId: string): Promise<Arrival[]> {
