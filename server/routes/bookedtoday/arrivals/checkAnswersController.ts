@@ -57,7 +57,10 @@ export default class CheckAnswersController {
         req.hostname
       )
 
-      req.flash('location', arrivalResponse.location)
+      req.flash('arrivalResponse', {
+        prisonNumber: arrivalResponse.prisonNumber,
+        location: arrivalResponse.location,
+      })
       return res.redirect(`/prisoners/${id}/confirmation`)
     }
   }

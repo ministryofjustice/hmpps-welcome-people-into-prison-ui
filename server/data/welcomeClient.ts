@@ -80,12 +80,12 @@ export default class WelcomeClient {
     }) as Promise<TemporaryAbsence>
   }
 
-  async confirmTemporaryAbsence(prisonNumber: string, agencyId: string): Promise<void> {
+  async confirmTemporaryAbsence(prisonNumber: string, agencyId: string): Promise<ArrivalResponse> {
     logger.info(`welcomeApi: confirmTemporaryAbsence ${prisonNumber})`)
     return this.restClient.post({
       path: `/temporary-absences/${prisonNumber}/confirm`,
       data: { agencyId },
-    }) as Promise<void>
+    }) as Promise<ArrivalResponse>
   }
 
   async getImage(prisonNumber: string): Promise<Readable> {

@@ -23,11 +23,20 @@ export default class CheckTemporaryAbsenceController {
       const { activeCaseLoadId } = res.locals.user
       const data = await this.temporaryAbsencesService.getTemporaryAbsence(activeCaseLoadId, prisonNumber)
 
-      await this.temporaryAbsencesService.confirmTemporaryAbsence(username, prisonNumber, activeCaseLoadId)
+      const arrivalResponse = await this.temporaryAbsencesService.confirmTemporaryAbsence(
+        username,
+        prisonNumber,
+        activeCaseLoadId
+      )
+
+      if (!arrivalResponse) {
+        return res.redirect('/feature-not-available')
+      }
 
       req.flash('prisoner', {
         firstName: data.firstName,
         lastName: data.lastName,
+        location: arrivalResponse.location,
       })
 
       this.raiseAnalyticsEvent(
@@ -37,7 +46,7 @@ export default class CheckTemporaryAbsenceController {
         req.hostname
       )
 
-      res.redirect(`/prisoners/${prisonNumber}/prisoner-returned`)
+      return res.redirect(`/prisoners/${prisonNumber}/prisoner-returned`)
     }
   }
 }

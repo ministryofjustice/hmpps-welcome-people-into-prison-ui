@@ -143,10 +143,11 @@ describe('welcomeClient', () => {
       fakeWelcomeApi
         .post(`/temporary-absences/${prisonNumber}/confirm`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, { prisonNumber: 'A1234AB' })
+        .reply(200, { prisonNumber: 'A1234AB', location: 'Reception' })
 
       return expect(welcomeClient.confirmTemporaryAbsence(prisonNumber, 'MDI')).resolves.toStrictEqual({
         prisonNumber: 'A1234AB',
+        location: 'Reception',
       })
     })
   })

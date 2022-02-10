@@ -143,7 +143,10 @@ describe('/checkAnswers', () => {
         .expect(302)
         .expect('Location', '/prisoners/12345-67890/confirmation')
         .expect(() => {
-          expect(flashProvider).toHaveBeenCalledWith('location', 'Reception')
+          expect(flashProvider).toHaveBeenCalledWith('arrivalResponse', {
+            location: 'Reception',
+            prisonNumber: 'A1234AB',
+          })
           expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
             'Add to the establishment roll',
             'Confirmed arrival',

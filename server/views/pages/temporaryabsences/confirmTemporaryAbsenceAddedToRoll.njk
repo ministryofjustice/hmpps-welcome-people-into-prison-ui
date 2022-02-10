@@ -14,8 +14,10 @@
                         } 
                     }) }}
 
-                    <p data-qa="confirmation-paragraph">{{ firstName}} {{ lastName }} is on the establishment roll and is located in reception.</p>
+                    <p data-qa="confirmation-paragraph">{{ firstName}} {{ lastName }} is on the establishment roll.</p>
                     
+                    <p data-qa="location-paragraph">Their location is {{ location }}.</p>
+
                     {{ govukButton({
                         text: "View establishment roll",
                         href: dpsUrl + "/establishment-roll",
