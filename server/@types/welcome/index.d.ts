@@ -5,7 +5,6 @@ declare module 'welcome' {
   export type NewOffenderBooking = schemas['NewOffenderBooking']
   export type ImprisonmentStatus = schemas['ImprisonmentStatus']
   export type Prison = schemas['Prison']
-  export type OffenderNumber = schemas['OffenderNumber']
   export type PrisonNumber = schemas['PrisonNumber']
   export type UserCaseLoad = schemas['UserCaseLoad']
   export type ArrivalResponse = schemas['ArrivalResponse']
@@ -93,9 +92,6 @@ declare module 'welcome' {
     }
     PrisonNumber: {
       prisonNumber: string
-    }
-    OffenderNumber: {
-      offenderNo: string
     }
     ArrivalResponse: {
       prisonNumber: string

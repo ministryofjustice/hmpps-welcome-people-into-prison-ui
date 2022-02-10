@@ -136,7 +136,7 @@ describe('/checkAnswers', () => {
         })
     })
 
-    it('should redirect to /confirmation page, store offenderNumber in flash and raise analytics event', () => {
+    it('should redirect to /confirmation page, store arrival response data in flash and raise analytics event', () => {
       return request(app)
         .post('/prisoners/12345-67890/check-answers')
         .send(newOffender)
