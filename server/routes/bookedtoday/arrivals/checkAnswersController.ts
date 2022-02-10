@@ -40,13 +40,13 @@ export default class CheckAnswersController {
         movementReasonCode: statusAndReason.movementReasonCode,
       }
 
-      const offenderNumber = await this.expectedArrivalsService.createOffenderRecordAndBooking(
+      const arrivalResponse = await this.expectedArrivalsService.createOffenderRecordAndBooking(
         username,
         id,
         newOffender
       )
 
-      if (!offenderNumber) {
+      if (!arrivalResponse) {
         return res.redirect('/feature-not-available')
       }
 
@@ -57,7 +57,7 @@ export default class CheckAnswersController {
         req.hostname
       )
 
-      req.flash('offenderNumber', offenderNumber.offenderNo)
+      req.flash('location', arrivalResponse.location)
       return res.redirect(`/prisoners/${id}/confirmation`)
     }
   }

@@ -2,7 +2,7 @@ import type { Arrival } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
-import { appWithAllRoutes } from '../../__testutils/appSetup'
+import { appWithAllRoutes, flashProvider } from '../../__testutils/appSetup'
 import { ExpectedArrivalsService } from '../../../services'
 import Role from '../../../authentication/role'
 
@@ -26,7 +26,18 @@ describe('GET /confirmArrival', () => {
     return request(app).get('/prisoners/12345-67890/confirm-arrival').expect(302).expect('Location', '/autherror')
   })
 
+  it('should retrieve location from flash', () => {
+    flashProvider.mockReturnValue([{ location: 'Reception' }])
+    return request(app)
+      .get('/prisoners/12345-67890/confirm-arrival')
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(() => {
+        expect(flashProvider).toHaveBeenCalledWith('location')
+      })
+  })
+
   it('should call service method correctly', () => {
+    flashProvider.mockReturnValue([{ location: 'Reception' }])
     return request(app)
       .get('/prisoners/12345-67890/confirm-arrival')
       .expect('Content-Type', 'text/html; charset=utf-8')
@@ -36,6 +47,7 @@ describe('GET /confirmArrival', () => {
   })
 
   it('should clear cookie', () => {
+    flashProvider.mockReturnValue([{ location: 'Reception' }])
     return request(app)
       .get('/prisoners/12345-67890/confirm-arrival')
       .expect(res => {
@@ -46,6 +58,7 @@ describe('GET /confirmArrival', () => {
   })
 
   it('should display correct page heading when there is NOT an existing prisoner record', () => {
+    flashProvider.mockReturnValue([{ location: 'Reception' }])
     expectedArrivalsService.getArrival.mockResolvedValue({
       firstName: 'James',
       lastName: 'Smyth',
@@ -80,6 +93,7 @@ describe('GET /confirmArrival', () => {
       ],
     } as Arrival)
 
+    flashProvider.mockReturnValue([{ location: 'Reception' }])
     return request(app)
       .get('/prisoners/12345-67890/confirm-arrival')
       .expect(res => {

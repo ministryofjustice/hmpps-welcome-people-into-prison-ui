@@ -45,7 +45,8 @@ beforeEach(() => {
     fromLocationType: 'COURT',
   } as Arrival)
   expectedArrivalsService.createOffenderRecordAndBooking.mockResolvedValue({
-    offenderNo: 'A1234AB',
+    prisonNumber: 'A1234AB',
+    location: 'Reception',
   })
   imprisonmentStatusesService.getReasonForImprisonment.mockResolvedValue(
     'Determinate sentence - Extended sentence for public protection'
@@ -142,7 +143,7 @@ describe('/checkAnswers', () => {
         .expect(302)
         .expect('Location', '/prisoners/12345-67890/confirmation')
         .expect(() => {
-          expect(flashProvider).toHaveBeenCalledWith('offenderNumber', 'A1234AB')
+          expect(flashProvider).toHaveBeenCalledWith('location', 'Reception')
           expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
             'Add to the establishment roll',
             'Confirmed arrival',

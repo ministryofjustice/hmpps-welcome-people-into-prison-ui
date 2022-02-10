@@ -226,11 +226,12 @@ describe('welcomeClient', () => {
       fakeWelcomeApi
         .post(`/arrivals/${id}/confirm`, newOffender)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, { prisonNumber: 'A1234AB' })
+        .reply(200, { prisonNumber: 'A1234AB', location: 'Reception' })
 
       const output = await welcomeClient.createOffenderRecordAndBooking(id, newOffender)
-      expect(output).toEqual({ prisonNumber: 'A1234AB' })
+      expect(output).toEqual({ prisonNumber: 'A1234AB', location: 'Reception' })
     })
+
     it('should return null', async () => {
       fakeWelcomeApi
         .post(`/arrivals/${id}/confirm`, newOffender)
@@ -252,6 +253,7 @@ describe('welcomeClient', () => {
       )
     })
   })
+
   describe('getImprisonmentStatuses', () => {
     const mockResponse: ImprisonmentStatus[] = [
       {

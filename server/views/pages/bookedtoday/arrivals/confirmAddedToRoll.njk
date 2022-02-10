@@ -15,7 +15,10 @@
           } 
         }) }}
 
-        <p data-qa="confirmation-paragraph">{{ data.firstName}} {{ data.lastName }} is now part of the {{ prison.description }} establishment roll and is located in reception.</p>
+
+        <p data-qa="confirmation-paragraph">{{ data.firstName}} {{ data.lastName }} is now part of the {{ prison.description }} establishment roll.</p>
+
+        <p data-qa="location-paragraph">Their location is {{ location }}.</p>
 
         <div class="govuk-button-group">
           {{ govukButton({
