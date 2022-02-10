@@ -11,6 +11,7 @@ export default function routes(services: Services): Router {
 
   const choosePrisonerController = new ChoosePrisonerController(services.expectedArrivalsService)
   router.get('/confirm-arrival/choose-prisoner', [choosePrisonerController.view()])
+  router.get('/confirm-arrival/choose-prisoner/:id', [choosePrisonerController.redirectToConfirm()])
 
   router.use(transferRoutes(services))
   router.use(arrivalRoutes(services))

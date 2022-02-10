@@ -21,6 +21,14 @@ export default class SearchForExistingRecordController {
     return data
   }
 
+  public newSearch(): RequestHandler {
+    return async (req, res) => {
+      const { id } = req.params
+      State.searchDetails.clear(res)
+      res.redirect(`/prisoners/${id}/search-for-existing-record`)
+    }
+  }
+
   public showSearch(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params

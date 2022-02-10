@@ -1,7 +1,7 @@
+import type { Arrival, ImprisonmentStatus } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
-import { Movement, ImprisonmentStatus } from 'welcome'
 import { appWithAllRoutes, flashProvider } from '../../__testutils/appSetup'
 import ImprisonmentStatusesService from '../../../services/imprisonmentStatusesService'
 import ExpectedArrivalsService from '../../../services/expectedArrivalsService'
@@ -34,7 +34,7 @@ const imprisonmentStatus: ImprisonmentStatus = {
 
 beforeEach(() => {
   app = appWithAllRoutes({ services: { imprisonmentStatusesService, expectedArrivalsService } })
-  expectedArrivalsService.getArrival.mockResolvedValue({} as Movement)
+  expectedArrivalsService.getArrival.mockResolvedValue({} as Arrival)
   imprisonmentStatusesService.getImprisonmentStatus.mockResolvedValue(imprisonmentStatus)
 })
 

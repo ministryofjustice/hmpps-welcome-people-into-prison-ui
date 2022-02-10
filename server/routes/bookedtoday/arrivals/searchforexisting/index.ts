@@ -37,6 +37,7 @@ export default function routes(services: Services): Router {
 
   const searchForExistingRecordController = new SearchForExistingRecordController(services.expectedArrivalsService)
   get('', [searchForExistingRecordController.showSearch()])
+  get('/new', [searchForExistingRecordController.newSearch()])
 
   const changeNameController = new ChangeNameController()
   get('/change-name', [checkSearchDetailsPresent, changeNameController.showChangeName()])

@@ -3,7 +3,7 @@ import moment from 'moment'
 import {
   Gender,
   ImprisonmentStatus,
-  Movement,
+  Arrival,
   Transfer,
   NewOffenderBooking,
   Prison,
@@ -51,7 +51,7 @@ describe('welcomeClient', () => {
   describe('getExpectedArrivals', () => {
     const activeCaseLoadId = 'MDI'
     const date = moment()
-    const expectedArrivals: Movement[] = []
+    const expectedArrivals: Arrival[] = []
     it('should return data from api', async () => {
       fakeWelcomeApi
         .get(`/prisons/${activeCaseLoadId}/arrivals?date=${date.format('YYYY-MM-DD')}`)
@@ -65,7 +65,7 @@ describe('welcomeClient', () => {
 
   describe('getTransfers', () => {
     const activeCaseLoadId = 'MDI'
-    const expectedArrivals: Movement[] = []
+    const expectedArrivals: Arrival[] = []
     it('should return data from api', async () => {
       fakeWelcomeApi
         .get(`/prisons/${activeCaseLoadId}/transfers/enroute`)
@@ -164,7 +164,7 @@ describe('welcomeClient', () => {
   })
 
   describe('getArrival', () => {
-    const expectedArrival: Movement = {
+    const expectedArrival = {
       id,
       firstName: 'Jim',
       lastName: 'Smith',
@@ -174,7 +174,7 @@ describe('welcomeClient', () => {
       date: '2021-10-13',
       fromLocation: 'Some court',
       fromLocationType: 'COURT',
-    }
+    } as Arrival
 
     it('should return data from api', async () => {
       fakeWelcomeApi.get(`/arrivals/${id}`).matchHeader('authorization', `Bearer ${token}`).reply(200, expectedArrival)

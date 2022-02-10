@@ -1,6 +1,6 @@
+import type { Arrival } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
-import { Movement } from 'welcome'
 import cheerio from 'cheerio'
 import { appWithAllRoutes } from '../../__testutils/appSetup'
 import { ExpectedArrivalsService } from '../../../services'
@@ -53,7 +53,7 @@ describe('GET /confirmArrival', () => {
       prisonNumber: 'A1234AB',
       pncNumber: '99/98644M',
       potentialMatches: [],
-    } as Movement)
+    } as Arrival)
 
     return request(app)
       .get('/prisoners/12345-67890/confirm-arrival')
@@ -78,7 +78,7 @@ describe('GET /confirmArrival', () => {
           pncNumber: '99/98644M',
         },
       ],
-    } as Movement)
+    } as Arrival)
 
     return request(app)
       .get('/prisoners/12345-67890/confirm-arrival')

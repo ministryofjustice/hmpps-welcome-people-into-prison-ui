@@ -1,5 +1,5 @@
+import { Gender, type Arrival, type NewOffenderBooking } from 'welcome'
 import moment from 'moment'
-import { Gender, Movement, NewOffenderBooking } from 'welcome'
 import ExpectedArrivalsService, { LocationType } from './expectedArrivalsService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import WelcomeClient from '../data/welcomeClient'
@@ -16,7 +16,7 @@ describe('Expected arrivals service', () => {
 
   const WelcomeClientFactory = jest.fn()
 
-  const arrival: Movement = {
+  const arrival = {
     firstName: 'James',
     lastName: 'Smyth',
     dateOfBirth: '1973-01-08',
@@ -34,9 +34,9 @@ describe('Expected arrivals service', () => {
         pncNumber: '99/98644M',
       },
     ],
-  }
+  } as Arrival
 
-  const arrivals: Movement[] = [
+  const arrivals = [
     {
       firstName: 'John',
       lastName: 'Doe',
@@ -97,9 +97,9 @@ describe('Expected arrivals service', () => {
       fromLocation: 'Manchester',
       fromLocationType: 'OTHER',
     },
-  ]
+  ] as Arrival[]
 
-  const transfers: Movement[] = [
+  const transfers = [
     {
       firstName: 'Karl',
       lastName: 'Offender',
@@ -110,7 +110,7 @@ describe('Expected arrivals service', () => {
       fromLocation: 'Leeds',
       fromLocationType: 'PRISON',
     },
-  ]
+  ] as Arrival[]
 
   const expectedArrivalsGroupedByType = new Map()
   expectedArrivalsGroupedByType.set(LocationType.COURT, [

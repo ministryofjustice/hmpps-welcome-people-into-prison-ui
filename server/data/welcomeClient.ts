@@ -1,6 +1,6 @@
 import moment from 'moment'
 import type {
-  Movement,
+  Arrival,
   Transfer,
   TemporaryAbsence,
   NewOffenderBooking,
@@ -22,19 +22,19 @@ export default class WelcomeClient {
     this.restClient = new RestClient('welcomeClient', config.apis.welcome as ApiConfig, token)
   }
 
-  async getExpectedArrivals(agencyId: string, date: moment.Moment): Promise<Movement[]> {
+  async getExpectedArrivals(agencyId: string, date: moment.Moment): Promise<Arrival[]> {
     logger.info(`welcomeApi: getExpectedArrivals(${agencyId}, ${date})`)
     return this.restClient.get({
       path: `/prisons/${agencyId}/arrivals`,
       query: { date: date.format('YYYY-MM-DD') },
-    }) as Promise<Movement[]>
+    }) as Promise<Arrival[]>
   }
 
-  async getArrival(id: string): Promise<Movement> {
+  async getArrival(id: string): Promise<Arrival> {
     logger.info(`welcomeApi: getArrival(${id})`)
     return this.restClient.get({
       path: `/arrivals/${id}`,
-    }) as Promise<Movement>
+    }) as Promise<Arrival>
   }
 
   async confirmCourtReturn(id: string, body: string): Promise<PrisonNumber> {
@@ -45,11 +45,11 @@ export default class WelcomeClient {
     }) as Promise<PrisonNumber>
   }
 
-  async getTransfers(agencyId: string): Promise<Movement[]> {
+  async getTransfers(agencyId: string): Promise<Arrival[]> {
     logger.info(`welcomeApi: getTransfers(${agencyId})`)
     return this.restClient.get({
       path: `/prisons/${agencyId}/transfers/enroute`,
-    }) as Promise<Movement[]>
+    }) as Promise<Arrival[]>
   }
 
   async getTransfer(agencyId: string, prisonNumber: string): Promise<Transfer> {

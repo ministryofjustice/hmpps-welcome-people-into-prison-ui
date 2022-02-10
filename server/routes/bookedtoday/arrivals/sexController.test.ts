@@ -1,7 +1,7 @@
+import { GenderKeys, type Arrival } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
-import { GenderKeys, Movement } from 'welcome'
 import { appWithAllRoutes, flashProvider } from '../../__testutils/appSetup'
 import ImprisonmentStatusesService from '../../../services/imprisonmentStatusesService'
 import ExpectedArrivalsService from '../../../services/expectedArrivalsService'
@@ -24,7 +24,7 @@ beforeEach(() => {
     services: { imprisonmentStatusesService, expectedArrivalsService },
     roles: [Role.PRISON_RECEPTION],
   })
-  expectedArrivalsService.getArrival.mockResolvedValue({} as Movement)
+  expectedArrivalsService.getArrival.mockResolvedValue({} as Arrival)
 })
 
 afterEach(() => {
@@ -41,7 +41,7 @@ describe('/sex', () => {
     it.each([{ gender: 'blas' as GenderKeys }, { gender: undefined }, { gender: GenderKeys.TRANS }])(
       'should render /sex page when Arrival gender is not MALE or FEMALE',
       ({ gender }) => {
-        expectedArrivalsService.getArrival.mockResolvedValue({ gender } as Movement)
+        expectedArrivalsService.getArrival.mockResolvedValue({ gender } as Arrival)
         return request(app)
           .get('/prisoners/12345-67890/sex')
           .expect(200)
@@ -56,7 +56,7 @@ describe('/sex', () => {
     it.each([{ gender: GenderKeys.MALE }, { gender: GenderKeys.FEMALE }])(
       'should render /imprisonment-status page when Arrival gender is MALE or FEMALE',
       ({ gender }) => {
-        expectedArrivalsService.getArrival.mockResolvedValue({ gender } as Movement)
+        expectedArrivalsService.getArrival.mockResolvedValue({ gender } as Arrival)
         return request(app)
           .get('/prisoners/12345-67890/sex')
           .expect(302)
@@ -76,7 +76,7 @@ describe('/sex', () => {
         gender: GenderKeys.TRANS,
         firstName: 'john',
         lastName: 'smith',
-      } as Movement)
+      } as Arrival)
       return request(app)
         .get('/prisoners/12345-67890/sex')
         .expect(200)

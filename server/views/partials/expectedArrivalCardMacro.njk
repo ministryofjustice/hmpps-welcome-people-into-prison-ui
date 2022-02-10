@@ -12,25 +12,15 @@
             <div class="app-card__content">
                 <header class="app-card__header">
                     <h2 class="app-card__title" data-qa="{{moveType}}-title-{{loopIndex}}">
-                        {% if user.isReceptionUser %}
-                            {% if arrival.fromLocationType === 'COURT' and not arrival.isCurrentPrisoner %}
-                                <a href="/prisoners/{{ arrival.id }}/confirm-arrival" class="govuk-link govuk-link--no-visited-state" data-qa="confirm-arrival"> {{ arrival.lastName }}, {{ arrival.firstName }}</a>
-
-                            {% elif arrival.fromLocationType === 'COURT' and arrival.isCurrentPrisoner %}
-                                <a href="/prisoners/{{ arrival.id }}/check-court-return" class="govuk-link govuk-link--no-visited-state" data-qa="confirm-arrival"> {{ arrival.lastName }}, {{ arrival.firstName }}</a>
-
-                            {% elif arrival.fromLocationType === 'CUSTODY_SUITE' and not arrival.isCurrentPrisoner %}
-                                <a href="/prisoners/{{ arrival.id }}/confirm-arrival" class="govuk-link govuk-link--no-visited-state" data-qa="confirm-arrival"> {{ arrival.lastName }}, {{ arrival.firstName }}</a>
-
-                            {% elif arrival.fromLocationType === 'PRISON' %}
-                                <a href="/prisoners/{{ arrival.prisonNumber }}/check-transfer" class="govuk-link govuk-link--no-visited-state" data-qa="confirm-arrival"> {{ arrival.lastName }}, {{ arrival.firstName }}</a>
-
+                            {% if user.isReceptionUser %}
+                                {% if arrival.fromLocationType === 'PRISON' %}
+                                    <a href="/prisoners/{{ arrival.prisonNumber }}/check-transfer" class="govuk-link govuk-link--no-visited-state" data-qa="confirm-arrival"> {{ arrival.lastName }}, {{ arrival.firstName }}</a>
+                                {% else %}
+                                    <a href="/confirm-arrival/choose-prisoner/{{ arrival.id }}" class="govuk-link govuk-link--no-visited-state" data-qa="confirm-arrival"> {{ arrival.lastName }}, {{ arrival.firstName }}</a>
+                                {% endif %}
                             {% else %}
                                 {{ arrival.lastName }}, {{ arrival.firstName }}
-                            {%  endif %}
-                        {% else  %}
-                            {{ arrival.lastName }}, {{ arrival.firstName }}
-                        {%  endif %}
+                            {% endif %}
                     </h2>
                 </header>
                 <dl class="app-card__meta-list">

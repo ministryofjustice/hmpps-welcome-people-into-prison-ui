@@ -1,5 +1,5 @@
-import type { Movement, NewOffenderBooking, OffenderNumber, PrisonNumber } from 'welcome'
-import moment, { Moment } from 'moment'
+import type { Arrival, NewOffenderBooking, OffenderNumber, PrisonNumber } from 'welcome'
+import moment, { type Moment } from 'moment'
 import type { Readable } from 'stream'
 import { groupBy, compareByFullName } from '../utils/utils'
 import type { RestClientBuilder, WelcomeClient, HmppsAuthClient } from '../data'
@@ -17,26 +17,26 @@ export default class ExpectedArrivalsService {
     private readonly welcomeClientFactory: RestClientBuilder<WelcomeClient>
   ) {}
 
-  private async getExpectedArrivals(agencyId: string, now: Moment): Promise<Movement[]> {
+  private async getExpectedArrivals(agencyId: string, now: Moment): Promise<Arrival[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const welcomeClient = this.welcomeClientFactory(token)
     const expectedArrivals = await welcomeClient.getExpectedArrivals(agencyId, now)
     return expectedArrivals.sort(compareByFullName)
   }
 
-  private async getTransfers(agencyId: string): Promise<Movement[]> {
+  private async getTransfers(agencyId: string): Promise<Arrival[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const welcomeClient = this.welcomeClientFactory(token)
     const transfers = await welcomeClient.getTransfers(agencyId)
     return transfers.map(transfer => ({ ...transfer, fromLocationType: LocationType.PRISON })).sort(compareByFullName)
   }
 
-  public async getArrivalsForToday(agencyId: string, now = () => moment()): Promise<Map<LocationType, Movement[]>> {
+  public async getArrivalsForToday(agencyId: string, now = () => moment()): Promise<Map<LocationType, Arrival[]>> {
     const [expectedArrivals, transfers] = await Promise.all([
       this.getExpectedArrivals(agencyId, now()),
       this.getTransfers(agencyId),
     ])
-    return groupBy([...expectedArrivals, ...transfers], (arrival: Movement) => arrival.fromLocationType)
+    return groupBy([...expectedArrivals, ...transfers], (arrival: Arrival) => arrival.fromLocationType)
   }
 
   public async getImage(prisonNumber: string): Promise<Readable> {
@@ -44,7 +44,7 @@ export default class ExpectedArrivalsService {
     return this.welcomeClientFactory(token).getImage(prisonNumber)
   }
 
-  public async getArrival(id: string): Promise<Movement> {
+  public async getArrival(id: string): Promise<Arrival> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     return this.welcomeClientFactory(token).getArrival(id)
   }
