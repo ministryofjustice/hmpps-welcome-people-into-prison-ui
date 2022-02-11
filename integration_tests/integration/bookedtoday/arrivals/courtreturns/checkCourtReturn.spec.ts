@@ -1,9 +1,9 @@
-import Page from '../pages/page'
-import Role from '../../server/authentication/role'
-import expectedArrivals from '../mockApis/responses/expectedArrivals'
-import ChoosePrisonerPage from '../pages/choosePrisoner'
-import CheckCourtReturnPage from '../pages/checkCourtReturn'
-import ConfirmCourtReturnAddedToRollPage from '../pages/confirmCourtReturnAddedToRoll'
+import Page from '../../../../pages/page'
+import Role from '../../../../../server/authentication/role'
+import expectedArrivals from '../../../../mockApis/responses/expectedArrivals'
+import ChoosePrisonerPage from '../../../../pages/choosePrisoner'
+import CheckCourtReturnPage from '../../../../pages/checkCourtReturn'
+import ConfirmCourtReturnAddedToRollPage from '../../../../pages/confirmCourtReturnAddedToRoll'
 
 const expectedArrival = expectedArrivals.court.current
 

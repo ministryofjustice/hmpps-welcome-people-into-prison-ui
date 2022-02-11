@@ -1,10 +1,10 @@
-import Page from '../pages/page'
-import ImprisonmentStatusPage from '../pages/imprisonmentStatus'
-import MovementReasonsPage from '../pages/movementReasons'
-import CheckAnswersPage from '../pages/checkAnswers'
-import Role from '../../server/authentication/role'
-import expectedArrivals from '../mockApis/responses/expectedArrivals'
-import SexPage from '../pages/sexPage'
+import Page from '../../../pages/page'
+import ImprisonmentStatusPage from '../../../pages/imprisonmentStatus'
+import MovementReasonsPage from '../../../pages/movementReasons'
+import CheckAnswersPage from '../../../pages/checkAnswers'
+import Role from '../../../../server/authentication/role'
+import expectedArrivals from '../../../mockApis/responses/expectedArrivals'
+import SexPage from '../../../pages/sexPage'
 
 const expectedArrival = expectedArrivals.withFemaleGender
 

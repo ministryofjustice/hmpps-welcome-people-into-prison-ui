@@ -2,11 +2,10 @@ import express, { RequestHandler, Router } from 'express'
 import ConfirmArrivalController from './confirmArrivalController'
 import CheckAnswersController from './checkAnswersController'
 import ConfirmAddedToRollController from './confirmAddedToRollController'
-import CheckCourtReturnController from './checkCourtReturnController'
-import ConfirmCourtReturnController from './confirmCourtReturnController'
 import ImprisonmentStatusesController from './imprisonmentStatusesController'
 import MovementReasonsController from './movementReasonsController'
 import searchForExistingRecordRoutes from './searchforexisting'
+import courtReturnRoutes from './courtreturns'
 
 import imprisonmentStatusesValidation from '../../../middleware/validation/imprisonmentStatusesValidation'
 import movementReasonsValidation from '../../../middleware/validation/movementReasonsValidation'
@@ -101,29 +100,8 @@ export default function routes(services: Services): Router {
   )
   get('/prisoners/:id/confirmation', [confirmAddedToRollController.view()], [Role.PRISON_RECEPTION])
 
-  const checkCourtReturnController = new CheckCourtReturnController(
-    services.expectedArrivalsService,
-    services.raiseAnalyticsEvent
-  )
-  get(
-    '/prisoners/:id/check-court-return',
-    [redirectIfDisabledMiddleware(config.confirmEnabled), checkCourtReturnController.checkCourtReturn()],
-    [Role.PRISON_RECEPTION]
-  )
-  post(
-    '/prisoners/:id/check-court-return',
-    [redirectIfDisabledMiddleware(config.confirmEnabled), checkCourtReturnController.addToRoll()],
-    [Role.PRISON_RECEPTION]
-  )
-
-  const confirmCourtReturnController = new ConfirmCourtReturnController(services.prisonService)
-  get(
-    '/prisoners/:id/prisoner-returned-from-court',
-    [redirectIfDisabledMiddleware(config.confirmEnabled), confirmCourtReturnController.view()],
-    [Role.PRISON_RECEPTION]
-  )
-
   router.use(searchForExistingRecordRoutes(services))
+  router.use(courtReturnRoutes(services))
 
   return router
 }
