@@ -1,6 +1,6 @@
 import type { Express } from 'express'
 import request from 'supertest'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import { appWithAllRoutes, user } from '../__testutils/appSetup'
 import TemporaryAbsencesService from '../../services/temporaryAbsencesService'
 import Role from '../../authentication/role'
@@ -63,6 +63,8 @@ describe('GET /prisoners-returning', () => {
       .expect(res => {
         const $ = cheerio.load(res.text)
         expect($('h1').text()).toContain('Select prisoner returning from temporary absence')
+        expect($('.app-card-wrapper')).toHaveLength(4)
+        expect($('#no-prisoners').text()).toContain('')
       })
   })
 
@@ -72,6 +74,19 @@ describe('GET /prisoners-returning', () => {
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
         expect(temporaryAbsencesService.getTemporaryAbsences).toHaveBeenCalledWith(user.activeCaseLoadId)
+      })
+  })
+
+  it('should display alternative text if no prisoners to display', () => {
+    temporaryAbsencesService.getTemporaryAbsences.mockResolvedValue([])
+
+    return request(app)
+      .get('/prisoners-returning')
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(res => {
+        const $ = cheerio.load(res.text)
+        expect($('.app-card-wrapper')).toHaveLength(0)
+        expect($('#no-prisoners').text()).toContain('There are currently no prisoners out on temporary absence.')
       })
   })
 })
