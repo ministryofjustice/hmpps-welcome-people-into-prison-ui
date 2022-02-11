@@ -1,11 +1,10 @@
 import Page from '../pages/page'
 import FeatureNotAvailable from '../pages/featureNotAvailable'
-import ConfirmArrivalPage from '../pages/bookedtoday/arrivals/confirmArrival'
+import ExistingRecordPage from '../pages/bookedtoday/arrivals/existingRecord'
 import ImprisonmentStatusPage from '../pages/bookedtoday/arrivals/imprisonmentStatus'
 import CheckAnswersPage from '../pages/bookedtoday/arrivals/checkAnswers'
 import Role from '../../server/authentication/role'
 import expectedArrivals from '../mockApis/responses/expectedArrivals'
-import SexPage from '../pages/bookedtoday/arrivals/sexPage'
 
 context('Feature not available', () => {
   beforeEach(() => {
@@ -19,17 +18,17 @@ context('Feature not available', () => {
   })
 
   it('Should display feature-not-available page', () => {
-    const expectedArrival = expectedArrivals.custodySuite.current
+    const expectedArrival = expectedArrivals.arrival({
+      fromLocationType: 'COURT',
+      isCurrentPrisoner: false,
+      potentialMatches: [expectedArrivals.potentialMatch],
+    })
     cy.task('stubExpectedArrival', expectedArrival)
     cy.task('stubCreateOffenderRecordAndBookingReturnsError', { arrivalId: expectedArrival.id, status: 400 })
 
     cy.signIn()
-    const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
-    confirmArrivalPage.continue().click()
 
-    const sexPage = Page.verifyOnPage(SexPage)
-    sexPage.sexRadioButtons('M').click()
-    sexPage.continue().click()
+    ExistingRecordPage.goTo(expectedArrival.id).continue().click()
 
     const imprisonmentStatusPage = ImprisonmentStatusPage.goTo(expectedArrival.id)
     imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()

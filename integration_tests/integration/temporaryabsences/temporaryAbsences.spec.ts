@@ -76,7 +76,7 @@ context('A user can view all current temporary absences', () => {
     temporaryAbsencesPage.temporaryAbsences(4).confirm().should('not.exist')
   })
 
-  it.only('Links shown for a reception user navigate to confirm a returning prisoner page', () => {
+  it('Links shown for a reception user navigate to confirm a returning prisoner page', () => {
     cy.signIn()
     const temporaryAbsencesPage = TemporaryAbsencesPage.goTo()
 

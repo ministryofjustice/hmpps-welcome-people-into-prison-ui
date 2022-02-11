@@ -1,5 +1,5 @@
 import Page from '../../../pages/page'
-import ConfirmArrivalPage from '../../../pages/bookedtoday/arrivals/confirmArrival'
+import ExistingRecordPage from '../../../pages/bookedtoday/arrivals/existingRecord'
 import CheckAnswersPage from '../../../pages/bookedtoday/arrivals/checkAnswers'
 import ConfirmAddedToRollPage from '../../../pages/bookedtoday/arrivals/confirmAddedToRoll'
 import ChoosePrisonerPage from '../../../pages/bookedtoday/choosePrisoner'
@@ -26,8 +26,8 @@ context('Confirm Added To Roll', () => {
 
   it('Should contain correctly formatted move data and Back to Digital Prisons Services link on confirmation page', () => {
     cy.signIn()
-    const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
-    confirmArrivalPage.continue().click()
+    const existingRecordPage = ExistingRecordPage.goTo(expectedArrival.id)
+    existingRecordPage.continue().click()
 
     const imprisonmentStatusPage = Page.verifyOnPage(ImprisonmentStatusPage)
     imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()

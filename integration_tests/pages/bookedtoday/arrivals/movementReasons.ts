@@ -10,12 +10,6 @@ export default class MovementReasonsPage extends Page {
     return Page.verifyOnPage(MovementReasonsPage)
   }
 
-  errorSummaryTitle = (): PageElement => cy.get('#error-summary-title')
-
-  errorSummaryBody = (): PageElement => cy.get('.govuk-error-summary__body')
-
-  errorSummaryMessage = (): PageElement => cy.get('.govuk-error-message')
-
   prisonerName = (): PageElement => cy.get(`[data-qa=prisoner-name]`)
 
   movementReasonRadioButton = (value): PageElement => cy.get('.govuk-radios__input[type="radio"]').check(value)
