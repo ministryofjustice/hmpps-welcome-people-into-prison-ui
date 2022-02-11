@@ -7,14 +7,11 @@
         <div class="govuk-width-container govuk-body">
             <span class="govuk-caption-xl">Confirm a prisoner's arrival</span>
             <h1 class="govuk-heading-l govuk-!-margin-bottom-9">Select prisoner returning from temporary absence</h1>
-                {% if temporaryAbsences.length %}
-                    {% for absence in temporaryAbsences %} 
-                        {{ temporaryAbsenceCard(absence, loop.index, user)}}
-                    {% endfor %}
+                {% for absence in temporaryAbsences %} 
+                    {{ temporaryAbsenceCard(absence, loop.index, user)}}
                 {% else %}
                     <p id='no-prisoners'>There are currently no prisoners out on temporary absence.</p>
-                {% endif %}
-
+                {% endfor %}
             {{ govukInsetText({
                 html: "<p class='govuk-body'>If the prisoner is returning from court, they may be listed as <a href='/confirm-arrival/choose-prisoner' class='govuk-link govuk-link--no-visited-state' data-qa='linkToExpectedArrivals'>booked to arrive into prison</a>.</p>"
             }) }}
