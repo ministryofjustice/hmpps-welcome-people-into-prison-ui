@@ -1,13 +1,14 @@
-import Page, { PageElement } from './page'
+import Page, { PageElement } from '../../page'
 
-export default class ConfrimAddedToRollPage extends Page {
+export default class ConfirmTransferAddedToRollPage extends Page {
   constructor() {
     super('has been added to the establishment roll')
   }
 
-  confirmationBanner = (): PageElement => cy.get(`[data-qa=confirmation-banner]`)
-
-  confirmationParagraph = (): PageElement => cy.get(`[data-qa=confirmation-paragraph]`)
+  static goTo(id: string): ConfirmTransferAddedToRollPage {
+    cy.visit(`/prisoners/${id}/confirm-transfer`)
+    return Page.verifyOnPage(ConfirmTransferAddedToRollPage)
+  }
 
   addAnotherToRoll = (): PageElement => cy.get(`[data-qa=add-another-to-roll]`)
 

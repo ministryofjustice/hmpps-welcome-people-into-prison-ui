@@ -1,4 +1,4 @@
-import ConfirmArrivalPage from '../../../pages/confirmArrival'
+import ConfirmArrivalPage from '../../../pages/bookedtoday/arrivals/confirmArrival'
 import Role from '../../../../server/authentication/role'
 import expectedArrivals from '../../../mockApis/responses/expectedArrivals'
 

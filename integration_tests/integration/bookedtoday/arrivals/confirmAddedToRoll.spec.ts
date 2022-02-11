@@ -1,12 +1,12 @@
 import Page from '../../../pages/page'
-import ConfirmArrivalPage from '../../../pages/confirmArrival'
-import CheckAnswersPage from '../../../pages/checkAnswers'
-import ConfirmAddedToRollPage from '../../../pages/confirmAddedToRoll'
-import ChoosePrisonerPage from '../../../pages/choosePrisoner'
+import ConfirmArrivalPage from '../../../pages/bookedtoday/arrivals/confirmArrival'
+import CheckAnswersPage from '../../../pages/bookedtoday/arrivals/checkAnswers'
+import ConfirmAddedToRollPage from '../../../pages/bookedtoday/arrivals/confirmAddedToRoll'
+import ChoosePrisonerPage from '../../../pages/bookedtoday/choosePrisoner'
 import Role from '../../../../server/authentication/role'
 
 import expectedArrivals from '../../../mockApis/responses/expectedArrivals'
-import ImprisonmentStatusPage from '../../../pages/imprisonmentStatus'
+import ImprisonmentStatusPage from '../../../pages/bookedtoday/arrivals/imprisonmentStatus'
 
 const expectedArrival = expectedArrivals.withFemaleGender
 

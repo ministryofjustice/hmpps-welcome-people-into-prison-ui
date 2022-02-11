@@ -1,5 +1,5 @@
 import ImprisonmentStatusPage from './imprisonmentStatus'
-import Page, { PageElement } from './page'
+import Page, { PageElement } from '../../page'
 
 export default class SexPage extends Page {
   constructor() {

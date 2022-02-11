@@ -1,11 +1,11 @@
 import Page from '../../../pages/page'
-import ConfirmArrivalPage from '../../../pages/confirmArrival'
-import ImprisonmentStatusPage from '../../../pages/imprisonmentStatus'
-import CheckAnswersPage from '../../../pages/checkAnswers'
-import ConfirmAddedToRollPage from '../../../pages/confirmAddedToRoll'
+import ConfirmArrivalPage from '../../../pages/bookedtoday/arrivals/confirmArrival'
+import ImprisonmentStatusPage from '../../../pages/bookedtoday/arrivals/imprisonmentStatus'
+import CheckAnswersPage from '../../../pages/bookedtoday/arrivals/checkAnswers'
+import ConfirmAddedToRollPage from '../../../pages/bookedtoday/arrivals/confirmAddedToRoll'
 import Role from '../../../../server/authentication/role'
 import expectedArrivals from '../../../mockApis/responses/expectedArrivals'
-import SexPage from '../../../pages/sexPage'
+import SexPage from '../../../pages/bookedtoday/arrivals/sexPage'
 
 const expectedArrival = expectedArrivals.court.notCurrent
 
