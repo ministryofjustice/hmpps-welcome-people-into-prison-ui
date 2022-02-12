@@ -1,9 +1,9 @@
-import ChoosePrisonerPage from '../pages/choosePrisoner'
-import ConfirmArrivalPage from '../pages/confirmArrival'
-import CheckCourtReturnPage from '../pages/checkCourtReturn'
-import Page from '../pages/page'
-import Role from '../../server/authentication/role'
-import expectedArrivals from '../mockApis/responses/expectedArrivals'
+import ChoosePrisonerPage from '../../../pages/choosePrisoner'
+import ConfirmArrivalPage from '../../../pages/confirmArrival'
+import CheckCourtReturnPage from '../../../pages/checkCourtReturn'
+import Page from '../../../pages/page'
+import Role from '../../../../server/authentication/role'
+import expectedArrivals from '../../../mockApis/responses/expectedArrivals'
 
 context('Choose Prisoner', () => {
   beforeEach(() => {

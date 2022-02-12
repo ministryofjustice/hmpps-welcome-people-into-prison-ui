@@ -1,8 +1,8 @@
-import Page from '../pages/page'
-import Role from '../../server/authentication/role'
-import TemporaryAbsencesPage from '../pages/temporaryAbsences'
-import CheckTemporaryAbsencePage from '../pages/checkTemporaryAbsence'
-import temporaryAbsences from '../mockApis/responses/temporaryAbsences'
+import Page from '../../pages/page'
+import Role from '../../../server/authentication/role'
+import TemporaryAbsencesPage from '../../pages/temporaryAbsences'
+import CheckTemporaryAbsencePage from '../../pages/checkTemporaryAbsence'
+import temporaryAbsences from '../../mockApis/responses/temporaryAbsences'
 
 context('A user can view all current temporary absences', () => {
   beforeEach(() => {

@@ -1,9 +1,9 @@
-import Page from '../pages/page'
-import MovementReasonsPage from '../pages/movementReasons'
-import CheckAnswersPage from '../pages/checkAnswers'
-import Role from '../../server/authentication/role'
-import expectedArrivals from '../mockApis/responses/expectedArrivals'
-import SexPage from '../pages/sexPage'
+import Page from '../../../pages/page'
+import MovementReasonsPage from '../../../pages/movementReasons'
+import CheckAnswersPage from '../../../pages/checkAnswers'
+import Role from '../../../../server/authentication/role'
+import expectedArrivals from '../../../mockApis/responses/expectedArrivals'
+import SexPage from '../../../pages/sexPage'
 
 context('Movement reasons', () => {
   const expectedArrival = expectedArrivals.withFemaleGender

@@ -1,6 +1,6 @@
-import Role from '../../server/authentication/role'
-import expectedArrivals from '../mockApis/responses/expectedArrivals'
-import SexPage from '../pages/sexPage'
+import Role from '../../../../server/authentication/role'
+import expectedArrivals from '../../../mockApis/responses/expectedArrivals'
+import SexPage from '../../../pages/sexPage'
 
 const expectedArrival = expectedArrivals.court.notCurrent
 const expectedArrivalWithMaleGender = expectedArrivals.withFemaleGender
