@@ -195,8 +195,8 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
     it('should redirect to search results when not current and PNC provided', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
-          prisonNumber: '01/123456',
-          pncNumber: undefined,
+          prisonNumber: undefined,
+          pncNumber: '01/123456',
           fromLocationType: LocationType.COURT,
           isCurrentPrisoner: false,
         })
@@ -210,8 +210,8 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
     it('should redirect to search results when not current and Prison Number provided', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
-          prisonNumber: '01/123456',
-          pncNumber: undefined,
+          prisonNumber: undefined,
+          pncNumber: 'A1234AA',
           fromLocationType: LocationType.COURT,
           isCurrentPrisoner: false,
         })

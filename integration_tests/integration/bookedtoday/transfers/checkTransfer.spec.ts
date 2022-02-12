@@ -1,9 +1,9 @@
-import Page from '../pages/page'
-import Role from '../../server/authentication/role'
-import expectedArrivals from '../mockApis/responses/expectedArrivals'
-import ChoosePrisonerPage from '../pages/choosePrisoner'
-import CheckTransferPage from '../pages/checkTransfer'
-import ConfirmTransferAddedToRollPage from '../pages/confirmTransferAddedToRoll'
+import Page from '../../../pages/page'
+import Role from '../../../../server/authentication/role'
+import expectedArrivals from '../../../mockApis/responses/expectedArrivals'
+import ChoosePrisonerPage from '../../../pages/choosePrisoner'
+import CheckTransferPage from '../../../pages/checkTransfer'
+import ConfirmTransferAddedToRollPage from '../../../pages/confirmTransferAddedToRoll'
 
 context('Check Transfer', () => {
   beforeEach(() => {

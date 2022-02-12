@@ -2,12 +2,12 @@ import type { Arrival } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
-import { appWithAllRoutes, flashProvider } from '../../__testutils/appSetup'
-import { ExpectedArrivalsService, RaiseAnalyticsEvent } from '../../../services'
-import Role from '../../../authentication/role'
-import config from '../../../config'
+import { appWithAllRoutes, flashProvider } from '../../../__testutils/appSetup'
+import { ExpectedArrivalsService, RaiseAnalyticsEvent } from '../../../../services'
+import Role from '../../../../authentication/role'
+import config from '../../../../config'
 
-jest.mock('../../../services/expectedArrivalsService')
+jest.mock('../../../../services/expectedArrivalsService')
 
 const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
 let app: Express

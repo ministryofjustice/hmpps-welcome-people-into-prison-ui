@@ -1,6 +1,6 @@
-import ConfirmArrivalPage from '../pages/confirmArrival'
-import Role from '../../server/authentication/role'
-import expectedArrivals from '../mockApis/responses/expectedArrivals'
+import ConfirmArrivalPage from '../../../pages/confirmArrival'
+import Role from '../../../../server/authentication/role'
+import expectedArrivals from '../../../mockApis/responses/expectedArrivals'
 
 const expectedArrival = expectedArrivals.court.notCurrent
 

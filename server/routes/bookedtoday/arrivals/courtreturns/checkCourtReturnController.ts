@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express'
-import type { ExpectedArrivalsService, RaiseAnalyticsEvent } from '../../../services'
+import type { ExpectedArrivalsService, RaiseAnalyticsEvent } from '../../../../services'
 
 export default class CheckCourtReturnController {
   public constructor(
@@ -11,7 +11,7 @@ export default class CheckCourtReturnController {
     return async (req, res) => {
       const { id } = req.params
       const data = await this.expectedArrivalsService.getArrival(id)
-      return res.render('pages/bookedtoday/arrivals/checkCourtReturn.njk', { data, id })
+      return res.render('pages/bookedtoday/arrivals/courtreturns/checkCourtReturn.njk', { data, id })
     }
   }
 
