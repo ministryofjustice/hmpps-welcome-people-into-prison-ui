@@ -43,7 +43,7 @@
                             | selectattr("show")}
                     }
                 ] %}
-                {{ govukSummaryList({ rows: identifiers }) }}
+                {{ govukSummaryList({ rows: identifiers, classes: 'search-identifiers' }) }}
                 {{ govukButton({
                         classes: "govuk-button govuk-!-margin-top-9 govuk-!-margin-bottom-3",
                         text: "Search",

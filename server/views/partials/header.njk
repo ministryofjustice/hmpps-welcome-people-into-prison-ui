@@ -232,7 +232,6 @@
               data-qa="manageDetails"
               class="hmpps-header__link"
               href="{{ authUrl + '/account-details' }}?redirect_uri={{ user.returnUrl | urlencode }}&client_id={{ user.clientID }}" 
-              data-qa="manage-account-link"
               rel="noopener noreferrer">
               <span data-qa="header-user-name">{{ user.displayName | initialiseName }}</span>
               <span class="hmpps-header__link__sub-text">Manage your details</span>
