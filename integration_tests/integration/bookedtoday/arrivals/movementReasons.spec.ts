@@ -1,9 +1,9 @@
 import Page from '../../../pages/page'
-import MovementReasonsPage from '../../../pages/movementReasons'
-import CheckAnswersPage from '../../../pages/checkAnswers'
+import MovementReasonsPage from '../../../pages/bookedtoday/arrivals/movementReasons'
+import CheckAnswersPage from '../../../pages/bookedtoday/arrivals/checkAnswers'
 import Role from '../../../../server/authentication/role'
 import expectedArrivals from '../../../mockApis/responses/expectedArrivals'
-import SexPage from '../../../pages/sexPage'
+import SexPage from '../../../pages/bookedtoday/arrivals/sexPage'
 
 context('Movement reasons', () => {
   const expectedArrival = expectedArrivals.withFemaleGender
@@ -37,8 +37,6 @@ context('Movement reasons', () => {
     cy.signIn()
     const movementReasonsPage = MovementReasonsPage.goTo(expectedArrival.id, 'civil-offence')
     movementReasonsPage.continue().click()
-    movementReasonsPage.errorSummaryTitle().contains('There is a problem')
-    movementReasonsPage.errorSummaryBody().contains('Select the civil offence')
-    movementReasonsPage.errorSummaryMessage().contains('Select the civil offence')
+    movementReasonsPage.hasError('Select the civil offence')
   })
 })

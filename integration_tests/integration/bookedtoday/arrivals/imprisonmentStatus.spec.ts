@@ -1,10 +1,10 @@
 import Page from '../../../pages/page'
-import ImprisonmentStatusPage from '../../../pages/imprisonmentStatus'
-import MovementReasonsPage from '../../../pages/movementReasons'
-import CheckAnswersPage from '../../../pages/checkAnswers'
+import ImprisonmentStatusPage from '../../../pages/bookedtoday/arrivals/imprisonmentStatus'
+import MovementReasonsPage from '../../../pages/bookedtoday/arrivals/movementReasons'
+import CheckAnswersPage from '../../../pages/bookedtoday/arrivals/checkAnswers'
 import Role from '../../../../server/authentication/role'
 import expectedArrivals from '../../../mockApis/responses/expectedArrivals'
-import SexPage from '../../../pages/sexPage'
+import SexPage from '../../../pages/bookedtoday/arrivals/sexPage'
 
 const expectedArrival = expectedArrivals.withFemaleGender
 
@@ -45,8 +45,6 @@ context('Imprisonment status', () => {
     cy.signIn()
     const imprisonmentStatusPage = ImprisonmentStatusPage.goTo(expectedArrival.id)
     imprisonmentStatusPage.continue().click()
-    imprisonmentStatusPage.errorSummaryTitle().contains('There is a problem')
-    imprisonmentStatusPage.errorSummaryBody().contains('Select a reason for imprisonment')
-    imprisonmentStatusPage.errorSummaryMessage().contains('Select a reason for imprisonment')
+    imprisonmentStatusPage.hasError('Select a reason for imprisonment')
   })
 })

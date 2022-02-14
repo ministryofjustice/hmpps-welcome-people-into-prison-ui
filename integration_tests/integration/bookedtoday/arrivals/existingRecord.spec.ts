@@ -1,4 +1,4 @@
-import ConfirmArrivalPage from '../../../pages/confirmArrival'
+import ExistingRecordPage from '../../../pages/bookedtoday/arrivals/existingRecord'
 import Role from '../../../../server/authentication/role'
 import expectedArrivals from '../../../mockApis/responses/expectedArrivals'
 
@@ -18,13 +18,13 @@ context('Confirm Arrival', () => {
   it('PER record should contain a full set of correctly formatted move data', () => {
     cy.task('stubExpectedArrival', expectedArrival)
     cy.signIn()
-    const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
+    const existingRecordPage = ExistingRecordPage.goTo(expectedArrival.id)
 
-    confirmArrivalPage.perName().should('contain.text', 'Sam Smith')
-    confirmArrivalPage.perDob().should('contain.text', '1 February 1970')
-    confirmArrivalPage.perPrisonNumber().should('contain.text', 'G0014GM')
-    confirmArrivalPage.perPncNumber().should('contain.text', '01/4567A')
-    confirmArrivalPage.continue().should('have.attr', 'href', `/prisoners/${expectedArrival.id}/sex`)
+    existingRecordPage.perName().should('contain.text', 'Sam Smith')
+    existingRecordPage.perDob().should('contain.text', '1 February 1970')
+    existingRecordPage.perPrisonNumber().should('contain.text', 'G0014GM')
+    existingRecordPage.perPncNumber().should('contain.text', '01/4567A')
+    existingRecordPage.continue().should('have.attr', 'href', `/prisoners/${expectedArrival.id}/sex`)
   })
 
   it('PER record should not display prison number', () => {
@@ -32,8 +32,8 @@ context('Confirm Arrival', () => {
 
     cy.task('stubExpectedArrival', expectedArrival)
     cy.signIn()
-    const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
-    confirmArrivalPage.perPrisonNumber().should('contain.text', '')
+    const existingRecordPage = ExistingRecordPage.goTo(expectedArrival.id)
+    existingRecordPage.perPrisonNumber().should('contain.text', '')
   })
 
   it('PER record should not display pnc number', () => {
@@ -41,8 +41,8 @@ context('Confirm Arrival', () => {
 
     cy.task('stubExpectedArrival', expectedArrival)
     cy.signIn()
-    const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
-    confirmArrivalPage.perPncNumber().should('contain.text', '')
+    const existingRecordPage = ExistingRecordPage.goTo(expectedArrival.id)
+    existingRecordPage.perPncNumber().should('contain.text', '')
   })
 
   it('Existing record should contain a full set of correctly formatted move data', () => {
@@ -58,16 +58,16 @@ context('Confirm Arrival', () => {
 
     cy.task('stubExpectedArrival', expectedArrival)
     cy.signIn()
-    const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
+    const existingRecordPage = ExistingRecordPage.goTo(expectedArrival.id)
 
-    confirmArrivalPage.existingName().should('contain.text', 'Sam Smith')
-    confirmArrivalPage.existingDob().should('contain.text', '1 February 1970')
-    confirmArrivalPage.existingPrisonNumber().should('contain.text', 'A1234BC')
-    confirmArrivalPage.existingPncNumber().should('contain.text', '01/4567A')
-    confirmArrivalPage
+    existingRecordPage.existingName().should('contain.text', 'Sam Smith')
+    existingRecordPage.existingDob().should('contain.text', '1 February 1970')
+    existingRecordPage.existingPrisonNumber().should('contain.text', 'A1234BC')
+    existingRecordPage.existingPncNumber().should('contain.text', '01/4567A')
+    existingRecordPage
       .prisonerImage()
       .should('have.attr', 'src', `/prisoner/${expectedArrival.potentialMatches[0].prisonNumber}/image`)
-    confirmArrivalPage.continue().should('have.attr', 'href', `/prisoners/${expectedArrival.id}/sex`)
+    existingRecordPage.continue().should('have.attr', 'href', `/prisoners/${expectedArrival.id}/sex`)
   })
 
   it('Existing record should not contain prison number', () => {
@@ -77,13 +77,14 @@ context('Confirm Arrival', () => {
         lastName: 'Smith',
         dateOfBirth: '1970-02-01',
         pncNumber: '01/4567A',
+        prisonNumber: undefined,
       },
     ]
 
     cy.task('stubExpectedArrival', expectedArrival)
     cy.signIn()
-    const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
-    confirmArrivalPage.existingPrisonNumber().should('contain.text', '')
+    const existingRecordPage = ExistingRecordPage.goTo(expectedArrival.id)
+    existingRecordPage.existingPrisonNumber().should('contain.text', '')
   })
   it('Existing record should not contain pnc number', () => {
     expectedArrival.potentialMatches = [
@@ -92,12 +93,13 @@ context('Confirm Arrival', () => {
         lastName: 'Smith',
         dateOfBirth: '1970-02-01',
         prisonNumber: 'A1234BC',
+        pncNumber: undefined,
       },
     ]
 
     cy.task('stubExpectedArrival', expectedArrival)
     cy.signIn()
-    const confirmArrivalPage = ConfirmArrivalPage.goTo(expectedArrival.id)
-    confirmArrivalPage.existingPncNumber().should('contain.text', '')
+    const existingRecordPage = ExistingRecordPage.goTo(expectedArrival.id)
+    existingRecordPage.existingPncNumber().should('contain.text', '')
   })
 })

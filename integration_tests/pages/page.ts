@@ -16,4 +16,10 @@ export default abstract class Page {
   signOut = (): PageElement => cy.get('[data-qa=signOut]')
 
   manageDetails = (): PageElement => cy.get('[data-qa=manageDetails]')
+
+  hasError = (message: string) => {
+    cy.get('#error-summary-title').contains('There is a problem')
+    cy.get('.govuk-error-summary__body').contains(message)
+    cy.get('.govuk-error-message').contains(message)
+  }
 }

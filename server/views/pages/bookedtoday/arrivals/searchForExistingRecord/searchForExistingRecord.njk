@@ -15,31 +15,31 @@
                 <h3 class="govuk-heading-m">Personal details</h3>
                 {% set details = [
                     {   key:     { text: "Name" },
-                        value:   { text: data.firstName + " " + data.lastName },
+                        value:   { text: data.firstName + " " + data.lastName, classes: 'data-qa-name' },
                         actions: { items: [
-                            { href: baseUrl + '/change-name', text: "Change", visuallyHiddenText: "name" }]}
+                            { href: baseUrl + '/change-name', text: "Change", visuallyHiddenText: "name", attributes: { 'data-qa': 'change-name' } }]}
                     },
                     {   key:     { text: "Date of birth" },
-                        value:   { text: data.dateOfBirth | formatDate('D MMMM YYYY') },
+                        value:   { text: data.dateOfBirth | formatDate('D MMMM YYYY'), classes: 'data-qa-dob' },
                         actions: { items: [
-                            { href: baseUrl + '/change-date-of-birth', text: "Change", visuallyHiddenText: "date of birth" }]}
+                            { href: baseUrl + '/change-date-of-birth', text: "Change", visuallyHiddenText: "date of birth", attributes: { 'data-qa': 'change-dob' } }]}
                     }
                 ] %}
                 {{ govukSummaryList({ rows: details }) }}
                 <h3 class="govuk-heading-m">Identifiers</h3>
                 {% set identifiers = [
                     {   key:     { text: "PNC number" },
-                        value:   { text: data.pncNumber | default('Not entered', true) },
+                        value:   { text: data.pncNumber | default('Not entered', true), classes: 'data-qa-pnc-number' },
                         actions: { items: [
-                            { href: baseUrl + '/change-pnc-number', text: "Change" if data.pncNumber else "Add", visuallyHiddenText: "PNC number", show: true },
-                            { href: baseUrl + '/remove-pnc-number', text: "Remove" if data.pncNumber, visuallyHiddenText: "PNC number", show: data.pncNumber }]
+                            { href: baseUrl + '/change-pnc-number', text: "Change" if data.pncNumber else "Add", visuallyHiddenText: "PNC number", show: true, attributes: { 'data-qa': 'change-pnc' } },
+                            { href: baseUrl + '/remove-pnc-number', text: "Remove" if data.pncNumber, visuallyHiddenText: "PNC number", show: data.pncNumber, attributes: { 'data-qa': 'remove-pnc' } }]
                             | selectattr("show")}
                     },
                     {   key:     { text: "Prison number" },
-                        value:   { text: data.prisonNumber | default('Not entered', true) },
+                        value:   { text: data.prisonNumber | default('Not entered', true), classes: 'data-qa-prison-number' },
                         actions: { items: [
-                            { href: baseUrl + '/change-prison-number', text: "Change" if data.prisonNumber else "Add", visuallyHiddenText: "Prison number", show: true },
-                            { href: baseUrl + '/remove-prison-number', text: "Remove", visuallyHiddenText: "Prison number", show: data.prisonNumber }]
+                            { href: baseUrl + '/change-prison-number', text: "Change" if data.prisonNumber else "Add", visuallyHiddenText: "Prison number", show: true, attributes: { 'data-qa': 'change-prison-number' } },
+                            { href: baseUrl + '/remove-prison-number', text: "Remove", visuallyHiddenText: "Prison number", show: data.prisonNumber, attributes: { 'data-qa': 'remove-prison-number' } }]
                             | selectattr("show")}
                     }
                 ] %}

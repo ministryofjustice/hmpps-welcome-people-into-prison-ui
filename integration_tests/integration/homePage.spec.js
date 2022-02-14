@@ -1,7 +1,7 @@
 import Page from '../pages/page'
 import HomePage from '../pages/homePage'
-import ChoosePrisonerPage from '../pages/choosePrisoner'
-import TemporaryAbsencesPage from '../pages/temporaryAbsences'
+import ChoosePrisonerPage from '../pages/bookedtoday/choosePrisoner'
+import TemporaryAbsencesPage from '../pages/temporaryabsences/temporaryAbsences'
 import Role from '../../server/authentication/role'
 import expectedArrivals from '../mockApis/responses/expectedArrivals'
 
