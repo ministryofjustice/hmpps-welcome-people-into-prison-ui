@@ -10,8 +10,8 @@ export default class ConfirmAddedToRollController {
 
   public view(): RequestHandler {
     return async (req, res) => {
-      const offenderNumber = req.flash('offenderNumber')?.[0]
-      if (!offenderNumber) {
+      const { prisonNumber, location } = req.flash('arrivalResponse')?.[0] as Record<string, string>
+      if (!prisonNumber || !location) {
         return res.redirect('/confirm-arrival/choose-prisoner')
       }
       const { id } = req.params
@@ -20,7 +20,7 @@ export default class ConfirmAddedToRollController {
       const prison = await this.prisonService.getPrison(activeCaseLoadId)
       State.imprisonmentStatus.clear(res)
       State.sex.clear(res)
-      return res.render('pages/bookedtoday/arrivals/confirmAddedToRoll.njk', { data, prison, offenderNumber })
+      return res.render('pages/bookedtoday/arrivals/confirmAddedToRoll.njk', { data, prison, prisonNumber, location })
     }
   }
 }

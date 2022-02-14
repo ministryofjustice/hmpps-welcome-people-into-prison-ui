@@ -22,16 +22,17 @@ export default class CheckCourtReturnController {
       const { activeCaseLoadId } = res.locals.user
       const data = await this.expectedArrivalsService.getArrival(id)
 
-      const prisonNumber = await this.expectedArrivalsService.confirmCourtReturn(username, id, activeCaseLoadId)
+      const arrivalResponse = await this.expectedArrivalsService.confirmCourtReturn(username, id, activeCaseLoadId)
 
-      if (!prisonNumber) {
+      if (!arrivalResponse) {
         return res.redirect('/feature-not-available')
       }
 
       req.flash('prisoner', {
         firstName: data.firstName,
         lastName: data.lastName,
-        prisonNumber: prisonNumber.prisonNumber,
+        prisonNumber: arrivalResponse.prisonNumber,
+        location: arrivalResponse.location,
       })
 
       this.raiseAnalyticsEvent(

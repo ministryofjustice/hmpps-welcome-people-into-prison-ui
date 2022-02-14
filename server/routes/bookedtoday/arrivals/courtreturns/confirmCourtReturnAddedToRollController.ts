@@ -7,8 +7,8 @@ export default class ConfirmCourtReturnAddedToRollController {
   public view(): RequestHandler {
     return async (req, res) => {
       const { activeCaseLoadId } = res.locals.user
-      const { firstName, lastName, prisonNumber } = req.flash('prisoner')?.[0] as Record<string, string>
-      if (!firstName || !lastName || !prisonNumber) {
+      const { firstName, lastName, prisonNumber, location } = req.flash('prisoner')?.[0] as Record<string, string>
+      if (!firstName || !lastName || !prisonNumber || !location) {
         return res.redirect('/confirm-arrival/choose-prisoner')
       }
 
@@ -19,6 +19,7 @@ export default class ConfirmCourtReturnAddedToRollController {
         lastName,
         prisonNumber,
         prison,
+        location,
       })
     }
   }

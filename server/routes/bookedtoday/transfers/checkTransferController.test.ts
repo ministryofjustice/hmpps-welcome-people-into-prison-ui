@@ -27,6 +27,10 @@ beforeEach(() => {
   app = appWithAllRoutes({ services: { transfersService, raiseAnalyticsEvent }, roles: [Role.PRISON_RECEPTION] })
   config.confirmEnabled = true
   transfersService.getTransfer.mockResolvedValue(transfer)
+  transfersService.confirmTransfer.mockResolvedValue({
+    prisonNumber: 'A1234AB',
+    location: 'Reception',
+  })
 })
 
 afterEach(() => {
@@ -84,7 +88,11 @@ describe('POST addToRoll', () => {
     return request(app)
       .post('/prisoners/A1234AB/check-transfer')
       .expect(() => {
-        expect(flashProvider).toHaveBeenCalledWith('prisoner', { firstName: 'Karl', lastName: 'Offender' })
+        expect(flashProvider).toHaveBeenCalledWith('prisoner', {
+          firstName: 'Karl',
+          lastName: 'Offender',
+          location: 'Reception',
+        })
       })
   })
 

@@ -31,7 +31,7 @@ describe('GET /view', () => {
   })
 
   it('should call service methods correctly', () => {
-    flashProvider.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith' }])
+    flashProvider.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith', location: 'Reception' }])
     return request(app)
       .get('/prisoners/A1234AB/confirm-transfer')
       .expect('Content-Type', 'text/html; charset=utf-8')
@@ -41,7 +41,7 @@ describe('GET /view', () => {
   })
 
   it('should retrieve prisoner details from flash', () => {
-    flashProvider.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith' }])
+    flashProvider.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith', location: 'Reception' }])
     return request(app)
       .get('/prisoners/A1234AB/confirm-transfer')
       .expect('Content-Type', 'text/html; charset=utf-8')
@@ -63,7 +63,7 @@ describe('GET /view', () => {
   })
 
   it('should render /confirmTransferAddedToRoll page with correct data', () => {
-    flashProvider.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith' }])
+    flashProvider.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith', location: 'Reception' }])
 
     return request(app)
       .get('/prisoners/A1234AB/confirm-transfer')
@@ -73,6 +73,7 @@ describe('GET /view', () => {
         expect($('h1').text()).toContain('Jim Smith has been added to the establishment roll')
         expect($('[data-qa=confirmation-banner]').text()).toContain('A1234AB')
         expect($('[data-qa=confirmation-paragraph]').text()).toContain('Moorland (HMP & YOI)')
+        expect($('[data-qa=location-paragraph]').text()).toContain('Their location is Reception.')
       })
   })
 })

@@ -1,6 +1,6 @@
 import express, { RequestHandler, Router } from 'express'
 import CheckCourtReturnController from './checkCourtReturnController'
-import ConfirmCourtReturnController from './confirmCourtReturnController'
+import ConfirmCourtReturnAddedToRollController from './confirmCourtReturnAddedToRollController'
 
 import authorisationForUrlMiddleware from '../../../../middleware/authorisationForUrlMiddleware'
 import asyncMiddleware from '../../../../middleware/asyncMiddleware'
@@ -41,10 +41,10 @@ export default function routes(services: Services): Router {
     [Role.PRISON_RECEPTION]
   )
 
-  const confirmCourtReturnController = new ConfirmCourtReturnController(services.prisonService)
+  const confirmCourtReturnAddedToRollController = new ConfirmCourtReturnAddedToRollController(services.prisonService)
   get(
     '/prisoners/:id/prisoner-returned-from-court',
-    [redirectIfDisabledMiddleware(config.confirmEnabled), confirmCourtReturnController.view()],
+    [redirectIfDisabledMiddleware(config.confirmEnabled), confirmCourtReturnAddedToRollController.view()],
     [Role.PRISON_RECEPTION]
   )
 

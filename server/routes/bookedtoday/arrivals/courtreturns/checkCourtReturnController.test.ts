@@ -30,6 +30,7 @@ beforeEach(() => {
   expectedArrivalsService.getArrival.mockResolvedValue(courtReturn)
   expectedArrivalsService.confirmCourtReturn.mockResolvedValue({
     prisonNumber: 'A1234AB',
+    location: 'Reception',
   })
 })
 
@@ -84,6 +85,7 @@ describe('checkCourtReturnController', () => {
             firstName: 'Jim',
             lastName: 'Smith',
             prisonNumber: 'A1234AB',
+            location: 'Reception',
           })
         })
     })

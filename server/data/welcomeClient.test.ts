@@ -143,10 +143,11 @@ describe('welcomeClient', () => {
       fakeWelcomeApi
         .post(`/temporary-absences/${prisonNumber}/confirm`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, { prisonNumber: 'A1234AB' })
+        .reply(200, { prisonNumber: 'A1234AB', location: 'Reception' })
 
       return expect(welcomeClient.confirmTemporaryAbsence(prisonNumber, 'MDI')).resolves.toStrictEqual({
         prisonNumber: 'A1234AB',
+        location: 'Reception',
       })
     })
   })
@@ -157,9 +158,12 @@ describe('welcomeClient', () => {
       fakeWelcomeApi
         .post(`/transfers/${prisonNumber}/confirm`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, {})
+        .reply(200, { prisonNumber: 'A1234AB', location: 'Reception' })
 
-      return expect(welcomeClient.confirmTransfer(prisonNumber)).resolves.toStrictEqual({})
+      return expect(welcomeClient.confirmTransfer(prisonNumber)).resolves.toStrictEqual({
+        prisonNumber: 'A1234AB',
+        location: 'Reception',
+      })
     })
   })
 
@@ -189,10 +193,11 @@ describe('welcomeClient', () => {
       fakeWelcomeApi
         .post(`/court-returns/${id}/confirm`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, { prisonNumber: 'A1234AB' })
+        .reply(200, { prisonNumber: 'A1234AB', location: 'Reception' })
 
       return expect(welcomeClient.confirmCourtReturn(id, 'MDI')).resolves.toStrictEqual({
         prisonNumber: 'A1234AB',
+        location: 'Reception',
       })
     })
   })
@@ -226,11 +231,12 @@ describe('welcomeClient', () => {
       fakeWelcomeApi
         .post(`/arrivals/${id}/confirm`, newOffender)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, { prisonNumber: 'A1234AB' })
+        .reply(200, { prisonNumber: 'A1234AB', location: 'Reception' })
 
       const output = await welcomeClient.createOffenderRecordAndBooking(id, newOffender)
-      expect(output).toEqual({ prisonNumber: 'A1234AB' })
+      expect(output).toEqual({ prisonNumber: 'A1234AB', location: 'Reception' })
     })
+
     it('should return null', async () => {
       fakeWelcomeApi
         .post(`/arrivals/${id}/confirm`, newOffender)
@@ -252,6 +258,7 @@ describe('welcomeClient', () => {
       )
     })
   })
+
   describe('getImprisonmentStatuses', () => {
     const mockResponse: ImprisonmentStatus[] = [
       {

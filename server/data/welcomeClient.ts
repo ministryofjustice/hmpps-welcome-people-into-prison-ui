@@ -5,12 +5,11 @@ import type {
   TemporaryAbsence,
   NewOffenderBooking,
   Prison,
-  OffenderNumber,
-  PrisonNumber,
   ImprisonmentStatus,
   UserCaseLoad,
 } from 'welcome'
 import type { Readable } from 'stream'
+import { ArrivalResponse } from 'welcome'
 import config, { ApiConfig } from '../config'
 import RestClient from './restClient'
 import logger from '../../logger'
@@ -37,12 +36,12 @@ export default class WelcomeClient {
     }) as Promise<Arrival>
   }
 
-  async confirmCourtReturn(id: string, body: string): Promise<PrisonNumber> {
+  async confirmCourtReturn(id: string, body: string): Promise<ArrivalResponse> {
     logger.info(`welcomeApi: confirmCourtReturn ${id})`)
     return this.restClient.post({
       path: `/court-returns/${id}/confirm`,
       data: { prisonId: body },
-    }) as Promise<PrisonNumber>
+    }) as Promise<ArrivalResponse>
   }
 
   async getTransfers(agencyId: string): Promise<Arrival[]> {
@@ -59,11 +58,11 @@ export default class WelcomeClient {
     }) as Promise<Transfer>
   }
 
-  async confirmTransfer(prisonNumber: string): Promise<void> {
+  async confirmTransfer(prisonNumber: string): Promise<ArrivalResponse> {
     logger.info(`welcomeApi: confirmTransfer ${prisonNumber})`)
     return this.restClient.post({
       path: `/transfers/${prisonNumber}/confirm`,
-    }) as Promise<void>
+    }) as Promise<ArrivalResponse>
   }
 
   async getTemporaryAbsences(agencyId: string): Promise<TemporaryAbsence[]> {
@@ -80,12 +79,12 @@ export default class WelcomeClient {
     }) as Promise<TemporaryAbsence>
   }
 
-  async confirmTemporaryAbsence(prisonNumber: string, agencyId: string): Promise<void> {
+  async confirmTemporaryAbsence(prisonNumber: string, agencyId: string): Promise<ArrivalResponse> {
     logger.info(`welcomeApi: confirmTemporaryAbsence ${prisonNumber})`)
     return this.restClient.post({
       path: `/temporary-absences/${prisonNumber}/confirm`,
       data: { agencyId },
-    }) as Promise<void>
+    }) as Promise<ArrivalResponse>
   }
 
   async getImage(prisonNumber: string): Promise<Readable> {
@@ -102,13 +101,13 @@ export default class WelcomeClient {
     }) as Promise<Prison>
   }
 
-  async createOffenderRecordAndBooking(id: string, body: NewOffenderBooking): Promise<OffenderNumber | null> {
+  async createOffenderRecordAndBooking(id: string, body: NewOffenderBooking): Promise<ArrivalResponse | null> {
     logger.info(`welcomeApi: createOffenderRecordAndBooking(${id})`)
     try {
       return (await this.restClient.post({
         path: `/arrivals/${id}/confirm`,
         data: body,
-      })) as Promise<OffenderNumber>
+      })) as Promise<ArrivalResponse>
     } catch (error) {
       if (error.status >= 400 && error.status < 500) {
         return null

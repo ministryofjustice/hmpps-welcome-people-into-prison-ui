@@ -11,7 +11,7 @@ export default class ConfirmArrivalController {
       const data = await this.expectedArrivalsService.getArrival(id)
       State.imprisonmentStatus.clear(res)
       State.sex.clear(res)
-      res.render('pages/bookedtoday/arrivals/confirmArrival.njk', { data })
+      return res.render('pages/bookedtoday/arrivals/confirmArrival.njk', { data })
     }
   }
 }

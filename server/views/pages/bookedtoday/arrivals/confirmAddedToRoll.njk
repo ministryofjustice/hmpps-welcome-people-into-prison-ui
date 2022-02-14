@@ -9,13 +9,16 @@
       <div class="govuk-grid-column-two-thirds">
         {{ govukPanel({
           titleText: data.firstName + " " + data.lastName + " " + "has been added to the establishment roll",
-          html: "Prison number<br><strong>" + offenderNumber | escape + "</strong>",
+          html: "Prison number<br><strong>" + prisonNumber | escape + "</strong>",
           attributes: {
             'data-qa': 'confirmation-banner'
           } 
         }) }}
 
-        <p data-qa="confirmation-paragraph">{{ data.firstName}} {{ data.lastName }} is now part of the {{ prison.description }} establishment roll and is located in reception.</p>
+
+        <p data-qa="confirmation-paragraph">{{ data.firstName}} {{ data.lastName }} is now part of the {{ prison.description }} establishment roll.</p>
+
+        <p data-qa="location-paragraph">Their location is {{ location }}.</p>
 
         <div class="govuk-button-group">
           {{ govukButton({

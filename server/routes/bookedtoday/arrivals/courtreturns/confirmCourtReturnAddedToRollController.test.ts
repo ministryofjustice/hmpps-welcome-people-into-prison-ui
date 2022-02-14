@@ -10,7 +10,7 @@ jest.mock('../../../../services/prisonService')
 const prisonService = new PrisonService(null, null) as jest.Mocked<PrisonService>
 let app: Express
 
-describe('confirmCourtReturnController', () => {
+describe('confirmCourtReturnAddedToRollController', () => {
   beforeEach(() => {
     app = appWithAllRoutes({
       services: { prisonService },
@@ -38,7 +38,9 @@ describe('confirmCourtReturnController', () => {
     })
 
     it('should call service methods correctly', () => {
-      flashProvider.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith', prisonNumber: 'A1234AB' }])
+      flashProvider.mockReturnValue([
+        { firstName: 'Jim', lastName: 'Smith', prisonNumber: 'A1234AB', location: 'Reception' },
+      ])
       return request(app)
         .get('/prisoners/12345-67890/prisoner-returned-from-court')
         .expect('Content-Type', 'text/html; charset=utf-8')
@@ -48,7 +50,9 @@ describe('confirmCourtReturnController', () => {
     })
 
     it('should retrieve prisoner details from flash', () => {
-      flashProvider.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith', prisonNumber: 'A1234AB' }])
+      flashProvider.mockReturnValue([
+        { firstName: 'Jim', lastName: 'Smith', prisonNumber: 'A1234AB', location: 'Reception' },
+      ])
       return request(app)
         .get('/prisoners/12345-67890/prisoner-returned-from-court')
         .expect('Content-Type', 'text/html; charset=utf-8')
@@ -70,7 +74,9 @@ describe('confirmCourtReturnController', () => {
     })
 
     it('should render /confirmCourtReturnAddedToRoll page with correct data', () => {
-      flashProvider.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith', prisonNumber: 'A1234AB' }])
+      flashProvider.mockReturnValue([
+        { firstName: 'Jim', lastName: 'Smith', prisonNumber: 'A1234AB', location: 'Reception' },
+      ])
 
       return request(app)
         .get('/prisoners/12345-67890/prisoner-returned-from-court')
@@ -79,9 +85,8 @@ describe('confirmCourtReturnController', () => {
           const $ = cheerio.load(res.text)
           expect($('h1').text()).toContain('Jim Smith has returned to Moorland (HMP & YOI)')
           expect($('[data-qa=confirmation-banner]').text()).toContain('A1234AB')
-          expect($('[data-qa=confirmation-paragraph]').text()).toContain(
-            'Jim Smith is on the establishment roll and is located in reception.'
-          )
+          expect($('[data-qa=confirmation-paragraph]').text()).toContain('Jim Smith is on the establishment roll.')
+          expect($('[data-qa=location-paragraph]').text()).toContain('Their location is Reception.')
         })
     })
   })

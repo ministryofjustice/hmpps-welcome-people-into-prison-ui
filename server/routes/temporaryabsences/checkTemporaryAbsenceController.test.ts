@@ -28,6 +28,10 @@ beforeEach(() => {
   })
   config.confirmEnabled = true
   temporaryAbsencesService.getTemporaryAbsence.mockResolvedValue(temporaryAbsence)
+  temporaryAbsencesService.confirmTemporaryAbsence.mockResolvedValue({
+    prisonNumber: 'G0013AB',
+    location: 'Reception',
+  })
 })
 
 afterEach(() => {
@@ -72,7 +76,7 @@ describe('POST addToRoll', () => {
     return request(app).post('/prisoners/G0013AB/check-temporary-absence').expect(302).expect('Location', '/autherror')
   })
 
-  it('should call service to confirm the transfer', () => {
+  it('should call service to confirm the temporary absence', () => {
     return request(app)
       .post('/prisoners/G0013AB/check-temporary-absence')
       .expect('Content-Type', 'text/plain; charset=utf-8')
@@ -85,7 +89,11 @@ describe('POST addToRoll', () => {
     return request(app)
       .post('/prisoners/G0013AB/check-temporary-absence')
       .expect(() => {
-        expect(flashProvider).toHaveBeenCalledWith('prisoner', { firstName: 'John', lastName: 'Doe' })
+        expect(flashProvider).toHaveBeenCalledWith('prisoner', {
+          firstName: 'John',
+          lastName: 'Doe',
+          location: 'Reception',
+        })
       })
   })
 

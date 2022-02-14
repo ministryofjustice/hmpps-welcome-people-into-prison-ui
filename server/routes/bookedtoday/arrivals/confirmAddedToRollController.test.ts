@@ -45,7 +45,7 @@ describe('GET /confirmation', () => {
   })
 
   it('should call service methods correctly', () => {
-    flashProvider.mockReturnValue([{ offenderNo: 'A1234AB' }])
+    flashProvider.mockReturnValue([{ prisonNumber: 'A1234AB', location: 'Recpetion' }])
     return request(app)
       .get('/prisoners/12345-67890/confirmation')
       .expect('Content-Type', 'text/html; charset=utf-8')
@@ -55,18 +55,18 @@ describe('GET /confirmation', () => {
       })
   })
 
-  it('should retrieve offenderNumber from flash', () => {
-    flashProvider.mockReturnValue([{ offenderNo: 'A1234AB' }])
+  it('should retrieve arrival response from flash', () => {
+    flashProvider.mockReturnValue([{ prisonNumber: 'A1234AB', location: 'Recpetion' }])
     return request(app)
       .get('/prisoners/12345-67890/confirmation')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(() => {
-        expect(flashProvider).toHaveBeenCalledWith('offenderNumber')
+        expect(flashProvider).toHaveBeenCalledWith('arrivalResponse')
       })
   })
 
-  it('should redirect to /choose-prisoner page if no offenderNumber present', () => {
-    flashProvider.mockReturnValue([])
+  it('should redirect to /choose-prisoner page if no arrival response present', () => {
+    flashProvider.mockReturnValue([{}])
     return request(app)
       .get('/prisoners/12345-67890/confirmation')
       .expect('Content-Type', 'text/plain; charset=utf-8')
@@ -78,7 +78,7 @@ describe('GET /confirmation', () => {
   })
 
   it('should clear cookie', () => {
-    flashProvider.mockReturnValue([{ offenderNo: 'A1234AB' }])
+    flashProvider.mockReturnValue([{ prisonNumber: 'A1234AB', location: 'Recpetion' }])
     return request(app)
       .get('/prisoners/12345-67890/confirmation')
       .expect(res => {
@@ -89,7 +89,7 @@ describe('GET /confirmation', () => {
   })
 
   it('should render /confirmAddedToRoll page', () => {
-    flashProvider.mockReturnValue([{ offenderNo: 'A1234AB' }])
+    flashProvider.mockReturnValue([{ prisonNumber: 'A1234AB', location: 'Recpetion' }])
     return request(app)
       .get('/prisoners/12345-67890/confirmation')
       .expect('Content-Type', 'text/html; charset=utf-8')

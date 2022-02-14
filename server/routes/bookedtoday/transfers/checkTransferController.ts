@@ -23,11 +23,12 @@ export default class CheckTransferController {
       const { activeCaseLoadId } = res.locals.user
       const data = await this.transfersService.getTransfer(activeCaseLoadId, prisonNumber)
 
-      await this.transfersService.confirmTransfer(username, prisonNumber)
+      const arrivalResponse = await this.transfersService.confirmTransfer(username, prisonNumber)
 
       req.flash('prisoner', {
         firstName: data.firstName,
         lastName: data.lastName,
+        location: arrivalResponse.location,
       })
 
       this.raiseAnalyticsEvent(
