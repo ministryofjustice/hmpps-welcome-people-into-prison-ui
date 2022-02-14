@@ -1,9 +1,9 @@
 import Page from '../../pages/page'
 import Role from '../../../server/authentication/role'
 import temporaryAbsences from '../../mockApis/responses/temporaryAbsences'
-import TemporaryAbsencePage from '../../pages/temporaryAbsences'
-import ConfirmTemporaryAbsenceAddedToRollPage from '../../pages/confirmTemporaryAbsenceAddedToRoll'
-import CheckTemporaryAbsencePage from '../../pages/checkTemporaryAbsence'
+import TemporaryAbsencePage from '../../pages/temporaryabsences/temporaryAbsences'
+import ConfirmTemporaryAbsenceAddedToRollPage from '../../pages/temporaryabsences/confirmTemporaryAbsenceAddedToRoll'
+import CheckTemporaryAbsencePage from '../../pages/temporaryabsences/checkTemporaryAbsence'
 
 context('Confirm temporary absence added To roll', () => {
   beforeEach(() => {

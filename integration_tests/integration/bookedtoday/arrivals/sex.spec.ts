@@ -1,6 +1,6 @@
 import Role from '../../../../server/authentication/role'
 import expectedArrivals from '../../../mockApis/responses/expectedArrivals'
-import SexPage from '../../../pages/sexPage'
+import SexPage from '../../../pages/bookedtoday/arrivals/sexPage'
 
 const expectedArrival = expectedArrivals.court.notCurrent
 const expectedArrivalWithMaleGender = expectedArrivals.withFemaleGender
@@ -26,8 +26,6 @@ context('Sex', () => {
     cy.signIn()
     const sexPage = SexPage.goTo(expectedArrival.id)
     sexPage.continue().click()
-    sexPage.errorSummaryTitle().contains('There is a problem')
-    sexPage.errorSummaryBody().contains('Select a sex')
-    sexPage.errorSummaryMessage().contains('Select a sex')
+    sexPage.hasError('Select a sex')
   })
 })

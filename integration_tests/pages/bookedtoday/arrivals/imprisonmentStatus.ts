@@ -1,4 +1,4 @@
-import Page, { PageElement } from './page'
+import Page, { PageElement } from '../../page'
 
 export default class ImprisonmentStatusPage extends Page {
   constructor() {
@@ -9,12 +9,6 @@ export default class ImprisonmentStatusPage extends Page {
     cy.visit(`/prisoners/${id}/imprisonment-status`)
     return Page.verifyOnPage(ImprisonmentStatusPage)
   }
-
-  errorSummaryTitle = (): PageElement => cy.get('#error-summary-title')
-
-  errorSummaryBody = (): PageElement => cy.get('.govuk-error-summary__body')
-
-  errorSummaryMessage = (): PageElement => cy.get('.govuk-error-message')
 
   prisonerName = (): PageElement => cy.get(`[data-qa=prisoner-name]`)
 

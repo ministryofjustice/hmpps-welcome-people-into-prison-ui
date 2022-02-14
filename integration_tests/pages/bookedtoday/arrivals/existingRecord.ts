@@ -1,13 +1,13 @@
-import Page, { PageElement } from './page'
+import Page, { PageElement } from '../../page'
 
-export default class ConfirmArrivalPage extends Page {
+export default class ExistingRecordPage extends Page {
   constructor() {
-    super(' an existing prisoner record')
+    super('This person has an existing prisoner record')
   }
 
-  static goTo(id: string): ConfirmArrivalPage {
+  static goTo(id: string): ExistingRecordPage {
     cy.visit(`/prisoners/${id}/confirm-arrival`)
-    return Page.verifyOnPage(ConfirmArrivalPage)
+    return Page.verifyOnPage(ExistingRecordPage)
   }
 
   perName = (): PageElement => cy.get(`.data-qa-per-record-prisoner-name`)

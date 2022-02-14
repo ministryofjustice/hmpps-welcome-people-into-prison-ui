@@ -1,4 +1,32 @@
 export default {
+  arrival: ({
+    fromLocationType,
+    isCurrentPrisoner,
+    dateOfBirth = '1970-01-01',
+    pncNumber = '01/2345A',
+    prisonNumber = 'G0015GF',
+    potentialMatches = [],
+  }) => ({
+    id: '11111-11111',
+    firstName: 'Bob',
+    lastName: 'Smith',
+    dateOfBirth,
+    pncNumber,
+    prisonNumber,
+    date: '2021-09-01',
+    gender: 'MALE',
+    fromLocation: 'Wandsworth',
+    fromLocationType,
+    isCurrentPrisoner,
+    potentialMatches,
+  }),
+  potentialMatch: {
+    firstName: 'Sam',
+    lastName: 'Smith',
+    dateOfBirth: '1970-02-01',
+    prisonNumber: 'A1234BC',
+    pncNumber: '01/4567A',
+  },
   other: {
     firstName: 'Steve',
     lastName: 'Smith',
@@ -80,6 +108,15 @@ export default {
       fromLocation: 'Reading',
       fromLocationType: 'COURT',
       isCurrentPrisoner: true,
+      potentialMatches: [
+        {
+          firstName: 'Sam',
+          lastName: 'Smith',
+          dateOfBirth: '1970-02-01',
+          prisonNumber: 'A1234BC',
+          pncNumber: '01/4567A',
+        },
+      ],
     },
     notCurrent: {
       id: '00000-33333',
@@ -92,7 +129,15 @@ export default {
       fromLocation: 'Leeds',
       fromLocationType: 'COURT',
       isCurrentPrisoner: false,
-      potentialMatches: [],
+      potentialMatches: [
+        {
+          firstName: 'Sam',
+          lastName: 'Smith',
+          dateOfBirth: '1970-02-01',
+          prisonNumber: 'A1234BC',
+          pncNumber: '01/4567A',
+        },
+      ],
     },
   },
   withFemaleGender: {
@@ -106,5 +151,14 @@ export default {
     fromLocation: 'Manchester',
     fromLocationType: 'OTHER',
     gender: 'FEMALE',
+    potentialMatches: [
+      {
+        firstName: 'Sam',
+        lastName: 'Smith',
+        dateOfBirth: '1970-02-01',
+        prisonNumber: 'A1234BC',
+        pncNumber: '01/4567A',
+      },
+    ],
   },
 }

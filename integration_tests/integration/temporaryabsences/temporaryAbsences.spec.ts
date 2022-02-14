@@ -1,7 +1,7 @@
 import Page from '../../pages/page'
 import Role from '../../../server/authentication/role'
-import TemporaryAbsencesPage from '../../pages/temporaryAbsences'
-import CheckTemporaryAbsencePage from '../../pages/checkTemporaryAbsence'
+import TemporaryAbsencesPage from '../../pages/temporaryabsences/temporaryAbsences'
+import CheckTemporaryAbsencePage from '../../pages/temporaryabsences/checkTemporaryAbsence'
 import temporaryAbsences from '../../mockApis/responses/temporaryAbsences'
 
 context('A user can view all current temporary absences', () => {
@@ -76,7 +76,7 @@ context('A user can view all current temporary absences', () => {
     temporaryAbsencesPage.temporaryAbsences(4).confirm().should('not.exist')
   })
 
-  it.only('Links shown for a reception user navigate to confirm a returning prisoner page', () => {
+  it('Links shown for a reception user navigate to confirm a returning prisoner page', () => {
     cy.signIn()
     const temporaryAbsencesPage = TemporaryAbsencesPage.goTo()
 
