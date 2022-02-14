@@ -5,6 +5,7 @@ import cheerio from 'cheerio'
 import { appWithAllRoutes, signedCookiesProvider } from '../../../__testutils/appSetup'
 import { ExpectedArrivalsService } from '../../../../services'
 import Role from '../../../../authentication/role'
+import config from '../../../../config'
 
 jest.mock('../../../../services/expectedArrivalsService')
 
@@ -12,6 +13,7 @@ const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.
 let app: Express
 
 beforeEach(() => {
+  config.confirmNoIdentifiersEnabled = true
   app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
   expectedArrivalsService.getArrival.mockResolvedValue(null)
 })
@@ -29,6 +31,17 @@ describe('GET /search-for-existing-record/new', () => {
       .expect(302)
       .expect('Location', '/prisoners/12345-67890/search-for-existing-record')
       .expect(res => expect(res.header['set-cookie'][0]).toContain('s%3A.'))
+  })
+
+  it('redirects when disabled', () => {
+    config.confirmNoIdentifiersEnabled = false
+    app = appWithAllRoutes({ roles: [Role.PRISON_RECEPTION] })
+    signedCookiesProvider.mockReturnValue({})
+
+    return request(app)
+      .get('/prisoners/12345-67890/search-for-existing-record/new')
+      .expect(302)
+      .expect('Location', '/feature-not-available')
   })
 })
 
@@ -50,6 +63,17 @@ describe('GET /search-for-existing-record', () => {
       .expect(res => {
         expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
       })
+  })
+
+  it('redirects when disabled', () => {
+    config.confirmNoIdentifiersEnabled = false
+    app = appWithAllRoutes({ roles: [Role.PRISON_RECEPTION] })
+    signedCookiesProvider.mockReturnValue({})
+
+    return request(app)
+      .get('/prisoners/12345-67890/search-for-existing-record')
+      .expect(302)
+      .expect('Location', '/feature-not-available')
   })
 
   it('should render page when no cookie state', () => {

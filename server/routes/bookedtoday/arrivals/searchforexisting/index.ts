@@ -15,6 +15,8 @@ import { State } from './state'
 import NameValidator from './validation/nameValidation'
 import DateOfBirthValidator from './validation/dateOfBirthValidation'
 import PrisonNumberValidator from './validation/prisonNumberValidation'
+import redirectIfDisabledMiddleware from '../../../../middleware/redirectIfDisabledMiddleware'
+import config from '../../../../config'
 
 export default function routes(services: Services): Router {
   const router = express.Router()
@@ -25,14 +27,20 @@ export default function routes(services: Services): Router {
     router.get(
       `/prisoners/:id/search-for-existing-record${path}`,
       authorisationForUrlMiddleware([Role.PRISON_RECEPTION]),
-      handlers.map(handler => asyncMiddleware(handler))
+      [
+        redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
+        ...handlers.map(handler => asyncMiddleware(handler)),
+      ]
     )
 
   const post = (path: string, handlers: RequestHandler[]) =>
     router.post(
       `/prisoners/:id/search-for-existing-record${path}`,
       authorisationForUrlMiddleware([Role.PRISON_RECEPTION]),
-      handlers.map(handler => asyncMiddleware(handler))
+      [
+        redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
+        ...handlers.map(handler => asyncMiddleware(handler)),
+      ]
     )
 
   const searchForExistingRecordController = new SearchForExistingRecordController(services.expectedArrivalsService)

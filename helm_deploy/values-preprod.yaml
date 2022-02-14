@@ -18,6 +18,7 @@ generic-service:
     SYSTEM_PHASE: PRE-PRODUCTION
     ENABLED_PRISONS: NMI
     CONFIRM_ENABLED: 'false'
+    CONFIRM_NO_IDENTIFIERS_ENABLED: 'false'
     TEMPORARY_ABSENCE_ENABLED: 'false'
 
 generic-prometheus-alerts:
