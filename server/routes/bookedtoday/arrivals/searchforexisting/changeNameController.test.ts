@@ -3,6 +3,7 @@ import request from 'supertest'
 import cheerio from 'cheerio'
 import { appWithAllRoutes, signedCookiesProvider, flashProvider } from '../../../__testutils/appSetup'
 import Role from '../../../../authentication/role'
+import config from '../../../../config'
 
 let app: Express
 
@@ -15,6 +16,7 @@ const searchDetails = {
 }
 
 beforeEach(() => {
+  config.confirmNoIdentifiersEnabled = true
   app = appWithAllRoutes({ roles: [Role.PRISON_RECEPTION] })
 })
 
