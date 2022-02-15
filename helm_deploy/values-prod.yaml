@@ -16,9 +16,9 @@ generic-service:
     HMPPS_COOKIE_NAME: hmpps-session-prod
     HMPPS_COOKIE_DOMAIN: welcome.prison.service.justice.gov.uk
     ENABLED_PRISONS: 'NMI'
-    CONFIRM_ENABLED: 'true'
+    CONFIRM_ENABLED: 'false'
     CONFIRM_NO_IDENTIFIERS_ENABLED: 'false'
-    TEMPORARY_ABSENCE_ENABLED: 'true'
+    TEMPORARY_ABSENCE_ENABLED: 'false'
 
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service
