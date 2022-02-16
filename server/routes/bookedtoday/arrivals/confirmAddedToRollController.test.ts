@@ -6,6 +6,7 @@ import { appWithAllRoutes, flashProvider } from '../../__testutils/appSetup'
 import ExpectedArrivalsService from '../../../services/expectedArrivalsService'
 import PrisonService from '../../../services/prisonService'
 import Role from '../../../authentication/role'
+import { expectSettingCookie } from '../../__testutils/requestTestUtils'
 
 jest.mock('../../../services/expectedArrivalsService')
 jest.mock('../../../services/prisonService')
@@ -82,9 +83,7 @@ describe('GET /confirmation', () => {
     return request(app)
       .get('/prisoners/12345-67890/confirmation')
       .expect(res => {
-        expect(res.header['set-cookie'][0]).not.toContain('code')
-        expect(res.header['set-cookie'][0]).not.toContain('imprisonmentStatus')
-        expect(res.header['set-cookie'][0]).not.toContain('movementReasonCode')
+        expectSettingCookie(res, 'status-and-reason').toBeUndefined()
       })
   })
 

@@ -4,6 +4,7 @@ import cheerio from 'cheerio'
 import { appWithAllRoutes, flashProvider, signedCookiesProvider } from '../../../__testutils/appSetup'
 import Role from '../../../../authentication/role'
 import config from '../../../../config'
+import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
 
 let app: Express
 
@@ -92,17 +93,13 @@ describe('POST /search-for-existing-record/change-date-of-birth', () => {
       .post('/prisoners/12345-67890/search-for-existing-record/change-date-of-birth')
       .send({ day: '01', month: '02', year: '2003' })
       .expect(res => {
-        expect(res.header['set-cookie'][0]).toContain(
-          encodeURIComponent(
-            JSON.stringify({
-              firstName: 'James',
-              lastName: 'Smyth',
-              dateOfBirth: '2003-02-01',
-              prisonNumber: 'A1234AB',
-              pncNumber: '99/98644M',
-            })
-          )
-        )
+        expectSettingCookie(res, 'search-details').toStrictEqual({
+          dateOfBirth: '2003-02-01',
+          firstName: 'James',
+          lastName: 'Smyth',
+          pncNumber: '99/98644M',
+          prisonNumber: 'A1234AB',
+        })
       })
   })
 
