@@ -1,3 +1,4 @@
+import superAgent from 'superagent'
 import { NextFunction, Request, Response } from 'express'
 import { ValidationError } from '../../middleware/validationMiddleware'
 
@@ -67,3 +68,14 @@ export const mockResponse = ({ locals = { context: {}, user: {} } }: ResponsePar
   } as unknown as jest.Mocked<Response>)
 
 export const mockNext = (): NextFunction => jest.fn()
+
+export const expectSettingCookie = (res: superAgent.Response, cookieName: string) => {
+  const [cookie] = res.header['set-cookie']
+  const [, name, value] = cookie.match(/^(.*?)=(.*?);/)
+
+  expect(name).toBe(cookieName)
+
+  const results = decodeURIComponent(value).match(/(\{.*?\})/)
+
+  return results ? expect(JSON.parse(results[1])) : expect(undefined)
+}

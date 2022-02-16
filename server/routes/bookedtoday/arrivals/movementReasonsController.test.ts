@@ -5,6 +5,7 @@ import cheerio from 'cheerio'
 import { appWithAllRoutes, flashProvider } from '../../__testutils/appSetup'
 import ImprisonmentStatusesService from '../../../services/imprisonmentStatusesService'
 import ExpectedArrivalsService from '../../../services/expectedArrivalsService'
+import { expectSettingCookie } from '../../__testutils/requestTestUtils'
 
 jest.mock('../../../services/imprisonmentStatusesService')
 jest.mock('../../../services/expectedArrivalsService')
@@ -85,11 +86,11 @@ describe('/determinate-sentence', () => {
         .send({ movementReason: '26' })
         .expect(302)
         .expect(res => {
-          expect(res.header['set-cookie'][0]).toContain(
-            encodeURIComponent(
-              JSON.stringify({ code: 'determinate-sentence', imprisonmentStatus: 'SENT', movementReasonCode: '26' })
-            )
-          )
+          expectSettingCookie(res, 'status-and-reason').toStrictEqual({
+            code: 'determinate-sentence',
+            imprisonmentStatus: 'SENT',
+            movementReasonCode: '26',
+          })
         })
     })
 
