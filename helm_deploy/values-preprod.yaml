@@ -16,10 +16,10 @@ generic-service:
     HMPPS_COOKIE_NAME: hmpps-session-preprod
     HMPPS_COOKIE_DOMAIN: welcome-preprod.prison.service.justice.gov.uk
     SYSTEM_PHASE: PRE-PRODUCTION
-    ENABLED_PRISONS: NMI
-    CONFIRM_ENABLED: 'false'
-    CONFIRM_NO_IDENTIFIERS_ENABLED: 'false'
-    TEMPORARY_ABSENCE_ENABLED: 'false'
+    ENABLED_PRISONS: 'NMI,MDI'
+    CONFIRM_ENABLED: 'true'
+    CONFIRM_NO_IDENTIFIERS_ENABLED: 'true'
+    TEMPORARY_ABSENCE_ENABLED: 'true'
 
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service-dev
