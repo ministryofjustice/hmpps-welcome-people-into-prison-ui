@@ -13,8 +13,8 @@ export default class CheckAnswersController {
   public view(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
-      const statusAndReason = State.imprisonmentStatus.get(req)
-      const sex = State.sex.get(req)
+      const { sex, code, imprisonmentStatus, movementReasonCode } = State.newArrival.get(req)
+      const statusAndReason = { code, imprisonmentStatus, movementReasonCode }
       const moveData = await this.expectedArrivalsService.getArrival(id)
       const reasonImprisonment = await this.imprisonmentStatusesService.getReasonForImprisonment(statusAndReason)
       const data = { sex, reasonImprisonment, ...moveData }
@@ -26,9 +26,8 @@ export default class CheckAnswersController {
     return async (req, res, next) => {
       const { id } = req.params
       const { username, activeCaseLoadId } = res.locals.user
+      const { sex, imprisonmentStatus, movementReasonCode } = State.newArrival.get(req)
       const data = await this.expectedArrivalsService.getArrival(id)
-      const statusAndReason = State.imprisonmentStatus.get(req)
-      const sex = State.sex.get(req)
 
       const newOffender = {
         firstName: data.firstName,
@@ -36,8 +35,8 @@ export default class CheckAnswersController {
         dateOfBirth: data.dateOfBirth,
         gender: sex as Gender,
         prisonId: activeCaseLoadId,
-        imprisonmentStatus: statusAndReason.imprisonmentStatus,
-        movementReasonCode: statusAndReason.movementReasonCode,
+        imprisonmentStatus,
+        movementReasonCode,
       }
 
       const arrivalResponse = await this.expectedArrivalsService.createOffenderRecordAndBooking(

@@ -14,7 +14,7 @@ export default class SexController {
       const genderValue = this.convertGenderKeyToValue(data.gender)
 
       if (genderValue) {
-        State.sex.set(res, genderValue)
+        State.newArrival.update(req, res, { sex: genderValue })
         return res.redirect(`/prisoners/${id}/imprisonment-status`)
       }
 
@@ -34,7 +34,7 @@ export default class SexController {
         return res.redirect(`/prisoners/${id}/sex`)
       }
 
-      State.sex.set(res, sex)
+      State.newArrival.update(req, res, { sex })
 
       return res.redirect(`/prisoners/${id}/imprisonment-status`)
     }

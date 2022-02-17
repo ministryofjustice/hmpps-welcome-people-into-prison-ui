@@ -83,7 +83,7 @@ describe('GET /confirmation', () => {
     return request(app)
       .get('/prisoners/12345-67890/confirmation')
       .expect(res => {
-        expectSettingCookie(res, 'status-and-reason').toBeUndefined()
+        expectSettingCookie(res, 'new-arrival').toBeUndefined()
       })
   })
 

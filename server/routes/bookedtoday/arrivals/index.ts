@@ -24,8 +24,7 @@ import config from '../../../config'
 export default function routes(services: Services): Router {
   const router = express.Router()
 
-  const checkImprisonmentStatusPresent = State.imprisonmentStatus.ensurePresent('/confirm-arrival/choose-prisoner')
-  const checkSexPresent = State.sex.ensurePresent('/confirm-arrival/choose-prisoner')
+  const checkNewArrivalPresent = State.newArrival.ensurePresent('/confirm-arrival/choose-prisoner')
 
   const get = (path: string, handlers: RequestHandler[], authorisedRoles?: Role[]) =>
     router.get(
@@ -75,22 +74,12 @@ export default function routes(services: Services): Router {
   )
   get(
     '/prisoners/:id/check-answers',
-    [
-      checkSexPresent,
-      checkImprisonmentStatusPresent,
-      redirectIfDisabledMiddleware(config.confirmEnabled),
-      checkAnswersController.view(),
-    ],
+    [checkNewArrivalPresent, redirectIfDisabledMiddleware(config.confirmEnabled), checkAnswersController.view()],
     [Role.PRISON_RECEPTION]
   )
   post(
     '/prisoners/:id/check-answers',
-    [
-      checkSexPresent,
-      checkImprisonmentStatusPresent,
-      redirectIfDisabledMiddleware(config.confirmEnabled),
-      checkAnswersController.addToRoll(),
-    ],
+    [checkNewArrivalPresent, redirectIfDisabledMiddleware(config.confirmEnabled), checkAnswersController.addToRoll()],
     [Role.PRISON_RECEPTION]
   )
 

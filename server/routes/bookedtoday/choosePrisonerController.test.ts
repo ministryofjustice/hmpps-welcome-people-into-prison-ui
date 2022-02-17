@@ -1,8 +1,10 @@
-import type { Arrival } from 'welcome'
+import type { Arrival, PotentialMatch } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
-import { user, appWithAllRoutes } from '../__testutils/appSetup'
+import { user, appWithAllRoutes, signedCookiesProvider } from '../__testutils/appSetup'
+import { expectSettingCookie } from '../__testutils/requestTestUtils'
+
 import ExpectedArrivalsService, { LocationType } from '../../services/expectedArrivalsService'
 
 jest.mock('../../services/expectedArrivalsService')
@@ -12,6 +14,14 @@ const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.
 let app: Express
 
 beforeEach(() => {
+  signedCookiesProvider.mockReturnValue({
+    'new-arrival': {
+      firstName: 'Harry',
+      lastName: 'Stanton',
+      dateOfBirth: '1961-01-01',
+      pncNumber: '01/123456',
+    },
+  })
   app = appWithAllRoutes({ services: { expectedArrivalsService } })
 })
 
@@ -124,6 +134,14 @@ describe('GET /confirm-arrival/choose-prisoner', () => {
       })
   })
 
+  it('should clear cookie', () => {
+    return request(app)
+      .get('/confirm-arrival/choose-prisoner')
+      .expect(res => {
+        expectSettingCookie(res, 'new-arrival').toBeUndefined()
+      })
+  })
+
   it('should call service method correctly', () => {
     return request(app)
       .get('/confirm-arrival/choose-prisoner')
@@ -140,11 +158,13 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
     fromLocationType,
     prisonNumber,
     pncNumber,
+    potentialMatches,
   }: {
     isCurrentPrisoner: boolean
     fromLocationType: LocationType
     prisonNumber: string
     pncNumber: string
+    potentialMatches: PotentialMatch[]
   }) =>
     ({
       id: '1111-2222-3333-4444',
@@ -156,7 +176,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
       date: '2021-09-01',
       fromLocation: 'Reading',
       moveType: 'PRISON_REMAND',
-      potentialMatches: [],
+      potentialMatches,
       isCurrentPrisoner,
       fromLocationType,
     } as Arrival)
@@ -169,6 +189,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
           pncNumber: '01/123456',
           fromLocationType: LocationType.COURT,
           isCurrentPrisoner: true,
+          potentialMatches: [],
         })
       )
       return request(app)
@@ -184,6 +205,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
           pncNumber: undefined,
           fromLocationType: LocationType.COURT,
           isCurrentPrisoner: false,
+          potentialMatches: [],
         })
       )
       return request(app)
@@ -192,28 +214,46 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
         .expect('Location', '/prisoners/1111-2222-3333-4444/search-for-existing-record/new')
     })
 
-    it('should redirect to search results when not current and PNC provided', () => {
+    it('should set state and redirect to search results when not current and PNC provided', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
           prisonNumber: undefined,
           pncNumber: '01/123456',
           fromLocationType: LocationType.COURT,
           isCurrentPrisoner: false,
+          potentialMatches: [
+            {
+              firstName: 'Harry',
+              lastName: 'Stanton',
+              dateOfBirth: '1961-01-01',
+              prisonNumber: 'A1234BC',
+              pncNumber: '01/123456',
+            },
+          ],
         })
       )
       return request(app)
         .get('/confirm-arrival/choose-prisoner/aaa-111-222')
         .expect('Content-Type', /text\/plain/)
         .expect('Location', '/prisoners/1111-2222-3333-4444/confirm-arrival')
+        .expect(res => {
+          expectSettingCookie(res, 'new-arrival').toStrictEqual({
+            firstName: 'Harry',
+            lastName: 'Stanton',
+            dateOfBirth: '1961-01-01',
+            pncNumber: '01/123456',
+          })
+        })
     })
 
-    it('should redirect to search results when not current and Prison Number provided', () => {
+    it('should redirect to search results when not current and no Prison Number provided', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
           prisonNumber: undefined,
           pncNumber: 'A1234AA',
           fromLocationType: LocationType.COURT,
           isCurrentPrisoner: false,
+          potentialMatches: [],
         })
       )
       return request(app)
@@ -231,6 +271,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
           pncNumber: '01/123456',
           fromLocationType: LocationType.CUSTODY_SUITE,
           isCurrentPrisoner: true,
+          potentialMatches: [],
         })
       )
       return request(app)
@@ -246,6 +287,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
           pncNumber: undefined,
           fromLocationType: LocationType.CUSTODY_SUITE,
           isCurrentPrisoner: false,
+          potentialMatches: [],
         })
       )
       return request(app)
@@ -261,6 +303,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
           pncNumber: undefined,
           fromLocationType: LocationType.CUSTODY_SUITE,
           isCurrentPrisoner: false,
+          potentialMatches: [],
         })
       )
       return request(app)
@@ -276,6 +319,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
           pncNumber: undefined,
           fromLocationType: LocationType.CUSTODY_SUITE,
           isCurrentPrisoner: false,
+          potentialMatches: [],
         })
       )
       return request(app)
@@ -292,6 +336,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
         pncNumber: '01/123456',
         fromLocationType: LocationType.COURT,
         isCurrentPrisoner: true,
+        potentialMatches: [],
       })
     )
     return request(app)

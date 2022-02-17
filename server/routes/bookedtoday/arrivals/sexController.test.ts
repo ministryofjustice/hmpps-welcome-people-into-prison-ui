@@ -2,7 +2,8 @@ import { GenderKeys, type Arrival } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
-import { appWithAllRoutes, flashProvider } from '../../__testutils/appSetup'
+import { appWithAllRoutes, signedCookiesProvider, flashProvider } from '../../__testutils/appSetup'
+import { expectSettingCookie } from '../../__testutils/requestTestUtils'
 import ImprisonmentStatusesService from '../../../services/imprisonmentStatusesService'
 import ExpectedArrivalsService from '../../../services/expectedArrivalsService'
 import Role from '../../../authentication/role'
@@ -20,6 +21,13 @@ const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.
 let app: Express
 
 beforeEach(() => {
+  signedCookiesProvider.mockReturnValue({
+    'new-arrival': {
+      firstName: 'Jim',
+      lastName: 'Smith',
+      dateOfBirth: '1973-01-08',
+    },
+  })
   app = appWithAllRoutes({
     services: { imprisonmentStatusesService, expectedArrivalsService },
     roles: [Role.PRISON_RECEPTION],
@@ -107,13 +115,18 @@ describe('/sex', () => {
         })
     })
 
-    it('should set cookie', () => {
+    it('should update cookie', () => {
       return request(app)
         .post('/prisoners/12345-67890/sex')
         .send({ sex: 'M' })
         .expect(302)
         .expect(res => {
-          expect(res.header['set-cookie'][0]).toContain(encodeURIComponent('M'))
+          expectSettingCookie(res, 'new-arrival').toStrictEqual({
+            firstName: 'Jim',
+            lastName: 'Smith',
+            dateOfBirth: '1973-01-08',
+            sex: 'M',
+          })
         })
     })
 

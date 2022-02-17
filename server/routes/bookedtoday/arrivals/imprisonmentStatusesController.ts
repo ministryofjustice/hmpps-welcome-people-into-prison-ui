@@ -36,7 +36,7 @@ export default class ImprisonmentStatusesController {
       )
 
       if (selectedImprisonmentStatus.movementReasons.length === 1) {
-        State.imprisonmentStatus.set(res, {
+        State.newArrival.update(req, res, {
           code: selectedImprisonmentStatus.code,
           imprisonmentStatus: selectedImprisonmentStatus.imprisonmentStatusCode,
           movementReasonCode: selectedImprisonmentStatus.movementReasons[0].movementReasonCode,

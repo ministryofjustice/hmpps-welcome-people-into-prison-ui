@@ -35,16 +35,6 @@ describe('GET /confirmArrival', () => {
       })
   })
 
-  it('should clear cookie', () => {
-    return request(app)
-      .get('/prisoners/12345-67890/confirm-arrival')
-      .expect(res => {
-        expect(res.header['set-cookie'][0]).not.toContain('code')
-        expect(res.header['set-cookie'][0]).not.toContain('imprisonmentStatus')
-        expect(res.header['set-cookie'][0]).not.toContain('movementReasonCode')
-      })
-  })
-
   it('should display correct page heading when there is NOT an existing prisoner record', () => {
     expectedArrivalsService.getArrival.mockResolvedValue({
       firstName: 'James',

@@ -2,6 +2,7 @@ import type { Arrival } from 'welcome'
 import type { RequestHandler, Response } from 'express'
 import type { ExpectedArrivalsService } from '../../services'
 import { LocationType } from '../../services/expectedArrivalsService'
+import { State } from './arrivals/state'
 
 export default class ChoosePrisonerController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
@@ -9,11 +10,25 @@ export default class ChoosePrisonerController {
   public view(): RequestHandler {
     return async (req, res) => {
       const { activeCaseLoadId } = res.locals.user
+      State.newArrival.clear(res)
       const expectedArrivals = await this.expectedArrivalsService.getArrivalsForToday(activeCaseLoadId)
       return res.render('pages/bookedtoday/choosePrisoner.njk', {
         expectedArrivals,
       })
     }
+  }
+
+  private handleNewPrisonerUpdate(arrival: Arrival, res: Response): void {
+    if (arrival.potentialMatches.length === 1) {
+      State.newArrival.set(res, {
+        firstName: arrival.firstName,
+        lastName: arrival.lastName,
+        dateOfBirth: arrival.dateOfBirth,
+        prisonNumber: arrival?.prisonNumber,
+        pncNumber: arrival?.pncNumber,
+      })
+    }
+    res.redirect(`/prisoners/${arrival.id}/confirm-arrival`)
   }
 
   private handleNewPrisoner(arrival: Arrival, res: Response): void | PromiseLike<void> {
@@ -25,7 +40,7 @@ export default class ChoosePrisonerController {
          * - multiple matches   - show "Possible existing records found"
          * - 1 match found      - show "This person has existing record"
          */
-        res.redirect(`/prisoners/${arrival.id}/confirm-arrival`)
+        this.handleNewPrisonerUpdate(arrival, res)
   }
 
   private handleCurrentPrisoner(arrival: Arrival, res: Response): void | PromiseLike<void> {

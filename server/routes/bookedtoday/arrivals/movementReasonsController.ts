@@ -40,7 +40,7 @@ export default class MovementReasonsController {
         imprisonmentStatus
       )
 
-      State.imprisonmentStatus.set(res, {
+      State.newArrival.update(req, res, {
         code: selectedImprisonmentStatus.code,
         imprisonmentStatus: selectedImprisonmentStatus.imprisonmentStatusCode,
         movementReasonCode: movementReason,
