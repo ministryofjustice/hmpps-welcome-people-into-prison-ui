@@ -134,14 +134,6 @@ describe('GET /confirm-arrival/choose-prisoner', () => {
       })
   })
 
-  it('should clear cookie', () => {
-    return request(app)
-      .get('/confirm-arrival/choose-prisoner')
-      .expect(res => {
-        expectSettingCookie(res, 'new-arrival').toBeUndefined()
-      })
-  })
-
   it('should call service method correctly', () => {
     return request(app)
       .get('/confirm-arrival/choose-prisoner')
@@ -235,13 +227,22 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
       return request(app)
         .get('/confirm-arrival/choose-prisoner/aaa-111-222')
         .expect('Content-Type', /text\/plain/)
-        .expect('Location', '/prisoners/1111-2222-3333-4444/confirm-arrival')
+        .expect('Location', '/prisoners/1111-2222-3333-4444/record-found')
         .expect(res => {
           expectSettingCookie(res, 'new-arrival').toStrictEqual({
             firstName: 'Harry',
             lastName: 'Stanton',
             dateOfBirth: '1961-01-01',
             pncNumber: '01/123456',
+            potentialMatches: JSON.stringify([
+              {
+                firstName: 'Harry',
+                lastName: 'Stanton',
+                dateOfBirth: '1961-01-01',
+                prisonNumber: 'A1234BC',
+                pncNumber: '01/123456',
+              },
+            ]),
           })
         })
     })
@@ -259,7 +260,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
       return request(app)
         .get('/confirm-arrival/choose-prisoner/aaa-111-222')
         .expect('Content-Type', /text\/plain/)
-        .expect('Location', '/prisoners/1111-2222-3333-4444/confirm-arrival')
+        .expect('Location', '/prisoners/1111-2222-3333-4444/no-record-found')
     })
   })
 
@@ -309,7 +310,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
       return request(app)
         .get('/confirm-arrival/choose-prisoner/aaa-111-222')
         .expect('Content-Type', /text\/plain/)
-        .expect('Location', '/prisoners/1111-2222-3333-4444/confirm-arrival')
+        .expect('Location', '/prisoners/1111-2222-3333-4444/no-record-found')
     })
 
     it('should redirect to search results when not current and Prison Number provided', () => {
@@ -325,7 +326,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
       return request(app)
         .get('/confirm-arrival/choose-prisoner/aaa-111-222')
         .expect('Content-Type', /text\/plain/)
-        .expect('Location', '/prisoners/1111-2222-3333-4444/confirm-arrival')
+        .expect('Location', '/prisoners/1111-2222-3333-4444/no-record-found')
     })
   })
 

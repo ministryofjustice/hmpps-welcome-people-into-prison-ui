@@ -10,7 +10,6 @@ export default class ChoosePrisonerController {
   public view(): RequestHandler {
     return async (req, res) => {
       const { activeCaseLoadId } = res.locals.user
-      State.newArrival.clear(res)
       const expectedArrivals = await this.expectedArrivalsService.getArrivalsForToday(activeCaseLoadId)
       return res.render('pages/bookedtoday/choosePrisoner.njk', {
         expectedArrivals,
@@ -18,29 +17,37 @@ export default class ChoosePrisonerController {
     }
   }
 
-  private handleNewPrisonerUpdate(arrival: Arrival, res: Response): void {
-    if (arrival.potentialMatches.length === 1) {
+  private handleNewPrisoner(arrival: Arrival, res: Response): void | PromiseLike<void> {
+    if (!arrival.prisonNumber && !arrival.pncNumber)
+      return res.redirect(`/prisoners/${arrival.id}/search-for-existing-record/new`)
+
+    if (arrival.potentialMatches.length >= 1) {
       State.newArrival.set(res, {
         firstName: arrival.firstName,
         lastName: arrival.lastName,
         dateOfBirth: arrival.dateOfBirth,
         prisonNumber: arrival?.prisonNumber,
         pncNumber: arrival?.pncNumber,
+        potentialMatches: arrival?.potentialMatches,
       })
+      return res.redirect(`/prisoners/${arrival.id}/record-found`)
     }
-    res.redirect(`/prisoners/${arrival.id}/confirm-arrival`)
-  }
 
-  private handleNewPrisoner(arrival: Arrival, res: Response): void | PromiseLike<void> {
-    return !arrival.prisonNumber && !arrival.pncNumber
-      ? res.redirect(`/prisoners/${arrival.id}/search-for-existing-record/new`)
-      : /**
-         * TODO 3 situations to deal with, will redirect to new pages for each of:
-         * - no matches         - show "This person doesn't have a record"
-         * - multiple matches   - show "Possible existing records found"
-         * - 1 match found      - show "This person has existing record"
-         */
-        this.handleNewPrisonerUpdate(arrival, res)
+    State.newArrival.set(res, {
+      firstName: arrival.firstName,
+      lastName: arrival.lastName,
+      dateOfBirth: arrival.dateOfBirth,
+      prisonNumber: arrival.prisonNumber,
+      pncNumber: arrival.pncNumber,
+    })
+    return res.redirect(`/prisoners/${arrival.id}/no-record-found`)
+
+    /**
+     * TODO 3 situations to deal with, will redirect to new pages for each of:
+     * - no matches         - show "This person doesn't have a record"
+     * - multiple matches   - show "Possible existing records found"
+     * - 1 match found      - show "This person has existing record"
+     */
   }
 
   private handleCurrentPrisoner(arrival: Arrival, res: Response): void | PromiseLike<void> {

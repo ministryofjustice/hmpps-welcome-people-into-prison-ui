@@ -1,5 +1,6 @@
 import express, { RequestHandler, Router } from 'express'
-import ConfirmArrivalController from './confirmArrivalController'
+import SingleRecordFoundController from './singleRecordFoundController'
+import NoRecordFoundController from './noRecordFoundController'
 import CheckAnswersController from './checkAnswersController'
 import ConfirmAddedToRollController from './confirmAddedToRollController'
 import ImprisonmentStatusesController from './imprisonmentStatusesController'
@@ -40,8 +41,19 @@ export default function routes(services: Services): Router {
       handlers.map(handler => asyncMiddleware(handler))
     )
 
-  const confirmArrivalController = new ConfirmArrivalController(services.expectedArrivalsService)
-  get('/prisoners/:id/confirm-arrival', [confirmArrivalController.confirmArrival()], [Role.PRISON_RECEPTION])
+  const singleRecordFoundController = new SingleRecordFoundController()
+  get(
+    '/prisoners/:id/record-found',
+    [checkNewArrivalPresent, singleRecordFoundController.view()],
+    [Role.PRISON_RECEPTION]
+  )
+
+  const noRecordFoundController = new NoRecordFoundController()
+  get(
+    '/prisoners/:id/no-record-found',
+    [checkNewArrivalPresent, noRecordFoundController.view()],
+    [Role.PRISON_RECEPTION]
+  )
 
   const sexController = new SexController(services.expectedArrivalsService)
   get('/prisoners/:id/sex', [sexController.view()], [Role.PRISON_RECEPTION])

@@ -139,6 +139,15 @@ describe('NewArrivalCodec', () => {
       code: 'on remand',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',
+      potentialMatches: JSON.stringify([
+        {
+          firstName: 'Sam',
+          lastName: 'Smith',
+          dateOfBirth: '1971-02-01',
+          prisonNumber: 'A1234AA',
+          pncNumber: '01/1234X',
+        },
+      ]),
     })
 
     expect(result).toStrictEqual({
@@ -151,6 +160,15 @@ describe('NewArrivalCodec', () => {
       code: 'on remand',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',
+      potentialMatches: [
+        {
+          firstName: 'Sam',
+          lastName: 'Smith',
+          dateOfBirth: '1971-02-01',
+          prisonNumber: 'A1234AA',
+          pncNumber: '01/1234X',
+        },
+      ],
     })
   })
 
@@ -171,6 +189,7 @@ describe('NewArrivalCodec', () => {
       code: undefined,
       imprisonmentStatus: undefined,
       movementReasonCode: undefined,
+      potentialMatches: undefined,
     })
   })
 
@@ -185,6 +204,15 @@ describe('NewArrivalCodec', () => {
       code: 'on remand',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',
+      potentialMatches: [
+        {
+          firstName: 'Sam',
+          lastName: 'Smith',
+          dateOfBirth: '1971-02-01',
+          prisonNumber: 'A1234AA',
+          pncNumber: '01/1234X',
+        },
+      ],
     })
 
     expect(result).toStrictEqual({
@@ -197,6 +225,15 @@ describe('NewArrivalCodec', () => {
       code: 'on remand',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',
+      potentialMatches: JSON.stringify([
+        {
+          firstName: 'Sam',
+          lastName: 'Smith',
+          dateOfBirth: '1971-02-01',
+          prisonNumber: 'A1234AA',
+          pncNumber: '01/1234X',
+        },
+      ]),
     })
   })
 
@@ -211,6 +248,13 @@ describe('NewArrivalCodec', () => {
       firstName: 'Sam',
       lastName: 'Smith',
       dateOfBirth: '1971-02-01',
+      prisonNumber: undefined,
+      pncNumber: undefined,
+      sex: undefined,
+      code: undefined,
+      imprisonmentStatus: undefined,
+      movementReasonCode: undefined,
+      potentialMatches: undefined,
     })
   })
 })

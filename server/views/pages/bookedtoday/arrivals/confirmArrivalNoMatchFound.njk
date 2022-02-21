@@ -2,14 +2,6 @@
 {% from "../../../components/prisoner-summary-detail.njk" import prisonerSummaryDetail %}
 
 {% set pageTitle = "Confirm arrival" %}
-{% set pageHeading = "This person does not have an existing prisoner record" %}
-{% set information = "does not have an existing prisoner record. A new record will be created when they are added to the establishment roll." %}
-
-{% if data.potentialMatches.length %} 
-{% set existingRecord = true %}
-{% set pageHeading = "This person has an existing prisoner record" %} 
-{% set information = "will be booked into the establishment using their existing prisoner record." %}
-{% endif %}
 
 {% block content %}
     <div class="govuk-width-container">
@@ -17,8 +9,8 @@
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-two-thirds">
                     <span class="govuk-caption-xl"> Confirm a prisoner's arrival </span>
-                    <h1 class="govuk-heading-l govuk-!-margin-bottom-7">{{ pageHeading }}</h1>
-                    <p> {{ data.firstName }} {{ data.lastName }} {{ information }} </p>
+                    <h1 class="govuk-heading-l govuk-!-margin-bottom-7">This person does not have an existing prisoner record</h1>
+                    <p> {{ data.firstName }} {{ data.lastName }} does not have an existing prisoner record. A new record will be created when they are added to the establishment roll. </p>
                 </div>
             </div>
             <div class="govuk-grid-row govuk-!-padding-left-3 govuk-!-margin-top-4 govuk-!-margin-bottom-8 flex" >
@@ -28,19 +20,6 @@
                         {{ prisonerSummaryDetail(data, "per-record" ) }}
                     </div>
                 </div>
-                {% if existingRecord %}
-                    <div class=" border-left-grey govuk-!-padding-left-9 column-width-60">
-                        <h2 class="govuk-heading-m">Details from existing prisoner record</h2> 
-                        <div class="prisoner-record-detail flex">
-                            {{ prisonerSummaryDetail(data.potentialMatches[0], "existing-record") }}
-                            <img src="{{ '/prisoners/' + data.potentialMatches[0].prisonNumber + '/image' if data.potentialMatches[0].prisonNumber else '/assets/images/placeholder-image.png' }}" 
-                                class="prisoner-image-transfer govuk-!-margin-top-2" 
-                                alt="{{ data.lastName }}, {{ data.firstName }}" 
-                                data-qa="prisoner-image" 
-                            />
-                        </div>
-                    </div>
-                {% endif %}
             </div> 
             <div>   
                 {{ govukButton({

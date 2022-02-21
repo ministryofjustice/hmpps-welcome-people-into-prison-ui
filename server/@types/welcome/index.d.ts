@@ -3,7 +3,6 @@ declare module 'welcome' {
   export type Transfer = schemas['Transfer']
   export type TemporaryAbsence = schemas['TemporaryAbsence']
   export type NewOffenderBooking = schemas['NewOffenderBooking']
-  export type NewArrival = schemas['NewArrival']
   export type ImprisonmentStatus = schemas['ImprisonmentStatus']
   export type Prison = schemas['Prison']
   export type UserCaseLoad = schemas['UserCaseLoad']
@@ -45,17 +44,6 @@ declare module 'welcome' {
       gender?: GenderKeys
       potentialMatches?: PotentialMatch[]
       isCurrentPrisoner: boolean
-    }
-    NewArrival: {
-      firstName: string
-      lastName: string
-      dateOfBirth: string
-      prisonNumber?: string
-      pncNumber?: string
-      sex?: string
-      code?: string
-      imprisonmentStatus?: string
-      movementReasonCode?: string
     }
     Transfer: {
       firstName: string
