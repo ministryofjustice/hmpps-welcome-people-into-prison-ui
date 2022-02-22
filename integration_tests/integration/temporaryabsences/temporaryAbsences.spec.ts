@@ -54,7 +54,7 @@ context('A user can view all current temporary absences', () => {
       .should('be.visible')
       .should('have.attr', 'src')
       .then(src => {
-        expect(src).equal('/prisoner/G0013AB/image')
+        expect(src).equal('/prisoners/G0013AB/image')
       })
 
     temporaryAbsencesPage

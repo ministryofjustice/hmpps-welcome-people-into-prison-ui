@@ -183,7 +183,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/welcome/prison/prisoner/${prisoner.prisonerNumber}/image`,
+        urlPattern: `/welcome/prisoners/${prisoner.prisonerNumber}/image`,
       },
       response: {
         status: 200,
@@ -200,7 +200,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/welcome/prison/prisoner/.*?/image`,
+        urlPattern: `/welcome/prisoners/.*?/image`,
       },
       response: {
         status: 404,

@@ -33,7 +33,7 @@
                         <h2 class="govuk-heading-m">Details from existing prisoner record</h2> 
                         <div class="prisoner-record-detail flex">
                             {{ prisonerSummaryDetail(data.potentialMatches[0], "existing-record") }}
-                            <img src="{{ '/prisoner/' + data.potentialMatches[0].prisonNumber + '/image' if data.potentialMatches[0].prisonNumber else '/assets/images/placeholder-image.png' }}" 
+                            <img src="{{ '/prisoners/' + data.potentialMatches[0].prisonNumber + '/image' if data.potentialMatches[0].prisonNumber else '/assets/images/placeholder-image.png' }}" 
                                 class="prisoner-image-transfer govuk-!-margin-top-2" 
                                 alt="{{ data.lastName }}, {{ data.firstName }}" 
                                 data-qa="prisoner-image" 

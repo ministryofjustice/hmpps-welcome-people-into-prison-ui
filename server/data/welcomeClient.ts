@@ -90,7 +90,7 @@ export default class WelcomeClient {
   async getImage(prisonNumber: string): Promise<Readable> {
     logger.info(`welcomeApi: getImage(${prisonNumber})`)
     return this.restClient.stream({
-      path: `/prison/prisoner/${prisonNumber}/image`,
+      path: `/prisoners/${prisonNumber}/image`,
     }) as Promise<Readable>
   }
 

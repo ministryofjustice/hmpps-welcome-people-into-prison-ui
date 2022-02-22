@@ -11,7 +11,7 @@ export default function routes(services: Services): Router {
   router.get('/', (req, res, next) => res.render('pages/home'))
 
   const prisonerController = new PrisonerController(services.expectedArrivalsService)
-  router.get('/prisoner/:prisonNumber/image', [prisonerController.getImage()])
+  router.get('/prisoners/:prisonNumber/image', [prisonerController.getImage()])
 
   router.get('/feature-not-available', (req, res) => res.render('pages/featureNotAvailable'))
 
