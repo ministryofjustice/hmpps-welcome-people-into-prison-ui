@@ -66,7 +66,7 @@ context('Confirm Arrival', () => {
     existingRecordPage.existingPncNumber().should('contain.text', '01/4567A')
     existingRecordPage
       .prisonerImage()
-      .should('have.attr', 'src', `/prisoner/${expectedArrival.potentialMatches[0].prisonNumber}/image`)
+      .should('have.attr', 'src', `/prisoners/${expectedArrival.potentialMatches[0].prisonNumber}/image`)
     existingRecordPage.continue().should('have.attr', 'href', `/prisoners/${expectedArrival.id}/sex`)
   })
 

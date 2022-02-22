@@ -20,11 +20,11 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET /prisoner/prisonNumber/image', () => {
+describe('GET /prisoners/prisonNumber/image', () => {
   expectedArrivalsService.getImage.mockResolvedValue(image as Readable)
   it('should call getImage method correctly', () => {
     return request(app)
-      .get('/prisoner/A12345/image')
+      .get('/prisoners/A12345/image')
       .expect('Content-Type', 'image/jpeg')
       .expect(res => {
         expect(expectedArrivalsService.getImage).toHaveBeenCalledWith('A12345')
@@ -34,7 +34,7 @@ describe('GET /prisoner/prisonNumber/image', () => {
   it('should return placeholder image if error retrieving photo from api', () => {
     expectedArrivalsService.getImage.mockRejectedValue(new Error())
     return request(app)
-      .get('/prisoner/X54321/image')
+      .get('/prisoners/X54321/image')
       .expect('Content-Type', 'image/png')
       .expect(res => {
         expect(res.status).toEqual(200)

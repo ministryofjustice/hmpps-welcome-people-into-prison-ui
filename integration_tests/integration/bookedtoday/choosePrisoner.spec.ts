@@ -61,44 +61,31 @@ context('Choose Prisoner', () => {
   })
 
   it("A user can view prisoner's actual image", () => {
-    cy.task('stubPrisonerImage', { prisonerNumber: 'G0013AB', imageFile: '/test-image.jpeg' })
-
-    cy.signIn()
-    const choosePrisonerPage = ChoosePrisonerPage.goTo()
-    choosePrisonerPage
-      .prisonerImage(0)
-      .should('be.visible')
-      .should('have.attr', 'src')
-      .then(src => {
-        expect(src).equal('/prisoner/G0013AB/image')
-      })
-
-    choosePrisonerPage
-      .prisonerImage(0)
-      .should('have.attr', 'alt')
-      .then(altText => {
-        expect(altText).equal('Doe, John')
-      })
-  })
-
-  it('A user will see placeholder image as prisoner has no image', () => {
+    const arrival = expectedArrivals.arrival({
+      fromLocationType: 'COURT',
+      prisonNumber: 'G0014GM',
+      isCurrentPrisoner: false,
+      potentialMatches: [{ ...expectedArrivals.potentialMatch, prisonNumber: 'G0014GM' }],
+    })
+    cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [arrival] })
+    cy.task('stubExpectedArrival', arrival)
     cy.task('stubPrisonerImage', { prisonerNumber: 'G0014GM', imageFile: '/placeholder-image.png' })
 
     cy.signIn()
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage
-      .prisonerImage(1)
+      .prisonerImage(0)
       .should('be.visible')
       .should('have.attr', 'src')
       .then(src => {
-        expect(src).equal('/prisoner/G0014GM/image')
+        expect(src).equal('/prisoners/G0014GM/image')
       })
 
     choosePrisonerPage
-      .prisonerImage(1)
+      .prisonerImage(0)
       .should('have.attr', 'alt')
       .then(altText => {
-        expect(altText).equal('Smith, Sam')
+        expect(altText).equal('Smith, Bob')
       })
   })
 
@@ -135,13 +122,13 @@ context('Choose Prisoner', () => {
   })
 
   it('new bookings from court with no match', () => {
-    const currentCustodySuite = expectedArrivals.arrival({
+    const arrival = expectedArrivals.arrival({
       fromLocationType: 'COURT',
       isCurrentPrisoner: false,
       potentialMatches: [],
     })
-    cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [currentCustodySuite] })
-    cy.task('stubExpectedArrival', currentCustodySuite)
+    cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [arrival] })
+    cy.task('stubExpectedArrival', arrival)
     cy.signIn()
 
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
@@ -151,13 +138,13 @@ context('Choose Prisoner', () => {
   })
 
   it('new bookings from court with match', () => {
-    const currentCustodySuite = expectedArrivals.arrival({
+    const arrival = expectedArrivals.arrival({
       fromLocationType: 'COURT',
       isCurrentPrisoner: false,
       potentialMatches: [expectedArrivals.potentialMatch],
     })
-    cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [currentCustodySuite] })
-    cy.task('stubExpectedArrival', currentCustodySuite)
+    cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [arrival] })
+    cy.task('stubExpectedArrival', arrival)
     cy.signIn()
 
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
@@ -167,9 +154,9 @@ context('Choose Prisoner', () => {
   })
 
   it('Current bookings from police custody suite are not processable', () => {
-    const currentCustodySuite = expectedArrivals.arrival({ fromLocationType: 'CUSTODY_SUITE', isCurrentPrisoner: true })
-    cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [currentCustodySuite] })
-    cy.task('stubExpectedArrival', currentCustodySuite)
+    const arrival = expectedArrivals.arrival({ fromLocationType: 'CUSTODY_SUITE', isCurrentPrisoner: true })
+    cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [arrival] })
+    cy.task('stubExpectedArrival', arrival)
     cy.signIn()
 
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
@@ -179,13 +166,13 @@ context('Choose Prisoner', () => {
   })
 
   it('new bookings from police custody suite with no match', () => {
-    const currentCustodySuite = expectedArrivals.arrival({
+    const arrival = expectedArrivals.arrival({
       fromLocationType: 'CUSTODY_SUITE',
       isCurrentPrisoner: false,
       potentialMatches: [],
     })
-    cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [currentCustodySuite] })
-    cy.task('stubExpectedArrival', currentCustodySuite)
+    cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [arrival] })
+    cy.task('stubExpectedArrival', arrival)
     cy.signIn()
 
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
@@ -195,13 +182,13 @@ context('Choose Prisoner', () => {
   })
 
   it('new bookings from police custody suite with match', () => {
-    const currentCustodySuite = expectedArrivals.arrival({
+    const arrival = expectedArrivals.arrival({
       fromLocationType: 'CUSTODY_SUITE',
       isCurrentPrisoner: false,
       potentialMatches: [expectedArrivals.potentialMatch],
     })
-    cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [currentCustodySuite] })
-    cy.task('stubExpectedArrival', currentCustodySuite)
+    cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [arrival] })
+    cy.task('stubExpectedArrival', arrival)
     cy.signIn()
 
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
