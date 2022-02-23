@@ -7,6 +7,8 @@ declare module 'welcome' {
   export type Prison = schemas['Prison']
   export type UserCaseLoad = schemas['UserCaseLoad']
   export type ArrivalResponse = schemas['ArrivalResponse']
+  export type PotentialMatchCriteria = schemas['PotentialMatchCriteria']
+  export type PotentialMatch = schemas['PotentialMatch']
 
   export const enum Gender {
     FEMALE = 'F',
@@ -20,14 +22,6 @@ declare module 'welcome' {
     FEMALE = 'FEMALE',
     MALE = 'MALE',
     TRANS = 'TRANS',
-  }
-
-  type PotentialMatch = {
-    firstName: string
-    lastName: string
-    dateOfBirth: string
-    prisonNumber?: string
-    pncNumber?: string
   }
 
   export interface schemas {
@@ -96,6 +90,20 @@ declare module 'welcome' {
     UserCaseLoad: {
       caseLoadId: string
       description: string
+    }
+    PotentialMatchCriteria: {
+      firstName: string
+      lastName: string
+      dateOfBirth: string
+      pncNumber?: string
+    }
+    PotentialMatch: {
+      firstName: string
+      lastName: string
+      dateOfBirth: string
+      prisonNumber?: string
+      pncNumber?: string
+      croNumber?: string
     }
   }
 }

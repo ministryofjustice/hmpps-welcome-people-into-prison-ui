@@ -4,12 +4,12 @@
     <div>
       {{ govukSummaryList({
       attributes: {'data-qa': dataQa},
-      classes: "govuk-!-margin-bottom-0 govuk-summary-list--no-border",
+      classes: "govuk-!-margin-bottom-0 govuk-!-padding-bottom-0 govuk-summary-list--no-border",
       rows: [
           {
           key: {
               text: "Name",
-              classes: "govuk-!-padding-bottom-0"
+              classes: "govuk-!-padding-bottom-0 width-one-third"
           },
           value: {
               text: data.firstName + ' ' + data.lastName,
@@ -19,7 +19,7 @@
           {
           key: {
               text: "Date of birth",
-              classes: "govuk-!-padding-bottom-0"
+              classes: "govuk-!-padding-bottom-0 width-one-third"
 
           },
           value: {
@@ -31,7 +31,7 @@
           {
           key: {
               text: "Prison number" if  data.prisonNumber,
-              classes: "govuk-!-padding-bottom-0"
+              classes: "govuk-!-padding-bottom-0 width-one-third"
           },
           value: {
               text:  data.prisonNumber if  data.prisonNumber,
@@ -41,11 +41,21 @@
           {
           key: {
               text: "PNC number" if  data.pncNumber,
-              classes: "govuk-!-padding-bottom-0"
+              classes: "govuk-!-padding-bottom-0 width-one-third"
           },
           value: {
               text:  data.pncNumber if  data.pncNumber,
               classes: "govuk-!-padding-bottom-0 data-qa-"+ dataQa +"-pnc-number"
+          }
+          },
+          {
+          key: {
+              text: "CRO number" if  data.pncNumber,
+              classes: "govuk-!-padding-bottom-0 width-one-third"
+          },
+          value: {
+              text:  data.croNumber if  data.croNumber,
+              classes: "govuk-!-padding-bottom-0 data-qa-"+ dataQa +"-cro-number"
           }
           }
       ]
