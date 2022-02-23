@@ -1,4 +1,3 @@
-import { StatusAndReasons } from '../../../services/imprisonmentStatusesService'
 import { assertHasStringValues, assertHasOptionalStringValues } from '../../../utils/utils'
 import { Codec, stateOperations } from '../../../utils/state'
 

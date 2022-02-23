@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express'
-import { Gender } from 'welcome'
+import { Gender, NewOffenderBooking } from 'welcome'
 import type { ImprisonmentStatusesService, ExpectedArrivalsService, RaiseAnalyticsEvent } from '../../../services'
 import { State } from './state'
 
@@ -27,17 +27,18 @@ export default class CheckAnswersController {
     return async (req, res, next) => {
       const { id } = req.params
       const { username, activeCaseLoadId } = res.locals.user
-      const { sex, imprisonmentStatus, movementReasonCode } = State.newArrival.get(req)
+      const arrival = State.newArrival.get(req)
       const data = await this.expectedArrivalsService.getArrival(id)
 
-      const newOffender = {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        dateOfBirth: data.dateOfBirth,
-        gender: sex as Gender,
+      const newOffender: NewOffenderBooking = {
+        firstName: arrival.firstName,
+        lastName: arrival.lastName,
+        dateOfBirth: arrival.dateOfBirth,
+        gender: arrival.sex as Gender,
         prisonId: activeCaseLoadId,
-        imprisonmentStatus,
-        movementReasonCode,
+        imprisonmentStatus: arrival.imprisonmentStatus,
+        movementReasonCode: arrival.movementReasonCode,
+        prisonNumber: arrival.prisonNumber,
       }
 
       const arrivalResponse = await this.expectedArrivalsService.createOffenderRecordAndBooking(
@@ -58,9 +59,9 @@ export default class CheckAnswersController {
       )
 
       req.flash('arrivalResponse', {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        prisonNumber: arrivalResponse.prisonNumber,
+        firstName: arrival.firstName,
+        lastName: arrival.lastName,
+        prisonNumber: arrival.prisonNumber,
         location: arrivalResponse.location,
       })
       return res.redirect(`/prisoners/${id}/confirmation`)

@@ -50,7 +50,7 @@ context('Check Answers', () => {
     sexPage.sexRadioButtons('F').click()
     sexPage.continue().click()
 
-    const imprisonmentStatusPage = ImprisonmentStatusPage.goTo(expectedArrival.id)
+    const imprisonmentStatusPage = Page.verifyOnPage(ImprisonmentStatusPage)
     imprisonmentStatusPage.continue().click()
     imprisonmentStatusPage.hasError('Select a reason for imprisonment')
     imprisonmentStatusPage.imprisonmentStatusRadioButton('determinate-sentence').click()
@@ -74,9 +74,9 @@ context('Check Answers', () => {
     checkAnswersPage.addToRoll().click()
 
     const confirmAddedToRollPage = Page.verifyOnPage(ConfirmAddedToRollPage)
-    confirmAddedToRollPage.confirmationBanner().should('contain.html', 'Bob Smith')
-    confirmAddedToRollPage.confirmationBanner().should('contain.html', 'A1234AB')
-    confirmAddedToRollPage.confirmationParagraph().should('contain.html', 'Bob Smith')
+    confirmAddedToRollPage.confirmationBanner().should('contain.html', 'Sam Smith')
+    confirmAddedToRollPage.confirmationBanner().should('contain.html', 'A1234BC')
+    confirmAddedToRollPage.confirmationParagraph().should('contain.html', 'Sam Smith')
     confirmAddedToRollPage.confirmationParagraph().should('contain.html', 'Moorland (HMP &amp; YOI)')
     confirmAddedToRollPage.locationParagraph().should('contain.html', 'Reception')
     confirmAddedToRollPage

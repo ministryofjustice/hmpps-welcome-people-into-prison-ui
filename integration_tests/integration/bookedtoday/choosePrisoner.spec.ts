@@ -1,7 +1,7 @@
 import ChoosePrisonerPage from '../../pages/bookedtoday/choosePrisoner'
 import FeatureNotAvailablePage from '../../pages/featureNotAvailable'
 
-import ExistingRecordPage from '../../pages/bookedtoday/arrivals/singleRecordFound'
+import SingleRecordFound from '../../pages/bookedtoday/arrivals/singleRecordFound'
 import CheckCourtReturnPage from '../../pages/bookedtoday/arrivals/courtreturns/checkCourtReturn'
 import Page from '../../pages/page'
 import Role from '../../../server/authentication/role'
@@ -150,7 +150,7 @@ context('Choose Prisoner', () => {
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
 
-    Page.verifyOnPage(ExistingRecordPage)
+    Page.verifyOnPage(SingleRecordFound)
   })
 
   it('Current bookings from police custody suite are not processable', () => {
@@ -194,7 +194,7 @@ context('Choose Prisoner', () => {
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(1).confirm().click()
 
-    Page.verifyOnPage(ExistingRecordPage)
+    Page.verifyOnPage(SingleRecordFound)
   })
 
   it('No links shown if not a reception user', () => {

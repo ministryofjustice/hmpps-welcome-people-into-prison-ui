@@ -104,6 +104,7 @@ describe('/checkAnswers', () => {
       prisonId: 'MDI',
       imprisonmentStatus: 'SENT',
       movementReasonCode: '26',
+      prisonNumber: 'A1234AB',
     }
 
     it('should redirect to /feature-not-available ', () => {
@@ -111,24 +112,18 @@ describe('/checkAnswers', () => {
 
       return request(app)
         .post('/prisoners/12345-67890/check-answers')
-        .send(newOffender)
         .expect(302)
         .expect('Location', '/feature-not-available')
     })
 
     it('should redirect to authentication error page for non reception users', () => {
       app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [] })
-      return request(app)
-        .post('/prisoners/12345-67890/check-answers')
-        .send(newOffender)
-        .expect(302)
-        .expect('Location', '/autherror')
+      return request(app).post('/prisoners/12345-67890/check-answers').expect(302).expect('Location', '/autherror')
     })
 
     it('should call service methods correctly', () => {
       return request(app)
         .post('/prisoners/12345-67890/check-answers')
-        .send(newOffender)
         .expect(302)
         .expect(() => {
           expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
@@ -143,7 +138,6 @@ describe('/checkAnswers', () => {
     it('should redirect to /confirmation page, store arrival response data in flash and raise analytics event', () => {
       return request(app)
         .post('/prisoners/12345-67890/check-answers')
-        .send(newOffender)
         .expect(302)
         .expect('Location', '/prisoners/12345-67890/confirmation')
         .expect(() => {
