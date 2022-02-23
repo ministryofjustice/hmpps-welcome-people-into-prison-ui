@@ -329,8 +329,7 @@ describe('welcomeClient', () => {
         .reply(200, matchedRecords)
 
       const output = await welcomeClient.getMatchingRecords(arrival)
-      expect(output[0]).toEqual(matchedRecords[0])
-      expect(output[1]).toEqual(matchedRecords[1])
+      expect(output).toStrictEqual(matchedRecords)
     })
 
     it('should get prisoner details', async () => {

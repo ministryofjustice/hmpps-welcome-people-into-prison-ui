@@ -132,19 +132,13 @@ export default class WelcomeClient {
     }) as Promise<UserCaseLoad[]>
   }
 
-  async getMatchingRecords(matchCriteria: PotentialMatchCriteria): Promise<PotentialMatch[]> | null {
+  async getMatchingRecords(matchCriteria: PotentialMatchCriteria): Promise<PotentialMatch[]> {
     logger.info(`welcomeApi: match-prisoners`)
-    try {
-      return (await this.restClient.post({
-        path: '/match-prisoners',
-        data: matchCriteria,
-      })) as Promise<PotentialMatch[]>
-    } catch (error) {
-      if (error.status >= 400 && error.status < 500) {
-        return null
-      }
-      throw error
-    }
+
+    return (await this.restClient.post({
+      path: '/match-prisoners',
+      data: matchCriteria,
+    })) as Promise<PotentialMatch[]>
   }
 
   async getPrisonerDetails(prisonNumber: string): Promise<PotentialMatch> {
