@@ -1,6 +1,6 @@
 import Page from '../pages/page'
 import FeatureNotAvailable from '../pages/featureNotAvailable'
-import ExistingRecordPage from '../pages/bookedtoday/arrivals/existingRecord'
+import ExistingRecordPage from '../pages/bookedtoday/arrivals/singleRecordFound'
 import ImprisonmentStatusPage from '../pages/bookedtoday/arrivals/imprisonmentStatus'
 import CheckAnswersPage from '../pages/bookedtoday/arrivals/checkAnswers'
 import Role from '../../server/authentication/role'

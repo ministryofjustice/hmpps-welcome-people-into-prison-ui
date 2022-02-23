@@ -1,7 +1,7 @@
 import ChoosePrisonerPage from '../../pages/bookedtoday/choosePrisoner'
 import FeatureNotAvailablePage from '../../pages/featureNotAvailable'
 
-import ExistingRecordPage from '../../pages/bookedtoday/arrivals/existingRecord'
+import ExistingRecordPage from '../../pages/bookedtoday/arrivals/singleRecordFound'
 import CheckCourtReturnPage from '../../pages/bookedtoday/arrivals/courtreturns/checkCourtReturn'
 import Page from '../../pages/page'
 import Role from '../../../server/authentication/role'

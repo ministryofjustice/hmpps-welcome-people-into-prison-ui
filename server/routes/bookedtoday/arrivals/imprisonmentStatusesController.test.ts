@@ -5,16 +5,13 @@ import { ImprisonmentStatus } from 'welcome'
 import { appWithAllRoutes, signedCookiesProvider, flashProvider } from '../../__testutils/appSetup'
 import { expectSettingCookie } from '../../__testutils/requestTestUtils'
 import ImprisonmentStatusesService from '../../../services/imprisonmentStatusesService'
-import ExpectedArrivalsService from '../../../services/expectedArrivalsService'
 
 jest.mock('../../../services/imprisonmentStatusesService')
-jest.mock('../../../services/expectedArrivalsService')
 
 const imprisonmentStatusesService = new ImprisonmentStatusesService(
   null,
   null
 ) as jest.Mocked<ImprisonmentStatusesService>
-const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
 
 let app: Express
 
@@ -29,8 +26,7 @@ beforeEach(() => {
       sex: 'M',
     },
   })
-  app = appWithAllRoutes({ services: { imprisonmentStatusesService, expectedArrivalsService } })
-  expectedArrivalsService.getArrival.mockResolvedValue(null)
+  app = appWithAllRoutes({ services: { imprisonmentStatusesService } })
   imprisonmentStatusesService.getAllImprisonmentStatuses.mockResolvedValue([] as ImprisonmentStatus[])
 })
 
@@ -47,6 +43,7 @@ describe('/imprisonment-status', () => {
         .expect(res => {
           const $ = cheerio.load(res.text)
           expect($('h1').text()).toContain('What is the reason for imprisonment?')
+          expect($('.data-qa-prisoner-name').text()).toContain('Jim Smith')
         })
     })
 
@@ -56,7 +53,6 @@ describe('/imprisonment-status', () => {
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           expect(imprisonmentStatusesService.getAllImprisonmentStatuses).toHaveBeenCalled()
-          expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
         })
     })
   })

@@ -1,21 +1,17 @@
-import type { Arrival, ImprisonmentStatus } from 'welcome'
+import type { ImprisonmentStatus } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
 import { appWithAllRoutes, signedCookiesProvider, flashProvider } from '../../__testutils/appSetup'
 import ImprisonmentStatusesService from '../../../services/imprisonmentStatusesService'
-import ExpectedArrivalsService from '../../../services/expectedArrivalsService'
 import { expectSettingCookie } from '../../__testutils/requestTestUtils'
 
 jest.mock('../../../services/imprisonmentStatusesService')
-jest.mock('../../../services/expectedArrivalsService')
 
 const imprisonmentStatusesService = new ImprisonmentStatusesService(
   null,
   null
 ) as jest.Mocked<ImprisonmentStatusesService>
-
-const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
 
 let app: Express
 
@@ -44,8 +40,7 @@ beforeEach(() => {
       sex: 'M',
     },
   })
-  app = appWithAllRoutes({ services: { imprisonmentStatusesService, expectedArrivalsService } })
-  expectedArrivalsService.getArrival.mockResolvedValue({} as Arrival)
+  app = appWithAllRoutes({ services: { imprisonmentStatusesService } })
   imprisonmentStatusesService.getImprisonmentStatus.mockResolvedValue(imprisonmentStatus)
 })
 
@@ -61,7 +56,6 @@ describe('/determinate-sentence', () => {
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           expect(imprisonmentStatusesService.getImprisonmentStatus).toHaveBeenCalledWith('determinate-sentence')
-          expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
         })
     })
 
@@ -72,6 +66,7 @@ describe('/determinate-sentence', () => {
         .expect(res => {
           const $ = cheerio.load(res.text)
           expect($('h1').text()).toContain('What is the type of determinate sentence?')
+          expect($('.data-qa-prisoner-name').text()).toContain('Jim Smith')
         })
     })
   })

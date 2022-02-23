@@ -233,16 +233,9 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
             firstName: 'Harry',
             lastName: 'Stanton',
             dateOfBirth: '1961-01-01',
+            sex: 'MALE',
+            prisonNumber: 'A1234BC',
             pncNumber: '01/123456',
-            potentialMatches: JSON.stringify([
-              {
-                firstName: 'Harry',
-                lastName: 'Stanton',
-                dateOfBirth: '1961-01-01',
-                prisonNumber: 'A1234BC',
-                pncNumber: '01/123456',
-              },
-            ]),
           })
         })
     })

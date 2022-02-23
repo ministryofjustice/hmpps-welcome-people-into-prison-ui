@@ -75,7 +75,6 @@ describe('/checkAnswers', () => {
         .expect(200)
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
-          expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
           expect(imprisonmentStatusesService.getReasonForImprisonment).toHaveBeenCalledWith({
             code: 'determinate-sentence',
             imprisonmentStatus: 'SENT',
@@ -149,6 +148,8 @@ describe('/checkAnswers', () => {
         .expect('Location', '/prisoners/12345-67890/confirmation')
         .expect(() => {
           expect(flashProvider).toHaveBeenCalledWith('arrivalResponse', {
+            firstName: 'Jim',
+            lastName: 'Smith',
             location: 'Reception',
             prisonNumber: 'A1234AB',
           })

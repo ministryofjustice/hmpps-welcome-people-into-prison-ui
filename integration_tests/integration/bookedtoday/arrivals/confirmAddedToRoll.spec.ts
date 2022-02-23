@@ -1,5 +1,5 @@
 import Page from '../../../pages/page'
-import ExistingRecordPage from '../../../pages/bookedtoday/arrivals/existingRecord'
+import ExistingRecordPage from '../../../pages/bookedtoday/arrivals/singleRecordFound'
 import CheckAnswersPage from '../../../pages/bookedtoday/arrivals/checkAnswers'
 import ConfirmAddedToRollPage from '../../../pages/bookedtoday/arrivals/confirmAddedToRoll'
 import ChoosePrisonerPage from '../../../pages/bookedtoday/choosePrisoner'

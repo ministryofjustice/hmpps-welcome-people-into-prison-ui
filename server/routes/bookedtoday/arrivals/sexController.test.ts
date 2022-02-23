@@ -1,22 +1,10 @@
-import { GenderKeys, type Arrival } from 'welcome'
+import { GenderKeys } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
 import { appWithAllRoutes, signedCookiesProvider, flashProvider } from '../../__testutils/appSetup'
 import { expectSettingCookie } from '../../__testutils/requestTestUtils'
-import ImprisonmentStatusesService from '../../../services/imprisonmentStatusesService'
-import ExpectedArrivalsService from '../../../services/expectedArrivalsService'
 import Role from '../../../authentication/role'
-
-jest.mock('../../../services/imprisonmentStatusesService')
-jest.mock('../../../services/expectedArrivalsService')
-
-const imprisonmentStatusesService = new ImprisonmentStatusesService(
-  null,
-  null
-) as jest.Mocked<ImprisonmentStatusesService>
-
-const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
 
 let app: Express
 
@@ -26,13 +14,12 @@ beforeEach(() => {
       firstName: 'Jim',
       lastName: 'Smith',
       dateOfBirth: '1973-01-08',
+      sex: 'M',
     },
   })
   app = appWithAllRoutes({
-    services: { imprisonmentStatusesService, expectedArrivalsService },
     roles: [Role.PRISON_RECEPTION],
   })
-  expectedArrivalsService.getArrival.mockResolvedValue({} as Arrival)
 })
 
 afterEach(() => {
@@ -46,10 +33,17 @@ describe('/sex', () => {
       return request(app).get('/prisoners/12345-67890/sex').expect(302).expect('Location', '/autherror')
     })
 
-    it.each([{ gender: 'blas' as GenderKeys }, { gender: undefined }, { gender: GenderKeys.TRANS }])(
-      'should render /sex page when Arrival gender is not MALE or FEMALE',
-      ({ gender }) => {
-        expectedArrivalsService.getArrival.mockResolvedValue({ gender } as Arrival)
+    it.each([{ sex: 'blas' as GenderKeys }, { sex: undefined }, { sex: GenderKeys.TRANS }])(
+      'should render /sex page when new-arrival sex is not MALE or FEMALE',
+      ({ sex }) => {
+        signedCookiesProvider.mockReturnValue({
+          'new-arrival': {
+            firstName: 'Jim',
+            lastName: 'Smith',
+            dateOfBirth: '1973-01-08',
+            sex,
+          },
+        })
         return request(app)
           .get('/prisoners/12345-67890/sex')
           .expect(200)
@@ -61,10 +55,17 @@ describe('/sex', () => {
       }
     )
 
-    it.each([{ gender: GenderKeys.MALE }, { gender: GenderKeys.FEMALE }])(
+    it.each([{ sex: GenderKeys.MALE }, { sex: GenderKeys.FEMALE }])(
       'should render /imprisonment-status page when Arrival gender is MALE or FEMALE',
-      ({ gender }) => {
-        expectedArrivalsService.getArrival.mockResolvedValue({ gender } as Arrival)
+      ({ sex }) => {
+        signedCookiesProvider.mockReturnValue({
+          'new-arrival': {
+            firstName: 'Jim',
+            lastName: 'Smith',
+            dateOfBirth: '1973-01-08',
+            sex,
+          },
+        })
         return request(app)
           .get('/prisoners/12345-67890/sex')
           .expect(302)
@@ -80,11 +81,14 @@ describe('/sex', () => {
     )
 
     it('contains additional hint for TRANS response', () => {
-      expectedArrivalsService.getArrival.mockResolvedValue({
-        gender: GenderKeys.TRANS,
-        firstName: 'john',
-        lastName: 'smith',
-      } as Arrival)
+      signedCookiesProvider.mockReturnValue({
+        'new-arrival': {
+          firstName: 'Jim',
+          lastName: 'Smith',
+          dateOfBirth: '1973-01-08',
+          sex: GenderKeys.TRANS,
+        },
+      })
       return request(app)
         .get('/prisoners/12345-67890/sex')
         .expect(200)
@@ -92,7 +96,7 @@ describe('/sex', () => {
         .expect(res => {
           const $ = cheerio.load(res.text)
           expect($('.govuk-inset-text').text()).toContain(
-            'john smith was identified as transgender on their Person Escort Record. Their registered sex at birth is required to confirm their arrival into this establishment.'
+            'Jim Smith was identified as transgender on their Person Escort Record. Their registered sex at birth is required to confirm their arrival into this establishment.'
           )
         })
     })

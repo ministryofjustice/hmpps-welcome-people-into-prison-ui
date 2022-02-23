@@ -3,6 +3,7 @@ import type { RequestHandler, Response } from 'express'
 import type { ExpectedArrivalsService } from '../../services'
 import { LocationType } from '../../services/expectedArrivalsService'
 import { State } from './arrivals/state'
+import { convertToTitleCase } from '../../utils/utils'
 
 export default class ChoosePrisonerController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
@@ -23,12 +24,13 @@ export default class ChoosePrisonerController {
 
     if (arrival.potentialMatches.length >= 1) {
       State.newArrival.set(res, {
-        firstName: arrival.firstName,
-        lastName: arrival.lastName,
-        dateOfBirth: arrival.dateOfBirth,
-        prisonNumber: arrival?.prisonNumber,
-        pncNumber: arrival?.pncNumber,
-        potentialMatches: arrival?.potentialMatches,
+        firstName: convertToTitleCase(arrival.potentialMatches[0].firstName),
+        lastName: convertToTitleCase(arrival.potentialMatches[0].lastName),
+        dateOfBirth: arrival.potentialMatches[0].dateOfBirth,
+        // TODO: add sex to potential match object on cookie
+        sex: 'MALE',
+        prisonNumber: arrival?.potentialMatches[0].prisonNumber,
+        pncNumber: arrival?.potentialMatches[0].pncNumber,
       })
       return res.redirect(`/prisoners/${arrival.id}/record-found`)
     }
@@ -37,6 +39,7 @@ export default class ChoosePrisonerController {
       firstName: arrival.firstName,
       lastName: arrival.lastName,
       dateOfBirth: arrival.dateOfBirth,
+      sex: arrival.gender,
       prisonNumber: arrival.prisonNumber,
       pncNumber: arrival.pncNumber,
     })

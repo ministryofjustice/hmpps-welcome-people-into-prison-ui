@@ -1,5 +1,5 @@
 import Page from '../../../pages/page'
-import ExistingRecordPage from '../../../pages/bookedtoday/arrivals/existingRecord'
+import SingleRecordFoundPage from '../../../pages/bookedtoday/arrivals/singleRecordFound'
 import ImprisonmentStatusPage from '../../../pages/bookedtoday/arrivals/imprisonmentStatus'
 import CheckAnswersPage from '../../../pages/bookedtoday/arrivals/checkAnswers'
 import ConfirmAddedToRollPage from '../../../pages/bookedtoday/arrivals/confirmAddedToRoll'
@@ -21,10 +21,9 @@ context('Check Answers', () => {
   })
 
   it('Should contain a full set of correctly formatted move data', () => {
-    cy.task('stubExpectedArrival', expectedArrival)
     cy.signIn()
-    const existingRecordPage = ExistingRecordPage.goTo(expectedArrival.id)
-    existingRecordPage.continue().click()
+    const singleRecordFoundPage = SingleRecordFoundPage.goTo(expectedArrival.id)
+    singleRecordFoundPage.continue().click()
 
     const sexPage = Page.verifyOnPage(SexPage)
     sexPage.sexRadioButtons('F').click()
@@ -51,10 +50,9 @@ context('Check Answers', () => {
     expectedArrival.prisonNumber = null
     expectedArrival.pncNumber = null
 
-    cy.task('stubExpectedArrival', expectedArrival)
     cy.signIn()
-    const existingRecordPage = ExistingRecordPage.goTo(expectedArrival.id)
-    existingRecordPage.continue().click()
+    const singleRecordFoundPage = SingleRecordFoundPage.goTo(expectedArrival.id)
+    singleRecordFoundPage.continue().click()
 
     const sexPage = Page.verifyOnPage(SexPage)
     sexPage.sexRadioButtons('M').click()

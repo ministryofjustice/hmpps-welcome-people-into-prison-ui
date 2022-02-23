@@ -12,12 +12,12 @@ export default class CheckAnswersController {
 
   public view(): RequestHandler {
     return async (req, res) => {
-      const { id } = req.params
-      const { sex, code, imprisonmentStatus, movementReasonCode } = State.newArrival.get(req)
+      const moveData = State.newArrival.get(req)
+      const { code, imprisonmentStatus, movementReasonCode } = State.newArrival.get(req)
       const statusAndReason = { code, imprisonmentStatus, movementReasonCode }
-      const moveData = await this.expectedArrivalsService.getArrival(id)
+
       const reasonImprisonment = await this.imprisonmentStatusesService.getReasonForImprisonment(statusAndReason)
-      const data = { sex, reasonImprisonment, ...moveData }
+      const data = { reasonImprisonment, ...moveData }
       return res.render('pages/bookedtoday/arrivals/checkAnswers.njk', { data })
     }
   }
@@ -57,6 +57,8 @@ export default class CheckAnswersController {
       )
 
       req.flash('arrivalResponse', {
+        firstName: data.firstName,
+        lastName: data.lastName,
         prisonNumber: arrivalResponse.prisonNumber,
         location: arrivalResponse.location,
       })

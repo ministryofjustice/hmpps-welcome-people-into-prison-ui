@@ -1,17 +1,14 @@
 import type { RequestHandler } from 'express'
-import type { ExpectedArrivalsService } from '../../../services'
 import { State } from './state'
 
 export default class SexController {
-  public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
-
   public view(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
 
-      const data = await this.expectedArrivalsService.getArrival(id)
+      const data = State.newArrival.get(req)
 
-      const genderValue = this.convertGenderKeyToValue(data.gender)
+      const genderValue = this.convertGenderKeyToValue(data.sex)
 
       if (genderValue) {
         State.newArrival.update(req, res, { sex: genderValue })
