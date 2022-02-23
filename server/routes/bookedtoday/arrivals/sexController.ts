@@ -17,6 +17,7 @@ export default class SexController {
 
       return res.render('pages/bookedtoday/arrivals/sex.njk', {
         errors: req.flash('errors'),
+        id,
         data,
       })
     }

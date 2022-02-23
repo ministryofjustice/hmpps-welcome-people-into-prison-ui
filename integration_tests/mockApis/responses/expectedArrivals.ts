@@ -5,6 +5,7 @@ export default {
     dateOfBirth = '1970-01-01',
     pncNumber = '01/2345A',
     prisonNumber = 'G0015GF',
+    gender = 'MALE',
     potentialMatches = [],
   }) => ({
     id: '11111-11111',
@@ -14,7 +15,7 @@ export default {
     pncNumber,
     prisonNumber,
     date: '2021-09-01',
-    gender: 'MALE',
+    gender,
     fromLocation: 'Wandsworth',
     fromLocationType,
     isCurrentPrisoner,

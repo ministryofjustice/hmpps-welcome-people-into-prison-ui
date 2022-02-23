@@ -1,10 +1,11 @@
 import Page from '../pages/page'
 import FeatureNotAvailable from '../pages/featureNotAvailable'
-import ExistingRecordPage from '../pages/bookedtoday/arrivals/singleRecordFound'
 import ImprisonmentStatusPage from '../pages/bookedtoday/arrivals/imprisonmentStatus'
 import CheckAnswersPage from '../pages/bookedtoday/arrivals/checkAnswers'
 import Role from '../../server/authentication/role'
 import expectedArrivals from '../mockApis/responses/expectedArrivals'
+import ChoosePrisonerPage from '../pages/bookedtoday/choosePrisoner'
+import SingleRecordFoundPage from '../pages/bookedtoday/arrivals/singleRecordFound'
 
 context('Feature not available', () => {
   beforeEach(() => {
@@ -17,7 +18,7 @@ context('Feature not available', () => {
     cy.task('stubImprisonmentStatus')
   })
 
-  it('Should display feature-not-available page', () => {
+  it('Should display feature-not-available page when client error during confirmation', () => {
     const expectedArrival = expectedArrivals.arrival({
       fromLocationType: 'COURT',
       isCurrentPrisoner: false,
@@ -28,9 +29,10 @@ context('Feature not available', () => {
 
     cy.signIn()
 
-    ExistingRecordPage.goTo(expectedArrival.id).continue().click()
+    const singleRecordFound = ChoosePrisonerPage.selectPrisoner(expectedArrival.id, SingleRecordFoundPage)
+    singleRecordFound.continue().click()
 
-    const imprisonmentStatusPage = ImprisonmentStatusPage.goTo(expectedArrival.id)
+    const imprisonmentStatusPage = Page.verifyOnPage(ImprisonmentStatusPage)
     imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()
     imprisonmentStatusPage.continue().click()
 

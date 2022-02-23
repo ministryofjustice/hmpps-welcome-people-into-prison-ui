@@ -24,7 +24,7 @@
                 }) }}
             {% endif %}
 
-            <form method="post" action="/prisoners/{{ data.id }}/sex">
+            <form method="post" action="/prisoners/{{ id }}/sex">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
                 {{ govukRadios({

@@ -1,6 +1,6 @@
 import Page, { PageElement } from '../../page'
 
-export default class ConfrimAddedToRollPage extends Page {
+export default class ConfirmAddedToRollPage extends Page {
   constructor() {
     super('has been added to the establishment roll')
   }

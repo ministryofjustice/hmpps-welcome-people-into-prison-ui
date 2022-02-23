@@ -19,18 +19,20 @@ export default class ChoosePrisonerController {
   }
 
   private handleNewPrisoner(arrival: Arrival, res: Response): void | PromiseLike<void> {
+    State.newArrival.clear(res)
     if (!arrival.prisonNumber && !arrival.pncNumber)
       return res.redirect(`/prisoners/${arrival.id}/search-for-existing-record/new`)
 
     if (arrival.potentialMatches.length >= 1) {
+      const match = arrival.potentialMatches[0]
       State.newArrival.set(res, {
-        firstName: convertToTitleCase(arrival.potentialMatches[0].firstName),
-        lastName: convertToTitleCase(arrival.potentialMatches[0].lastName),
-        dateOfBirth: arrival.potentialMatches[0].dateOfBirth,
+        firstName: convertToTitleCase(match.firstName),
+        lastName: convertToTitleCase(match.lastName),
+        dateOfBirth: match.dateOfBirth,
         // TODO: add sex to potential match object on cookie
-        sex: 'MALE',
-        prisonNumber: arrival?.potentialMatches[0].prisonNumber,
-        pncNumber: arrival?.potentialMatches[0].pncNumber,
+        sex: arrival.gender,
+        prisonNumber: match.prisonNumber,
+        pncNumber: match.pncNumber,
       })
       return res.redirect(`/prisoners/${arrival.id}/record-found`)
     }
@@ -46,10 +48,7 @@ export default class ChoosePrisonerController {
     return res.redirect(`/prisoners/${arrival.id}/no-record-found`)
 
     /**
-     * TODO 3 situations to deal with, will redirect to new pages for each of:
-     * - no matches         - show "This person doesn't have a record"
-     * - multiple matches   - show "Possible existing records found"
-     * - 1 match found      - show "This person has existing record"
+     * TODO deal with multiple matches   - show "Possible existing records found"
      */
   }
 

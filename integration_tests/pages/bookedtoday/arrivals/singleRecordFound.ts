@@ -5,11 +5,6 @@ export default class SingleRecordFoundPage extends Page {
     super('This person has an existing prisoner record')
   }
 
-  static goTo(id: string): SingleRecordFoundPage {
-    cy.visit(`/prisoners/${id}/record-found`)
-    return Page.verifyOnPage(SingleRecordFoundPage)
-  }
-
   perName = (): PageElement => cy.get(`.data-qa-per-record-prisoner-name`)
 
   perDob = (): PageElement => cy.get(`.data-qa-per-record-dob`)

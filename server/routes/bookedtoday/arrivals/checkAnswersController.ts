@@ -12,13 +12,14 @@ export default class CheckAnswersController {
 
   public view(): RequestHandler {
     return async (req, res) => {
+      const { id } = req.params
       const moveData = State.newArrival.get(req)
       const { code, imprisonmentStatus, movementReasonCode } = State.newArrival.get(req)
       const statusAndReason = { code, imprisonmentStatus, movementReasonCode }
 
       const reasonImprisonment = await this.imprisonmentStatusesService.getReasonForImprisonment(statusAndReason)
       const data = { reasonImprisonment, ...moveData }
-      return res.render('pages/bookedtoday/arrivals/checkAnswers.njk', { data })
+      return res.render('pages/bookedtoday/arrivals/checkAnswers.njk', { id, data })
     }
   }
 
