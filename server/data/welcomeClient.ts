@@ -9,6 +9,7 @@ import type {
   UserCaseLoad,
   PotentialMatch,
   PotentialMatchCriteria,
+  PrisonerDetails,
 } from 'welcome'
 import type { Readable } from 'stream'
 import { ArrivalResponse } from 'welcome'
@@ -141,10 +142,10 @@ export default class WelcomeClient {
     })) as Promise<PotentialMatch[]>
   }
 
-  async getPrisonerDetails(prisonNumber: string): Promise<PotentialMatch> {
+  async getPrisonerDetails(prisonNumber: string): Promise<PrisonerDetails> {
     logger.info(`welcomeApi: getPrison(${prisonNumber})`)
     return this.restClient.get({
       path: `/prisoners/${prisonNumber}`,
-    }) as Promise<PotentialMatch>
+    }) as Promise<PrisonerDetails>
   }
 }

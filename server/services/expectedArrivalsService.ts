@@ -1,4 +1,11 @@
-import type { Arrival, NewOffenderBooking, ArrivalResponse, PotentialMatchCriteria, PotentialMatch } from 'welcome'
+import type {
+  Arrival,
+  NewOffenderBooking,
+  ArrivalResponse,
+  PotentialMatchCriteria,
+  PotentialMatch,
+  PrisonerDetails,
+} from 'welcome'
 import moment, { type Moment } from 'moment'
 import type { Readable } from 'stream'
 import { groupBy, compareByFullName } from '../utils/utils'
@@ -68,7 +75,7 @@ export default class ExpectedArrivalsService {
     return this.welcomeClientFactory(token).getMatchingRecords(potentialMatchCriteria)
   }
 
-  public async getPrisonerDetails(prisonNumber: string): Promise<PotentialMatch> {
+  public async getPrisonerDetails(prisonNumber: string): Promise<PrisonerDetails> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     return this.welcomeClientFactory(token).getPrisonerDetails(prisonNumber)
   }
