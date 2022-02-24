@@ -23,7 +23,7 @@
                     <h2 class="govuk-heading-m">Details from existing prisoner record</h2> 
                     <div class="prisoner-record-detail flex">
                         {{ prisonerSummaryDetail(existingArrival, "existing-record") }}
-                        <img src="{{ '/prisoner/' + existingArrival.prisonNumber + '/image' if existingArrival.prisonNumber else '/assets/images/placeholder-image.png' }}" 
+                        <img src="{{ '/prisoners/' + existingArrival.prisonNumber + '/image' if existingArrival.prisonNumber else '/assets/images/placeholder-image.png' }}" 
                              class="prisoner-image-transfer govuk-!-margin-top-2" 
                              alt="{{ existingArrival.lastName }}, {{ existingArrival.firstName }}" 
                              data-qa="prisoner-image" 

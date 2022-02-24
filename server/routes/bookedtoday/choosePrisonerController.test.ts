@@ -229,7 +229,13 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
         .expect('Content-Type', /text\/plain/)
         .expect('Location', '/prisoners/1111-2222-3333-4444/record-found')
         .expect(res => {
-          expectSettingCookie(res, 'new-arrival').toStrictEqual(undefined)
+          expectSettingCookie(res, 'new-arrival').toStrictEqual({
+            dateOfBirth: '1961-01-01',
+            firstName: 'Harry',
+            lastName: 'Stanton',
+            pncNumber: '01/123456',
+            prisonNumber: 'A1234BC',
+          })
         })
     })
 
