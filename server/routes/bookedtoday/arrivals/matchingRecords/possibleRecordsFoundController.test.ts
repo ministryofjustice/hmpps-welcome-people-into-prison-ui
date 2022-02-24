@@ -87,7 +87,10 @@ describe('possible records found', () => {
         .expect('Location', '/prisoners/12345-67890/possible-records-found')
         .expect(() => {
           expect(flashProvider).toHaveBeenCalledWith('errors', [
-            { text: 'You must select an option', href: '#record-1' },
+            {
+              text: 'Select an existing record or search using different details',
+              href: '#record-1',
+            },
           ])
         })
     })

@@ -8,7 +8,7 @@ describe('MatchedRecordSelectionValidation', () => {
     expect(MatchedRecordSelectionValidation({})).toEqual([
       {
         href: '#record-1',
-        text: 'You must select an option',
+        text: 'Select an existing record or search using different details',
       },
     ]))
 })

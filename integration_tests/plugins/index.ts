@@ -33,5 +33,7 @@ export default (on: (string, Record) => void): void => {
     stubCreateOffenderRecordAndBooking: welcome.stubCreateOffenderRecordAndBooking,
     stubCreateOffenderRecordAndBookingReturnsError: welcome.stubCreateOffenderRecordAndBookingReturnsError,
     stubImprisonmentStatus: welcome.stubImprisonmentStatus,
+    stubMatchedRecords: welcome.stubMatchedRecords,
+    stubPrisonerDetails: welcome.stubPrisonerDetails,
   })
 }
