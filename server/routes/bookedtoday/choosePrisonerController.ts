@@ -3,7 +3,6 @@ import type { RequestHandler, Response } from 'express'
 import type { ExpectedArrivalsService } from '../../services'
 import { LocationType } from '../../services/expectedArrivalsService'
 import { State } from './arrivals/state'
-import { convertToTitleCase } from '../../utils/utils'
 
 export default class ChoosePrisonerController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
@@ -11,6 +10,7 @@ export default class ChoosePrisonerController {
   public view(): RequestHandler {
     return async (req, res) => {
       const { activeCaseLoadId } = res.locals.user
+      State.newArrival.clear(res)
       const expectedArrivals = await this.expectedArrivalsService.getArrivalsForToday(activeCaseLoadId)
       return res.render('pages/bookedtoday/choosePrisoner.njk', {
         expectedArrivals,
@@ -20,23 +20,11 @@ export default class ChoosePrisonerController {
 
   private handleNewPrisoner(arrival: Arrival, res: Response): void | PromiseLike<void> {
     if (!arrival.prisonNumber && !arrival.pncNumber) {
-      State.newArrival.clear(res)
       return res.redirect(`/prisoners/${arrival.id}/search-for-existing-record/new`)
     }
     if (arrival.potentialMatches.length >= 1) {
-      const match = arrival.potentialMatches[0]
-      State.newArrival.set(res, {
-        firstName: convertToTitleCase(match.firstName),
-        lastName: convertToTitleCase(match.lastName),
-        dateOfBirth: match.dateOfBirth,
-        // TODO: add sex to potential match object on cookie
-        sex: arrival.gender,
-        prisonNumber: match.prisonNumber,
-        pncNumber: match.pncNumber,
-      })
       return res.redirect(`/prisoners/${arrival.id}/record-found`)
     }
-    State.newArrival.clear(res)
     return res.redirect(`/prisoners/${arrival.id}/no-record-found`)
 
     /**
