@@ -15,9 +15,9 @@
                 }}
             {% endif %}
 
-            <span class="govuk-caption-xl" data-qa="prisoner-name">  Confirm arrival of {{ data.firstName}} {{ data.lastName }}</span>
+            <span class="govuk-caption-xl data-qa-prisoner-name" data-qa="prisoner-name">  Confirm arrival of {{ data.firstName}} {{ data.lastName }}</span>
 
-            <form method="post" action = "/prisoners/{{ data.id }}/imprisonment-status/{{imprisonmentStatus}}">
+            <form method="post" action = "/prisoners/{{ id }}/imprisonment-status/{{imprisonmentStatus}}">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
                 <input type="hidden" name="imprisonmentStatus" value="{{imprisonmentStatus}}" />
     

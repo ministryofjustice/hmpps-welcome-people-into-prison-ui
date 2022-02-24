@@ -261,6 +261,7 @@ describe('Expected arrivals service', () => {
       prisonId: 'MDI',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',
+      prisonNumber: 'A1234AA',
     }
 
     it('Calls hmppsAuth and welcome clients correctly', async () => {
@@ -278,6 +279,7 @@ describe('Expected arrivals service', () => {
         prisonId: 'MDI',
         imprisonmentStatus: 'RX',
         movementReasonCode: 'N',
+        prisonNumber: 'A1234AA',
       })
     })
   })

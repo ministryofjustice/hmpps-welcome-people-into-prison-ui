@@ -71,7 +71,7 @@
                 </div>
             </div>
 
-            <form method="post" action = "/prisoners/{{ data.id }}/check-answers">
+            <form method="post" action = "/prisoners/{{ id }}/check-answers">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
                 {{ govukButton({
                     classes: "govuk-button govuk-!-margin-bottom-6",

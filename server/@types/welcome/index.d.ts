@@ -77,6 +77,7 @@ declare module 'welcome' {
       prisonId: string
       imprisonmentStatus: string
       movementReasonCode: string
+      prisonNumber: string
     }
     ImprisonmentStatus: {
       code: string

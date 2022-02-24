@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express'
-import { Gender } from 'welcome'
+import { Gender, NewOffenderBooking } from 'welcome'
 import type { ImprisonmentStatusesService, ExpectedArrivalsService, RaiseAnalyticsEvent } from '../../../services'
 import { State } from './state'
 
@@ -13,12 +13,13 @@ export default class CheckAnswersController {
   public view(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
-      const statusAndReason = State.imprisonmentStatus.get(req)
-      const sex = State.sex.get(req)
-      const moveData = await this.expectedArrivalsService.getArrival(id)
+      const moveData = State.newArrival.get(req)
+      const { code, imprisonmentStatus, movementReasonCode } = State.newArrival.get(req)
+      const statusAndReason = { code, imprisonmentStatus, movementReasonCode }
+
       const reasonImprisonment = await this.imprisonmentStatusesService.getReasonForImprisonment(statusAndReason)
-      const data = { sex, reasonImprisonment, ...moveData }
-      return res.render('pages/bookedtoday/arrivals/checkAnswers.njk', { data })
+      const data = { reasonImprisonment, ...moveData }
+      return res.render('pages/bookedtoday/arrivals/checkAnswers.njk', { id, data })
     }
   }
 
@@ -26,18 +27,18 @@ export default class CheckAnswersController {
     return async (req, res, next) => {
       const { id } = req.params
       const { username, activeCaseLoadId } = res.locals.user
+      const arrival = State.newArrival.get(req)
       const data = await this.expectedArrivalsService.getArrival(id)
-      const statusAndReason = State.imprisonmentStatus.get(req)
-      const sex = State.sex.get(req)
 
-      const newOffender = {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        dateOfBirth: data.dateOfBirth,
-        gender: sex as Gender,
+      const newOffender: NewOffenderBooking = {
+        firstName: arrival.firstName,
+        lastName: arrival.lastName,
+        dateOfBirth: arrival.dateOfBirth,
+        gender: arrival.sex as Gender,
         prisonId: activeCaseLoadId,
-        imprisonmentStatus: statusAndReason.imprisonmentStatus,
-        movementReasonCode: statusAndReason.movementReasonCode,
+        imprisonmentStatus: arrival.imprisonmentStatus,
+        movementReasonCode: arrival.movementReasonCode,
+        prisonNumber: arrival.prisonNumber,
       }
 
       const arrivalResponse = await this.expectedArrivalsService.createOffenderRecordAndBooking(
@@ -58,7 +59,9 @@ export default class CheckAnswersController {
       )
 
       req.flash('arrivalResponse', {
-        prisonNumber: arrivalResponse.prisonNumber,
+        firstName: arrival.firstName,
+        lastName: arrival.lastName,
+        prisonNumber: arrival.prisonNumber,
         location: arrivalResponse.location,
       })
       return res.redirect(`/prisoners/${id}/confirmation`)

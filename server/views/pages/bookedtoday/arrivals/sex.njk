@@ -18,13 +18,13 @@
                     data-qa="prisoner-name">Confirm arrival of {{ data.firstName }} {{ data.lastName }}</span>
             <h1 class="govuk-fieldset__legend--l govuk-!-margin-0">{{ pageTitle }}</h1>
 
-            {% if data.gender === 'TRANS' %}
+            {% if data.sex === 'TRANS' %}
                 {{ govukInsetText({
                     text:  data.firstName + " " + data.lastName + " was identified as transgender on their Person Escort Record. Their registered sex at birth is required to confirm their arrival into this establishment."
                 }) }}
             {% endif %}
 
-            <form method="post" action="/prisoners/{{ data.id }}/sex">
+            <form method="post" action="/prisoners/{{ id }}/sex">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
                 {{ govukRadios({

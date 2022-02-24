@@ -75,10 +75,10 @@
                     <form method="post" action="/prisoners/{{ id }}/check-court-return">
                         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
                         {{ govukButton({
-                        classes: "govuk-button govuk-!-margin-bottom-6",
-                        text: "Confirm prisoner has returned",
-                        attributes: {'data-qa': 'add-to-roll'},
-                        type: 'submit'
+                            classes: "govuk-button govuk-!-margin-bottom-6",
+                            text: "Confirm prisoner has returned",
+                            attributes: {'data-qa': 'add-to-roll'},
+                            type: 'submit'
                         }) }}
                     </form>
                     <p class="govuk-!-margin-top-4">

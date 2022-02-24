@@ -5,11 +5,6 @@ export default class MovementReasonsPage extends Page {
     super('What is the')
   }
 
-  static goTo(id: string, movementReason: string): MovementReasonsPage {
-    cy.visit(`/prisoners/${id}/imprisonment-status/${movementReason}`)
-    return Page.verifyOnPage(MovementReasonsPage)
-  }
-
   prisonerName = (): PageElement => cy.get(`[data-qa=prisoner-name]`)
 
   movementReasonRadioButton = (value): PageElement => cy.get('.govuk-radios__input[type="radio"]').check(value)

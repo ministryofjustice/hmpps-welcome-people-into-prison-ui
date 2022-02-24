@@ -1,25 +1,23 @@
 import type { RequestHandler } from 'express'
-import type { ExpectedArrivalsService } from '../../../services'
 import { State } from './state'
 
 export default class SexController {
-  public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
-
   public view(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
 
-      const data = await this.expectedArrivalsService.getArrival(id)
+      const data = State.newArrival.get(req)
 
-      const genderValue = this.convertGenderKeyToValue(data.gender)
+      const genderValue = this.convertGenderKeyToValue(data.sex)
 
       if (genderValue) {
-        State.sex.set(res, genderValue)
+        State.newArrival.update(req, res, { sex: genderValue })
         return res.redirect(`/prisoners/${id}/imprisonment-status`)
       }
 
       return res.render('pages/bookedtoday/arrivals/sex.njk', {
         errors: req.flash('errors'),
+        id,
         data,
       })
     }
@@ -34,7 +32,7 @@ export default class SexController {
         return res.redirect(`/prisoners/${id}/sex`)
       }
 
-      State.sex.set(res, sex)
+      State.newArrival.update(req, res, { sex })
 
       return res.redirect(`/prisoners/${id}/imprisonment-status`)
     }

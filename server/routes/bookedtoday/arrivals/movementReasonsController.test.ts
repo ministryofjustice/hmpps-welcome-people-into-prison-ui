@@ -1,21 +1,17 @@
-import type { Arrival, ImprisonmentStatus } from 'welcome'
+import type { ImprisonmentStatus } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
-import { appWithAllRoutes, flashProvider } from '../../__testutils/appSetup'
+import { appWithAllRoutes, signedCookiesProvider, flashProvider } from '../../__testutils/appSetup'
 import ImprisonmentStatusesService from '../../../services/imprisonmentStatusesService'
-import ExpectedArrivalsService from '../../../services/expectedArrivalsService'
 import { expectSettingCookie } from '../../__testutils/requestTestUtils'
 
 jest.mock('../../../services/imprisonmentStatusesService')
-jest.mock('../../../services/expectedArrivalsService')
 
 const imprisonmentStatusesService = new ImprisonmentStatusesService(
   null,
   null
 ) as jest.Mocked<ImprisonmentStatusesService>
-
-const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
 
 let app: Express
 
@@ -34,8 +30,17 @@ const imprisonmentStatus: ImprisonmentStatus = {
 }
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { imprisonmentStatusesService, expectedArrivalsService } })
-  expectedArrivalsService.getArrival.mockResolvedValue({} as Arrival)
+  signedCookiesProvider.mockReturnValue({
+    'new-arrival': {
+      firstName: 'Jim',
+      lastName: 'Smith',
+      dateOfBirth: '1973-01-08',
+      prisonNumber: 'A1234AB',
+      pncNumber: '01/98644M',
+      sex: 'M',
+    },
+  })
+  app = appWithAllRoutes({ services: { imprisonmentStatusesService } })
   imprisonmentStatusesService.getImprisonmentStatus.mockResolvedValue(imprisonmentStatus)
 })
 
@@ -51,7 +56,6 @@ describe('/determinate-sentence', () => {
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           expect(imprisonmentStatusesService.getImprisonmentStatus).toHaveBeenCalledWith('determinate-sentence')
-          expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
         })
     })
 
@@ -62,6 +66,7 @@ describe('/determinate-sentence', () => {
         .expect(res => {
           const $ = cheerio.load(res.text)
           expect($('h1').text()).toContain('What is the type of determinate sentence?')
+          expect($('.data-qa-prisoner-name').text()).toContain('Jim Smith')
         })
     })
   })
@@ -80,13 +85,19 @@ describe('/determinate-sentence', () => {
         })
     })
 
-    it('should set cookie', () => {
+    it('should update cookie', () => {
       return request(app)
         .post('/prisoners/12345-67890/imprisonment-status/determinate-sentence')
         .send({ movementReason: '26' })
         .expect(302)
         .expect(res => {
-          expectSettingCookie(res, 'status-and-reason').toStrictEqual({
+          expectSettingCookie(res, 'new-arrival').toStrictEqual({
+            firstName: 'Jim',
+            lastName: 'Smith',
+            dateOfBirth: '1973-01-08',
+            prisonNumber: 'A1234AB',
+            pncNumber: '01/98644M',
+            sex: 'M',
             code: 'determinate-sentence',
             imprisonmentStatus: 'SENT',
             movementReasonCode: '26',

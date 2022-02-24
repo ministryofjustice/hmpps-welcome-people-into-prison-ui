@@ -2,6 +2,8 @@ import type { Arrival } from 'welcome'
 import type { RequestHandler, Response } from 'express'
 import type { ExpectedArrivalsService } from '../../services'
 import { LocationType } from '../../services/expectedArrivalsService'
+import { State } from './arrivals/state'
+import { convertToTitleCase } from '../../utils/utils'
 
 export default class ChoosePrisonerController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
@@ -17,15 +19,29 @@ export default class ChoosePrisonerController {
   }
 
   private handleNewPrisoner(arrival: Arrival, res: Response): void | PromiseLike<void> {
-    return !arrival.prisonNumber && !arrival.pncNumber
-      ? res.redirect(`/prisoners/${arrival.id}/search-for-existing-record/new`)
-      : /**
-         * TODO 3 situations to deal with, will redirect to new pages for each of:
-         * - no matches         - show "This person doesn't have a record"
-         * - multiple matches   - show "Possible existing records found"
-         * - 1 match found      - show "This person has existing record"
-         */
-        res.redirect(`/prisoners/${arrival.id}/confirm-arrival`)
+    if (!arrival.prisonNumber && !arrival.pncNumber) {
+      State.newArrival.clear(res)
+      return res.redirect(`/prisoners/${arrival.id}/search-for-existing-record/new`)
+    }
+    if (arrival.potentialMatches.length >= 1) {
+      const match = arrival.potentialMatches[0]
+      State.newArrival.set(res, {
+        firstName: convertToTitleCase(match.firstName),
+        lastName: convertToTitleCase(match.lastName),
+        dateOfBirth: match.dateOfBirth,
+        // TODO: add sex to potential match object on cookie
+        sex: arrival.gender,
+        prisonNumber: match.prisonNumber,
+        pncNumber: match.pncNumber,
+      })
+      return res.redirect(`/prisoners/${arrival.id}/record-found`)
+    }
+    State.newArrival.clear(res)
+    return res.redirect(`/prisoners/${arrival.id}/no-record-found`)
+
+    /**
+     * TODO deal with multiple matches   - show "Possible existing records found"
+     */
   }
 
   private handleCurrentPrisoner(arrival: Arrival, res: Response): void | PromiseLike<void> {
