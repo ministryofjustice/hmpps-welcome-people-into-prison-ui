@@ -81,11 +81,4 @@ context('Possible existing records', () => {
       .errorMessage()
       .should('contain', 'Select an existing record or search using different details')
   })
-
-  it('should progress to next page if no errors', () => {
-    const possibleRecordsFoundPage = PossibleRecordsFoundPage.goTo('11111-11111')
-    possibleRecordsFoundPage.radioButtonOne().check()
-    possibleRecordsFoundPage.continue().click()
-    Page.verifyOnPage(ImprisonmentStatus)
-  })
 })
