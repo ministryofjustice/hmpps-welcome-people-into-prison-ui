@@ -17,6 +17,10 @@
         {   key:     { text: "PNC number", classes: "govuk-!-padding-bottom-0" },
             value:   { text:  data.pncNumber, classes: "govuk-!-padding-bottom-0 data-qa-" + dataQa + "-pnc-number" },
             show:    data.pncNumber
+        },
+        {   key:     { text: "CRO number", classes: "govuk-!-padding-bottom-0" },
+            value:   { text:  data.croNumber, classes: "govuk-!-padding-bottom-0 data-qa-" + dataQa + "-cro-number" },
+            show:    data.croNumber
         }
     ] | selectattr("show")
     %}

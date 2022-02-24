@@ -65,6 +65,20 @@ export default {
       },
     })
   },
+  stubMatchedRecords: (matches: Record<string, string>[]): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/welcome/match-prisoners`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: matches,
+      },
+    })
+  },
+
   stubTransfer: ({
     caseLoadId,
     prisonNumber,
@@ -207,6 +221,19 @@ export default {
         headers: {
           'Content-Type': 'image/jpeg',
         },
+      },
+    })
+  },
+  stubPrisonerDetails: (details): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/welcome/prisoners/${details.prisonNumber}`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: details,
       },
     })
   },

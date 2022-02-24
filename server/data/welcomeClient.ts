@@ -7,6 +7,9 @@ import type {
   Prison,
   ImprisonmentStatus,
   UserCaseLoad,
+  PotentialMatch,
+  PotentialMatchCriteria,
+  PrisonerDetails,
 } from 'welcome'
 import type { Readable } from 'stream'
 import { ArrivalResponse } from 'welcome'
@@ -128,5 +131,21 @@ export default class WelcomeClient {
     return this.restClient.get({
       path: '/prison/users/me/caseLoads',
     }) as Promise<UserCaseLoad[]>
+  }
+
+  async getMatchingRecords(matchCriteria: PotentialMatchCriteria): Promise<PotentialMatch[]> {
+    logger.info(`welcomeApi: match-prisoners`)
+
+    return (await this.restClient.post({
+      path: '/match-prisoners',
+      data: matchCriteria,
+    })) as Promise<PotentialMatch[]>
+  }
+
+  async getPrisonerDetails(prisonNumber: string): Promise<PrisonerDetails> {
+    logger.info(`welcomeApi: getPrison(${prisonNumber})`)
+    return this.restClient.get({
+      path: `/prisoners/${prisonNumber}`,
+    }) as Promise<PrisonerDetails>
   }
 }

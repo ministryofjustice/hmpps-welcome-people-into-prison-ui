@@ -7,6 +7,7 @@ import ImprisonmentStatusesController from './imprisonmentStatusesController'
 import MovementReasonsController from './movementReasonsController'
 import searchForExistingRecordRoutes from './searchforexisting'
 import courtReturnRoutes from './courtreturns'
+import matchingRecordsRoutes from './matchingRecords'
 
 import imprisonmentStatusesValidation from '../../../middleware/validation/imprisonmentStatusesValidation'
 import movementReasonsValidation from '../../../middleware/validation/movementReasonsValidation'
@@ -89,6 +90,7 @@ export default function routes(services: Services): Router {
 
   router.use(searchForExistingRecordRoutes(services))
   router.use(courtReturnRoutes(services))
+  router.use(matchingRecordsRoutes(services))
 
   return router
 }

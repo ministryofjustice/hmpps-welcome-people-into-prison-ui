@@ -293,4 +293,30 @@ describe('Expected arrivals service', () => {
       expect(welcomeClient.confirmCourtReturn).toBeCalledWith('12345-67890', 'MDI')
     })
   })
+
+  describe('matching records', () => {
+    it('calls upstream service with correct args', async () => {
+      const potentialMatchCriteria = {
+        firstName: arrival.firstName,
+        lastName: arrival.lastName,
+        dateOfBirth: arrival.dateOfBirth,
+      }
+
+      await service.getMatchingRecords(potentialMatchCriteria)
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      expect(WelcomeClientFactory).toBeCalledWith(token)
+      expect(welcomeClient.getMatchingRecords).toBeCalledWith(potentialMatchCriteria)
+    })
+  })
+
+  describe('get prisoner details', () => {
+    it('calls upstream service with correct args', async () => {
+      const prisonNumber = 'A1234BC'
+
+      await service.getPrisonerDetails(prisonNumber)
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      expect(WelcomeClientFactory).toBeCalledWith(token)
+      expect(welcomeClient.getPrisonerDetails).toBeCalledWith(prisonNumber)
+    })
+  })
 })

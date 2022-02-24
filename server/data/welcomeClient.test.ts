@@ -299,4 +299,49 @@ describe('welcomeClient', () => {
       expect(output).toEqual(mockResponse)
     })
   })
+  describe('matching records', () => {
+    const arrival = {
+      firstName: 'James',
+      lastName: 'Charles',
+      dateOfBirth: '1988-07-13',
+    }
+    const matchedRecords = [
+      {
+        firstName: 'James',
+        lastName: 'Charles',
+        dateOfBirth: '1988-07-13',
+        prisonNumber: 'A5534HA',
+        pncNumber: '11/836373L',
+        croNumber: '952184/22A',
+      },
+      {
+        firstName: 'James Paul',
+        lastName: 'Charles',
+        dateOfBirth: '1988-07-13',
+        prisonNumber: 'A3684DA',
+        pncNumber: '07/652634A',
+        croNumber: '342256/21A',
+      },
+    ]
+    it('should get matching records', async () => {
+      fakeWelcomeApi
+        .post(`/match-prisoners`, arrival)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, matchedRecords)
+
+      const output = await welcomeClient.getMatchingRecords(arrival)
+      expect(output).toStrictEqual(matchedRecords)
+    })
+
+    it('should get prisoner details', async () => {
+      const prisonNumber = 'A3684DA'
+      fakeWelcomeApi
+        .get(`/prisoners/${prisonNumber}`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, matchedRecords[1])
+
+      const output = await welcomeClient.getPrisonerDetails(prisonNumber)
+      expect(output).toEqual(matchedRecords[1])
+    })
+  })
 })
