@@ -36,7 +36,7 @@ context('Feature not available', () => {
     imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()
     imprisonmentStatusPage.continue().click()
 
-    const checkAnswersPage = CheckAnswersPage.goTo(expectedArrival.id)
+    const checkAnswersPage = Page.verifyOnPage(CheckAnswersPage)
 
     checkAnswersPage.addToRoll().click()
     Page.verifyOnPage(FeatureNotAvailable)

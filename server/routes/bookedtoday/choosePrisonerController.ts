@@ -36,15 +36,6 @@ export default class ChoosePrisonerController {
       })
       return res.redirect(`/prisoners/${arrival.id}/record-found`)
     }
-
-    State.newArrival.set(res, {
-      firstName: arrival.firstName,
-      lastName: arrival.lastName,
-      dateOfBirth: arrival.dateOfBirth,
-      sex: arrival.gender,
-      prisonNumber: arrival.prisonNumber,
-      pncNumber: arrival.pncNumber,
-    })
     return res.redirect(`/prisoners/${arrival.id}/no-record-found`)
 
     /**

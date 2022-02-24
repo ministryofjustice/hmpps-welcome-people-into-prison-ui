@@ -44,7 +44,7 @@ export default function routes(services: Services): Router {
   const singleRecordFoundController = new SingleRecordFoundController(services.expectedArrivalsService)
   get('/prisoners/:id/record-found', [singleRecordFoundController.view()], [Role.PRISON_RECEPTION])
 
-  const noRecordFoundController = new NoRecordFoundController()
+  const noRecordFoundController = new NoRecordFoundController(services.expectedArrivalsService)
   get('/prisoners/:id/no-record-found', [noRecordFoundController.view()], [Role.PRISON_RECEPTION])
 
   const sexController = new SexController()
