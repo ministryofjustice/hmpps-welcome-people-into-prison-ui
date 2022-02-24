@@ -10,7 +10,6 @@ export default class ChoosePrisonerController {
   public view(): RequestHandler {
     return async (req, res) => {
       const { activeCaseLoadId } = res.locals.user
-      State.newArrival.clear(res)
       const expectedArrivals = await this.expectedArrivalsService.getArrivalsForToday(activeCaseLoadId)
       return res.render('pages/bookedtoday/choosePrisoner.njk', {
         expectedArrivals,
@@ -46,6 +45,7 @@ export default class ChoosePrisonerController {
   public redirectToConfirm(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
+      State.newArrival.clear(res)
       const arrival = await this.expectedArrivalsService.getArrival(id)
       return arrival.isCurrentPrisoner //
         ? this.handleCurrentPrisoner(arrival, res) //

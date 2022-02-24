@@ -37,7 +37,7 @@ beforeEach(() => {
         pncNumber: '01/98644M',
       },
     ],
-  } as Arrival)
+  } as unknown as Arrival)
 })
 
 afterEach(() => {

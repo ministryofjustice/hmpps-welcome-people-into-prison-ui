@@ -134,14 +134,6 @@ describe('GET /confirm-arrival/choose-prisoner', () => {
       })
   })
 
-  it('should clear cookie', () => {
-    return request(app)
-      .get('/confirm-arrival/choose-prisoner')
-      .expect(res => {
-        expectSettingCookie(res, 'new-arrival').toBeUndefined()
-      })
-  })
-
   it('should call service method correctly', () => {
     return request(app)
       .get('/confirm-arrival/choose-prisoner')
@@ -182,6 +174,23 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
     } as Arrival)
 
   describe('from court', () => {
+    it('should clear cookie', () => {
+      expectedArrivalsService.getArrival.mockResolvedValue(
+        arrival({
+          prisonNumber: 'A1234AA',
+          pncNumber: '01/123456',
+          fromLocationType: LocationType.COURT,
+          isCurrentPrisoner: true,
+          potentialMatches: [],
+        })
+      )
+      return request(app)
+        .get('/confirm-arrival/choose-prisoner/aaa-111-222')
+        .expect(res => {
+          expectSettingCookie(res, 'new-arrival').toBeUndefined()
+        })
+    })
+
     it('should redirect to court transfer when current', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
