@@ -225,6 +225,7 @@ describe('welcomeClient', () => {
       prisonId: 'MDI',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',
+      prisonNumber: 'A1234AA',
     }
 
     it('should send data to api and return a prisoner number', async () => {

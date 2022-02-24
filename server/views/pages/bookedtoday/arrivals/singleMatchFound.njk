@@ -1,0 +1,50 @@
+{% extends "../../../partials/layout.njk" %}
+{% from "../../../components/prisoner-summary-detail.njk" import prisonerSummaryDetail %}
+
+{% block content %}
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <span class="govuk-caption-xl"> Confirm a prisoner's arrival </span>
+                    <h1 class="govuk-heading-l govuk-!-margin-bottom-7">This person has an existing prisoner record</h1>
+                    <p> {{ existingArrival.firstName }} {{ existingArrival.lastName }} will be booked into the establishment using their existing prisoner record.</p>
+                </div>
+            </div>
+            <div class="govuk-grid-row govuk-!-padding-left-3 govuk-!-margin-top-4 govuk-!-margin-bottom-8 flex" >
+                <div class="column-width-40 govuk-!-padding-right-9">
+                    <h2 class="govuk-heading-m">Details from Person Escort Record</h2>
+                    <div class = "prisoner-record-detail prisoner-head">
+                        {{ prisonerSummaryDetail(perRecord, "per-record" ) }}
+                    </div>
+                </div>
+
+                <div class=" border-left-grey govuk-!-padding-left-9 column-width-60">
+                    <h2 class="govuk-heading-m">Details from existing prisoner record</h2> 
+                    <div class="prisoner-record-detail flex">
+                        {{ prisonerSummaryDetail(existingArrival, "existing-record") }}
+                        <img src="{{ '/prisoners/' + existingArrival.prisonNumber + '/image' if existingArrival.prisonNumber else '/assets/images/placeholder-image.png' }}" 
+                             class="prisoner-image-transfer govuk-!-margin-top-2" 
+                             alt="{{ existingArrival.lastName }}, {{ existingArrival.firstName }}" 
+                             data-qa="prisoner-image" 
+                        />
+                    </div>
+                 </div>
+            </div> 
+            <div>   
+                {{ govukButton({
+                    classes: "govuk-button govuk-!-margin-bottom-6",
+                    href: "/prisoners/" + id + "/sex",
+                    text: "Continue",
+                    attributes: {'data-qa': 'continue'}
+                }) }}
+
+                <p>
+                    <a class="govuk-body govuk-link govuk-link--no-visited-state" href="/confirm-arrival/choose-prisoner" data-qa="choose-prisoner">
+                        Return to list of prisoners arriving today
+                    </a>
+                </p> 
+            </div>   
+        </main>
+    </div>
+{% endblock %}

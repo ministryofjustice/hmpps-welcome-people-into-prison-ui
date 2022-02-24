@@ -21,8 +21,13 @@ const raiseAnalyticsEvent = jest.fn() as RaiseAnalyticsEvent
 
 beforeEach(() => {
   signedCookiesProvider.mockReturnValue({
-    sex: { data: 'M' },
-    'status-and-reason': {
+    'new-arrival': {
+      firstName: 'Jim',
+      lastName: 'Smith',
+      dateOfBirth: '1973-01-08',
+      prisonNumber: 'A1234AB',
+      pncNumber: '01/98644M',
+      sex: 'M',
       code: 'determinate-sentence',
       imprisonmentStatus: 'SENT',
       movementReasonCode: '26',
@@ -64,13 +69,12 @@ describe('/checkAnswers', () => {
       return request(app).get('/prisoners/12345-67890/check-answers').expect(302).expect('Location', '/autherror')
     })
 
-    it('should get status and reason from cookie and call service methods correctly', () => {
+    it('should call service methods correctly', () => {
       return request(app)
         .get('/prisoners/12345-67890/check-answers')
         .expect(200)
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
-          expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
           expect(imprisonmentStatusesService.getReasonForImprisonment).toHaveBeenCalledWith({
             code: 'determinate-sentence',
             imprisonmentStatus: 'SENT',
@@ -100,6 +104,7 @@ describe('/checkAnswers', () => {
       prisonId: 'MDI',
       imprisonmentStatus: 'SENT',
       movementReasonCode: '26',
+      prisonNumber: 'A1234AB',
     }
 
     it('should redirect to /feature-not-available ', () => {
@@ -107,24 +112,18 @@ describe('/checkAnswers', () => {
 
       return request(app)
         .post('/prisoners/12345-67890/check-answers')
-        .send(newOffender)
         .expect(302)
         .expect('Location', '/feature-not-available')
     })
 
     it('should redirect to authentication error page for non reception users', () => {
       app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [] })
-      return request(app)
-        .post('/prisoners/12345-67890/check-answers')
-        .send(newOffender)
-        .expect(302)
-        .expect('Location', '/autherror')
+      return request(app).post('/prisoners/12345-67890/check-answers').expect(302).expect('Location', '/autherror')
     })
 
     it('should call service methods correctly', () => {
       return request(app)
         .post('/prisoners/12345-67890/check-answers')
-        .send(newOffender)
         .expect(302)
         .expect(() => {
           expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
@@ -139,11 +138,12 @@ describe('/checkAnswers', () => {
     it('should redirect to /confirmation page, store arrival response data in flash and raise analytics event', () => {
       return request(app)
         .post('/prisoners/12345-67890/check-answers')
-        .send(newOffender)
         .expect(302)
         .expect('Location', '/prisoners/12345-67890/confirmation')
         .expect(() => {
           expect(flashProvider).toHaveBeenCalledWith('arrivalResponse', {
+            firstName: 'Jim',
+            lastName: 'Smith',
             location: 'Reception',
             prisonNumber: 'A1234AB',
           })

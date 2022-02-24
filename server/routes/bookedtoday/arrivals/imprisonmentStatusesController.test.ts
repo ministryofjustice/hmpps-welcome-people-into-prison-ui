@@ -2,24 +2,31 @@ import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
 import { ImprisonmentStatus } from 'welcome'
-import { appWithAllRoutes, flashProvider } from '../../__testutils/appSetup'
+import { appWithAllRoutes, signedCookiesProvider, flashProvider } from '../../__testutils/appSetup'
+import { expectSettingCookie } from '../../__testutils/requestTestUtils'
 import ImprisonmentStatusesService from '../../../services/imprisonmentStatusesService'
-import ExpectedArrivalsService from '../../../services/expectedArrivalsService'
 
 jest.mock('../../../services/imprisonmentStatusesService')
-jest.mock('../../../services/expectedArrivalsService')
 
 const imprisonmentStatusesService = new ImprisonmentStatusesService(
   null,
   null
 ) as jest.Mocked<ImprisonmentStatusesService>
-const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
 
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { imprisonmentStatusesService, expectedArrivalsService } })
-  expectedArrivalsService.getArrival.mockResolvedValue(null)
+  signedCookiesProvider.mockReturnValue({
+    'new-arrival': {
+      firstName: 'Jim',
+      lastName: 'Smith',
+      dateOfBirth: '1973-01-08',
+      prisonNumber: 'A1234AB',
+      pncNumber: '01/98644M',
+      sex: 'M',
+    },
+  })
+  app = appWithAllRoutes({ services: { imprisonmentStatusesService } })
   imprisonmentStatusesService.getAllImprisonmentStatuses.mockResolvedValue([] as ImprisonmentStatus[])
 })
 
@@ -36,6 +43,7 @@ describe('/imprisonment-status', () => {
         .expect(res => {
           const $ = cheerio.load(res.text)
           expect($('h1').text()).toContain('What is the reason for imprisonment?')
+          expect($('.data-qa-prisoner-name').text()).toContain('Jim Smith')
         })
     })
 
@@ -45,7 +53,6 @@ describe('/imprisonment-status', () => {
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           expect(imprisonmentStatusesService.getAllImprisonmentStatuses).toHaveBeenCalled()
-          expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
         })
     })
   })
@@ -109,7 +116,7 @@ describe('/imprisonment-status', () => {
         .expect('Location', '/prisoners/12345-67890/check-answers')
     })
 
-    it('should set cookie when single movement reason', () => {
+    it('should update cookie when single movement reason', () => {
       imprisonmentStatusesService.getImprisonmentStatus.mockResolvedValue({
         code: 'recapture',
         description: 'Recapture after escape',
@@ -126,11 +133,17 @@ describe('/imprisonment-status', () => {
         .send({ imprisonmentStatus: 'recapture' })
         .expect(302)
         .expect(res => {
-          expect(res.header['set-cookie'][0]).toContain(
-            encodeURIComponent(
-              JSON.stringify({ code: 'recapture', imprisonmentStatus: 'SENT03', movementReasonCode: 'RECA' })
-            )
-          )
+          expectSettingCookie(res, 'new-arrival').toStrictEqual({
+            firstName: 'Jim',
+            lastName: 'Smith',
+            dateOfBirth: '1973-01-08',
+            pncNumber: '01/98644M',
+            prisonNumber: 'A1234AB',
+            sex: 'M',
+            code: 'recapture',
+            imprisonmentStatus: 'SENT03',
+            movementReasonCode: 'RECA',
+          })
         })
     })
 

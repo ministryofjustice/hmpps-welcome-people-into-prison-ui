@@ -1,4 +1,4 @@
-import Page, { PageElement } from '../page'
+import Page, { PageConstructor, PageElement } from '../page'
 
 export default class ChoosePrisonerPage extends Page {
   constructor() {
@@ -8,6 +8,11 @@ export default class ChoosePrisonerPage extends Page {
   static goTo(): ChoosePrisonerPage {
     cy.visit(`/confirm-arrival/choose-prisoner`)
     return Page.verifyOnPage(ChoosePrisonerPage)
+  }
+
+  static selectPrisoner<T extends Page>(id: string, expectedPage: PageConstructor<T>): T {
+    cy.visit(`/confirm-arrival/choose-prisoner/${id}`)
+    return Page.verifyOnPage(expectedPage)
   }
 
   expectedArrivalsFromCourt = (index: number): PageElement => cy.get(`[data-qa=COURT-title-${index}]`)

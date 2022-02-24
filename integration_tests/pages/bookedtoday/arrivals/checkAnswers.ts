@@ -5,11 +5,6 @@ export default class CheckAnswersPage extends Page {
     super('Check your answers before adding')
   }
 
-  static goTo(id: string): CheckAnswersPage {
-    cy.visit(`/prisoners/${id}/check-answers`)
-    return Page.verifyOnPage(CheckAnswersPage)
-  }
-
   name = (): PageElement => cy.get(`[data-qa=prisoner-name]`)
 
   dob = (): PageElement => cy.get(`[data-qa=dob]`)

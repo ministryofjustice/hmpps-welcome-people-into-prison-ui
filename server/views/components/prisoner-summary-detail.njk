@@ -1,64 +1,35 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% macro prisonerSummaryDetail(data, dataQa) %}
+    {% set rows = [
+        {   key:     { text: "Name", classes:"govuk-!-padding-bottom-0" },
+            value:   { text: data.firstName + " " + data.lastName, classes: "govuk-!-padding-bottom-0 data-qa-" + dataQa + "-prisoner-name" },
+            show:    true
+        },
+        {   key:     { text: "Date of birth", classes:"govuk-!-padding-bottom-0" },
+            value:   { text: data.dateOfBirth | formatDate('D MMMM YYYY'), classes: "govuk-!-padding-bottom-0 data-qa-" + dataQa + "-dob" },
+            show:    true
+        },
+        {   key:     { text: "Prison number", classes: "govuk-!-padding-bottom-0" },
+            value:   { text:  data.prisonNumber,  classes: "govuk-!-padding-bottom-0 data-qa-"+ dataQa + "-prison-number" },
+            show:    data.prisonNumber           
+        },
+        {   key:     { text: "PNC number", classes: "govuk-!-padding-bottom-0" },
+            value:   { text:  data.pncNumber, classes: "govuk-!-padding-bottom-0 data-qa-" + dataQa + "-pnc-number" },
+            show:    data.pncNumber
+        },
+        {   key:     { text: "CRO number", classes: "govuk-!-padding-bottom-0" },
+            value:   { text:  data.croNumber, classes: "govuk-!-padding-bottom-0 data-qa-" + dataQa + "-cro-number" },
+            show:    data.croNumber
+        },
+    ] | selectattr("show")
+    %}
+
     <div>
       {{ govukSummaryList({
       attributes: {'data-qa': dataQa},
-      classes: "govuk-!-margin-bottom-0 govuk-!-padding-bottom-0 govuk-summary-list--no-border",
-      rows: [
-          {
-          key: {
-              text: "Name",
-              classes: "govuk-!-padding-bottom-0 width-one-third"
-          },
-          value: {
-              text: data.firstName + ' ' + data.lastName,
-              classes: "govuk-!-padding-bottom-0 data-qa-"+ dataQa +"-prisoner-name"
-          }
-          },
-          {
-          key: {
-              text: "Date of birth",
-              classes: "govuk-!-padding-bottom-0 width-one-third"
-
-          },
-          value: {
-              text:  data.dateOfBirth | formatDate('D MMMM YYYY'),
-              classes: "govuk-!-padding-bottom-0 data-qa-"+ dataQa +"-dob"
-          }
-
-          },
-          {
-          key: {
-              text: "Prison number" if  data.prisonNumber,
-              classes: "govuk-!-padding-bottom-0 width-one-third"
-          },
-          value: {
-              text:  data.prisonNumber if  data.prisonNumber,
-              classes: "govuk-!-padding-bottom-0 data-qa-"+ dataQa +"-prison-number"
-          }
-          },
-          {
-          key: {
-              text: "PNC number" if  data.pncNumber,
-              classes: "govuk-!-padding-bottom-0 width-one-third"
-          },
-          value: {
-              text:  data.pncNumber if  data.pncNumber,
-              classes: "govuk-!-padding-bottom-0 data-qa-"+ dataQa +"-pnc-number"
-          }
-          },
-          {
-          key: {
-              text: "CRO number" if  data.pncNumber,
-              classes: "govuk-!-padding-bottom-0 width-one-third"
-          },
-          value: {
-              text:  data.croNumber if  data.croNumber,
-              classes: "govuk-!-padding-bottom-0 data-qa-"+ dataQa +"-cro-number"
-          }
-          }
-      ]
+      classes: "govuk-!-margin-bottom-0 govuk-summary-list--no-border",
+      rows: rows
       }) }}
   </div>
 {% endmacro %}

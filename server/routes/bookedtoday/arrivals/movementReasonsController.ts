@@ -1,12 +1,9 @@
 import type { RequestHandler } from 'express'
-import type { ExpectedArrivalsService, ImprisonmentStatusesService } from '../../../services'
+import type { ImprisonmentStatusesService } from '../../../services'
 import { State } from './state'
 
 export default class MovementReasonsController {
-  public constructor(
-    private readonly imprisonmentStatusesService: ImprisonmentStatusesService,
-    private readonly expectedArrivalsService: ExpectedArrivalsService
-  ) {}
+  public constructor(private readonly imprisonmentStatusesService: ImprisonmentStatusesService) {}
 
   public view(): RequestHandler {
     return async (req, res) => {
@@ -15,9 +12,11 @@ export default class MovementReasonsController {
       const { movementReasons, secondLevelTitle } = await this.imprisonmentStatusesService.getImprisonmentStatus(
         imprisonmentStatus
       )
-      const data = await this.expectedArrivalsService.getArrival(id)
+
+      const data = State.newArrival.get(req)
 
       return res.render('pages/bookedtoday/arrivals/movementReason.njk', {
+        id,
         errors: req.flash('errors'),
         imprisonmentStatus,
         secondLevelTitle,
@@ -40,7 +39,7 @@ export default class MovementReasonsController {
         imprisonmentStatus
       )
 
-      State.imprisonmentStatus.set(res, {
+      State.newArrival.update(req, res, {
         code: selectedImprisonmentStatus.code,
         imprisonmentStatus: selectedImprisonmentStatus.imprisonmentStatusCode,
         movementReasonCode: movementReason,

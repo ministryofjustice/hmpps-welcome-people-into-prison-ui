@@ -75,7 +75,7 @@ export const expectSettingCookie = (res: superAgent.Response, cookieName: string
 
   expect(name).toBe(cookieName)
 
-  const results = decodeURIComponent(value).match(/(\{.*?\})/)
+  const results = decodeURIComponent(value).match(/(\{.*\})/)
 
   return results ? expect(JSON.parse(results[1])) : expect(undefined)
 }

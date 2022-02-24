@@ -5,11 +5,6 @@ export default class HomePage extends Page {
     super('Welcome people into prison')
   }
 
-  static goTo(): HomePage {
-    cy.visit(`/`)
-    return Page.verifyOnPage(HomePage)
-  }
-
   hmpps = (): PageElement => cy.get('[data-qa=hmpps]')
 
   digitalPrisonServices = (): PageElement => cy.get('[data-qa=digital-prison-services]')
