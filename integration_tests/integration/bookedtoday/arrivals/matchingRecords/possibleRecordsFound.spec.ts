@@ -1,7 +1,6 @@
 import ChoosePrisonerPage from '../../../../pages/bookedtoday/choosePrisoner'
 import PossibleRecordsFoundPage from '../../../../pages/bookedtoday/arrivals/matchingRecords/possibleRecordsFound'
 import SearchForExistingPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/searchForExisting'
-import ImprisonmentStatus from '../../../../pages/bookedtoday/arrivals/imprisonmentStatus'
 
 import Page from '../../../../pages/page'
 import Role from '../../../../../server/authentication/role'
@@ -45,7 +44,6 @@ context('Possible existing records', () => {
     cy.task('stubExpectedArrival', arrival)
     cy.task('stubMatchedRecords', matchedRecords)
     cy.task('stubPrisonerDetails', matchedRecords[0])
-    cy.task('stubImprisonmentStatus')
     cy.signIn()
 
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
