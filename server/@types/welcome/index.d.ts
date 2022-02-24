@@ -106,15 +106,6 @@ declare module 'welcome' {
       prisonNumber?: string
       pncNumber?: string
       croNumber?: string
-      sex: string
-    }
-    PotentialMatch: {
-      firstName: string
-      lastName: string
-      dateOfBirth: string
-      prisonNumber?: string
-      pncNumber?: string
-      croNumber?: string
       sex: GenderKeys
     }
     PrisonerDetails: {
