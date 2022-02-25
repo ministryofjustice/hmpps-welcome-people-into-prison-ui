@@ -15,14 +15,17 @@ RUN addgroup --gid 2000 --system appgroup && \
 WORKDIR /app
 
 RUN apt-get update && \
-    apt-get upgrade -y
+    apt-get upgrade -y && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*
 
 # Stage: build assets
 FROM base as build
 ARG BUILD_NUMBER
 ARG GIT_REF
 
-RUN apt-get install -y make python g++
+RUN apt-get update && \
+    apt-get install -y make python g++
 
 COPY package*.json ./
 RUN CYPRESS_INSTALL_BINARY=0 npm ci --no-audit
