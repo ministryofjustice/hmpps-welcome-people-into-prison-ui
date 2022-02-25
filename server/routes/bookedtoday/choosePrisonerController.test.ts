@@ -174,6 +174,23 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
     } as Arrival)
 
   describe('from court', () => {
+    it('should clear cookie', () => {
+      expectedArrivalsService.getArrival.mockResolvedValue(
+        arrival({
+          prisonNumber: 'A1234AA',
+          pncNumber: '01/123456',
+          fromLocationType: LocationType.COURT,
+          isCurrentPrisoner: true,
+          potentialMatches: [],
+        })
+      )
+      return request(app)
+        .get('/confirm-arrival/choose-prisoner/aaa-111-222')
+        .expect(res => {
+          expectSettingCookie(res, 'new-arrival').toBeUndefined()
+        })
+    })
+
     it('should redirect to court transfer when current', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
@@ -206,7 +223,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
         .expect('Location', '/prisoners/1111-2222-3333-4444/search-for-existing-record/new')
     })
 
-    it('should set state and redirect to search results when not current and PNC provided', () => {
+    it('should redirect to search results when not current and PNC provided', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
           prisonNumber: undefined,
@@ -229,15 +246,6 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
         .get('/confirm-arrival/choose-prisoner/aaa-111-222')
         .expect('Content-Type', /text\/plain/)
         .expect('Location', '/prisoners/1111-2222-3333-4444/record-found')
-        .expect(res => {
-          expectSettingCookie(res, 'new-arrival').toStrictEqual({
-            dateOfBirth: '1961-01-01',
-            firstName: 'Harry',
-            lastName: 'Stanton',
-            pncNumber: '01/123456',
-            prisonNumber: 'A1234BC',
-          })
-        })
     })
 
     it('should redirect to search results when not current and no Prison Number provided', () => {
