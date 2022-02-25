@@ -1,6 +1,7 @@
 import type { RequestHandler, Request, Response } from 'express'
 import type { ExpectedArrivalsService } from '../../../../services'
-import { State } from './state'
+import { State as searchState } from './state'
+import { State as newState } from '../state'
 
 export default class PossibleRecordsFoundController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
@@ -8,7 +9,7 @@ export default class PossibleRecordsFoundController {
   public view(): RequestHandler {
     return async (req: Request, res: Response) => {
       const { id } = req.params
-      const searchData = State.searchDetails.get(req)
+      const searchData = searchState.searchDetails.get(req)
 
       const arrival = {
         firstName: searchData.firstName,
@@ -37,7 +38,8 @@ export default class PossibleRecordsFoundController {
 
       const { prisonNumber } = req.body
       const selectedRecord = await this.expectedArrivalsService.getPrisonerDetails(prisonNumber)
-      State.searchDetails.update(req, res, selectedRecord)
+
+      newState.newArrival.set(res, selectedRecord)
 
       return res.redirect(`/prisoners/${id}/sex`)
     }

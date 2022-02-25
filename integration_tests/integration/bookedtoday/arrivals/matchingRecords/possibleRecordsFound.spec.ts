@@ -1,6 +1,7 @@
 import ChoosePrisonerPage from '../../../../pages/bookedtoday/choosePrisoner'
 import PossibleRecordsFoundPage from '../../../../pages/bookedtoday/arrivals/matchingRecords/possibleRecordsFound'
 import SearchForExistingPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/searchForExisting'
+import ImprisonmentStatus from '../../../../pages/bookedtoday/arrivals/imprisonmentStatus'
 
 import Page from '../../../../pages/page'
 import Role from '../../../../../server/authentication/role'
@@ -43,6 +44,7 @@ context('Possible existing records', () => {
     cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [arrival] })
     cy.task('stubExpectedArrival', arrival)
     cy.task('stubMatchedRecords', matchedRecords)
+    cy.task('stubImprisonmentStatus')
     cy.task('stubPrisonerDetails', matchedRecords[0])
     cy.signIn()
 
@@ -52,31 +54,39 @@ context('Possible existing records', () => {
 
   it('should display page contents', () => {
     const possibleRecordsFoundPage = PossibleRecordsFoundPage.goTo('11111-11111')
-    possibleRecordsFoundPage.perElement('prisoner-name').should('contain', 'Bob Smith')
-    possibleRecordsFoundPage.perElement('dob').should('contain', '21 November 1972')
-    possibleRecordsFoundPage.matchingElement('1-prisoner-name').should('contain', 'Sam Smith')
-    possibleRecordsFoundPage.matchingElement('1-dob').should('contain', '1 February 1970')
-    possibleRecordsFoundPage.matchingElement('1-prison-number').should('contain', 'G0014GM')
-    possibleRecordsFoundPage.matchingElement('1-pnc-number').should('contain', '01/1111A')
-    possibleRecordsFoundPage.matchingElement('1-cro-number').should('contain', '01/0000A')
-    possibleRecordsFoundPage.matchingElement('2-prisoner-name').should('contain', 'Sammy Smith')
-    possibleRecordsFoundPage.matchingElement('2-dob').should('contain', '1 February 1970')
+    const arrival = possibleRecordsFoundPage.arrival()
+    arrival.fieldName('prisoner-name').should('contain', 'Bob Smith')
+    arrival.fieldName('dob').should('contain', '21 November 1972')
+
+    let match
+    match = possibleRecordsFoundPage.chooseMatch(1)
+    match.fieldName('prisoner-name').should('contain', 'Sam Smith')
+    match.fieldName('dob').should('contain', '1 February 1970')
+    match.fieldName('prison-number').should('contain', 'G0014GM')
+    match.fieldName('pnc-number').should('contain', '01/1111A')
+    match.fieldName('cro-number').should('contain', '01/0000A')
+
+    match = possibleRecordsFoundPage.chooseMatch(2)
+    match.fieldName('prisoner-name').should('contain', 'Sammy Smith')
+    match.fieldName('dob').should('contain', '1 February 1970')
+
     possibleRecordsFoundPage.prisonerImage().should('have.attr', 'src', `/prisoner/G0014GM/image`)
   })
 
   it('should allow a new search', () => {
     const possibleRecordsFoundPage = PossibleRecordsFoundPage.goTo('11111-11111')
-    possibleRecordsFoundPage.searchAgainLink().click()
+    possibleRecordsFoundPage.searchAgain().click()
     Page.verifyOnPage(SearchForExistingPage)
   })
   it('should display error messages', () => {
     const possibleRecordsFoundPage = PossibleRecordsFoundPage.goTo('11111-11111')
     possibleRecordsFoundPage.continue().click()
-    possibleRecordsFoundPage
-      .errorSummary()
-      .should('contain', 'Select an existing record or search using different details')
-    possibleRecordsFoundPage
-      .errorMessage()
-      .should('contain', 'Select an existing record or search using different details')
+    possibleRecordsFoundPage.hasError('Select an existing record or search using different details')
+  })
+  it('should progress to next page if no errors', () => {
+    const possibleRecordsFoundPage = PossibleRecordsFoundPage.goTo('11111-11111')
+    possibleRecordsFoundPage.match(1).click()
+    possibleRecordsFoundPage.continue().click()
+    Page.verifyOnPage(ImprisonmentStatus)
   })
 })
