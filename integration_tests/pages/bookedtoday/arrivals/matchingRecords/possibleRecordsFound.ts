@@ -10,19 +10,19 @@ export default class PossibleRecordsFoundPage extends Page {
     return Page.verifyOnPage(PossibleRecordsFoundPage)
   }
 
-  perElement = (element): PageElement => cy.get(`.data-qa-per-record-${element}`)
-
-  matchingElement = (element): PageElement => cy.get(`.data-qa-matching-record-${element}`)
+  arrival = () => ({
+    fieldName: name => cy.get(`.data-qa-per-record-${name}`),
+  })
 
   prisonerImage = (): PageElement => cy.get(`[data-qa=prisoner-image]`)
 
-  errorSummary = (): PageElement => cy.get('.govuk-error-summary__list')
+  searchAgain = (): PageElement => cy.get('[data-qa=ammend-search]')
 
-  errorMessage = (): PageElement => cy.get('.govuk-error-message')
+  chooseMatch = match => ({
+    fieldName: name => cy.get(`.data-qa-matching-record-${match}-${name}`),
+  })
 
-  searchAgainLink = (): PageElement => cy.get('[data-qa=ammend-search]')
-
-  radioButtonOne = (): PageElement => cy.get('#record-1')
+  match = (index): PageElement => cy.get(`#record-${index}`)
 
   continue = (): PageElement => cy.get('[data-qa=continue]')
 }
