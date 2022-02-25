@@ -1,6 +1,7 @@
 import ChoosePrisonerPage from '../../../../pages/bookedtoday/choosePrisoner'
 import PossibleRecordsFoundPage from '../../../../pages/bookedtoday/arrivals/matchingRecords/possibleRecordsFound'
 import SearchForExistingPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/searchForExisting'
+import ImprisonmentStatus from '../../../../pages/bookedtoday/arrivals/imprisonmentStatus'
 
 import Page from '../../../../pages/page'
 import Role from '../../../../../server/authentication/role'
@@ -43,6 +44,7 @@ context('Possible existing records', () => {
     cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [arrival] })
     cy.task('stubExpectedArrival', arrival)
     cy.task('stubMatchedRecords', matchedRecords)
+    cy.task('stubImprisonmentStatus')
     cy.task('stubPrisonerDetails', matchedRecords[0])
     cy.signIn()
 
@@ -78,5 +80,11 @@ context('Possible existing records', () => {
     possibleRecordsFoundPage
       .errorMessage()
       .should('contain', 'Select an existing record or search using different details')
+  })
+  it('should progress to next page if no errors', () => {
+    const possibleRecordsFoundPage = PossibleRecordsFoundPage.goTo('11111-11111')
+    possibleRecordsFoundPage.radioButtonOne().check()
+    possibleRecordsFoundPage.continue().click()
+    Page.verifyOnPage(ImprisonmentStatus)
   })
 })
