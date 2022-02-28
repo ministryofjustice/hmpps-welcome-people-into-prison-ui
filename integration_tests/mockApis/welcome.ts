@@ -259,7 +259,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: { prisonNumber: 'A1234AB', location: 'Reception' },
+        jsonBody: { prisonNumber: 'A1234BC', location: 'Reception' },
       },
     })
   },
