@@ -286,11 +286,11 @@ describe('Expected arrivals service', () => {
 
   describe('confirmCourtReturn', () => {
     it('Calls upstream services correctly', async () => {
-      await service.confirmCourtReturn('user1', '12345-67890', 'MDI')
+      await service.confirmCourtReturn('user1', '12345-67890', 'MDI', 'A1234AA')
 
       expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith('user1')
       expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.confirmCourtReturn).toBeCalledWith('12345-67890', 'MDI')
+      expect(welcomeClient.confirmCourtReturn).toBeCalledWith('12345-67890', 'MDI', 'A1234AA')
     })
   })
 

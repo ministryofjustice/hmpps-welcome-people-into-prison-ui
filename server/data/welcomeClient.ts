@@ -39,11 +39,11 @@ export default class WelcomeClient {
     }) as Promise<Arrival>
   }
 
-  async confirmCourtReturn(id: string, body: string): Promise<ArrivalResponse> {
+  async confirmCourtReturn(id: string, prisonId: string, prisonNumber: string): Promise<ArrivalResponse> {
     logger.info(`welcomeApi: confirmCourtReturn ${id})`)
     return this.restClient.post({
       path: `/court-returns/${id}/confirm`,
-      data: { prisonId: body },
+      data: { prisonId, prisonNumber },
     }) as Promise<ArrivalResponse>
   }
 

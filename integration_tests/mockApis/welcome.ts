@@ -4,7 +4,7 @@ import path from 'path'
 import defaultUserCaseLoads from './responses/userCaseLoads'
 import temporaryAbsences from './responses/temporaryAbsences'
 import imprisonmentStatuses from './responses/imprisonmentStatuses'
-import { stubFor } from './wiremock'
+import { getMatchingRequests, stubFor } from './wiremock'
 
 export default {
   stubPing: (): SuperAgentRequest => {
@@ -290,4 +290,37 @@ export default {
       },
     })
   },
+  getCourtReturnConfirmationRequest: id =>
+    getMatchingRequests({
+      method: 'POST',
+      urlPath: `/welcome/court-returns/${id}/confirm`,
+    }).then(data => {
+      const { requests } = data.body
+      if (!requests.length) {
+        throw new Error('No matching request')
+      }
+      return JSON.parse(requests[0].body)
+    }),
+  getConfirmationRequest: id =>
+    getMatchingRequests({
+      method: 'POST',
+      urlPath: `/welcome/arrivals/${id}/confirm`,
+    }).then(data => {
+      const { requests } = data.body
+      if (!requests.length) {
+        throw new Error('No matching request')
+      }
+      return JSON.parse(requests[0].body)
+    }),
+  getTransferConfirmationRequest: prisonNumber =>
+    getMatchingRequests({
+      method: 'POST',
+      urlPath: `/welcome/transfers/${prisonNumber}/confirm`,
+    }).then(data => {
+      const { requests } = data.body
+      if (!requests.length) {
+        throw new Error('No matching request')
+      }
+      return JSON.parse(requests[0].body)
+    }),
 }

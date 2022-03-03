@@ -22,7 +22,12 @@ export default class CheckCourtReturnController {
       const { activeCaseLoadId } = res.locals.user
       const data = await this.expectedArrivalsService.getArrival(id)
 
-      const arrivalResponse = await this.expectedArrivalsService.confirmCourtReturn(username, id, activeCaseLoadId)
+      const arrivalResponse = await this.expectedArrivalsService.confirmCourtReturn(
+        username,
+        id,
+        activeCaseLoadId,
+        data.prisonNumber
+      )
 
       if (!arrivalResponse) {
         return res.redirect('/feature-not-available')
