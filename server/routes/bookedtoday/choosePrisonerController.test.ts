@@ -127,6 +127,7 @@ describe('GET /confirm-arrival/choose-prisoner', () => {
   it('should render /confirm-arrival/choose-prisoner page', () => {
     return request(app)
       .get('/confirm-arrival/choose-prisoner')
+      .expect(200)
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
         const $ = cheerio.load(res.text)
@@ -141,6 +142,14 @@ describe('GET /confirm-arrival/choose-prisoner', () => {
       .expect(res => {
         expect(expectedArrivalsService.getArrivalsForToday).toHaveBeenCalledWith(user.activeCaseLoadId)
       })
+  })
+
+  it('should handle unexpected server error', () => {
+    expectedArrivalsService.getArrivalsForToday.mockRejectedValue(new Error('an error occurred'))
+    return request(app)
+      .get('/confirm-arrival/choose-prisoner')
+      .expect(500)
+      .expect('Content-Type', 'text/html; charset=utf-8')
   })
 })
 
@@ -346,5 +355,13 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
       .expect(res => {
         expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('aaa-111-222')
       })
+  })
+
+  it('should handle unexpected server error', () => {
+    expectedArrivalsService.getArrival.mockRejectedValue(new Error('an error occurred'))
+    return request(app)
+      .get('/confirm-arrival/choose-prisoner/aaa-111-222')
+      .expect(500)
+      .expect('Content-Type', 'text/html; charset=utf-8')
   })
 })
