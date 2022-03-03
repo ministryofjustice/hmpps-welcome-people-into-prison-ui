@@ -95,6 +95,19 @@ context('Check Answers', () => {
       })
     confirmAddedToRollPage.addAnotherToRoll().click()
     Page.verifyOnPage(ChoosePrisonerPage)
+
+    cy.task('getConfirmationRequest', expectedArrival.id).then(request => {
+      expect(request).to.deep.equal({
+        dateOfBirth: '1970-02-01',
+        firstName: 'Sam',
+        gender: 'F',
+        imprisonmentStatus: 'SENT',
+        lastName: 'Smith',
+        movementReasonCode: '26',
+        prisonId: 'MDI',
+        prisonNumber: 'A1234BC',
+      })
+    })
   })
 
   it('Should show matched results when found', () => {

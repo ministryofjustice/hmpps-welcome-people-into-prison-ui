@@ -6,6 +6,15 @@ export default abstract class Page {
     return new constructor()
   }
 
+  static checkLink(element: PageElement, text: string, url: string) {
+    element
+      .should('contain', text)
+      .should('have.attr', 'href')
+      .then(href => {
+        expect(href).to.equal(url)
+      })
+  }
+
   constructor(private readonly title: string) {
     this.checkOnPage()
   }

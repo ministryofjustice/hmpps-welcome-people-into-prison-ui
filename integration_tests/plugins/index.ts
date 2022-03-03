@@ -35,5 +35,8 @@ export default (on: (string, Record) => void): void => {
     stubImprisonmentStatus: welcome.stubImprisonmentStatus,
     stubMatchedRecords: welcome.stubMatchedRecords,
     stubPrisonerDetails: welcome.stubPrisonerDetails,
+    getCourtReturnConfirmationRequest: welcome.getCourtReturnConfirmationRequest,
+    getConfirmationRequest: welcome.getConfirmationRequest,
+    getTransferConfirmationRequest: welcome.getTransferConfirmationRequest,
   })
 }

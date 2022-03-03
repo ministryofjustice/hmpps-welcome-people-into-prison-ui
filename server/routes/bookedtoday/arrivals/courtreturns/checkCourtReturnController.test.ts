@@ -103,6 +103,19 @@ describe('checkCourtReturnController', () => {
         })
     })
 
+    it('should make call to confirm', () => {
+      return request(app)
+        .post('/prisoners/12345-67890/check-court-return')
+        .expect(() => {
+          expect(expectedArrivalsService.confirmCourtReturn).toHaveBeenCalledWith(
+            'user1',
+            '12345-67890',
+            'MDI',
+            'A1234AB'
+          )
+        })
+    })
+
     it('should redirect to added to roll confirmation page', () => {
       return request(app)
         .post('/prisoners/12345-67890/check-court-return')

@@ -65,9 +65,14 @@ export default class ExpectedArrivalsService {
     return this.welcomeClientFactory(token).createOffenderRecordAndBooking(id, body)
   }
 
-  public async confirmCourtReturn(username: string, id: string, prisonId: string): Promise<ArrivalResponse> {
+  public async confirmCourtReturn(
+    username: string,
+    id: string,
+    prisonId: string,
+    prisonNumber: string
+  ): Promise<ArrivalResponse> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    return this.welcomeClientFactory(token).confirmCourtReturn(id, prisonId)
+    return this.welcomeClientFactory(token).confirmCourtReturn(id, prisonId, prisonNumber)
   }
 
   public async getMatchingRecords(potentialMatchCriteria: PotentialMatchCriteria): Promise<PotentialMatch[]> {

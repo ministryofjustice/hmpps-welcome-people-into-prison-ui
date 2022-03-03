@@ -141,7 +141,7 @@ describe('welcomeClient', () => {
 
     it('should call rest client successfully', async () => {
       fakeWelcomeApi
-        .post(`/temporary-absences/${prisonNumber}/confirm`)
+        .post(`/temporary-absences/${prisonNumber}/confirm`, { agencyId: 'MDI' })
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, { prisonNumber: 'A1234AB', location: 'Reception' })
 
@@ -156,7 +156,7 @@ describe('welcomeClient', () => {
     const prisonNumber = 'A1234AB'
     it('should call rest client successfully', async () => {
       fakeWelcomeApi
-        .post(`/transfers/${prisonNumber}/confirm`)
+        .post(`/transfers/${prisonNumber}/confirm`, {})
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, { prisonNumber: 'A1234AB', location: 'Reception' })
 
@@ -191,11 +191,11 @@ describe('welcomeClient', () => {
   describe('confirmCourtReturn', () => {
     it('should call rest client successfully', async () => {
       fakeWelcomeApi
-        .post(`/court-returns/${id}/confirm`)
+        .post(`/court-returns/${id}/confirm`, { prisonId: 'MDI', prisonNumber: 'A1234AA' })
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, { prisonNumber: 'A1234AB', location: 'Reception' })
 
-      return expect(welcomeClient.confirmCourtReturn(id, 'MDI')).resolves.toStrictEqual({
+      return expect(welcomeClient.confirmCourtReturn(id, 'MDI', 'A1234AA')).resolves.toStrictEqual({
         prisonNumber: 'A1234AB',
         location: 'Reception',
       })
