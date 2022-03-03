@@ -1,6 +1,7 @@
 import express, { RequestHandler, Router } from 'express'
 import SingleRecordFoundController from './singleRecordFoundController'
 import NoRecordFoundController from './noRecordFoundController'
+import ReviewPerDetailsController from './reviewPerDetailsController'
 import CheckAnswersController from './checkAnswersController'
 import ConfirmAddedToRollController from './confirmAddedToRollController'
 import ImprisonmentStatusesController from './imprisonmentStatusesController'
@@ -47,6 +48,10 @@ export default function routes(services: Services): Router {
 
   const noRecordFoundController = new NoRecordFoundController(services.expectedArrivalsService)
   get('/prisoners/:id/no-record-found', [noRecordFoundController.view()], [Role.PRISON_RECEPTION])
+
+  const reviewPerDetailsController = new ReviewPerDetailsController(services.expectedArrivalsService)
+  get('/prisoners/:id/info-from-per', [reviewPerDetailsController.view()], [Role.PRISON_RECEPTION])
+  post('/prisoners/:id/info-from-per', [reviewPerDetailsController.submit()], [Role.PRISON_RECEPTION])
 
   const sexController = new SexController()
   get('/prisoners/:id/sex', [sexController.view()], [Role.PRISON_RECEPTION])

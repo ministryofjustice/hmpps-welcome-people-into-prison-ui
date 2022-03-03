@@ -1,0 +1,37 @@
+{% extends "../../../partials/layout.njk" %}
+{% set pageTitle = "Review personal details from Person Escort Record" %}
+{% set baseUrl = '/prisoners/' + data.id + '/search-for-existing-record' %}
+{% block content %}
+    <div class="govuk-width-container">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <span class="govuk-caption-xl">Confirm a prisoner's arrival</span>
+                <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+                <p>This information will be used to create a new prisoner record for this person.</p>
+                <p>You should add details exactly as they appear on the document authorising detention into custody.</p>
+                {% set details = [
+                    {   key:     { text: "Name" },
+                        value:   { text: data.firstName + " " + data.lastName, classes: 'data-qa-name' },
+                        actions: { items: [
+                            { href: baseUrl + '/change-name', text: "Change", visuallyHiddenText: "name", attributes: { 'data-qa': 'change-name' } }]}
+                    },
+                    {   key:     { text: "Date of birth" },
+                        value:   { text: data.dateOfBirth | formatDate('D MMMM YYYY'), classes: 'data-qa-dob' },
+                        actions: { items: [
+                            { href: baseUrl + '/change-date-of-birth', text: "Change", visuallyHiddenText: "date of birth", attributes: { 'data-qa': 'change-dob' } }]}
+                    }
+                ] %}
+                {{ govukSummaryList({ rows: details }) }}
+
+                <form method="post" action = "/prisoners/{{ data.id }}/info-from-per">
+                    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                    {{ govukButton({
+                        classes: "govuk-button govuk-!-margin-bottom-6",
+                        text: "Continue",
+                        attributes: {'data-qa': 'continue'}
+                    }) }}
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
