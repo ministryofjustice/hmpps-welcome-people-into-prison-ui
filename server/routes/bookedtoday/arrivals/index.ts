@@ -2,6 +2,8 @@ import express, { RequestHandler, Router } from 'express'
 import SingleRecordFoundController from './singleRecordFoundController'
 import NoRecordFoundController from './noRecordFoundController'
 import ReviewPerDetailsController from './reviewPerDetailsController'
+import ReviewPerDetailsChangeNameController from './reviewPerDetailsChangeNameController'
+import ReviewPerDetailsChangeDateOfBirthController from './reviewPerDetailsChangeDateOfBirthController'
 import CheckAnswersController from './checkAnswersController'
 import ConfirmAddedToRollController from './confirmAddedToRollController'
 import ImprisonmentStatusesController from './imprisonmentStatusesController'
@@ -12,6 +14,8 @@ import matchingRecordsRoutes from './matchingRecords'
 
 import imprisonmentStatusesValidation from '../../../middleware/validation/imprisonmentStatusesValidation'
 import movementReasonsValidation from '../../../middleware/validation/movementReasonsValidation'
+import NameValidator from './validation/nameValidation'
+import DateOfBirthValidator from './validation/dateOfBirthValidation'
 import validationMiddleware from '../../../middleware/validationMiddleware'
 import { State } from './state'
 
@@ -27,7 +31,7 @@ import config from '../../../config'
 export default function routes(services: Services): Router {
   const router = express.Router()
 
-  const checkNewArrivalPresent = State.newArrival.ensurePresent('/confirm-arrival/choose-prisoner')
+  const checkNewArrivalPresent = State.newArrival.ensurePresent('/')
 
   const get = (path: string, handlers: RequestHandler[], authorisedRoles?: Role[]) =>
     router.get(
@@ -50,8 +54,36 @@ export default function routes(services: Services): Router {
   get('/prisoners/:id/no-record-found', [noRecordFoundController.view()], [Role.PRISON_RECEPTION])
 
   const reviewPerDetailsController = new ReviewPerDetailsController(services.expectedArrivalsService)
-  get('/prisoners/:id/info-from-per', [reviewPerDetailsController.view()], [Role.PRISON_RECEPTION])
-  post('/prisoners/:id/info-from-per', [reviewPerDetailsController.submit()], [Role.PRISON_RECEPTION])
+  get('/prisoners/:id/info-from-per/new', [reviewPerDetailsController.newReview()], [Role.PRISON_RECEPTION])
+  get('/prisoners/:id/info-from-per', [reviewPerDetailsController.showReview()], [Role.PRISON_RECEPTION])
+
+  const reviewPerDetailsChangeNameController = new ReviewPerDetailsChangeNameController()
+  get(
+    '/prisoners/:id/info-from-per/change-name',
+    [checkNewArrivalPresent, reviewPerDetailsChangeNameController.showChangeName()],
+    [Role.PRISON_RECEPTION]
+  )
+  post(
+    '/prisoners/:id/info-from-per/change-name',
+    [checkNewArrivalPresent, validationMiddleware(NameValidator), reviewPerDetailsChangeNameController.changeName()],
+    [Role.PRISON_RECEPTION]
+  )
+
+  const reviewPerDetailsChangeDateOfBirthController = new ReviewPerDetailsChangeDateOfBirthController()
+  get(
+    '/prisoners/:id/info-from-per/change-date-of-birth',
+    [checkNewArrivalPresent, reviewPerDetailsChangeDateOfBirthController.showChangeDateOfBirth()],
+    [Role.PRISON_RECEPTION]
+  )
+  post(
+    '/prisoners/:id/info-from-per/change-date-of-birth',
+    [
+      checkNewArrivalPresent,
+      validationMiddleware(DateOfBirthValidator),
+      reviewPerDetailsChangeDateOfBirthController.changeDateOfBirth(),
+    ],
+    [Role.PRISON_RECEPTION]
+  )
 
   const sexController = new SexController()
   get('/prisoners/:id/sex', [sexController.view()], [Role.PRISON_RECEPTION])
