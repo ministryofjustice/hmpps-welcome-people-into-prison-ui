@@ -26,11 +26,11 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET /info-from-per/change-name', () => {
+describe('GET /review-per-details/change-name', () => {
   it('should redirect to authentication error page for non reception users', () => {
     app = appWithAllRoutes({ roles: [] })
     return request(app)
-      .get('/prisoners/12345-67890/info-from-per/change-name')
+      .get('/prisoners/12345-67890/review-per-details/change-name')
       .expect(302)
       .expect('Location', '/autherror')
   })
@@ -40,7 +40,7 @@ describe('GET /info-from-per/change-name', () => {
     signedCookiesProvider.mockReturnValue({ 'new-arrival': newArrival })
 
     return request(app)
-      .get('/prisoners/12345-67890/info-from-per/change-name')
+      .get('/prisoners/12345-67890/review-per-details/change-name')
       .expect(200)
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -52,15 +52,15 @@ describe('GET /info-from-per/change-name', () => {
   it('redirects when no cookie present', () => {
     signedCookiesProvider.mockReturnValue({})
 
-    return request(app).get('/prisoners/12345-67890/info-from-per/change-name').expect(302).expect('Location', '/')
+    return request(app).get('/prisoners/12345-67890/review-per-details/change-name').expect(302).expect('Location', '/')
   })
 })
 
-describe('POST /info-from-per/change-name', () => {
+describe('POST /review-per-details/change-name', () => {
   it('should redirect to authentication error page for non reception users', () => {
     app = appWithAllRoutes({ roles: [] })
     return request(app)
-      .post('/prisoners/12345-67890/info-from-per/change-name')
+      .post('/prisoners/12345-67890/review-per-details/change-name')
       .send({})
       .expect(302)
       .expect('Location', '/autherror')
@@ -69,14 +69,17 @@ describe('POST /info-from-per/change-name', () => {
   it('should redirect when no cookie present', () => {
     signedCookiesProvider.mockReturnValue({})
 
-    return request(app).post('/prisoners/12345-67890/info-from-per/change-name').expect(302).expect('Location', '/')
+    return request(app)
+      .post('/prisoners/12345-67890/review-per-details/change-name')
+      .expect(302)
+      .expect('Location', '/')
   })
 
   it('should update name in cookie', () => {
     signedCookiesProvider.mockReturnValue({ 'new-arrival': newArrival })
 
     return request(app)
-      .post('/prisoners/12345-67890/info-from-per/change-name')
+      .post('/prisoners/12345-67890/review-per-details/change-name')
       .send({ firstName: 'Bob', lastName: 'Smith' })
       .expect(res => {
         expectSettingCookie(res, 'new-arrival').toStrictEqual({
@@ -94,20 +97,20 @@ describe('POST /info-from-per/change-name', () => {
     signedCookiesProvider.mockReturnValue({ 'new-arrival': newArrival })
 
     return request(app)
-      .post('/prisoners/12345-67890/info-from-per/change-name')
+      .post('/prisoners/12345-67890/review-per-details/change-name')
       .send({ firstName: 'William', lastName: 'Shakespeare' })
       .expect(302)
-      .expect('Location', '/prisoners/12345-67890/info-from-per')
+      .expect('Location', '/prisoners/12345-67890/review-per-details')
   })
 
   it('should redirect when validation error', () => {
     signedCookiesProvider.mockReturnValue({ 'new-arrival': newArrival })
 
     return request(app)
-      .post('/prisoners/12345-67890/info-from-per/change-name')
+      .post('/prisoners/12345-67890/review-per-details/change-name')
       .send({ lastName: 'Shakespeare' })
       .expect(302)
-      .expect('Location', '/prisoners/12345-67890/info-from-per/change-name')
+      .expect('Location', '/prisoners/12345-67890/review-per-details/change-name')
       .expect(() => {
         expect(flashProvider).toHaveBeenCalledWith('errors', [
           { href: '#first-name', text: "Enter this person's first name" },

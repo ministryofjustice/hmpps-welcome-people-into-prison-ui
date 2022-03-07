@@ -54,29 +54,29 @@ export default function routes(services: Services): Router {
   get('/prisoners/:id/no-record-found', [noRecordFoundController.view()], [Role.PRISON_RECEPTION])
 
   const reviewPerDetailsController = new ReviewPerDetailsController(services.expectedArrivalsService)
-  get('/prisoners/:id/info-from-per/new', [reviewPerDetailsController.newReview()], [Role.PRISON_RECEPTION])
-  get('/prisoners/:id/info-from-per', [reviewPerDetailsController.showReview()], [Role.PRISON_RECEPTION])
+  get('/prisoners/:id/review-per-details/new', [reviewPerDetailsController.newReview()], [Role.PRISON_RECEPTION])
+  get('/prisoners/:id/review-per-details', [reviewPerDetailsController.showReview()], [Role.PRISON_RECEPTION])
 
   const reviewPerDetailsChangeNameController = new ReviewPerDetailsChangeNameController()
   get(
-    '/prisoners/:id/info-from-per/change-name',
+    '/prisoners/:id/review-per-details/change-name',
     [checkNewArrivalPresent, reviewPerDetailsChangeNameController.showChangeName()],
     [Role.PRISON_RECEPTION]
   )
   post(
-    '/prisoners/:id/info-from-per/change-name',
+    '/prisoners/:id/review-per-details/change-name',
     [checkNewArrivalPresent, validationMiddleware(NameValidator), reviewPerDetailsChangeNameController.changeName()],
     [Role.PRISON_RECEPTION]
   )
 
   const reviewPerDetailsChangeDateOfBirthController = new ReviewPerDetailsChangeDateOfBirthController()
   get(
-    '/prisoners/:id/info-from-per/change-date-of-birth',
+    '/prisoners/:id/review-per-details/change-date-of-birth',
     [checkNewArrivalPresent, reviewPerDetailsChangeDateOfBirthController.showChangeDateOfBirth()],
     [Role.PRISON_RECEPTION]
   )
   post(
-    '/prisoners/:id/info-from-per/change-date-of-birth',
+    '/prisoners/:id/review-per-details/change-date-of-birth',
     [
       checkNewArrivalPresent,
       validationMiddleware(DateOfBirthValidator),

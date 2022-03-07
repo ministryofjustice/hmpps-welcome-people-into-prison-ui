@@ -26,11 +26,11 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET /info-from-per/change-date-of-birth', () => {
+describe('GET /review-per-details/change-date-of-birth', () => {
   it('should redirect to authentication error page for non reception users', () => {
     app = appWithAllRoutes({ roles: [] })
     return request(app)
-      .get('/prisoners/12345-67890/info-from-per/change-date-of-birth')
+      .get('/prisoners/12345-67890/review-per-details/change-date-of-birth')
       .expect(302)
       .expect('Location', '/autherror')
   })
@@ -40,7 +40,7 @@ describe('GET /info-from-per/change-date-of-birth', () => {
     signedCookiesProvider.mockReturnValue({ 'new-arrival': newArrival })
 
     return request(app)
-      .get('/prisoners/12345-67890/info-from-per/change-date-of-birth')
+      .get('/prisoners/12345-67890/review-per-details/change-date-of-birth')
       .expect(200)
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -53,17 +53,17 @@ describe('GET /info-from-per/change-date-of-birth', () => {
     signedCookiesProvider.mockReturnValue({})
 
     return request(app)
-      .get('/prisoners/12345-67890/info-from-per/change-date-of-birth')
+      .get('/prisoners/12345-67890/review-per-details/change-date-of-birth')
       .expect(302)
       .expect('Location', '/')
   })
 })
 
-describe('POST /info-from-per/change-date-of-birth', () => {
+describe('POST /review-per-details/change-date-of-birth', () => {
   it('should redirect to authentication error page for non reception users', () => {
     app = appWithAllRoutes({ roles: [] })
     return request(app)
-      .post('/prisoners/12345-67890/info-from-per/change-date-of-birth')
+      .post('/prisoners/12345-67890/review-per-details/change-date-of-birth')
       .send({})
       .expect(302)
       .expect('Location', '/autherror')
@@ -73,7 +73,7 @@ describe('POST /info-from-per/change-date-of-birth', () => {
     signedCookiesProvider.mockReturnValue({})
 
     return request(app)
-      .post('/prisoners/12345-67890/info-from-per/change-date-of-birth')
+      .post('/prisoners/12345-67890/review-per-details/change-date-of-birth')
       .expect(302)
       .expect('Location', '/')
   })
@@ -82,7 +82,7 @@ describe('POST /info-from-per/change-date-of-birth', () => {
     signedCookiesProvider.mockReturnValue({})
 
     return request(app)
-      .post('/prisoners/12345-67890/info-from-per/change-date-of-birth')
+      .post('/prisoners/12345-67890/review-per-details/change-date-of-birth')
       .expect(302)
       .expect('Location', '/')
   })
@@ -91,7 +91,7 @@ describe('POST /info-from-per/change-date-of-birth', () => {
     signedCookiesProvider.mockReturnValue({ 'new-arrival': newArrival })
 
     return request(app)
-      .post('/prisoners/12345-67890/info-from-per/change-date-of-birth')
+      .post('/prisoners/12345-67890/review-per-details/change-date-of-birth')
       .send({ day: '01', month: '02', year: '2003' })
       .expect(res => {
         expectSettingCookie(res, 'new-arrival').toStrictEqual({
@@ -109,10 +109,10 @@ describe('POST /info-from-per/change-date-of-birth', () => {
     signedCookiesProvider.mockReturnValue({ 'new-arrival': newArrival })
 
     return request(app)
-      .post('/prisoners/12345-67890/info-from-per/change-date-of-birth')
+      .post('/prisoners/12345-67890/review-per-details/change-date-of-birth')
       .send({ day: '1', month: '2', year: '2003' })
       .expect(302)
-      .expect('Location', '/prisoners/12345-67890/info-from-per')
+      .expect('Location', '/prisoners/12345-67890/review-per-details')
       .expect(res => {
         expectSettingCookie(res, 'new-arrival').toStrictEqual({
           firstName: 'James',
@@ -129,20 +129,20 @@ describe('POST /info-from-per/change-date-of-birth', () => {
     signedCookiesProvider.mockReturnValue({ 'new-arrival': newArrival })
 
     return request(app)
-      .post('/prisoners/12345-67890/info-from-per/change-date-of-birth')
+      .post('/prisoners/12345-67890/review-per-details/change-date-of-birth')
       .send({ day: '01', month: '02', year: '2003' })
       .expect(302)
-      .expect('Location', '/prisoners/12345-67890/info-from-per')
+      .expect('Location', '/prisoners/12345-67890/review-per-details')
   })
 
   it('should redirect when validation error', () => {
     signedCookiesProvider.mockReturnValue({ 'new-arrival': newArrival })
 
     return request(app)
-      .post('/prisoners/12345-67890/info-from-per/change-date-of-birth')
+      .post('/prisoners/12345-67890/review-per-details/change-date-of-birth')
       .send({ day: '01' })
       .expect(302)
-      .expect('Location', '/prisoners/12345-67890/info-from-per/change-date-of-birth')
+      .expect('Location', '/prisoners/12345-67890/review-per-details/change-date-of-birth')
       .expect(() => {
         expect(flashProvider).toHaveBeenCalledWith('errors', [
           { href: '#date-of-birth-month', text: 'Date of birth must include a month and year' },

@@ -17,11 +17,11 @@ export default class ReviewPerDetailsChangeNameController {
       const { id } = req.params
       if (req.errors) {
         req.flash('input', req.body)
-        return res.redirect(`/prisoners/${id}/info-from-per/change-name`)
+        return res.redirect(`/prisoners/${id}/review-per-details/change-name`)
       }
       const { firstName, lastName } = req.body
       State.newArrival.update(req, res, { firstName, lastName })
-      return res.redirect(`/prisoners/${id}/info-from-per`)
+      return res.redirect(`/prisoners/${id}/review-per-details`)
     }
   }
 }

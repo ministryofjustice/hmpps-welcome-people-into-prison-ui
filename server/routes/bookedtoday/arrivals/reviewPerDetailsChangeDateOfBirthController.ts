@@ -18,7 +18,7 @@ export default class ReviewPerDetailsChangeDateOfBirthController {
 
       if (req.errors) {
         req.flash('input', req.body)
-        return res.redirect(`/prisoners/${id}/info-from-per/change-date-of-birth`)
+        return res.redirect(`/prisoners/${id}/review-per-details/change-date-of-birth`)
       }
 
       const { day, month, year } = req.body
@@ -27,7 +27,7 @@ export default class ReviewPerDetailsChangeDateOfBirthController {
         dateOfBirth: `${year.padStart(4, '0')}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`,
       })
 
-      return res.redirect(`/prisoners/${id}/info-from-per`)
+      return res.redirect(`/prisoners/${id}/review-per-details`)
     }
   }
 }

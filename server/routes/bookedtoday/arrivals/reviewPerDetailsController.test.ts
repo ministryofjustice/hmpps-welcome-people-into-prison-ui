@@ -21,29 +21,29 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET /info-from-per/new', () => {
+describe('GET /review-per-details/new', () => {
   it('should redirect and clear cookie', () => {
     signedCookiesProvider.mockReturnValue({})
 
     return request(app)
-      .get('/prisoners/12345-67890/info-from-per/new')
+      .get('/prisoners/12345-67890/review-per-details/new')
       .expect(302)
-      .expect('Location', '/prisoners/12345-67890/info-from-per')
+      .expect('Location', '/prisoners/12345-67890/review-per-details')
       .expect(res => expectSettingCookie(res, 'new-arrival').toBeUndefined())
   })
 })
 
-describe('GET /info-from-per', () => {
+describe('GET /review-per-details', () => {
   it('should redirect to authentication error page for non reception users', () => {
     signedCookiesProvider.mockReturnValue({})
     app = appWithAllRoutes({ roles: [] })
-    return request(app).get('/prisoners/12345-67890/info-from-per').expect(302).expect('Location', '/autherror')
+    return request(app).get('/prisoners/12345-67890/review-per-details').expect(302).expect('Location', '/autherror')
   })
 
   it('should call service method correctly', () => {
     signedCookiesProvider.mockReturnValue({})
     return request(app)
-      .get('/prisoners/12345-67890/info-from-per')
+      .get('/prisoners/12345-67890/review-per-details')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
         expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
@@ -63,7 +63,7 @@ describe('GET /info-from-per', () => {
     } as Arrival)
 
     return request(app)
-      .get('/prisoners/12345-67890/info-from-per')
+      .get('/prisoners/12345-67890/review-per-details')
       .expect(res => {
         const $ = cheerio.load(res.text)
         expect($('h1').text()).toContain('Review personal details from Person Escort Record')
@@ -83,7 +83,7 @@ describe('GET /info-from-per', () => {
     } as Arrival)
 
     return request(app)
-      .get('/prisoners/12345-67890/info-from-per')
+      .get('/prisoners/12345-67890/review-per-details')
       .expect(res => {
         expectSettingCookie(res, 'new-arrival').toStrictEqual({
           firstName: 'James',
@@ -109,7 +109,7 @@ describe('GET /info-from-per', () => {
     })
 
     return request(app)
-      .get('/prisoners/12345-67890/info-from-per')
+      .get('/prisoners/12345-67890/review-per-details')
       .expect(res => {
         const $ = cheerio.load(res.text)
         expect($('h1').text()).toContain('Review personal details from Person Escort Record')

@@ -27,7 +27,7 @@ export default class ReviewPerDetailsController {
     return async (req, res) => {
       const { id } = req.params
       State.newArrival.clear(res)
-      res.redirect(`/prisoners/${id}/info-from-per`)
+      res.redirect(`/prisoners/${id}/review-per-details`)
     }
   }
 
