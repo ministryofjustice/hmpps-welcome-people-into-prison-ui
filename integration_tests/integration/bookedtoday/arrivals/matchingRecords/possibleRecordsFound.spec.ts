@@ -1,6 +1,6 @@
 import ChoosePrisonerPage from '../../../../pages/bookedtoday/choosePrisoner'
 import PossibleRecordsFoundPage from '../../../../pages/bookedtoday/arrivals/matchingRecords/possibleRecordsFound'
-import SearchForExistingPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/searchForExisting'
+import SearchForExistingPage from '../../../../pages/bookedtoday/arrivals/searchForExisting'
 import ImprisonmentStatus from '../../../../pages/bookedtoday/arrivals/imprisonmentStatus'
 
 import Page from '../../../../pages/page'
