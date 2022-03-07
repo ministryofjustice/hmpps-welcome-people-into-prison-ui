@@ -5,7 +5,6 @@ import { type Arrival, GenderKeys } from 'welcome'
 import { appWithAllRoutes } from '../../__testutils/appSetup'
 import ExpectedArrivalsService, { LocationType } from '../../../services/expectedArrivalsService'
 import Role from '../../../authentication/role'
-import { expectSettingCookie } from '../../__testutils/requestTestUtils'
 
 jest.mock('../../../services/expectedArrivalsService')
 
@@ -40,21 +39,6 @@ describe('GET /view', () => {
   it('should redirect to authentication error page for non reception users', () => {
     app = appWithAllRoutes({ roles: [] })
     return request(app).get('/prisoners/12345-67890/no-record-found').expect(302).expect('Location', '/autherror')
-  })
-
-  it('should set state', () => {
-    return request(app)
-      .get('/prisoners/12345-67890/no-record-found')
-      .expect(res => {
-        expectSettingCookie(res, 'new-arrival').toStrictEqual({
-          firstName: 'James',
-          lastName: 'Smyth',
-          dateOfBirth: '1973-01-08',
-          sex: 'MALE',
-          prisonNumber: 'A1234AB',
-          pncNumber: '01/98644M',
-        })
-      })
   })
 
   it('should display correct page heading', () => {

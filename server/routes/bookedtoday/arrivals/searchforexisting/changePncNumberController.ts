@@ -5,7 +5,7 @@ export default class ChangePncNumberController {
   public showChangePncNumber(): RequestHandler {
     return async (req, res) => {
       const data = State.searchDetails.get(req)
-      res.render('pages/bookedtoday/arrivals/searchForExistingRecord/changePncNumber.njk', { data })
+      res.render('pages/bookedtoday/arrivals/changeArrivalDetails/changePncNumber.njk', { data })
     }
   }
 

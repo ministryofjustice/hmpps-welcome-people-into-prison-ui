@@ -1,6 +1,6 @@
 import moment from 'moment'
-import { Validator } from '../../../../../middleware/validationMiddleware'
-import { zip } from '../../../../../utils/utils'
+import { Validator } from '../../../../middleware/validationMiddleware'
+import { zip } from '../../../../utils/utils'
 
 const fields = ['day', 'month', 'year']
 

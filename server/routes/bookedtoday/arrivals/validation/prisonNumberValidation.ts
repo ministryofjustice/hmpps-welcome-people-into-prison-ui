@@ -1,4 +1,4 @@
-import { Validator } from '../../../../../middleware/validationMiddleware'
+import { Validator } from '../../../../middleware/validationMiddleware'
 
 const PRISON_NUMBER_REGEX = /^[A-Za-z]\d{4}[A-Za-z]{2}$/
 

@@ -35,7 +35,7 @@ export default class SearchForExistingRecordController {
 
       const data = State.searchDetails.get(req) || (await this.loadData(id, res))
 
-      res.render('pages/bookedtoday/arrivals/searchForExistingRecord/searchForExistingRecord.njk', {
+      res.render('pages/bookedtoday/arrivals/searchForExistingRecord.njk', {
         data: { ...data, id },
       })
     }

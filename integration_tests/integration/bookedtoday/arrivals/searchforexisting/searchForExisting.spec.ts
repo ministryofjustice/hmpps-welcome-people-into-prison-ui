@@ -2,11 +2,11 @@ import ChoosePrisonerPage from '../../../../pages/bookedtoday/choosePrisoner'
 import Page from '../../../../pages/page'
 import Role from '../../../../../server/authentication/role'
 import expectedArrivals from '../../../../mockApis/responses/expectedArrivals'
-import SearchForExistingPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/searchForExisting'
-import ChangeNamePage from '../../../../pages/bookedtoday/arrivals/searchforexisting/changeName'
-import ChangeDateOfBirthPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/changeDateOfBirth'
-import ChangePrisonNumberPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/changePrisonNumber'
-import ChangePncNumberPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/changePncNumber'
+import SearchForExistingPage from '../../../../pages/bookedtoday/arrivals/searchForExisting'
+import ChangeNamePage from '../../../../pages/bookedtoday/arrivals/changeArrivalDetails/changeName'
+import ChangeDateOfBirthPage from '../../../../pages/bookedtoday/arrivals/changeArrivalDetails/changeDateOfBirth'
+import ChangePrisonNumberPage from '../../../../pages/bookedtoday/arrivals/changeArrivalDetails/changePrisonNumber'
+import ChangePncNumberPage from '../../../../pages/bookedtoday/arrivals/changeArrivalDetails/changePncNumber'
 
 context('Search for existing spec', () => {
   beforeEach(() => {

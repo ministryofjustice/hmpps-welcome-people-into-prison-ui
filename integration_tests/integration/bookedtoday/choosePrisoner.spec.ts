@@ -7,6 +7,7 @@ import Page from '../../pages/page'
 import Role from '../../../server/authentication/role'
 import expectedArrivals from '../../mockApis/responses/expectedArrivals'
 import NoExistingRecordPage from '../../pages/bookedtoday/arrivals/noExistingRecord'
+import ReviewPerDetailsPage from '../../pages/bookedtoday/arrivals/reviewPerDetails'
 
 context('Choose Prisoner', () => {
   beforeEach(() => {
@@ -134,7 +135,13 @@ context('Choose Prisoner', () => {
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
 
-    Page.verifyOnPage(NoExistingRecordPage)
+    const noExistingRecordPage = Page.verifyOnPage(NoExistingRecordPage)
+    noExistingRecordPage.perName().should('contain.text', 'Bob Smith')
+    noExistingRecordPage.perDob().should('contain.text', '1 January 1970')
+    noExistingRecordPage.perPncNumber().should('contain.text', '01/2345A')
+    noExistingRecordPage.continue().click()
+
+    Page.verifyOnPage(ReviewPerDetailsPage)
   })
 
   it('new bookings from court with match', () => {
