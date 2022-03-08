@@ -18,7 +18,7 @@ generic-service:
     HMPPS_COOKIE_NAME: hmpps-session-dev
     HMPPS_COOKIE_DOMAIN: welcome-dev.prison.service.justice.gov.uk
     SYSTEM_PHASE: DEV
-    ENABLED_PRISONS: NMI,MDI
+    ENABLED_PRISONS: 'NMI,MDI,LII'
     CONFIRM_ENABLED: 'true'
     CONFIRM_NO_IDENTIFIERS_ENABLED: 'true'
     TEMPORARY_ABSENCE_ENABLED: 'true'
