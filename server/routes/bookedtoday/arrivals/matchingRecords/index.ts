@@ -8,9 +8,9 @@ import MatchedRecordSelectionValidation from './validation/matchedRecordSelectio
 
 import type { Services } from '../../../../services'
 import Role from '../../../../authentication/role'
-import { State } from './state'
 import redirectIfDisabledMiddleware from '../../../../middleware/redirectIfDisabledMiddleware'
 import config from '../../../../config'
+import { State } from '../state'
 
 export default function routes(services: Services): Router {
   const router = express.Router()

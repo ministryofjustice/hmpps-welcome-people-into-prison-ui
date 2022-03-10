@@ -1,5 +1,5 @@
 import type { RequestHandler } from 'express'
-import { State } from './state'
+import { State } from '../state'
 
 export default class ChangePrisonNumberController {
   public showChangePrisonNumber(): RequestHandler {
