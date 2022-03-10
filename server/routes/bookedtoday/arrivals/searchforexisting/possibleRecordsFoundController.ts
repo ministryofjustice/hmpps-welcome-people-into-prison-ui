@@ -18,7 +18,7 @@ export default class PossibleRecordsFoundController {
 
       const potentialMatches = await this.expectedArrivalsService.getMatchingRecords(searchData)
 
-      res.render('pages/bookedtoday/arrivals/matchingRecords/possibleRecordsFound.njk', {
+      res.render('pages/bookedtoday/arrivals/searchforexisting/possibleRecordsFound.njk', {
         arrival,
         data: { potentialMatches, id },
         errors: req.flash('errors'),

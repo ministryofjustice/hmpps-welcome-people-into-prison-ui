@@ -1,11 +1,11 @@
 import type { RequestHandler } from 'express'
-import { State } from '../state'
+import { State } from '../../state'
 
 export default class ChangePrisonNumberController {
   public showChangePrisonNumber(): RequestHandler {
     return async (req, res) => {
       const data = req.flash('input')[0] || State.searchDetails.get(req)
-      res.render('pages/bookedtoday/arrivals/changeArrivalDetails/changePrisonNumber.njk', {
+      res.render('pages/bookedtoday/arrivals/searchforexisting/search/changePrisonNumber.njk', {
         data,
         errors: req.flash('errors'),
       })

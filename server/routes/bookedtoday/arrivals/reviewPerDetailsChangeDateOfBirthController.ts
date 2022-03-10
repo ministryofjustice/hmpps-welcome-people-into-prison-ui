@@ -5,7 +5,7 @@ export default class ReviewPerDetailsChangeDateOfBirthController {
   public showChangeDateOfBirth(): RequestHandler {
     return async (req, res) => {
       const data = req.flash('input')[0] || State.newArrival.get(req)
-      res.render('pages/bookedtoday/arrivals/changeArrivalDetails/changeDateOfBirth.njk', {
+      res.render('pages/bookedtoday/arrivals/changeDateOfBirth.njk', {
         data,
         errors: req.flash('errors'),
       })

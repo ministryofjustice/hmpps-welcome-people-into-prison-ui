@@ -1,11 +1,11 @@
 import type { RequestHandler } from 'express'
-import { State } from '../state'
+import { State } from '../../state'
 
 export default class ChangePncNumberController {
   public showChangePncNumber(): RequestHandler {
     return async (req, res) => {
       const data = State.searchDetails.get(req)
-      res.render('pages/bookedtoday/arrivals/changeArrivalDetails/changePncNumber.njk', { data })
+      res.render('pages/bookedtoday/arrivals/searchforexisting/search/changePncNumber.njk', { data })
     }
   }
 
