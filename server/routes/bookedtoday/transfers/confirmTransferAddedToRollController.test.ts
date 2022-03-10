@@ -44,7 +44,7 @@ describe('GET /view', () => {
     flashProvider.mockReturnValue([{ firstName: 'Jim', lastName: 'Smith', location: 'Reception' }])
     return request(app)
       .get('/prisoners/A1234AB/confirm-transfer')
-      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect('Content-Type', /text\/html/)
       .expect(() => {
         expect(flashProvider).toHaveBeenCalledWith('prisoner')
       })
