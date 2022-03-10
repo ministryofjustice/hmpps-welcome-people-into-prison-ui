@@ -1,7 +1,7 @@
 import ChoosePrisonerPage from '../../../../pages/bookedtoday/choosePrisoner'
 import PossibleRecordsFoundPage from '../../../../pages/bookedtoday/arrivals/matchingRecords/possibleRecordsFound'
 import SearchForExistingPage from '../../../../pages/bookedtoday/arrivals/searchForExisting'
-import ImprisonmentStatus from '../../../../pages/bookedtoday/arrivals/imprisonmentStatus'
+import ImprisonmentStatus from '../../../../pages/bookedtoday/arrivals/confirmArrival/imprisonmentStatus'
 
 import Page from '../../../../pages/page'
 import Role from '../../../../../server/authentication/role'

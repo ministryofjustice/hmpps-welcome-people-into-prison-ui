@@ -1,5 +1,5 @@
 import type { RequestHandler } from 'express'
-import { State } from './state'
+import { State } from '../state'
 
 export default class SexController {
   public view(): RequestHandler {
@@ -15,7 +15,7 @@ export default class SexController {
         return res.redirect(`/prisoners/${id}/imprisonment-status`)
       }
 
-      return res.render('pages/bookedtoday/arrivals/sex.njk', {
+      return res.render('pages/bookedtoday/arrivals/confirmArrival/sex.njk', {
         errors: req.flash('errors'),
         id,
         data,

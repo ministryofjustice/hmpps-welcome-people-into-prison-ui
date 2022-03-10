@@ -2,11 +2,11 @@ import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
 import { ImprisonmentStatus } from 'welcome'
-import { appWithAllRoutes, signedCookiesProvider, flashProvider } from '../../__testutils/appSetup'
-import { expectSettingCookie } from '../../__testutils/requestTestUtils'
-import ImprisonmentStatusesService from '../../../services/imprisonmentStatusesService'
+import { appWithAllRoutes, signedCookiesProvider, flashProvider } from '../../../__testutils/appSetup'
+import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
+import ImprisonmentStatusesService from '../../../../services/imprisonmentStatusesService'
 
-jest.mock('../../../services/imprisonmentStatusesService')
+jest.mock('../../../../services/imprisonmentStatusesService')
 
 const imprisonmentStatusesService = new ImprisonmentStatusesService(
   null,

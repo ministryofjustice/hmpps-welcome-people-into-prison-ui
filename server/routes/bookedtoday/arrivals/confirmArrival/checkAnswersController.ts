@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express'
 import { Gender, NewOffenderBooking } from 'welcome'
-import type { ImprisonmentStatusesService, ExpectedArrivalsService, RaiseAnalyticsEvent } from '../../../services'
-import { State } from './state'
+import type { ImprisonmentStatusesService, ExpectedArrivalsService, RaiseAnalyticsEvent } from '../../../../services'
+import { State } from '../state'
 
 export default class CheckAnswersController {
   public constructor(
@@ -19,7 +19,7 @@ export default class CheckAnswersController {
 
       const reasonImprisonment = await this.imprisonmentStatusesService.getReasonForImprisonment(statusAndReason)
       const data = { reasonImprisonment, ...moveData }
-      return res.render('pages/bookedtoday/arrivals/checkAnswers.njk', { id, data })
+      return res.render('pages/bookedtoday/arrivals/confirmArrival/checkAnswers.njk', { id, data })
     }
   }
 

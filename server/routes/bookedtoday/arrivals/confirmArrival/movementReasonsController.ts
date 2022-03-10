@@ -1,6 +1,6 @@
 import type { RequestHandler } from 'express'
-import type { ImprisonmentStatusesService } from '../../../services'
-import { State } from './state'
+import type { ImprisonmentStatusesService } from '../../../../services'
+import { State } from '../state'
 
 export default class MovementReasonsController {
   public constructor(private readonly imprisonmentStatusesService: ImprisonmentStatusesService) {}
@@ -15,7 +15,7 @@ export default class MovementReasonsController {
 
       const data = State.newArrival.get(req)
 
-      return res.render('pages/bookedtoday/arrivals/movementReason.njk', {
+      return res.render('pages/bookedtoday/arrivals/confirmArrival/movementReason.njk', {
         id,
         errors: req.flash('errors'),
         imprisonmentStatus,
