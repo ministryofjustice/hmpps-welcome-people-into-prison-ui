@@ -1,6 +1,6 @@
 import type { RequestHandler, Response } from 'express'
 import type { ExpectedArrivalsService } from '../../../../services'
-import { SearchDetails, State } from './state'
+import { SearchDetails, State } from '../state'
 
 export default class SearchForExistingRecordController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}

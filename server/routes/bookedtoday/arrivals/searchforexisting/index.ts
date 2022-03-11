@@ -11,12 +11,12 @@ import ChangeNameController from './changeNameController'
 import ChangeDateOfBirthController from './changeDateOfBirthController'
 import ChangePrisonNumberController from './changePrisonNumberController'
 import ChangePncNumberController from './changePncNumberController'
-import { State } from './state'
 import NameValidator from '../validation/nameValidation'
 import DateOfBirthValidator from '../validation/dateOfBirthValidation'
 import PrisonNumberValidator from '../validation/prisonNumberValidation'
 import redirectIfDisabledMiddleware from '../../../../middleware/redirectIfDisabledMiddleware'
 import config from '../../../../config'
+import { State } from '../state'
 
 export default function routes(services: Services): Router {
   const router = express.Router()
