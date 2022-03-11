@@ -1,5 +1,5 @@
 import express, { RequestHandler, Router } from 'express'
-import MultipleExistingRecordsFoundController from './multipleExistingRecordsFound'
+import MultipleExistingRecordsFoundController from './multipleExistingRecordsFoundController'
 
 import authorisationForUrlMiddleware from '../../../../middleware/authorisationForUrlMiddleware'
 import asyncMiddleware from '../../../../middleware/asyncMiddleware'
