@@ -2,7 +2,7 @@ import type { RequestHandler, Request, Response } from 'express'
 import type { ExpectedArrivalsService } from '../../../../services'
 import { State } from '../state'
 
-export default class PossibleRecordsFoundController {
+export default class MultipleExistingRecordsFoundController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
 
   public view(): RequestHandler {
@@ -18,7 +18,7 @@ export default class PossibleRecordsFoundController {
 
       const potentialMatches = await this.expectedArrivalsService.getMatchingRecords(searchData)
 
-      res.render('pages/bookedtoday/arrivals/searchforexisting/possibleRecordsFound.njk', {
+      res.render('pages/bookedtoday/arrivals/searchforexisting/multipleExistingRecordsFound.njk', {
         arrival,
         data: { potentialMatches, id },
         errors: req.flash('errors'),

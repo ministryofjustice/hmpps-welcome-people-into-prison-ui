@@ -1,12 +1,12 @@
 import ChoosePrisonerPage from '../../pages/bookedtoday/choosePrisoner'
 import FeatureNotAvailablePage from '../../pages/featureNotAvailable'
 
-import SingleRecordFound from '../../pages/bookedtoday/arrivals/singleRecordFound'
+import SingleMatchingRecordFoundPage from '../../pages/bookedtoday/arrivals/singleMatchingRecordFound'
 import CheckCourtReturnPage from '../../pages/bookedtoday/arrivals/courtreturns/checkCourtReturn'
 import Page from '../../pages/page'
 import Role from '../../../server/authentication/role'
 import expectedArrivals from '../../mockApis/responses/expectedArrivals'
-import NoExistingRecordPage from '../../pages/bookedtoday/arrivals/noExistingRecord'
+import NoMatchingRecordsFoundPage from '../../pages/bookedtoday/arrivals/noMatchingRecordsFound'
 import ReviewPerDetailsPage from '../../pages/bookedtoday/arrivals/reviewPerDetails'
 
 context('Choose Prisoner', () => {
@@ -135,11 +135,11 @@ context('Choose Prisoner', () => {
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
 
-    const noExistingRecordPage = Page.verifyOnPage(NoExistingRecordPage)
-    noExistingRecordPage.perName().should('contain.text', 'Bob Smith')
-    noExistingRecordPage.perDob().should('contain.text', '1 January 1970')
-    noExistingRecordPage.perPncNumber().should('contain.text', '01/2345A')
-    noExistingRecordPage.continue().click()
+    const noMatchingRecordsFoundPage = Page.verifyOnPage(NoMatchingRecordsFoundPage)
+    noMatchingRecordsFoundPage.perName().should('contain.text', 'Bob Smith')
+    noMatchingRecordsFoundPage.perDob().should('contain.text', '1 January 1970')
+    noMatchingRecordsFoundPage.perPncNumber().should('contain.text', '01/2345A')
+    noMatchingRecordsFoundPage.continue().click()
 
     Page.verifyOnPage(ReviewPerDetailsPage)
   })
@@ -157,7 +157,7 @@ context('Choose Prisoner', () => {
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
 
-    Page.verifyOnPage(SingleRecordFound)
+    Page.verifyOnPage(SingleMatchingRecordFoundPage)
   })
 
   it('Current bookings from police custody suite are not processable', () => {
@@ -185,7 +185,7 @@ context('Choose Prisoner', () => {
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(1).confirm().click()
 
-    Page.verifyOnPage(NoExistingRecordPage)
+    Page.verifyOnPage(NoMatchingRecordsFoundPage)
   })
 
   it('new bookings from police custody suite with match', () => {
@@ -201,7 +201,7 @@ context('Choose Prisoner', () => {
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(1).confirm().click()
 
-    Page.verifyOnPage(SingleRecordFound)
+    Page.verifyOnPage(SingleMatchingRecordFoundPage)
   })
 
   it('No links shown if not a reception user', () => {

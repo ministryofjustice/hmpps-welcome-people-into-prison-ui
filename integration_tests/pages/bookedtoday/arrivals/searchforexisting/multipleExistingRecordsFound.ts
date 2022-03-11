@@ -1,13 +1,13 @@
 import Page, { PageElement } from '../../../page'
 
-export default class PossibleRecordsFoundPage extends Page {
+export default class MultipleMatchingRecordsFoundPage extends Page {
   constructor() {
     super('Possible existing records have been found')
   }
 
-  static goTo(id: string): PossibleRecordsFoundPage {
+  static goTo(id: string): MultipleMatchingRecordsFoundPage {
     cy.visit(`/prisoners/${id}/possible-records-found`)
-    return Page.verifyOnPage(PossibleRecordsFoundPage)
+    return Page.verifyOnPage(MultipleMatchingRecordsFoundPage)
   }
 
   arrival = () => ({

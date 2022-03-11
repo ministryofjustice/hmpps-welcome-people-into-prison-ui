@@ -1,7 +1,7 @@
 import type { RequestHandler } from 'express'
 import { ExpectedArrivalsService } from '../../../services'
 
-export default class NoRecordFoundController {
+export default class NoMatchingRecordsFoundController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
 
   public view(): RequestHandler {
@@ -9,7 +9,7 @@ export default class NoRecordFoundController {
       const { id } = req.params
       const data = await this.expectedArrivalsService.getArrival(id)
 
-      return res.render('pages/bookedtoday/arrivals/noMatchFound.njk', { data })
+      return res.render('pages/bookedtoday/arrivals/noMatchingRecordsFound.njk', { data })
     }
   }
 }

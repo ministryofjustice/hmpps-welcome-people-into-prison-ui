@@ -3,7 +3,7 @@ import { State } from './state'
 import type { ExpectedArrivalsService } from '../../../services'
 import { convertToTitleCase } from '../../../utils/utils'
 
-export default class SingleRecordFoundController {
+export default class SingleMatchingRecordFoundController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
 
   public view(): RequestHandler {
@@ -22,7 +22,7 @@ export default class SingleRecordFoundController {
         pncNumber: match.pncNumber,
       })
 
-      return res.render('pages/bookedtoday/arrivals/singleMatchFound.njk', { data })
+      return res.render('pages/bookedtoday/arrivals/singleMatchingRecordFound.njk', { data })
     }
   }
 }

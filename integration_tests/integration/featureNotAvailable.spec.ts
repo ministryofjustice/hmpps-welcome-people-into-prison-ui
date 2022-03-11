@@ -5,7 +5,7 @@ import CheckAnswersPage from '../pages/bookedtoday/arrivals/confirmArrival/check
 import Role from '../../server/authentication/role'
 import expectedArrivals from '../mockApis/responses/expectedArrivals'
 import ChoosePrisonerPage from '../pages/bookedtoday/choosePrisoner'
-import SingleRecordFoundPage from '../pages/bookedtoday/arrivals/singleRecordFound'
+import SingleMatchingRecordFoundPage from '../pages/bookedtoday/arrivals/singleMatchingRecordFound'
 
 context('Feature not available', () => {
   beforeEach(() => {
@@ -29,8 +29,11 @@ context('Feature not available', () => {
 
     cy.signIn()
 
-    const singleRecordFound = ChoosePrisonerPage.selectPrisoner(expectedArrival.id, SingleRecordFoundPage)
-    singleRecordFound.continue().click()
+    const singleMatchingRecordFoundPage = ChoosePrisonerPage.selectPrisoner(
+      expectedArrival.id,
+      SingleMatchingRecordFoundPage
+    )
+    singleMatchingRecordFoundPage.continue().click()
 
     const imprisonmentStatusPage = Page.verifyOnPage(ImprisonmentStatusPage)
     imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()
