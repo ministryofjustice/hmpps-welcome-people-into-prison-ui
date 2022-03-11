@@ -1,10 +1,10 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
-import { appWithAllRoutes, flashProvider, signedCookiesProvider } from '../../../__testutils/appSetup'
-import Role from '../../../../authentication/role'
-import config from '../../../../config'
-import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
+import { appWithAllRoutes, flashProvider, signedCookiesProvider } from '../../../../__testutils/appSetup'
+import Role from '../../../../../authentication/role'
+import config from '../../../../../config'
+import { expectSettingCookie } from '../../../../__testutils/requestTestUtils'
 
 let app: Express
 

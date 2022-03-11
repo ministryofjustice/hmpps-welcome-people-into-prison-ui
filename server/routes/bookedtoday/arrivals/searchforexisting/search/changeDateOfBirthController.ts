@@ -1,11 +1,11 @@
 import type { RequestHandler } from 'express'
-import { State } from '../state'
+import { State } from '../../state'
 
 export default class ChangeDateOfBirthController {
   public showChangeDateOfBirth(): RequestHandler {
     return async (req, res) => {
       const data = req.flash('input')[0] || State.searchDetails.get(req)
-      res.render('pages/bookedtoday/arrivals/changeArrivalDetails/changeDateOfBirth.njk', {
+      res.render('pages/bookedtoday/arrivals/searchforexisting/search/changeDateOfBirth.njk', {
         data,
         errors: req.flash('errors'),
       })

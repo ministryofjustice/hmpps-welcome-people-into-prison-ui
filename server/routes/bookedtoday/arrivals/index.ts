@@ -7,7 +7,6 @@ import ReviewPerDetailsChangeDateOfBirthController from './reviewPerDetailsChang
 
 import searchForExistingRecordRoutes from './searchforexisting'
 import courtReturnRoutes from './courtreturns'
-import matchingRecordsRoutes from './matchingRecords'
 import confirmArrivalRoutes from './confirmArrival'
 
 import NameValidator from './validation/nameValidation'
@@ -79,7 +78,6 @@ export default function routes(services: Services): Router {
 
   router.use(searchForExistingRecordRoutes(services))
   router.use(courtReturnRoutes(services))
-  router.use(matchingRecordsRoutes(services))
   router.use(confirmArrivalRoutes(services))
 
   return router

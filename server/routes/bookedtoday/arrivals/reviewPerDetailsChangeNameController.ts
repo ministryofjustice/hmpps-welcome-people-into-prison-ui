@@ -5,7 +5,7 @@ export default class ReviewPerDetailsChangeNameController {
   public showChangeName(): RequestHandler {
     return async (req, res) => {
       const data = req.flash('input')[0] || State.newArrival.get(req)
-      res.render('pages/bookedtoday/arrivals/changeArrivalDetails/changeName.njk', {
+      res.render('pages/bookedtoday/arrivals/changeName.njk', {
         data,
         errors: req.flash('errors'),
       })

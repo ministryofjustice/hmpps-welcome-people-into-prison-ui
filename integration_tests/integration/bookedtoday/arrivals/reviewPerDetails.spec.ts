@@ -4,8 +4,8 @@ import Role from '../../../../server/authentication/role'
 import expectedArrivals from '../../../mockApis/responses/expectedArrivals'
 import NoExistingRecordPage from '../../../pages/bookedtoday/arrivals/noExistingRecord'
 import ReviewPerDetailsPage from '../../../pages/bookedtoday/arrivals/reviewPerDetails'
-import ChangeNamePage from '../../../pages/bookedtoday/arrivals/changeArrivalDetails/changeName'
-import ChangeDateOfBirthPage from '../../../pages/bookedtoday/arrivals/changeArrivalDetails/changeDateOfBirth'
+import ChangeNamePage from '../../../pages/bookedtoday/arrivals/changeName'
+import ChangeDateOfBirthPage from '../../../pages/bookedtoday/arrivals/changeDateOfBirth'
 
 context('Review per details spec', () => {
   beforeEach(() => {

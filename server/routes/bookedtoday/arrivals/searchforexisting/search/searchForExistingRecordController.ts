@@ -1,6 +1,6 @@
 import type { RequestHandler, Response } from 'express'
-import type { ExpectedArrivalsService } from '../../../../services'
-import { SearchDetails, State } from '../state'
+import type { ExpectedArrivalsService } from '../../../../../services'
+import { SearchDetails, State } from '../../state'
 
 export default class SearchForExistingRecordController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
@@ -35,7 +35,7 @@ export default class SearchForExistingRecordController {
 
       const data = State.searchDetails.get(req) || (await this.loadData(id, res))
 
-      res.render('pages/bookedtoday/arrivals/searchForExistingRecord.njk', {
+      res.render('pages/bookedtoday/arrivals/searchforexisting/search/searchForExistingRecord.njk', {
         data: { ...data, id },
       })
     }
