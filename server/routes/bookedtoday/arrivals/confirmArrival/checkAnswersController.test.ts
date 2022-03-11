@@ -3,13 +3,13 @@ import { type Arrival, Gender, type NewOffenderBooking } from 'welcome'
 import request from 'supertest'
 import cheerio from 'cheerio'
 
-import { appWithAllRoutes, user, signedCookiesProvider, flashProvider } from '../../__testutils/appSetup'
-import { ExpectedArrivalsService, ImprisonmentStatusesService, RaiseAnalyticsEvent } from '../../../services'
-import Role from '../../../authentication/role'
-import config from '../../../config'
+import { appWithAllRoutes, user, signedCookiesProvider, flashProvider } from '../../../__testutils/appSetup'
+import { ExpectedArrivalsService, ImprisonmentStatusesService, RaiseAnalyticsEvent } from '../../../../services'
+import Role from '../../../../authentication/role'
+import config from '../../../../config'
 
-jest.mock('../../../services/expectedArrivalsService')
-jest.mock('../../../services/imprisonmentStatusesService')
+jest.mock('../../../../services/expectedArrivalsService')
+jest.mock('../../../../services/imprisonmentStatusesService')
 
 const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
 const imprisonmentStatusesService = new ImprisonmentStatusesService(

@@ -1,13 +1,13 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
-import { appWithAllRoutes, flashProvider } from '../../__testutils/appSetup'
-import PrisonService from '../../../services/prisonService'
-import Role from '../../../authentication/role'
-import { expectSettingCookie } from '../../__testutils/requestTestUtils'
+import { appWithAllRoutes, flashProvider } from '../../../__testutils/appSetup'
+import PrisonService from '../../../../services/prisonService'
+import Role from '../../../../authentication/role'
+import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
 
-jest.mock('../../../services/expectedArrivalsService')
-jest.mock('../../../services/prisonService')
+jest.mock('../../../../services/expectedArrivalsService')
+jest.mock('../../../../services/prisonService')
 
 const prisonService = new PrisonService(null, null) as jest.Mocked<PrisonService>
 let app: Express

@@ -1,13 +1,13 @@
 import Page from '../../../pages/page'
 import SingleRecordFoundPage from '../../../pages/bookedtoday/arrivals/singleRecordFound'
-import ImprisonmentStatusPage from '../../../pages/bookedtoday/arrivals/imprisonmentStatus'
-import CheckAnswersPage from '../../../pages/bookedtoday/arrivals/checkAnswers'
-import ConfirmAddedToRollPage from '../../../pages/bookedtoday/arrivals/confirmAddedToRoll'
+import ImprisonmentStatusPage from '../../../pages/bookedtoday/arrivals/confirmArrival/imprisonmentStatus'
+import CheckAnswersPage from '../../../pages/bookedtoday/arrivals/confirmArrival/checkAnswers'
+import ConfirmAddedToRollPage from '../../../pages/bookedtoday/arrivals/confirmArrival/confirmAddedToRoll'
 import Role from '../../../../server/authentication/role'
 import expectedArrivals from '../../../mockApis/responses/expectedArrivals'
-import SexPage from '../../../pages/bookedtoday/arrivals/sexPage'
+import SexPage from '../../../pages/bookedtoday/arrivals/confirmArrival/sexPage'
 import ChoosePrisonerPage from '../../../pages/bookedtoday/choosePrisoner'
-import MovementReasonsPage from '../../../pages/bookedtoday/arrivals/movementReasons'
+import MovementReasonsPage from '../../../pages/bookedtoday/arrivals/confirmArrival/movementReasons'
 
 const expectedArrival = expectedArrivals.arrival({
   fromLocationType: 'COURT',

@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express'
-import type { PrisonService } from '../../../services'
-import { State } from './state'
+import type { PrisonService } from '../../../../services'
+import { State } from '../state'
 
 export default class ConfirmAddedToRollController {
   public constructor(private readonly prisonService: PrisonService) {}
@@ -17,7 +17,7 @@ export default class ConfirmAddedToRollController {
       const { activeCaseLoadId } = res.locals.user
       const prison = await this.prisonService.getPrison(activeCaseLoadId)
       State.newArrival.clear(res)
-      return res.render('pages/bookedtoday/arrivals/confirmAddedToRoll.njk', {
+      return res.render('pages/bookedtoday/arrivals/confirmArrival/confirmAddedToRoll.njk', {
         firstName,
         lastName,
         prison,
