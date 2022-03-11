@@ -1,6 +1,6 @@
 import Page, { PageElement } from '../../page'
 
-export default class SingleRecordFoundPage extends Page {
+export default class SingleMatchingRecordFoundPage extends Page {
   constructor() {
     super('This person has an existing prisoner record')
   }

@@ -1,5 +1,5 @@
 import express, { RequestHandler, Router } from 'express'
-import PossibleRecordsFoundController from './possibleRecordsFoundController'
+import MultipleExistingRecordsFoundController from './multipleExistingRecordsFound'
 
 import authorisationForUrlMiddleware from '../../../../middleware/authorisationForUrlMiddleware'
 import asyncMiddleware from '../../../../middleware/asyncMiddleware'
@@ -30,12 +30,14 @@ export default function routes(services: Services): Router {
       ...handlers.map(handler => asyncMiddleware(handler)),
     ])
 
-  const possibleRecordsFoundController = new PossibleRecordsFoundController(services.expectedArrivalsService)
-  get('/possible-records-found', [checkSearchDetailsPresent, possibleRecordsFoundController.view()])
+  const multipleExistingRecordsFoundController = new MultipleExistingRecordsFoundController(
+    services.expectedArrivalsService
+  )
+  get('/possible-records-found', [checkSearchDetailsPresent, multipleExistingRecordsFoundController.view()])
   post('/possible-records-found', [
     checkSearchDetailsPresent,
     validationMiddleware(MatchedRecordSelectionValidation),
-    possibleRecordsFoundController.submit(),
+    multipleExistingRecordsFoundController.submit(),
   ])
 
   router.use(searchRoutes(services))

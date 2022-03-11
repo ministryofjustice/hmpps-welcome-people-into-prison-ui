@@ -1,5 +1,5 @@
 import Page from '../../../pages/page'
-import SingleRecordFoundPage from '../../../pages/bookedtoday/arrivals/singleRecordFound'
+import SingleMatchingRecordFoundPage from '../../../pages/bookedtoday/arrivals/singleMatchingRecordFound'
 import ImprisonmentStatusPage from '../../../pages/bookedtoday/arrivals/confirmArrival/imprisonmentStatus'
 import CheckAnswersPage from '../../../pages/bookedtoday/arrivals/confirmArrival/checkAnswers'
 import ConfirmAddedToRollPage from '../../../pages/bookedtoday/arrivals/confirmArrival/confirmAddedToRoll'
@@ -33,18 +33,21 @@ context('Check Answers', () => {
     cy.task('stubExpectedArrival', expectedArrival)
     cy.signIn()
 
-    const singleRecordFoundPage = ChoosePrisonerPage.selectPrisoner(expectedArrival.id, SingleRecordFoundPage)
-    singleRecordFoundPage.perName().should('contain.text', 'Bob Smith')
-    singleRecordFoundPage.perDob().should('contain.text', '1 January 1970')
-    singleRecordFoundPage.perPrisonNumber().should('contain.text', 'G0015GF')
-    singleRecordFoundPage.perPncNumber().should('contain.text', '01/2345A')
-    singleRecordFoundPage.continue().should('have.attr', 'href', `/prisoners/${expectedArrival.id}/sex`)
+    const singleMatchingRecordFoundPage = ChoosePrisonerPage.selectPrisoner(
+      expectedArrival.id,
+      SingleMatchingRecordFoundPage
+    )
+    singleMatchingRecordFoundPage.perName().should('contain.text', 'Bob Smith')
+    singleMatchingRecordFoundPage.perDob().should('contain.text', '1 January 1970')
+    singleMatchingRecordFoundPage.perPrisonNumber().should('contain.text', 'G0015GF')
+    singleMatchingRecordFoundPage.perPncNumber().should('contain.text', '01/2345A')
+    singleMatchingRecordFoundPage.continue().should('have.attr', 'href', `/prisoners/${expectedArrival.id}/sex`)
 
-    singleRecordFoundPage.existingName().should('contain.text', 'Sam Smith')
-    singleRecordFoundPage.existingDob().should('contain.text', '1 February 1970')
-    singleRecordFoundPage.existingPrisonNumber().should('contain.text', 'A1234BC')
-    singleRecordFoundPage.existingPncNumber().should('contain.text', '01/4567A')
-    singleRecordFoundPage.continue().click()
+    singleMatchingRecordFoundPage.existingName().should('contain.text', 'Sam Smith')
+    singleMatchingRecordFoundPage.existingDob().should('contain.text', '1 February 1970')
+    singleMatchingRecordFoundPage.existingPrisonNumber().should('contain.text', 'A1234BC')
+    singleMatchingRecordFoundPage.existingPncNumber().should('contain.text', '01/4567A')
+    singleMatchingRecordFoundPage.continue().click()
 
     const sexPage = Page.verifyOnPage(SexPage)
     sexPage.sexRadioButtons('F').click()
@@ -115,8 +118,11 @@ context('Check Answers', () => {
     cy.task('stubExpectedArrival', expectedArrival)
 
     cy.signIn()
-    const singleRecordFoundPage = ChoosePrisonerPage.selectPrisoner(expectedArrival.id, SingleRecordFoundPage)
-    singleRecordFoundPage.continue().click()
+    const singleMatchingRecordFoundPage = ChoosePrisonerPage.selectPrisoner(
+      expectedArrival.id,
+      SingleMatchingRecordFoundPage
+    )
+    singleMatchingRecordFoundPage.continue().click()
 
     const sexPage = Page.verifyOnPage(SexPage)
     sexPage.continue().click()

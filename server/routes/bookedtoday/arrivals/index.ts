@@ -1,6 +1,6 @@
 import express, { RequestHandler, Router } from 'express'
-import SingleRecordFoundController from './singleRecordFoundController'
-import NoRecordFoundController from './noRecordFoundController'
+import SingleMatchingRecordFoundController from './singleMatchingRecordFoundController'
+import NoMatchingRecordsFoundController from './noMatchingRecordsFoundController'
 import ReviewPerDetailsController from './reviewPerDetailsController'
 import ReviewPerDetailsChangeNameController from './reviewPerDetailsChangeNameController'
 import ReviewPerDetailsChangeDateOfBirthController from './reviewPerDetailsChangeDateOfBirthController'
@@ -38,11 +38,11 @@ export default function routes(services: Services): Router {
       handlers.map(handler => asyncMiddleware(handler))
     )
 
-  const singleRecordFoundController = new SingleRecordFoundController(services.expectedArrivalsService)
-  get('/prisoners/:id/record-found', [singleRecordFoundController.view()], [Role.PRISON_RECEPTION])
+  const singleMatchingRecordFoundController = new SingleMatchingRecordFoundController(services.expectedArrivalsService)
+  get('/prisoners/:id/record-found', [singleMatchingRecordFoundController.view()], [Role.PRISON_RECEPTION])
 
-  const noRecordFoundController = new NoRecordFoundController(services.expectedArrivalsService)
-  get('/prisoners/:id/no-record-found', [noRecordFoundController.view()], [Role.PRISON_RECEPTION])
+  const noMatchingRecordsFoundController = new NoMatchingRecordsFoundController(services.expectedArrivalsService)
+  get('/prisoners/:id/no-record-found', [noMatchingRecordsFoundController.view()], [Role.PRISON_RECEPTION])
 
   const reviewPerDetailsController = new ReviewPerDetailsController(services.expectedArrivalsService)
   get('/prisoners/:id/review-per-details/new', [reviewPerDetailsController.newReview()], [Role.PRISON_RECEPTION])

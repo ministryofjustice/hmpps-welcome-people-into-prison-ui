@@ -2,7 +2,7 @@ import ChoosePrisonerPage from '../../../pages/bookedtoday/choosePrisoner'
 import Page from '../../../pages/page'
 import Role from '../../../../server/authentication/role'
 import expectedArrivals from '../../../mockApis/responses/expectedArrivals'
-import NoExistingRecordPage from '../../../pages/bookedtoday/arrivals/noExistingRecord'
+import NoMatchingRecordsFoundPage from '../../../pages/bookedtoday/arrivals/noMatchingRecordsFound'
 import ReviewPerDetailsPage from '../../../pages/bookedtoday/arrivals/reviewPerDetails'
 import ChangeNamePage from '../../../pages/bookedtoday/arrivals/changeName'
 import ChangeDateOfBirthPage from '../../../pages/bookedtoday/arrivals/changeDateOfBirth'
@@ -29,11 +29,11 @@ context('Review per details spec', () => {
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
 
-    const noExistingRecordPage = Page.verifyOnPage(NoExistingRecordPage)
-    noExistingRecordPage.perName().should('contain.text', 'Bob Smith')
-    noExistingRecordPage.perDob().should('contain.text', '1 January 1970')
-    noExistingRecordPage.perPncNumber().should('contain.text', '01/2345A')
-    noExistingRecordPage.continue().click()
+    const noMatchingRecordsFoundPage = Page.verifyOnPage(NoMatchingRecordsFoundPage)
+    noMatchingRecordsFoundPage.perName().should('contain.text', 'Bob Smith')
+    noMatchingRecordsFoundPage.perDob().should('contain.text', '1 January 1970')
+    noMatchingRecordsFoundPage.perPncNumber().should('contain.text', '01/2345A')
+    noMatchingRecordsFoundPage.continue().click()
   })
 
   it('Change name', () => {
