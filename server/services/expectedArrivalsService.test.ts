@@ -252,6 +252,22 @@ describe('Expected arrivals service', () => {
     })
   })
 
+  describe('getPrisonDetailsForArrival', () => {
+    it('Calls upstream service correctly', async () => {
+      const result = await service.getPrisonerDetailsForArrival('12345-67890')
+
+      expect(WelcomeClientFactory).toBeCalledWith(token)
+      expect(welcomeClient.getArrival).toBeCalledWith('12345-67890')
+      expect(result).toStrictEqual({
+        dateOfBirth: '1973-01-08',
+        firstName: 'James',
+        lastName: 'Smyth',
+        pncNumber: '99/98644M',
+        prisonNumber: 'A1234AB',
+      })
+    })
+  })
+
   describe('createOffenderRecordAndBooking', () => {
     const newOffender: NewOffenderBooking = {
       firstName: 'Jim',

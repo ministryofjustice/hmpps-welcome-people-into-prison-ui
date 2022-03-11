@@ -8,10 +8,10 @@ export default class SexController {
 
       const data = State.newArrival.get(req)
 
-      const genderValue = this.convertGenderKeyToValue(data.sex)
+      const sex = this.normaliseToNomisValue(data.sex)
 
-      if (genderValue) {
-        State.newArrival.update(req, res, { sex: genderValue })
+      if (sex) {
+        State.newArrival.update(req, res, { sex })
         return res.redirect(`/prisoners/${id}/imprisonment-status`)
       }
 
@@ -38,9 +38,9 @@ export default class SexController {
     }
   }
 
-  private convertGenderKeyToValue(value: string): string {
-    if (value?.toUpperCase() === 'MALE') return 'M'
-    if (value?.toUpperCase() === 'FEMALE') return 'F'
+  private normaliseToNomisValue(value: string): string {
+    if (['MALE', 'M'].includes(value?.toUpperCase())) return 'M'
+    if (['FEMALE', 'F'].includes(value?.toUpperCase())) return 'F'
     return null
   }
 }

@@ -44,7 +44,7 @@ context('Confirm court return added To roll', () => {
     Page.verifyOnPage(ChoosePrisonerPage)
 
     cy.task('getCourtReturnConfirmationRequest', expectedArrival.id).then(request => {
-      expect(request).to.deep.equal({ prisonId: 'MDI', prisonNumber: 'G0013AB' })
+      expect(request).to.deep.equal({ prisonId: 'MDI', prisonNumber: 'A1234BC' })
     })
   })
 })

@@ -10,6 +10,7 @@ import moment, { type Moment } from 'moment'
 import type { Readable } from 'stream'
 import { groupBy, compareByFullName } from '../utils/utils'
 import type { RestClientBuilder, WelcomeClient, HmppsAuthClient } from '../data'
+import logger from '../../logger'
 
 export enum LocationType {
   COURT = 'COURT',
@@ -54,6 +55,15 @@ export default class ExpectedArrivalsService {
   public async getArrival(id: string): Promise<Arrival> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     return this.welcomeClientFactory(token).getArrival(id)
+  }
+
+  public async getPrisonerDetailsForArrival(id: string): Promise<PrisonerDetails> {
+    const token = await this.hmppsAuthClient.getSystemClientToken()
+    const arrival = await this.welcomeClientFactory(token).getArrival(id)
+    if (arrival.potentialMatches.length > 1) {
+      logger.warn(`multiple matches for move: ${id}`)
+    }
+    return arrival.potentialMatches[0]
   }
 
   public async createOffenderRecordAndBooking(

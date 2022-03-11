@@ -55,7 +55,7 @@ describe('/sex', () => {
       }
     )
 
-    it.each([{ sex: GenderKeys.MALE }, { sex: GenderKeys.FEMALE }])(
+    it.each([{ sex: GenderKeys.MALE }, { sex: 'M' }, { sex: GenderKeys.FEMALE }, { sex: 'F' }])(
       'should render /imprisonment-status page when Arrival gender is MALE or FEMALE',
       ({ sex }) => {
         signedCookiesProvider.mockReturnValue({

@@ -10,7 +10,7 @@ export default class CheckCourtReturnController {
   public checkCourtReturn(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
-      const data = await this.expectedArrivalsService.getArrival(id)
+      const data = await this.expectedArrivalsService.getPrisonerDetailsForArrival(id)
       return res.render('pages/bookedtoday/arrivals/courtreturns/checkCourtReturn.njk', { data, id })
     }
   }
@@ -20,7 +20,8 @@ export default class CheckCourtReturnController {
       const { id } = req.params
       const { username } = req.user
       const { activeCaseLoadId } = res.locals.user
-      const data = await this.expectedArrivalsService.getArrival(id)
+      const arrival = await this.expectedArrivalsService.getArrival(id)
+      const data = await this.expectedArrivalsService.getPrisonerDetailsForArrival(id)
 
       const arrivalResponse = await this.expectedArrivalsService.confirmCourtReturn(
         username,
@@ -36,14 +37,14 @@ export default class CheckCourtReturnController {
       req.flash('prisoner', {
         firstName: data.firstName,
         lastName: data.lastName,
-        prisonNumber: arrivalResponse.prisonNumber,
+        prisonNumber: data.prisonNumber,
         location: arrivalResponse.location,
       })
 
       this.raiseAnalyticsEvent(
         'Add to the establishment roll',
         'Confirmed court return returned',
-        `AgencyId: ${activeCaseLoadId}, From: ${data.fromLocation}, Type: ${data.fromLocationType},`,
+        `AgencyId: ${activeCaseLoadId}, From: ${arrival.fromLocation}, Type: ${arrival.fromLocationType},`,
         req.hostname
       )
 
