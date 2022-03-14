@@ -1,42 +1,13 @@
-import { type Arrival, GenderKeys } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
 import { appWithAllRoutes, signedCookiesProvider } from '../../../__testutils/appSetup'
-import ExpectedArrivalsService, { LocationType } from '../../../../services/expectedArrivalsService'
 import Role from '../../../../authentication/role'
-
-jest.mock('../../../../services/expectedArrivalsService')
-
-const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
 
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
-  expectedArrivalsService.getArrival.mockResolvedValue({
-    id: '1111-2222-3333-4444',
-    firstName: 'James',
-    lastName: 'Smyth',
-    dateOfBirth: '1973-01-08',
-    prisonNumber: undefined,
-    pncNumber: '01/98644M',
-    date: '2021-09-01',
-    fromLocation: 'Reading',
-    moveType: 'PRISON_REMAND',
-    fromLocationType: LocationType.COURT,
-    gender: GenderKeys.MALE,
-    isCurrentPrisoner: false,
-    potentialMatches: [
-      {
-        firstName: 'Jim',
-        lastName: 'Smith',
-        dateOfBirth: '1973-01-08',
-        prisonNumber: 'A1234AB',
-        pncNumber: '01/98644M',
-      },
-    ],
-  } as unknown as Arrival)
+  app = appWithAllRoutes({ roles: [Role.PRISON_RECEPTION] })
 
   signedCookiesProvider.mockReturnValue({
     'new-arrival': {
@@ -45,6 +16,13 @@ beforeEach(() => {
       dateOfBirth: '1973-01-08',
       sex: 'MALE',
       prisonNumber: 'A1234AB',
+      pncNumber: '01/98644M',
+    },
+    'search-details': {
+      firstName: 'James',
+      lastName: 'Smyth',
+      dateOfBirth: '1973-01-08',
+      prisonNumber: undefined,
       pncNumber: '01/98644M',
     },
   })
@@ -63,16 +41,7 @@ describe('GET /view', () => {
       .expect('Location', '/autherror')
   })
 
-  it('should call service method correctly', () => {
-    return request(app)
-      .get('/prisoners/12345-67890/search-for-different-existing-record/record-found')
-      .expect('Content-Type', 'text/html; charset=utf-8')
-      .expect(res => {
-        expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
-      })
-  })
-
-  it('should get search details from state', () => {
+  it('should get details from state', () => {
     return request(app)
       .get('/prisoners/12345-67890/search-for-different-existing-record/records-found')
       .expect(() => {

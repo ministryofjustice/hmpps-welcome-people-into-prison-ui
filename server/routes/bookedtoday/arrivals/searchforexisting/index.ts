@@ -51,7 +51,7 @@ export default function routes(services: Services): Router {
     multipleExistingRecordsFoundController.submit(),
   ])
 
-  const singleExistingRecordFoundController = new SingleExistingRecordFoundController(services.expectedArrivalsService)
+  const singleExistingRecordFoundController = new SingleExistingRecordFoundController()
   get('/record-found', [checkNewArrivalPresent, singleExistingRecordFoundController.view()])
 
   const noExistingRecordsFoundController = new NoExistingRecordsFoundController(services.expectedArrivalsService)
