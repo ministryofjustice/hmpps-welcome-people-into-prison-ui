@@ -1,6 +1,7 @@
 import express, { RequestHandler, Router } from 'express'
 import MultipleExistingRecordsFoundController from './multipleExistingRecordsFoundController'
 import SingleExistingRecordFoundController from './singleExistingRecordFoundController'
+import NoExistingRecordsFoundController from './noExistingRecordsFoundController'
 
 import authorisationForUrlMiddleware from '../../../../middleware/authorisationForUrlMiddleware'
 import asyncMiddleware from '../../../../middleware/asyncMiddleware'
@@ -52,6 +53,9 @@ export default function routes(services: Services): Router {
 
   const singleExistingRecordFoundController = new SingleExistingRecordFoundController(services.expectedArrivalsService)
   get('/record-found', [checkNewArrivalPresent, singleExistingRecordFoundController.view()])
+
+  const noExistingRecordsFoundController = new NoExistingRecordsFoundController(services.expectedArrivalsService)
+  get('/no-record-found', [noExistingRecordsFoundController.view()])
 
   router.use(searchRoutes(services))
 
