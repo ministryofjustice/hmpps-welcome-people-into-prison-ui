@@ -52,7 +52,7 @@ describe('possible records found', () => {
   describe('view', () => {
     it('should get search details from state', () => {
       return request(app)
-        .get('/prisoners/12345-67890/possible-records-found')
+        .get('/prisoners/12345-67890/search-for-different-existing-record/possible-records-found')
         .expect(() => {
           expect(signedCookiesProvider).toHaveBeenCalledTimes(1)
         })
@@ -60,7 +60,7 @@ describe('possible records found', () => {
 
     it('should call service method correctly', () => {
       return request(app)
-        .get('/prisoners/12345-67890/possible-records-found')
+        .get('/prisoners/12345-67890/search-for-different-existing-record/possible-records-found')
         .expect(() => {
           expect(expectedArrivalsService.getMatchingRecords).toHaveBeenCalledWith(searchDetails)
         })
@@ -68,7 +68,7 @@ describe('possible records found', () => {
 
     it('should render page correctly', () => {
       return request(app)
-        .get('/prisoners/12345-67890/possible-records-found')
+        .get('/prisoners/12345-67890/search-for-different-existing-record/possible-records-found')
         .expect(200)
         .expect('Content-Type', /html/)
         .expect(res => {
@@ -81,10 +81,10 @@ describe('possible records found', () => {
   describe('submit', () => {
     it('should redirect if errors', () => {
       return request(app)
-        .post('/prisoners/12345-67890/possible-records-found')
+        .post('/prisoners/12345-67890/search-for-different-existing-record/possible-records-found')
         .send()
         .expect(302)
-        .expect('Location', '/prisoners/12345-67890/possible-records-found')
+        .expect('Location', '/prisoners/12345-67890/search-for-different-existing-record/possible-records-found')
         .expect(() => {
           expect(flashProvider).toHaveBeenCalledWith('errors', [
             {
@@ -97,7 +97,7 @@ describe('possible records found', () => {
 
     it('should redirect to /sex page if no errors', () => {
       return request(app)
-        .post('/prisoners/12345-67890/possible-records-found')
+        .post('/prisoners/12345-67890/search-for-different-existing-record/possible-records-found')
         .send(potentialMatches[0])
         .expect(302)
         .expect('Location', '/prisoners/12345-67890/sex')

@@ -1,5 +1,6 @@
 import express, { RequestHandler, Router } from 'express'
 import MultipleExistingRecordsFoundController from './multipleExistingRecordsFoundController'
+import SingleExistingRecordFoundController from './singleExistingRecordFoundController'
 
 import authorisationForUrlMiddleware from '../../../../middleware/authorisationForUrlMiddleware'
 import asyncMiddleware from '../../../../middleware/asyncMiddleware'
@@ -17,18 +18,27 @@ export default function routes(services: Services): Router {
   const router = express.Router()
 
   const checkSearchDetailsPresent = State.searchDetails.ensurePresent('/')
+  const checkNewArrivalPresent = State.newArrival.ensurePresent('/')
 
   const get = (path: string, handlers: RequestHandler[]) =>
-    router.get(`/prisoners/:id${path}`, authorisationForUrlMiddleware([Role.PRISON_RECEPTION]), [
-      redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
-      ...handlers.map(handler => asyncMiddleware(handler)),
-    ])
+    router.get(
+      `/prisoners/:id/search-for-different-existing-record${path}`,
+      authorisationForUrlMiddleware([Role.PRISON_RECEPTION]),
+      [
+        redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
+        ...handlers.map(handler => asyncMiddleware(handler)),
+      ]
+    )
 
   const post = (path: string, handlers: RequestHandler[]) =>
-    router.post(`/prisoners/:id${path}`, authorisationForUrlMiddleware([Role.PRISON_RECEPTION]), [
-      redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
-      ...handlers.map(handler => asyncMiddleware(handler)),
-    ])
+    router.post(
+      `/prisoners/:id/search-for-different-existing-record${path}`,
+      authorisationForUrlMiddleware([Role.PRISON_RECEPTION]),
+      [
+        redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
+        ...handlers.map(handler => asyncMiddleware(handler)),
+      ]
+    )
 
   const multipleExistingRecordsFoundController = new MultipleExistingRecordsFoundController(
     services.expectedArrivalsService
@@ -39,6 +49,9 @@ export default function routes(services: Services): Router {
     validationMiddleware(MatchedRecordSelectionValidation),
     multipleExistingRecordsFoundController.submit(),
   ])
+
+  const singleExistingRecordFoundController = new SingleExistingRecordFoundController(services.expectedArrivalsService)
+  get('/record-found', [checkNewArrivalPresent, singleExistingRecordFoundController.view()])
 
   router.use(searchRoutes(services))
 
