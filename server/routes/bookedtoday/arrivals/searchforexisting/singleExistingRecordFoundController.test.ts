@@ -3,10 +3,12 @@ import request from 'supertest'
 import cheerio from 'cheerio'
 import { appWithAllRoutes, signedCookiesProvider } from '../../../__testutils/appSetup'
 import Role from '../../../../authentication/role'
+import config from '../../../../config'
 
 let app: Express
 
 beforeEach(() => {
+  config.confirmNoIdentifiersEnabled = true
   app = appWithAllRoutes({ roles: [Role.PRISON_RECEPTION] })
 
   signedCookiesProvider.mockReturnValue({

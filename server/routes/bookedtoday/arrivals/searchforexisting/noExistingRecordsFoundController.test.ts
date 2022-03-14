@@ -5,6 +5,7 @@ import { type Arrival, GenderKeys } from 'welcome'
 import { appWithAllRoutes } from '../../../__testutils/appSetup'
 import ExpectedArrivalsService, { LocationType } from '../../../../services/expectedArrivalsService'
 import Role from '../../../../authentication/role'
+import config from '../../../../config'
 
 jest.mock('../../../../services/expectedArrivalsService')
 
@@ -13,6 +14,7 @@ const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.
 let app: Express
 
 beforeEach(() => {
+  config.confirmNoIdentifiersEnabled = true
   app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
   expectedArrivalsService.getArrival.mockResolvedValue({
     id: '1111-2222-3333-4444',
