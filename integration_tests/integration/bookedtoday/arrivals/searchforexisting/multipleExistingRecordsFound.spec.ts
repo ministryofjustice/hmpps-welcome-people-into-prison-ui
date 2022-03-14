@@ -64,9 +64,9 @@ context('Multiple existing records', () => {
     const changePncNumberPage = Page.verifyOnPage(ChangePncNumberPage)
     changePncNumberPage.pnc().clear().type('01/123456')
     changePncNumberPage.save().click()
+    searchForExistingPage.search().click()
 
-    // Fix - navigation to this page currently missing
-    const multipleExistingRecordsFoundPage = MultipleExistingRecordsFoundPage.goTo('11111-11111')
+    const multipleExistingRecordsFoundPage = Page.verifyOnPage(MultipleExistingRecordsFoundPage)
     const arrival = multipleExistingRecordsFoundPage.arrival()
     arrival.fieldName('prisoner-name').should('contain', 'Bob Smith')
     arrival.fieldName('dob').should('contain', '21 November 1972')

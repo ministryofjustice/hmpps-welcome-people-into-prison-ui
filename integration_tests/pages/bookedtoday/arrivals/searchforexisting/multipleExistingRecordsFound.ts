@@ -6,7 +6,7 @@ export default class MultipleMatchingRecordsFoundPage extends Page {
   }
 
   static goTo(id: string): MultipleMatchingRecordsFoundPage {
-    cy.visit(`/prisoners/${id}/possible-records-found`)
+    cy.visit(`/prisoners/${id}/search-for-different-existing-record/possible-records-found`)
     return Page.verifyOnPage(MultipleMatchingRecordsFoundPage)
   }
 
