@@ -10,16 +10,16 @@ export default class MultipleExistingRecordsFoundController {
       const { id } = req.params
       const searchData = State.searchDetails.get(req)
 
-      const arrival = {
-        firstName: searchData.firstName,
-        lastName: searchData.lastName,
-        dateOfBirth: searchData.dateOfBirth,
-      }
-
       const potentialMatches = await this.expectedArrivalsService.getMatchingRecords(searchData)
 
       res.render('pages/bookedtoday/arrivals/searchforexisting/multipleExistingRecordsFound.njk', {
-        arrival,
+        arrival: {
+          firstName: searchData.firstName,
+          lastName: searchData.lastName,
+          dateOfBirth: searchData.dateOfBirth,
+          prisonNumber: searchData.prisonNumber,
+          pncNumber: searchData.pncNumber,
+        },
         data: { potentialMatches, id },
         errors: req.flash('errors'),
       })

@@ -6,6 +6,8 @@ import ImprisonmentStatus from '../../../../pages/bookedtoday/arrivals/confirmAr
 import Page from '../../../../pages/page'
 import Role from '../../../../../server/authentication/role'
 import expectedArrivals from '../../../../mockApis/responses/expectedArrivals'
+import ChangePrisonNumberPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/search/changePrisonNumber'
+import ChangePncNumberPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/search/changePncNumber'
 
 const matchedRecords = [
   {
@@ -53,10 +55,23 @@ context('Multiple existing records', () => {
   })
 
   it('should display page contents', () => {
+    const searchForExistingPage = Page.verifyOnPage(SearchForExistingPage)
+    searchForExistingPage.prisonNumber.change().click()
+    const changePrisonNumberPage = Page.verifyOnPage(ChangePrisonNumberPage)
+    changePrisonNumberPage.prisonNumber().clear().type('A1234AA')
+    changePrisonNumberPage.save().click()
+    searchForExistingPage.pnc.change().click()
+    const changePncNumberPage = Page.verifyOnPage(ChangePncNumberPage)
+    changePncNumberPage.pnc().clear().type('01/123456')
+    changePncNumberPage.save().click()
+
+    // Fix - navigation to this page currently missing
     const multipleExistingRecordsFoundPage = MultipleExistingRecordsFoundPage.goTo('11111-11111')
     const arrival = multipleExistingRecordsFoundPage.arrival()
     arrival.fieldName('prisoner-name').should('contain', 'Bob Smith')
     arrival.fieldName('dob').should('contain', '21 November 1972')
+    arrival.fieldName('prison-number').should('contain', 'A1234AA')
+    arrival.fieldName('pnc-number').should('contain', '01/123456')
 
     let match
     match = multipleExistingRecordsFoundPage.chooseMatch(1)
@@ -70,7 +85,7 @@ context('Multiple existing records', () => {
     match.fieldName('prisoner-name').should('contain', 'Sammy Smith')
     match.fieldName('dob').should('contain', '1 February 1970')
 
-    multipleExistingRecordsFoundPage.prisonerImage().should('have.attr', 'src', `/prisoner/G0014GM/image`)
+    multipleExistingRecordsFoundPage.prisonerImage().should('have.attr', 'src', `/prisoners/G0014GM/image`)
   })
 
   it('should allow a new search', () => {
