@@ -1,7 +1,7 @@
 import type { Express } from 'express'
 import { type Arrival, Gender, type NewOffenderBooking } from 'welcome'
 import request from 'supertest'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 
 import { appWithAllRoutes, user, signedCookiesProvider, flashProvider } from '../../../__testutils/appSetup'
 import { ExpectedArrivalsService, ImprisonmentStatusesService, RaiseAnalyticsEvent } from '../../../../services'
@@ -83,7 +83,7 @@ describe('/checkAnswers', () => {
         })
     })
 
-    it('should render /check-answers page', () => {
+    it('should render correct page when there is a prison number', () => {
       return request(app)
         .get('/prisoners/12345-67890/check-answers')
         .expect(200)
@@ -91,6 +91,28 @@ describe('/checkAnswers', () => {
         .expect(res => {
           const $ = cheerio.load(res.text)
           expect($('h1').text()).toContain('Check your answers before adding')
+        })
+    })
+    it('should render correct page when no matching prison number', () => {
+      signedCookiesProvider.mockReturnValue({
+        'new-arrival': {
+          firstName: 'Jim',
+          lastName: 'Smith',
+          dateOfBirth: '1973-01-08',
+          pncNumber: '01/98644M',
+          sex: 'M',
+          code: 'determinate-sentence',
+          imprisonmentStatus: 'SENT',
+          movementReasonCode: '26',
+        },
+      })
+      return request(app)
+        .get('/prisoners/12345-67890/check-answers')
+        .expect(200)
+        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect(res => {
+          const $ = cheerio.load(res.text)
+          expect($('h1').text()).toContain("You're about to add this person to the establishment roll")
         })
     })
   })

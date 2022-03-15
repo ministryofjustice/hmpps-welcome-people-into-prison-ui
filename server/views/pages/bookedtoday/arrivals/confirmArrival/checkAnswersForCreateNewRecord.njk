@@ -1,0 +1,72 @@
+{% extends "../../../../partials/layout.njk" %}
+{% set pageTitle = "Check answers" %}
+
+{% block content %}
+    <div class="govuk-width-container">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <span class="govuk-caption-xl"> Confirm a prisoner's arrival </span>
+                <h1 class="govuk-heading-l govuk-!-margin-bottom-7">You're about to add this person to the establishment roll</h1>
+                <dl class="govuk-summary-list">
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                            Name
+                        </dt>
+                        <dd class="govuk-summary-list__value" data-qa="prisoner-name">
+                            {{ data.firstName}} {{ data.lastName }}
+                        </dd>
+                    </div>
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                            Date of birth
+                        </dt>
+                        <dd class="govuk-summary-list__value" data-qa="dob">
+                            {{ data.dateOfBirth | formatDate('D MMMM YYYY') }}
+                        </dd>
+                    </div>
+                    {%  if data.pncNumber  %}
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                                PNC number
+                            </dt>
+                            <dd class="govuk-summary-list__value" data-qa="pnc-number">
+                                {{ data.pncNumber }}
+                            </dd>
+                        </div>
+                    {%  endif %}
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                            Sex
+                        </dt>
+                        <dd class="govuk-summary-list__value" data-qa="sex">
+                            {{ "Male" if data.sex === 'M' else "Female" }}
+                        </dd>
+                    </div>
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                            Reason for imprisonment
+                        </dt>
+                        <dd class="govuk-summary-list__value" data-qa="reason">
+                            {{ data.reasonImprisonment }}
+                        </dd>
+                    </div>
+                </dl>
+                <h2 class="govuk-heading-m">Create prisoner record and add to establishment roll</h2>
+                <p class="govuk-body">
+                    By submitting this form, you will create a new prisoner record, add this person to your 
+                    establishment roll and generate a new prison number.
+                </p>
+
+                <form method="post" action = "/prisoners/{{ id }}/check-answers">
+                    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                    {{ govukButton({
+                        classes: "govuk-button govuk-!-margin-bottom-1",
+                        text: "Create record and add to establishment roll",
+                        attributes: {'data-qa': 'add-to-roll'},
+                        type: 'submit'
+                    }) }}
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

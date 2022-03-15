@@ -1,7 +1,10 @@
 import Page from '../../../pages/page'
 import SingleMatchingRecordFoundPage from '../../../pages/bookedtoday/arrivals/singleMatchingRecordFound'
+import NoMatchingRecordFoundPage from '../../../pages/bookedtoday/arrivals/noMatchingRecordsFound'
+import ReviewPerDetailsPage from '../../../pages/bookedtoday/arrivals/reviewPerDetails'
 import ImprisonmentStatusPage from '../../../pages/bookedtoday/arrivals/confirmArrival/imprisonmentStatus'
 import CheckAnswersPage from '../../../pages/bookedtoday/arrivals/confirmArrival/checkAnswers'
+import CheckAnswersForCreateNewRecordPage from '../../../pages/bookedtoday/arrivals/confirmArrival/checkAnswersForCreateNewRecord'
 import ConfirmAddedToRollPage from '../../../pages/bookedtoday/arrivals/confirmArrival/confirmAddedToRoll'
 import Role from '../../../../server/authentication/role'
 import expectedArrivals from '../../../mockApis/responses/expectedArrivals'
@@ -137,6 +140,43 @@ context('Check Answers', () => {
     const checkAnswersPage = Page.verifyOnPage(CheckAnswersPage)
     checkAnswersPage.prisonNumber().should('contain.text', 'A1234BC')
     checkAnswersPage.pncNumber().should('contain.text', '01/4567A')
+    cy.task('stubCreateOffenderRecordAndBooking', expectedArrival.id)
+    checkAnswersPage.addToRoll().click()
+    Page.verifyOnPage(ConfirmAddedToRollPage)
+  })
+  it('Should display correct prisoner details and sub-title', () => {
+    cy.task(
+      'stubExpectedArrival',
+      expectedArrivals.arrival({
+        fromLocationType: 'COURT',
+        isCurrentPrisoner: false,
+        gender: null,
+        prisonNumber: null,
+      })
+    )
+
+    cy.signIn()
+    ChoosePrisonerPage.selectPrisoner(expectedArrival.id, NoMatchingRecordFoundPage).continue().click()
+    Page.verifyOnPage(ReviewPerDetailsPage).continue().click()
+
+    const sexPage = Page.verifyOnPage(SexPage)
+    sexPage.sexRadioButtons('M').click()
+    sexPage.continue().click()
+
+    const imprisonmentStatusPage = Page.verifyOnPage(ImprisonmentStatusPage)
+    imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()
+    imprisonmentStatusPage.continue().click()
+
+    const checkAnswersPage = Page.verifyOnPage(CheckAnswersForCreateNewRecordPage)
+    checkAnswersPage.name().should('contain.text', 'Bob Smith')
+    checkAnswersPage.pncNumber().should('contain.text', '01/2345A')
+    checkAnswersPage.dob().should('contain.text', '1 January 1970')
+    checkAnswersPage.sex().should('contain.text', 'Male')
+    checkAnswersPage.reason().should('contain.text', 'On remand')
+    checkAnswersPage
+      .submissionParagraphTitle()
+      .should('contain.text', 'Create prisoner record and add to establishment roll')
+
     cy.task('stubCreateOffenderRecordAndBooking', expectedArrival.id)
     checkAnswersPage.addToRoll().click()
     Page.verifyOnPage(ConfirmAddedToRollPage)

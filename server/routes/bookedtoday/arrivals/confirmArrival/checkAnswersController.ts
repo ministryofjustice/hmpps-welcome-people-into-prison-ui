@@ -19,7 +19,8 @@ export default class CheckAnswersController {
 
       const reasonImprisonment = await this.imprisonmentStatusesService.getReasonForImprisonment(statusAndReason)
       const data = { reasonImprisonment, ...moveData }
-      return res.render('pages/bookedtoday/arrivals/confirmArrival/checkAnswers.njk', { id, data })
+      const pageToRender = moveData.prisonNumber ? 'checkAnswers' : 'checkAnswersForCreateNewRecord'
+      return res.render(`pages/bookedtoday/arrivals/confirmArrival/${pageToRender}.njk`, { id, data })
     }
   }
 
