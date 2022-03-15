@@ -5,17 +5,17 @@ export default class CheckAnswersPage extends Page {
     super('Check your answers before adding')
   }
 
-  name = (): PageElement => cy.get(`[data-qa=prisoner-name]`)
+  name = (): PageElement => cy.get('.data-qa-prisoner-name')
 
-  dob = (): PageElement => cy.get(`[data-qa=dob]`)
+  dob = (): PageElement => cy.get('.data-qa-dob')
 
-  prisonNumber = (): PageElement => cy.get(`[data-qa=prison-number]`)
+  prisonNumber = (): PageElement => cy.get('.data-qa-prison-number')
 
-  pncNumber = (): PageElement => cy.get(`[data-qa=pnc-number]`)
+  pncNumber = (): PageElement => cy.get('.data-qa-pnc-number')
 
-  sex = (): PageElement => cy.get(`[data-qa=sex]`)
+  sex = (): PageElement => cy.get('.data-qa-sex')
 
-  reason = (): PageElement => cy.get(`[data-qa=reason]`)
+  reason = (): PageElement => cy.get('.data-qa-reason')
 
-  addToRoll = (): PageElement => cy.get(`[data-qa=add-to-roll]`)
+  addToRoll = (): PageElement => cy.get('[data-qa=add-to-roll]')
 }
