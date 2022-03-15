@@ -1,4 +1,4 @@
-import type { RequestHandler, Response } from 'express'
+import type { RequestHandler, Response, Request } from 'express'
 import type { ExpectedArrivalsService } from '../../../../../services'
 import { SearchDetails, State } from '../../state'
 
@@ -38,6 +38,32 @@ export default class SearchForExistingRecordController {
       res.render('pages/bookedtoday/arrivals/searchforexisting/search/searchForExistingRecord.njk', {
         data: { ...data, id },
       })
+    }
+  }
+
+  public submitSearch(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      const { id } = req.params
+      const searchData = State.searchDetails.get(req)
+      const potentialMatches = await this.expectedArrivalsService.getMatchingRecords(searchData)
+
+      if (potentialMatches.length > 1) {
+        return res.redirect(`/prisoners/${id}/search-for-different-existing-record/possible-records-found`)
+      }
+      if (potentialMatches.length === 1) {
+        const match = potentialMatches[0]
+        State.newArrival.set(res, {
+          firstName: match.firstName,
+          lastName: match.lastName,
+          dateOfBirth: match.dateOfBirth,
+          sex: match.sex,
+          prisonNumber: match.prisonNumber,
+          pncNumber: match.pncNumber,
+        })
+
+        return res.redirect(`/prisoners/${id}/search-for-different-existing-record/record-found`)
+      }
+      return res.redirect(`/prisoners/${id}/search-for-different-existing-record/no-record-found`)
     }
   }
 }

@@ -78,15 +78,6 @@ describe('POST /review-per-details/change-date-of-birth', () => {
       .expect('Location', '/')
   })
 
-  it('should redirect when no cookie present', () => {
-    signedCookiesProvider.mockReturnValue({})
-
-    return request(app)
-      .post('/prisoners/12345-67890/review-per-details/change-date-of-birth')
-      .expect(302)
-      .expect('Location', '/')
-  })
-
   it('should update date of birth in cookie', () => {
     signedCookiesProvider.mockReturnValue({ 'new-arrival': newArrival })
 

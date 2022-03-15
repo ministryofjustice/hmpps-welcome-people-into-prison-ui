@@ -3,6 +3,8 @@ import Page from '../../../../pages/page'
 import Role from '../../../../../server/authentication/role'
 import expectedArrivals from '../../../../mockApis/responses/expectedArrivals'
 import SearchForExistingPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/search/searchForExisting'
+import SingleExistingRecordFoundPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/singleExistingRecordFound'
+import NoExistingRecordsFoundPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/noExistingRecordsFound'
 import ChangeNamePage from '../../../../pages/bookedtoday/arrivals/searchforexisting/search/changeName'
 import ChangeDateOfBirthPage from '../../../../pages/bookedtoday/arrivals/changeDateOfBirth'
 import ChangePrisonNumberPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/search/changePrisonNumber'
@@ -142,5 +144,31 @@ context('Search for existing spec', () => {
       remove().click()
       value().contains('Not entered')
     }
+  })
+
+  it('Redirects to single match page', () => {
+    cy.task('stubMatchedRecords', [
+      {
+        firstName: 'Bob',
+        lastName: 'Smith',
+        dateOfBirth: '1972-11-21',
+        prisonNumber: 'G0014GM',
+        pncNumber: '01/1111A',
+        croNumber: '01/0000A',
+        sex: 'MALE',
+      },
+    ])
+    const searchPage = Page.verifyOnPage(SearchForExistingPage)
+    searchPage.search().click()
+
+    Page.verifyOnPage(SingleExistingRecordFoundPage)
+  })
+
+  it('Redirects to no match page', () => {
+    cy.task('stubMatchedRecords', [])
+    const searchPage = Page.verifyOnPage(SearchForExistingPage)
+    searchPage.search().click()
+
+    Page.verifyOnPage(NoExistingRecordsFoundPage)
   })
 })

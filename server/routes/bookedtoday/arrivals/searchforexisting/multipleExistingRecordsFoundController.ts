@@ -32,7 +32,7 @@ export default class MultipleExistingRecordsFoundController {
 
       if (req.errors) {
         req.flash('errors', req.body)
-        return res.redirect(`/prisoners/${id}/possible-records-found`)
+        return res.redirect(`/prisoners/${id}/search-for-different-existing-record/possible-records-found`)
       }
 
       const { prisonNumber } = req.body

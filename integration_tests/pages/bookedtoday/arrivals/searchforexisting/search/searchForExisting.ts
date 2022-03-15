@@ -27,5 +27,7 @@ export default class SearchForExistingPage extends Page {
     remove: () => cy.get(`[data-qa=remove-prison-number]`),
   }
 
+  search = (): PageElement => cy.get(`[data-qa=search]`)
+
   returnToArrivalsList = (): PageElement => cy.get(`[data-qa=return-to-arrivals-list]`)
 }
