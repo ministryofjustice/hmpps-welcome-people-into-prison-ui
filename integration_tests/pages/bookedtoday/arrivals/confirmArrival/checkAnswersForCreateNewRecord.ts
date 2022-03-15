@@ -1,6 +1,6 @@
 import Page, { PageElement } from '../../../page'
 
-export default class CheckAnswersPage extends Page {
+export default class CheckAnswersForCreateNewRecordPage extends Page {
   constructor() {
     super("You're about to add this person to the establishment roll")
   }
