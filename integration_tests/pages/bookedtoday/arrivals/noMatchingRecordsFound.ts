@@ -14,4 +14,6 @@ export default class NoMatchingRecordsFoundPage extends Page {
   perPncNumber = (): PageElement => cy.get(`.data-qa-per-record-pnc-number`)
 
   continue = (): PageElement => cy.get(`[data-qa=continue]`)
+
+  search = (): PageElement => cy.get('[data-qa=search-instead]')
 }
