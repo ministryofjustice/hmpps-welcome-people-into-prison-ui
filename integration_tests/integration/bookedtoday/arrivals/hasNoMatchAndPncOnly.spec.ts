@@ -6,8 +6,16 @@ import NoMatchingRecordsFoundPage from '../../../pages/bookedtoday/arrivals/noMa
 import ReviewPerDetailsPage from '../../../pages/bookedtoday/arrivals/reviewPerDetails'
 import ChangeNamePage from '../../../pages/bookedtoday/arrivals/changeName'
 import ChangeDateOfBirthPage from '../../../pages/bookedtoday/arrivals/changeDateOfBirth'
+import SearchForExistingPage from '../../../pages/bookedtoday/arrivals/searchforexisting/search/searchForExisting'
 
-context('Review per details spec', () => {
+const arrival = expectedArrivals.arrival({
+  prisonNumber: null,
+  fromLocationType: 'COURT',
+  isCurrentPrisoner: false,
+  potentialMatches: [],
+})
+
+context('No match found', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', Role.PRISON_RECEPTION)
@@ -16,11 +24,6 @@ context('Review per details spec', () => {
     cy.task('stubUserCaseLoads')
     cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [] })
     cy.task('stubMissingPrisonerImage')
-    const arrival = expectedArrivals.arrival({
-      fromLocationType: 'COURT',
-      isCurrentPrisoner: false,
-      potentialMatches: [],
-    })
     cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [arrival] })
     cy.task('stubExpectedArrival', arrival)
 
@@ -28,15 +31,22 @@ context('Review per details spec', () => {
 
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
+  })
 
+  it('Check no match page', () => {
     const noMatchingRecordsFoundPage = Page.verifyOnPage(NoMatchingRecordsFoundPage)
     noMatchingRecordsFoundPage.perName().should('contain.text', 'Bob Smith')
     noMatchingRecordsFoundPage.perDob().should('contain.text', '1 January 1970')
     noMatchingRecordsFoundPage.perPncNumber().should('contain.text', '01/2345A')
-    noMatchingRecordsFoundPage.continue().click()
+    noMatchingRecordsFoundPage.search().click()
+
+    const searchPage = Page.verifyOnPage(SearchForExistingPage)
+    searchPage.name.value().should('contain.text', 'Bob Smith')
   })
 
   it('Change name', () => {
+    const noMatchingRecordsFoundPage = Page.verifyOnPage(NoMatchingRecordsFoundPage)
+    noMatchingRecordsFoundPage.continue().click()
     {
       const reviewPerDetailsPage = Page.verifyOnPage(ReviewPerDetailsPage)
       const { value, change } = reviewPerDetailsPage.name
@@ -64,6 +74,8 @@ context('Review per details spec', () => {
   })
 
   it('Change date of birth', () => {
+    const noMatchingRecordsFoundPage = Page.verifyOnPage(NoMatchingRecordsFoundPage)
+    noMatchingRecordsFoundPage.continue().click()
     {
       const reviewPerDetailsPage = Page.verifyOnPage(ReviewPerDetailsPage)
       const { value, change } = reviewPerDetailsPage.dob

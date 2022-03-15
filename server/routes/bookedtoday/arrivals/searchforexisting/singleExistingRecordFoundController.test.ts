@@ -38,14 +38,14 @@ describe('GET /view', () => {
   it('should redirect to authentication error page for non reception users', () => {
     app = appWithAllRoutes({ roles: [] })
     return request(app)
-      .get('/prisoners/12345-67890/search-for-different-existing-record/record-found')
+      .get('/prisoners/12345-67890/search-for-existing-record/record-found')
       .expect(302)
       .expect('Location', '/autherror')
   })
 
   it('should get details from state', () => {
     return request(app)
-      .get('/prisoners/12345-67890/search-for-different-existing-record/records-found')
+      .get('/prisoners/12345-67890/search-for-existing-record/record-found')
       .expect(() => {
         expect(signedCookiesProvider).toHaveBeenCalledTimes(1)
       })
@@ -53,7 +53,7 @@ describe('GET /view', () => {
 
   it('should display correct page content', () => {
     return request(app)
-      .get('/prisoners/12345-67890/search-for-different-existing-record/record-found')
+      .get('/prisoners/12345-67890/search-for-existing-record/record-found')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
         const $ = cheerio.load(res.text)

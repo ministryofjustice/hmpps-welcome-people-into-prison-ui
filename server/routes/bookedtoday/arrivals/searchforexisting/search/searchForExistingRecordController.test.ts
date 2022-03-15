@@ -203,7 +203,7 @@ describe('POST /search-for-existing-record', () => {
     return request(app)
       .post('/prisoners/12345-67890/search-for-existing-record')
       .expect(302)
-      .expect('Location', '/prisoners/12345-67890/search-for-different-existing-record/possible-records-found')
+      .expect('Location', '/prisoners/12345-67890/search-for-existing-record/possible-records-found')
   })
 
   it('should set new-arrival state and redirect to /record-found when one existing potential record found', () => {
@@ -231,7 +231,7 @@ describe('POST /search-for-existing-record', () => {
           pncNumber: '88/98544M',
         })
       })
-      .expect('Location', '/prisoners/12345-67890/search-for-different-existing-record/record-found')
+      .expect('Location', '/prisoners/12345-67890/search-for-existing-record/record-found')
   })
 
   it('should redirect to /no-record-found when no existing potential records found', () => {
@@ -241,6 +241,6 @@ describe('POST /search-for-existing-record', () => {
     return request(app)
       .post('/prisoners/12345-67890/search-for-existing-record')
       .expect(302)
-      .expect('Location', '/prisoners/12345-67890/search-for-different-existing-record/no-record-found')
+      .expect('Location', '/prisoners/12345-67890/search-for-existing-record/no-record-found')
   })
 })

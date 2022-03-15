@@ -48,7 +48,7 @@ export default class SearchForExistingRecordController {
       const potentialMatches = await this.expectedArrivalsService.getMatchingRecords(searchData)
 
       if (potentialMatches.length > 1) {
-        return res.redirect(`/prisoners/${id}/search-for-different-existing-record/possible-records-found`)
+        return res.redirect(`/prisoners/${id}/search-for-existing-record/possible-records-found`)
       }
       if (potentialMatches.length === 1) {
         const match = potentialMatches[0]
@@ -61,9 +61,9 @@ export default class SearchForExistingRecordController {
           pncNumber: match.pncNumber,
         })
 
-        return res.redirect(`/prisoners/${id}/search-for-different-existing-record/record-found`)
+        return res.redirect(`/prisoners/${id}/search-for-existing-record/record-found`)
       }
-      return res.redirect(`/prisoners/${id}/search-for-different-existing-record/no-record-found`)
+      return res.redirect(`/prisoners/${id}/search-for-existing-record/no-record-found`)
     }
   }
 }
