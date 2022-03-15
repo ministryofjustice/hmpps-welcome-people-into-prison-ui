@@ -23,7 +23,7 @@ export default function routes(services: Services): Router {
 
   const get = (path: string, handlers: RequestHandler[]) =>
     router.get(
-      `/prisoners/:id/search-for-different-existing-record${path}`,
+      `/prisoners/:id/search-for-existing-record${path}`,
       authorisationForUrlMiddleware([Role.PRISON_RECEPTION]),
       [
         redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
@@ -33,7 +33,7 @@ export default function routes(services: Services): Router {
 
   const post = (path: string, handlers: RequestHandler[]) =>
     router.post(
-      `/prisoners/:id/search-for-different-existing-record${path}`,
+      `/prisoners/:id/search-for-existing-record${path}`,
       authorisationForUrlMiddleware([Role.PRISON_RECEPTION]),
       [
         redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),

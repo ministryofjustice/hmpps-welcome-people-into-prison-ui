@@ -41,14 +41,14 @@ describe('GET /view', () => {
   it('should redirect to authentication error page for non reception users', () => {
     app = appWithAllRoutes({ roles: [] })
     return request(app)
-      .get('/prisoners/12345-67890/search-for-different-existing-record/no-record-found')
+      .get('/prisoners/12345-67890/search-for-existing-record/no-record-found')
       .expect(302)
       .expect('Location', '/autherror')
   })
 
   it('should display correct page heading', () => {
     return request(app)
-      .get('/prisoners/12345-67890/search-for-different-existing-record/no-record-found')
+      .get('/prisoners/12345-67890/search-for-existing-record/no-record-found')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
         const $ = cheerio.load(res.text)
