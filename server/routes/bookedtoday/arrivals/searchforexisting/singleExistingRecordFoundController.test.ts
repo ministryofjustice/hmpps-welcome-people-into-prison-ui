@@ -45,7 +45,7 @@ describe('GET /view', () => {
 
   it('should get details from state', () => {
     return request(app)
-      .get('/prisoners/12345-67890/search-for-existing-record/records-found')
+      .get('/prisoners/12345-67890/search-for-existing-record/record-found')
       .expect(() => {
         expect(signedCookiesProvider).toHaveBeenCalledTimes(1)
       })

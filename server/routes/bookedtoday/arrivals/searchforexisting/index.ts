@@ -54,7 +54,7 @@ export default function routes(services: Services): Router {
   const singleExistingRecordFoundController = new SingleExistingRecordFoundController()
   get('/record-found', [checkNewArrivalPresent, checkSearchDetailsPresent, singleExistingRecordFoundController.view()])
 
-  const noExistingRecordsFoundController = new NoExistingRecordsFoundController(services.expectedArrivalsService)
+  const noExistingRecordsFoundController = new NoExistingRecordsFoundController()
   get('/no-record-found', [noExistingRecordsFoundController.view()])
 
   router.use(searchRoutes(services))
