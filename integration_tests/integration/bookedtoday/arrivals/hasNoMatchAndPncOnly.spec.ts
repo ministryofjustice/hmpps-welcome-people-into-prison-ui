@@ -7,6 +7,9 @@ import ReviewPerDetailsPage from '../../../pages/bookedtoday/arrivals/reviewPerD
 import ChangeNamePage from '../../../pages/bookedtoday/arrivals/changeName'
 import ChangeDateOfBirthPage from '../../../pages/bookedtoday/arrivals/changeDateOfBirth'
 import SearchForExistingPage from '../../../pages/bookedtoday/arrivals/searchforexisting/search/searchForExisting'
+import ImprisonmentStatusPage from '../../../pages/bookedtoday/arrivals/confirmArrival/imprisonmentStatus'
+import CheckAnswersForCreateNewRecordPage from '../../../pages/bookedtoday/arrivals/confirmArrival/checkAnswersForCreateNewRecord'
+import ConfirmAddedToRollPage from '../../../pages/bookedtoday/arrivals/confirmArrival/confirmAddedToRoll'
 
 const arrival = expectedArrivals.arrival({
   prisonNumber: null,
@@ -26,6 +29,7 @@ context('No match found', () => {
     cy.task('stubMissingPrisonerImage')
     cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [arrival] })
     cy.task('stubExpectedArrival', arrival)
+    cy.task('stubImprisonmentStatus')
 
     cy.signIn()
 
@@ -104,5 +108,30 @@ context('No match found', () => {
       const { value } = reviewPerDetailsPage.dob
       value().contains('20 September 1982')
     }
+  })
+
+  it('Can process arrival', () => {
+    const noMatchingRecordsFoundPage = Page.verifyOnPage(NoMatchingRecordsFoundPage)
+    noMatchingRecordsFoundPage.continue().click()
+
+    Page.verifyOnPage(ReviewPerDetailsPage).continue().click()
+
+    const imprisonmentStatusPage = Page.verifyOnPage(ImprisonmentStatusPage)
+    imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()
+    imprisonmentStatusPage.continue().click()
+
+    const checkAnswersPage = Page.verifyOnPage(CheckAnswersForCreateNewRecordPage)
+    checkAnswersPage.name().should('contain.text', 'Bob Smith')
+    checkAnswersPage.pncNumber().should('contain.text', '01/2345A')
+    checkAnswersPage.dob().should('contain.text', '1 January 1970')
+    checkAnswersPage.sex().should('contain.text', 'Male')
+    checkAnswersPage.reason().should('contain.text', 'On remand')
+    checkAnswersPage
+      .submissionParagraphTitle()
+      .should('contain.text', 'Create prisoner record and add to establishment roll')
+
+    cy.task('stubCreateOffenderRecordAndBooking', arrival.id)
+    checkAnswersPage.addToRoll().click()
+    Page.verifyOnPage(ConfirmAddedToRollPage)
   })
 })

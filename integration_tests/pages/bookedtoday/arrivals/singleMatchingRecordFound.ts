@@ -24,4 +24,6 @@ export default class SingleMatchingRecordFoundPage extends Page {
   prisonerImage = (): PageElement => cy.get(`[data-qa=prisoner-image]`)
 
   continue = (): PageElement => cy.get(`[data-qa=continue]`)
+
+  search = (): PageElement => cy.get('[data-qa=search-instead]')
 }
