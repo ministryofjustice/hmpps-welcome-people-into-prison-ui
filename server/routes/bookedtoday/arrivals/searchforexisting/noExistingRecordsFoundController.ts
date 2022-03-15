@@ -9,7 +9,14 @@ export default class NoMatchingRecordsFoundController {
       const { id } = req.params
       const data = await this.expectedArrivalsService.getArrival(id)
 
-      return res.render('pages/bookedtoday/arrivals/searchforexisting/noExistingRecordsFound.njk', { data })
+      return res.render('pages/bookedtoday/arrivals/searchforexisting/noExistingRecordsFound.njk', {
+        arrival: {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          dateOfBirth: data.dateOfBirth,
+        },
+        id,
+      })
     }
   }
 }

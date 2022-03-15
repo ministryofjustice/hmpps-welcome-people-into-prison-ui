@@ -55,8 +55,6 @@ describe('GET /view', () => {
         expect($('h1').text()).toContain('This person does not have an existing prisoner record')
         expect($('.data-qa-per-record-prisoner-name').text()).toContain('James Smyth')
         expect($('.data-qa-per-record-dob').text()).toContain('8 January 1973')
-        expect($('.data-qa-per-record-prison-number').text()).toContain('A1234AB')
-        expect($('.data-qa-per-record-pnc-number').text()).toContain('01/98644M')
         expect($('[data-qa = "continue"]').text()).toContain('Continue')
       })
   })
