@@ -133,5 +133,19 @@ context('No match found', () => {
     cy.task('stubCreateOffenderRecordAndBooking', arrival.id)
     checkAnswersPage.addToRoll().click()
     Page.verifyOnPage(ConfirmAddedToRollPage)
+
+    cy.task('getConfirmationRequest', arrival.id).then(request => {
+      expect(request).to.deep.equal({
+        dateOfBirth: '1970-01-01',
+        firstName: 'Bob',
+        lastName: 'Smith',
+        fromLocationId: 'MDI',
+        gender: 'M',
+        imprisonmentStatus: 'RX',
+        movementReasonCode: 'R',
+        prisonId: 'MDI',
+        prisonNumber: null,
+      })
+    })
   })
 })

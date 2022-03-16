@@ -2,7 +2,7 @@ declare module 'welcome' {
   export type Arrival = schemas['Arrival']
   export type Transfer = schemas['Transfer']
   export type TemporaryAbsence = schemas['TemporaryAbsence']
-  export type NewOffenderBooking = schemas['NewOffenderBooking']
+  export type ConfirmArrivalDetail = schemas['ConfirmArrivalDetail']
   export type ImprisonmentStatus = schemas['ImprisonmentStatus']
   export type Prison = schemas['Prison']
   export type UserCaseLoad = schemas['UserCaseLoad']
@@ -35,6 +35,7 @@ declare module 'welcome' {
       pncNumber: string
       date: string
       fromLocation: string
+      fromLocationId?: string
       fromLocationType: LocationType
       gender?: GenderKeys
       potentialMatches?: PotentialMatch[]
@@ -64,12 +65,13 @@ declare module 'welcome' {
       developerMessage?: string
       moreInfo?: string
     }
-    NewOffenderBooking: {
+    ConfirmArrivalDetail: {
       firstName: string
       lastName: string
       dateOfBirth: string
       gender: Gender
       prisonId: string
+      fromLocationId?: string
       imprisonmentStatus: string
       movementReasonCode: string
       prisonNumber: string

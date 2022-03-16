@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express'
-import { Gender, NewOffenderBooking } from 'welcome'
+import { Gender, ConfirmArrivalDetail } from 'welcome'
 import type { ImprisonmentStatusesService, ExpectedArrivalsService, RaiseAnalyticsEvent } from '../../../../services'
 import { State } from '../state'
 
@@ -31,7 +31,7 @@ export default class CheckAnswersController {
       const arrival = State.newArrival.get(req)
       const data = await this.expectedArrivalsService.getArrival(id)
 
-      const newOffender: NewOffenderBooking = {
+      const detail: ConfirmArrivalDetail = {
         firstName: arrival.firstName,
         lastName: arrival.lastName,
         dateOfBirth: arrival.dateOfBirth,
@@ -39,14 +39,11 @@ export default class CheckAnswersController {
         prisonId: activeCaseLoadId,
         imprisonmentStatus: arrival.imprisonmentStatus,
         movementReasonCode: arrival.movementReasonCode,
+        fromLocationId: data.fromLocationId,
         prisonNumber: arrival.prisonNumber,
       }
 
-      const arrivalResponse = await this.expectedArrivalsService.createOffenderRecordAndBooking(
-        username,
-        id,
-        newOffender
-      )
+      const arrivalResponse = await this.expectedArrivalsService.confirmArrival(username, id, detail)
 
       if (!arrivalResponse) {
         return res.redirect('/feature-not-available')

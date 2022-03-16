@@ -1,4 +1,4 @@
-import { Gender, type Arrival, type NewOffenderBooking } from 'welcome'
+import { Gender, type Arrival, type ConfirmArrivalDetail } from 'welcome'
 import moment from 'moment'
 import ExpectedArrivalsService, { LocationType } from './expectedArrivalsService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
@@ -269,7 +269,7 @@ describe('Expected arrivals service', () => {
   })
 
   describe('createOffenderRecordAndBooking', () => {
-    const newOffender: NewOffenderBooking = {
+    const detail: ConfirmArrivalDetail = {
       firstName: 'Jim',
       lastName: 'Smith',
       dateOfBirth: '1973-01-08',
@@ -282,12 +282,12 @@ describe('Expected arrivals service', () => {
 
     it('Calls hmppsAuth and welcome clients correctly', async () => {
       const username = 'Bob'
-      await service.createOffenderRecordAndBooking(username, '12345-67890', newOffender)
+      await service.confirmArrival(username, '12345-67890', detail)
       await hmppsAuthClient.getSystemClientToken(username)
 
       expect(WelcomeClientFactory).toBeCalledWith(token)
       expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith(username)
-      expect(welcomeClient.createOffenderRecordAndBooking).toBeCalledWith('12345-67890', {
+      expect(welcomeClient.confirmArrival).toBeCalledWith('12345-67890', {
         firstName: 'Jim',
         lastName: 'Smith',
         dateOfBirth: '1973-01-08',

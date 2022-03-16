@@ -1,5 +1,5 @@
 import type { Express } from 'express'
-import { type Arrival, Gender, type NewOffenderBooking } from 'welcome'
+import { type Arrival, Gender, type ConfirmArrivalDetail } from 'welcome'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
 
@@ -49,7 +49,7 @@ beforeEach(() => {
     fromLocation: 'Some court',
     fromLocationType: 'COURT',
   } as Arrival)
-  expectedArrivalsService.createOffenderRecordAndBooking.mockResolvedValue({
+  expectedArrivalsService.confirmArrival.mockResolvedValue({
     prisonNumber: 'A1234AB',
     location: 'Reception',
   })
@@ -118,7 +118,7 @@ describe('/checkAnswers', () => {
   })
 
   describe('addToRoll()', () => {
-    const newOffender: NewOffenderBooking = {
+    const detail: ConfirmArrivalDetail = {
       firstName: 'Jim',
       lastName: 'Smith',
       dateOfBirth: '1973-01-08',
@@ -130,7 +130,7 @@ describe('/checkAnswers', () => {
     }
 
     it('should redirect to /feature-not-available ', () => {
-      expectedArrivalsService.createOffenderRecordAndBooking.mockResolvedValue(null)
+      expectedArrivalsService.confirmArrival.mockResolvedValue(null)
 
       return request(app)
         .post('/prisoners/12345-67890/check-answers')
@@ -149,11 +149,7 @@ describe('/checkAnswers', () => {
         .expect(302)
         .expect(() => {
           expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
-          expect(expectedArrivalsService.createOffenderRecordAndBooking).toHaveBeenCalledWith(
-            user.username,
-            '12345-67890',
-            newOffender
-          )
+          expect(expectedArrivalsService.confirmArrival).toHaveBeenCalledWith(user.username, '12345-67890', detail)
         })
     })
 
