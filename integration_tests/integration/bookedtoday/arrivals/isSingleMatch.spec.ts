@@ -1,16 +1,14 @@
 import Page from '../../../pages/page'
 import SingleMatchingRecordFoundPage from '../../../pages/bookedtoday/arrivals/singleMatchingRecordFound'
-import NoMatchingRecordFoundPage from '../../../pages/bookedtoday/arrivals/noMatchingRecordsFound'
-import ReviewPerDetailsPage from '../../../pages/bookedtoday/arrivals/reviewPerDetails'
 import ImprisonmentStatusPage from '../../../pages/bookedtoday/arrivals/confirmArrival/imprisonmentStatus'
 import CheckAnswersPage from '../../../pages/bookedtoday/arrivals/confirmArrival/checkAnswers'
-import CheckAnswersForCreateNewRecordPage from '../../../pages/bookedtoday/arrivals/confirmArrival/checkAnswersForCreateNewRecord'
 import ConfirmAddedToRollPage from '../../../pages/bookedtoday/arrivals/confirmArrival/confirmAddedToRoll'
 import Role from '../../../../server/authentication/role'
 import expectedArrivals from '../../../mockApis/responses/expectedArrivals'
 import SexPage from '../../../pages/bookedtoday/arrivals/confirmArrival/sexPage'
 import ChoosePrisonerPage from '../../../pages/bookedtoday/choosePrisoner'
 import MovementReasonsPage from '../../../pages/bookedtoday/arrivals/confirmArrival/movementReasons'
+import SearchForExistingPage from '../../../pages/bookedtoday/arrivals/searchforexisting/search/searchForExisting'
 
 const expectedArrival = expectedArrivals.arrival({
   fromLocationType: 'COURT',
@@ -19,7 +17,7 @@ const expectedArrival = expectedArrivals.arrival({
   potentialMatches: [expectedArrivals.potentialMatch],
 })
 
-context('Check Answers', () => {
+context('Is Single Match', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', Role.PRISON_RECEPTION)
@@ -32,7 +30,7 @@ context('Check Answers', () => {
     cy.task('stubImprisonmentStatus')
   })
 
-  it('Should contain a full set of correctly formatted move data', () => {
+  it('Can see PER and matched prison record', () => {
     cy.task('stubExpectedArrival', expectedArrival)
     cy.signIn()
 
@@ -85,21 +83,10 @@ context('Check Answers', () => {
     confirmAddedToRollPage.confirmationParagraph().should('contain.html', 'Sam Smith')
     confirmAddedToRollPage.confirmationParagraph().should('contain.html', 'Moorland (HMP &amp; YOI)')
     confirmAddedToRollPage.locationParagraph().should('contain.html', 'Reception')
-    confirmAddedToRollPage
-      .viewEstablishmentRoll()
-      .should('contain', 'View establishment roll')
-      .should('have.attr', 'href')
-      .then(href => {
-        expect(href).to.equal('https://digital-dev.prison.service.justice.gov.uk/establishment-roll')
-      })
-    confirmAddedToRollPage
-      .backToDigitalPrisonServices()
-      .should('contain', 'Back to Digital Prison Services')
-      .should('have.attr', 'href')
-      .then(href => {
-        expect(href).to.equal('https://digital-dev.prison.service.justice.gov.uk')
-      })
+    confirmAddedToRollPage.viewEstablishmentRoll().exists()
+    confirmAddedToRollPage.backToDigitalPrisonServices().exists()
     confirmAddedToRollPage.addAnotherToRoll().click()
+
     Page.verifyOnPage(ChoosePrisonerPage)
 
     cy.task('getConfirmationRequest', expectedArrival.id).then(request => {
@@ -116,7 +103,7 @@ context('Check Answers', () => {
     })
   })
 
-  it('Should show matched results when found', () => {
+  it('Should allow navigation to search for alternative', () => {
     expectedArrival.prisonNumber = null
     cy.task('stubExpectedArrival', expectedArrival)
 
@@ -125,60 +112,9 @@ context('Check Answers', () => {
       expectedArrival.id,
       SingleMatchingRecordFoundPage
     )
-    singleMatchingRecordFoundPage.continue().click()
+    singleMatchingRecordFoundPage.search().click()
 
-    const sexPage = Page.verifyOnPage(SexPage)
-    sexPage.continue().click()
-    sexPage.hasError('Select a sex')
-    sexPage.sexRadioButtons('M').click()
-    sexPage.continue().click()
-
-    const imprisonmentStatusPage = Page.verifyOnPage(ImprisonmentStatusPage)
-    imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()
-    imprisonmentStatusPage.continue().click()
-
-    const checkAnswersPage = Page.verifyOnPage(CheckAnswersPage)
-    checkAnswersPage.prisonNumber().should('contain.text', 'A1234BC')
-    checkAnswersPage.pncNumber().should('contain.text', '01/4567A')
-    cy.task('stubCreateOffenderRecordAndBooking', expectedArrival.id)
-    checkAnswersPage.addToRoll().click()
-    Page.verifyOnPage(ConfirmAddedToRollPage)
-  })
-  it('Should display correct prisoner details and sub-title', () => {
-    cy.task(
-      'stubExpectedArrival',
-      expectedArrivals.arrival({
-        fromLocationType: 'COURT',
-        isCurrentPrisoner: false,
-        gender: null,
-        prisonNumber: null,
-      })
-    )
-
-    cy.signIn()
-    ChoosePrisonerPage.selectPrisoner(expectedArrival.id, NoMatchingRecordFoundPage).continue().click()
-    Page.verifyOnPage(ReviewPerDetailsPage).continue().click()
-
-    const sexPage = Page.verifyOnPage(SexPage)
-    sexPage.sexRadioButtons('M').click()
-    sexPage.continue().click()
-
-    const imprisonmentStatusPage = Page.verifyOnPage(ImprisonmentStatusPage)
-    imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()
-    imprisonmentStatusPage.continue().click()
-
-    const checkAnswersPage = Page.verifyOnPage(CheckAnswersForCreateNewRecordPage)
-    checkAnswersPage.name().should('contain.text', 'Bob Smith')
-    checkAnswersPage.pncNumber().should('contain.text', '01/2345A')
-    checkAnswersPage.dob().should('contain.text', '1 January 1970')
-    checkAnswersPage.sex().should('contain.text', 'Male')
-    checkAnswersPage.reason().should('contain.text', 'On remand')
-    checkAnswersPage
-      .submissionParagraphTitle()
-      .should('contain.text', 'Create prisoner record and add to establishment roll')
-
-    cy.task('stubCreateOffenderRecordAndBooking', expectedArrival.id)
-    checkAnswersPage.addToRoll().click()
-    Page.verifyOnPage(ConfirmAddedToRollPage)
+    const searchPage = Page.verifyOnPage(SearchForExistingPage)
+    searchPage.name.value().should('contain.text', 'Bob Smith')
   })
 })
