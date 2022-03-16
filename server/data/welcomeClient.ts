@@ -3,7 +3,7 @@ import type {
   Arrival,
   Transfer,
   TemporaryAbsence,
-  NewOffenderBooking,
+  ConfirmArrivalDetail,
   Prison,
   ImprisonmentStatus,
   UserCaseLoad,
@@ -104,12 +104,12 @@ export default class WelcomeClient {
     }) as Promise<Prison>
   }
 
-  async createOffenderRecordAndBooking(id: string, body: NewOffenderBooking): Promise<ArrivalResponse | null> {
-    logger.info(`welcomeApi: createOffenderRecordAndBooking(${id})`)
+  async confirmArrival(id: string, detail: ConfirmArrivalDetail): Promise<ArrivalResponse | null> {
+    logger.info(`welcomeApi: confirmArrival(${id})`)
     try {
       return (await this.restClient.post({
         path: `/arrivals/${id}/confirm`,
-        data: body,
+        data: detail,
       })) as Promise<ArrivalResponse>
     } catch (error) {
       if (error.status >= 400 && error.status < 500) {

@@ -99,6 +99,7 @@ context('Is Single Match', () => {
         movementReasonCode: '26',
         prisonId: 'MDI',
         prisonNumber: 'A1234BC',
+        fromLocationId: 'MDI',
       })
     })
   })

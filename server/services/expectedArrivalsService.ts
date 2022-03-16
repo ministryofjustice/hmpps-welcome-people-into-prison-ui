@@ -1,6 +1,6 @@
 import type {
   Arrival,
-  NewOffenderBooking,
+  ConfirmArrivalDetail,
   ArrivalResponse,
   PotentialMatchCriteria,
   PotentialMatch,
@@ -66,13 +66,13 @@ export default class ExpectedArrivalsService {
     return arrival.potentialMatches[0]
   }
 
-  public async createOffenderRecordAndBooking(
+  public async confirmArrival(
     username: string,
     id: string,
-    body: NewOffenderBooking
+    detail: ConfirmArrivalDetail
   ): Promise<ArrivalResponse | null> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    return this.welcomeClientFactory(token).createOffenderRecordAndBooking(id, body)
+    return this.welcomeClientFactory(token).confirmArrival(id, detail)
   }
 
   public async confirmCourtReturn(
