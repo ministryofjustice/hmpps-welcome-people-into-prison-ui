@@ -112,17 +112,13 @@ describe('POST /search-for-existing-record/change-date-of-birth', () => {
       .expect(302)
       .expect('Location', '/prisoners/12345-67890/search-for-existing-record')
       .expect(res => {
-        expect(res.header['set-cookie'][0]).toContain(
-          encodeURIComponent(
-            JSON.stringify({
-              firstName: 'James',
-              lastName: 'Smyth',
-              dateOfBirth: '2003-02-01',
-              prisonNumber: 'A1234AB',
-              pncNumber: '99/98644M',
-            })
-          )
-        )
+        expectSettingCookie(res, 'search-details').toStrictEqual({
+          firstName: 'James',
+          lastName: 'Smyth',
+          dateOfBirth: '2003-02-01',
+          prisonNumber: 'A1234AB',
+          pncNumber: '99/98644M',
+        })
       })
   })
 
