@@ -47,9 +47,6 @@ export default class SearchForExistingRecordController {
       const searchData = State.searchDetails.get(req)
       const potentialMatches = await this.expectedArrivalsService.getMatchingRecords(searchData)
 
-      if (potentialMatches.length > 1) {
-        return res.redirect(`/prisoners/${id}/search-for-existing-record/possible-records-found`)
-      }
       if (potentialMatches.length === 1) {
         const match = potentialMatches[0]
         State.newArrival.set(res, {
@@ -63,7 +60,12 @@ export default class SearchForExistingRecordController {
 
         return res.redirect(`/prisoners/${id}/search-for-existing-record/record-found`)
       }
-      return res.redirect(`/prisoners/${id}/search-for-existing-record/no-record-found`)
+
+      State.newArrival.clear(res)
+
+      return potentialMatches.length > 1
+        ? res.redirect(`/prisoners/${id}/search-for-existing-record/possible-records-found`)
+        : res.redirect(`/prisoners/${id}/search-for-existing-record/no-record-found`)
     }
   }
 }

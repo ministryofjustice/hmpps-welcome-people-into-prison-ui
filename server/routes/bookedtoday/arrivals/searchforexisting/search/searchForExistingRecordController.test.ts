@@ -40,7 +40,7 @@ describe('GET /search-for-existing-record/new', () => {
       .get('/prisoners/12345-67890/search-for-existing-record/new')
       .expect(302)
       .expect('Location', '/prisoners/12345-67890/search-for-existing-record')
-      .expect(res => expect(res.header['set-cookie'][0]).toContain('s%3A.'))
+      .expect(res => expectSettingCookie(res, 'search-details').toBeUndefined())
   })
 
   it('redirects when disabled', () => {
@@ -70,7 +70,7 @@ describe('GET /search-for-existing-record', () => {
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record')
       .expect('Content-Type', 'text/html; charset=utf-8')
-      .expect(res => {
+      .expect(() => {
         expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
       })
   })
@@ -119,17 +119,13 @@ describe('GET /search-for-existing-record', () => {
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record')
       .expect(res => {
-        expect(res.header['set-cookie'][0]).toContain(
-          encodeURIComponent(
-            JSON.stringify({
-              firstName: 'James',
-              lastName: 'Smyth',
-              dateOfBirth: '1973-01-08',
-              pncNumber: '99/98644M',
-              prisonNumber: 'A1234AB',
-            })
-          )
-        )
+        expectSettingCookie(res, 'search-details').toStrictEqual({
+          firstName: 'James',
+          lastName: 'Smyth',
+          dateOfBirth: '1973-01-08',
+          pncNumber: '99/98644M',
+          prisonNumber: 'A1234AB',
+        })
       })
   })
 
@@ -179,7 +175,7 @@ describe('POST /search-for-existing-record', () => {
       })
   })
 
-  it('should redirect to /possible-records-found when multiple existing potential records found', () => {
+  it('should clear new-arrival state and redirect when multiple existing potential records found', () => {
     signedCookiesProvider.mockReturnValue({ 'search-details': searchDetails })
     expectedArrivalsService.getMatchingRecords.mockResolvedValue([
       {
@@ -204,9 +200,12 @@ describe('POST /search-for-existing-record', () => {
       .post('/prisoners/12345-67890/search-for-existing-record')
       .expect(302)
       .expect('Location', '/prisoners/12345-67890/search-for-existing-record/possible-records-found')
+      .expect(res => {
+        expectSettingCookie(res, 'new-arrival').toBeUndefined()
+      })
   })
 
-  it('should set new-arrival state and redirect to /record-found when one existing potential record found', () => {
+  it('should set new-arrival state and redirect when one existing potential record found', () => {
     signedCookiesProvider.mockReturnValue({ 'search-details': searchDetails })
     expectedArrivalsService.getMatchingRecords.mockResolvedValue([
       {
@@ -221,6 +220,7 @@ describe('POST /search-for-existing-record', () => {
 
     return request(app)
       .post('/prisoners/12345-67890/search-for-existing-record')
+      .expect('Location', '/prisoners/12345-67890/search-for-existing-record/record-found')
       .expect(res => {
         expectSettingCookie(res, 'new-arrival').toStrictEqual({
           firstName: 'James',
@@ -231,10 +231,9 @@ describe('POST /search-for-existing-record', () => {
           pncNumber: '88/98544M',
         })
       })
-      .expect('Location', '/prisoners/12345-67890/search-for-existing-record/record-found')
   })
 
-  it('should redirect to /no-record-found when no existing potential records found', () => {
+  it('should clear new-arrival state and redirect when no existing potential records found', () => {
     signedCookiesProvider.mockReturnValue({ 'search-details': searchDetails })
     expectedArrivalsService.getMatchingRecords.mockResolvedValue([])
 
@@ -242,5 +241,8 @@ describe('POST /search-for-existing-record', () => {
       .post('/prisoners/12345-67890/search-for-existing-record')
       .expect(302)
       .expect('Location', '/prisoners/12345-67890/search-for-existing-record/no-record-found')
+      .expect(res => {
+        expectSettingCookie(res, 'new-arrival').toBeUndefined()
+      })
   })
 })
