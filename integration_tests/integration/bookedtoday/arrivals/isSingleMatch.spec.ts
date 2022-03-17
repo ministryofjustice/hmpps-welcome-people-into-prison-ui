@@ -5,7 +5,6 @@ import CheckAnswersPage from '../../../pages/bookedtoday/arrivals/confirmArrival
 import ConfirmAddedToRollPage from '../../../pages/bookedtoday/arrivals/confirmArrival/confirmAddedToRoll'
 import Role from '../../../../server/authentication/role'
 import expectedArrivals from '../../../mockApis/responses/expectedArrivals'
-import SexPage from '../../../pages/bookedtoday/arrivals/confirmArrival/sexPage'
 import ChoosePrisonerPage from '../../../pages/bookedtoday/choosePrisoner'
 import MovementReasonsPage from '../../../pages/bookedtoday/arrivals/confirmArrival/movementReasons'
 import SearchForExistingPage from '../../../pages/bookedtoday/arrivals/searchforexisting/search/searchForExisting'
@@ -50,10 +49,6 @@ context('Is Single Match', () => {
     singleMatchingRecordFoundPage.existingPncNumber().should('contain.text', '01/4567A')
     singleMatchingRecordFoundPage.continue().click()
 
-    const sexPage = Page.verifyOnPage(SexPage)
-    sexPage.sexRadioButtons('F').click()
-    sexPage.continue().click()
-
     const imprisonmentStatusPage = Page.verifyOnPage(ImprisonmentStatusPage)
     imprisonmentStatusPage.continue().click()
     imprisonmentStatusPage.hasError('Select a reason for imprisonment')
@@ -72,7 +67,7 @@ context('Is Single Match', () => {
     checkAnswersPage.dob().should('contain.text', '1 February 1970')
     checkAnswersPage.prisonNumber().should('contain.text', 'A1234BC')
     checkAnswersPage.pncNumber().should('contain.text', '01/4567A')
-    checkAnswersPage.sex().should('contain.text', 'Female')
+    checkAnswersPage.sex().should('contain.text', 'Male')
     checkAnswersPage.reason().should('contain.text', 'Determinate sentence - Extended sentence for public protection')
     cy.task('stubCreateOffenderRecordAndBooking', expectedArrival.id)
     checkAnswersPage.addToRoll().click()
@@ -93,7 +88,7 @@ context('Is Single Match', () => {
       expect(request).to.deep.equal({
         dateOfBirth: '1970-02-01',
         firstName: 'Sam',
-        gender: 'F',
+        gender: 'M',
         imprisonmentStatus: 'SENT',
         lastName: 'Smith',
         movementReasonCode: '26',

@@ -16,8 +16,7 @@ export default class SingleMatchingRecordFoundController {
         firstName: convertToTitleCase(match.firstName),
         lastName: convertToTitleCase(match.lastName),
         dateOfBirth: match.dateOfBirth,
-        // TODO: add sex to potential match object on cookie
-        sex: data.gender,
+        sex: match.sex,
         prisonNumber: match.prisonNumber,
         pncNumber: match.pncNumber,
       })

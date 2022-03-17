@@ -35,9 +35,10 @@ beforeEach(() => {
         dateOfBirth: '1973-01-08',
         prisonNumber: 'A1234AB',
         pncNumber: '01/98644M',
+        sex: GenderKeys.FEMALE,
       },
     ],
-  } as unknown as Arrival)
+  } as Arrival)
 })
 
 afterEach(() => {
@@ -67,7 +68,7 @@ describe('GET /view', () => {
           firstName: 'Jim',
           lastName: 'Smith',
           dateOfBirth: '1973-01-08',
-          sex: 'MALE',
+          sex: 'FEMALE',
           prisonNumber: 'A1234AB',
           pncNumber: '01/98644M',
         })
