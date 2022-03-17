@@ -4,6 +4,7 @@ import cheerio from 'cheerio'
 import { appWithAllRoutes, signedCookiesProvider } from '../../../../__testutils/appSetup'
 import Role from '../../../../../authentication/role'
 import config from '../../../../../config'
+import { expectSettingCookie } from '../../../../__testutils/requestTestUtils'
 
 let app: Express
 
@@ -82,17 +83,13 @@ describe('POST /search-for-existing-record/change-pnc-number', () => {
       .post('/prisoners/12345-67890/search-for-existing-record/change-pnc-number')
       .send({ pncNumber: '11/98644M' })
       .expect(res => {
-        expect(res.header['set-cookie'][0]).toContain(
-          encodeURIComponent(
-            JSON.stringify({
-              firstName: 'James',
-              lastName: 'Smyth',
-              dateOfBirth: '1973-01-08',
-              prisonNumber: 'A1234AB',
-              pncNumber: '11/98644M',
-            })
-          )
-        )
+        expectSettingCookie(res, 'search-details').toStrictEqual({
+          firstName: 'James',
+          lastName: 'Smyth',
+          dateOfBirth: '1973-01-08',
+          prisonNumber: 'A1234AB',
+          pncNumber: '11/98644M',
+        })
       })
   })
 
@@ -131,16 +128,12 @@ describe('GET /search-for-existing-record/remove-pnc-number', () => {
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record/remove-pnc-number')
       .expect(res => {
-        expect(res.header['set-cookie'][0]).toContain(
-          encodeURIComponent(
-            JSON.stringify({
-              firstName: 'James',
-              lastName: 'Smyth',
-              dateOfBirth: '1973-01-08',
-              prisonNumber: 'A1234AB',
-            })
-          )
-        )
+        expectSettingCookie(res, 'search-details').toStrictEqual({
+          firstName: 'James',
+          lastName: 'Smyth',
+          dateOfBirth: '1973-01-08',
+          prisonNumber: 'A1234AB',
+        })
       })
   })
 
