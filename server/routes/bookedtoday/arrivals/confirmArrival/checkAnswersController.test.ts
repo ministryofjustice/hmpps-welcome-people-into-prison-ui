@@ -1,5 +1,5 @@
 import type { Express } from 'express'
-import { type Arrival, Gender, type ConfirmArrivalDetail } from 'welcome'
+import { type Arrival, Sex, type ConfirmArrivalDetail } from 'welcome'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
 
@@ -122,7 +122,7 @@ describe('/checkAnswers', () => {
       firstName: 'Jim',
       lastName: 'Smith',
       dateOfBirth: '1973-01-08',
-      gender: Gender.MALE,
+      sex: Sex.MALE,
       prisonId: 'MDI',
       imprisonmentStatus: 'SENT',
       movementReasonCode: '26',

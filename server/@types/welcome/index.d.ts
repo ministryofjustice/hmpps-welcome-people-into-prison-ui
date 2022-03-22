@@ -11,7 +11,7 @@ declare module 'welcome' {
   export type PotentialMatch = schemas['PotentialMatch']
   export type PrisonerDetails = schemas['PrisonerDetails']
 
-  export const enum Gender {
+  export const enum Sex {
     FEMALE = 'F',
     MALE = 'M',
     NOT_KNOWN = 'NK',
@@ -19,7 +19,7 @@ declare module 'welcome' {
     REFUSED = 'REF',
   }
 
-  export const enum GenderKeys {
+  export const enum SexKeys {
     FEMALE = 'FEMALE',
     MALE = 'MALE',
     TRANS = 'TRANS',
@@ -37,7 +37,7 @@ declare module 'welcome' {
       fromLocation: string
       fromLocationId?: string
       fromLocationType: LocationType
-      gender?: GenderKeys
+      gender?: SexKeys
       potentialMatches?: PotentialMatch[]
       isCurrentPrisoner: boolean
     }
@@ -69,7 +69,7 @@ declare module 'welcome' {
       firstName: string
       lastName: string
       dateOfBirth: string
-      gender: Gender
+      sex: Sex
       prisonId: string
       fromLocationId?: string
       imprisonmentStatus: string
@@ -108,7 +108,7 @@ declare module 'welcome' {
       prisonNumber?: string
       pncNumber?: string
       croNumber?: string
-      sex: GenderKeys
+      sex: SexKeys
     }
     PrisonerDetails: {
       firstName: string
@@ -117,7 +117,7 @@ declare module 'welcome' {
       prisonNumber?: string
       pncNumber?: string
       croNumber?: string
-      sex: GenderKeys
+      sex: SexKeys
     }
   }
 }
