@@ -1,4 +1,4 @@
-import { GenderKeys } from 'welcome'
+import { SexKeys } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
@@ -30,13 +30,13 @@ const potentialMatches = [
     prisonNumber: 'A1234BC',
     pncNumber: '11/5678',
     croNumber: '12/0000',
-    sex: GenderKeys.MALE,
+    sex: SexKeys.MALE,
   },
   {
     firstName: 'Jim',
     lastName: 'Smith',
     dateOfBirth: '1983-01-08',
-    sex: GenderKeys.MALE,
+    sex: SexKeys.MALE,
   },
 ]
 
