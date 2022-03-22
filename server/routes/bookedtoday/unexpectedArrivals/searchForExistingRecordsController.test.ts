@@ -2,14 +2,14 @@ import { GenderKeys } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
-import { appWithAllRoutes, flashProvider } from '../../../__testutils/appSetup'
-import { ExpectedArrivalsService } from '../../../../services'
-import Role from '../../../../authentication/role'
-import config from '../../../../config'
-import * as State from '../../arrivals/state'
+import { appWithAllRoutes, flashProvider } from '../../__testutils/appSetup'
+import { ExpectedArrivalsService } from '../../../services'
+import Role from '../../../authentication/role'
+import config from '../../../config'
+import * as State from '../arrivals/state'
 
-jest.mock('../../../../services/expectedArrivalsService')
-jest.mock('../../arrivals/state')
+jest.mock('../../../services/expectedArrivalsService')
+jest.mock('../arrivals/state')
 const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
 let app: Express
 
