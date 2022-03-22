@@ -1,0 +1,115 @@
+{% extends "../../partials/layout.njk" %}
+
+{% set pageTitle = "Search for an existing prisoner record" %}
+
+{% block content %}
+    <div class="govuk-width-container">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                {% if errors.length %}
+                    {{ govukErrorSummary({
+                        titleText: "There is a problem",
+                        errorList: errors,
+                        attributes: { 'data-qa-errors': true }
+                    }) }}
+                {% endif %}
+                <span class="govuk-caption-xl">Confirm a prisoner's arrival</span>
+                <h1 class="govuk-heading-l">{{pageTitle}}</h1>    
+                <div class="govuk-inset-text">
+                    <p>Before you can confirm the prisoner's arrival, you need to check if they have an existing prisoner record.</p> 
+                    <p>If no existing prisoner record is found, you can create a new record for the prisoner.</p>
+                </div>
+
+                <form method="post">
+                    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                        {% call govukFieldset({ legend: {} }) %}
+                            {{ govukInput({
+                                label: { text: 'First name' },
+                                id: "first-name",
+                                name: "firstName",
+                                classes: 'govuk-input--width-10',
+                                value: data.firstName,
+                                errorMessage: errors | findError("first-name")
+                            }) }}
+
+                            {{ govukInput({
+                                label: { text: 'Last name' },
+                                id: "last-name",
+                                name: "lastName",
+                                classes: 'govuk-input--width-10',
+                                value: data.lastName,
+                                errorMessage: errors | findError("last-name")
+                            }) }}
+
+                            {{ govukDateInput({
+                                id: "date-of-birth",
+                                fieldset: {
+                                    legend: {
+                                    text: "Date of birth (optional)"
+                                    }
+                                },
+                                hint: {
+                                    text: "For example, 31 3 1980."
+                                },
+                                errorMessage: errors | findFirstError(["date-of-birth-day", "date-of-birth-month", "date-of-birth-year"]),
+                                items: [
+                                    {
+                                    classes: "govuk-input--width-2",
+                                    name: "day",
+                                    value: data.day | default(data.dateOfBirth | formatDate('DD'))
+                                    },
+                                    {
+                                    classes: "govuk-input--width-2",
+                                    name: "month",
+                                    value: data.month | default(data.dateOfBirth | formatDate('MM'))
+                                    },
+                                    {
+                                    classes: "govuk-input--width-4",
+                                    name: "year",
+                                    value: data.year | default(data.dateOfBirth | formatDate('YYYY'))
+                                    }
+                                ]
+                        }) }}
+                        {% endcall %}
+
+                        <details class="govuk-details" data-module="govuk-details" data-qa="other-search-details">
+                            <summary class="govuk-details__summary">
+                                <span class="govuk-details__summary-text">Search using prison number or PNC number</span>
+                            </summary>
+
+                            <div class="govuk-details__text">
+                                <p class="govuk-hint">Your search must include either a name, prison number or PNC number.</p>
+
+                                {{ govukInput({
+                                    label: { text: 'Prison number' },
+                                    hint: {text: "Enter in the format 'A1234AA'."},
+                                    id: "prison-number",
+                                    name: "prisonNumber",
+                                    classes: 'govuk-input--width-10',
+                                    value: data.prisonNumber,
+                                    errorMessage: errors | findError("prison-number")
+                                }) }}
+
+                                {{ govukInput({
+                                    label: { text: 'PNC number' },
+                                    hint: {text: "Enter in the format '01/123456A'."},
+                                    id: "pnc-number",
+                                    name: "pncNumber",
+                                    classes: 'govuk-input--width-10',
+                                    value: data.pncNumber,
+                                    errorMessage: errors | findError("pnc-number")
+                                }) }}
+                            </div>
+                        </details>
+
+                    {{ govukButton({
+                            classes: "govuk-button govuk-!-margin-bottom-3",
+                            text: "Search",
+                            attributes: {'data-qa': 'save'},
+                            type: 'submit'
+                    }) }}         
+                 </form>                              
+            </div>
+        </div>
+    </div>
+{% endblock %}
