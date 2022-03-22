@@ -140,7 +140,7 @@ context('No match found', () => {
         firstName: 'Bob',
         lastName: 'Smith',
         fromLocationId: 'MDI',
-        gender: 'M',
+        sex: 'M',
         imprisonmentStatus: 'RX',
         movementReasonCode: 'R',
         prisonId: 'MDI',
