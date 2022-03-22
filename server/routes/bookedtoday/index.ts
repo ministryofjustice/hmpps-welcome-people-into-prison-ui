@@ -5,6 +5,7 @@ import type { Services } from '../../services'
 
 import transferRoutes from './transfers'
 import arrivalRoutes from './arrivals'
+import unexpectedArrivalsRoutes from './unexpectedArrivals'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 export default function routes(services: Services): Router {
@@ -16,6 +17,7 @@ export default function routes(services: Services): Router {
 
   router.use(transferRoutes(services))
   router.use(arrivalRoutes(services))
+  router.use(unexpectedArrivalsRoutes(services))
 
   return router
 }

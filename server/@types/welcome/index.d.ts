@@ -100,6 +100,7 @@ declare module 'welcome' {
       lastName: string
       dateOfBirth: string
       pncNumber?: string
+      prisonNumber?: string
     }
     PotentialMatch: {
       firstName: string
