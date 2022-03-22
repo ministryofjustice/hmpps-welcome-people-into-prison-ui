@@ -1,4 +1,4 @@
-import { Gender, type Arrival, type ConfirmArrivalDetail } from 'welcome'
+import { Sex, type Arrival, type ConfirmArrivalDetail } from 'welcome'
 import moment from 'moment'
 import ExpectedArrivalsService, { LocationType } from './expectedArrivalsService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
@@ -273,7 +273,7 @@ describe('Expected arrivals service', () => {
       firstName: 'Jim',
       lastName: 'Smith',
       dateOfBirth: '1973-01-08',
-      gender: Gender.NOT_SPECIFIED,
+      sex: Sex.NOT_SPECIFIED,
       prisonId: 'MDI',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',
@@ -291,7 +291,7 @@ describe('Expected arrivals service', () => {
         firstName: 'Jim',
         lastName: 'Smith',
         dateOfBirth: '1973-01-08',
-        gender: 'NS',
+        sex: 'NS',
         prisonId: 'MDI',
         imprisonmentStatus: 'RX',
         movementReasonCode: 'N',

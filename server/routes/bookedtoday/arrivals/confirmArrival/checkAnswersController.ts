@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express'
-import { Gender, ConfirmArrivalDetail } from 'welcome'
+import { Sex, ConfirmArrivalDetail } from 'welcome'
 import type { ImprisonmentStatusesService, ExpectedArrivalsService, RaiseAnalyticsEvent } from '../../../../services'
 import { State } from '../state'
 
@@ -35,7 +35,7 @@ export default class CheckAnswersController {
         firstName: arrival.firstName,
         lastName: arrival.lastName,
         dateOfBirth: arrival.dateOfBirth,
-        gender: arrival.sex as Gender,
+        sex: arrival.sex as Sex,
         prisonId: activeCaseLoadId,
         imprisonmentStatus: arrival.imprisonmentStatus,
         movementReasonCode: arrival.movementReasonCode,

@@ -1,4 +1,4 @@
-import { type Arrival, GenderKeys } from 'welcome'
+import { type Arrival, SexKeys } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
@@ -26,7 +26,7 @@ beforeEach(() => {
     fromLocation: 'Reading',
     moveType: 'PRISON_REMAND',
     fromLocationType: LocationType.COURT,
-    gender: GenderKeys.MALE,
+    gender: SexKeys.MALE,
     isCurrentPrisoner: false,
     potentialMatches: [
       {
@@ -35,7 +35,7 @@ beforeEach(() => {
         dateOfBirth: '1973-01-08',
         prisonNumber: 'A1234AB',
         pncNumber: '01/98644M',
-        sex: GenderKeys.FEMALE,
+        sex: SexKeys.FEMALE,
       },
     ],
   } as Arrival)

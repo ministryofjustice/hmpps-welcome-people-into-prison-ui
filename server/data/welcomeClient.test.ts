@@ -1,7 +1,7 @@
 import nock from 'nock'
 import moment from 'moment'
 import {
-  Gender,
+  Sex,
   ImprisonmentStatus,
   Arrival,
   Transfer,
@@ -221,7 +221,7 @@ describe('welcomeClient', () => {
       firstName: 'Jim',
       lastName: 'Smith',
       dateOfBirth: '1973-01-08',
-      gender: Gender.NOT_SPECIFIED,
+      sex: Sex.NOT_SPECIFIED,
       prisonId: 'MDI',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',

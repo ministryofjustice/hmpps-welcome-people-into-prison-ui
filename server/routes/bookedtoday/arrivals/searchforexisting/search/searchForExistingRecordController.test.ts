@@ -1,4 +1,4 @@
-import { type Arrival, GenderKeys } from 'welcome'
+import { type Arrival, SexKeys } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
@@ -182,7 +182,7 @@ describe('POST /search-for-existing-record', () => {
         firstName: 'James',
         lastName: 'Smyth',
         dateOfBirth: '1973-01-08',
-        sex: GenderKeys.MALE,
+        sex: SexKeys.MALE,
         pncNumber: '88/98544M',
         prisonNumber: 'A1234AC',
       },
@@ -190,7 +190,7 @@ describe('POST /search-for-existing-record', () => {
         firstName: 'Jim',
         lastName: 'Simon',
         dateOfBirth: '2003-03-01',
-        sex: GenderKeys.MALE,
+        sex: SexKeys.MALE,
         prisonNumber: 'A1234AB',
         pncNumber: '99/98644M',
       },
@@ -212,7 +212,7 @@ describe('POST /search-for-existing-record', () => {
         firstName: 'James',
         lastName: 'Smyth',
         dateOfBirth: '1973-01-08',
-        sex: GenderKeys.MALE,
+        sex: SexKeys.MALE,
         pncNumber: '88/98544M',
         prisonNumber: 'A1234AC',
       },
