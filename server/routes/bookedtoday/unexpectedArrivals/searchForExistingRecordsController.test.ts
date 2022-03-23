@@ -97,6 +97,20 @@ describe('Unexpected arrivals - search for existing records', () => {
         .expect('Location', '/autherror')
     })
 
+    it('should call flash twice if errors and redirect', () => {
+      return request(app)
+        .post('/manually-confirm-arrival/search-for-existing-record')
+        .send({ firstName: 'james' })
+        .expect(302)
+        .expect('Location', '/manually-confirm-arrival/search-for-existing-record')
+        .expect(() => {
+          expect(flashProvider.mock.calls).toEqual([
+            ['errors', [{ href: '#last-name', text: 'Enter a last name' }]],
+            ['input', { firstName: 'james' }],
+          ])
+        })
+    })
+
     it('should use correct details to get matched records', () => {
       return request(app)
         .post('/manually-confirm-arrival/search-for-existing-record')

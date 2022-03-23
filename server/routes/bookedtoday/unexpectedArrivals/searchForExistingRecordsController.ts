@@ -2,14 +2,26 @@ import type { RequestHandler, Response, Request } from 'express'
 import type { ExpectedArrivalsService } from '../../../services'
 import { State } from '../arrivals/state'
 
+type FlashErrors = [{ text: string; href: string }]
+
 export default class SearchForExistingRecordsController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
 
   public view(): RequestHandler {
     return async (req, res) => {
+      let expandDetails = false
+      const errors = req.flash('errors') as FlashErrors
+      const prisonNumberOrPncErrors = errors.filter(
+        error => error.href === '#prison-number' || error.href === '#pnc-number'
+      )
+      if (prisonNumberOrPncErrors.length) {
+        expandDetails = true
+      }
+
       res.render('pages/unexpectedArrivals/searchForExistingRecord.njk', {
-        errors: req.flash('errors'),
+        errors,
         data: req.flash('input')[0],
+        expandDetails,
       })
     }
   }

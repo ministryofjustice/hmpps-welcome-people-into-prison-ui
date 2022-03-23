@@ -72,35 +72,36 @@
                         }) }}
                         {% endcall %}
 
-                        <details class="govuk-details" data-module="govuk-details" data-qa="other-search-details">
-                            <summary class="govuk-details__summary">
-                                <span class="govuk-details__summary-text">Search using prison number or PNC number</span>
-                            </summary>
+                        {% set otherSearchDetails %}
+                            <p class="govuk-hint">Your search must include either a name, prison number or PNC number</p>
+                            
+                            {{ govukInput({
+                                label: { text: 'Prison number' },
+                                hint: {text: "Enter in the format 'A1234AA'."},
+                                id: "prison-number",
+                                name: "prisonNumber",
+                                classes: 'govuk-input--width-10',
+                                value: data.prisonNumber,
+                                errorMessage: errors | findError('prison-number')
+                            }) }}
 
-                            <div class="govuk-details__text">
-                                <p class="govuk-hint">Your search must include either a name, prison number or PNC number.</p>
+                            {{ govukInput({
+                                label: { text: 'PNC number' },
+                                hint: {text: "Enter in the format '01/23456A'."},
+                                id: "pnc-number",
+                                name: "pncNumber",
+                                classes: 'govuk-input--width-10',
+                                value: data.pncNumber,
+                                errorMessage: errors | findError('pnc-number')
+                            }) }}
+                        {% endset %}
 
-                                {{ govukInput({
-                                    label: { text: 'Prison number' },
-                                    hint: {text: "Enter in the format 'A1234AA'."},
-                                    id: "prison-number",
-                                    name: "prisonNumber",
-                                    classes: 'govuk-input--width-10',
-                                    value: data.prisonNumber,
-                                    errorMessage: errors | findError("prison-number")
-                                }) }}
-
-                                {{ govukInput({
-                                    label: { text: 'PNC number' },
-                                    hint: {text: "Enter in the format '01/123456A'."},
-                                    id: "pnc-number",
-                                    name: "pncNumber",
-                                    classes: 'govuk-input--width-10',
-                                    value: data.pncNumber,
-                                    errorMessage: errors | findError("pnc-number")
-                                }) }}
-                            </div>
-                        </details>
+                        {{ govukDetails({
+                        summaryText: "Search using prison number or PNC number",
+                        html: otherSearchDetails,
+                        open: expandDetails,
+                        attributes: { "data-qa": "other-search-details" }
+                        }) }}
 
                     {{ govukButton({
                             classes: "govuk-button govuk-!-margin-bottom-3",
