@@ -7,6 +7,11 @@ import authorisationForUrlMiddleware from '../../../middleware/authorisationForU
 import asyncMiddleware from '../../../middleware/asyncMiddleware'
 import { Services } from '../../../services'
 import Role from '../../../authentication/role'
+import validationMiddleware from '../../../middleware/validationMiddleware'
+import SearchForExistingRecordsValidation from './validation/searchForExistingRecordsValidation'
+import DateOfBirthValidation from './validation/dateOfBirthValidation'
+import PrisonNumberValidation from './validation/prisonNumberValidation'
+import PncNumberValidation from './validation/pncNumberValidation'
 
 export default function routes(services: Services): Router {
   const router = express.Router()
@@ -28,7 +33,17 @@ export default function routes(services: Services): Router {
   const searchForExistingRecordController = new SearchForExistingRecordController(services.expectedArrivalsService)
   get('', [searchForExistingRecordController.view()], [Role.PRISON_RECEPTION])
 
-  post('', [searchForExistingRecordController.submit()], [Role.PRISON_RECEPTION])
+  post(
+    '',
+    [
+      validationMiddleware(SearchForExistingRecordsValidation),
+      validationMiddleware(DateOfBirthValidation),
+      validationMiddleware(PrisonNumberValidation),
+      validationMiddleware(PncNumberValidation),
+      searchForExistingRecordController.submit(),
+    ],
+    [Role.PRISON_RECEPTION]
+  )
 
   const noExistingRecordsFoundController = new NoExistingRecordsFoundController()
   get('/no-record-found', [noExistingRecordsFoundController.view()], [Role.PRISON_RECEPTION])
