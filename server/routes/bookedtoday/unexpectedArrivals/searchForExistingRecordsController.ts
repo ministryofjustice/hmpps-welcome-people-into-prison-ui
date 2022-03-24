@@ -1,5 +1,6 @@
 import type { RequestHandler, Response, Request } from 'express'
 import type { ExpectedArrivalsService } from '../../../services'
+import { convertToTitleCase } from '../../../utils/utils'
 import { State } from '../arrivals/state'
 
 type FlashErrors = [{ text: string; href: string }]
@@ -36,13 +37,16 @@ export default class SearchForExistingRecordsController {
       const { firstName, lastName, year, month, day, prisonNumber, pncNumber } = req.body
       const dateOfBirth = `${year.padStart(4, '0')}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
 
-      const potentialMatches = await this.expectedArrivalsService.getMatchingRecords({
-        firstName,
-        lastName,
+      const searchData = {
+        firstName: convertToTitleCase(firstName),
+        lastName: convertToTitleCase(lastName),
         dateOfBirth,
         prisonNumber: prisonNumber || undefined,
         pncNumber: pncNumber || undefined,
-      })
+      }
+
+      const potentialMatches = await this.expectedArrivalsService.getMatchingRecords(searchData)
+      State.searchDetails.set(res, searchData)
 
       if (potentialMatches.length === 1) {
         const match = potentialMatches[0]
@@ -51,6 +55,7 @@ export default class SearchForExistingRecordsController {
           lastName: match.lastName,
           dateOfBirth: match.dateOfBirth,
           prisonNumber: match.prisonNumber,
+          sex: match.sex,
           pncNumber: match.pncNumber,
         })
         return res.redirect('/manually-confirm-arrival/search-for-existing-record/record-found')

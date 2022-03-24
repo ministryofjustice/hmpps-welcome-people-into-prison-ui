@@ -51,7 +51,9 @@ export default function routes(services: Services): Router {
   const singleExistingRecordFoundController = new SingleExistingRecordFoundController()
   get('/record-found', [singleExistingRecordFoundController.view()], [Role.PRISON_RECEPTION])
 
-  const multipleExistingRecordsFoundController = new MultipleExistingRecordsFoundController()
+  const multipleExistingRecordsFoundController = new MultipleExistingRecordsFoundController(
+    services.expectedArrivalsService
+  )
   get('/possible-records-found', [multipleExistingRecordsFoundController.view()], [Role.PRISON_RECEPTION])
 
   return router
