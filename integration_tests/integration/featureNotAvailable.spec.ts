@@ -5,7 +5,7 @@ import CheckAnswersPage from '../pages/bookedtoday/arrivals/confirmArrival/check
 import Role from '../../server/authentication/role'
 import expectedArrivals from '../mockApis/responses/expectedArrivals'
 import ChoosePrisonerPage from '../pages/bookedtoday/choosePrisoner'
-import SingleMatchingRecordFoundPage from '../pages/bookedtoday/arrivals/singleMatchingRecordFound'
+import SingleMatchingRecordFoundPage from '../pages/bookedtoday/arrivals/autoMatchingRecords/singleMatchingRecordFound'
 
 context('Feature not available', () => {
   beforeEach(() => {

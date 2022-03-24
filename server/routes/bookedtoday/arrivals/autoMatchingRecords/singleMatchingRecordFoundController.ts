@@ -1,7 +1,7 @@
 import type { RequestHandler } from 'express'
-import { State } from './state'
-import type { ExpectedArrivalsService } from '../../../services'
-import { convertToTitleCase } from '../../../utils/utils'
+import { State } from '../state'
+import type { ExpectedArrivalsService } from '../../../../services'
+import { convertToTitleCase } from '../../../../utils/utils'
 
 export default class SingleMatchingRecordFoundController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
@@ -21,7 +21,7 @@ export default class SingleMatchingRecordFoundController {
         pncNumber: match.pncNumber,
       })
 
-      return res.render('pages/bookedtoday/arrivals/singleMatchingRecordFound.njk', { data })
+      return res.render('pages/bookedtoday/arrivals/autoMatchingRecords/singleMatchingRecordFound.njk', { data })
     }
   }
 }

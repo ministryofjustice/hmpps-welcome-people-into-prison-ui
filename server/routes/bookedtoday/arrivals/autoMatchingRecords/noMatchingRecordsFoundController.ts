@@ -1,5 +1,5 @@
 import type { RequestHandler } from 'express'
-import { ExpectedArrivalsService } from '../../../services'
+import { ExpectedArrivalsService } from '../../../../services'
 
 export default class NoMatchingRecordsFoundController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
@@ -9,7 +9,7 @@ export default class NoMatchingRecordsFoundController {
       const { id } = req.params
       const data = await this.expectedArrivalsService.getArrival(id)
 
-      return res.render('pages/bookedtoday/arrivals/noMatchingRecordsFound.njk', { data })
+      return res.render('pages/bookedtoday/arrivals/autoMatchingRecords/noMatchingRecordsFound.njk', { data })
     }
   }
 }
