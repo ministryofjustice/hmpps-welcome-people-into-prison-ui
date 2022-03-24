@@ -1,0 +1,18 @@
+{% extends "../../partials/layout.njk" %}
+{% from "../../components/prisoner-summary-detail.njk" import prisonerSummaryDetail %}
+
+{% set pageTitle = "Confirm arrival" %}
+
+{% block content %}
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <span class="govuk-caption-xl"> Confirm a prisoner's arrival </span>
+                    <h1 class="govuk-heading-l govuk-!-margin-bottom-7">This person does not have an existing prisoner record</h1>
+                    <p> {{ arrival.firstName }} {{ arrival.lastName }} does not have an existing prisoner record. A new record will be created when they are added to the establishment roll. </p>
+                </div>
+            </div>
+        </main>
+    </div>
+{% endblock %}

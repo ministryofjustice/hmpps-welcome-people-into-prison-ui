@@ -1,4 +1,4 @@
-import { GenderKeys } from 'welcome'
+import { SexKeys } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
@@ -33,7 +33,7 @@ describe('/sex', () => {
       return request(app).get('/prisoners/12345-67890/sex').expect(302).expect('Location', '/autherror')
     })
 
-    it.each([{ sex: 'blas' as GenderKeys }, { sex: undefined }, { sex: GenderKeys.TRANS }])(
+    it.each([{ sex: 'blas' as SexKeys }, { sex: undefined }, { sex: SexKeys.TRANS }])(
       'should render /sex page when new-arrival sex is not MALE or FEMALE',
       ({ sex }) => {
         signedCookiesProvider.mockReturnValue({
@@ -55,8 +55,8 @@ describe('/sex', () => {
       }
     )
 
-    it.each([{ sex: GenderKeys.MALE }, { sex: 'M' }, { sex: GenderKeys.FEMALE }, { sex: 'F' }])(
-      'should render /imprisonment-status page when Arrival gender is MALE or FEMALE',
+    it.each([{ sex: SexKeys.MALE }, { sex: 'M' }, { sex: SexKeys.FEMALE }, { sex: 'F' }])(
+      'should render /imprisonment-status page when Arrival sex is MALE or FEMALE',
       ({ sex }) => {
         signedCookiesProvider.mockReturnValue({
           'new-arrival': {
@@ -86,7 +86,7 @@ describe('/sex', () => {
           firstName: 'Jim',
           lastName: 'Smith',
           dateOfBirth: '1973-01-08',
-          sex: GenderKeys.TRANS,
+          sex: SexKeys.TRANS,
         },
       })
       return request(app)

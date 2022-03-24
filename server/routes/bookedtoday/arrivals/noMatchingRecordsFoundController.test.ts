@@ -1,7 +1,7 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import cheerio from 'cheerio'
-import { type Arrival, GenderKeys } from 'welcome'
+import { type Arrival, SexKeys } from 'welcome'
 import { appWithAllRoutes } from '../../__testutils/appSetup'
 import ExpectedArrivalsService, { LocationType } from '../../../services/expectedArrivalsService'
 import Role from '../../../authentication/role'
@@ -25,7 +25,7 @@ beforeEach(() => {
     fromLocation: 'Reading',
     moveType: 'PRISON_REMAND',
     fromLocationType: LocationType.COURT,
-    gender: GenderKeys.MALE,
+    gender: SexKeys.MALE,
     isCurrentPrisoner: false,
     potentialMatches: [],
   } as Arrival)

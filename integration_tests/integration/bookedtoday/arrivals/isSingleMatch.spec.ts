@@ -88,7 +88,7 @@ context('Is Single Match', () => {
       expect(request).to.deep.equal({
         dateOfBirth: '1970-02-01',
         firstName: 'Sam',
-        gender: 'M',
+        sex: 'M',
         imprisonmentStatus: 'SENT',
         lastName: 'Smith',
         movementReasonCode: '26',
