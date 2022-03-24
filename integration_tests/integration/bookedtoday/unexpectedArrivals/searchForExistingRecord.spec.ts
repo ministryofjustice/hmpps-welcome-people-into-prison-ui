@@ -1,9 +1,9 @@
 import Page from '../../../pages/page'
 import Role from '../../../../server/authentication/role'
 import SearchForExistingPage from '../../../pages/bookedtoday/unexpectedArrivals/searchForExistingRecord'
-import NoRecordFoundPage from '../../../pages/bookedtoday/unexpectedArrivals/noRecordFound'
-import RecordFoundPage from '../../../pages/bookedtoday/unexpectedArrivals/recordFound'
-import PossibleRecordsFoundPage from '../../../pages/bookedtoday/unexpectedArrivals/possibleRecordsFound'
+import NoRecordsFoundPage from '../../../pages/bookedtoday/unexpectedArrivals/noRecordsFound'
+import SingleRecordFoundPage from '../../../pages/bookedtoday/unexpectedArrivals/singleRecordFound'
+import MultipleRecordsFoundPage from '../../../pages/bookedtoday/unexpectedArrivals/multipleRecordsFound'
 
 context('Unexpected arrivals - Search for existing record spec', () => {
   beforeEach(() => {
@@ -16,6 +16,26 @@ context('Unexpected arrivals - Search for existing record spec', () => {
     SearchForExistingPage.goTo()
   })
 
+  it('Search with no details', () => {
+    const searchPage = Page.verifyOnPage(SearchForExistingPage)
+    searchPage.search().click()
+    searchPage.hasError("You must search using either the prisoner's last name, prison number or PNC Number")
+  })
+  it('Enter first name only', () => {
+    const searchPage = Page.verifyOnPage(SearchForExistingPage)
+    searchPage.firstName().type('James')
+    searchPage.search().click()
+    searchPage.hasError('Enter a last name')
+  })
+
+  it('Enter partial date only', () => {
+    const searchPage = Page.verifyOnPage(SearchForExistingPage)
+    searchPage.day().type('01')
+    searchPage.search().click()
+    searchPage.hasError("You must search using either the prisoner's last name, prison number or PNC Number")
+    searchPage.hasError('Date of birth must include a month and year')
+  })
+
   it('Redirects to no match page', () => {
     cy.task('stubUnexpectedArrivalsMatchedRecords', [])
     const searchPage = Page.verifyOnPage(SearchForExistingPage)
@@ -26,7 +46,7 @@ context('Unexpected arrivals - Search for existing record spec', () => {
     searchPage.month().type('08')
     searchPage.year().type('2000')
     searchPage.search().click()
-    Page.verifyOnPage(NoRecordFoundPage)
+    Page.verifyOnPage(NoRecordsFoundPage)
   })
   it('Redirects to single match page', () => {
     cy.task('stubUnexpectedArrivalsMatchedRecords', [
@@ -44,7 +64,7 @@ context('Unexpected arrivals - Search for existing record spec', () => {
     searchPage.otherSearchDetails().click()
     searchPage.prisonNumber().type('G0014GM')
     searchPage.search().click()
-    Page.verifyOnPage(RecordFoundPage)
+    Page.verifyOnPage(SingleRecordFoundPage)
   })
 
   it('Redirects to multiple match page', () => {
@@ -72,6 +92,6 @@ context('Unexpected arrivals - Search for existing record spec', () => {
     searchPage.otherSearchDetails().click()
     searchPage.pncNumber().type('01/23456M')
     searchPage.search().click()
-    Page.verifyOnPage(PossibleRecordsFoundPage)
+    Page.verifyOnPage(MultipleRecordsFoundPage)
   })
 })
