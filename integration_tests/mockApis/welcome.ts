@@ -264,7 +264,11 @@ export default {
       },
     })
   },
-  stubCreateOffenderRecordAndBooking: (arrivalId: string): SuperAgentRequest => {
+  stubCreateOffenderRecordAndBooking: (
+    arrivalId: string,
+    prisonNumber = 'A1234BC',
+    location = 'Reception'
+  ): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'POST',
@@ -273,7 +277,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: { prisonNumber: 'A1234BC', location: 'Reception' },
+        jsonBody: { prisonNumber, location },
       },
     })
   },
