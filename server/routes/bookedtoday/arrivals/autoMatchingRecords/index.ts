@@ -1,6 +1,7 @@
 import express, { RequestHandler, Router } from 'express'
 import SingleMatchingRecordFoundController from './singleMatchingRecordFoundController'
 import NoMatchingRecordsFoundController from './noMatchingRecordsFoundController'
+import MultipleExistingsRecordsFoundController from './multipleExistingRecordsFoundController'
 
 import authorisationForUrlMiddleware from '../../../../middleware/authorisationForUrlMiddleware'
 import asyncMiddleware from '../../../../middleware/asyncMiddleware'
@@ -22,6 +23,9 @@ export default function routes(services: Services): Router {
 
   const noMatchingRecordsFoundController = new NoMatchingRecordsFoundController(services.expectedArrivalsService)
   get('/prisoners/:id/no-record-found', [noMatchingRecordsFoundController.view()], [Role.PRISON_RECEPTION])
+
+  const multipleExistingRecordsFoundController = new MultipleExistingsRecordsFoundController()
+  get('/prisoners/:id/possible-matches-found', [multipleExistingRecordsFoundController.view()], [Role.PRISON_RECEPTION])
 
   return router
 }

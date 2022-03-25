@@ -232,7 +232,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
         .expect('Location', '/prisoners/1111-2222-3333-4444/search-for-existing-record/new')
     })
 
-    it('should redirect to search results when not current and PNC provided', () => {
+    it('should redirect to single match', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
           prisonNumber: undefined,
@@ -257,7 +257,40 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
         .expect('Location', '/prisoners/1111-2222-3333-4444/record-found')
     })
 
-    it('should redirect to search results when not current and no Prison Number provided', () => {
+    it('should redirect to multiple matches', () => {
+      expectedArrivalsService.getArrival.mockResolvedValue(
+        arrival({
+          prisonNumber: undefined,
+          pncNumber: '01/123456',
+          fromLocationType: LocationType.COURT,
+          isCurrentPrisoner: false,
+          potentialMatches: [
+            {
+              firstName: 'Harry',
+              lastName: 'Stanton',
+              dateOfBirth: '1961-01-01',
+              prisonNumber: 'A1234BC',
+              pncNumber: '01/123456',
+              sex: SexKeys.MALE,
+            },
+            {
+              firstName: 'Hurry',
+              lastName: 'Stenton',
+              dateOfBirth: '1961-01-02',
+              prisonNumber: 'A1234BD',
+              pncNumber: '01/12345&',
+              sex: SexKeys.MALE,
+            },
+          ],
+        })
+      )
+      return request(app)
+        .get('/confirm-arrival/choose-prisoner/aaa-111-222')
+        .expect('Content-Type', /text\/plain/)
+        .expect('Location', '/prisoners/1111-2222-3333-4444/possible-matches-found')
+    })
+
+    it('should redirect to no match', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
           prisonNumber: undefined,
