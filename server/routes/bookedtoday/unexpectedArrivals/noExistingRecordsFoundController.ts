@@ -1,7 +1,7 @@
 import type { RequestHandler } from 'express'
 import { State } from '../arrivals/state'
 
-export default class NoMatchingRecordsFoundController {
+export default class NoExistingRecordsFoundController {
   public view(): RequestHandler {
     return async (req, res) => {
       const searchData = State.searchDetails.get(req)

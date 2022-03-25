@@ -5,7 +5,6 @@ import * as cheerio from 'cheerio'
 import { appWithAllRoutes, flashProvider, signedCookiesProvider } from '../../__testutils/appSetup'
 
 import Role from '../../../authentication/role'
-import config from '../../../config'
 import { ExpectedArrivalsService } from '../../../services'
 
 jest.mock('../../../services/expectedArrivalsService')
@@ -37,7 +36,6 @@ const potentialMatches = [
 let app: Express
 
 beforeEach(() => {
-  config.confirmNoIdentifiersEnabled = true
   app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
   expectedArrivalsService.getMatchingRecords.mockResolvedValue(potentialMatches)
   expectedArrivalsService.getPrisonerDetails.mockResolvedValue(potentialMatches[0])
@@ -99,7 +97,7 @@ describe('possible records found', () => {
     it('should redirect to /sex page if no errors', () => {
       return request(app)
         .post('/manually-confirm-arrival/search-for-existing-record/possible-records-found')
-        .send(potentialMatches[0])
+        .send({ prisonNumber: potentialMatches[0].prisonNumber })
         .expect(302)
         .expect('Location', '/prisoners/unexpected-arrivals/sex')
         .expect(() => {

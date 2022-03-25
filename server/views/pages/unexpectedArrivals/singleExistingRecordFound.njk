@@ -21,10 +21,10 @@
         <div class=" border-left-grey govuk-!-padding-left-9 column-width-60">
             <h2 class="govuk-heading-m">Details from existing prisoner record</h2> 
             <div class="prisoner-record-detail flex">
-                {{ prisonerSummaryDetail(data.potentialMatches[0], "existing-record") }}
-                <img src="{{ '/prisoners/' + data.potentialMatches[0].prisonNumber + '/image' if data.potentialMatches[0].prisonNumber else '/assets/images/placeholder-image.png' }}" 
+                {{ prisonerSummaryDetail(potentialMatch, "existing-record") }}
+                <img src="{{ '/prisoners/' + potentialMatch.prisonNumber + '/image' if potentialMatch.prisonNumber else '/assets/images/placeholder-image.png' }}" 
                         class="prisoner-image-transfer govuk-!-margin-top-2" 
-                        alt="{{ data.potentialMatches[0].lastName }}, {{ data.potentialMatches[0].firstName }}" 
+                        alt="{{ potentialMatches.lastName }}, {{ potentialMatch.firstName }}" 
                         data-qa="prisoner-image" 
                 />
             </div>
