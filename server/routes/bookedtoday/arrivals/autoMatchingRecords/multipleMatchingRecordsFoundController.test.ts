@@ -1,74 +1,75 @@
 import type { Express } from 'express'
 import request from 'supertest'
-import { SexKeys } from 'welcome'
+import { Arrival, SexKeys } from 'welcome'
 import * as cheerio from 'cheerio'
 import { appWithAllRoutes, flashProvider, signedCookiesProvider } from '../../../__testutils/appSetup'
 
 import Role from '../../../../authentication/role'
 import config from '../../../../config'
 import { ExpectedArrivalsService } from '../../../../services'
+import { LocationType } from '../../../../services/expectedArrivalsService'
 
 jest.mock('../../../../services/expectedArrivalsService')
 const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
 
-const searchDetails = {
-  firstName: 'Jamie',
-  lastName: 'Smyth',
+const arrival: Arrival = {
+  firstName: 'James',
+  lastName: 'Smith',
   dateOfBirth: '1973-01-08',
+  prisonNumber: 'A1234BC',
+  pncNumber: '11/5678',
+  gender: SexKeys.MALE,
+  date: '2020-01-08',
+  fromLocation: 'Crown Court',
+  fromLocationType: LocationType.COURT,
+  id: '1234-2345-3456-4566',
+  isCurrentPrisoner: false,
+  fromLocationId: 'CC',
+  potentialMatches: [
+    {
+      firstName: 'James',
+      lastName: 'Smyth',
+      dateOfBirth: '1973-01-08',
+      prisonNumber: 'A1234BC',
+      pncNumber: '11/5678',
+      croNumber: '12/0000',
+      sex: SexKeys.MALE,
+    },
+    {
+      firstName: 'Jim',
+      lastName: 'Smith',
+      dateOfBirth: '1983-01-08',
+      sex: SexKeys.MALE,
+    },
+  ],
 }
-const potentialMatches = [
-  {
-    firstName: 'James',
-    lastName: 'Smyth',
-    dateOfBirth: '1973-01-08',
-    prisonNumber: 'A1234BC',
-    pncNumber: '11/5678',
-    croNumber: '12/0000',
-    sex: SexKeys.MALE,
-  },
-  {
-    firstName: 'Jim',
-    lastName: 'Smith',
-    dateOfBirth: '1983-01-08',
-    sex: SexKeys.MALE,
-  },
-]
 let app: Express
 
 beforeEach(() => {
   config.confirmNoIdentifiersEnabled = true
   app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
-  expectedArrivalsService.getMatchingRecords.mockResolvedValue(potentialMatches)
-  expectedArrivalsService.getPrisonerDetails.mockResolvedValue(potentialMatches[0])
+  expectedArrivalsService.getArrival.mockResolvedValue(arrival)
+  expectedArrivalsService.getPrisonerDetails.mockResolvedValue(arrival.potentialMatches[0])
   flashProvider.mockReturnValue([])
-  signedCookiesProvider.mockReturnValue({ 'search-details': searchDetails })
 })
 
 afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('possible records found', () => {
+describe('possible matches found', () => {
   describe('view', () => {
-    it('should get search details from state', () => {
-      return request(app)
-        .get('/prisoners/12345-67890/search-for-existing-record/possible-records-found')
-        .expect(() => {
-          expect(signedCookiesProvider).toHaveBeenCalledTimes(1)
-        })
-    })
-
     it('should call service method correctly', () => {
       return request(app)
-        .get('/prisoners/12345-67890/search-for-existing-record/possible-records-found')
+        .get(`/prisoners/${arrival.id}/possible-matches-found`)
         .expect(() => {
-          expect(expectedArrivalsService.getMatchingRecords).toHaveBeenCalledWith(searchDetails)
+          expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith(arrival.id)
         })
     })
 
     it('should render page correctly', () => {
       return request(app)
-        .get('/prisoners/12345-67890/search-for-existing-record/possible-records-found')
+        .get(`/prisoners/${arrival.id}/possible-matches-found`)
         .expect(200)
         .expect('Content-Type', /html/)
         .expect(res => {
@@ -81,10 +82,10 @@ describe('possible records found', () => {
   describe('submit', () => {
     it('should redirect if errors', () => {
       return request(app)
-        .post('/prisoners/12345-67890/search-for-existing-record/possible-records-found')
+        .post('/prisoners/12345-67890/possible-matches-found')
         .send()
         .expect(302)
-        .expect('Location', '/prisoners/12345-67890/search-for-existing-record/possible-records-found')
+        .expect('Location', '/prisoners/12345-67890/possible-matches-found')
         .expect(() => {
           expect(flashProvider).toHaveBeenCalledWith('errors', [
             {
@@ -97,8 +98,8 @@ describe('possible records found', () => {
 
     it('should redirect to /sex page if no errors', () => {
       return request(app)
-        .post('/prisoners/12345-67890/search-for-existing-record/possible-records-found')
-        .send({ prisonNumber: potentialMatches[0].prisonNumber })
+        .post('/prisoners/12345-67890/possible-matches-found')
+        .send({ prisonNumber: arrival.prisonNumber })
         .expect(302)
         .expect('Location', '/prisoners/12345-67890/sex')
         .expect(() => {
