@@ -30,7 +30,8 @@ export default (on: (string, Record) => void): void => {
     stubPrison: welcome.stubPrison,
     stubPrisonerImage: welcome.stubPrisonerImage,
     stubMissingPrisonerImage: welcome.stubMissingPrisonerImage,
-    stubCreateOffenderRecordAndBooking: welcome.stubCreateOffenderRecordAndBooking,
+    stubCreateOffenderRecordAndBooking: ({ arrivalId, prisonNumber, location }) =>
+      welcome.stubCreateOffenderRecordAndBooking(arrivalId, prisonNumber, location),
     stubCreateOffenderRecordAndBookingReturnsError: welcome.stubCreateOffenderRecordAndBookingReturnsError,
     stubImprisonmentStatus: welcome.stubImprisonmentStatus,
     stubMatchedRecords: welcome.stubMatchedRecords,

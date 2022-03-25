@@ -55,7 +55,7 @@
                                                     <img src="{{ '/prisoners/' + match.prisonNumber + '/image' }}" 
                                                         class="govuk-!-padding-bottom-3 prisoner-image govuk-!-margin-top-2" 
                                                         alt="{{ match.lastName }}, {{ match.firstName }}" 
-                                                        data-qa="prisoner-image" 
+                                                        data-qa="prisoner-image-{{ loop.index }}"
                                                     />              
                                                 </div>
                                             </label>

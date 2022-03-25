@@ -1,13 +1,13 @@
-import Page from '../../../pages/page'
-import SingleMatchingRecordFoundPage from '../../../pages/bookedtoday/arrivals/autoMatchingRecords/singleMatchingRecordFound'
-import ImprisonmentStatusPage from '../../../pages/bookedtoday/arrivals/confirmArrival/imprisonmentStatus'
-import CheckAnswersPage from '../../../pages/bookedtoday/arrivals/confirmArrival/checkAnswers'
-import ConfirmAddedToRollPage from '../../../pages/bookedtoday/arrivals/confirmArrival/confirmAddedToRoll'
-import Role from '../../../../server/authentication/role'
-import expectedArrivals from '../../../mockApis/responses/expectedArrivals'
-import ChoosePrisonerPage from '../../../pages/bookedtoday/choosePrisoner'
-import MovementReasonsPage from '../../../pages/bookedtoday/arrivals/confirmArrival/movementReasons'
-import SearchForExistingPage from '../../../pages/bookedtoday/arrivals/searchforexisting/search/searchForExisting'
+import Page from '../../../../pages/page'
+import SingleMatchingRecordFoundPage from '../../../../pages/bookedtoday/arrivals/autoMatchingRecords/singleMatchingRecordFound'
+import ImprisonmentStatusPage from '../../../../pages/bookedtoday/arrivals/confirmArrival/imprisonmentStatus'
+import CheckAnswersPage from '../../../../pages/bookedtoday/arrivals/confirmArrival/checkAnswers'
+import ConfirmAddedToRollPage from '../../../../pages/bookedtoday/arrivals/confirmArrival/confirmAddedToRoll'
+import Role from '../../../../../server/authentication/role'
+import expectedArrivals from '../../../../mockApis/responses/expectedArrivals'
+import ChoosePrisonerPage from '../../../../pages/bookedtoday/choosePrisoner'
+import MovementReasonsPage from '../../../../pages/bookedtoday/arrivals/confirmArrival/movementReasons'
+import SearchForExistingPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/search/searchForExisting'
 
 const expectedArrival = expectedArrivals.arrival({
   fromLocationType: 'COURT',
@@ -69,7 +69,7 @@ context('Is Single Match', () => {
     checkAnswersPage.pncNumber().should('contain.text', '01/4567A')
     checkAnswersPage.sex().should('contain.text', 'Male')
     checkAnswersPage.reason().should('contain.text', 'Determinate sentence - Extended sentence for public protection')
-    cy.task('stubCreateOffenderRecordAndBooking', expectedArrival.id)
+    cy.task('stubCreateOffenderRecordAndBooking', { arrivalId: expectedArrival.id })
     checkAnswersPage.addToRoll().click()
 
     const confirmAddedToRollPage = Page.verifyOnPage(ConfirmAddedToRollPage)

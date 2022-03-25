@@ -1,15 +1,15 @@
-import ChoosePrisonerPage from '../../../pages/bookedtoday/choosePrisoner'
-import Page from '../../../pages/page'
-import Role from '../../../../server/authentication/role'
-import expectedArrivals from '../../../mockApis/responses/expectedArrivals'
-import NoMatchingRecordsFoundPage from '../../../pages/bookedtoday/arrivals/autoMatchingRecords/noMatchingRecordsFound'
-import ReviewPerDetailsPage from '../../../pages/bookedtoday/arrivals/reviewPerDetails'
-import ChangeNamePage from '../../../pages/bookedtoday/arrivals/changeName'
-import ChangeDateOfBirthPage from '../../../pages/bookedtoday/arrivals/changeDateOfBirth'
-import SearchForExistingPage from '../../../pages/bookedtoday/arrivals/searchforexisting/search/searchForExisting'
-import ImprisonmentStatusPage from '../../../pages/bookedtoday/arrivals/confirmArrival/imprisonmentStatus'
-import CheckAnswersForCreateNewRecordPage from '../../../pages/bookedtoday/arrivals/confirmArrival/checkAnswersForCreateNewRecord'
-import ConfirmAddedToRollPage from '../../../pages/bookedtoday/arrivals/confirmArrival/confirmAddedToRoll'
+import ChoosePrisonerPage from '../../../../pages/bookedtoday/choosePrisoner'
+import Page from '../../../../pages/page'
+import Role from '../../../../../server/authentication/role'
+import expectedArrivals from '../../../../mockApis/responses/expectedArrivals'
+import NoMatchingRecordsFoundPage from '../../../../pages/bookedtoday/arrivals/autoMatchingRecords/noMatchingRecordsFound'
+import ReviewPerDetailsPage from '../../../../pages/bookedtoday/arrivals/reviewPerDetails'
+import ChangeNamePage from '../../../../pages/bookedtoday/arrivals/changeName'
+import ChangeDateOfBirthPage from '../../../../pages/bookedtoday/arrivals/changeDateOfBirth'
+import SearchForExistingPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/search/searchForExisting'
+import ImprisonmentStatusPage from '../../../../pages/bookedtoday/arrivals/confirmArrival/imprisonmentStatus'
+import CheckAnswersForCreateNewRecordPage from '../../../../pages/bookedtoday/arrivals/confirmArrival/checkAnswersForCreateNewRecord'
+import ConfirmAddedToRollPage from '../../../../pages/bookedtoday/arrivals/confirmArrival/confirmAddedToRoll'
 
 const arrival = expectedArrivals.arrival({
   prisonNumber: null,
@@ -130,7 +130,7 @@ context('No match found', () => {
       .submissionParagraphTitle()
       .should('contain.text', 'Create prisoner record and add to establishment roll')
 
-    cy.task('stubCreateOffenderRecordAndBooking', arrival.id)
+    cy.task('stubCreateOffenderRecordAndBooking', { arrivalId: arrival.id })
     checkAnswersPage.addToRoll().click()
     Page.verifyOnPage(ConfirmAddedToRollPage)
 
