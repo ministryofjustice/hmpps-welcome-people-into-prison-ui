@@ -21,14 +21,13 @@ export default class ChoosePrisonerController {
     if (!arrival.prisonNumber && !arrival.pncNumber) {
       return res.redirect(`/prisoners/${arrival.id}/search-for-existing-record/new`)
     }
-    if (arrival.potentialMatches.length >= 1) {
+    if (arrival.potentialMatches.length > 1) {
+      return res.redirect(`/prisoners/${arrival.id}/possible-matches-found`)
+    }
+    if (arrival.potentialMatches.length === 1) {
       return res.redirect(`/prisoners/${arrival.id}/record-found`)
     }
     return res.redirect(`/prisoners/${arrival.id}/no-record-found`)
-
-    /**
-     * TODO deal with multiple matches   - show "Possible existing records found"
-     */
   }
 
   private handleCurrentPrisoner(arrival: Arrival, res: Response): void | PromiseLike<void> {

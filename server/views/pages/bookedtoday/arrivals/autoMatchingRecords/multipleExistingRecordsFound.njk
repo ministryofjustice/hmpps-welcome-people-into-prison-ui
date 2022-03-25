@@ -1,0 +1,33 @@
+{% extends "../../../../partials/layout.njk" %}
+{% from "../../../../components/prisoner-summary-detail.njk" import prisonerSummaryDetail %}
+
+{% set pageTitle = "Possible existing records have been found" %}
+
+{% block content %}
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+
+            {% if errors.length %}
+                {{ govukErrorSummary({
+                    titleText: "There is a problem",
+                    errorList: errors,
+                    attributes: { 'data-qa-errors': true }
+                    }) 
+                }}
+                {% set errorMessage = errors[0].text %}
+                {% set formGroupError = "govuk-form-group--error" %}
+            {% endif %}
+
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <div>
+                        <span class="govuk-caption-xl"> Confirm a prisoner's arrival </span>
+                        <h1 class="govuk-heading-l govuk-!-margin-bottom-7">Possible existing records have been found</h1>
+                        <p> Compare details and confirm the correct record for the prisoner. </p>
+                        <p class="govuk-inset-text">Search results may include matches based on a person's known aliases.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+{% endblock %}
