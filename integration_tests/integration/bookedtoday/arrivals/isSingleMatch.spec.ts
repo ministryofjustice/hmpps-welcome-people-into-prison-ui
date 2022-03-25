@@ -1,5 +1,5 @@
 import Page from '../../../pages/page'
-import SingleMatchingRecordFoundPage from '../../../pages/bookedtoday/arrivals/singleMatchingRecordFound'
+import SingleMatchingRecordFoundPage from '../../../pages/bookedtoday/arrivals/autoMatchingRecords/singleMatchingRecordFound'
 import ImprisonmentStatusPage from '../../../pages/bookedtoday/arrivals/confirmArrival/imprisonmentStatus'
 import CheckAnswersPage from '../../../pages/bookedtoday/arrivals/confirmArrival/checkAnswers'
 import ConfirmAddedToRollPage from '../../../pages/bookedtoday/arrivals/confirmArrival/confirmAddedToRoll'

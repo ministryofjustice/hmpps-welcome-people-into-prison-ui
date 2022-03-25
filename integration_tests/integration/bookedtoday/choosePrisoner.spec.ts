@@ -1,12 +1,12 @@
 import ChoosePrisonerPage from '../../pages/bookedtoday/choosePrisoner'
 import FeatureNotAvailablePage from '../../pages/featureNotAvailable'
 
-import SingleMatchingRecordFoundPage from '../../pages/bookedtoday/arrivals/singleMatchingRecordFound'
+import SingleMatchingRecordFoundPage from '../../pages/bookedtoday/arrivals/autoMatchingRecords/singleMatchingRecordFound'
 import CheckCourtReturnPage from '../../pages/bookedtoday/arrivals/courtreturns/checkCourtReturn'
 import Page from '../../pages/page'
 import Role from '../../../server/authentication/role'
 import expectedArrivals from '../../mockApis/responses/expectedArrivals'
-import NoMatchingRecordsFoundPage from '../../pages/bookedtoday/arrivals/noMatchingRecordsFound'
+import NoMatchingRecordsFoundPage from '../../pages/bookedtoday/arrivals/autoMatchingRecords/noMatchingRecordsFound'
 import ReviewPerDetailsPage from '../../pages/bookedtoday/arrivals/reviewPerDetails'
 
 context('Choose Prisoner', () => {

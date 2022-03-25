@@ -1,6 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import SingleMatchingRecordFoundController from './singleMatchingRecordFoundController'
-import NoMatchingRecordsFoundController from './noMatchingRecordsFoundController'
 import ReviewPerDetailsController from './reviewPerDetailsController'
 import ReviewPerDetailsChangeNameController from './reviewPerDetailsChangeNameController'
 import ReviewPerDetailsChangeDateOfBirthController from './reviewPerDetailsChangeDateOfBirthController'
@@ -8,6 +6,7 @@ import ReviewPerDetailsChangeDateOfBirthController from './reviewPerDetailsChang
 import searchForExistingRecordRoutes from './searchforexisting'
 import courtReturnRoutes from './courtreturns'
 import confirmArrivalRoutes from './confirmArrival'
+import autoMatchingRecordsRoutes from './autoMatchingRecords'
 
 import NameValidator from './validation/nameValidation'
 import DateOfBirthValidator from './validation/dateOfBirthValidation'
@@ -37,12 +36,6 @@ export default function routes(services: Services): Router {
       authorisationForUrlMiddleware(authorisedRoles),
       handlers.map(handler => asyncMiddleware(handler))
     )
-
-  const singleMatchingRecordFoundController = new SingleMatchingRecordFoundController(services.expectedArrivalsService)
-  get('/prisoners/:id/record-found', [singleMatchingRecordFoundController.view()], [Role.PRISON_RECEPTION])
-
-  const noMatchingRecordsFoundController = new NoMatchingRecordsFoundController(services.expectedArrivalsService)
-  get('/prisoners/:id/no-record-found', [noMatchingRecordsFoundController.view()], [Role.PRISON_RECEPTION])
 
   const reviewPerDetailsController = new ReviewPerDetailsController(services.expectedArrivalsService)
   get('/prisoners/:id/review-per-details/new', [reviewPerDetailsController.newReview()], [Role.PRISON_RECEPTION])
@@ -79,6 +72,7 @@ export default function routes(services: Services): Router {
   router.use(searchForExistingRecordRoutes(services))
   router.use(courtReturnRoutes(services))
   router.use(confirmArrivalRoutes(services))
+  router.use(autoMatchingRecordsRoutes(services))
 
   return router
 }
