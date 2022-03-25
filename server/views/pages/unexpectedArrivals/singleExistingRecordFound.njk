@@ -12,10 +12,10 @@
         <div class="column-width-40 govuk-!-padding-right-9">
             <h2 class="govuk-heading-m">Personal details</h2>
             <div class = "prisoner-record-detail prisoner-head">
-                {{ prisonerSummaryDetail(data, "arrival-details" ) }}
+                {{ prisonerSummaryDetail(data, "arrival" ) }}
             </div>
             <p class="govuk-!-margin-top-4">
-                <a class="govuk-link govuk-link--no-visited-state" href=""  data-qa="search-again">Search using different details</a>
+                <a class="govuk-link govuk-link--no-visited-state" href="/prisoners/unexpected-arrivals/search-for-existing-record"  data-qa="search-again">Search using different details</a>
             </p>
         </div>
         <div class=" border-left-grey govuk-!-padding-left-9 column-width-60">
@@ -31,17 +31,15 @@
         </div>
     </div> 
     <div>  
-
-
         {{ govukButton({
             classes: "govuk-button govuk-!-margin-bottom-6",
-            href: "/prisoners/" + data.id + "/sex",
+            href: "/prisoners/unexpected-arrivals/sex",
             text: "Continue using this record",
             attributes: {'data-qa': 'continue'}
         }) }}
 
         {{ govukInsetText({
-            html: 'If this is not the correct record, you can <a data-qa="create-new" href=""> you can create a new record.</a>'
+            html: 'If this is not the correct record, you can <a data-qa="create-new" href="">create a new record.</a>'
         }) }}
         <p>
 

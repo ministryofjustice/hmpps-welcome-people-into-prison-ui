@@ -16,23 +16,20 @@ context('Unexpected arrivals - Search for existing record spec', () => {
     SearchForExistingPage.goTo()
   })
 
-  it('Search with no details', () => {
+  it('Search without first name, last name or date of birth', () => {
     const searchPage = Page.verifyOnPage(SearchForExistingPage)
     searchPage.search().click()
-    searchPage.hasError("You must search using either the prisoner's last name, prison number or PNC Number")
-  })
-  it('Enter first name only', () => {
-    const searchPage = Page.verifyOnPage(SearchForExistingPage)
-    searchPage.firstName().type('James')
-    searchPage.search().click()
-    searchPage.hasError('Enter a last name')
+    searchPage.hasError(
+      "You must search using either the prisoner's last name and date of birth, prison number or PNC Number"
+    )
   })
 
-  it('Enter partial date only', () => {
+  it('Enter partial date of birth', () => {
     const searchPage = Page.verifyOnPage(SearchForExistingPage)
+    searchPage.firstName().type('James')
+    searchPage.lastName().type('Smyth')
     searchPage.day().type('01')
     searchPage.search().click()
-    searchPage.hasError("You must search using either the prisoner's last name, prison number or PNC Number")
     searchPage.hasError('Date of birth must include a month and year')
   })
 
@@ -56,11 +53,16 @@ context('Unexpected arrivals - Search for existing record spec', () => {
         dateOfBirth: '1972-11-21',
         prisonNumber: 'G0014GM',
         pncNumber: '01/1111A',
-        croNumber: '01/0000A',
         sex: 'MALE',
       },
     ])
     const searchPage = Page.verifyOnPage(SearchForExistingPage)
+    searchPage.otherSearchDetails().click()
+    searchPage.firstName().type('James')
+    searchPage.lastName().type('Smith')
+    searchPage.day().type('01')
+    searchPage.month().type('08')
+    searchPage.year().type('2000')
     searchPage.otherSearchDetails().click()
     searchPage.prisonNumber().type('G0014GM')
     searchPage.search().click()
@@ -89,6 +91,12 @@ context('Unexpected arrivals - Search for existing record spec', () => {
       },
     ])
     const searchPage = Page.verifyOnPage(SearchForExistingPage)
+    searchPage.otherSearchDetails().click()
+    searchPage.firstName().type('James')
+    searchPage.lastName().type('Smith')
+    searchPage.day().type('01')
+    searchPage.month().type('08')
+    searchPage.year().type('2000')
     searchPage.otherSearchDetails().click()
     searchPage.pncNumber().type('01/23456M')
     searchPage.search().click()

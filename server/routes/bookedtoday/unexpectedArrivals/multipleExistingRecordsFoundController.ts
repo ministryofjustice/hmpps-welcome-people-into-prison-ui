@@ -24,4 +24,20 @@ export default class MultipleExistingRecordsFoundController {
       })
     }
   }
+
+  public submit(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      if (req.errors) {
+        req.flash('errors', req.body)
+        return res.redirect('/manually-confirm-arrival/search-for-existing-record/possible-records-found')
+      }
+
+      const { prisonNumber } = req.body
+      const selectedRecord = await this.expectedArrivalsService.getPrisonerDetails(prisonNumber)
+
+      State.newArrival.set(res, selectedRecord)
+
+      return res.redirect(`/prisoners/unexpected-arrivals/sex`)
+    }
+  }
 }
