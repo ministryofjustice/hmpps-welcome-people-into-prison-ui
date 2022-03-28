@@ -2,15 +2,47 @@
 {% from "../../components/prisoner-summary-detail.njk" import prisonerSummaryDetail %}
 
 {% block content %}
-    <div class="govuk-width-container">
-        <main class="govuk-main-wrapper">
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-two-thirds">
-                    <span class="govuk-caption-xl"> Confirm a prisoner's arrival </span>
-                    <h1 class="govuk-heading-l govuk-!-margin-bottom-7">This person has an existing prisoner record</h1>
-                    <p> {{ arrival.firstName }} {{ arrival.lastName }} will be booked into the establishment using their existing prisoner record.</p>
-                </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <span class="govuk-caption-xl"> Confirm a prisoner's arrival </span>
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-7">An existing prisoner record has been found</h1>
+        </div>
+    </div>
+    <div class="govuk-grid-row govuk-!-padding-left-3 govuk-!-margin-top-4 govuk-!-margin-bottom-8 flex" >
+        <div class="column-width-40 govuk-!-padding-right-9">
+            <h2 class="govuk-heading-m">Personal details</h2>
+            <div class = "prisoner-record-detail prisoner-head">
+                {{ prisonerSummaryDetail(data, "arrival" ) }}
             </div>
-        </main>
+            <p class="govuk-!-margin-top-4">
+                <a class="govuk-link govuk-link--no-visited-state" href="/prisoners/unexpected-arrivals/search-for-existing-record"  data-qa="search-again">Search using different details</a>
+            </p>
+        </div>
+        <div class=" border-left-grey govuk-!-padding-left-9 column-width-60">
+            <h2 class="govuk-heading-m">Details from existing prisoner record</h2> 
+            <div class="prisoner-record-detail flex">
+                {{ prisonerSummaryDetail(potentialMatch, "existing-record") }}
+                <img src="{{ '/prisoners/' + potentialMatch.prisonNumber + '/image' if potentialMatch.prisonNumber else '/assets/images/placeholder-image.png' }}" 
+                        class="prisoner-image-transfer govuk-!-margin-top-2" 
+                        alt="{{ potentialMatches.lastName }}, {{ potentialMatch.firstName }}" 
+                        data-qa="prisoner-image" 
+                />
+            </div>
+        </div>
+    </div> 
+    <div>  
+        {{ govukButton({
+            classes: "govuk-button govuk-!-margin-bottom-6",
+            href: "/prisoners/unexpected-arrivals/sex",
+            text: "Continue using this record",
+            attributes: {'data-qa': 'continue'}
+        }) }}
+
+        {{ govukInsetText({
+            html: 'If this is not the correct record, you can <a data-qa="create-new" href="">create a new record.</a>'
+        }) }}
+        <p>
+
+        </p>
     </div>
 {% endblock %}

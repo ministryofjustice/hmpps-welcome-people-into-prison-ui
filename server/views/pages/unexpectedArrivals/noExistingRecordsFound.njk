@@ -4,15 +4,32 @@
 {% set pageTitle = "Confirm arrival" %}
 
 {% block content %}
-    <div class="govuk-width-container">
-        <main class="govuk-main-wrapper">
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-two-thirds">
-                    <span class="govuk-caption-xl"> Confirm a prisoner's arrival </span>
-                    <h1 class="govuk-heading-l govuk-!-margin-bottom-7">This person does not have an existing prisoner record</h1>
-                    <p> {{ arrival.firstName }} {{ arrival.lastName }} does not have an existing prisoner record. A new record will be created when they are added to the establishment roll. </p>
-                </div>
-            </div>
-        </main>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <span class="govuk-caption-xl"> Confirm a prisoner's arrival </span>
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-7">This person does not have an existing prisoner record</h1>
+            <p> {{ data.firstName }} {{ data.lastName }} does not have an existing prisoner record. A new record will be created when they are added to the establishment roll. </p>
+        </div>
     </div>
+    <div class="govuk-grid-row govuk-!-margin-top-4 govuk-!-margin-bottom-8 flex" >
+        <div class="govuk-grid-column-one-half">
+            <h2 class="govuk-heading-m">Personal details</h2>
+            <div class = "prisoner-record-detail prisoner-head">
+                {{ prisonerSummaryDetail(data, "arrival" ) }}
+            </div>
+        </div>
+    </div> 
+    <div>   
+        {{ govukButton({
+            classes: "govuk-button govuk-!-margin-bottom-6",
+            href: "",
+            text: "Continue",
+            attributes: {'data-qa': 'continue'}
+        }) }}
+        <p>
+            <a class="govuk-body govuk-link govuk-link--no-visited-state" href="" data-qa="choose-prisoner">
+                Return to list of prisoners arriving today
+            </a>
+        </p> 
+    </div>   
 {% endblock %}

@@ -4,30 +4,83 @@
 {% set pageTitle = "Possible existing records have been found" %}
 
 {% block content %}
-    <div class="govuk-width-container">
-        <main class="govuk-main-wrapper">
+    {% if errors.length %}
+        {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errors,
+            attributes: { 'data-qa-errors': true }
+            }) 
+        }}
+        {% set errorMessage = errors[0].text %}
+        {% set formGroupError = "govuk-form-group--error" %}
+    {% endif %}
 
-            {% if errors.length %}
-                {{ govukErrorSummary({
-                    titleText: "There is a problem",
-                    errorList: errors,
-                    attributes: { 'data-qa-errors': true }
-                    }) 
-                }}
-                {% set errorMessage = errors[0].text %}
-                {% set formGroupError = "govuk-form-group--error" %}
-            {% endif %}
-
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-two-thirds">
-                    <div>
-                        <span class="govuk-caption-xl"> Confirm a prisoner's arrival </span>
-                        <h1 class="govuk-heading-l govuk-!-margin-bottom-7">Possible existing records have been found</h1>
-                        <p> Compare details and confirm the correct record for the prisoner. </p>
-                        <p class="govuk-inset-text">Search results may include matches based on a person's known aliases.</p>
-                    </div>
-                </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div>
+                <span class="govuk-caption-xl"> Confirm a prisoner's arrival </span>
+                <h1 class="govuk-heading-l govuk-!-margin-bottom-7">Possible existing records have been found</h1>
+                <p> Compare details and confirm the correct record for the prisoner. </p>
+                <p class="govuk-inset-text">Search results may include matches based on a person's known aliases.</p>
             </div>
-        </main>
+        </div>
+        <div class="govuk-grid-column-full govuk-!-margin-top-4 govuk-!-margin-bottom-8" >
+            <div class="govuk-grid-column-one-half column-width-40 govuk-!-padding-left-0 govuk-!-padding-right-9">
+                <h2 class="govuk-heading-m">Personal details</h2>
+                <div class = "prisoner-record-detail govuk-!-margin-bottom-4">
+                    {{ prisonerSummaryDetail(arrival, "arrival-details" ) }}
+                </div>
+                <a class="govuk-body govuk-link govuk-link--no-visited-state" href="/prisoners/unexpected-arrivals/search-for-existing-record" data-qa="ammend-search">
+                    Search using different details
+                </a>
+            </div>
+
+            <form method="post">
+                <div class="govuk-grid-column-one-half column-width-60 border-left-grey govuk-!-padding-left-9 govuk-!-padding-right-0 ">
+                    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                    <div class="govuk-form-group {{ formGroupError }}" >
+                        <h2 class="govuk-heading-m">Select the correct existing record</h2> 
+                            <span class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span>
+                                {{ errorMessage }}
+                            </span>
+                        <fieldset class="govuk-fieldset">
+                            {% for match in data.potentialMatches%}
+                                <div class="govuk-radios">
+                                    <div class="govuk-radios__item govuk-!-padding-bottom-6">
+                                        <input class="govuk-radios__input" id="record-{{loop.index}}" name="prisonNumber" type="radio" value={{match.prisonNumber}}>
+                                        <label class="govuk-label govuk-radios__label govuk-!-padding-right-0 govuk-!-padding-top-0" for="record-{{loop.index}}">
+                                            <div class="prisoner-record-detail flex">
+                                                {{ prisonerSummaryDetail(match, "matching-record-"+loop.index) }}
+                                                <img src="{{ '/prisoners/' + match.prisonNumber + '/image' if match.prisonNumber else '/assets/images/placeholder-image.png' }}" 
+                                                    class="govuk-!-padding-bottom-3 prisoner-image govuk-!-margin-top-2" 
+                                                    alt="{{ match.lastName }}, {{ match.firstName }}" 
+                                                    data-qa="prisoner-image-{{loop.index}}"
+                                                />              
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </fieldset>
+                    </div>
+                </div> 
+                <details class="govuk-details govuk-!-margin-bottom-4">
+                    <summary class="govuk-details__summary">
+                        <span class="govuk-details__summary-text" id="incorrect_vehicle_details_reveal">If you cannot find the correct record
+                        </span>
+                    </summary>
+                    <div class="govuk-details__text">
+                        <p>If you cannot find an existing record for this prisoner, you'll need to <a class="govuk-link govuk-link--no-visited-state" href="">create a new record</a>.</p>
+                    </div>
+                </details>
+                {{ govukButton({
+                    classes: "govuk-button govuk-!-margin-bottom-6",
+                    text: "Continue",
+                    type: "submit",
+                    attributes: {'data-qa': 'continue'}
+                }) }}
+            </form>
+        </div> 
     </div>
 {% endblock %}

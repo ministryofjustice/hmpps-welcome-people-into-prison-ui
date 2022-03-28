@@ -98,15 +98,35 @@ describe('Unexpected arrivals - search for existing records', () => {
     })
 
     it('should call flash twice if errors and redirect', () => {
+      const search = {
+        firstName: 'James',
+        lastName: 'Smith',
+        day: '',
+        month: '01',
+        year: '1973',
+        prisonNumber: 'A1234AB',
+        pncNumber: '99/55555M',
+      }
       return request(app)
         .post('/manually-confirm-arrival/search-for-existing-record')
-        .send({ firstName: 'james' })
+        .send(search)
         .expect(302)
         .expect('Location', '/manually-confirm-arrival/search-for-existing-record')
         .expect(() => {
           expect(flashProvider.mock.calls).toEqual([
-            ['errors', [{ href: '#last-name', text: 'Enter a last name' }]],
-            ['input', { firstName: 'james' }],
+            ['errors', [{ href: '#date-of-birth-day', text: 'Date of birth must include a day' }]],
+            [
+              'input',
+              {
+                day: '',
+                firstName: 'James',
+                lastName: 'Smith',
+                month: '01',
+                pncNumber: '99/55555M',
+                prisonNumber: 'A1234AB',
+                year: '1973',
+              },
+            ],
           ])
         })
     })

@@ -12,6 +12,7 @@ import SearchForExistingRecordsValidation from './validation/searchForExistingRe
 import DateOfBirthValidation from './validation/dateOfBirthValidation'
 import PrisonNumberValidation from './validation/prisonNumberValidation'
 import PncNumberValidation from './validation/pncNumberValidation'
+import MatchedRecordSelectionValidation from '../arrivals/searchforexisting/validation/matchedRecordSelectionValidation'
 
 export default function routes(services: Services): Router {
   const router = express.Router()
@@ -51,8 +52,16 @@ export default function routes(services: Services): Router {
   const singleExistingRecordFoundController = new SingleExistingRecordFoundController()
   get('/record-found', [singleExistingRecordFoundController.view()], [Role.PRISON_RECEPTION])
 
-  const multipleExistingRecordsFoundController = new MultipleExistingRecordsFoundController()
+  const multipleExistingRecordsFoundController = new MultipleExistingRecordsFoundController(
+    services.expectedArrivalsService
+  )
   get('/possible-records-found', [multipleExistingRecordsFoundController.view()], [Role.PRISON_RECEPTION])
+
+  post(
+    '/possible-records-found',
+    [validationMiddleware(MatchedRecordSelectionValidation), multipleExistingRecordsFoundController.submit()],
+    [Role.PRISON_RECEPTION]
+  )
 
   return router
 }
