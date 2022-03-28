@@ -22,7 +22,7 @@ export default class ChoosePrisonerController {
       return res.redirect(`/prisoners/${arrival.id}/search-for-existing-record/new`)
     }
     if (arrival.potentialMatches.length > 1) {
-      return res.redirect(`/prisoners/${arrival.id}/possible-matches-found`)
+      return res.redirect(`/prisoners/${arrival.id}/possible-records-found`)
     }
     if (arrival.potentialMatches.length === 1) {
       return res.redirect(`/prisoners/${arrival.id}/record-found`)

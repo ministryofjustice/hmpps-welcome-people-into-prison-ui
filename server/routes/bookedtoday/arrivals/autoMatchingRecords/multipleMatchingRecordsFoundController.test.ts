@@ -57,11 +57,11 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('possible matches found', () => {
+describe('possible records found', () => {
   describe('view', () => {
     it('should call service method correctly', () => {
       return request(app)
-        .get(`/prisoners/${arrival.id}/possible-matches-found`)
+        .get(`/prisoners/${arrival.id}/possible-records-found`)
         .expect(() => {
           expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith(arrival.id)
         })
@@ -69,7 +69,7 @@ describe('possible matches found', () => {
 
     it('should render page correctly', () => {
       return request(app)
-        .get(`/prisoners/${arrival.id}/possible-matches-found`)
+        .get(`/prisoners/${arrival.id}/possible-records-found`)
         .expect(200)
         .expect('Content-Type', /html/)
         .expect(res => {
@@ -82,10 +82,10 @@ describe('possible matches found', () => {
   describe('submit', () => {
     it('should redirect if errors', () => {
       return request(app)
-        .post('/prisoners/12345-67890/possible-matches-found')
+        .post('/prisoners/12345-67890/possible-records-found')
         .send()
         .expect(302)
-        .expect('Location', '/prisoners/12345-67890/possible-matches-found')
+        .expect('Location', '/prisoners/12345-67890/possible-records-found')
         .expect(() => {
           expect(flashProvider).toHaveBeenCalledWith('errors', [
             {
@@ -98,7 +98,7 @@ describe('possible matches found', () => {
 
     it('should redirect to /sex page if no errors', () => {
       return request(app)
-        .post('/prisoners/12345-67890/possible-matches-found')
+        .post('/prisoners/12345-67890/possible-records-found')
         .send({ prisonNumber: arrival.prisonNumber })
         .expect(302)
         .expect('Location', '/prisoners/12345-67890/sex')
