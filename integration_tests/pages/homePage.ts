@@ -2,7 +2,7 @@ import Page, { PageElement } from './page'
 
 export default class HomePage extends Page {
   constructor() {
-    super('Welcome people into prison', false)
+    super('Welcome people into prison', { hasBackLink: false })
   }
 
   hmpps = (): PageElement => cy.get('[data-qa=hmpps]')

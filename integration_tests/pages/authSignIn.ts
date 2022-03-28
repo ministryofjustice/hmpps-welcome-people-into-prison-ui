@@ -2,6 +2,6 @@ import Page from './page'
 
 export default class AuthSignInPage extends Page {
   constructor() {
-    super('Sign in', false)
+    super('Sign in', { hasBackLink: false })
   }
 }

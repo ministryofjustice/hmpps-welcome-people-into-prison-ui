@@ -1,5 +1,6 @@
 export type PageElement = Cypress.Chainable<JQuery>
 export type PageConstructor<T extends Page> = new () => T
+export type BackLink = { hasBackLink: boolean }
 
 export default abstract class Page {
   static verifyOnPage<T extends Page>(constructor: PageConstructor<T>): T {
@@ -15,18 +16,20 @@ export default abstract class Page {
       })
   }
 
-  constructor(private readonly title: string, private readonly backLink: boolean = true) {
+  constructor(private readonly title: string, private readonly backNavigationLink: BackLink = { hasBackLink: true }) {
     this.checkOnPage()
   }
 
   checkOnPage(): void {
     cy.get('h1').contains(this.title)
-    if (this.backLink !== false) {
+    if (this.backNavigationLink.hasBackLink !== false) {
       cy.get('[data-qa=back-link]').should('exist')
+    } else {
+      cy.get('[data-qa=back-link]').should('not.exist')
     }
   }
 
-  backNavigationLink = (): PageElement => cy.get(`[data-qa=back-link]`)
+  backNavigation = (): PageElement => cy.get(`[data-qa=back-link]`)
 
   signOut = (): PageElement => cy.get('[data-qa=signOut]')
 

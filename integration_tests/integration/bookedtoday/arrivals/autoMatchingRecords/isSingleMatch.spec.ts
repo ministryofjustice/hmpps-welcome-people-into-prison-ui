@@ -122,20 +122,33 @@ context('Is Single Match', () => {
       expectedArrival.id,
       SingleMatchingRecordFoundPage
     )
-    singleMatchingRecordFoundPage.backNavigationLink().should('exist')
+    singleMatchingRecordFoundPage.backNavigation().should('exist')
     singleMatchingRecordFoundPage.continue().click()
 
     const imprisonmentStatusPage = Page.verifyOnPage(ImprisonmentStatusPage)
-    imprisonmentStatusPage.backNavigationLink().should('exist')
+    imprisonmentStatusPage.backNavigation().should('exist')
     imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()
     imprisonmentStatusPage.continue().click()
 
     const checkAnswersPage = Page.verifyOnPage(CheckAnswersPage)
-    checkAnswersPage.backNavigationLink().should('exist')
+    checkAnswersPage.backNavigation().should('exist')
+    checkAnswersPage.backNavigation().click()
+
+    Page.verifyOnPage(ImprisonmentStatusPage)
+    imprisonmentStatusPage.backNavigation().click()
+
+    Page.verifyOnPage(SingleMatchingRecordFoundPage)
+    singleMatchingRecordFoundPage.continue().click()
+
+    Page.verifyOnPage(ImprisonmentStatusPage)
+    imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()
+    imprisonmentStatusPage.continue().click()
+
+    Page.verifyOnPage(CheckAnswersPage)
     cy.task('stubCreateOffenderRecordAndBooking', { arrivalId: expectedArrival.id })
     checkAnswersPage.addToRoll().click()
 
     const confirmAddedToRollPage = Page.verifyOnPage(ConfirmAddedToRollPage)
-    confirmAddedToRollPage.backNavigationLink().should('not.exist')
+    confirmAddedToRollPage.backNavigation().should('not.exist')
   })
 })
