@@ -31,7 +31,7 @@ export default class MultipleExistingRecordsFoundController {
 
       if (req.errors) {
         req.flash('errors', req.body)
-        return res.redirect(`/prisoners/${id}/possible-matches-found`)
+        return res.redirect(`/prisoners/${id}/possible-records-found`)
       }
 
       const { prisonNumber } = req.body

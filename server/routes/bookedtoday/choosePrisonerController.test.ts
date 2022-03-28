@@ -287,7 +287,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
       return request(app)
         .get('/confirm-arrival/choose-prisoner/aaa-111-222')
         .expect('Content-Type', /text\/plain/)
-        .expect('Location', '/prisoners/1111-2222-3333-4444/possible-matches-found')
+        .expect('Location', '/prisoners/1111-2222-3333-4444/possible-records-found')
     })
 
     it('should redirect to no match', () => {

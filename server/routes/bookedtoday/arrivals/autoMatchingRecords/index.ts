@@ -37,9 +37,9 @@ export default function routes(services: Services): Router {
   const multipleMatchingRecordsFoundController = new MultipleMatchingRecordsFoundController(
     services.expectedArrivalsService
   )
-  get('/prisoners/:id/possible-matches-found', [multipleMatchingRecordsFoundController.view()], [Role.PRISON_RECEPTION])
+  get('/prisoners/:id/possible-records-found', [multipleMatchingRecordsFoundController.view()], [Role.PRISON_RECEPTION])
   post(
-    '/prisoners/:id/possible-matches-found',
+    '/prisoners/:id/possible-records-found',
     [validationMiddleware(MatchedRecordSelectionValidation), multipleMatchingRecordsFoundController.submit()],
     [Role.PRISON_RECEPTION]
   )
