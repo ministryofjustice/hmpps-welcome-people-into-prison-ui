@@ -48,7 +48,7 @@ context('Unexpected arrivals - multiple matching records', () => {
     cy.task('stubUnexpectedArrivalsMatchedRecords', arrival.potentialMatches)
   })
 
-  it('should display page contents', () => {
+  it('should display page contents, errors and continue to next page', () => {
     const searchPage = Page.verifyOnPage(SearchForExistingPage)
     searchPage.otherSearchDetails().click()
     searchPage.firstName().type('James')
@@ -68,60 +68,26 @@ context('Unexpected arrivals - multiple matching records', () => {
     personalDetails.fieldName('prison-number').should('contain', 'A1234AA')
     personalDetails.fieldName('pnc-number').should('contain', '01/23456M')
 
-    {
-      const match = multipleRecordsFoundPage.match(1)
-      match.fieldName('prisoner-name').should('contain', 'Bob Smith')
-      match.fieldName('dob').should('contain', '21 November 1972')
-      match.fieldName('prison-number').should('contain', arrival.potentialMatches[0].prisonNumber)
-      match.fieldName('pnc-number').should('contain', arrival.potentialMatches[0].pncNumber)
-      match.fieldName('cro-number').should('contain', arrival.potentialMatches[0].croNumber)
-    }
+    let match
+    match = multipleRecordsFoundPage.match(1)
+    match.fieldName('prisoner-name').should('contain', 'Bob Smith')
+    match.fieldName('dob').should('contain', '21 November 1972')
+    match.fieldName('prison-number').should('contain', arrival.potentialMatches[0].prisonNumber)
+    match.fieldName('pnc-number').should('contain', arrival.potentialMatches[0].pncNumber)
+    match.fieldName('cro-number').should('contain', arrival.potentialMatches[0].croNumber)
 
-    {
-      const match = multipleRecordsFoundPage.match(2)
-      match.fieldName('prisoner-name').should('contain', 'Robert Smyth')
-      match.fieldName('dob').should('contain', '21 November 1982')
-      match.fieldName('prison-number').should('contain', arrival.potentialMatches[1].prisonNumber)
-      match.fieldName('pnc-number').should('contain', arrival.potentialMatches[1].pncNumber)
-      match.fieldName('cro-number').should('contain', arrival.potentialMatches[1].croNumber)
-      match.prisonerImage().should('have.attr', 'src', `/prisoners/${arrival.potentialMatches[1].prisonNumber}/image`)
-    }
-  })
-
-  it('should display error messages', () => {
-    const searchPage = Page.verifyOnPage(SearchForExistingPage)
-    searchPage.otherSearchDetails().click()
-    searchPage.firstName().type('James')
-    searchPage.lastName().type('Smith')
-    searchPage.day().type('21')
-    searchPage.month().type('11')
-    searchPage.year().type('1972')
-    searchPage.otherSearchDetails().click()
-    searchPage.pncNumber().type('01/23456M')
-    searchPage.prisonNumber().type('A1234AA')
-    searchPage.search().click()
-    const multipleRecordsFoundPage = Page.verifyOnPage(MultipleRecordsFoundPage)
+    match = multipleRecordsFoundPage.match(2)
+    match.fieldName('prisoner-name').should('contain', 'Robert Smyth')
+    match.fieldName('dob').should('contain', '21 November 1982')
+    match.fieldName('prison-number').should('contain', arrival.potentialMatches[1].prisonNumber)
+    match.fieldName('pnc-number').should('contain', arrival.potentialMatches[1].pncNumber)
+    match.fieldName('cro-number').should('contain', arrival.potentialMatches[1].croNumber)
+    match.prisonerImage().should('have.attr', 'src', `/prisoners/${arrival.potentialMatches[1].prisonNumber}/image`)
 
     multipleRecordsFoundPage.continue().click()
     multipleRecordsFoundPage.hasError('Select an existing record or search using different details')
-  })
-  it('should progress to next page if no errors', () => {
-    const searchPage = Page.verifyOnPage(SearchForExistingPage)
-    searchPage.otherSearchDetails().click()
-    searchPage.firstName().type('James')
-    searchPage.lastName().type('Smith')
-    searchPage.day().type('21')
-    searchPage.month().type('11')
-    searchPage.year().type('1972')
-    searchPage.otherSearchDetails().click()
-    searchPage.pncNumber().type('01/23456M')
-    searchPage.prisonNumber().type('A1234AA')
-    searchPage.search().click()
-    const multipleRecordsFoundPage = Page.verifyOnPage(MultipleRecordsFoundPage)
 
-    const match = multipleRecordsFoundPage.match(1)
     match.select().click()
-
     multipleRecordsFoundPage.continue().click()
 
     Page.verifyOnPage(ImprisonmentStatus)
