@@ -15,12 +15,15 @@ export default abstract class Page {
       })
   }
 
-  constructor(private readonly title: string) {
+  constructor(private readonly title: string, private readonly noBackLink: boolean = false) {
     this.checkOnPage()
   }
 
   checkOnPage(): void {
     cy.get('h1').contains(this.title)
+    if (this.noBackLink === false) {
+      cy.get('[data-qa=back-link]').should('exist')
+    }
   }
 
   signOut = (): PageElement => cy.get('[data-qa=signOut]')

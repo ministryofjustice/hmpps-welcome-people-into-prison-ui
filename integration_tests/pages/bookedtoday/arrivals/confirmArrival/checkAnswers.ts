@@ -5,6 +5,8 @@ export default class CheckAnswersPage extends Page {
     super('Check your answers before adding')
   }
 
+  backLink = (): PageElement => cy.get(`[data-qa=back-link]`)
+
   name = (): PageElement => cy.get('.data-qa-prisoner-name')
 
   dob = (): PageElement => cy.get('.data-qa-dob')

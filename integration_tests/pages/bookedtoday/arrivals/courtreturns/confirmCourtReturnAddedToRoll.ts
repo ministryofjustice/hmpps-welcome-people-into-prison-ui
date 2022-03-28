@@ -2,7 +2,7 @@ import Page, { PageElement } from '../../../page'
 
 export default class ConfirmCourtReturnAddedToRollPage extends Page {
   constructor() {
-    super('has returned to Moorland (HMP & YOI)')
+    super('has returned to Moorland (HMP & YOI)', true)
   }
 
   addAnotherToRoll = (): PageElement => cy.get(`[data-qa=add-another-to-roll]`)

@@ -113,4 +113,29 @@ context('Is Single Match', () => {
     const searchPage = Page.verifyOnPage(SearchForExistingPage)
     searchPage.name.value().should('contain.text', 'Bob Smith')
   })
+
+  it('Back link navigation is not displayed on confirmation page', () => {
+    cy.task('stubExpectedArrival', expectedArrival)
+    cy.signIn()
+
+    const singleMatchingRecordFoundPage = ChoosePrisonerPage.selectPrisoner(
+      expectedArrival.id,
+      SingleMatchingRecordFoundPage
+    )
+    singleMatchingRecordFoundPage.backLink().should('exist')
+    singleMatchingRecordFoundPage.continue().click()
+
+    const imprisonmentStatusPage = Page.verifyOnPage(ImprisonmentStatusPage)
+    imprisonmentStatusPage.backLink().should('exist')
+    imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()
+    imprisonmentStatusPage.continue().click()
+
+    const checkAnswersPage = Page.verifyOnPage(CheckAnswersPage)
+    checkAnswersPage.backLink().should('exist')
+    cy.task('stubCreateOffenderRecordAndBooking', { arrivalId: expectedArrival.id })
+    checkAnswersPage.addToRoll().click()
+
+    const confirmAddedToRollPage = Page.verifyOnPage(ConfirmAddedToRollPage)
+    confirmAddedToRollPage.backLink().should('not.exist')
+  })
 })
