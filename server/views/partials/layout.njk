@@ -10,8 +10,7 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
-
-
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
 {% block head %}
 
@@ -66,13 +65,22 @@
   {% endblock %}
 </title>
 
-
-
 {% block header %}
   {% include "./header.njk" %}
 {% endblock %}
 
 {% block bodyStart %}
+{% endblock %}
+
+{% block beforeContent %}
+  {% if hasBackLink !== false %}
+    {{ govukBackLink({
+      text: "Back",
+      classes: "backLinkUrl",
+      attributes: {'data-qa': 'back-link'},
+      href: "#"
+    }) }}
+  {% endif %}
 {% endblock %}
 
 {% block bodyEnd %}
@@ -83,5 +91,6 @@
   <script src="/assets/moj/all.js"></script>
     {# Javascript block for individual pages #}
     {% block pageScripts %}
+      <script src="/assets/backLink.js"></script>
     {%  endblock %}
 {% endblock %}
