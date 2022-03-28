@@ -50,7 +50,6 @@ context('Unexpected arrivals - multiple matching records', () => {
 
   it('should display page contents, errors and continue to next page', () => {
     const searchPage = Page.verifyOnPage(SearchForExistingPage)
-    searchPage.otherSearchDetails().click()
     searchPage.firstName().type('James')
     searchPage.lastName().type('Smith')
     searchPage.day().type('21')
@@ -91,5 +90,23 @@ context('Unexpected arrivals - multiple matching records', () => {
     multipleRecordsFoundPage.continue().click()
 
     Page.verifyOnPage(ImprisonmentStatus)
+  })
+
+  it('should display search page', () => {
+    const searchPage = Page.verifyOnPage(SearchForExistingPage)
+    searchPage.firstName().type('James')
+    searchPage.lastName().type('Smith')
+    searchPage.day().type('21')
+    searchPage.month().type('11')
+    searchPage.year().type('1972')
+    searchPage.otherSearchDetails().click()
+    searchPage.pncNumber().type('01/23456M')
+    searchPage.prisonNumber().type('A1234AA')
+    searchPage.search().click()
+    const multipleRecordsFoundPage = Page.verifyOnPage(MultipleRecordsFoundPage)
+
+    multipleRecordsFoundPage.searchAgain().click()
+
+    Page.verifyOnPage(SearchForExistingPage)
   })
 })
