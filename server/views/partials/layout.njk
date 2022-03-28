@@ -73,7 +73,7 @@
 {% endblock %}
 
 {% block beforeContent %}
-  {% if backNavigationLink.hasBackLink !== false %}
+  {% if hasBackLink !== false %}
     {{ govukBackLink({
       text: "Back",
       classes: "backLinkUrl",
