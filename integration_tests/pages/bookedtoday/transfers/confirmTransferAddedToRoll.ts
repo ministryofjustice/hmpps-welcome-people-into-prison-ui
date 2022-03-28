@@ -2,7 +2,7 @@ import Page, { PageElement } from '../../page'
 
 export default class ConfirmTransferAddedToRollPage extends Page {
   constructor() {
-    super('has been added to the establishment roll', true)
+    super('has been added to the establishment roll', false)
   }
 
   addAnotherToRoll = (): PageElement => cy.get(`[data-qa=add-another-to-roll]`)

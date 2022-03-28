@@ -15,16 +15,18 @@ export default abstract class Page {
       })
   }
 
-  constructor(private readonly title: string, private readonly noBackLink: boolean = false) {
+  constructor(private readonly title: string, private readonly backLink: boolean = true) {
     this.checkOnPage()
   }
 
   checkOnPage(): void {
     cy.get('h1').contains(this.title)
-    if (this.noBackLink === false) {
+    if (this.backLink !== false) {
       cy.get('[data-qa=back-link]').should('exist')
     }
   }
+
+  backNavigationLink = (): PageElement => cy.get(`[data-qa=back-link]`)
 
   signOut = (): PageElement => cy.get('[data-qa=signOut]')
 

@@ -122,20 +122,20 @@ context('Is Single Match', () => {
       expectedArrival.id,
       SingleMatchingRecordFoundPage
     )
-    singleMatchingRecordFoundPage.backLink().should('exist')
+    singleMatchingRecordFoundPage.backNavigationLink().should('exist')
     singleMatchingRecordFoundPage.continue().click()
 
     const imprisonmentStatusPage = Page.verifyOnPage(ImprisonmentStatusPage)
-    imprisonmentStatusPage.backLink().should('exist')
+    imprisonmentStatusPage.backNavigationLink().should('exist')
     imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()
     imprisonmentStatusPage.continue().click()
 
     const checkAnswersPage = Page.verifyOnPage(CheckAnswersPage)
-    checkAnswersPage.backLink().should('exist')
+    checkAnswersPage.backNavigationLink().should('exist')
     cy.task('stubCreateOffenderRecordAndBooking', { arrivalId: expectedArrival.id })
     checkAnswersPage.addToRoll().click()
 
     const confirmAddedToRollPage = Page.verifyOnPage(ConfirmAddedToRollPage)
-    confirmAddedToRollPage.backLink().should('not.exist')
+    confirmAddedToRollPage.backNavigationLink().should('not.exist')
   })
 })

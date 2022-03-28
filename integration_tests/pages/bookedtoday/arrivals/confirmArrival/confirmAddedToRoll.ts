@@ -2,10 +2,8 @@ import Page, { PageElement } from '../../../page'
 
 export default class ConfirmAddedToRollPage extends Page {
   constructor() {
-    super('has been added to the establishment roll', true)
+    super('has been added to the establishment roll', false)
   }
-
-  backLink = (): PageElement => cy.get(`[data-qa=back-link]`)
 
   confirmationBanner = (): PageElement => cy.get(`[data-qa=confirmation-banner]`)
 

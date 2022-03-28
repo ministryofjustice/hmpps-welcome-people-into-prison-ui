@@ -2,7 +2,7 @@ import Page, { PageElement } from '../page'
 
 export default class ConfirmTemporaryAbsenceAddedToRollPage extends Page {
   constructor() {
-    super('has returned to Moorland (HMP & YOI)', true)
+    super('has returned to Moorland (HMP & YOI)', false)
   }
 
   static goTo(id: string): ConfirmTemporaryAbsenceAddedToRollPage {

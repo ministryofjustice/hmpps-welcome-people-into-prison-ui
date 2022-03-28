@@ -5,8 +5,6 @@ export default class SingleMatchingRecordFoundPage extends Page {
     super('This person has an existing prisoner record')
   }
 
-  backLink = (): PageElement => cy.get(`[data-qa=back-link]`)
-
   perName = (): PageElement => cy.get(`.data-qa-per-record-prisoner-name`)
 
   perDob = (): PageElement => cy.get(`.data-qa-per-record-dob`)

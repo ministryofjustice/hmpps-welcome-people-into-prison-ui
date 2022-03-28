@@ -5,8 +5,6 @@ export default class ImprisonmentStatusPage extends Page {
     super('What is the reason for imprisonment?')
   }
 
-  backLink = (): PageElement => cy.get(`[data-qa=back-link]`)
-
   prisonerName = (): PageElement => cy.get(`[data-qa=prisoner-name]`)
 
   imprisonmentStatusRadioButton = (value): PageElement => cy.get('.govuk-radios__input[type="radio"]').check(value)
