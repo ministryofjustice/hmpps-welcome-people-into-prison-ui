@@ -69,7 +69,7 @@ context('Unexpected arrivals - multiple matching records', () => {
     personalDetails.fieldName('pnc-number').should('contain', '01/23456M')
 
     {
-      const match = multipleRecordsFoundPage.chooseMatch(1)
+      const match = multipleRecordsFoundPage.match(1)
       match.fieldName('prisoner-name').should('contain', 'Bob Smith')
       match.fieldName('dob').should('contain', '21 November 1972')
       match.fieldName('prison-number').should('contain', arrival.potentialMatches[0].prisonNumber)
@@ -78,12 +78,13 @@ context('Unexpected arrivals - multiple matching records', () => {
     }
 
     {
-      const match = multipleRecordsFoundPage.chooseMatch(2)
+      const match = multipleRecordsFoundPage.match(2)
       match.fieldName('prisoner-name').should('contain', 'Robert Smyth')
       match.fieldName('dob').should('contain', '21 November 1982')
-      multipleRecordsFoundPage
-        .prisonerImage()
-        .should('have.attr', 'src', `/prisoners/${arrival.potentialMatches[1].prisonNumber}/image`)
+      match.fieldName('prison-number').should('contain', arrival.potentialMatches[1].prisonNumber)
+      match.fieldName('pnc-number').should('contain', arrival.potentialMatches[1].pncNumber)
+      match.fieldName('cro-number').should('contain', arrival.potentialMatches[1].croNumber)
+      match.prisonerImage().should('have.attr', 'src', `/prisoners/${arrival.potentialMatches[1].prisonNumber}/image`)
     }
   })
 
@@ -119,7 +120,8 @@ context('Unexpected arrivals - multiple matching records', () => {
     const multipleRecordsFoundPage = Page.verifyOnPage(MultipleRecordsFoundPage)
 
     const match = multipleRecordsFoundPage.match(1)
-    match.click()
+    match.select().click()
+
     multipleRecordsFoundPage.continue().click()
 
     Page.verifyOnPage(ImprisonmentStatus)
