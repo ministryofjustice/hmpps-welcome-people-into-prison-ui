@@ -16,14 +16,15 @@ describe('Validation middleware', () => {
 
   it('should add errors to request object when any are present', async () => {
     const alwaysFailsValidator: Validator = () => [error]
-    await validationMiddleware(alwaysFailsValidator)(req, res, next)
+    const middleware = validationMiddleware(alwaysFailsValidator)
+    await middleware(req, res, next)
 
     expect(req.errors).toEqual([error])
     expect(req.flash).toHaveBeenCalledWith('errors', [error])
     expect(next).toHaveBeenCalled()
   })
 
-  it('should add errors to request object when any are present and return a promise', async () => {
+  it('should add errors to request object if any are present and return a promise', async () => {
     const alwaysFailsValidator: Validator = () => Promise.resolve([error])
     await validationMiddleware(alwaysFailsValidator)(req, res, next)
 
@@ -46,5 +47,18 @@ describe('Validation middleware', () => {
     validationMiddleware(mockValidator)(req, res, next)
 
     expect(mockValidator).toHaveBeenCalledWith(req.body)
+  })
+  it('should handle multiple validators', async () => {
+    const firstNameValidation = { text: 'first name missing', href: 'firstName' }
+    const secondNameValidation = { text: 'second name missing', href: 'secondName' }
+    const firstNameValidator: Validator = () => [firstNameValidation]
+    const secondNameValidator: Validator = () => [secondNameValidation]
+
+    const middleware = validationMiddleware(firstNameValidator, secondNameValidator)
+    await middleware(req, res, next)
+
+    expect(req.errors).toEqual([firstNameValidation, secondNameValidation])
+    expect(req.flash).toHaveBeenCalledWith('errors', [firstNameValidation, secondNameValidation])
+    expect(next).toHaveBeenCalled()
   })
 })

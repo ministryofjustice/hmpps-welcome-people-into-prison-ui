@@ -37,10 +37,13 @@ export default function routes(services: Services): Router {
   post(
     '',
     [
-      validationMiddleware(SearchForExistingRecordsValidation),
-      validationMiddleware(DateOfBirthValidation),
-      validationMiddleware(PrisonNumberValidation),
-      validationMiddleware(PncNumberValidation),
+      validationMiddleware(
+        SearchForExistingRecordsValidation,
+        DateOfBirthValidation,
+        PrisonNumberValidation,
+        PncNumberValidation
+      ),
+
       searchForExistingRecordController.submit(),
     ],
     [Role.PRISON_RECEPTION]
