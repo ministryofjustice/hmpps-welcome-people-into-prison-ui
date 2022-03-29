@@ -46,6 +46,14 @@ describe('GET /view', () => {
       .expect('Location', '/autherror')
   })
 
+  it('should get details from state', () => {
+    return request(app)
+      .get('/manually-confirm-arrival/search-for-existing-record/record-found')
+      .expect(() => {
+        expect(signedCookiesProvider).toHaveBeenCalledTimes(1)
+      })
+  })
+
   it('should display correct page data', () => {
     return request(app)
       .get('/manually-confirm-arrival/search-for-existing-record/record-found')
