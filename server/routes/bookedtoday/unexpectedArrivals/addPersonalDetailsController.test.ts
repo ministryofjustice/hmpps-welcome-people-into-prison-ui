@@ -89,7 +89,7 @@ describe('add personal records', () => {
           sex: 'M',
         })
         .expect(302)
-        .expect('Location', '/prisoners/unexpected-arrivals/imprisonment-status')
+        .expect('Location', '/prisoners/unexpected-arrival/sex')
         .expect(() => {
           expect(flashProvider).not.toHaveBeenCalled()
           expect(State.newArrival.set).toBeCalledTimes(1)

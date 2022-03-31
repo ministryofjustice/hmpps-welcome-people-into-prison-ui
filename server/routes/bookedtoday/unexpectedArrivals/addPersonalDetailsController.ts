@@ -29,7 +29,7 @@ export default class AddPersonalDetailsController {
         sex,
       })
 
-      return res.redirect('/prisoners/unexpected-arrivals/imprisonment-status')
+      return res.redirect('/prisoners/unexpected-arrival/sex')
     }
   }
 }
