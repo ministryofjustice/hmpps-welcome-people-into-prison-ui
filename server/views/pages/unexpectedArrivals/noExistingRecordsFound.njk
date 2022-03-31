@@ -20,12 +20,14 @@
         </div>
     </div> 
     <div>   
-        {{ govukButton({
-            classes: "govuk-button govuk-!-margin-bottom-6",
-            href: "",
-            text: "Continue",
-            attributes: {'data-qa': 'continue'}
-        }) }}
+        <form method="post">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+            {{ govukButton({
+                classes: "govuk-button govuk-!-margin-bottom-6",
+                text: "Continue",
+                attributes: {'data-qa': 'continue'}
+            }) }}
+        </form>
         <p>
             <a class="govuk-body govuk-link govuk-link--no-visited-state" href="" data-qa="choose-prisoner">
                 Return to list of prisoners arriving today

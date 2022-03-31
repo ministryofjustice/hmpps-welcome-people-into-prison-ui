@@ -1,17 +1,15 @@
-import moment from 'moment'
 import { Validator } from '../../../../middleware/validationMiddleware'
-import { createDate, zip } from '../../../../utils/utils'
+import { zip } from '../../../../utils/utils'
 
 type ValidationError = { text?: string; href: string }
 
 const fields = ['day', 'month', 'year']
 
-export const isValidDate = (d: unknown, m: unknown, y: unknown) => {
-  const fullDate = createDate(d.toString(), m.toString(), y.toString())
-  return moment(fullDate, 'YYYY-MM-DD', true).isValid()
-}
-
-const DateOfBirthValidator: Validator = ({ day: d, month: m, year: y }: Record<string, string>) => {
+const SearchForExistingRecordsDateOfBirthValidation: Validator = ({
+  day: d,
+  month: m,
+  year: y,
+}: Record<string, string>) => {
   const day = parseInt(d, 10)
   const month = parseInt(m, 10)
   const year = parseInt(y, 10)
@@ -30,4 +28,4 @@ const DateOfBirthValidator: Validator = ({ day: d, month: m, year: y }: Record<s
 
   return errors
 }
-export default DateOfBirthValidator
+export default SearchForExistingRecordsDateOfBirthValidation

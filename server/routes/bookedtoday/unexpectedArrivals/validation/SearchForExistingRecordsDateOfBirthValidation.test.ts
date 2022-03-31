@@ -1,6 +1,6 @@
-import DateOfBirthValidator from './dateOfBirthValidation'
+import SearchForExistingRecordsDateOfBirthValidation from './SearchForExistingRecordsDateOfBirthValidation'
 
-describe('DateOfBirthValidator', () => {
+describe('SearchForExistingRecordsDateOfBirthValidation', () => {
   test.each([
     [
       { month: '1', year: '2020' },
@@ -66,6 +66,6 @@ describe('DateOfBirthValidator', () => {
 
     [{ day: '01', month: '02', year: '2020' }, []],
   ])('invalid cases : (%s, %s)', (fields, expectedErrors) => {
-    expect(DateOfBirthValidator(fields)).toEqual(expectedErrors)
+    expect(SearchForExistingRecordsDateOfBirthValidation(fields)).toEqual(expectedErrors)
   })
 })
