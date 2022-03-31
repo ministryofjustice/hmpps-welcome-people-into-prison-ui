@@ -96,9 +96,9 @@ declare module 'welcome' {
       description: string
     }
     PotentialMatchCriteria: {
-      firstName: string
-      lastName: string
-      dateOfBirth: string
+      firstName?: string
+      lastName?: string
+      dateOfBirth?: string
       pncNumber?: string
       prisonNumber?: string
     }

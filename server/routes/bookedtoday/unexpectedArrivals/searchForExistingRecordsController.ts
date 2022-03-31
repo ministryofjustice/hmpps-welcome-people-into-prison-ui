@@ -1,6 +1,6 @@
 import type { RequestHandler, Response, Request } from 'express'
 import type { ExpectedArrivalsService } from '../../../services'
-import { convertToTitleCase } from '../../../utils/utils'
+import sanitiseSearchCriteria from '../../../services/sanitiseSearch'
 import { State } from '../arrivals/state'
 
 type FlashErrors = [{ text: string; href: string }]
@@ -34,16 +34,7 @@ export default class SearchForExistingRecordsController {
         return res.redirect('/manually-confirm-arrival/search-for-existing-record')
       }
 
-      const { firstName, lastName, year, month, day, prisonNumber, pncNumber } = req.body
-      const dateOfBirth = `${year.padStart(4, '0')}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-
-      const searchData = {
-        firstName: convertToTitleCase(firstName),
-        lastName: convertToTitleCase(lastName),
-        dateOfBirth,
-        prisonNumber: prisonNumber || undefined,
-        pncNumber: pncNumber || undefined,
-      }
+      const searchData = sanitiseSearchCriteria(req.body)
 
       const potentialMatches = await this.expectedArrivalsService.getMatchingRecords(searchData)
       State.searchDetails.set(res, searchData)
