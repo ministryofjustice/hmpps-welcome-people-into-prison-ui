@@ -1,4 +1,5 @@
 import type { RequestHandler } from 'express'
+import { createDate } from '../../../utils/utils'
 import { State } from './state'
 
 export default class ReviewPerDetailsChangeDateOfBirthController {
@@ -22,10 +23,7 @@ export default class ReviewPerDetailsChangeDateOfBirthController {
       }
 
       const { day, month, year } = req.body
-
-      State.newArrival.update(req, res, {
-        dateOfBirth: `${year.padStart(4, '0')}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`,
-      })
+      State.newArrival.update(req, res, { dateOfBirth: createDate(day, month, year) })
 
       return res.redirect(`/prisoners/${id}/review-per-details`)
     }

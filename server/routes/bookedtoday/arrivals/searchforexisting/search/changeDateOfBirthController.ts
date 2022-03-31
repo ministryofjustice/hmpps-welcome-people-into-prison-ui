@@ -1,4 +1,5 @@
 import type { RequestHandler } from 'express'
+import { createDate } from '../../../../../utils/utils'
 import { State } from '../../state'
 
 export default class ChangeDateOfBirthController {
@@ -22,10 +23,7 @@ export default class ChangeDateOfBirthController {
       }
 
       const { day, month, year } = req.body
-
-      State.searchDetails.update(req, res, {
-        dateOfBirth: `${year.padStart(4, '0')}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`,
-      })
+      State.searchDetails.update(req, res, { dateOfBirth: createDate(day, month, year) })
 
       return res.redirect(`/prisoners/${id}/search-for-existing-record`)
     }

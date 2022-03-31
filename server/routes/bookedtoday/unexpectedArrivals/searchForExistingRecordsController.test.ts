@@ -146,6 +146,18 @@ describe('Unexpected arrivals - search for existing records', () => {
         })
     })
 
+    it('can perform prison number search', () => {
+      return request(app)
+        .post('/manually-confirm-arrival/search-for-existing-record')
+        .send({ prisonNumber: 'A1234AA', day: '', month: '', year: '' })
+        .expect(302)
+        .expect(() => {
+          expect(expectedArrivalsService.getMatchingRecords).toHaveBeenCalledWith({
+            prisonNumber: 'A1234AA',
+          })
+        })
+    })
+
     it('should redirect to /no-record-found', () => {
       return request(app)
         .post('/manually-confirm-arrival/search-for-existing-record')

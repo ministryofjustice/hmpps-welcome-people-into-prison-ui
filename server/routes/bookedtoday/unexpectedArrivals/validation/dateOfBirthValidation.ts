@@ -1,13 +1,13 @@
 import moment from 'moment'
 import { Validator } from '../../../../middleware/validationMiddleware'
-import { zip } from '../../../../utils/utils'
+import { createDate, zip } from '../../../../utils/utils'
 
 type ValidationError = { text?: string; href: string }
 
 const fields = ['day', 'month', 'year']
 
 export const isValidDate = (d: unknown, m: unknown, y: unknown) => {
-  const fullDate = `${y.toString().padStart(4, '0')}-${m.toString().padStart(2, '0')}-${d.toString().padStart(2, '0')}`
+  const fullDate = createDate(d.toString(), m.toString(), y.toString())
   return moment(fullDate, 'YYYY-MM-DD', true).isValid()
 }
 

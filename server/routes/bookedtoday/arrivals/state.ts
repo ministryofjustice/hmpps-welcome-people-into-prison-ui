@@ -42,9 +42,9 @@ export const NewArrivalCodec: Codec<NewArrival> = {
 }
 
 export type SearchDetails = {
-  firstName: string
-  lastName: string
-  dateOfBirth: string
+  firstName?: string
+  lastName?: string
+  dateOfBirth?: string
   prisonNumber?: string
   pncNumber?: string
 }
@@ -53,8 +53,7 @@ const SearchDetailsCodec: Codec<SearchDetails> = {
   write: (value: SearchDetails): Record<string, string> => ({ ...value }),
 
   read(record: Record<string, unknown>): SearchDetails {
-    assertHasStringValues(record, ['firstName', 'lastName', 'dateOfBirth'])
-    assertHasOptionalStringValues(record, ['prisonNumber', 'pncNumber'])
+    assertHasOptionalStringValues(record, ['firstName', 'lastName', 'dateOfBirth', 'prisonNumber', 'pncNumber'])
 
     return {
       firstName: record.firstName,

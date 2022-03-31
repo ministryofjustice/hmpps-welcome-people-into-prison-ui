@@ -1,5 +1,6 @@
 import {
   convertToTitleCase,
+  createDate,
   groupBy,
   compareByFullName,
   assertHasStringValues,
@@ -34,6 +35,15 @@ describe('Convert to title case', () => {
   })
   it('Hyphenated', () => {
     expect(convertToTitleCase('Robert-John SmiTH-jONes-WILSON')).toEqual('Robert-John Smith-Jones-Wilson')
+  })
+})
+
+describe('createDate', () => {
+  test('date with padded zeros', () => {
+    expect(createDate('01', '03', '2020')).toBe('2020-03-01')
+  })
+  test('date without zeros', () => {
+    expect(createDate('1', '3', '20')).toBe('0020-03-01')
   })
 })
 
