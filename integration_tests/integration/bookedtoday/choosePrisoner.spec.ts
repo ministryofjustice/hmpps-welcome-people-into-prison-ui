@@ -32,7 +32,7 @@ context('Choose Prisoner', () => {
     cy.task('stubMissingPrisonerImage')
   })
 
-  it('Should display available prisoner info', () => {
+  it("Should display available prisoner info and the 'manually confirm' link", () => {
     cy.signIn()
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
 
@@ -49,6 +49,7 @@ context('Choose Prisoner', () => {
     choosePrisonerPage.pncNumber(1, 'CUSTODY_SUITE').should('not.exist')
 
     choosePrisonerPage.expectedArrivalsFromAnotherEstablishment(1).should('contain.text', 'Offender, Karl')
+    choosePrisonerPage.manuallyConfirmArrival().should('exist')
   })
 
   it('Should handle no expected arrivals', () => {
@@ -216,5 +217,6 @@ context('Choose Prisoner', () => {
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().should('not.exist')
     choosePrisonerPage.arrivalFrom('COURT')(2).confirm().should('not.exist')
     choosePrisonerPage.arrivalFrom('COURT')(3).confirm().should('not.exist')
+    choosePrisonerPage.manuallyConfirmArrival().should('not.exist')
   })
 })

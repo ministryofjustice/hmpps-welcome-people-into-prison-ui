@@ -40,4 +40,6 @@ export default class ChoosePrisonerPage extends Page {
     (row: number): Record<string, () => PageElement> => ({
       confirm: () => cy.get(`[data-qa=${arrivalFromType}-title-${row}]`).find(`[data-qa=confirm-arrival]`),
     })
+
+  manuallyConfirmArrival = (): PageElement => cy.get('[data-qa=manually-confirm-arrival]')
 }
