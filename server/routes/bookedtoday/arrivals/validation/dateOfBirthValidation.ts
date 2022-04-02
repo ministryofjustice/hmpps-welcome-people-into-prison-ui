@@ -1,13 +1,7 @@
-import moment from 'moment'
 import { Validator } from '../../../../middleware/validationMiddleware'
-import { createDate, zip } from '../../../../utils/utils'
+import { zip, isValidDate } from '../../../../utils/utils'
 
 const fields = ['day', 'month', 'year']
-
-const isValidDate = (d: unknown, m: unknown, y: unknown) => {
-  const fullDate = createDate(d.toString(), m.toString(), y.toString())
-  return moment(fullDate, 'YYYY-MM-DD', true).isValid()
-}
 
 const DateOfBirthValidator: Validator = ({ day: d, month: m, year: y }: Record<string, string>) => {
   const day = parseInt(d, 10)
@@ -18,18 +12,15 @@ const DateOfBirthValidator: Validator = ({ day: d, month: m, year: y }: Record<s
     return [{ text: "Enter this person's date of birth", href: '#date-of-birth-day' }]
   }
 
-  if (day && month && year && !isValidDate(d, m, y)) {
-    return [{ text: 'Date of birth must be a real date', href: '#date-of-birth-day' }]
-  }
-
   const missingFieldNames = zip(fields, [day, month, year])
     .map(([field, value]) => !value && field)
     .filter(Boolean)
 
   const message = missingFieldNames.join(' and ')
 
-  return !missingFieldNames.length
-    ? []
-    : [{ text: `Date of birth must include a ${message}`, href: `#date-of-birth-${missingFieldNames[0]}` }]
+  if (missingFieldNames.length)
+    return [{ text: `Date of birth must include a ${message}`, href: `#date-of-birth-${missingFieldNames[0]}` }]
+
+  return isValidDate(d, m, y) ? [] : [{ text: 'Date of birth must be a real date', href: '#date-of-birth-day' }]
 }
 export default DateOfBirthValidator

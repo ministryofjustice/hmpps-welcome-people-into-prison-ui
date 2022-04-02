@@ -6,6 +6,7 @@ import {
   assertHasStringValues,
   assertHasOptionalStringValues,
   zip,
+  isValidDate,
 } from './utils'
 
 describe('Convert to title case', () => {
@@ -315,5 +316,16 @@ describe('zip', () => {
       ['aaa', 1],
       ['bbb', undefined],
     ])
+  })
+})
+
+describe('isValidDate', () => {
+  it('has invalid month', () => {
+    const result = isValidDate('01', '42', '2000')
+    expect(result).toEqual(false)
+  })
+  it('has valid date', () => {
+    const result = isValidDate('01', '05', '2000')
+    expect(result).toEqual(true)
   })
 })

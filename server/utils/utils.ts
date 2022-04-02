@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 interface Person {
   firstName: string
   lastName: string
@@ -68,3 +70,16 @@ export const createDate = (day: string, month: string, year: string) =>
   `${year.padStart(4, '0')}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
 
 export const zip = <A, B>(a: A[], b: B[]): [A, B][] => a.map((k, i) => [k, b[i]])
+
+export const isValidDate = (day: string, month: string, year: string) => {
+  const validate = (d: unknown, m: unknown, y: unknown) => {
+    const fullDate = createDate(d.toString(), m.toString(), y.toString())
+    return moment(fullDate, 'YYYY-MM-DD', true).isValid()
+  }
+
+  if (day && month && year && !validate(day, month, year)) {
+    return false
+  }
+
+  return true
+}
