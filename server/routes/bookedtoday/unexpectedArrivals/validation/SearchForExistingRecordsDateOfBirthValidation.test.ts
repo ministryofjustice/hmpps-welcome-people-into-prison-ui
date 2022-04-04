@@ -62,6 +62,26 @@ describe('SearchForExistingRecordsDateOfBirthValidation', () => {
       ],
     ],
 
+    [
+      { day: '29', month: '02', year: '1986' },
+      [
+        {
+          href: '#date-of-birth-day',
+          text: 'Date of birth must be a real date',
+        },
+      ],
+    ],
+
+    [
+      { day: '01', month: '22', year: '2000' },
+      [
+        {
+          href: '#date-of-birth-day',
+          text: 'Date of birth must be a real date',
+        },
+      ],
+    ],
+
     [{ day: '1', month: '2', year: '2020' }, []],
 
     [{ day: '01', month: '02', year: '2020' }, []],
