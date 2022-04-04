@@ -1,11 +1,12 @@
 import type { Arrival } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
-import cheerio from 'cheerio'
-import { appWithAllRoutes, signedCookiesProvider } from '../../__testutils/appSetup'
+import * as cheerio from 'cheerio'
+import { appWithAllRoutes, stubCookie } from '../../__testutils/appSetup'
 import { ExpectedArrivalsService } from '../../../services'
 import Role from '../../../authentication/role'
 import { expectSettingCookie } from '../../__testutils/requestTestUtils'
+import { State } from './state'
 
 jest.mock('../../../services/expectedArrivalsService')
 
@@ -23,25 +24,21 @@ afterEach(() => {
 
 describe('GET /review-per-details/new', () => {
   it('should redirect and clear cookie', () => {
-    signedCookiesProvider.mockReturnValue({})
-
     return request(app)
       .get('/prisoners/12345-67890/review-per-details/new')
       .expect(302)
       .expect('Location', '/prisoners/12345-67890/review-per-details')
-      .expect(res => expectSettingCookie(res, 'new-arrival').toBeUndefined())
+      .expect(res => expectSettingCookie(res, State.newArrival).toBeUndefined())
   })
 })
 
 describe('GET /review-per-details', () => {
   it('should redirect to authentication error page for non reception users', () => {
-    signedCookiesProvider.mockReturnValue({})
     app = appWithAllRoutes({ roles: [] })
     return request(app).get('/prisoners/12345-67890/review-per-details').expect(302).expect('Location', '/autherror')
   })
 
   it('should call service method correctly', () => {
-    signedCookiesProvider.mockReturnValue({})
     return request(app)
       .get('/prisoners/12345-67890/review-per-details')
       .expect('Content-Type', 'text/html; charset=utf-8')
@@ -51,7 +48,6 @@ describe('GET /review-per-details', () => {
   })
 
   it('should render page when no cookie state', () => {
-    signedCookiesProvider.mockReturnValue({})
     expectedArrivalsService.getArrival.mockResolvedValue({
       firstName: 'James',
       lastName: 'Smyth',
@@ -72,7 +68,6 @@ describe('GET /review-per-details', () => {
   })
 
   it('cookie is set from retrieved data', () => {
-    signedCookiesProvider.mockReturnValue({})
     expectedArrivalsService.getArrival.mockResolvedValue({
       firstName: 'James',
       lastName: 'Smyth',
@@ -86,27 +81,27 @@ describe('GET /review-per-details', () => {
     return request(app)
       .get('/prisoners/12345-67890/review-per-details')
       .expect(res => {
-        expectSettingCookie(res, 'new-arrival').toStrictEqual({
+        expectSettingCookie(res, State.newArrival).toStrictEqual({
           firstName: 'James',
           lastName: 'Smyth',
           dateOfBirth: '1973-01-08',
           sex: 'MALE',
           pncNumber: '99/98644M',
           prisonNumber: 'A1234AB',
+          expected: 'true',
         })
       })
   })
 
   it('should render page with cookie state', () => {
-    signedCookiesProvider.mockReturnValue({
-      'new-arrival': {
-        firstName: 'James',
-        lastName: 'Smyth',
-        dateOfBirth: '1973-01-08',
-        sex: 'MALE',
-        prisonNumber: 'A1234AB',
-        pncNumber: '99/98644M',
-      },
+    stubCookie(State.newArrival, {
+      firstName: 'James',
+      lastName: 'Smyth',
+      dateOfBirth: '1973-01-08',
+      sex: 'MALE',
+      prisonNumber: 'A1234AB',
+      pncNumber: '99/98644M',
+      expected: true,
     })
 
     return request(app)

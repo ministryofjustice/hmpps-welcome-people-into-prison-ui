@@ -1,10 +1,11 @@
 import type { Express } from 'express'
 import request from 'supertest'
-import cheerio from 'cheerio'
-import { appWithAllRoutes, flashProvider, signedCookiesProvider } from '../../../../__testutils/appSetup'
+import * as cheerio from 'cheerio'
+import { appWithAllRoutes, flashProvider, stubCookie } from '../../../../__testutils/appSetup'
 import Role from '../../../../../authentication/role'
 import config from '../../../../../config'
 import { expectSettingCookie } from '../../../../__testutils/requestTestUtils'
+import { State } from '../../state'
 
 let app: Express
 
@@ -36,7 +37,7 @@ describe('GET /search-for-existing-record/change-date-of-birth', () => {
 
   it('should render page', () => {
     flashProvider.mockReturnValue([])
-    signedCookiesProvider.mockReturnValue({ 'search-details': searchDetails })
+    stubCookie(State.searchDetails, searchDetails)
 
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record/change-date-of-birth')
@@ -49,8 +50,6 @@ describe('GET /search-for-existing-record/change-date-of-birth', () => {
   })
 
   it('redirects when no cookie present', () => {
-    signedCookiesProvider.mockReturnValue({})
-
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record/change-date-of-birth')
       .expect(302)
@@ -69,8 +68,6 @@ describe('POST /search-for-existing-record/change-date-of-birth', () => {
   })
 
   it('should redirect when no cookie present', () => {
-    signedCookiesProvider.mockReturnValue({})
-
     return request(app)
       .post('/prisoners/12345-67890/search-for-existing-record/change-date-of-birth')
       .expect(302)
@@ -78,8 +75,6 @@ describe('POST /search-for-existing-record/change-date-of-birth', () => {
   })
 
   it('should redirect when no cookie present', () => {
-    signedCookiesProvider.mockReturnValue({})
-
     return request(app)
       .post('/prisoners/12345-67890/search-for-existing-record/change-date-of-birth')
       .expect(302)
@@ -87,13 +82,13 @@ describe('POST /search-for-existing-record/change-date-of-birth', () => {
   })
 
   it('should update date of birth in cookie', () => {
-    signedCookiesProvider.mockReturnValue({ 'search-details': searchDetails })
+    stubCookie(State.searchDetails, searchDetails)
 
     return request(app)
       .post('/prisoners/12345-67890/search-for-existing-record/change-date-of-birth')
       .send({ day: '01', month: '02', year: '2003' })
       .expect(res => {
-        expectSettingCookie(res, 'search-details').toStrictEqual({
+        expectSettingCookie(res, State.searchDetails).toStrictEqual({
           dateOfBirth: '2003-02-01',
           firstName: 'James',
           lastName: 'Smyth',
@@ -104,7 +99,7 @@ describe('POST /search-for-existing-record/change-date-of-birth', () => {
   })
 
   it('should update date of birth in cookie when providing date without leading zeros', () => {
-    signedCookiesProvider.mockReturnValue({ 'search-details': searchDetails })
+    stubCookie(State.searchDetails, searchDetails)
 
     return request(app)
       .post('/prisoners/12345-67890/search-for-existing-record/change-date-of-birth')
@@ -112,7 +107,7 @@ describe('POST /search-for-existing-record/change-date-of-birth', () => {
       .expect(302)
       .expect('Location', '/prisoners/12345-67890/search-for-existing-record')
       .expect(res => {
-        expectSettingCookie(res, 'search-details').toStrictEqual({
+        expectSettingCookie(res, State.searchDetails).toStrictEqual({
           firstName: 'James',
           lastName: 'Smyth',
           dateOfBirth: '2003-02-01',
@@ -123,7 +118,7 @@ describe('POST /search-for-existing-record/change-date-of-birth', () => {
   })
 
   it('should redirect after successful update', () => {
-    signedCookiesProvider.mockReturnValue({ 'search-details': searchDetails })
+    stubCookie(State.searchDetails, searchDetails)
 
     return request(app)
       .post('/prisoners/12345-67890/search-for-existing-record/change-date-of-birth')
@@ -133,7 +128,7 @@ describe('POST /search-for-existing-record/change-date-of-birth', () => {
   })
 
   it('should redirect when validation error', () => {
-    signedCookiesProvider.mockReturnValue({ 'search-details': searchDetails })
+    stubCookie(State.searchDetails, searchDetails)
 
     return request(app)
       .post('/prisoners/12345-67890/search-for-existing-record/change-date-of-birth')

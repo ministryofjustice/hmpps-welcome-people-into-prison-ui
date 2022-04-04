@@ -1,10 +1,11 @@
 import type { ImprisonmentStatus } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
-import cheerio from 'cheerio'
-import { appWithAllRoutes, signedCookiesProvider, flashProvider } from '../../../__testutils/appSetup'
+import * as cheerio from 'cheerio'
+import { appWithAllRoutes, stubCookie, flashProvider } from '../../../__testutils/appSetup'
 import ImprisonmentStatusesService from '../../../../services/imprisonmentStatusesService'
 import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
+import { State } from '../state'
 
 jest.mock('../../../../services/imprisonmentStatusesService')
 
@@ -30,16 +31,16 @@ const imprisonmentStatus: ImprisonmentStatus = {
 }
 
 beforeEach(() => {
-  signedCookiesProvider.mockReturnValue({
-    'new-arrival': {
-      firstName: 'Jim',
-      lastName: 'Smith',
-      dateOfBirth: '1973-01-08',
-      prisonNumber: 'A1234AB',
-      pncNumber: '01/98644M',
-      sex: 'M',
-    },
+  stubCookie(State.newArrival, {
+    firstName: 'Jim',
+    lastName: 'Smith',
+    dateOfBirth: '1973-01-08',
+    prisonNumber: 'A1234AB',
+    pncNumber: '01/98644M',
+    sex: 'M',
+    expected: true,
   })
+
   app = appWithAllRoutes({ services: { imprisonmentStatusesService } })
   imprisonmentStatusesService.getImprisonmentStatus.mockResolvedValue(imprisonmentStatus)
 })
@@ -91,7 +92,7 @@ describe('/determinate-sentence', () => {
         .send({ movementReason: '26' })
         .expect(302)
         .expect(res => {
-          expectSettingCookie(res, 'new-arrival').toStrictEqual({
+          expectSettingCookie(res, State.newArrival).toStrictEqual({
             firstName: 'Jim',
             lastName: 'Smith',
             dateOfBirth: '1973-01-08',
@@ -101,6 +102,7 @@ describe('/determinate-sentence', () => {
             code: 'determinate-sentence',
             imprisonmentStatus: 'SENT',
             movementReasonCode: '26',
+            expected: 'true',
           })
         })
     })

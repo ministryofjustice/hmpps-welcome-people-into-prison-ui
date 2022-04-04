@@ -1,18 +1,16 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
-import { appWithAllRoutes, flashProvider, signedCookiesProvider } from '../../__testutils/appSetup'
+import { appWithAllRoutes, flashProvider } from '../../__testutils/appSetup'
 import Role from '../../../authentication/role'
 import { State } from '../arrivals/state'
-
-jest.mock('../arrivals/state')
+import { expectSettingCookie } from '../../__testutils/requestTestUtils'
 
 let app: Express
 
 beforeEach(() => {
   app = appWithAllRoutes({ roles: [Role.PRISON_RECEPTION] })
   flashProvider.mockReturnValue([])
-  signedCookiesProvider.mockReturnValue({})
 })
 
 afterEach(() => {
@@ -77,7 +75,7 @@ describe('add personal records', () => {
         })
     })
 
-    it('should redirect to /imprisonment-status page if no errors', () => {
+    it('should redirect to /sex page if no errors', () => {
       return request(app)
         .post('/manually-confirm-arrival/add-personal-details')
         .send({
@@ -90,9 +88,15 @@ describe('add personal records', () => {
         })
         .expect(302)
         .expect('Location', '/prisoners/unexpected-arrival/sex')
-        .expect(() => {
+        .expect(res => {
           expect(flashProvider).not.toHaveBeenCalled()
-          expect(State.newArrival.set).toBeCalledTimes(1)
+          expectSettingCookie(res, State.newArrival).toStrictEqual({
+            dateOfBirth: '2000-10-13',
+            expected: 'false',
+            firstName: 'James',
+            lastName: 'Smith',
+            sex: 'M',
+          })
         })
     })
   })

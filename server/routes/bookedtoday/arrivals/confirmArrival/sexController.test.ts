@@ -1,21 +1,21 @@
 import { SexKeys } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
-import cheerio from 'cheerio'
-import { appWithAllRoutes, signedCookiesProvider, flashProvider } from '../../../__testutils/appSetup'
+import * as cheerio from 'cheerio'
+import { appWithAllRoutes, flashProvider, stubCookie } from '../../../__testutils/appSetup'
 import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
 import Role from '../../../../authentication/role'
+import { State } from '../state'
 
 let app: Express
 
 beforeEach(() => {
-  signedCookiesProvider.mockReturnValue({
-    'new-arrival': {
-      firstName: 'Jim',
-      lastName: 'Smith',
-      dateOfBirth: '1973-01-08',
-      sex: 'M',
-    },
+  stubCookie(State.newArrival, {
+    firstName: 'Jim',
+    lastName: 'Smith',
+    dateOfBirth: '1973-01-08',
+    sex: 'M',
+    expected: true,
   })
   app = appWithAllRoutes({
     roles: [Role.PRISON_RECEPTION],
@@ -36,13 +36,12 @@ describe('/sex', () => {
     it.each([{ sex: 'blas' as SexKeys }, { sex: undefined }, { sex: SexKeys.TRANS }])(
       'should render /sex page when new-arrival sex is not MALE or FEMALE',
       ({ sex }) => {
-        signedCookiesProvider.mockReturnValue({
-          'new-arrival': {
-            firstName: 'Jim',
-            lastName: 'Smith',
-            dateOfBirth: '1973-01-08',
-            sex,
-          },
+        stubCookie(State.newArrival, {
+          firstName: 'Jim',
+          lastName: 'Smith',
+          dateOfBirth: '1973-01-08',
+          sex,
+          expected: true,
         })
         return request(app)
           .get('/prisoners/12345-67890/sex')
@@ -58,13 +57,12 @@ describe('/sex', () => {
     it.each([{ sex: SexKeys.MALE }, { sex: 'M' }, { sex: SexKeys.FEMALE }, { sex: 'F' }])(
       'should render /imprisonment-status page when Arrival sex is MALE or FEMALE',
       ({ sex }) => {
-        signedCookiesProvider.mockReturnValue({
-          'new-arrival': {
-            firstName: 'Jim',
-            lastName: 'Smith',
-            dateOfBirth: '1973-01-08',
-            sex,
-          },
+        stubCookie(State.newArrival, {
+          firstName: 'Jim',
+          lastName: 'Smith',
+          dateOfBirth: '1973-01-08',
+          sex,
+          expected: true,
         })
         return request(app)
           .get('/prisoners/12345-67890/sex')
@@ -81,13 +79,12 @@ describe('/sex', () => {
     )
 
     it('contains additional hint for TRANS response', () => {
-      signedCookiesProvider.mockReturnValue({
-        'new-arrival': {
-          firstName: 'Jim',
-          lastName: 'Smith',
-          dateOfBirth: '1973-01-08',
-          sex: SexKeys.TRANS,
-        },
+      stubCookie(State.newArrival, {
+        firstName: 'Jim',
+        lastName: 'Smith',
+        dateOfBirth: '1973-01-08',
+        sex: SexKeys.TRANS,
+        expected: true,
       })
       return request(app)
         .get('/prisoners/12345-67890/sex')
@@ -125,11 +122,12 @@ describe('/sex', () => {
         .send({ sex: 'M' })
         .expect(302)
         .expect(res => {
-          expectSettingCookie(res, 'new-arrival').toStrictEqual({
+          expectSettingCookie(res, State.newArrival).toStrictEqual({
             firstName: 'Jim',
             lastName: 'Smith',
             dateOfBirth: '1973-01-08',
             sex: 'M',
+            expected: 'true',
           })
         })
     })

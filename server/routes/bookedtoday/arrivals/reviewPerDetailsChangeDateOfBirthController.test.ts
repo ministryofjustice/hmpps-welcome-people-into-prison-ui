@@ -1,20 +1,22 @@
 import type { Express } from 'express'
 import request from 'supertest'
-import cheerio from 'cheerio'
-import { appWithAllRoutes, flashProvider, signedCookiesProvider } from '../../__testutils/appSetup'
+import * as cheerio from 'cheerio'
+import { appWithAllRoutes, flashProvider, stubCookie } from '../../__testutils/appSetup'
 import Role from '../../../authentication/role'
 import config from '../../../config'
 import { expectSettingCookie } from '../../__testutils/requestTestUtils'
+import { NewArrival, State } from './state'
 
 let app: Express
 
-const newArrival = {
+const newArrival: NewArrival = {
   firstName: 'James',
   lastName: 'Smyth',
   dateOfBirth: '1973-01-08',
   sex: 'MALE',
   pncNumber: '99/98644M',
   prisonNumber: 'A1234AB',
+  expected: true,
 }
 
 beforeEach(() => {
@@ -37,7 +39,7 @@ describe('GET /review-per-details/change-date-of-birth', () => {
 
   it('should render page', () => {
     flashProvider.mockReturnValue([])
-    signedCookiesProvider.mockReturnValue({ 'new-arrival': newArrival })
+    stubCookie(State.newArrival, newArrival)
 
     return request(app)
       .get('/prisoners/12345-67890/review-per-details/change-date-of-birth')
@@ -50,8 +52,6 @@ describe('GET /review-per-details/change-date-of-birth', () => {
   })
 
   it('redirects when no cookie present', () => {
-    signedCookiesProvider.mockReturnValue({})
-
     return request(app)
       .get('/prisoners/12345-67890/review-per-details/change-date-of-birth')
       .expect(302)
@@ -70,8 +70,6 @@ describe('POST /review-per-details/change-date-of-birth', () => {
   })
 
   it('should redirect when no cookie present', () => {
-    signedCookiesProvider.mockReturnValue({})
-
     return request(app)
       .post('/prisoners/12345-67890/review-per-details/change-date-of-birth')
       .expect(302)
@@ -79,25 +77,26 @@ describe('POST /review-per-details/change-date-of-birth', () => {
   })
 
   it('should update date of birth in cookie', () => {
-    signedCookiesProvider.mockReturnValue({ 'new-arrival': newArrival })
+    stubCookie(State.newArrival, newArrival)
 
     return request(app)
       .post('/prisoners/12345-67890/review-per-details/change-date-of-birth')
       .send({ day: '01', month: '02', year: '2003' })
       .expect(res => {
-        expectSettingCookie(res, 'new-arrival').toStrictEqual({
+        expectSettingCookie(res, State.newArrival).toStrictEqual({
           firstName: 'James',
           lastName: 'Smyth',
           dateOfBirth: '2003-02-01',
           sex: 'MALE',
           prisonNumber: 'A1234AB',
           pncNumber: '99/98644M',
+          expected: 'true',
         })
       })
   })
 
   it('should update date of birth in cookie when providing date without leading zeros', () => {
-    signedCookiesProvider.mockReturnValue({ 'new-arrival': newArrival })
+    stubCookie(State.newArrival, newArrival)
 
     return request(app)
       .post('/prisoners/12345-67890/review-per-details/change-date-of-birth')
@@ -105,19 +104,20 @@ describe('POST /review-per-details/change-date-of-birth', () => {
       .expect(302)
       .expect('Location', '/prisoners/12345-67890/review-per-details')
       .expect(res => {
-        expectSettingCookie(res, 'new-arrival').toStrictEqual({
+        expectSettingCookie(res, State.newArrival).toStrictEqual({
           firstName: 'James',
           lastName: 'Smyth',
           dateOfBirth: '2003-02-01',
           sex: 'MALE',
           prisonNumber: 'A1234AB',
           pncNumber: '99/98644M',
+          expected: 'true',
         })
       })
   })
 
   it('should redirect after successful update', () => {
-    signedCookiesProvider.mockReturnValue({ 'new-arrival': newArrival })
+    stubCookie(State.newArrival, newArrival)
 
     return request(app)
       .post('/prisoners/12345-67890/review-per-details/change-date-of-birth')
@@ -127,7 +127,7 @@ describe('POST /review-per-details/change-date-of-birth', () => {
   })
 
   it('should redirect when validation error', () => {
-    signedCookiesProvider.mockReturnValue({ 'new-arrival': newArrival })
+    stubCookie(State.newArrival, newArrival)
 
     return request(app)
       .post('/prisoners/12345-67890/review-per-details/change-date-of-birth')

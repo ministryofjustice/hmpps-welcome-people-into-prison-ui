@@ -1,5 +1,5 @@
 import { assertHasStringValues, assertHasOptionalStringValues } from '../../../utils/utils'
-import { Codec, stateOperations } from '../../../utils/state'
+import { Codec, StateOperations } from '../../../utils/state'
 
 export type NewArrival = {
   firstName: string
@@ -8,16 +8,29 @@ export type NewArrival = {
   prisonNumber?: string
   pncNumber?: string
   sex?: string
+  // TODO: update this name to 'imprisonmentStatusCode'
   code?: string
   imprisonmentStatus?: string
   movementReasonCode?: string
+  expected: boolean
 }
 
 export const NewArrivalCodec: Codec<NewArrival> = {
-  write: (value: NewArrival): Record<string, string> => ({ ...value }),
+  write: (value: NewArrival): Record<string, string> => ({
+    firstName: value.firstName,
+    lastName: value.lastName,
+    dateOfBirth: value.dateOfBirth,
+    expected: value.expected.toString(),
+    ...(value.prisonNumber !== undefined && { prisonNumber: value.prisonNumber }),
+    ...(value.pncNumber !== undefined && { pncNumber: value.pncNumber }),
+    ...(value.sex !== undefined && { sex: value.sex }),
+    ...(value.code !== undefined && { code: value.code }),
+    ...(value.imprisonmentStatus !== undefined && { imprisonmentStatus: value.imprisonmentStatus }),
+    ...(value.movementReasonCode !== undefined && { movementReasonCode: value.movementReasonCode }),
+  }),
 
   read(record: Record<string, unknown>): NewArrival {
-    assertHasStringValues(record, ['firstName', 'lastName', 'dateOfBirth'])
+    assertHasStringValues(record, ['firstName', 'lastName', 'dateOfBirth', 'expected'])
     assertHasOptionalStringValues(record, [
       'prisonNumber',
       'pncNumber',
@@ -31,6 +44,7 @@ export const NewArrivalCodec: Codec<NewArrival> = {
       firstName: record.firstName,
       lastName: record.lastName,
       dateOfBirth: record.dateOfBirth,
+      expected: record.expected === 'true',
       pncNumber: record.pncNumber,
       prisonNumber: record.prisonNumber,
       sex: record.sex,
@@ -66,6 +80,6 @@ const SearchDetailsCodec: Codec<SearchDetails> = {
 }
 
 export const State = {
-  searchDetails: stateOperations('search-details', SearchDetailsCodec),
-  newArrival: stateOperations('new-arrival', NewArrivalCodec),
+  searchDetails: new StateOperations('search-details', SearchDetailsCodec),
+  newArrival: new StateOperations('new-arrival', NewArrivalCodec),
 }

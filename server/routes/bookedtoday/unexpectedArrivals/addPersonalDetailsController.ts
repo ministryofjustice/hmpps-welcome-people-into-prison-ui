@@ -27,6 +27,7 @@ export default class AddPersonalDetailsController {
         lastName: convertToTitleCase(lastName),
         dateOfBirth,
         sex,
+        expected: false,
       })
 
       return res.redirect('/prisoners/unexpected-arrival/sex')

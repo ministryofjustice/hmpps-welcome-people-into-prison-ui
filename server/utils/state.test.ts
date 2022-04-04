@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { assertHasStringValues } from './utils'
-import { cookieOptions, Codec, stateOperations } from './state'
+import { cookieOptions, Codec, StateOperations } from './state'
 
 type TestType = {
   firstName: string
@@ -27,7 +27,7 @@ const TestCodec: Codec<TestType> = {
   },
 }
 
-const fixture = stateOperations('test', TestCodec)
+const fixture = new StateOperations('test', TestCodec)
 
 describe('state', () => {
   describe('clearUpdate', () => {

@@ -3,10 +3,11 @@ import { type Arrival, Sex, type ConfirmArrivalDetail } from 'welcome'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
 
-import { appWithAllRoutes, user, signedCookiesProvider, flashProvider } from '../../../__testutils/appSetup'
+import { appWithAllRoutes, user, stubCookie, flashProvider } from '../../../__testutils/appSetup'
 import { ExpectedArrivalsService, ImprisonmentStatusesService, RaiseAnalyticsEvent } from '../../../../services'
 import Role from '../../../../authentication/role'
 import config from '../../../../config'
+import { State } from '../state'
 
 jest.mock('../../../../services/expectedArrivalsService')
 jest.mock('../../../../services/imprisonmentStatusesService')
@@ -20,18 +21,17 @@ let app: Express
 const raiseAnalyticsEvent = jest.fn() as RaiseAnalyticsEvent
 
 beforeEach(() => {
-  signedCookiesProvider.mockReturnValue({
-    'new-arrival': {
-      firstName: 'Jim',
-      lastName: 'Smith',
-      dateOfBirth: '1973-01-08',
-      prisonNumber: 'A1234AB',
-      pncNumber: '01/98644M',
-      sex: 'M',
-      code: 'determinate-sentence',
-      imprisonmentStatus: 'SENT',
-      movementReasonCode: '26',
-    },
+  stubCookie(State.newArrival, {
+    firstName: 'Jim',
+    lastName: 'Smith',
+    dateOfBirth: '1973-01-08',
+    prisonNumber: 'A1234AB',
+    pncNumber: '01/98644M',
+    sex: 'M',
+    code: 'determinate-sentence',
+    imprisonmentStatus: 'SENT',
+    movementReasonCode: '26',
+    expected: true,
   })
   app = appWithAllRoutes({
     services: { expectedArrivalsService, imprisonmentStatusesService, raiseAnalyticsEvent },
@@ -94,17 +94,16 @@ describe('/checkAnswers', () => {
         })
     })
     it('should render correct page when no matching prison number', () => {
-      signedCookiesProvider.mockReturnValue({
-        'new-arrival': {
-          firstName: 'Jim',
-          lastName: 'Smith',
-          dateOfBirth: '1973-01-08',
-          pncNumber: '01/98644M',
-          sex: 'M',
-          code: 'determinate-sentence',
-          imprisonmentStatus: 'SENT',
-          movementReasonCode: '26',
-        },
+      stubCookie(State.newArrival, {
+        firstName: 'Jim',
+        lastName: 'Smith',
+        dateOfBirth: '1973-01-08',
+        pncNumber: '01/98644M',
+        sex: 'M',
+        code: 'determinate-sentence',
+        imprisonmentStatus: 'SENT',
+        movementReasonCode: '26',
+        expected: true,
       })
       return request(app)
         .get('/prisoners/12345-67890/check-answers')

@@ -1,6 +1,7 @@
 import superAgent from 'superagent'
 import { NextFunction, Request, Response } from 'express'
 import { ValidationError } from '../../middleware/validationMiddleware'
+import { StateOperations } from '../../utils/state'
 
 const exampleUserDetails = {
   username: 'USER1',
@@ -69,13 +70,41 @@ export const mockResponse = ({ locals = { context: {}, user: {} } }: ResponsePar
 
 export const mockNext = (): NextFunction => jest.fn()
 
-export const expectSettingCookie = (res: superAgent.Response, cookieName: string) => {
+export const expectSettingCookie = <T>(
+  res: superAgent.Response,
+  stateOperations: StateOperations<T>
+): jest.JestMatchers<T> => {
   const [cookie] = res.header['set-cookie']
   const [, name, value] = cookie.match(/^(.*?)=(.*?);/)
 
-  expect(name).toBe(cookieName)
+  expect(name).toBe(stateOperations.cookieName)
 
   const results = decodeURIComponent(value).match(/(\{.*\})/)
-
   return results ? expect(JSON.parse(results[1])) : expect(undefined)
+}
+
+export const stubRequestCookie = <T>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  signedCookiesProvider: jest.Mock<any, any>,
+  stateOperations: StateOperations<T>,
+  value: T
+) => {
+  signedCookiesProvider.mockReturnValue({
+    [stateOperations.cookieName]: stateOperations.write(value),
+  })
+}
+
+export type ExpectedCookie<T> = [stateOperations: StateOperations<T>, value: T]
+
+export const stubRequestCookies = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  signedCookiesProvider: jest.Mock<any, any>,
+  cookies: ExpectedCookie<unknown>[]
+) => {
+  signedCookiesProvider.mockReturnValue(
+    cookies.reduce((acc, [stateOperations, value]) => {
+      acc[stateOperations.cookieName] = stateOperations.write(value)
+      return acc
+    }, {})
+  )
 }

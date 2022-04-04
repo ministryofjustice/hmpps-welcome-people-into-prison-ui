@@ -30,38 +30,52 @@ const setState =
 const getState =
   <T>(name: string, codec: Codec<T>) =>
   (req: Request): T | undefined => {
-    const result = req.signedCookies[name]
+    const result = req?.signedCookies?.[name]
     return result ? codec.read(result) : undefined
   }
 
 const isStatePresent =
   (name: string) =>
   (req: Request): boolean => {
-    return Boolean(req.signedCookies[name])
+    return Boolean(req?.signedCookies?.[name])
   }
 
-export const stateOperations = <T>(cookieName: string, codec: Codec<T>) => ({
-  clear: clearState(cookieName),
+export class StateOperations<T> {
+  constructor(public readonly cookieName: string, private readonly codec: Codec<T>) {}
 
-  set: (res: Response, data: T): void => setState(cookieName, codec)(res, data),
+  clear(res: Response) {
+    clearState(this.cookieName)(res)
+  }
 
-  get: (req: Request): T | undefined => getState(cookieName, codec)(req),
+  set(res: Response, data: T): void {
+    setState(this.cookieName, this.codec)(res, data)
+  }
 
-  read: (record: Record<string, unknown>) => codec.read(record),
+  get(req: Request): T | undefined {
+    return getState(this.cookieName, this.codec)(req)
+  }
 
-  write: (value: T) => codec.write(value),
+  read(record: Record<string, unknown>) {
+    return this.codec.read(record)
+  }
 
-  isStatePresent: isStatePresent(cookieName),
+  write(value: T) {
+    return this.codec.write(value)
+  }
 
-  update: (req: Request, res: Response, update: Partial<T>) => {
-    const val = getState(cookieName, codec)(req)
+  isStatePresent(req: Request) {
+    return isStatePresent(this.cookieName)(req)
+  }
+
+  update(req: Request, res: Response, update: Partial<T>) {
+    const val = getState(this.cookieName, this.codec)(req)
     const newValue = { ...val, ...update }
-    setState(cookieName, codec)(res, newValue)
+    setState(this.cookieName, this.codec)(res, newValue)
     return newValue
-  },
+  }
 
-  ensurePresent:
-    (redirectUrl: string): RequestHandler =>
-    (req: Request, res: Response, next: NextFunction) =>
-      isStatePresent(cookieName)(req) ? next() : res.redirect(redirectUrl),
-})
+  ensurePresent(redirectUrl: string): RequestHandler {
+    return (req: Request, res: Response, next: NextFunction) =>
+      isStatePresent(this.cookieName)(req) ? next() : res.redirect(redirectUrl)
+  }
+}

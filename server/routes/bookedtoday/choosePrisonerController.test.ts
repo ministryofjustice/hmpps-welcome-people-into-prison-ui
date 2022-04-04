@@ -1,11 +1,12 @@
 import { Arrival, SexKeys, PotentialMatch } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
-import cheerio from 'cheerio'
-import { user, appWithAllRoutes, signedCookiesProvider } from '../__testutils/appSetup'
+import * as cheerio from 'cheerio'
+import { user, appWithAllRoutes, stubCookie } from '../__testutils/appSetup'
 import { expectSettingCookie } from '../__testutils/requestTestUtils'
 
 import ExpectedArrivalsService, { LocationType } from '../../services/expectedArrivalsService'
+import { State } from './arrivals/state'
 
 jest.mock('../../services/expectedArrivalsService')
 
@@ -14,13 +15,12 @@ const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.
 let app: Express
 
 beforeEach(() => {
-  signedCookiesProvider.mockReturnValue({
-    'new-arrival': {
-      firstName: 'Harry',
-      lastName: 'Stanton',
-      dateOfBirth: '1961-01-01',
-      pncNumber: '01/123456',
-    },
+  stubCookie(State.newArrival, {
+    firstName: 'Harry',
+    lastName: 'Stanton',
+    dateOfBirth: '1961-01-01',
+    pncNumber: '01/123456',
+    expected: true,
   })
   app = appWithAllRoutes({ services: { expectedArrivalsService } })
 })
@@ -196,7 +196,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
       return request(app)
         .get('/confirm-arrival/choose-prisoner/aaa-111-222')
         .expect(res => {
-          expectSettingCookie(res, 'new-arrival').toBeUndefined()
+          expectSettingCookie(res, State.newArrival).toBeUndefined()
         })
     })
 

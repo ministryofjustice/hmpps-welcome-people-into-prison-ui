@@ -1,10 +1,11 @@
 import type { Express } from 'express'
 import request from 'supertest'
-import cheerio from 'cheerio'
-import { appWithAllRoutes, flashProvider, signedCookiesProvider } from '../../../../__testutils/appSetup'
+import * as cheerio from 'cheerio'
+import { appWithAllRoutes, flashProvider, stubCookie } from '../../../../__testutils/appSetup'
 import Role from '../../../../../authentication/role'
 import config from '../../../../../config'
 import { expectSettingCookie } from '../../../../__testutils/requestTestUtils'
+import { State } from '../../state'
 
 let app: Express
 
@@ -36,7 +37,7 @@ describe('GET /search-for-existing-record/change-prison-number', () => {
 
   it('should render page', () => {
     flashProvider.mockReturnValue([])
-    signedCookiesProvider.mockReturnValue({ 'search-details': searchDetails })
+    stubCookie(State.searchDetails, searchDetails)
 
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record/change-prison-number')
@@ -47,8 +48,6 @@ describe('GET /search-for-existing-record/change-prison-number', () => {
   })
 
   it('redirects when no cookie present', () => {
-    signedCookiesProvider.mockReturnValue({})
-
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record/change-prison-number')
       .expect(302)
@@ -67,8 +66,6 @@ describe('POST /search-for-existing-record/change-prison-number', () => {
   })
 
   it('should redirect when no cookie present', () => {
-    signedCookiesProvider.mockReturnValue({})
-
     return request(app)
       .post('/prisoners/12345-67890/search-for-existing-record/change-prison-number')
       .expect(302)
@@ -76,13 +73,13 @@ describe('POST /search-for-existing-record/change-prison-number', () => {
   })
 
   it('should update prison number in cookie', () => {
-    signedCookiesProvider.mockReturnValue({ 'search-details': searchDetails })
+    stubCookie(State.searchDetails, searchDetails)
 
     return request(app)
       .post('/prisoners/12345-67890/search-for-existing-record/change-prison-number')
       .send({ prisonNumber: 'A1234CC' })
       .expect(res => {
-        expectSettingCookie(res, 'search-details').toStrictEqual({
+        expectSettingCookie(res, State.searchDetails).toStrictEqual({
           firstName: 'James',
           lastName: 'Smyth',
           dateOfBirth: '1973-01-08',
@@ -93,7 +90,7 @@ describe('POST /search-for-existing-record/change-prison-number', () => {
   })
 
   it('should redirect after successful update', () => {
-    signedCookiesProvider.mockReturnValue({ 'search-details': searchDetails })
+    stubCookie(State.searchDetails, searchDetails)
 
     return request(app)
       .post('/prisoners/12345-67890/search-for-existing-record/change-prison-number')
@@ -103,7 +100,7 @@ describe('POST /search-for-existing-record/change-prison-number', () => {
   })
 
   it('should redirect when validation error', () => {
-    signedCookiesProvider.mockReturnValue({ 'search-details': searchDetails })
+    stubCookie(State.searchDetails, searchDetails)
 
     return request(app)
       .post('/prisoners/12345-67890/search-for-existing-record/change-prison-number')
@@ -129,8 +126,6 @@ describe('GET /search-for-existing-record/remove-prison-number', () => {
   })
 
   it('should redirect when no cookie present', () => {
-    signedCookiesProvider.mockReturnValue({})
-
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record/remove-prison-number')
       .expect(302)
@@ -138,12 +133,12 @@ describe('GET /search-for-existing-record/remove-prison-number', () => {
   })
 
   it('should update prison number in cookie', () => {
-    signedCookiesProvider.mockReturnValue({ 'search-details': searchDetails })
+    stubCookie(State.searchDetails, searchDetails)
 
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record/remove-prison-number')
       .expect(res => {
-        expectSettingCookie(res, 'search-details').toStrictEqual({
+        expectSettingCookie(res, State.searchDetails).toStrictEqual({
           firstName: 'James',
           lastName: 'Smyth',
           dateOfBirth: '1973-01-08',
@@ -153,7 +148,7 @@ describe('GET /search-for-existing-record/remove-prison-number', () => {
   })
 
   it('should redirect after successful update', () => {
-    signedCookiesProvider.mockReturnValue({ 'search-details': searchDetails })
+    stubCookie(State.searchDetails, searchDetails)
 
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record/remove-prison-number')
