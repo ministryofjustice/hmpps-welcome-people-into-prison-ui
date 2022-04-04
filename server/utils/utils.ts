@@ -77,9 +77,5 @@ export const isValidDate = (day: string, month: string, year: string) => {
     return moment(fullDate, 'YYYY-MM-DD', true).isValid()
   }
 
-  if (day && month && year && !validate(day, month, year)) {
-    return false
-  }
-
-  return true
+  return !day || !month || !year || validate(day, month, year)
 }

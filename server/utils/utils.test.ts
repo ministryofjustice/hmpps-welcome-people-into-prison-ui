@@ -324,6 +324,10 @@ describe('isValidDate', () => {
     const result = isValidDate('01', '42', '2000')
     expect(result).toEqual(false)
   })
+  it('has no day month or year', () => {
+    const result = isValidDate(undefined, undefined, undefined)
+    expect(result).toEqual(true)
+  })
   it('has valid date', () => {
     const result = isValidDate('01', '05', '2000')
     expect(result).toEqual(true)
