@@ -1,11 +1,12 @@
 import { type Arrival, SexKeys } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import { appWithAllRoutes } from '../../../__testutils/appSetup'
 import ExpectedArrivalsService, { LocationType } from '../../../../services/expectedArrivalsService'
 import Role from '../../../../authentication/role'
 import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
+import { State } from '../state'
 
 jest.mock('../../../../services/expectedArrivalsService')
 
@@ -64,9 +65,10 @@ describe('GET /view', () => {
     return request(app)
       .get('/prisoners/12345-67890/record-found')
       .expect(res => {
-        expectSettingCookie(res, 'new-arrival').toStrictEqual({
+        expectSettingCookie(res, State.newArrival).toStrictEqual({
           firstName: 'Jim',
           lastName: 'Smith',
+          expected: 'true',
           dateOfBirth: '1973-01-08',
           sex: 'FEMALE',
           prisonNumber: 'A1234AB',

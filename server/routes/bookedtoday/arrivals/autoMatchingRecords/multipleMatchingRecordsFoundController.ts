@@ -37,7 +37,7 @@ export default class MultipleExistingRecordsFoundController {
       const { prisonNumber } = req.body
       const selectedRecord = await this.expectedArrivalsService.getPrisonerDetails(prisonNumber)
 
-      State.newArrival.set(res, selectedRecord)
+      State.newArrival.set(res, { ...selectedRecord, expected: true })
 
       return res.redirect(`/prisoners/${id}/sex`)
     }

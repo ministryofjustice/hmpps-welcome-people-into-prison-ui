@@ -1,6 +1,6 @@
 import type { Express } from 'express'
 import request from 'supertest'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import { appWithAllRoutes, flashProvider } from '../../__testutils/appSetup'
 import { TransfersService, RaiseAnalyticsEvent } from '../../../services'
 

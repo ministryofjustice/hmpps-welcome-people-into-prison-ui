@@ -1,21 +1,20 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
-import { appWithAllRoutes, signedCookiesProvider } from '../../__testutils/appSetup'
+import { appWithAllRoutes, stubCookie } from '../../__testutils/appSetup'
 import Role from '../../../authentication/role'
+import { State } from '../arrivals/state'
 
 let app: Express
 
 beforeEach(() => {
   app = appWithAllRoutes({ roles: [Role.PRISON_RECEPTION] })
-  signedCookiesProvider.mockReturnValue({
-    'search-details': {
-      firstName: 'James',
-      lastName: 'Smyth',
-      dateOfBirth: '1973-01-08',
-      prisonNumber: undefined,
-      pncNumber: '01/98644M',
-    },
+  stubCookie(State.searchDetails, {
+    firstName: 'James',
+    lastName: 'Smyth',
+    dateOfBirth: '1973-01-08',
+    prisonNumber: undefined,
+    pncNumber: '01/98644M',
   })
 })
 
@@ -33,13 +32,6 @@ describe('no existing records', () => {
         .expect('Location', '/autherror')
     })
 
-    it('should get details from state', () => {
-      return request(app)
-        .get('/manually-confirm-arrival/search-for-existing-record/no-record-found')
-        .expect(() => {
-          expect(signedCookiesProvider).toHaveBeenCalledTimes(1)
-        })
-    })
     it('should display correct page data', () => {
       return request(app)
         .get('/manually-confirm-arrival/search-for-existing-record/no-record-found')

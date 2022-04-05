@@ -1,10 +1,11 @@
 import type { Express } from 'express'
 import request from 'supertest'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import { ImprisonmentStatus } from 'welcome'
-import { appWithAllRoutes, signedCookiesProvider, flashProvider } from '../../../__testutils/appSetup'
+import { appWithAllRoutes, flashProvider, stubCookie } from '../../../__testutils/appSetup'
 import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
 import ImprisonmentStatusesService from '../../../../services/imprisonmentStatusesService'
+import { State } from '../state'
 
 jest.mock('../../../../services/imprisonmentStatusesService')
 
@@ -16,15 +17,14 @@ const imprisonmentStatusesService = new ImprisonmentStatusesService(
 let app: Express
 
 beforeEach(() => {
-  signedCookiesProvider.mockReturnValue({
-    'new-arrival': {
-      firstName: 'Jim',
-      lastName: 'Smith',
-      dateOfBirth: '1973-01-08',
-      prisonNumber: 'A1234AB',
-      pncNumber: '01/98644M',
-      sex: 'M',
-    },
+  stubCookie(State.newArrival, {
+    firstName: 'Jim',
+    lastName: 'Smith',
+    dateOfBirth: '1973-01-08',
+    prisonNumber: 'A1234AB',
+    pncNumber: '01/98644M',
+    sex: 'M',
+    expected: true,
   })
   app = appWithAllRoutes({ services: { imprisonmentStatusesService } })
   imprisonmentStatusesService.getAllImprisonmentStatuses.mockResolvedValue([] as ImprisonmentStatus[])
@@ -133,7 +133,7 @@ describe('/imprisonment-status', () => {
         .send({ imprisonmentStatus: 'recapture' })
         .expect(302)
         .expect(res => {
-          expectSettingCookie(res, 'new-arrival').toStrictEqual({
+          expectSettingCookie(res, State.newArrival).toStrictEqual({
             firstName: 'Jim',
             lastName: 'Smith',
             dateOfBirth: '1973-01-08',
@@ -143,6 +143,7 @@ describe('/imprisonment-status', () => {
             code: 'recapture',
             imprisonmentStatus: 'SENT03',
             movementReasonCode: 'RECA',
+            expected: 'true',
           })
         })
     })

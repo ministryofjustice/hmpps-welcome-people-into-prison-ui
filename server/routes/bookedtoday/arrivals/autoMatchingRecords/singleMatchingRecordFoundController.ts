@@ -19,6 +19,7 @@ export default class SingleMatchingRecordFoundController {
         sex: match.sex,
         prisonNumber: match.prisonNumber,
         pncNumber: match.pncNumber,
+        expected: true,
       })
 
       return res.render('pages/bookedtoday/arrivals/autoMatchingRecords/singleMatchingRecordFound.njk', { data })

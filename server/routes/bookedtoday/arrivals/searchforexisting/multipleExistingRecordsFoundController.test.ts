@@ -2,11 +2,13 @@ import type { Express } from 'express'
 import request from 'supertest'
 import { SexKeys } from 'welcome'
 import * as cheerio from 'cheerio'
-import { appWithAllRoutes, flashProvider, signedCookiesProvider } from '../../../__testutils/appSetup'
+import { appWithAllRoutes, flashProvider, stubCookie } from '../../../__testutils/appSetup'
 
 import Role from '../../../../authentication/role'
 import config from '../../../../config'
 import { ExpectedArrivalsService } from '../../../../services'
+import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
+import { State } from '../state'
 
 jest.mock('../../../../services/expectedArrivalsService')
 const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
@@ -41,7 +43,7 @@ beforeEach(() => {
   expectedArrivalsService.getMatchingRecords.mockResolvedValue(potentialMatches)
   expectedArrivalsService.getPrisonerDetails.mockResolvedValue(potentialMatches[0])
   flashProvider.mockReturnValue([])
-  signedCookiesProvider.mockReturnValue({ 'search-details': searchDetails })
+  stubCookie(State.searchDetails, searchDetails)
 })
 
 afterEach(() => {
@@ -50,14 +52,6 @@ afterEach(() => {
 
 describe('possible records found', () => {
   describe('view', () => {
-    it('should get search details from state', () => {
-      return request(app)
-        .get('/prisoners/12345-67890/search-for-existing-record/possible-records-found')
-        .expect(() => {
-          expect(signedCookiesProvider).toHaveBeenCalledTimes(1)
-        })
-    })
-
     it('should call service method correctly', () => {
       return request(app)
         .get('/prisoners/12345-67890/search-for-existing-record/possible-records-found')
@@ -101,10 +95,18 @@ describe('possible records found', () => {
         .send({ prisonNumber: potentialMatches[0].prisonNumber })
         .expect(302)
         .expect('Location', '/prisoners/12345-67890/sex')
-        .expect(() => {
+        .expect(res => {
           expect(flashProvider).not.toHaveBeenCalled()
           expect(expectedArrivalsService.getPrisonerDetails).toHaveBeenCalledWith('A1234BC')
-          expect(signedCookiesProvider).toHaveBeenCalledTimes(1)
+          expectSettingCookie(res, State.newArrival).toStrictEqual({
+            dateOfBirth: '1973-01-08',
+            expected: 'true',
+            firstName: 'James',
+            lastName: 'Smyth',
+            pncNumber: '11/5678',
+            prisonNumber: 'A1234BC',
+            sex: 'MALE',
+          })
         })
     })
   })

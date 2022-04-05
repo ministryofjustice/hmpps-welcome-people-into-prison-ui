@@ -16,6 +16,7 @@ export default class ReviewPerDetailsController {
       sex: arrival.gender,
       pncNumber: arrival.pncNumber,
       prisonNumber: arrival.prisonNumber,
+      expected: true,
     }
 
     State.newArrival.set(res, data)

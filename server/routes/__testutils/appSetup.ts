@@ -11,6 +11,8 @@ import errorHandler from '../../errorHandler'
 import * as auth from '../../authentication/auth'
 import { Services } from '../../services'
 import Role from '../../authentication/role'
+import { StateOperations } from '../../utils/state'
+import { stubRequestCookie, stubRequestCookies, ExpectedCookie } from './requestTestUtils'
 
 export const user = {
   firstName: 'first',
@@ -23,7 +25,13 @@ export const user = {
   authSource: 'NOMIS',
 }
 
-export const signedCookiesProvider = jest.fn()
+const signedCookiesProvider = jest.fn()
+
+export const stubCookie = <T>(state: StateOperations<T>, value: T) =>
+  stubRequestCookie(signedCookiesProvider, state, value)
+
+export const stubCookies = (cookies: ExpectedCookie<unknown>[]) => stubRequestCookies(signedCookiesProvider, cookies)
+
 export const flashProvider = jest.fn()
 
 function appSetup(services: Services, production: boolean, userSupplier: () => Express.User, roles: Role[]): Express {

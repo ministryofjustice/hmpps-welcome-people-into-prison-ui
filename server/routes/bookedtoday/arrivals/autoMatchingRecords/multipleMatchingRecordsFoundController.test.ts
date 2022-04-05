@@ -2,12 +2,14 @@ import type { Express } from 'express'
 import request from 'supertest'
 import { Arrival, SexKeys } from 'welcome'
 import * as cheerio from 'cheerio'
-import { appWithAllRoutes, flashProvider, signedCookiesProvider } from '../../../__testutils/appSetup'
+import { appWithAllRoutes, flashProvider } from '../../../__testutils/appSetup'
 
 import Role from '../../../../authentication/role'
 import config from '../../../../config'
 import { ExpectedArrivalsService } from '../../../../services'
 import { LocationType } from '../../../../services/expectedArrivalsService'
+import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
+import { State } from '../state'
 
 jest.mock('../../../../services/expectedArrivalsService')
 const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
@@ -102,10 +104,18 @@ describe('possible records found', () => {
         .send({ prisonNumber: arrival.prisonNumber })
         .expect(302)
         .expect('Location', '/prisoners/12345-67890/sex')
-        .expect(() => {
+        .expect(req => {
           expect(flashProvider).not.toHaveBeenCalled()
           expect(expectedArrivalsService.getPrisonerDetails).toHaveBeenCalledWith('A1234BC')
-          expect(signedCookiesProvider).toHaveBeenCalledTimes(1)
+          expectSettingCookie(req, State.newArrival).toStrictEqual({
+            dateOfBirth: '1973-01-08',
+            expected: 'true',
+            firstName: 'James',
+            lastName: 'Smyth',
+            pncNumber: '11/5678',
+            prisonNumber: 'A1234BC',
+            sex: 'MALE',
+          })
         })
     })
   })

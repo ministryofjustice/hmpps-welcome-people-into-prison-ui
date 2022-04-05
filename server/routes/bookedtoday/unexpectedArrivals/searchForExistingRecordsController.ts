@@ -48,6 +48,7 @@ export default class SearchForExistingRecordsController {
           prisonNumber: match.prisonNumber,
           sex: match.sex,
           pncNumber: match.pncNumber,
+          expected: false,
         })
         return res.redirect('/manually-confirm-arrival/search-for-existing-record/record-found')
       }

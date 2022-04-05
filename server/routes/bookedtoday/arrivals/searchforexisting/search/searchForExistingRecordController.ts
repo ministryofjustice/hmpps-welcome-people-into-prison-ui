@@ -56,6 +56,7 @@ export default class SearchForExistingRecordController {
           sex: match.sex,
           prisonNumber: match.prisonNumber,
           pncNumber: match.pncNumber,
+          expected: true,
         })
 
         return res.redirect(`/prisoners/${id}/search-for-existing-record/record-found`)

@@ -1,10 +1,11 @@
 import type { Express } from 'express'
 import request from 'supertest'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import { appWithAllRoutes, flashProvider } from '../../../__testutils/appSetup'
 import PrisonService from '../../../../services/prisonService'
 import Role from '../../../../authentication/role'
 import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
+import { State } from '../state'
 
 jest.mock('../../../../services/expectedArrivalsService')
 jest.mock('../../../../services/prisonService')
@@ -74,7 +75,7 @@ describe('GET /confirmation', () => {
     return request(app)
       .get('/prisoners/12345-67890/confirmation')
       .expect(res => {
-        expectSettingCookie(res, 'new-arrival').toBeUndefined()
+        expectSettingCookie(res, State.newArrival).toBeUndefined()
       })
   })
 

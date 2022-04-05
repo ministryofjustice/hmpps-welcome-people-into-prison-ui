@@ -13,6 +13,7 @@ describe('NewArrivalCodec', () => {
       code: 'on remand',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',
+      expected: 'true',
     })
 
     expect(result).toStrictEqual({
@@ -25,6 +26,35 @@ describe('NewArrivalCodec', () => {
       code: 'on remand',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',
+      expected: true,
+    })
+  })
+
+  test('read false', () => {
+    const result = State.newArrival.read({
+      firstName: 'Sam',
+      lastName: 'Smith',
+      dateOfBirth: '1971-02-01',
+      prisonNumber: 'A1234AA',
+      pncNumber: '01/1234X',
+      sex: 'M',
+      code: 'on remand',
+      imprisonmentStatus: 'RX',
+      movementReasonCode: 'N',
+      expected: 'false',
+    })
+
+    expect(result).toStrictEqual({
+      firstName: 'Sam',
+      lastName: 'Smith',
+      dateOfBirth: '1971-02-01',
+      prisonNumber: 'A1234AA',
+      pncNumber: '01/1234X',
+      sex: 'M',
+      code: 'on remand',
+      imprisonmentStatus: 'RX',
+      movementReasonCode: 'N',
+      expected: false,
     })
   })
 
@@ -33,12 +63,14 @@ describe('NewArrivalCodec', () => {
       firstName: 'Sam',
       lastName: 'Smith',
       dateOfBirth: '1971-02-01',
+      expected: 'true',
     })
 
     expect(result).toStrictEqual({
       firstName: 'Sam',
       lastName: 'Smith',
       dateOfBirth: '1971-02-01',
+      expected: true,
       prisonNumber: undefined,
       pncNumber: undefined,
       sex: undefined,
@@ -59,6 +91,7 @@ describe('NewArrivalCodec', () => {
       code: 'on remand',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',
+      expected: true,
     })
 
     expect(result).toStrictEqual({
@@ -71,6 +104,7 @@ describe('NewArrivalCodec', () => {
       code: 'on remand',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',
+      expected: 'true',
     })
   })
 
@@ -79,12 +113,14 @@ describe('NewArrivalCodec', () => {
       firstName: 'Sam',
       lastName: 'Smith',
       dateOfBirth: '1971-02-01',
+      expected: false,
     })
 
     expect(result).toStrictEqual({
       firstName: 'Sam',
       lastName: 'Smith',
       dateOfBirth: '1971-02-01',
+      expected: 'false',
     })
   })
 })
