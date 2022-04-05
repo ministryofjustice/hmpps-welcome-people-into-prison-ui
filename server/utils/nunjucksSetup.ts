@@ -93,6 +93,7 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)
   njkEnv.addGlobal('dpsUrl', config.dpsUrl)
   njkEnv.addGlobal('temporaryAbsencesEnabled', config.temporaryAbsencesEnabled)
+  njkEnv.addGlobal('prisonTransfersEnabled', config.prisonTransfersEnabled)
 
   return njkEnv
 }

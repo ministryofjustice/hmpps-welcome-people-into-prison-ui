@@ -19,6 +19,7 @@ generic-service:
     CONFIRM_ENABLED: 'false'
     CONFIRM_NO_IDENTIFIERS_ENABLED: 'false'
     TEMPORARY_ABSENCE_ENABLED: 'false'
+    PRISON_TRANSFERS_ENABLED: 'false'
 
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service
