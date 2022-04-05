@@ -15,7 +15,6 @@ export default class ReviewPerDetailsController {
       dateOfBirth: arrival.dateOfBirth,
       sex: arrival.gender,
       pncNumber: arrival.pncNumber,
-      prisonNumber: arrival.prisonNumber,
       expected: true,
     }
 
