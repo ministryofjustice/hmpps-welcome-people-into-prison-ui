@@ -8,7 +8,7 @@ import Role from '../../../../authentication/role'
 
 jest.mock('../../../../services/expectedArrivalsService')
 
-const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
+const expectedArrivalsService = new ExpectedArrivalsService(null, null, null) as jest.Mocked<ExpectedArrivalsService>
 
 let app: Express
 

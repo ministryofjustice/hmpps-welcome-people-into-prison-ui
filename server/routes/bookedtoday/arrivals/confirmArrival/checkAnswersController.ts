@@ -1,5 +1,4 @@
 import { RequestHandler } from 'express'
-import { Sex, ConfirmArrivalDetail } from 'welcome'
 import type { ImprisonmentStatusesService, ExpectedArrivalsService, RaiseAnalyticsEvent } from '../../../../services'
 import { State } from '../state'
 
@@ -29,32 +28,12 @@ export default class CheckAnswersController {
       const { id } = req.params
       const { username, activeCaseLoadId } = res.locals.user
       const arrival = State.newArrival.get(req)
-      const data = await this.expectedArrivalsService.getArrival(id)
 
-      const detail: ConfirmArrivalDetail = {
-        firstName: arrival.firstName,
-        lastName: arrival.lastName,
-        dateOfBirth: arrival.dateOfBirth,
-        sex: arrival.sex as Sex,
-        prisonId: activeCaseLoadId,
-        imprisonmentStatus: arrival.imprisonmentStatus,
-        movementReasonCode: arrival.movementReasonCode,
-        fromLocationId: data.fromLocationId,
-        prisonNumber: arrival.prisonNumber,
-      }
-
-      const arrivalResponse = await this.expectedArrivalsService.confirmArrival(username, id, detail)
+      const arrivalResponse = await this.expectedArrivalsService.confirmArrival(activeCaseLoadId, username, id, arrival)
 
       if (!arrivalResponse) {
         return res.redirect('/feature-not-available')
       }
-
-      this.raiseAnalyticsEvent(
-        'Add to the establishment roll',
-        'Confirmed arrival',
-        `AgencyId: ${activeCaseLoadId}, From: ${data.fromLocation}, Type: ${data.fromLocationType},`,
-        req.hostname
-      )
 
       req.flash('arrivalResponse', {
         firstName: arrival.firstName,

@@ -36,6 +36,7 @@ export default {
   staticResourceCacheDuration: 20,
   phaseName: process.env.SYSTEM_PHASE,
   dpsUrl: get('DPS_URL', 'http://localhost:3000', requiredInProduction),
+  hostname: process.env.HOSTNAME || 'localhost',
   redis: {
     host: process.env.REDIS_HOST,
     port: parseInt(process.env.REDIS_PORT, 10) || 6379,
@@ -44,7 +45,7 @@ export default {
   },
   session: {
     name: process.env.HMPPS_COOKIE_NAME || 'hmpps-session-dev',
-    domain: process.env.HMPPS_COOKIE_DOMAIN || 'localhost',
+    domain: process.env.HOSTNAME || 'localhost',
     secret: get('SESSION_SECRET', 'app-insecure-default-session', requiredInProduction),
     expiryMinutes: Number(get('WEB_SESSION_TIMEOUT_IN_MINUTES', 120)),
   },

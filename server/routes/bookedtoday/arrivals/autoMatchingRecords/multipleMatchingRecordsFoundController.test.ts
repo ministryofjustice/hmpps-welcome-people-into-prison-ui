@@ -12,7 +12,7 @@ import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
 import { State } from '../state'
 
 jest.mock('../../../../services/expectedArrivalsService')
-const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
+const expectedArrivalsService = new ExpectedArrivalsService(null, null, null) as jest.Mocked<ExpectedArrivalsService>
 
 const arrival: Arrival = {
   firstName: 'James',
