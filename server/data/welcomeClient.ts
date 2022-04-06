@@ -104,7 +104,7 @@ export default class WelcomeClient {
     }) as Promise<Prison>
   }
 
-  async confirmArrival(id: string, detail: ConfirmArrivalDetail): Promise<ArrivalResponse | null> {
+  async confirmExpectedArrival(id: string, detail: ConfirmArrivalDetail): Promise<ArrivalResponse | null> {
     logger.info(`welcomeApi: confirmArrival(${id})`)
     try {
       return (await this.restClient.post({

@@ -268,7 +268,7 @@ describe('Expected arrivals service', () => {
     })
   })
 
-  describe('createOffenderRecordAndBooking', () => {
+  describe('confirmExpectedArrival', () => {
     const detail: ConfirmArrivalDetail = {
       firstName: 'Jim',
       lastName: 'Smith',
@@ -287,7 +287,7 @@ describe('Expected arrivals service', () => {
 
       expect(WelcomeClientFactory).toBeCalledWith(token)
       expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith(username)
-      expect(welcomeClient.confirmArrival).toBeCalledWith('12345-67890', {
+      expect(welcomeClient.confirmExpectedArrival).toBeCalledWith('12345-67890', {
         firstName: 'Jim',
         lastName: 'Smith',
         dateOfBirth: '1973-01-08',
