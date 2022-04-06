@@ -252,6 +252,48 @@ describe('welcomeClient', () => {
     })
   })
 
+  describe('confirmUnexpectedArrival', () => {
+    const detail: ConfirmArrivalDetail = {
+      firstName: 'Jim',
+      lastName: 'Smith',
+      dateOfBirth: '1973-01-08',
+      sex: Sex.NOT_SPECIFIED,
+      prisonId: 'MDI',
+      imprisonmentStatus: 'RX',
+      movementReasonCode: 'N',
+      prisonNumber: 'A1234AA',
+    }
+
+    it('should send data to api and return a prisoner number', async () => {
+      fakeWelcomeApi
+        .post(`/unexpected-arrivals/confirm`, detail)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, { prisonNumber: 'A1234AB', location: 'Reception' })
+
+      const output = await welcomeClient.confirmUnexpectedArrival(detail)
+      expect(output).toEqual({ prisonNumber: 'A1234AB', location: 'Reception' })
+    })
+
+    it('should return null', async () => {
+      fakeWelcomeApi
+        .post(`/unexpected-arrivals/confirm`, detail)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(400)
+
+      const output = await welcomeClient.confirmUnexpectedArrival(detail)
+      return expect(output).toBe(null)
+    })
+
+    it('server error thrown', async () => {
+      fakeWelcomeApi
+        .post(`/unexpected-arrivals/confirm`, detail)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(500)
+
+      await expect(welcomeClient.confirmUnexpectedArrival(detail)).rejects.toThrow('Internal Server Error')
+    })
+  })
+
   describe('getImprisonmentStatuses', () => {
     const mockResponse: ImprisonmentStatus[] = [
       {
