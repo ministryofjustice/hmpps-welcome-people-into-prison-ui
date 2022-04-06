@@ -9,9 +9,9 @@ export default class SingleMatchingRecordFoundController {
   public view(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
-      const data = await this.expectedArrivalsService.getArrival(id)
+      const arrival = await this.expectedArrivalsService.getArrival(id)
 
-      const match = data.potentialMatches[0]
+      const match = arrival.potentialMatches[0]
       State.newArrival.set(res, {
         firstName: convertToTitleCase(match.firstName),
         lastName: convertToTitleCase(match.lastName),
@@ -22,7 +22,23 @@ export default class SingleMatchingRecordFoundController {
         expected: true,
       })
 
-      return res.render('pages/bookedtoday/arrivals/autoMatchingRecords/singleMatchingRecordFound.njk', { data })
+      return res.render('pages/bookedtoday/arrivals/autoMatchingRecords/singleMatchingRecordFound.njk', {
+        arrival: {
+          firstName: arrival.firstName,
+          lastName: arrival.lastName,
+          dateOfBirth: arrival.dateOfBirth,
+          prisonNumber: arrival.prisonNumber,
+          pncNumber: arrival.pncNumber,
+        },
+        data: {
+          firstName: match.firstName,
+          lastName: match.lastName,
+          dateOfBirth: match.dateOfBirth,
+          prisonNumber: match.prisonNumber,
+          pncNumber: match.pncNumber,
+          id,
+        },
+      })
     }
   }
 }
