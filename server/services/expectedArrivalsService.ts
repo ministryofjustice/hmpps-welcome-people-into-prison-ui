@@ -72,7 +72,7 @@ export default class ExpectedArrivalsService {
     detail: ConfirmArrivalDetail
   ): Promise<ArrivalResponse | null> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    return this.welcomeClientFactory(token).confirmArrival(id, detail)
+    return this.welcomeClientFactory(token).confirmExpectedArrival(id, detail)
   }
 
   public async confirmCourtReturn(
