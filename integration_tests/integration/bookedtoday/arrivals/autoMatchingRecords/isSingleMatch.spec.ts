@@ -73,11 +73,12 @@ context('Is Single Match', () => {
     checkAnswersPage.addToRoll().click()
 
     const confirmAddedToRollPage = Page.verifyOnPage(ConfirmAddedToRollPage)
-    confirmAddedToRollPage.confirmationBanner().should('contain.html', 'Sam Smith')
-    confirmAddedToRollPage.confirmationBanner().should('contain.html', 'A1234BC')
-    confirmAddedToRollPage.confirmationParagraph().should('contain.html', 'Sam Smith')
-    confirmAddedToRollPage.confirmationParagraph().should('contain.html', 'Moorland (HMP &amp; YOI)')
-    confirmAddedToRollPage.locationParagraph().should('contain.html', 'Reception')
+    confirmAddedToRollPage.details({
+      name: 'Sam Smith',
+      prison: 'Moorland (HMP & YOI)',
+      prisonNumber: 'A1234BC',
+      locationName: 'Reception',
+    })
     confirmAddedToRollPage.viewEstablishmentRoll().exists()
     confirmAddedToRollPage.backToDigitalPrisonServices().exists()
     confirmAddedToRollPage.addAnotherToRoll().click()

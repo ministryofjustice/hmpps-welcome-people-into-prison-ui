@@ -2,8 +2,12 @@ import Page from '../../../pages/page'
 import Role from '../../../../server/authentication/role'
 import SearchForExistingPage from '../../../pages/bookedtoday/unexpectedArrivals/searchForExistingRecord'
 import MultipleRecordsFoundPage from '../../../pages/bookedtoday/unexpectedArrivals/multipleRecordsFound'
-import ImprisonmentStatus from '../../../pages/bookedtoday/arrivals/confirmArrival/imprisonmentStatus'
 import expectedArrivals from '../../../mockApis/responses/expectedArrivals'
+import ImprisonmentStatusPage from '../../../pages/bookedtoday/arrivals/confirmArrival/imprisonmentStatus'
+import MovementReasonsPage from '../../../pages/bookedtoday/arrivals/confirmArrival/movementReasons'
+import ConfirmAddedToRollPage from '../../../pages/bookedtoday/arrivals/confirmArrival/confirmAddedToRoll'
+import ChoosePrisonerPage from '../../../pages/bookedtoday/choosePrisoner'
+import CheckAnswersPage from '../../../pages/bookedtoday/arrivals/confirmArrival/checkAnswers'
 
 const arrival = expectedArrivals.arrival({
   fromLocationType: 'COURT',
@@ -41,6 +45,8 @@ context('Unexpected arrivals - multiple matching records', () => {
     cy.task('stubAuthUser')
     cy.task('stubUserCaseLoads')
     cy.task('stubImprisonmentStatus')
+    cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [] })
+    cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [] })
     cy.task('stubPrisonerDetails', arrival.potentialMatches[0])
     cy.signIn()
 
@@ -89,7 +95,51 @@ context('Unexpected arrivals - multiple matching records', () => {
     match.select().click()
     multipleRecordsFoundPage.continue().click()
 
-    Page.verifyOnPage(ImprisonmentStatus)
+    const imprisonmentStatusPage = Page.verifyOnPage(ImprisonmentStatusPage)
+    imprisonmentStatusPage.imprisonmentStatusRadioButton('determinate-sentence').click()
+    imprisonmentStatusPage.continue().click()
+
+    const movementReasonPage = Page.verifyOnPage(MovementReasonsPage)
+    movementReasonPage.movementReasonRadioButton('26').click()
+    movementReasonPage.continue().click()
+
+    const checkAnswersPage = Page.verifyOnPage(CheckAnswersPage)
+
+    checkAnswersPage.name().should('contain.text', 'Bob Smith')
+    checkAnswersPage.dob().should('contain.text', '21 November 1972')
+    checkAnswersPage.sex().should('contain.text', 'Male')
+    checkAnswersPage.reason().should('contain.text', 'Determinate sentence - Extended sentence for public protection')
+    cy.task('stubConfirmUnexpectedArrval', {
+      prisonNumber: arrival.potentialMatches[0].prisonNumber,
+      location: 'Reception',
+    })
+    checkAnswersPage.addToRoll().click()
+
+    const confirmAddedToRollPage = Page.verifyOnPage(ConfirmAddedToRollPage)
+    confirmAddedToRollPage.details({
+      name: 'Bob Smith',
+      prison: 'Moorland (HMP & YOI)',
+      prisonNumber: arrival.potentialMatches[0].prisonNumber,
+      locationName: 'Reception',
+    })
+    confirmAddedToRollPage.viewEstablishmentRoll().exists()
+    confirmAddedToRollPage.backToDigitalPrisonServices().exists()
+    confirmAddedToRollPage.addAnotherToRoll().click()
+
+    Page.verifyOnPage(ChoosePrisonerPage)
+
+    cy.task('getUnexpectedConfirmationRequest').then(request => {
+      expect(request).to.deep.equal({
+        dateOfBirth: '1972-11-21',
+        firstName: 'Bob',
+        imprisonmentStatus: 'SENT',
+        lastName: 'Smith',
+        movementReasonCode: '26',
+        prisonId: 'MDI',
+        prisonNumber: 'G0014GM',
+        sex: 'M',
+      })
+    })
   })
 
   it('should display search page', () => {
