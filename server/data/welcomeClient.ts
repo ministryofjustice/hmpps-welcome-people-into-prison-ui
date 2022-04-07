@@ -104,11 +104,26 @@ export default class WelcomeClient {
     }) as Promise<Prison>
   }
 
-  async confirmArrival(id: string, detail: ConfirmArrivalDetail): Promise<ArrivalResponse | null> {
-    logger.info(`welcomeApi: confirmArrival(${id})`)
+  async confirmExpectedArrival(id: string, detail: ConfirmArrivalDetail): Promise<ArrivalResponse | null> {
+    logger.info(`welcomeApi: confirmExpectedArrival(${id})`)
     try {
       return (await this.restClient.post({
         path: `/arrivals/${id}/confirm`,
+        data: detail,
+      })) as Promise<ArrivalResponse>
+    } catch (error) {
+      if (error.status >= 400 && error.status < 500) {
+        return null
+      }
+      throw error
+    }
+  }
+
+  async confirmUnexpectedArrival(detail: ConfirmArrivalDetail): Promise<ArrivalResponse | null> {
+    logger.info(`welcomeApi: confirmUnexpectedArrival`)
+    try {
+      return (await this.restClient.post({
+        path: `/unexpected-arrivals/confirm`,
         data: detail,
       })) as Promise<ArrivalResponse>
     } catch (error) {
