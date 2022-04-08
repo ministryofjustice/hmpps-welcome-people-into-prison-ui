@@ -14,7 +14,7 @@ generic-service:
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api.prison.service.justice.gov.uk"
     WELCOME_API_URL: "https://welcome-api.prison.service.justice.gov.uk"
     HMPPS_COOKIE_NAME: hmpps-session-prod
-    HOSTNAME: welcome.prison.service.justice.gov.uk
+    APP_HOSTNAME: welcome.prison.service.justice.gov.uk
     ENABLED_PRISONS: 'NMI,LII'
     CONFIRM_ENABLED: 'false'
     CONFIRM_NO_IDENTIFIERS_ENABLED: 'false'
