@@ -30,16 +30,6 @@ export default {
     pncNumber: '01/4567A',
     sex: 'MALE',
   },
-  other: {
-    firstName: 'Steve',
-    lastName: 'Smith',
-    dateOfBirth: '1985-05-05',
-    prisonNumber: 'G0015GF',
-    pncNumber: '01/5568B',
-    date: '2021-09-01',
-    fromLocation: 'Manchester',
-    fromLocationType: 'OTHER',
-  },
   prisonTransfer: {
     firstName: 'Karl',
     lastName: 'Offender',

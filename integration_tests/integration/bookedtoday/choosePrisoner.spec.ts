@@ -22,7 +22,6 @@ context('Choose Prisoner', () => {
         expectedArrivals.custodySuite.current,
         expectedArrivals.custodySuite.notCurrent,
         expectedArrivals.custodySuite.notMatched,
-        expectedArrivals.other,
         expectedArrivals.court.current,
         expectedArrivals.court.notCurrent,
         expectedArrivals.court.notMatched,

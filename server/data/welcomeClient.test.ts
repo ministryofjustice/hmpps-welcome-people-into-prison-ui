@@ -1,22 +1,23 @@
 import nock from 'nock'
 import moment from 'moment'
-import {
-  Sex,
-  ImprisonmentStatus,
-  Arrival,
-  Transfer,
-  ConfirmArrivalDetail,
-  Prison,
-  UserCaseLoad,
-  TemporaryAbsence,
-} from 'welcome'
+import { Sex, Arrival, ConfirmArrivalDetail, Prison, UserCaseLoad, TemporaryAbsence } from 'welcome'
 import WelcomeClient from './welcomeClient'
 import config from '../config'
+import {
+  createArrival,
+  createArrivalResponse,
+  createImprisonmentStatuses,
+  createMatchCriteria,
+  createPotentialMatch,
+  createTemporaryAbsence,
+  createTransfer,
+} from './__testutils/testObjects'
 
 describe('welcomeClient', () => {
   let fakeWelcomeApi: nock.Scope
   let welcomeClient: WelcomeClient
 
+  const arrivalResponse = createArrivalResponse()
   const token = 'token-1'
   const id = '12345-67890'
 
@@ -51,52 +52,44 @@ describe('welcomeClient', () => {
   describe('getExpectedArrivals', () => {
     const activeCaseLoadId = 'MDI'
     const date = moment()
-    const expectedArrivals: Arrival[] = []
+    const arrivals: Arrival[] = []
     it('should return data from api', async () => {
       fakeWelcomeApi
         .get(`/prisons/${activeCaseLoadId}/arrivals?date=${date.format('YYYY-MM-DD')}`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, expectedArrivals)
+        .reply(200, arrivals)
 
       const output = await welcomeClient.getExpectedArrivals(activeCaseLoadId, date)
-      expect(output).toEqual(expectedArrivals)
+      expect(output).toEqual(arrivals)
     })
   })
 
   describe('getTransfers', () => {
     const activeCaseLoadId = 'MDI'
-    const expectedArrivals: Arrival[] = []
+    const transfers: Arrival[] = []
     it('should return data from api', async () => {
       fakeWelcomeApi
         .get(`/prisons/${activeCaseLoadId}/transfers/enroute`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, expectedArrivals)
+        .reply(200, transfers)
 
       const output = await welcomeClient.getTransfers(activeCaseLoadId)
-      expect(output).toEqual(expectedArrivals)
+      expect(output).toEqual(transfers)
     })
   })
 
   describe('get Transfer', () => {
     const activeCaseLoadId = 'MDI'
     const prisonNumber = 'A1234AB'
-    const expectedArrival: Transfer = {
-      firstName: 'Sam',
-      lastName: 'Smith',
-      dateOfBirth: '1971-02-01',
-      prisonNumber: 'A1234AA',
-      pncNumber: '01/1234X',
-      date: '2020-02-23',
-      fromLocation: 'Kingston-upon-Hull Crown Court',
-    }
+    const transfer = createTransfer()
     it('should return single a transfer from api', async () => {
       fakeWelcomeApi
         .get(`/prisons/${activeCaseLoadId}/transfers/enroute/${prisonNumber}`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, expectedArrival)
+        .reply(200, transfer)
 
       const output = await welcomeClient.getTransfer(activeCaseLoadId, prisonNumber)
-      expect(output).toEqual(expectedArrival)
+      expect(output).toEqual(transfer)
     })
   })
 
@@ -117,14 +110,7 @@ describe('welcomeClient', () => {
   describe('getTemporaryAbsence', () => {
     const activeCaseLoadId = 'MDI'
     const prisonNumber = 'A1234AB'
-    const temporaryAbsence: TemporaryAbsence = {
-      firstName: 'Sam',
-      lastName: 'Smith',
-      dateOfBirth: '1971-02-01',
-      prisonNumber: 'A1234AA',
-      reasonForAbsence: 'Hospital appointment',
-      movementDateTime: '2022-01-17T14:20:00',
-    }
+    const temporaryAbsence = createTemporaryAbsence()
     it('should return single a transfer from api', async () => {
       fakeWelcomeApi
         .get(`/temporary-absences/${activeCaseLoadId}/${prisonNumber}`)
@@ -143,12 +129,9 @@ describe('welcomeClient', () => {
       fakeWelcomeApi
         .post(`/temporary-absences/${prisonNumber}/confirm`, { agencyId: 'MDI' })
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, { prisonNumber: 'A1234AB', location: 'Reception' })
+        .reply(200, arrivalResponse)
 
-      return expect(welcomeClient.confirmTemporaryAbsence(prisonNumber, 'MDI')).resolves.toStrictEqual({
-        prisonNumber: 'A1234AB',
-        location: 'Reception',
-      })
+      return expect(welcomeClient.confirmTemporaryAbsence(prisonNumber, 'MDI')).resolves.toStrictEqual(arrivalResponse)
     })
   })
 
@@ -158,33 +141,19 @@ describe('welcomeClient', () => {
       fakeWelcomeApi
         .post(`/transfers/${prisonNumber}/confirm`, {})
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, { prisonNumber: 'A1234AB', location: 'Reception' })
+        .reply(200, arrivalResponse)
 
-      return expect(welcomeClient.confirmTransfer(prisonNumber)).resolves.toStrictEqual({
-        prisonNumber: 'A1234AB',
-        location: 'Reception',
-      })
+      return expect(welcomeClient.confirmTransfer(prisonNumber)).resolves.toStrictEqual(arrivalResponse)
     })
   })
 
   describe('getArrival', () => {
-    const expectedArrival = {
-      id,
-      firstName: 'Jim',
-      lastName: 'Smith',
-      dateOfBirth: '1973-01-08',
-      prisonNumber: 'A1234AB',
-      pncNumber: '01/98644M',
-      date: '2021-10-13',
-      fromLocation: 'Some court',
-      fromLocationType: 'COURT',
-    } as Arrival
-
+    const arrival = createArrival()
     it('should return data from api', async () => {
-      fakeWelcomeApi.get(`/arrivals/${id}`).matchHeader('authorization', `Bearer ${token}`).reply(200, expectedArrival)
+      fakeWelcomeApi.get(`/arrivals/${id}`).matchHeader('authorization', `Bearer ${token}`).reply(200, arrival)
 
       const output = await welcomeClient.getArrival(id)
-      expect(output).toEqual(expectedArrival)
+      expect(output).toEqual(arrival)
     })
   })
 
@@ -193,12 +162,9 @@ describe('welcomeClient', () => {
       fakeWelcomeApi
         .post(`/court-returns/${id}/confirm`, { prisonId: 'MDI', prisonNumber: 'A1234AA' })
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, { prisonNumber: 'A1234AB', location: 'Reception' })
+        .reply(200, arrivalResponse)
 
-      return expect(welcomeClient.confirmCourtReturn(id, 'MDI', 'A1234AA')).resolves.toStrictEqual({
-        prisonNumber: 'A1234AB',
-        location: 'Reception',
-      })
+      return expect(welcomeClient.confirmCourtReturn(id, 'MDI', 'A1234AA')).resolves.toStrictEqual(arrivalResponse)
     })
   })
 
@@ -232,10 +198,10 @@ describe('welcomeClient', () => {
       fakeWelcomeApi
         .post(`/arrivals/${id}/confirm`, detail)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, { prisonNumber: 'A1234AB', location: 'Reception' })
+        .reply(200, arrivalResponse)
 
       const output = await welcomeClient.confirmExpectedArrival(id, detail)
-      expect(output).toEqual({ prisonNumber: 'A1234AB', location: 'Reception' })
+      expect(output).toEqual(arrivalResponse)
     })
 
     it('should return null', async () => {
@@ -268,10 +234,10 @@ describe('welcomeClient', () => {
       fakeWelcomeApi
         .post(`/unexpected-arrivals/confirm`, detail)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, { prisonNumber: 'A1234AB', location: 'Reception' })
+        .reply(200, arrivalResponse)
 
       const output = await welcomeClient.confirmUnexpectedArrival(detail)
-      expect(output).toEqual({ prisonNumber: 'A1234AB', location: 'Reception' })
+      expect(output).toEqual(arrivalResponse)
     })
 
     it('should return null', async () => {
@@ -295,87 +261,41 @@ describe('welcomeClient', () => {
   })
 
   describe('getImprisonmentStatuses', () => {
-    const mockResponse: ImprisonmentStatus[] = [
-      {
-        code: 'on-remand',
-        description: 'On remand',
-        imprisonmentStatusCode: 'RX',
-        movementReasons: [{ movementReasonCode: 'R' }],
-      },
-      {
-        code: 'convicted-unsentenced',
-        description: 'Convicted unsentenced',
-        imprisonmentStatusCode: 'JR',
-        movementReasons: [{ movementReasonCode: 'V' }],
-      },
-      {
-        code: 'determinate-sentence',
-        description: 'Determinate sentence',
-        imprisonmentStatusCode: 'SENT',
-        secondLevelTitle: 'What is the type of determinate sentence?',
-        secondLevelValidationMessage: 'Select the type of determinate sentence',
-        movementReasons: [
-          { description: 'Extended sentence for public protection', movementReasonCode: '26' },
-          { description: 'Imprisonment without option of a fine', movementReasonCode: 'I' },
-          { description: 'Intermittent custodial sentence', movementReasonCode: 'INTER' },
-          { description: 'Partly suspended sentence', movementReasonCode: 'P' },
-        ],
-      },
-    ]
+    const imprisonmentStatus = createImprisonmentStatuses()
 
     it('should get data in correct format', async () => {
       fakeWelcomeApi
         .get('/imprisonment-statuses')
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, mockResponse)
+        .reply(200, imprisonmentStatus)
 
       const output = await welcomeClient.getImprisonmentStatuses()
-      expect(output).toEqual(mockResponse)
+      expect(output).toEqual(imprisonmentStatus)
     })
   })
   describe('matching records', () => {
-    const arrival = {
-      firstName: 'James',
-      lastName: 'Charles',
-      dateOfBirth: '1988-07-13',
-    }
-    const matchedRecords = [
-      {
-        firstName: 'James',
-        lastName: 'Charles',
-        dateOfBirth: '1988-07-13',
-        prisonNumber: 'A5534HA',
-        pncNumber: '11/836373L',
-        croNumber: '952184/22A',
-      },
-      {
-        firstName: 'James Paul',
-        lastName: 'Charles',
-        dateOfBirth: '1988-07-13',
-        prisonNumber: 'A3684DA',
-        pncNumber: '07/652634A',
-        croNumber: '342256/21A',
-      },
-    ]
+    const criteria = createMatchCriteria()
+
     it('should get matching records', async () => {
       fakeWelcomeApi
-        .post(`/match-prisoners`, arrival)
+        .post(`/match-prisoners`, criteria)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, matchedRecords)
+        .reply(200, [createPotentialMatch()])
 
-      const output = await welcomeClient.getMatchingRecords(arrival)
-      expect(output).toStrictEqual(matchedRecords)
+      const output = await welcomeClient.getMatchingRecords(criteria)
+      expect(output).toStrictEqual([createPotentialMatch()])
     })
 
     it('should get prisoner details', async () => {
+      const potentialMatch = createPotentialMatch()
       const prisonNumber = 'A3684DA'
       fakeWelcomeApi
         .get(`/prisoners/${prisonNumber}`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, matchedRecords[1])
+        .reply(200, potentialMatch)
 
       const output = await welcomeClient.getPrisonerDetails(prisonNumber)
-      expect(output).toEqual(matchedRecords[1])
+      expect(output).toEqual(potentialMatch)
     })
   })
 })
