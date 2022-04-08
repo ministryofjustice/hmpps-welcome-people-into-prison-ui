@@ -104,8 +104,7 @@ describe('POST addToRoll', () => {
         expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
           'Add to the establishment roll',
           'Confirmed temporary absence returned',
-          "AgencyId: MDI, Reason: Hospital appointment, Type: 'PRISON',",
-          '127.0.0.1'
+          "AgencyId: MDI, Reason: Hospital appointment, Type: 'PRISON',"
         )
       })
   })

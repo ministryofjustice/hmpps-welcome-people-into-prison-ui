@@ -1,11 +1,14 @@
-import { Sex, type Arrival, type ConfirmArrivalDetail } from 'welcome'
+import { Sex, type Arrival } from 'welcome'
 import moment from 'moment'
 import ExpectedArrivalsService, { LocationType } from './expectedArrivalsService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import WelcomeClient from '../data/welcomeClient'
+import { NewArrival } from '../routes/bookedtoday/arrivals/state'
+import { raiseAnalyticsEvent } from './raiseAnalyticsEvent'
 
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/welcomeClient')
+jest.mock('./raiseAnalyticsEvent')
 
 const token = 'some token'
 
@@ -199,7 +202,7 @@ describe('Expected arrivals service', () => {
     hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
     welcomeClient = new WelcomeClient(null) as jest.Mocked<WelcomeClient>
     WelcomeClientFactory.mockReturnValue(welcomeClient)
-    service = new ExpectedArrivalsService(hmppsAuthClient, WelcomeClientFactory)
+    service = new ExpectedArrivalsService(hmppsAuthClient, WelcomeClientFactory, raiseAnalyticsEvent)
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
     welcomeClient.getArrival.mockResolvedValue(arrival)
     welcomeClient.getExpectedArrivals.mockResolvedValue(arrivals)
@@ -268,25 +271,32 @@ describe('Expected arrivals service', () => {
     })
   })
 
-  describe('confirmExpectedArrival', () => {
-    const detail: ConfirmArrivalDetail = {
+  describe('confirm expected arrival', () => {
+    const username = 'Bob'
+    const detail: NewArrival = {
       firstName: 'Jim',
       lastName: 'Smith',
       dateOfBirth: '1973-01-08',
       sex: Sex.NOT_SPECIFIED,
-      prisonId: 'MDI',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',
       prisonNumber: 'A1234AA',
+      expected: true,
     }
 
-    it('Calls hmppsAuth and welcome clients correctly', async () => {
-      const username = 'Bob'
-      await service.confirmArrival(username, '12345-67890', detail)
-      await hmppsAuthClient.getSystemClientToken(username)
+    it('Calls hmppsAuth correctly', async () => {
+      await service.confirmArrival('MDI', username, '12345-67890', detail)
 
       expect(WelcomeClientFactory).toBeCalledWith(token)
       expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith(username)
+    })
+
+    it('Calls welcome api correctly', async () => {
+      welcomeClient.confirmExpectedArrival.mockResolvedValue({ prisonNumber: 'A1234AA', location: 'AA-1' })
+
+      const response = await service.confirmArrival('MDI', username, '12345-67890', detail)
+
+      expect(response).toStrictEqual({ location: 'AA-1', prisonNumber: 'A1234AA' })
       expect(welcomeClient.confirmExpectedArrival).toBeCalledWith('12345-67890', {
         firstName: 'Jim',
         lastName: 'Smith',
@@ -297,6 +307,85 @@ describe('Expected arrivals service', () => {
         movementReasonCode: 'N',
         prisonNumber: 'A1234AA',
       })
+    })
+
+    it('raises event when confirmation was successful', async () => {
+      welcomeClient.confirmExpectedArrival.mockResolvedValue({ prisonNumber: 'A1234AA', location: 'AA-1' })
+
+      await service.confirmArrival('MDI', username, '12345-67890', detail)
+
+      expect(raiseAnalyticsEvent).toBeCalledWith(
+        'Add to the establishment roll',
+        'Confirmed arrival',
+        'AgencyId: MDI, From: Reading, Type: COURT,'
+      )
+    })
+
+    it('does not raise event when confirmation was unsuccessful', async () => {
+      welcomeClient.confirmExpectedArrival.mockResolvedValue(undefined)
+
+      await service.confirmArrival('MDI', username, '12345-67890', detail)
+
+      expect(raiseAnalyticsEvent).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('confirm unexpected arrival', () => {
+    const username = 'Bob'
+    const detail: NewArrival = {
+      firstName: 'Jim',
+      lastName: 'Smith',
+      dateOfBirth: '1973-01-08',
+      sex: Sex.NOT_SPECIFIED,
+      imprisonmentStatus: 'RX',
+      movementReasonCode: 'N',
+      prisonNumber: 'A1234AA',
+      expected: false,
+    }
+
+    it('Calls hmppsAuth correctly', async () => {
+      await service.confirmArrival('MDI', username, '12345-67890', detail)
+
+      expect(WelcomeClientFactory).toBeCalledWith(token)
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith(username)
+    })
+
+    it('Calls welcome api correctly', async () => {
+      welcomeClient.confirmUnexpectedArrival.mockResolvedValue({ prisonNumber: 'A1234AA', location: 'AA-1' })
+
+      const response = await service.confirmArrival('MDI', username, '12345-67890', detail)
+
+      expect(response).toStrictEqual({ location: 'AA-1', prisonNumber: 'A1234AA' })
+      expect(welcomeClient.confirmUnexpectedArrival).toBeCalledWith({
+        firstName: 'Jim',
+        lastName: 'Smith',
+        dateOfBirth: '1973-01-08',
+        sex: 'NS',
+        prisonId: 'MDI',
+        imprisonmentStatus: 'RX',
+        movementReasonCode: 'N',
+        prisonNumber: 'A1234AA',
+      })
+    })
+
+    it('raises event when confirmation was successful', async () => {
+      welcomeClient.confirmUnexpectedArrival.mockResolvedValue({ prisonNumber: 'A1234AA', location: 'AA-1' })
+
+      await service.confirmArrival('MDI', username, '12345-67890', detail)
+
+      expect(raiseAnalyticsEvent).toBeCalledWith(
+        'Add to the establishment roll',
+        'Confirmed unexpected arrival',
+        'AgencyId: MDI'
+      )
+    })
+
+    it('does not raise event when confirmation was unsuccessful', async () => {
+      welcomeClient.confirmExpectedArrival.mockResolvedValue(undefined)
+
+      await service.confirmArrival('MDI', username, '12345-67890', detail)
+
+      expect(raiseAnalyticsEvent).not.toHaveBeenCalled()
     })
   })
 

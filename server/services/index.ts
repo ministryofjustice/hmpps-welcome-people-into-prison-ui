@@ -11,7 +11,11 @@ export const services = () => {
   const { hmppsAuthClient, welcomeClientBuilder } = dataAccess()
 
   const userService = new UserService(hmppsAuthClient, welcomeClientBuilder)
-  const expectedArrivalsService = new ExpectedArrivalsService(hmppsAuthClient, welcomeClientBuilder)
+  const expectedArrivalsService = new ExpectedArrivalsService(
+    hmppsAuthClient,
+    welcomeClientBuilder,
+    raiseAnalyticsEvent
+  )
   const temporaryAbsencesService = new TemporaryAbsencesService(hmppsAuthClient, welcomeClientBuilder)
   const imprisonmentStatusesService = new ImprisonmentStatusesService(hmppsAuthClient, welcomeClientBuilder)
   const transfersService = new TransfersService(hmppsAuthClient, welcomeClientBuilder)

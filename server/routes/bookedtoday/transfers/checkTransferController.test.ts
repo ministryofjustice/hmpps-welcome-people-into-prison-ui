@@ -103,8 +103,7 @@ describe('POST addToRoll', () => {
         expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
           'Add to the establishment roll',
           'Confirmed transfer',
-          "AgencyId: MDI, From: Leeds, Type: 'PRISON',",
-          '127.0.0.1'
+          "AgencyId: MDI, From: Leeds, Type: 'PRISON',"
         )
       })
   })

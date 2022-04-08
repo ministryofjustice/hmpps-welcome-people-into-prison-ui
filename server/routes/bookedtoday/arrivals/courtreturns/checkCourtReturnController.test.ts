@@ -9,7 +9,7 @@ import config from '../../../../config'
 
 jest.mock('../../../../services/expectedArrivalsService')
 
-const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
+const expectedArrivalsService = new ExpectedArrivalsService(null, null, null) as jest.Mocked<ExpectedArrivalsService>
 let app: Express
 const raiseAnalyticsEvent = jest.fn() as RaiseAnalyticsEvent
 
@@ -108,8 +108,7 @@ describe('checkCourtReturnController', () => {
           expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
             'Add to the establishment roll',
             'Confirmed court return returned',
-            'AgencyId: MDI, From: Some court, Type: COURT,',
-            '127.0.0.1'
+            'AgencyId: MDI, From: Some court, Type: COURT,'
           )
         })
     })

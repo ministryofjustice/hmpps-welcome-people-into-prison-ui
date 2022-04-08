@@ -1,24 +1,23 @@
 import type { Express } from 'express'
-import { type Arrival, Sex, type ConfirmArrivalDetail } from 'welcome'
+import { Sex } from 'welcome'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
 
 import { appWithAllRoutes, user, stubCookie, flashProvider } from '../../../__testutils/appSetup'
-import { ExpectedArrivalsService, ImprisonmentStatusesService, RaiseAnalyticsEvent } from '../../../../services'
+import { ExpectedArrivalsService, ImprisonmentStatusesService } from '../../../../services'
 import Role from '../../../../authentication/role'
 import config from '../../../../config'
-import { State } from '../state'
+import { NewArrival, State } from '../state'
 
 jest.mock('../../../../services/expectedArrivalsService')
 jest.mock('../../../../services/imprisonmentStatusesService')
 
-const expectedArrivalsService = new ExpectedArrivalsService(null, null) as jest.Mocked<ExpectedArrivalsService>
+const expectedArrivalsService = new ExpectedArrivalsService(null, null, null) as jest.Mocked<ExpectedArrivalsService>
 const imprisonmentStatusesService = new ImprisonmentStatusesService(
   null,
   null
 ) as jest.Mocked<ImprisonmentStatusesService>
 let app: Express
-const raiseAnalyticsEvent = jest.fn() as RaiseAnalyticsEvent
 
 beforeEach(() => {
   stubCookie(State.newArrival, {
@@ -34,21 +33,11 @@ beforeEach(() => {
     expected: true,
   })
   app = appWithAllRoutes({
-    services: { expectedArrivalsService, imprisonmentStatusesService, raiseAnalyticsEvent },
+    services: { expectedArrivalsService, imprisonmentStatusesService },
     roles: [Role.PRISON_RECEPTION],
   })
   config.session.secret = 'sdksdfkdfs'
   config.confirmEnabled = true
-  expectedArrivalsService.getArrival.mockResolvedValue({
-    firstName: 'Jim',
-    lastName: 'Smith',
-    dateOfBirth: '1973-01-08',
-    prisonNumber: 'A1234AB',
-    pncNumber: '01/98644M',
-    date: '2021-10-13',
-    fromLocation: 'Some court',
-    fromLocationType: 'COURT',
-  } as Arrival)
   expectedArrivalsService.confirmArrival.mockResolvedValue({
     prisonNumber: 'A1234AB',
     location: 'Reception',
@@ -117,15 +106,17 @@ describe('/checkAnswers', () => {
   })
 
   describe('addToRoll()', () => {
-    const detail: ConfirmArrivalDetail = {
+    const detail: NewArrival = {
       firstName: 'Jim',
       lastName: 'Smith',
       dateOfBirth: '1973-01-08',
       sex: Sex.MALE,
-      prisonId: 'MDI',
       imprisonmentStatus: 'SENT',
+      code: 'determinate-sentence',
       movementReasonCode: '26',
+      pncNumber: '01/98644M',
       prisonNumber: 'A1234AB',
+      expected: true,
     }
 
     it('should redirect to /feature-not-available ', () => {
@@ -147,12 +138,16 @@ describe('/checkAnswers', () => {
         .post('/prisoners/12345-67890/check-answers')
         .expect(302)
         .expect(() => {
-          expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
-          expect(expectedArrivalsService.confirmArrival).toHaveBeenCalledWith(user.username, '12345-67890', detail)
+          expect(expectedArrivalsService.confirmArrival).toHaveBeenCalledWith(
+            'MDI',
+            user.username,
+            '12345-67890',
+            detail
+          )
         })
     })
 
-    it('should redirect to /confirmation page, store arrival response data in flash and raise analytics event', () => {
+    it('should redirect to /confirmation page, store arrival response data in flash', () => {
       return request(app)
         .post('/prisoners/12345-67890/check-answers')
         .expect(302)
@@ -164,12 +159,6 @@ describe('/checkAnswers', () => {
             location: 'Reception',
             prisonNumber: 'A1234AB',
           })
-          expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
-            'Add to the establishment roll',
-            'Confirmed arrival',
-            'AgencyId: MDI, From: Some court, Type: COURT,',
-            '127.0.0.1'
-          )
         })
     })
   })

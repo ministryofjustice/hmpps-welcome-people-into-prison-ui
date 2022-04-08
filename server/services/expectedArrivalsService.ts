@@ -5,12 +5,15 @@ import type {
   PotentialMatchCriteria,
   PotentialMatch,
   PrisonerDetails,
+  Sex,
 } from 'welcome'
 import moment, { type Moment } from 'moment'
 import type { Readable } from 'stream'
 import { groupBy, compareByFullName } from '../utils/utils'
 import type { RestClientBuilder, WelcomeClient, HmppsAuthClient } from '../data'
 import logger from '../../logger'
+import { RaiseAnalyticsEvent } from './raiseAnalyticsEvent'
+import { NewArrival } from '../routes/bookedtoday/arrivals/state'
 
 export enum LocationType {
   COURT = 'COURT',
@@ -22,7 +25,8 @@ export enum LocationType {
 export default class ExpectedArrivalsService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
-    private readonly welcomeClientFactory: RestClientBuilder<WelcomeClient>
+    private readonly welcomeClientFactory: RestClientBuilder<WelcomeClient>,
+    private readonly raiseAnalyticsEvent: RaiseAnalyticsEvent
   ) {}
 
   private async getExpectedArrivals(agencyId: string, now: Moment): Promise<Arrival[]> {
@@ -67,12 +71,47 @@ export default class ExpectedArrivalsService {
   }
 
   public async confirmArrival(
+    prisonId: string,
     username: string,
     id: string,
-    detail: ConfirmArrivalDetail
+    arrival: NewArrival
   ): Promise<ArrivalResponse | null> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    return this.welcomeClientFactory(token).confirmExpectedArrival(id, detail)
+    const welcomeClient = this.welcomeClientFactory(token)
+
+    const data = await this.getArrival(id)
+
+    const detail: ConfirmArrivalDetail = {
+      firstName: arrival.firstName,
+      lastName: arrival.lastName,
+      dateOfBirth: arrival.dateOfBirth,
+      sex: arrival.sex as Sex,
+      prisonId,
+      imprisonmentStatus: arrival.imprisonmentStatus,
+      movementReasonCode: arrival.movementReasonCode,
+      fromLocationId: arrival.expected ? data.fromLocationId : undefined,
+      prisonNumber: arrival.prisonNumber,
+    }
+
+    const arrivalResponse = arrival.expected
+      ? await welcomeClient.confirmExpectedArrival(id, detail)
+      : await welcomeClient.confirmUnexpectedArrival(detail)
+
+    if (!arrivalResponse) {
+      return null
+    }
+
+    if (arrival.expected) {
+      this.raiseAnalyticsEvent(
+        'Add to the establishment roll',
+        'Confirmed arrival',
+        `AgencyId: ${prisonId}, From: ${data.fromLocation}, Type: ${data.fromLocationType},`
+      )
+    } else {
+      this.raiseAnalyticsEvent('Add to the establishment roll', 'Confirmed unexpected arrival', `AgencyId: ${prisonId}`)
+    }
+
+    return arrivalResponse
   }
 
   public async confirmCourtReturn(

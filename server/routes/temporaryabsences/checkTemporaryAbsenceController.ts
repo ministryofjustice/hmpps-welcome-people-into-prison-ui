@@ -42,8 +42,7 @@ export default class CheckTemporaryAbsenceController {
       this.raiseAnalyticsEvent(
         'Add to the establishment roll',
         'Confirmed temporary absence returned',
-        `AgencyId: ${activeCaseLoadId}, Reason: ${data.reasonForAbsence}, Type: 'PRISON',`,
-        req.hostname
+        `AgencyId: ${activeCaseLoadId}, Reason: ${data.reasonForAbsence}, Type: 'PRISON',`
       )
 
       return res.redirect(`/prisoners/${prisonNumber}/prisoner-returned`)
