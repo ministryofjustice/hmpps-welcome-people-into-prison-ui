@@ -74,7 +74,7 @@
             <div class="app-card__content">
                 <header class="app-card__header">
                     <h2 class="app-card__title" data-qa="PRISON-title-{{ loopIndex }}">
-                        {% if user.isReceptionUser and prisonTransfersEnabled %}
+                        {% if user.isReceptionUser %}
                             <a
                                 href="/prisoners/{{ arrival.prisonNumber }}/check-transfer"
                                 class="govuk-link govuk-link--no-visited-state"
