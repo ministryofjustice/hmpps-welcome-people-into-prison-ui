@@ -32,6 +32,8 @@ export default (on: (string, Record) => void): void => {
     stubMissingPrisonerImage: welcome.stubMissingPrisonerImage,
     stubCreateOffenderRecordAndBooking: ({ arrivalId, prisonNumber, location }) =>
       welcome.stubCreateOffenderRecordAndBooking(arrivalId, prisonNumber, location),
+    stubConfirmUnexpectedArrval: ({ prisonNumber, location }) =>
+      welcome.stubConfirmUnexpectedArrval({ prisonNumber, location }),
     stubCreateOffenderRecordAndBookingReturnsError: welcome.stubCreateOffenderRecordAndBookingReturnsError,
     stubImprisonmentStatus: welcome.stubImprisonmentStatus,
     stubMatchedRecords: welcome.stubMatchedRecords,
@@ -39,6 +41,7 @@ export default (on: (string, Record) => void): void => {
     stubPrisonerDetails: welcome.stubPrisonerDetails,
     getCourtReturnConfirmationRequest: welcome.getCourtReturnConfirmationRequest,
     getConfirmationRequest: welcome.getConfirmationRequest,
+    getUnexpectedConfirmationRequest: welcome.getUnexpectedConfirmationRequest,
     getTransferConfirmationRequest: welcome.getTransferConfirmationRequest,
   })
 }

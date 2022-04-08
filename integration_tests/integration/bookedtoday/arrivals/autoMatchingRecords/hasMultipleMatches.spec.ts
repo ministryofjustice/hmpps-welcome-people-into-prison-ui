@@ -117,11 +117,12 @@ context('Arrival matches multiple records', () => {
     checkAnswersPage.addToRoll().click()
 
     const confirmAddedToRollPage = Page.verifyOnPage(ConfirmAddedToRollPage)
-    confirmAddedToRollPage.confirmationBanner().should('contain.html', 'Sum Smoth')
-    confirmAddedToRollPage.confirmationBanner().should('contain.html', arrival.potentialMatches[1].prisonNumber)
-    confirmAddedToRollPage.confirmationParagraph().should('contain.html', 'Sum Smoth')
-    confirmAddedToRollPage.confirmationParagraph().should('contain.html', 'Moorland (HMP &amp; YOI)')
-    confirmAddedToRollPage.locationParagraph().should('contain.html', 'Reception')
+    confirmAddedToRollPage.details({
+      name: 'Sum Smoth',
+      prison: 'Moorland (HMP & YOI)',
+      prisonNumber: arrival.potentialMatches[1].prisonNumber,
+      locationName: 'Reception',
+    })
     confirmAddedToRollPage.viewEstablishmentRoll().exists()
     confirmAddedToRollPage.backToDigitalPrisonServices().exists()
     confirmAddedToRollPage.addAnotherToRoll().click()

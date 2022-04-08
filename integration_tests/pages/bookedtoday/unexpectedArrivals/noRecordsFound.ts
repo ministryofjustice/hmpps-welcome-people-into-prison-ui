@@ -8,4 +8,6 @@ export default class NoRecordsFoundPage extends Page {
   name = (): PageElement => cy.get('.data-qa-arrival-prisoner-name')
 
   dob = (): PageElement => cy.get('.data-qa-arrival-dob')
+
+  continue = (): PageElement => cy.get('[data-qa=continue]')
 }

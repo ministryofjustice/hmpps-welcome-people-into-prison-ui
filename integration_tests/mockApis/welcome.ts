@@ -295,6 +295,19 @@ export default {
       },
     })
   },
+  stubConfirmUnexpectedArrval: ({ prisonNumber, location }: Record<string, number>): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/welcome/unexpected-arrivals/confirm`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: { prisonNumber, location },
+      },
+    })
+  },
   stubImprisonmentStatus: (): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -323,6 +336,17 @@ export default {
     getMatchingRequests({
       method: 'POST',
       urlPath: `/welcome/arrivals/${id}/confirm`,
+    }).then(data => {
+      const { requests } = data.body
+      if (!requests.length) {
+        throw new Error('No matching request')
+      }
+      return JSON.parse(requests[0].body)
+    }),
+  getUnexpectedConfirmationRequest: () =>
+    getMatchingRequests({
+      method: 'POST',
+      urlPath: `/welcome/unexpected-arrivals/confirm`,
     }).then(data => {
       const { requests } = data.body
       if (!requests.length) {
