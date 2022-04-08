@@ -90,5 +90,4 @@ export default {
   confirmEnabled: get('CONFIRM_ENABLED', 'false', requiredInProduction) === 'true',
   confirmNoIdentifiersEnabled: get('CONFIRM_NO_IDENTIFIERS_ENABLED', 'false', requiredInProduction) === 'true',
   temporaryAbsencesEnabled: get('TEMPORARY_ABSENCE_ENABLED', 'false', requiredInProduction) === 'true',
-  prisonTransfersEnabled: get('PRISON_TRANSFERS_ENABLED', 'false', requiredInProduction) === 'true',
 }
