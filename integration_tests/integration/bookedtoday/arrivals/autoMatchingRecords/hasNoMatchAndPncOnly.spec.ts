@@ -144,7 +144,6 @@ context('No match found', () => {
         imprisonmentStatus: 'RX',
         movementReasonCode: 'R',
         prisonId: 'MDI',
-        prisonNumber: null,
       })
     })
   })

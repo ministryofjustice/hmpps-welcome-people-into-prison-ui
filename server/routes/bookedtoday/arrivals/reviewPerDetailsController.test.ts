@@ -87,7 +87,6 @@ describe('GET /review-per-details', () => {
           dateOfBirth: '1973-01-08',
           sex: 'MALE',
           pncNumber: '99/98644M',
-          prisonNumber: 'A1234AB',
           expected: 'true',
         })
       })
