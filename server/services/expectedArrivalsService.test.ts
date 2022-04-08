@@ -317,8 +317,7 @@ describe('Expected arrivals service', () => {
       expect(raiseAnalyticsEvent).toBeCalledWith(
         'Add to the establishment roll',
         'Confirmed arrival',
-        'AgencyId: MDI, From: Reading, Type: COURT,',
-        'localhost'
+        'AgencyId: MDI, From: Reading, Type: COURT,'
       )
     })
 
@@ -377,8 +376,7 @@ describe('Expected arrivals service', () => {
       expect(raiseAnalyticsEvent).toBeCalledWith(
         'Add to the establishment roll',
         'Confirmed unexpected arrival',
-        'AgencyId: MDI',
-        'localhost'
+        'AgencyId: MDI'
       )
     })
 

@@ -14,7 +14,6 @@ import type { RestClientBuilder, WelcomeClient, HmppsAuthClient } from '../data'
 import logger from '../../logger'
 import { RaiseAnalyticsEvent } from './raiseAnalyticsEvent'
 import { NewArrival } from '../routes/bookedtoday/arrivals/state'
-import config from '../config'
 
 export enum LocationType {
   COURT = 'COURT',
@@ -106,16 +105,10 @@ export default class ExpectedArrivalsService {
       this.raiseAnalyticsEvent(
         'Add to the establishment roll',
         'Confirmed arrival',
-        `AgencyId: ${prisonId}, From: ${data.fromLocation}, Type: ${data.fromLocationType},`,
-        config.hostname
+        `AgencyId: ${prisonId}, From: ${data.fromLocation}, Type: ${data.fromLocationType},`
       )
     } else {
-      this.raiseAnalyticsEvent(
-        'Add to the establishment roll',
-        'Confirmed unexpected arrival',
-        `AgencyId: ${prisonId}`,
-        config.hostname
-      )
+      this.raiseAnalyticsEvent('Add to the establishment roll', 'Confirmed unexpected arrival', `AgencyId: ${prisonId}`)
     }
 
     return arrivalResponse

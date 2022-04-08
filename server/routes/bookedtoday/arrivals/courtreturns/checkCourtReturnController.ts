@@ -44,8 +44,7 @@ export default class CheckCourtReturnController {
       this.raiseAnalyticsEvent(
         'Add to the establishment roll',
         'Confirmed court return returned',
-        `AgencyId: ${activeCaseLoadId}, From: ${arrival.fromLocation}, Type: ${arrival.fromLocationType},`,
-        req.hostname
+        `AgencyId: ${activeCaseLoadId}, From: ${arrival.fromLocation}, Type: ${arrival.fromLocationType},`
       )
 
       return res.redirect(`/prisoners/${id}/prisoner-returned-from-court`)

@@ -108,8 +108,7 @@ describe('checkCourtReturnController', () => {
           expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
             'Add to the establishment roll',
             'Confirmed court return returned',
-            'AgencyId: MDI, From: Some court, Type: COURT,',
-            '127.0.0.1'
+            'AgencyId: MDI, From: Some court, Type: COURT,'
           )
         })
     })

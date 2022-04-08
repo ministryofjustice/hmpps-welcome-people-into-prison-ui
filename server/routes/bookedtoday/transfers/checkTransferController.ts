@@ -34,8 +34,7 @@ export default class CheckTransferController {
       this.raiseAnalyticsEvent(
         'Add to the establishment roll',
         'Confirmed transfer',
-        `AgencyId: ${activeCaseLoadId}, From: ${data.fromLocation}, Type: 'PRISON',`,
-        req.hostname
+        `AgencyId: ${activeCaseLoadId}, From: ${data.fromLocation}, Type: 'PRISON',`
       )
 
       res.redirect(`/prisoners/${prisonNumber}/confirm-transfer`)
