@@ -1,10 +1,18 @@
-import { Sex, type Arrival } from 'welcome'
 import moment from 'moment'
+import type { Arrival } from 'welcome'
 import ExpectedArrivalsService, { LocationType } from './expectedArrivalsService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import WelcomeClient from '../data/welcomeClient'
 import { NewArrival } from '../routes/bookedtoday/arrivals/state'
 import { raiseAnalyticsEvent } from './raiseAnalyticsEvent'
+import {
+  createArrival,
+  createArrivalResponse,
+  createMatchCriteria,
+  createNewArrival,
+  createPotentialMatch,
+  createTransfer,
+} from '../data/__testutils/testObjects'
 
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/welcomeClient')
@@ -19,181 +27,7 @@ describe('Expected arrivals service', () => {
 
   const WelcomeClientFactory = jest.fn()
 
-  const arrival = {
-    firstName: 'James',
-    lastName: 'Smyth',
-    dateOfBirth: '1973-01-08',
-    prisonNumber: 'A1234AB',
-    pncNumber: '01/3456A',
-    date: '2021-09-01',
-    fromLocation: 'Reading',
-    fromLocationType: 'COURT',
-    potentialMatches: [
-      {
-        firstName: 'James',
-        lastName: 'Smyth',
-        dateOfBirth: '1973-01-08',
-        prisonNumber: 'A1234AB',
-        pncNumber: '99/98644M',
-      },
-    ],
-  } as Arrival
-
-  const arrivals = [
-    {
-      firstName: 'John',
-      lastName: 'Doe',
-      dateOfBirth: '1971-01-01',
-      prisonNumber: 'G0013AB',
-      pncNumber: '01/3456A',
-      date: '2021-09-01',
-      fromLocation: 'Reading',
-      fromLocationType: 'COURT',
-    },
-    {
-      firstName: 'Mark',
-      lastName: 'Prisoner',
-      dateOfBirth: '1985-01-05',
-      prisonNumber: 'G0016GD',
-      pncNumber: '01/6789A',
-      date: '2021-09-01',
-      fromLocation: 'Coventry',
-      fromLocationType: 'CUSTODY_SUITE',
-    },
-    {
-      firstName: 'Barry',
-      lastName: 'Smith',
-      dateOfBirth: '1970-01-01',
-      prisonNumber: 'G0012HK',
-      pncNumber: '01/2345A',
-      date: '2021-09-01',
-      fromLocation: 'Sheffield',
-      fromLocationType: 'CUSTODY_SUITE',
-    },
-    {
-      firstName: 'Bob',
-      lastName: 'Smith',
-      dateOfBirth: '1970-01-01',
-      prisonNumber: 'G0012BK',
-      pncNumber: '01/2345A',
-      date: '2021-09-01',
-      fromLocation: 'Wandsworth',
-      fromLocationType: 'CUSTODY_SUITE',
-    },
-    {
-      firstName: 'Sam',
-      lastName: 'Smith',
-      dateOfBirth: '1970-02-01',
-      prisonNumber: 'G0014GM',
-      pncNumber: '01/4567A',
-      date: '2021-09-01',
-      fromLocation: 'Leeds',
-      fromLocationType: 'COURT',
-    },
-    {
-      firstName: 'Steve',
-      lastName: 'Smith',
-      dateOfBirth: '1985-05-05',
-      prisonNumber: 'G0015GF',
-      pncNumber: '01/5568B',
-      date: '2021-09-01',
-      fromLocation: 'Manchester',
-      fromLocationType: 'OTHER',
-    },
-  ] as Arrival[]
-
-  const transfers = [
-    {
-      firstName: 'Karl',
-      lastName: 'Offender',
-      dateOfBirth: '1985-01-01',
-      prisonNumber: 'G0015GD',
-      pncNumber: '01/5678A',
-      date: '2021-09-01',
-      fromLocation: 'Leeds',
-      fromLocationType: 'PRISON',
-    },
-  ] as Arrival[]
-
-  const expectedArrivalsGroupedByType = new Map()
-  expectedArrivalsGroupedByType.set(LocationType.COURT, [
-    {
-      firstName: 'John',
-      lastName: 'Doe',
-      dateOfBirth: '1971-01-01',
-      prisonNumber: 'G0013AB',
-      pncNumber: '01/3456A',
-      date: '2021-09-01',
-      fromLocation: 'Reading',
-      fromLocationType: 'COURT',
-    },
-    {
-      firstName: 'Sam',
-      lastName: 'Smith',
-      dateOfBirth: '1970-02-01',
-      prisonNumber: 'G0014GM',
-      pncNumber: '01/4567A',
-      date: '2021-09-01',
-      fromLocation: 'Leeds',
-      fromLocationType: 'COURT',
-    },
-  ])
-  expectedArrivalsGroupedByType.set(LocationType.PRISON, [
-    {
-      firstName: 'Karl',
-      lastName: 'Offender',
-      dateOfBirth: '1985-01-01',
-      prisonNumber: 'G0015GD',
-      pncNumber: '01/5678A',
-      date: '2021-09-01',
-      fromLocation: 'Leeds',
-      fromLocationType: 'PRISON',
-    },
-  ])
-  expectedArrivalsGroupedByType.set(LocationType.CUSTODY_SUITE, [
-    {
-      firstName: 'Mark',
-      lastName: 'Prisoner',
-      dateOfBirth: '1985-01-05',
-      prisonNumber: 'G0016GD',
-      pncNumber: '01/6789A',
-      date: '2021-09-01',
-      fromLocation: 'Coventry',
-      fromLocationType: 'CUSTODY_SUITE',
-    },
-    {
-      firstName: 'Barry',
-      lastName: 'Smith',
-      dateOfBirth: '1970-01-01',
-      prisonNumber: 'G0012HK',
-      pncNumber: '01/2345A',
-      date: '2021-09-01',
-      fromLocation: 'Sheffield',
-      fromLocationType: 'CUSTODY_SUITE',
-    },
-    {
-      firstName: 'Bob',
-      lastName: 'Smith',
-      dateOfBirth: '1970-01-01',
-      prisonNumber: 'G0012BK',
-      pncNumber: '01/2345A',
-      date: '2021-09-01',
-      fromLocation: 'Wandsworth',
-      fromLocationType: 'CUSTODY_SUITE',
-    },
-  ])
-  expectedArrivalsGroupedByType.set(LocationType.OTHER, [
-    {
-      firstName: 'Steve',
-      lastName: 'Smith',
-      dateOfBirth: '1985-05-05',
-      prisonNumber: 'G0015GF',
-      pncNumber: '01/5568B',
-      date: '2021-09-01',
-      fromLocation: 'Manchester',
-      fromLocationType: 'OTHER',
-    },
-  ])
+  const arrivalResponse = createArrivalResponse()
 
   const res = { locals: { user: { activeCaseLoadId: 'MDI' } } }
 
@@ -204,18 +38,52 @@ describe('Expected arrivals service', () => {
     WelcomeClientFactory.mockReturnValue(welcomeClient)
     service = new ExpectedArrivalsService(hmppsAuthClient, WelcomeClientFactory, raiseAnalyticsEvent)
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
-    welcomeClient.getArrival.mockResolvedValue(arrival)
-    welcomeClient.getExpectedArrivals.mockResolvedValue(arrivals)
-    welcomeClient.getTransfers.mockResolvedValue(transfers)
   })
 
   describe('getExpectedArrivals', () => {
+    const transferArrival: Arrival = {
+      ...createTransfer(),
+      isCurrentPrisoner: true,
+      fromLocationType: LocationType.PRISON,
+    }
+
+    beforeEach(() => {
+      const arrivals = [
+        createArrival({ fromLocationType: 'COURT' }),
+        createArrival({ fromLocationType: 'CUSTODY_SUITE' }),
+        createArrival({ fromLocationType: 'CUSTODY_SUITE' }),
+        createArrival({ fromLocationType: 'CUSTODY_SUITE' }),
+        createArrival({ fromLocationType: 'COURT' }),
+        createArrival({ fromLocationType: 'OTHER' }),
+      ]
+
+      welcomeClient.getTransfers.mockResolvedValue([transferArrival])
+      welcomeClient.getExpectedArrivals.mockResolvedValue(arrivals)
+    })
+
     it('Retrieves expected arrivals sorted alphabetically by name', async () => {
       const today = moment()
       const result = await service.getArrivalsForToday(res.locals.user.activeCaseLoadId, () => today)
 
-      expect(result).toStrictEqual(expectedArrivalsGroupedByType)
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      expect(result).toStrictEqual(
+        new Map([
+          [
+            LocationType.COURT,
+            [createArrival({ fromLocationType: 'COURT' }), createArrival({ fromLocationType: 'COURT' })],
+          ],
+          [LocationType.PRISON, [transferArrival]],
+          [
+            LocationType.CUSTODY_SUITE,
+            [
+              createArrival({ fromLocationType: 'CUSTODY_SUITE' }),
+              createArrival({ fromLocationType: 'CUSTODY_SUITE' }),
+              createArrival({ fromLocationType: 'CUSTODY_SUITE' }),
+            ],
+          ],
+          [LocationType.OTHER, [createArrival({ fromLocationType: 'OTHER' })]],
+        ])
+      )
+
       expect(welcomeClient.getExpectedArrivals).toBeCalledWith(res.locals.user.activeCaseLoadId, today)
       expect(welcomeClient.getTransfers).toBeCalledWith(res.locals.user.activeCaseLoadId)
     })
@@ -223,15 +91,8 @@ describe('Expected arrivals service', () => {
     it('WelcomeClientFactory is called with a token', async () => {
       await service.getArrivalsForToday(res.locals.user.activeCaseLoadId)
 
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       expect(WelcomeClientFactory).toBeCalledWith(token)
-    })
-  })
-
-  describe('getSortedArrivalsByType', () => {
-    it('Retrieves expected arrivals grouped by type', async () => {
-      const result = await service.getArrivalsForToday(res.locals.user.activeCaseLoadId)
-
-      expect(result).toEqual(expectedArrivalsGroupedByType)
     })
   })
 
@@ -242,50 +103,39 @@ describe('Expected arrivals service', () => {
       expect(WelcomeClientFactory).toBeCalledWith(token)
       expect(welcomeClient.getArrival).toBeCalledWith('12345-67890')
     })
-    it('handles potential matches', async () => {
-      const { potentialMatches } = await service.getArrival('')
 
-      expect(potentialMatches[0]).toEqual({
-        dateOfBirth: '1973-01-08',
-        firstName: 'James',
-        lastName: 'Smyth',
-        pncNumber: '99/98644M',
-        prisonNumber: 'A1234AB',
-      })
+    it('Returns response of client', async () => {
+      const arrival = createArrival()
+      welcomeClient.getArrival.mockResolvedValue(arrival)
+
+      const result = await service.getArrival('12345-67890')
+
+      expect(result).toStrictEqual(arrival)
     })
   })
 
   describe('getPrisonDetailsForArrival', () => {
     it('Calls upstream service correctly', async () => {
+      const arrival = createArrival()
+      welcomeClient.getArrival.mockResolvedValue(arrival)
       const result = await service.getPrisonerDetailsForArrival('12345-67890')
 
       expect(WelcomeClientFactory).toBeCalledWith(token)
       expect(welcomeClient.getArrival).toBeCalledWith('12345-67890')
-      expect(result).toStrictEqual({
-        dateOfBirth: '1973-01-08',
-        firstName: 'James',
-        lastName: 'Smyth',
-        pncNumber: '99/98644M',
-        prisonNumber: 'A1234AB',
-      })
+      expect(result).toStrictEqual(createPotentialMatch(arrival.potentialMatches[0]))
     })
   })
 
   describe('confirm expected arrival', () => {
     const username = 'Bob'
-    const detail: NewArrival = {
-      firstName: 'Jim',
-      lastName: 'Smith',
-      dateOfBirth: '1973-01-08',
-      sex: Sex.NOT_SPECIFIED,
-      imprisonmentStatus: 'RX',
-      movementReasonCode: 'N',
-      prisonNumber: 'A1234AA',
-      expected: true,
-    }
+    const newArrival: NewArrival = createNewArrival()
+
+    beforeEach(() => {
+      welcomeClient.getArrival.mockResolvedValue(createArrival())
+    })
 
     it('Calls hmppsAuth correctly', async () => {
-      await service.confirmArrival('MDI', username, '12345-67890', detail)
+      await service.confirmArrival('MDI', username, '12345-67890', newArrival)
 
       expect(WelcomeClientFactory).toBeCalledWith(token)
       expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith(username)
@@ -294,7 +144,7 @@ describe('Expected arrivals service', () => {
     it('Calls welcome api correctly', async () => {
       welcomeClient.confirmExpectedArrival.mockResolvedValue({ prisonNumber: 'A1234AA', location: 'AA-1' })
 
-      const response = await service.confirmArrival('MDI', username, '12345-67890', detail)
+      const response = await service.confirmArrival('MDI', username, '12345-67890', newArrival)
 
       expect(response).toStrictEqual({ location: 'AA-1', prisonNumber: 'A1234AA' })
       expect(welcomeClient.confirmExpectedArrival).toBeCalledWith('12345-67890', {
@@ -312,19 +162,19 @@ describe('Expected arrivals service', () => {
     it('raises event when confirmation was successful', async () => {
       welcomeClient.confirmExpectedArrival.mockResolvedValue({ prisonNumber: 'A1234AA', location: 'AA-1' })
 
-      await service.confirmArrival('MDI', username, '12345-67890', detail)
+      await service.confirmArrival('MDI', username, '12345-67890', newArrival)
 
       expect(raiseAnalyticsEvent).toBeCalledWith(
         'Add to the establishment roll',
         'Confirmed arrival',
-        'AgencyId: MDI, From: Reading, Type: COURT,'
+        'AgencyId: MDI, From: Reading Court, Type: COURT,'
       )
     })
 
     it('does not raise event when confirmation was unsuccessful', async () => {
       welcomeClient.confirmExpectedArrival.mockResolvedValue(undefined)
 
-      await service.confirmArrival('MDI', username, '12345-67890', detail)
+      await service.confirmArrival('MDI', username, '12345-67890', newArrival)
 
       expect(raiseAnalyticsEvent).not.toHaveBeenCalled()
     })
@@ -332,30 +182,21 @@ describe('Expected arrivals service', () => {
 
   describe('confirm unexpected arrival', () => {
     const username = 'Bob'
-    const detail: NewArrival = {
-      firstName: 'Jim',
-      lastName: 'Smith',
-      dateOfBirth: '1973-01-08',
-      sex: Sex.NOT_SPECIFIED,
-      imprisonmentStatus: 'RX',
-      movementReasonCode: 'N',
-      prisonNumber: 'A1234AA',
-      expected: false,
-    }
+    const newArrival: NewArrival = createNewArrival({ expected: false })
 
     it('Calls hmppsAuth correctly', async () => {
-      await service.confirmArrival('MDI', username, '12345-67890', detail)
+      await service.confirmArrival('MDI', username, '12345-67890', newArrival)
 
       expect(WelcomeClientFactory).toBeCalledWith(token)
       expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith(username)
     })
 
     it('Calls welcome api correctly', async () => {
-      welcomeClient.confirmUnexpectedArrival.mockResolvedValue({ prisonNumber: 'A1234AA', location: 'AA-1' })
+      welcomeClient.confirmUnexpectedArrival.mockResolvedValue(arrivalResponse)
 
-      const response = await service.confirmArrival('MDI', username, '12345-67890', detail)
+      const response = await service.confirmArrival('MDI', username, '12345-67890', newArrival)
 
-      expect(response).toStrictEqual({ location: 'AA-1', prisonNumber: 'A1234AA' })
+      expect(response).toStrictEqual(arrivalResponse)
       expect(welcomeClient.confirmUnexpectedArrival).toBeCalledWith({
         firstName: 'Jim',
         lastName: 'Smith',
@@ -369,9 +210,9 @@ describe('Expected arrivals service', () => {
     })
 
     it('raises event when confirmation was successful', async () => {
-      welcomeClient.confirmUnexpectedArrival.mockResolvedValue({ prisonNumber: 'A1234AA', location: 'AA-1' })
+      welcomeClient.confirmUnexpectedArrival.mockResolvedValue(arrivalResponse)
 
-      await service.confirmArrival('MDI', username, '12345-67890', detail)
+      await service.confirmArrival('MDI', username, '12345-67890', newArrival)
 
       expect(raiseAnalyticsEvent).toBeCalledWith(
         'Add to the establishment roll',
@@ -381,9 +222,10 @@ describe('Expected arrivals service', () => {
     })
 
     it('does not raise event when confirmation was unsuccessful', async () => {
+      welcomeClient.getArrival.mockResolvedValue(createArrival())
       welcomeClient.confirmExpectedArrival.mockResolvedValue(undefined)
 
-      await service.confirmArrival('MDI', username, '12345-67890', detail)
+      await service.confirmArrival('MDI', username, '12345-67890', newArrival)
 
       expect(raiseAnalyticsEvent).not.toHaveBeenCalled()
     })
@@ -401,16 +243,13 @@ describe('Expected arrivals service', () => {
 
   describe('matching records', () => {
     it('calls upstream service with correct args', async () => {
-      const potentialMatchCriteria = {
-        firstName: arrival.firstName,
-        lastName: arrival.lastName,
-        dateOfBirth: arrival.dateOfBirth,
-      }
+      const criteria = createMatchCriteria()
 
-      await service.getMatchingRecords(potentialMatchCriteria)
+      await service.getMatchingRecords(criteria)
+
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.getMatchingRecords).toBeCalledWith(potentialMatchCriteria)
+      expect(welcomeClient.getMatchingRecords).toBeCalledWith(criteria)
     })
   })
 
@@ -419,6 +258,7 @@ describe('Expected arrivals service', () => {
       const prisonNumber = 'A1234BC'
 
       await service.getPrisonerDetails(prisonNumber)
+
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       expect(WelcomeClientFactory).toBeCalledWith(token)
       expect(welcomeClient.getPrisonerDetails).toBeCalledWith(prisonNumber)

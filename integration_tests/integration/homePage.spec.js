@@ -14,15 +14,7 @@ context('A user can view the home page', () => {
     cy.task('stubUserCaseLoads')
     cy.task('stubExpectedArrivals', {
       caseLoadId: 'MDI',
-      arrivals: [
-        expectedArrivals.custodySuite.current,
-        expectedArrivals.custodySuite.notCurrent,
-        expectedArrivals.custodySuite.notMatched,
-        expectedArrivals.other,
-        expectedArrivals.court.current,
-        expectedArrivals.court.notCurrent,
-        expectedArrivals.court.notMatched,
-      ],
+      arrivals: [expectedArrivals.court.current],
     })
     cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [expectedArrivals.prisonTransfer] })
     cy.task('stubTemporaryAbsences', 'MDI')
