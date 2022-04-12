@@ -57,7 +57,7 @@ context('Is Single Match', () => {
 
     const movementReasonPage = Page.verifyOnPage(MovementReasonsPage)
     movementReasonPage.continue().click()
-    movementReasonPage.hasError('Select the type of determinate sentence')
+    movementReasonPage.hasError('Select the type of fixed-length sentence')
     movementReasonPage.movementReasonRadioButton('26').click()
     movementReasonPage.continue().click()
 
@@ -68,7 +68,9 @@ context('Is Single Match', () => {
     checkAnswersPage.prisonNumber().should('contain.text', 'A1234BC')
     checkAnswersPage.pncNumber().should('contain.text', '01/4567A')
     checkAnswersPage.sex().should('contain.text', 'Male')
-    checkAnswersPage.reason().should('contain.text', 'Determinate sentence - Extended sentence for public protection')
+    checkAnswersPage
+      .reason()
+      .should('contain.text', 'Sentenced - fixed length of time - Extended sentence for public protection')
     cy.task('stubCreateOffenderRecordAndBooking', { arrivalId: expectedArrival.id })
     checkAnswersPage.addToRoll().click()
 

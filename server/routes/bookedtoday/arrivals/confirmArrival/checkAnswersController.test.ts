@@ -43,7 +43,7 @@ beforeEach(() => {
     location: 'Reception',
   })
   imprisonmentStatusesService.getReasonForImprisonment.mockResolvedValue(
-    'Determinate sentence - Extended sentence for public protection'
+    'Sentenced - fixed length of time - Extended sentence for public protection'
   )
 })
 

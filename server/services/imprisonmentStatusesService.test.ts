@@ -24,19 +24,19 @@ describe('Imprisonment statuses service', () => {
     },
     {
       code: 'convicted-unsentenced',
-      description: 'Convicted unsentenced',
+      description: 'Convicted - waiting to be sentenced',
       imprisonmentStatusCode: 'JR',
       movementReasons: [{ movementReasonCode: 'V' }],
     },
     {
       code: 'determinate-sentence',
-      description: 'Determinate sentence',
+      description: 'Sentenced - fixed length of time',
       imprisonmentStatusCode: 'SENT',
-      secondLevelTitle: 'What is the type of determinate sentence?',
-      secondLevelValidationMessage: 'Select the type of determinate sentence',
+      secondLevelTitle: 'What is the type of fixed sentence?',
+      secondLevelValidationMessage: 'Select the type of fixed-length sentence',
       movementReasons: [
-        { description: 'Extended sentence for public protection', movementReasonCode: '26' },
         { description: 'Imprisonment without option of a fine', movementReasonCode: 'I' },
+        { description: 'Extended sentence for public protection', movementReasonCode: '26' },
         { description: 'Intermittent custodial sentence', movementReasonCode: 'INTER' },
         { description: 'Partly suspended sentence', movementReasonCode: 'P' },
       ],
@@ -79,7 +79,7 @@ describe('Imprisonment statuses service', () => {
       it('should return imprisonment status with single movement reason', async () => {
         const imprisonmentStatus = {
           code: 'convicted-unsentenced',
-          description: 'Convicted unsentenced',
+          description: 'Convicted - waiting to be sentenced',
           imprisonmentStatusCode: 'JR',
           movementReasons: [{ movementReasonCode: 'V' }],
         }
@@ -94,13 +94,13 @@ describe('Imprisonment statuses service', () => {
       it('should return imprisonment status with multiple movement reasons', async () => {
         const imprisonmentStatus = {
           code: 'determinate-sentence',
-          description: 'Determinate sentence',
+          description: 'Sentenced - fixed length of time',
           imprisonmentStatusCode: 'SENT',
-          secondLevelTitle: 'What is the type of determinate sentence?',
-          secondLevelValidationMessage: 'Select the type of determinate sentence',
+          secondLevelTitle: 'What is the type of fixed sentence?',
+          secondLevelValidationMessage: 'Select the type of fixed-length sentence',
           movementReasons: [
-            { description: 'Extended sentence for public protection', movementReasonCode: '26' },
             { description: 'Imprisonment without option of a fine', movementReasonCode: 'I' },
+            { description: 'Extended sentence for public protection', movementReasonCode: '26' },
             { description: 'Intermittent custodial sentence', movementReasonCode: 'INTER' },
             { description: 'Partly suspended sentence', movementReasonCode: 'P' },
           ],
@@ -122,7 +122,7 @@ describe('Imprisonment statuses service', () => {
         }
         const result = await service.getReasonForImprisonment(statusAndReason)
 
-        expect(result).toStrictEqual('Convicted unsentenced')
+        expect(result).toStrictEqual('Convicted - waiting to be sentenced')
       })
       it('should include movement reason description when one of multiple movement reasons selected', async () => {
         const statusAndReason = {
@@ -132,7 +132,7 @@ describe('Imprisonment statuses service', () => {
         }
         const result = await service.getReasonForImprisonment(statusAndReason)
 
-        expect(result).toStrictEqual('Determinate sentence - Imprisonment without option of a fine')
+        expect(result).toStrictEqual('Sentenced - fixed length of time - Imprisonment without option of a fine')
       })
     })
   })

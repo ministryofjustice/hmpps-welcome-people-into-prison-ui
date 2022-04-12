@@ -11,7 +11,7 @@ export default [
   },
   {
     code: 'convicted-unsentenced',
-    description: 'Convicted unsentenced',
+    description: 'Convicted - waiting to be sentenced',
     imprisonmentStatusCode: 'JR',
     movementReasons: [
       {
@@ -21,18 +21,18 @@ export default [
   },
   {
     code: 'determinate-sentence',
-    description: 'Determinate sentence',
+    description: 'Sentenced - fixed length of time',
     imprisonmentStatusCode: 'SENT',
-    secondLevelTitle: 'What is the type of determinate sentence?',
-    secondLevelValidationMessage: 'Select the type of determinate sentence',
+    secondLevelTitle: 'What is the type of fixed sentence?',
+    secondLevelValidationMessage: 'Select the type of fixed-length sentence',
     movementReasons: [
-      {
-        description: 'Extended sentence for public protection',
-        movementReasonCode: '26',
-      },
       {
         description: 'Imprisonment without option of a fine',
         movementReasonCode: 'I',
+      },
+      {
+        description: 'Extended sentence for public protection',
+        movementReasonCode: '26',
       },
       {
         description: 'Intermittent custodial sentence',
@@ -46,11 +46,15 @@ export default [
   },
   {
     code: 'indeterminate-sentence',
-    description: 'Indeterminate sentence',
+    description: 'Sentenced for life',
     imprisonmentStatusCode: 'SENT',
-    secondLevelTitle: 'What is the type of indeterminate sentence?',
-    secondLevelValidationMessage: 'Select the type of indeterminate sentence',
+    secondLevelTitle: 'What is the type of life sentence?',
+    secondLevelValidationMessage: 'Select the type of life sentence',
     movementReasons: [
+      {
+        description: 'Imprisonment without option of a fine',
+        movementReasonCode: 'I',
+      },
       {
         description: 'Custody for life - aged under 18',
         movementReasonCode: '27',
@@ -71,7 +75,7 @@ export default [
   },
   {
     code: 'recall',
-    description: 'Recall from licence or temporary release',
+    description: 'Recalled',
     imprisonmentStatusCode: 'LR_ORA',
     secondLevelTitle: 'Where is the prisoner being recalled from?',
     secondLevelValidationMessage: 'Select where the person is being recalled from',

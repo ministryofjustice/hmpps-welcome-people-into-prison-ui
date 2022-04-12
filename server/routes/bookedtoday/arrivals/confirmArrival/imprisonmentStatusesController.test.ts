@@ -42,7 +42,7 @@ describe('/imprisonment-status', () => {
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           const $ = cheerio.load(res.text)
-          expect($('h1').text()).toContain('What is the reason for imprisonment?')
+          expect($('h1').text()).toContain('Why is this person in prison?')
           expect($('.data-qa-prisoner-name').text()).toContain('Jim Smith')
         })
     })

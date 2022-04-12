@@ -18,13 +18,13 @@ let app: Express
 
 const imprisonmentStatus: ImprisonmentStatus = {
   code: 'determinate-sentence',
-  description: 'Determinate sentence',
+  description: 'Sentenced - fixed length of time',
   imprisonmentStatusCode: 'SENT',
-  secondLevelTitle: 'What is the type of determinate sentence?',
-  secondLevelValidationMessage: 'Select the type of determinate sentence',
+  secondLevelTitle: 'What is the type of fixed sentence?',
+  secondLevelValidationMessage: 'Select the type of fixed-length sentence',
   movementReasons: [
-    { description: 'Extended sentence for public protection', movementReasonCode: '26' },
     { description: 'Imprisonment without option of a fine', movementReasonCode: 'I' },
+    { description: 'Extended sentence for public protection', movementReasonCode: '26' },
     { description: 'Intermittent custodial sentence', movementReasonCode: 'INTER' },
     { description: 'Partly suspended sentence', movementReasonCode: 'P' },
   ],
@@ -66,7 +66,7 @@ describe('/determinate-sentence', () => {
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           const $ = cheerio.load(res.text)
-          expect($('h1').text()).toContain('What is the type of determinate sentence?')
+          expect($('h1').text()).toContain('What is the type of fixed sentence?')
           expect($('.data-qa-prisoner-name').text()).toContain('Jim Smith')
         })
     })
@@ -81,7 +81,7 @@ describe('/determinate-sentence', () => {
         .expect('Location', '/prisoners/12345-67890/imprisonment-status/determinate-sentence')
         .expect(() => {
           expect(flashProvider.mock.calls).toEqual([
-            ['errors', [{ href: '#movement-reason-0', text: 'Select the type of determinate sentence' }]],
+            ['errors', [{ href: '#movement-reason-0', text: 'Select the type of fixed-length sentence' }]],
           ])
         })
     })
