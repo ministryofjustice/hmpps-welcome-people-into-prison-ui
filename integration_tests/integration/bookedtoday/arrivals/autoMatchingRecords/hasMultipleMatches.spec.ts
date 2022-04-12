@@ -109,7 +109,9 @@ context('Arrival matches multiple records', () => {
     checkAnswersPage.prisonNumber().should('contain.text', arrival.potentialMatches[1].prisonNumber)
     checkAnswersPage.pncNumber().should('contain.text', arrival.potentialMatches[1].pncNumber)
     checkAnswersPage.sex().should('contain.text', 'Male')
-    checkAnswersPage.reason().should('contain.text', 'Determinate sentence - Extended sentence for public protection')
+    checkAnswersPage
+      .reason()
+      .should('contain.text', 'Sentenced - fixed length of time - Extended sentence for public protection')
     cy.task('stubCreateOffenderRecordAndBooking', {
       arrivalId: arrival.id,
       prisonNumber: arrival.potentialMatches[1].prisonNumber,

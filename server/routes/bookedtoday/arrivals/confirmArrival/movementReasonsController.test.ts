@@ -18,7 +18,7 @@ let app: Express
 
 const imprisonmentStatus: ImprisonmentStatus = {
   code: 'determinate-sentence',
-  description: 'Determinate sentence',
+  description: 'Sentenced - fixed length of time',
   imprisonmentStatusCode: 'SENT',
   secondLevelTitle: 'What is the type of determinate sentence?',
   secondLevelValidationMessage: 'Select the type of determinate sentence',

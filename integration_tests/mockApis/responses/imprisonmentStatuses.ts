@@ -11,7 +11,7 @@ export default [
   },
   {
     code: 'convicted-unsentenced',
-    description: 'Convicted unsentenced',
+    description: 'Convicted - waiting to be sentenced',
     imprisonmentStatusCode: 'JR',
     movementReasons: [
       {
@@ -21,7 +21,7 @@ export default [
   },
   {
     code: 'determinate-sentence',
-    description: 'Determinate sentence',
+    description: 'Sentenced - fixed length of time',
     imprisonmentStatusCode: 'SENT',
     secondLevelTitle: 'What is the type of determinate sentence?',
     secondLevelValidationMessage: 'Select the type of determinate sentence',
@@ -46,7 +46,7 @@ export default [
   },
   {
     code: 'indeterminate-sentence',
-    description: 'Indeterminate sentence',
+    description: 'Sentenced for life',
     imprisonmentStatusCode: 'SENT',
     secondLevelTitle: 'What is the type of indeterminate sentence?',
     secondLevelValidationMessage: 'Select the type of indeterminate sentence',
@@ -71,7 +71,7 @@ export default [
   },
   {
     code: 'recall',
-    description: 'Recall from licence or temporary release',
+    description: 'Recalled',
     imprisonmentStatusCode: 'LR_ORA',
     secondLevelTitle: 'Where is the prisoner being recalled from?',
     secondLevelValidationMessage: 'Select where the person is being recalled from',

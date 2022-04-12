@@ -64,7 +64,9 @@ context('Unexpected arrivals - Single matching record found', () => {
     checkAnswersPage.prisonNumber().should('contain.text', 'G0014GM')
     checkAnswersPage.pncNumber().should('contain.text', '01/1111A')
     checkAnswersPage.sex().should('contain.text', 'Male')
-    checkAnswersPage.reason().should('contain.text', 'Determinate sentence - Extended sentence for public protection')
+    checkAnswersPage
+      .reason()
+      .should('contain.text', 'Sentenced - fixed length of time - Extended sentence for public protection')
     cy.task('stubConfirmUnexpectedArrval', { prisonNumber: 'G0014GM', location: 'Reception' })
     checkAnswersPage.addToRoll().click()
 

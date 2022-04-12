@@ -108,7 +108,9 @@ context('Unexpected arrivals - multiple matching records', () => {
     checkAnswersPage.name().should('contain.text', 'Bob Smith')
     checkAnswersPage.dob().should('contain.text', '21 November 1972')
     checkAnswersPage.sex().should('contain.text', 'Male')
-    checkAnswersPage.reason().should('contain.text', 'Determinate sentence - Extended sentence for public protection')
+    checkAnswersPage
+      .reason()
+      .should('contain.text', 'Sentenced - fixed length of time - Extended sentence for public protection')
     cy.task('stubConfirmUnexpectedArrval', {
       prisonNumber: arrival.potentialMatches[0].prisonNumber,
       location: 'Reception',

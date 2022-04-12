@@ -85,13 +85,13 @@ export const createImprisonmentStatuses = (): ImprisonmentStatus[] => [
   },
   {
     code: 'convicted-unsentenced',
-    description: 'Convicted unsentenced',
+    description: 'Convicted - waiting to be sentenced',
     imprisonmentStatusCode: 'JR',
     movementReasons: [{ movementReasonCode: 'V' }],
   },
   {
     code: 'determinate-sentence',
-    description: 'Determinate sentence',
+    description: 'Sentenced - fixed length of time',
     imprisonmentStatusCode: 'SENT',
     secondLevelTitle: 'What is the type of determinate sentence?',
     secondLevelValidationMessage: 'Select the type of determinate sentence',
