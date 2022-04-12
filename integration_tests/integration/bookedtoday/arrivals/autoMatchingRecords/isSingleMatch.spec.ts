@@ -57,7 +57,7 @@ context('Is Single Match', () => {
 
     const movementReasonPage = Page.verifyOnPage(MovementReasonsPage)
     movementReasonPage.continue().click()
-    movementReasonPage.hasError('Select the type of determinate sentence')
+    movementReasonPage.hasError('Select the type of fixed-length sentence')
     movementReasonPage.movementReasonRadioButton('26').click()
     movementReasonPage.continue().click()
 

@@ -23,16 +23,16 @@ export default [
     code: 'determinate-sentence',
     description: 'Sentenced - fixed length of time',
     imprisonmentStatusCode: 'SENT',
-    secondLevelTitle: 'What is the type of determinate sentence?',
-    secondLevelValidationMessage: 'Select the type of determinate sentence',
+    secondLevelTitle: 'What is the type of fixed sentence?',
+    secondLevelValidationMessage: 'Select the type of fixed-length sentence',
     movementReasons: [
-      {
-        description: 'Extended sentence for public protection',
-        movementReasonCode: '26',
-      },
       {
         description: 'Imprisonment without option of a fine',
         movementReasonCode: 'I',
+      },
+      {
+        description: 'Extended sentence for public protection',
+        movementReasonCode: '26',
       },
       {
         description: 'Intermittent custodial sentence',
