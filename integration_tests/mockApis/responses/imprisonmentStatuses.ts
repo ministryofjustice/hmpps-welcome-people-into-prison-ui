@@ -48,9 +48,13 @@ export default [
     code: 'indeterminate-sentence',
     description: 'Sentenced for life',
     imprisonmentStatusCode: 'SENT',
-    secondLevelTitle: 'What is the type of indeterminate sentence?',
-    secondLevelValidationMessage: 'Select the type of indeterminate sentence',
+    secondLevelTitle: 'What is the type of life sentence?',
+    secondLevelValidationMessage: 'Select the type of life sentence',
     movementReasons: [
+      {
+        description: 'Imprisonment without option of a fine',
+        movementReasonCode: 'I',
+      },
       {
         description: 'Custody for life - aged under 18',
         movementReasonCode: '27',
