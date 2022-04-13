@@ -125,6 +125,7 @@ context('Arrival matches multiple records', () => {
       prisonNumber: arrival.potentialMatches[1].prisonNumber,
       locationName: 'Reception',
     })
+    confirmAddedToRollPage.addCaseNote(arrival.potentialMatches[1].prisonNumber).exists()
     confirmAddedToRollPage.viewEstablishmentRoll().exists()
     confirmAddedToRollPage.backToDigitalPrisonServices().exists()
     confirmAddedToRollPage.addAnotherToRoll().click()
