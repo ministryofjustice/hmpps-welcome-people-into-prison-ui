@@ -1,5 +1,6 @@
 {% extends "../../partials/layout.njk" %}
 {% from "../../components/prisoner-summary-detail.njk" import prisonerSummaryDetail %}
+{% from "../../components/prisoner-search-detail.njk" import prisonerSearchDetail %}
 
 {% set pageTitle = "Confirm arrival" %}
 
@@ -8,14 +9,14 @@
         <div class="govuk-grid-column-two-thirds">
             <span class="govuk-caption-xl"> Confirm a prisoner's arrival </span>
             <h1 class="govuk-heading-l govuk-!-margin-bottom-7">This person does not have an existing prisoner record</h1>
-            <p> {{ data.firstName }} {{ data.lastName }} does not have an existing prisoner record. A new record will be created when they are added to the establishment roll. </p>
+            <p> A new record will be created when they are added to the establishment roll. </p>
         </div>
     </div>
     <div class="govuk-grid-row govuk-!-margin-top-4 govuk-!-margin-bottom-8 flex" >
         <div class="govuk-grid-column-one-half">
             <h2 class="govuk-heading-m">Personal details</h2>
             <div class = "prisoner-record-detail prisoner-head">
-                {{ prisonerSummaryDetail(data, "arrival" ) }}
+                {{ prisonerSearchDetail(data, "arrival" ) }}
             </div>
         </div>
     </div> 
