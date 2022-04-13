@@ -1,15 +1,18 @@
 import {
-  Arrival,
-  ArrivalResponse,
-  ImprisonmentStatus,
-  PotentialMatch,
-  PotentialMatchCriteria,
+  type Arrival,
+  type ArrivalResponse,
+  type ImprisonmentStatus,
+  type PotentialMatch,
+  type PotentialMatchCriteria,
+  type Prison,
   Sex,
   SexKeys,
-  TemporaryAbsence,
-  Transfer,
+  type TemporaryAbsence,
+  type Transfer,
+  type UserCaseLoad,
 } from 'welcome'
-import { NewArrival } from '../../routes/bookedtoday/arrivals/state'
+import type { NewArrival } from '../../routes/bookedtoday/arrivals/state'
+import type { User } from '../hmppsAuthClient'
 
 export const createArrival = ({
   id = '1111-1111-1111-1111',
@@ -145,3 +148,15 @@ export const createNewArrival = ({
   prisonNumber,
   expected,
 })
+
+export const createPrison = ({ description = 'Moorland (HMP & YOI)' } = {}): Prison => ({ description })
+
+export const createUserCaseLoad = ({
+  caseLoadId = 'MDI',
+  description = 'Moorland (HMP & YOI)',
+} = {}): UserCaseLoad => ({
+  caseLoadId,
+  description,
+})
+
+export const createUser = ({ name = 'John Smith', activeCaseLoadId = 'MDI' } = {}): User => ({ name, activeCaseLoadId })

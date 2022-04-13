@@ -10,8 +10,7 @@ export default class TransfersService {
   public async getTransfer(agencyId: string, prisonNumber: string): Promise<Transfer> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const welcomeClient = this.welcomeClientFactory(token)
-    const transfer = await welcomeClient.getTransfer(agencyId, prisonNumber)
-    return transfer
+    return welcomeClient.getTransfer(agencyId, prisonNumber)
   }
 
   public async confirmTransfer(username: string, prisonNumber: string): Promise<ArrivalResponse> {

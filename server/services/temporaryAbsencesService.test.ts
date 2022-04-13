@@ -1,7 +1,7 @@
-import type { TemporaryAbsence } from 'welcome'
 import TemporaryAbsencesService from './temporaryAbsencesService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import WelcomeClient from '../data/welcomeClient'
+import { createTemporaryAbsence } from '../data/__testutils/testObjects'
 
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/welcomeClient')
@@ -15,41 +15,6 @@ describe('Temporary absences service', () => {
 
   const WelcomeClientFactory = jest.fn()
 
-  const temporaryAbsences: TemporaryAbsence[] = [
-    {
-      firstName: 'Mark',
-      lastName: 'Prisoner',
-      dateOfBirth: '1985-01-05',
-      prisonNumber: 'G0016GD',
-      reasonForAbsence: 'Hospital appointment',
-      movementDateTime: '2022-01-10T15:00:00',
-    },
-    {
-      firstName: 'John',
-      lastName: 'Doe',
-      dateOfBirth: '1971-01-01',
-      prisonNumber: 'G0013AB',
-      reasonForAbsence: 'Hospital appointment',
-      movementDateTime: '2022-01-17T14:20:00',
-    },
-    {
-      firstName: 'Barry',
-      lastName: 'Smith',
-      dateOfBirth: '1970-01-01',
-      prisonNumber: 'G0012HK',
-      reasonForAbsence: 'External visit',
-      movementDateTime: '2022-01-16T12:30:00',
-    },
-    {
-      firstName: 'Karl',
-      lastName: 'Offender',
-      dateOfBirth: '1985-01-01',
-      prisonNumber: 'G0015GD',
-      reasonForAbsence: 'Hospital appointment',
-      movementDateTime: '2022-01-05T10:20:00',
-    },
-  ]
-
   const res = { locals: { user: { activeCaseLoadId: 'MDI' } } }
 
   beforeEach(() => {
@@ -57,48 +22,22 @@ describe('Temporary absences service', () => {
     WelcomeClientFactory.mockReturnValue(welcomeClient)
     service = new TemporaryAbsencesService(hmppsAuthClient, WelcomeClientFactory)
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
-    welcomeClient.getTemporaryAbsences.mockResolvedValue(temporaryAbsences)
-    welcomeClient.getTemporaryAbsence.mockResolvedValue(temporaryAbsences[0])
   })
 
   describe('getTemporaryAbsences', () => {
+    const ant = createTemporaryAbsence({ lastName: 'Aardvark' })
+    const bat = createTemporaryAbsence({ lastName: 'Bat' })
+    const cat = createTemporaryAbsence({ lastName: 'Cat' })
+    const dog = createTemporaryAbsence({ lastName: 'Dog' })
+
+    beforeEach(() => {
+      welcomeClient.getTemporaryAbsences.mockResolvedValue([dog, bat, ant, cat])
+    })
+
     it('Retrieves temporary absences sorted alphabetically by name', async () => {
       const result = await service.getTemporaryAbsences(res.locals.user.activeCaseLoadId)
 
-      expect(result).toStrictEqual([
-        {
-          firstName: 'John',
-          lastName: 'Doe',
-          dateOfBirth: '1971-01-01',
-          prisonNumber: 'G0013AB',
-          reasonForAbsence: 'Hospital appointment',
-          movementDateTime: '2022-01-17T14:20:00',
-        },
-        {
-          firstName: 'Karl',
-          lastName: 'Offender',
-          dateOfBirth: '1985-01-01',
-          prisonNumber: 'G0015GD',
-          reasonForAbsence: 'Hospital appointment',
-          movementDateTime: '2022-01-05T10:20:00',
-        },
-        {
-          firstName: 'Mark',
-          lastName: 'Prisoner',
-          dateOfBirth: '1985-01-05',
-          prisonNumber: 'G0016GD',
-          reasonForAbsence: 'Hospital appointment',
-          movementDateTime: '2022-01-10T15:00:00',
-        },
-        {
-          firstName: 'Barry',
-          lastName: 'Smith',
-          dateOfBirth: '1970-01-01',
-          prisonNumber: 'G0012HK',
-          reasonForAbsence: 'External visit',
-          movementDateTime: '2022-01-16T12:30:00',
-        },
-      ])
+      expect(result).toStrictEqual([ant, bat, cat, dog])
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       expect(welcomeClient.getTemporaryAbsences).toBeCalledWith(res.locals.user.activeCaseLoadId)
     })
@@ -111,6 +50,11 @@ describe('Temporary absences service', () => {
   })
 
   describe('getTemporaryAbsence', () => {
+    const temporaryAbsence = createTemporaryAbsence()
+
+    beforeEach(() => {
+      welcomeClient.getTemporaryAbsence.mockResolvedValue(temporaryAbsence)
+    })
     it('Calls upstream service correctly', async () => {
       await service.getTemporaryAbsence('MDI', 'G0013AB')
 
@@ -119,16 +63,11 @@ describe('Temporary absences service', () => {
     })
 
     it('Should return correct data', async () => {
+      welcomeClient.getTemporaryAbsence.mockResolvedValue(temporaryAbsence)
+
       const result = await service.getTemporaryAbsence('MDI', 'G0013AB')
 
-      expect(result).toStrictEqual({
-        firstName: 'John',
-        lastName: 'Doe',
-        dateOfBirth: '1971-01-01',
-        prisonNumber: 'G0013AB',
-        reasonForAbsence: 'Hospital appointment',
-        movementDateTime: '2022-01-17T14:20:00',
-      })
+      expect(result).toStrictEqual(temporaryAbsence)
     })
   })
 
