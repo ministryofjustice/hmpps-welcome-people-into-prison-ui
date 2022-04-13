@@ -66,7 +66,7 @@ describe('/imprisonment-status', () => {
         .expect('Location', '/prisoners/12345-67890/imprisonment-status')
         .expect(() => {
           expect(flashProvider.mock.calls).toEqual([
-            ['errors', [{ href: '#imprisonment-status-0', text: 'Select a reason for imprisonment' }]],
+            ['errors', [{ href: '#imprisonment-status-0', text: 'Select why this person is in prison' }]],
           ])
         })
     })
