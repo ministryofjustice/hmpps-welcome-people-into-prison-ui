@@ -1,4 +1,3 @@
-import { Arrival, SexKeys, PrisonerDetails } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
@@ -6,6 +5,7 @@ import { appWithAllRoutes, flashProvider } from '../../../__testutils/appSetup'
 import { ExpectedArrivalsService, RaiseAnalyticsEvent } from '../../../../services'
 import Role from '../../../../authentication/role'
 import config from '../../../../config'
+import { createArrival, createArrivalResponse, createPrisonerDetails } from '../../../../data/__testutils/testObjects'
 
 jest.mock('../../../../services/expectedArrivalsService')
 
@@ -13,36 +13,16 @@ const expectedArrivalsService = new ExpectedArrivalsService(null, null, null) as
 let app: Express
 const raiseAnalyticsEvent = jest.fn() as RaiseAnalyticsEvent
 
-const courtReturn: PrisonerDetails = {
-  firstName: 'Jim',
-  lastName: 'Smith',
-  dateOfBirth: '1973-01-08',
-  prisonNumber: 'A1234AB',
-  pncNumber: '01/98644M',
-  sex: SexKeys.MALE,
-}
-
-const arrival: Arrival = {
-  firstName: 'Jim',
-  lastName: 'Smith',
-  dateOfBirth: '1973-01-08',
-  prisonNumber: 'A1234AB',
-  pncNumber: '01/98644M',
-  date: '2021-10-13',
-  fromLocation: 'Some court',
-  fromLocationType: 'COURT',
-  isCurrentPrisoner: true,
-}
+const courtReturn = createPrisonerDetails()
+const arrival = createArrival({ fromLocationType: 'COURT', isCurrentPrisoner: true })
+const arrivalResponse = createArrivalResponse()
 
 beforeEach(() => {
   app = appWithAllRoutes({ services: { expectedArrivalsService, raiseAnalyticsEvent }, roles: [Role.PRISON_RECEPTION] })
   config.confirmEnabled = true
   expectedArrivalsService.getPrisonerDetailsForArrival.mockResolvedValue(courtReturn)
   expectedArrivalsService.getArrival.mockResolvedValue(arrival)
-  expectedArrivalsService.confirmCourtReturn.mockResolvedValue({
-    prisonNumber: 'A1234AB',
-    location: 'Reception',
-  })
+  expectedArrivalsService.confirmCourtReturn.mockResolvedValue(arrivalResponse)
 })
 
 afterEach(() => {
@@ -72,12 +52,6 @@ describe('checkCourtReturnController', () => {
         .expect(res => {
           const $ = cheerio.load(res.text)
           expect($('h1').text()).toContain('This person is returning from court')
-          expect($('.data-qa-name').text()).toContain('Jim Smith')
-          expect($('.data-qa-dob').text()).toContain('8 January 1973')
-          expect($('.data-qa-prison-number').text()).toContain('A1234AB')
-          expect($('.data-qa-pnc-number').text()).toContain('01/98644M')
-          expect($('[data-qa = "add-to-roll"]').text()).toContain('Confirm prisoner has returned')
-          expect(res.text).toContain('/prisoners/12345-67890/check-court-return')
         })
     })
   })
@@ -93,10 +67,10 @@ describe('checkCourtReturnController', () => {
         .post('/prisoners/12345-67890/check-court-return')
         .expect(() => {
           expect(flashProvider).toHaveBeenCalledWith('prisoner', {
-            firstName: 'Jim',
-            lastName: 'Smith',
-            prisonNumber: 'A1234AB',
-            location: 'Reception',
+            firstName: courtReturn.firstName,
+            lastName: courtReturn.lastName,
+            prisonNumber: arrivalResponse.prisonNumber,
+            location: arrivalResponse.location,
           })
         })
     })
@@ -108,7 +82,7 @@ describe('checkCourtReturnController', () => {
           expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
             'Add to the establishment roll',
             'Confirmed court return returned',
-            'AgencyId: MDI, From: Some court, Type: COURT,'
+            `AgencyId: MDI, From: ${arrival.fromLocation}, Type: ${arrival.fromLocationType},`
           )
         })
     })

@@ -44,7 +44,7 @@ describe('confirmCourtReturnAddedToRollController', () => {
       return request(app)
         .get('/prisoners/12345-67890/prisoner-returned-from-court')
         .expect('Content-Type', 'text/html; charset=utf-8')
-        .expect(res => {
+        .expect(() => {
           expect(prisonService.getPrison).toHaveBeenCalledWith('MDI')
         })
     })

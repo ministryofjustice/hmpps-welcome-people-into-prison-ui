@@ -155,6 +155,7 @@ describe('Expected arrivals service', () => {
         prisonId: 'MDI',
         imprisonmentStatus: 'RX',
         movementReasonCode: 'N',
+        fromLocationId: 'REDCC',
         prisonNumber: 'A1234AA',
       })
     })
