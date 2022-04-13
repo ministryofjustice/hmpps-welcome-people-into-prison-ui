@@ -92,7 +92,7 @@ context('Arrival matches multiple records', () => {
 
     const imprisonmentStatusPage = Page.verifyOnPage(ImprisonmentStatusPage)
     imprisonmentStatusPage.continue().click()
-    imprisonmentStatusPage.hasError('Select a reason for imprisonment')
+    imprisonmentStatusPage.hasError('Select why this person is in prison')
     imprisonmentStatusPage.imprisonmentStatusRadioButton('determinate-sentence').click()
     imprisonmentStatusPage.continue().click()
 
