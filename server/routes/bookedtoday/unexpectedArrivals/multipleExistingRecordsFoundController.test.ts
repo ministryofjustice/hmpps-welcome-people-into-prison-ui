@@ -13,8 +13,8 @@ jest.mock('../../../services/expectedArrivalsService')
 const expectedArrivalsService = new ExpectedArrivalsService(null, null, null) as jest.Mocked<ExpectedArrivalsService>
 
 const searchDetails = {
-  firstName: 'Jamie',
-  lastName: 'Smyth',
+  firstName: 'Jim',
+  lastName: 'Smith',
   dateOfBirth: '1973-01-08',
 }
 
@@ -42,7 +42,6 @@ beforeEach(() => {
   expectedArrivalsService.getMatchingRecords.mockResolvedValue(potentialMatches)
   expectedArrivalsService.getPrisonerDetails.mockResolvedValue(potentialMatches[0])
   flashProvider.mockReturnValue([])
-  stubCookie(State.searchDetails, searchDetails)
 })
 
 afterEach(() => {
@@ -52,6 +51,7 @@ afterEach(() => {
 describe('possible records found', () => {
   describe('view', () => {
     it('should call service method correctly', () => {
+      stubCookie(State.searchDetails, searchDetails)
       return request(app)
         .get('/manually-confirm-arrival/search-for-existing-record/possible-records-found')
         .expect(() => {
@@ -59,7 +59,15 @@ describe('possible records found', () => {
         })
     })
 
-    it('should render page correctly', () => {
+    it('should display partial prisoner name', () => {
+      stubCookie(State.searchDetails, {
+        firstName: undefined,
+        lastName: 'Smith',
+        dateOfBirth: '1973-01-08',
+        prisonNumber: 'A1234BC',
+        pncNumber: '11/5678',
+      })
+
       return request(app)
         .get('/manually-confirm-arrival/search-for-existing-record/possible-records-found')
         .expect(200)
@@ -67,6 +75,46 @@ describe('possible records found', () => {
         .expect(res => {
           const $ = cheerio.load(res.text)
           expect($('h1').text()).toContain('Possible existing records have been found')
+          expect($('.data-qa-arrival-details-prisoner-name').text()).toContain('Smith')
+          expect($('.data-qa-arrival-details-prisoner-name').text()).not.toContain('undefined')
+        })
+    })
+    it('should display alternative search text for name and date of birth', () => {
+      stubCookie(State.searchDetails, {
+        firstName: undefined,
+        lastName: undefined,
+        dateOfBirth: undefined,
+        prisonNumber: 'A1234BC',
+        pncNumber: '11/5678',
+      })
+
+      return request(app)
+        .get('/manually-confirm-arrival/search-for-existing-record/possible-records-found')
+        .expect(200)
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          const $ = cheerio.load(res.text)
+          expect($('.data-qa-arrival-details-prisoner-name').text()).toContain('Not entered')
+          expect($('.data-qa-arrival-details-dob').text()).toContain('Not entered')
+        })
+    })
+    it('should display alternative search text for prison and pnc', () => {
+      stubCookie(State.searchDetails, {
+        firstName: 'Jim',
+        lastName: 'Smith',
+        dateOfBirth: '1983-01-08',
+        prisonNumber: undefined,
+        pncNumber: undefined,
+      })
+
+      return request(app)
+        .get('/manually-confirm-arrival/search-for-existing-record/possible-records-found')
+        .expect(200)
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          const $ = cheerio.load(res.text)
+          expect($('.data-qa-arrival-details-prison-number').text()).toContain('Not entered')
+          expect($('.data-qa-arrival-details-pnc-number').text()).toContain('Not entered')
         })
     })
   })

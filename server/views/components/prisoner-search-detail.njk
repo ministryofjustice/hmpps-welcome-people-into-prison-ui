@@ -1,0 +1,37 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro prisonerSearchDetail(data, dataQa) %}
+
+    {% set firstName = data.firstName %}
+    {% set lastName = data.lastName %}
+    {% set dateOfBirth = data.dateOfBirth %}
+
+    {% if firstName or lastName %}
+        {% set name = firstName | default('') + " " + lastName %}
+    {% endif %}
+
+
+    {% set rows = [
+        {   key:     { text: "Name", classes:"govuk-!-padding-bottom-0" },
+            value:   { text: name | default('Not entered', true), classes: "govuk-!-padding-bottom-0 data-qa-" + dataQa + "-prisoner-name" }
+        },
+        {   key:     { text: "Date of birth", classes:"govuk-!-padding-bottom-0" },
+            value:   { text: dateOfBirth | formatDate('D MMMM YYYY') if dateOfBirth else 'Not entered' , classes: "govuk-!-padding-bottom-0 data-qa-" + dataQa + "-dob" }
+        },
+        {   key:     { text: "Prison number", classes: "govuk-!-padding-bottom-0" },
+            value:   { text:  data.prisonNumber | default('Not entered', true),  classes: "govuk-!-padding-bottom-0 data-qa-"+ dataQa + "-prison-number" }    
+        },
+        {   key:     { text: "PNC number", classes: "govuk-!-padding-bottom-0" },
+            value:   { text:  data.pncNumber | default('Not entered', true), classes: "govuk-!-padding-bottom-0 data-qa-" + dataQa + "-pnc-number" }   
+        }
+    ] 
+    %}
+
+    <div>
+      {{ govukSummaryList({
+      attributes: {'data-qa': dataQa},
+      classes: "govuk-!-margin-bottom-0 govuk-summary-list--no-border",
+      rows: rows
+      }) }}
+  </div>
+{% endmacro %}

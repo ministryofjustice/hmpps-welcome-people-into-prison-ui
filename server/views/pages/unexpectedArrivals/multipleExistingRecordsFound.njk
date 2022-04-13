@@ -1,5 +1,6 @@
 {% extends "../../partials/layout.njk" %}
 {% from "../../components/prisoner-summary-detail.njk" import prisonerSummaryDetail %}
+{% from "../../components/prisoner-search-detail.njk" import prisonerSearchDetail %}
 
 {% set pageTitle = "Possible existing records have been found" %}
 
@@ -28,7 +29,7 @@
             <div class="govuk-grid-column-one-half column-width-40 govuk-!-padding-left-0 govuk-!-padding-right-9">
                 <h2 class="govuk-heading-m">Personal details</h2>
                 <div class = "prisoner-record-detail govuk-!-margin-bottom-4">
-                    {{ prisonerSummaryDetail(arrival, "arrival-details" ) }}
+                    {{ prisonerSearchDetail(arrival, "arrival-details" ) }}
                 </div>
                 <a class="govuk-body govuk-link govuk-link--no-visited-state" href="/manually-confirm-arrival/search-for-existing-record/" data-qa="ammend-search">
                     Search using different details

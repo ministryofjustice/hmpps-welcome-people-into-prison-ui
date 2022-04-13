@@ -1,5 +1,6 @@
 {% extends "../../partials/layout.njk" %}
 {% from "../../components/prisoner-summary-detail.njk" import prisonerSummaryDetail %}
+{% from "../../components/prisoner-search-detail.njk" import prisonerSearchDetail %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -12,7 +13,7 @@
         <div class="column-width-40 govuk-!-padding-right-9">
             <h2 class="govuk-heading-m">Personal details</h2>
             <div class = "prisoner-record-detail prisoner-head">
-                {{ prisonerSummaryDetail(data, "arrival" ) }}
+                {{ prisonerSearchDetail(data, "arrival" ) }}
             </div>
             <p class="govuk-!-margin-top-4">
                 <a class="govuk-link govuk-link--no-visited-state" href="/manually-confirm-arrival/search-for-existing-record"  data-qa="search-again">Search using different details</a>
