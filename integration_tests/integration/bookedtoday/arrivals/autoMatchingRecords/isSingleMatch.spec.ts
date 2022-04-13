@@ -81,6 +81,7 @@ context('Is Single Match', () => {
       prisonNumber: 'A1234BC',
       locationName: 'Reception',
     })
+    confirmAddedToRollPage.addCaseNote('A1234BC').exists()
     confirmAddedToRollPage.viewEstablishmentRoll().exists()
     confirmAddedToRollPage.backToDigitalPrisonServices().exists()
     confirmAddedToRollPage.addAnotherToRoll().click()

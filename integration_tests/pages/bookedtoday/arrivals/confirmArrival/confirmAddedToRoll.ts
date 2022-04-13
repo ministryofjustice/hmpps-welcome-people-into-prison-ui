@@ -30,6 +30,15 @@ export default class ConfirmAddedToRollPage extends Page {
     cy.get(banner).contains(name)
   }
 
+  addCaseNote = (prisonNumber: string) => ({
+    exists: () =>
+      Page.checkLink(
+        cy.get(`[data-qa=add-case-note]`),
+        'Add a case note to their profile',
+        `https://digital-dev.prison.service.justice.gov.uk/prisoner/${prisonNumber}/add-case-note`
+      ),
+  })
+
   addAnotherToRoll = (): PageElement => cy.get(`[data-qa=add-another-to-roll]`)
 
   viewEstablishmentRoll = () => ({
