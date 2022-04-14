@@ -50,14 +50,14 @@ export default class WelcomeClient {
   async getTransfers(agencyId: string): Promise<Arrival[]> {
     logger.info(`welcomeApi: getTransfers(${agencyId})`)
     return this.restClient.get({
-      path: `/prisons/${agencyId}/transfers/enroute`,
+      path: `/prisons/${agencyId}/transfers`,
     }) as Promise<Arrival[]>
   }
 
   async getTransfer(agencyId: string, prisonNumber: string): Promise<Transfer> {
     logger.info(`welcomeApi: getTransfer(${agencyId} ${prisonNumber})`)
     return this.restClient.get({
-      path: `/prisons/${agencyId}/transfers/enroute/${prisonNumber}`,
+      path: `/prisons/${agencyId}/transfers/${prisonNumber}`,
     }) as Promise<Transfer>
   }
 
@@ -71,14 +71,14 @@ export default class WelcomeClient {
   async getTemporaryAbsences(agencyId: string): Promise<TemporaryAbsence[]> {
     logger.info(`welcomeApi: getTemporaryAbsences(${agencyId})`)
     return this.restClient.get({
-      path: `/temporary-absences/${agencyId}`,
+      path: `/prison/${agencyId}/temporary-absences`,
     }) as Promise<TemporaryAbsence[]>
   }
 
   async getTemporaryAbsence(agencyId: string, prisonNumber: string): Promise<TemporaryAbsence> {
     logger.info(`welcomeApi: getTemporaryAbsence(${agencyId} ${prisonNumber})`)
     return this.restClient.get({
-      path: `/temporary-absences/${agencyId}/${prisonNumber}`,
+      path: `/prison/${agencyId}/temporary-absences/${prisonNumber}`,
     }) as Promise<TemporaryAbsence>
   }
 

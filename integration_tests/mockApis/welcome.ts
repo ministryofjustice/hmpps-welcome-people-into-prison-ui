@@ -105,7 +105,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/welcome/prisons/${caseLoadId}/transfers/enroute/${prisonNumber}`,
+        urlPattern: `/welcome/prisons/${caseLoadId}/transfers/${prisonNumber}`,
       },
       response: {
         status: 200,
@@ -124,7 +124,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/welcome/prisons/${caseLoadId}/transfers/enroute`,
+        urlPattern: `/welcome/prisons/${caseLoadId}/transfers`,
       },
       response: {
         status: 200,
@@ -159,7 +159,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/welcome/temporary-absences/${activeCaseLoadId}/${prisonNumber}`,
+        urlPattern: `/welcome/prison/${activeCaseLoadId}/temporary-absences/${prisonNumber}`,
       },
       response: {
         status: 200,
@@ -172,7 +172,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/welcome/temporary-absences/${activeCaseLoadId}`,
+        urlPattern: `/welcome/prison/${activeCaseLoadId}/temporary-absences`,
       },
       response: {
         status: 200,
