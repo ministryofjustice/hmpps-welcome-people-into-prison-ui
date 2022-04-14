@@ -1,4 +1,4 @@
-import { Validator } from '../../../../middleware/validationMiddleware'
+import { Validator } from '../../../middleware/validationMiddleware'
 
 const PNC_NUMBER_REGEX = /^([0-9]{2}|[0-9]{4})\/[0-9]{5}[a-zA-Z]/
 

@@ -17,6 +17,7 @@ import PrisonNumberValidator from '../../validation/prisonNumberValidation'
 import redirectIfDisabledMiddleware from '../../../../../middleware/redirectIfDisabledMiddleware'
 import config from '../../../../../config'
 import { State } from '../../state'
+import PncNumberValidator from '../../../validation/pncNumberValidation'
 
 export default function routes(services: Services): Router {
   const router = express.Router()
@@ -75,7 +76,11 @@ export default function routes(services: Services): Router {
 
   const changePncNumberController = new ChangePncNumberController()
   get('/change-pnc-number', [checkSearchDetailsPresent, changePncNumberController.showChangePncNumber()])
-  post('/change-pnc-number', [checkSearchDetailsPresent, changePncNumberController.changePncNumber()])
+  post('/change-pnc-number', [
+    checkSearchDetailsPresent,
+    validationMiddleware(PncNumberValidator),
+    changePncNumberController.changePncNumber(),
+  ])
   get('/remove-pnc-number', [checkSearchDetailsPresent, changePncNumberController.removePncNumber()])
 
   return router

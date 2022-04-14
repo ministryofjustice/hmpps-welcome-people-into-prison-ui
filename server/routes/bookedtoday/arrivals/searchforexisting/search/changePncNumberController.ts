@@ -5,7 +5,10 @@ export default class ChangePncNumberController {
   public showChangePncNumber(): RequestHandler {
     return async (req, res) => {
       const data = State.searchDetails.get(req)
-      res.render('pages/bookedtoday/arrivals/searchforexisting/search/changePncNumber.njk', { data })
+      res.render('pages/bookedtoday/arrivals/searchforexisting/search/changePncNumber.njk', {
+        data,
+        errors: req.flash('errors'),
+      })
     }
   }
 
@@ -13,8 +16,13 @@ export default class ChangePncNumberController {
     return async (req, res) => {
       const { id } = req.params
       const { pncNumber } = req.body
+
+      if (req.errors) {
+        return res.redirect(`/prisoners/${id}/search-for-existing-record/change-pnc-number`)
+      }
+
       State.searchDetails.update(req, res, { pncNumber })
-      res.redirect(`/prisoners/${id}/search-for-existing-record`)
+      return res.redirect(`/prisoners/${id}/search-for-existing-record`)
     }
   }
 
