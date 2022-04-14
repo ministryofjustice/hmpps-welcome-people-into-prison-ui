@@ -69,7 +69,7 @@ describe('welcomeClient', () => {
     const transfers: Arrival[] = []
     it('should return data from api', async () => {
       fakeWelcomeApi
-        .get(`/prisons/${activeCaseLoadId}/transfers/enroute`)
+        .get(`/prisons/${activeCaseLoadId}/transfers`)
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, transfers)
 
@@ -84,7 +84,7 @@ describe('welcomeClient', () => {
     const transfer = createTransfer()
     it('should return single a transfer from api', async () => {
       fakeWelcomeApi
-        .get(`/prisons/${activeCaseLoadId}/transfers/enroute/${prisonNumber}`)
+        .get(`/prisons/${activeCaseLoadId}/transfers/${prisonNumber}`)
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, transfer)
 
@@ -98,7 +98,7 @@ describe('welcomeClient', () => {
     const temporaryAbsences: TemporaryAbsence[] = []
     it('should return data from api', async () => {
       fakeWelcomeApi
-        .get(`/temporary-absences/${activeCaseLoadId}`)
+        .get(`/prison/${activeCaseLoadId}/temporary-absences`)
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, temporaryAbsences)
 
@@ -113,7 +113,7 @@ describe('welcomeClient', () => {
     const temporaryAbsence = createTemporaryAbsence()
     it('should return single a transfer from api', async () => {
       fakeWelcomeApi
-        .get(`/temporary-absences/${activeCaseLoadId}/${prisonNumber}`)
+        .get(`/prison/${activeCaseLoadId}/temporary-absences/${prisonNumber}`)
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, temporaryAbsence)
 
