@@ -37,6 +37,7 @@ context('Confirm court return added To roll', () => {
 
     const confirmCourtReturnAddedToRollPage = Page.verifyOnPage(ConfirmCourtReturnAddedToRollPage)
 
+    confirmCourtReturnAddedToRollPage.addCaseNote(expectedArrival.potentialMatches[0].prisonNumber).exists()
     confirmCourtReturnAddedToRollPage.viewEstablishmentRoll().exists()
     confirmCourtReturnAddedToRollPage.backToDigitalPrisonServices().exists()
     confirmCourtReturnAddedToRollPage.addAnotherToRoll().click()
