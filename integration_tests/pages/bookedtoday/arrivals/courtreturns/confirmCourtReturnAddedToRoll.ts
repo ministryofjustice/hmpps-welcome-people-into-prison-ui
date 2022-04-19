@@ -9,7 +9,7 @@ export default class ConfirmCourtReturnAddedToRollPage extends Page {
     exists: () =>
       Page.checkLink(
         cy.get(`[data-qa=add-case-note]`),
-        'Add a case note to their profile',
+        'Add a case note on their profile',
         `https://digital-dev.prison.service.justice.gov.uk/prisoner/${prisonNumber}/add-case-note`
       ),
   })
