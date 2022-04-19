@@ -1,4 +1,4 @@
-import Page, { PageElement } from '../page'
+import Page from '../page'
 
 export default class ConfirmTemporaryAbsenceAddedToRollPage extends Page {
   constructor() {
@@ -10,7 +10,30 @@ export default class ConfirmTemporaryAbsenceAddedToRollPage extends Page {
     return Page.verifyOnPage(ConfirmTemporaryAbsenceAddedToRollPage)
   }
 
-  viewEstablishmentRoll = (): PageElement => cy.get(`[data-qa=view-establishment-roll]`)
+  addCaseNote = (prisonNumber: string) => ({
+    exists: () =>
+      Page.checkLink(
+        cy.get(`[data-qa=add-case-note]`),
+        'Add a case note to their profile',
+        `https://digital-dev.prison.service.justice.gov.uk/prisoner/${prisonNumber}/add-case-note`
+      ),
+  })
 
-  backToDigitalPrisonServices = (): PageElement => cy.get('[data-qa=back-to-dps]')
+  viewEstablishmentRoll = () => ({
+    exists: () =>
+      Page.checkLink(
+        cy.get(`[data-qa=view-establishment-roll]`),
+        'View establishment roll',
+        'https://digital-dev.prison.service.justice.gov.uk/establishment-roll'
+      ),
+  })
+
+  backToDigitalPrisonServices = () => ({
+    exists: () =>
+      Page.checkLink(
+        cy.get('[data-qa=back-to-dps]'),
+        'Back to Digital Prison Services',
+        'https://digital-dev.prison.service.justice.gov.uk'
+      ),
+  })
 }
