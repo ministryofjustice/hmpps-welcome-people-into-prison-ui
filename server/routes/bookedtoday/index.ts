@@ -1,23 +1,21 @@
-import express, { type Router } from 'express'
-import ChoosePrisonerController from './choosePrisonerController'
-
+import type { Router } from 'express'
 import type { Services } from '../../services'
 
+import ChoosePrisonerController from './choosePrisonerController'
 import transferRoutes from './transfers'
 import arrivalRoutes from './arrivals'
 import unexpectedArrivalsRoutes from './unexpectedArrivals'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
+import Routes from '../../utils/routeBuilder'
 
 export default function routes(services: Services): Router {
-  const router = express.Router()
-
   const choosePrisonerController = new ChoosePrisonerController(services.expectedArrivalsService)
-  router.get('/confirm-arrival/choose-prisoner', [asyncMiddleware(choosePrisonerController.view())])
-  router.get('/confirm-arrival/choose-prisoner/:id', [asyncMiddleware(choosePrisonerController.redirectToConfirm())])
 
-  router.use(transferRoutes(services))
-  router.use(arrivalRoutes(services))
-  router.use(unexpectedArrivalsRoutes(services))
+  return Routes.forAnyRole()
+    .get('/confirm-arrival/choose-prisoner', choosePrisonerController.view())
+    .get('/confirm-arrival/choose-prisoner/:id', choosePrisonerController.redirectToConfirm())
 
-  return router
+    .use(transferRoutes(services))
+    .use(arrivalRoutes(services))
+    .use(unexpectedArrivalsRoutes(services))
+    .build()
 }

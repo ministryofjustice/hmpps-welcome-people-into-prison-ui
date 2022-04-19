@@ -1,10 +1,8 @@
-import express, { RequestHandler, Router } from 'express'
+import type { Router } from 'express'
 import MultipleExistingRecordsFoundController from './multipleExistingRecordsFoundController'
 import SingleExistingRecordFoundController from './singleExistingRecordFoundController'
 import NoExistingRecordsFoundController from './noExistingRecordsFoundController'
 
-import authorisationForUrlMiddleware from '../../../../middleware/authorisationForUrlMiddleware'
-import asyncMiddleware from '../../../../middleware/asyncMiddleware'
 import validationMiddleware from '../../../../middleware/validationMiddleware'
 import MatchedRecordSelectionValidation from './validation/matchedRecordSelectionValidation'
 
@@ -14,50 +12,40 @@ import redirectIfDisabledMiddleware from '../../../../middleware/redirectIfDisab
 import config from '../../../../config'
 import { State } from '../state'
 import searchRoutes from './search'
+import Routes from '../../../../utils/routeBuilder'
 
 export default function routes(services: Services): Router {
-  const router = express.Router()
-
   const checkSearchDetailsPresent = State.searchDetails.ensurePresent('/')
   const checkNewArrivalPresent = State.newArrival.ensurePresent('/')
 
-  const get = (path: string, handlers: RequestHandler[]) =>
-    router.get(
-      `/prisoners/:id/search-for-existing-record${path}`,
-      authorisationForUrlMiddleware([Role.PRISON_RECEPTION]),
-      [
-        redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
-        ...handlers.map(handler => asyncMiddleware(handler)),
-      ]
+  const basePath = `/prisoners/:id/search-for-existing-record`
+
+  const multipleMatchFoundController = new MultipleExistingRecordsFoundController(services.expectedArrivalsService)
+  const singleMatchFoundController = new SingleExistingRecordFoundController()
+  const noMatchFoundController = new NoExistingRecordsFoundController()
+
+  return Routes.forRole(Role.PRISON_RECEPTION)
+    .get(
+      `${basePath}/possible-records-found`,
+      redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
+      checkSearchDetailsPresent,
+      multipleMatchFoundController.view()
     )
-
-  const post = (path: string, handlers: RequestHandler[]) =>
-    router.post(
-      `/prisoners/:id/search-for-existing-record${path}`,
-      authorisationForUrlMiddleware([Role.PRISON_RECEPTION]),
-      [
-        redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
-        ...handlers.map(handler => asyncMiddleware(handler)),
-      ]
+    .post(
+      `${basePath}/possible-records-found`,
+      redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
+      checkSearchDetailsPresent,
+      validationMiddleware(MatchedRecordSelectionValidation),
+      multipleMatchFoundController.submit()
     )
-
-  const multipleExistingRecordsFoundController = new MultipleExistingRecordsFoundController(
-    services.expectedArrivalsService
-  )
-  get('/possible-records-found', [checkSearchDetailsPresent, multipleExistingRecordsFoundController.view()])
-  post('/possible-records-found', [
-    checkSearchDetailsPresent,
-    validationMiddleware(MatchedRecordSelectionValidation),
-    multipleExistingRecordsFoundController.submit(),
-  ])
-
-  const singleExistingRecordFoundController = new SingleExistingRecordFoundController()
-  get('/record-found', [checkNewArrivalPresent, checkSearchDetailsPresent, singleExistingRecordFoundController.view()])
-
-  const noExistingRecordsFoundController = new NoExistingRecordsFoundController()
-  get('/no-record-found', [noExistingRecordsFoundController.view()])
-
-  router.use(searchRoutes(services))
-
-  return router
+    .get(
+      `${basePath}/record-found`,
+      redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
+      checkNewArrivalPresent,
+      checkSearchDetailsPresent,
+      singleMatchFoundController.view()
+    )
+    .get(`${basePath}/no-record-found`, noMatchFoundController.view())
+    .use(searchRoutes(services))
+    .build()
 }

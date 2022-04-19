@@ -1,22 +1,19 @@
-import express, { Router } from 'express'
-import PrisonerController from './prisonerController'
+import type { Router } from 'express'
+import type { Services } from '../services'
 
-import { Services } from '../services'
+import Routes from '../utils/routeBuilder'
+import PrisonerController from './prisonerController'
 import temporaryAbsenceRoutes from './temporaryabsences'
 import bookedTodayRoutes from './bookedtoday'
 
 export default function routes(services: Services): Router {
-  const router = express.Router()
-
-  router.get('/', (req, res, next) => res.render('pages/home'))
-
   const prisonerController = new PrisonerController(services.expectedArrivalsService)
-  router.get('/prisoners/:prisonNumber/image', [prisonerController.getImage()])
 
-  router.get('/feature-not-available', (req, res) => res.render('pages/featureNotAvailable'))
-
-  router.use(bookedTodayRoutes(services))
-  router.use(temporaryAbsenceRoutes(services))
-
-  return router
+  return Routes.forAnyRole()
+    .get('/', (_, res) => res.render('pages/home'))
+    .get('/prisoners/:prisonNumber/image', prisonerController.getImage())
+    .get('/feature-not-available', (req, res) => res.render('pages/featureNotAvailable'))
+    .use(bookedTodayRoutes(services))
+    .use(temporaryAbsenceRoutes(services))
+    .build()
 }
