@@ -1,11 +1,16 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
-import { ImprisonmentStatus } from 'welcome'
 import { appWithAllRoutes, flashProvider, stubCookie } from '../../../__testutils/appSetup'
 import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
 import ImprisonmentStatusesService from '../../../../services/imprisonmentStatusesService'
 import { State } from '../state'
+import {
+  createImprisonmentStatuses,
+  createNewArrival,
+  statusWithManyReasons,
+  statusWithSingleReason,
+} from '../../../../data/__testutils/testObjects'
 
 jest.mock('../../../../services/imprisonmentStatusesService')
 
@@ -15,19 +20,13 @@ const imprisonmentStatusesService = new ImprisonmentStatusesService(
 ) as jest.Mocked<ImprisonmentStatusesService>
 
 let app: Express
+const newArrival = createNewArrival()
+const imprisonmentStatuses = createImprisonmentStatuses()
 
 beforeEach(() => {
-  stubCookie(State.newArrival, {
-    firstName: 'Jim',
-    lastName: 'Smith',
-    dateOfBirth: '1973-01-08',
-    prisonNumber: 'A1234AB',
-    pncNumber: '01/98644M',
-    sex: 'M',
-    expected: true,
-  })
+  stubCookie(State.newArrival, newArrival)
   app = appWithAllRoutes({ services: { imprisonmentStatusesService } })
-  imprisonmentStatusesService.getAllImprisonmentStatuses.mockResolvedValue([] as ImprisonmentStatus[])
+  imprisonmentStatusesService.getAllImprisonmentStatuses.mockResolvedValue(imprisonmentStatuses)
 })
 
 afterEach(() => {
@@ -43,7 +42,6 @@ describe('/imprisonment-status', () => {
         .expect(res => {
           const $ = cheerio.load(res.text)
           expect($('h1').text()).toContain('Why is this person in prison?')
-          expect($('.data-qa-prisoner-name').text()).toContain('Jim Smith')
         })
     })
 
@@ -72,106 +70,52 @@ describe('/imprisonment-status', () => {
     })
 
     it('should call service method correctly', () => {
-      imprisonmentStatusesService.getImprisonmentStatus.mockResolvedValue({
-        code: 'civil-offence',
-        description: 'Civil offence',
-        imprisonmentStatusCode: 'CIVIL',
-        secondLevelTitle: 'What is the civil offence?',
-        secondLevelValidationMessage: 'Select the civil offence',
-        movementReasons: [
-          {
-            description: 'Civil committal',
-            movementReasonCode: 'C',
-          },
-          {
-            description: 'Non-payment of a fine',
-            movementReasonCode: 'F',
-          },
-        ],
-      })
+      imprisonmentStatusesService.getImprisonmentStatus.mockResolvedValue(statusWithSingleReason)
+
       return request(app)
         .post('/prisoners/12345-67890/imprisonment-status')
-        .send({ imprisonmentStatus: 'civil-offence' })
+        .send({ imprisonmentStatus: statusWithManyReasons.code })
         .expect(res => {
-          expect(imprisonmentStatusesService.getImprisonmentStatus).toHaveBeenCalledWith('civil-offence')
+          expect(imprisonmentStatusesService.getImprisonmentStatus).toHaveBeenCalledWith(statusWithManyReasons.code)
         })
     })
 
     it('should redirect to /check-answers and when single movement reason', () => {
-      imprisonmentStatusesService.getImprisonmentStatus.mockResolvedValue({
-        code: 'recapture',
-        description: 'Recapture after escape',
-        imprisonmentStatusCode: 'SENT03',
-        movementReasons: [
-          {
-            movementReasonCode: 'RECA',
-          },
-        ],
-      })
+      imprisonmentStatusesService.getImprisonmentStatus.mockResolvedValue(statusWithSingleReason)
 
       return request(app)
         .post('/prisoners/12345-67890/imprisonment-status')
-        .send({ imprisonmentStatus: 'recapture' })
+        .send({ imprisonmentStatus: statusWithSingleReason.code })
         .expect(302)
         .expect('Location', '/prisoners/12345-67890/check-answers')
     })
 
     it('should update cookie when single movement reason', () => {
-      imprisonmentStatusesService.getImprisonmentStatus.mockResolvedValue({
-        code: 'recapture',
-        description: 'Recapture after escape',
-        imprisonmentStatusCode: 'SENT03',
-        movementReasons: [
-          {
-            movementReasonCode: 'RECA',
-          },
-        ],
-      })
+      imprisonmentStatusesService.getImprisonmentStatus.mockResolvedValue(statusWithSingleReason)
 
       return request(app)
         .post('/prisoners/12345-67890/imprisonment-status')
-        .send({ imprisonmentStatus: 'recapture' })
+        .send({ imprisonmentStatus: statusWithSingleReason.code })
         .expect(302)
         .expect(res => {
           expectSettingCookie(res, State.newArrival).toStrictEqual({
-            firstName: 'Jim',
-            lastName: 'Smith',
-            dateOfBirth: '1973-01-08',
-            pncNumber: '01/98644M',
-            prisonNumber: 'A1234AB',
-            sex: 'M',
-            code: 'recapture',
-            imprisonmentStatus: 'SENT03',
-            movementReasonCode: 'RECA',
+            ...newArrival,
             expected: 'true',
+            code: statusWithSingleReason.code,
+            imprisonmentStatus: statusWithSingleReason.imprisonmentStatusCode,
+            movementReasonCode: statusWithSingleReason.movementReasons[0].movementReasonCode,
           })
         })
     })
 
     it('should redirect to /imprisonment-status/:imprisonmentStatus when multiple movement reasons', () => {
-      imprisonmentStatusesService.getImprisonmentStatus.mockResolvedValue({
-        code: 'civil-offence',
-        description: 'Civil offence',
-        imprisonmentStatusCode: 'CIVIL',
-        secondLevelTitle: 'What is the civil offence?',
-        secondLevelValidationMessage: 'Select the civil offence',
-        movementReasons: [
-          {
-            description: 'Civil committal',
-            movementReasonCode: 'C',
-          },
-          {
-            description: 'Non-payment of a fine',
-            movementReasonCode: 'F',
-          },
-        ],
-      })
+      imprisonmentStatusesService.getImprisonmentStatus.mockResolvedValue(statusWithManyReasons)
 
       return request(app)
         .post('/prisoners/12345-67890/imprisonment-status')
-        .send({ imprisonmentStatus: 'civil-offence' })
+        .send({ imprisonmentStatus: statusWithManyReasons.code })
         .expect(302)
-        .expect('Location', '/prisoners/12345-67890/imprisonment-status/civil-offence')
+        .expect('Location', `/prisoners/12345-67890/imprisonment-status/${statusWithManyReasons.code}`)
     })
   })
 })

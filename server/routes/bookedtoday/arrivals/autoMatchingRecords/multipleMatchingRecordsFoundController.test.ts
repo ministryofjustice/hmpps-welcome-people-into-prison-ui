@@ -1,50 +1,26 @@
 import type { Express } from 'express'
 import request from 'supertest'
-import { Arrival, SexKeys } from 'welcome'
 import * as cheerio from 'cheerio'
 import { appWithAllRoutes, flashProvider } from '../../../__testutils/appSetup'
 
 import Role from '../../../../authentication/role'
 import config from '../../../../config'
 import { ExpectedArrivalsService } from '../../../../services'
-import { LocationType } from '../../../../services/expectedArrivalsService'
 import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
 import { State } from '../state'
+import { createArrival, createPotentialMatch } from '../../../../data/__testutils/testObjects'
 
 jest.mock('../../../../services/expectedArrivalsService')
 const expectedArrivalsService = new ExpectedArrivalsService(null, null, null) as jest.Mocked<ExpectedArrivalsService>
 
-const arrival: Arrival = {
-  firstName: 'James',
-  lastName: 'Smith',
-  dateOfBirth: '1973-01-08',
-  prisonNumber: 'A1234BC',
-  pncNumber: '11/5678',
-  gender: SexKeys.MALE,
-  date: '2020-01-08',
-  fromLocation: 'Crown Court',
-  fromLocationType: LocationType.COURT,
-  id: '1234-2345-3456-4566',
-  isCurrentPrisoner: false,
-  fromLocationId: 'CC',
+const arrival = createArrival({
+  prisonNumber: 'A1234AA',
   potentialMatches: [
-    {
-      firstName: 'James',
-      lastName: 'Smyth',
-      dateOfBirth: '1973-01-08',
-      prisonNumber: 'A1234BC',
-      pncNumber: '11/5678',
-      croNumber: '12/0000',
-      sex: SexKeys.MALE,
-    },
-    {
-      firstName: 'Jim',
-      lastName: 'Smith',
-      dateOfBirth: '1983-01-08',
-      sex: SexKeys.MALE,
-    },
+    createPotentialMatch({ prisonNumber: 'A1234BB' }),
+    createPotentialMatch({ prisonNumber: 'A1234CC' }),
   ],
-}
+})
+
 let app: Express
 
 beforeEach(() => {
@@ -101,21 +77,14 @@ describe('possible records found', () => {
     it('should redirect to /sex page if no errors', () => {
       return request(app)
         .post('/prisoners/12345-67890/possible-records-found')
-        .send({ prisonNumber: arrival.prisonNumber })
+        .send({ prisonNumber: arrival.potentialMatches[0] })
         .expect(302)
         .expect('Location', '/prisoners/12345-67890/sex')
         .expect(req => {
           expect(flashProvider).not.toHaveBeenCalled()
-          expect(expectedArrivalsService.getPrisonerDetails).toHaveBeenCalledWith('A1234BC')
-          expectSettingCookie(req, State.newArrival).toStrictEqual({
-            dateOfBirth: '1973-01-08',
-            expected: 'true',
-            firstName: 'James',
-            lastName: 'Smyth',
-            pncNumber: '11/5678',
-            prisonNumber: 'A1234BC',
-            sex: 'MALE',
-          })
+          expect(expectedArrivalsService.getPrisonerDetails).toHaveBeenCalledWith(arrival.potentialMatches[0])
+          const { croNumber, ...fields } = arrival.potentialMatches[0]
+          expectSettingCookie(req, State.newArrival).toStrictEqual({ expected: 'true', ...fields })
         })
     })
   })

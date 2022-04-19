@@ -1,12 +1,14 @@
-import { Transfer } from 'welcome'
 import TransfersService from './transfersService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import WelcomeClient from '../data/welcomeClient'
+import { createTransfer } from '../data/__testutils/testObjects'
 
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/welcomeClient')
 
 const token = 'some token'
+
+const transfer = createTransfer()
 
 describe('Transfers service', () => {
   let welcomeClient: jest.Mocked<WelcomeClient>
@@ -14,16 +16,6 @@ describe('Transfers service', () => {
   let service: TransfersService
 
   const WelcomeClientFactory = jest.fn()
-
-  const transfer: Transfer = {
-    firstName: 'Karl',
-    lastName: 'Offender',
-    dateOfBirth: '1985-01-01',
-    prisonNumber: 'G0015GD',
-    pncNumber: '01/5678A',
-    date: '2021-09-01',
-    fromLocation: 'Leeds',
-  }
 
   beforeEach(() => {
     jest.resetAllMocks()
@@ -46,15 +38,7 @@ describe('Transfers service', () => {
     it('Should return correct data', async () => {
       const result = await service.getTransfer('MDI', 'G0015GD')
 
-      expect(result).toStrictEqual({
-        date: '2021-09-01',
-        dateOfBirth: '1985-01-01',
-        firstName: 'Karl',
-        fromLocation: 'Leeds',
-        lastName: 'Offender',
-        pncNumber: '01/5678A',
-        prisonNumber: 'G0015GD',
-      })
+      expect(result).toStrictEqual(transfer)
     })
   })
 

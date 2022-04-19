@@ -16,8 +16,7 @@ export default class TemporaryAbsencesService {
 
   public async getTemporaryAbsence(agencyId: string, prisonNumber: string): Promise<TemporaryAbsence> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
-    const temporaryAbsence = await this.welcomeClientFactory(token).getTemporaryAbsence(agencyId, prisonNumber)
-    return temporaryAbsence
+    return this.welcomeClientFactory(token).getTemporaryAbsence(agencyId, prisonNumber)
   }
 
   public async confirmTemporaryAbsence(

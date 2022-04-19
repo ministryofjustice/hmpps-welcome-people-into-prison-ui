@@ -1,7 +1,7 @@
-import { UserCaseLoad } from 'welcome'
 import UserService from './userService'
-import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
+import HmppsAuthClient from '../data/hmppsAuthClient'
 import WelcomeClient from '../data/welcomeClient'
+import { createUser, createUserCaseLoad } from '../data/__testutils/testObjects'
 
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/welcomeClient')
@@ -15,31 +15,21 @@ describe('User service', () => {
 
   const WelcomeClientFactory = jest.fn()
 
-  const userCaseLoads: UserCaseLoad[] = [
-    {
-      caseLoadId: 'MDI',
-      description: 'Moorland (HMP & YOI)',
-    },
-    {
-      caseLoadId: 'NMI',
-      description: 'Nottingham (HMP)',
-    },
-  ]
-
   beforeEach(() => {
     WelcomeClientFactory.mockReturnValue(welcomeClient)
     service = new UserService(hmppsAuthClient, WelcomeClientFactory)
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
-    welcomeClient.getUserCaseLoads.mockResolvedValue(userCaseLoads)
   })
 
   describe('getUser', () => {
     it('Retrieves and formats user name', async () => {
-      hmppsAuthClient.getUser.mockResolvedValue({ name: 'john smith' } as User)
+      const user = createUser()
+
+      hmppsAuthClient.getUser.mockResolvedValue(user)
 
       const result = await service.getUser(token)
 
-      expect(result.displayName).toEqual('John Smith')
+      expect(result).toStrictEqual({ ...user, displayName: 'John Smith' })
     })
 
     it('Propagates error', async () => {
@@ -50,6 +40,12 @@ describe('User service', () => {
   })
 
   describe('getUserCaseLoads', () => {
+    const caseLoad = createUserCaseLoad()
+
+    beforeEach(() => {
+      welcomeClient.getUserCaseLoads.mockResolvedValue([caseLoad])
+    })
+
     it('Calls upstream service correctly', async () => {
       await service.getUserCaseLoads(token)
 
@@ -60,16 +56,7 @@ describe('User service', () => {
     it('Should return correct data', async () => {
       const result = await service.getUserCaseLoads(token)
 
-      expect(result).toStrictEqual([
-        {
-          caseLoadId: 'MDI',
-          description: 'Moorland (HMP & YOI)',
-        },
-        {
-          caseLoadId: 'NMI',
-          description: 'Nottingham (HMP)',
-        },
-      ])
+      expect(result).toStrictEqual([caseLoad])
     })
   })
 })

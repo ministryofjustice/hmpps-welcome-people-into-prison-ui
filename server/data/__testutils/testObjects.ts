@@ -1,15 +1,19 @@
 import {
-  Arrival,
-  ArrivalResponse,
-  ImprisonmentStatus,
-  PotentialMatch,
-  PotentialMatchCriteria,
+  type Arrival,
+  type ArrivalResponse,
+  type ImprisonmentStatus,
+  type PotentialMatch,
+  type PotentialMatchCriteria,
+  type Prison,
   Sex,
   SexKeys,
-  TemporaryAbsence,
-  Transfer,
+  type TemporaryAbsence,
+  type Transfer,
+  type UserCaseLoad,
+  PrisonerDetails,
 } from 'welcome'
-import { NewArrival } from '../../routes/bookedtoday/arrivals/state'
+import type { NewArrival } from '../../routes/bookedtoday/arrivals/state'
+import type { User } from '../hmppsAuthClient'
 
 export const createArrival = ({
   id = '1111-1111-1111-1111',
@@ -20,6 +24,7 @@ export const createArrival = ({
   pncNumber = '01/98644M',
   date = '2021-10-13',
   fromLocation = 'Reading Court',
+  fromLocationId = 'REDCC',
   fromLocationType = 'COURT',
   isCurrentPrisoner = true,
   potentialMatches = [createPotentialMatch()],
@@ -32,9 +37,26 @@ export const createArrival = ({
   pncNumber,
   date,
   fromLocation,
+  fromLocationId,
   fromLocationType,
   isCurrentPrisoner,
   potentialMatches,
+})
+
+export const createPrisonerDetails = ({
+  firstName = 'Jim',
+  lastName = 'Smith',
+  dateOfBirth = '1973-01-08',
+  prisonNumber = 'A1234AB',
+  pncNumber = '01/98644M',
+  sex = SexKeys.MALE,
+} = {}): PrisonerDetails => ({
+  firstName,
+  lastName,
+  dateOfBirth,
+  prisonNumber,
+  pncNumber,
+  sex,
 })
 
 export const createTemporaryAbsence = ({
@@ -103,6 +125,10 @@ export const createImprisonmentStatuses = (): ImprisonmentStatus[] => [
     ],
   },
 ]
+
+export const statusWithSingleReason = createImprisonmentStatuses().find(s => s.code === 'on-remand')
+export const statusWithManyReasons = createImprisonmentStatuses().find(s => s.code === 'determinate-sentence')
+
 export const createMatchCriteria = (): PotentialMatchCriteria => ({
   firstName: 'James',
   lastName: 'Charles',
@@ -145,3 +171,15 @@ export const createNewArrival = ({
   prisonNumber,
   expected,
 })
+
+export const createPrison = ({ description = 'Moorland (HMP & YOI)' } = {}): Prison => ({ description })
+
+export const createUserCaseLoad = ({
+  caseLoadId = 'MDI',
+  description = 'Moorland (HMP & YOI)',
+} = {}): UserCaseLoad => ({
+  caseLoadId,
+  description,
+})
+
+export const createUser = ({ name = 'John Smith', activeCaseLoadId = 'MDI' } = {}): User => ({ name, activeCaseLoadId })
