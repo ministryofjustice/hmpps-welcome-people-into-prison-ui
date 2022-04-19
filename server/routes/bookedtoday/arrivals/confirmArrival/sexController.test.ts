@@ -6,17 +6,13 @@ import { appWithAllRoutes, flashProvider, stubCookie } from '../../../__testutil
 import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
 import Role from '../../../../authentication/role'
 import { State } from '../state'
+import { createNewArrival } from '../../../../data/__testutils/testObjects'
 
 let app: Express
+const newArrival = createNewArrival()
 
 beforeEach(() => {
-  stubCookie(State.newArrival, {
-    firstName: 'Jim',
-    lastName: 'Smith',
-    dateOfBirth: '1973-01-08',
-    sex: 'M',
-    expected: true,
-  })
+  stubCookie(State.newArrival, newArrival)
   app = appWithAllRoutes({
     roles: [Role.PRISON_RECEPTION],
   })
@@ -36,13 +32,7 @@ describe('/sex', () => {
     it.each([{ sex: 'blas' as SexKeys }, { sex: undefined }, { sex: SexKeys.TRANS }])(
       'should render /sex page when new-arrival sex is not MALE or FEMALE',
       ({ sex }) => {
-        stubCookie(State.newArrival, {
-          firstName: 'Jim',
-          lastName: 'Smith',
-          dateOfBirth: '1973-01-08',
-          sex,
-          expected: true,
-        })
+        stubCookie(State.newArrival, { ...newArrival, sex })
         return request(app)
           .get('/prisoners/12345-67890/sex')
           .expect(200)
@@ -57,35 +47,17 @@ describe('/sex', () => {
     it.each([{ sex: SexKeys.MALE }, { sex: 'M' }, { sex: SexKeys.FEMALE }, { sex: 'F' }])(
       'should render /imprisonment-status page when Arrival sex is MALE or FEMALE',
       ({ sex }) => {
-        stubCookie(State.newArrival, {
-          firstName: 'Jim',
-          lastName: 'Smith',
-          dateOfBirth: '1973-01-08',
-          sex,
-          expected: true,
-        })
+        stubCookie(State.newArrival, { ...newArrival, sex })
         return request(app)
           .get('/prisoners/12345-67890/sex')
           .expect(302)
           .expect('Content-Type', 'text/plain; charset=utf-8')
-          .expect(res => {
-            const $ = cheerio.load(res.text)
-            expect(res.text).toContain('Found. Redirecting to /prisoners/12345-67890/imprisonment-status')
-            expect($('.govuk-inset-text').text()).not.toContain(
-              'was identified as transgender on their Person Escort Record. Their registered sex at birth is required to confirm their arrival into this establishment.'
-            )
-          })
+          .expect('Location', '/prisoners/12345-67890/imprisonment-status')
       }
     )
 
     it('contains additional hint for TRANS response', () => {
-      stubCookie(State.newArrival, {
-        firstName: 'Jim',
-        lastName: 'Smith',
-        dateOfBirth: '1973-01-08',
-        sex: SexKeys.TRANS,
-        expected: true,
-      })
+      stubCookie(State.newArrival, { ...newArrival, sex: SexKeys.TRANS })
       return request(app)
         .get('/prisoners/12345-67890/sex')
         .expect(200)
@@ -99,7 +71,7 @@ describe('/sex', () => {
     })
   })
 
-  describe('assignSex()', () => {
+  describe('POST /sex', () => {
     it('should redirect to authentication error page for non reception users', () => {
       app = appWithAllRoutes({ roles: [] })
       return request(app).get('/prisoners/12345-67890/sex').expect(302).expect('Location', '/autherror')
@@ -122,13 +94,7 @@ describe('/sex', () => {
         .send({ sex: 'M' })
         .expect(302)
         .expect(res => {
-          expectSettingCookie(res, State.newArrival).toStrictEqual({
-            firstName: 'Jim',
-            lastName: 'Smith',
-            dateOfBirth: '1973-01-08',
-            sex: 'M',
-            expected: 'true',
-          })
+          expectSettingCookie(res, State.newArrival).toStrictEqual({ ...newArrival, sex: 'M', expected: 'true' })
         })
     })
 

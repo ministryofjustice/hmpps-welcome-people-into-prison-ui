@@ -10,6 +10,7 @@ import {
   type TemporaryAbsence,
   type Transfer,
   type UserCaseLoad,
+  PrisonerDetails,
 } from 'welcome'
 import type { NewArrival } from '../../routes/bookedtoday/arrivals/state'
 import type { User } from '../hmppsAuthClient'
@@ -23,6 +24,7 @@ export const createArrival = ({
   pncNumber = '01/98644M',
   date = '2021-10-13',
   fromLocation = 'Reading Court',
+  fromLocationId = 'REDCC',
   fromLocationType = 'COURT',
   isCurrentPrisoner = true,
   potentialMatches = [createPotentialMatch()],
@@ -35,9 +37,26 @@ export const createArrival = ({
   pncNumber,
   date,
   fromLocation,
+  fromLocationId,
   fromLocationType,
   isCurrentPrisoner,
   potentialMatches,
+})
+
+export const createPrisonerDetails = ({
+  firstName = 'Jim',
+  lastName = 'Smith',
+  dateOfBirth = '1973-01-08',
+  prisonNumber = 'A1234AB',
+  pncNumber = '01/98644M',
+  sex = SexKeys.MALE,
+} = {}): PrisonerDetails => ({
+  firstName,
+  lastName,
+  dateOfBirth,
+  prisonNumber,
+  pncNumber,
+  sex,
 })
 
 export const createTemporaryAbsence = ({
@@ -106,6 +125,10 @@ export const createImprisonmentStatuses = (): ImprisonmentStatus[] => [
     ],
   },
 ]
+
+export const statusWithSingleReason = createImprisonmentStatuses().find(s => s.code === 'on-remand')
+export const statusWithManyReasons = createImprisonmentStatuses().find(s => s.code === 'determinate-sentence')
+
 export const createMatchCriteria = (): PotentialMatchCriteria => ({
   firstName: 'James',
   lastName: 'Charles',
