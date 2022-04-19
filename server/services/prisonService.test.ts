@@ -1,6 +1,7 @@
 import PrisonService from './prisonService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import WelcomeClient from '../data/welcomeClient'
+import { createPrison } from '../data/__testutils/testObjects'
 
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/welcomeClient')
@@ -19,12 +20,15 @@ describe('Expected arrivals service', () => {
     WelcomeClientFactory.mockReturnValue(welcomeClient)
     service = new PrisonService(hmppsAuthClient, WelcomeClientFactory)
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
-    welcomeClient.getPrison.mockResolvedValue({
-      description: 'Moorland (HMP & YOI)',
-    })
   })
 
   describe('getPrison', () => {
+    const prison = createPrison()
+
+    beforeEach(() => {
+      welcomeClient.getPrison.mockResolvedValue(prison)
+    })
+
     it('Calls upstream service correctly', async () => {
       await service.getPrison('MDI')
 
@@ -35,9 +39,7 @@ describe('Expected arrivals service', () => {
     it('Should return correct data', async () => {
       const result = await service.getPrison('MDI')
 
-      expect(result).toStrictEqual({
-        description: 'Moorland (HMP & YOI)',
-      })
+      expect(result).toStrictEqual(prison)
     })
   })
 })

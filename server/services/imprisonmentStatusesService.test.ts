@@ -1,7 +1,7 @@
-import { ImprisonmentStatus } from 'welcome'
 import ImprisonmentStatusesService from './imprisonmentStatusesService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import WelcomeClient from '../data/welcomeClient'
+import { createImprisonmentStatuses } from '../data/__testutils/testObjects'
 
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/welcomeClient')
@@ -15,33 +15,7 @@ describe('Imprisonment statuses service', () => {
 
   const WelcomeClientFactory = jest.fn()
 
-  const imprisonmentStatuses: ImprisonmentStatus[] = [
-    {
-      code: 'on-remand',
-      description: 'On remand',
-      imprisonmentStatusCode: 'RX',
-      movementReasons: [{ movementReasonCode: 'R' }],
-    },
-    {
-      code: 'convicted-unsentenced',
-      description: 'Convicted - waiting to be sentenced',
-      imprisonmentStatusCode: 'JR',
-      movementReasons: [{ movementReasonCode: 'V' }],
-    },
-    {
-      code: 'determinate-sentence',
-      description: 'Sentenced - fixed length of time',
-      imprisonmentStatusCode: 'SENT',
-      secondLevelTitle: 'What is the type of fixed sentence?',
-      secondLevelValidationMessage: 'Select the type of fixed-length sentence',
-      movementReasons: [
-        { description: 'Imprisonment without option of a fine', movementReasonCode: 'I' },
-        { description: 'Extended sentence for public protection', movementReasonCode: '26' },
-        { description: 'Intermittent custodial sentence', movementReasonCode: 'INTER' },
-        { description: 'Partly suspended sentence', movementReasonCode: 'P' },
-      ],
-    },
-  ]
+  const imprisonmentStatuses = createImprisonmentStatuses()
 
   beforeEach(() => {
     jest.resetAllMocks()
@@ -77,35 +51,9 @@ describe('Imprisonment statuses service', () => {
       })
 
       it('should return imprisonment status with single movement reason', async () => {
-        const imprisonmentStatus = {
-          code: 'convicted-unsentenced',
-          description: 'Convicted - waiting to be sentenced',
-          imprisonmentStatusCode: 'JR',
-          movementReasons: [{ movementReasonCode: 'V' }],
-        }
+        const imprisonmentStatus = imprisonmentStatuses.find(s => s.code === 'convicted-unsentenced')
 
         const result = await service.getImprisonmentStatus('convicted-unsentenced')
-
-        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-        expect(welcomeClient.getImprisonmentStatuses).toBeCalled()
-        expect(result).toStrictEqual(imprisonmentStatus)
-      })
-
-      it('should return imprisonment status with multiple movement reasons', async () => {
-        const imprisonmentStatus = {
-          code: 'determinate-sentence',
-          description: 'Sentenced - fixed length of time',
-          imprisonmentStatusCode: 'SENT',
-          secondLevelTitle: 'What is the type of fixed sentence?',
-          secondLevelValidationMessage: 'Select the type of fixed-length sentence',
-          movementReasons: [
-            { description: 'Imprisonment without option of a fine', movementReasonCode: 'I' },
-            { description: 'Extended sentence for public protection', movementReasonCode: '26' },
-            { description: 'Intermittent custodial sentence', movementReasonCode: 'INTER' },
-            { description: 'Partly suspended sentence', movementReasonCode: 'P' },
-          ],
-        }
-        const result = await service.getImprisonmentStatus('determinate-sentence')
 
         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
         expect(welcomeClient.getImprisonmentStatuses).toBeCalled()
