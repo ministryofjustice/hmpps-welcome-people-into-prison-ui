@@ -1,7 +1,7 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
-import { appWithAllRoutes, flashProvider } from '../../../__testutils/appSetup'
+import { appWithAllRoutes, flashProvider, stubCookie } from '../../../__testutils/appSetup'
 import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
 import ImprisonmentStatusesService from '../../../../services/imprisonmentStatusesService'
 import { State } from '../state'
@@ -25,6 +25,7 @@ const newArrival = createNewArrival()
 const imprisonmentStatuses = createImprisonmentStatuses()
 
 beforeEach(() => {
+  stubCookie(State.newArrival, newArrival)
   app = appWithAllRoutes({ services: { imprisonmentStatusesService }, roles: [Role.PRISON_RECEPTION] })
   imprisonmentStatusesService.getAllImprisonmentStatuses.mockResolvedValue(imprisonmentStatuses)
 })
