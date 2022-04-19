@@ -11,7 +11,12 @@ export default class CheckCourtReturnController {
     return async (req, res) => {
       const { id } = req.params
       const data = await this.expectedArrivalsService.getPrisonerDetailsForArrival(id)
-      return res.render('pages/bookedtoday/arrivals/courtreturns/checkCourtReturn.njk', { data, id })
+      const prisonerEscortRecord = await this.expectedArrivalsService.getArrival(id)
+      return res.render('pages/bookedtoday/arrivals/courtreturns/checkCourtReturn.njk', {
+        data,
+        id,
+        prisonerEscortRecord,
+      })
     }
   }
 

@@ -1,0 +1,24 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "./prisoner-summary-detail.njk" import prisonerSummaryDetail %}
+
+{% macro prisonerSplitView(prisonerEscortRecord, prisonRecord, personDetailsHeaderText='Details from Person Escort Record') %}
+    <div class="govuk-grid-row govuk-!-padding-left-3 govuk-!-margin-top-4 govuk-!-margin-bottom-8 flex">
+        <div class="column-width-40 govuk-!-padding-right-9">
+            <h2 class="govuk-heading-m">{{ personDetailsHeaderText }}</h2>
+            <div class="prisoner-record-detail prisoner-head">
+                {{ prisonerSummaryDetail(prisonerEscortRecord, "per-record" ) }}
+            </div>
+        </div>
+        <div class="border-left-grey govuk-!-padding-left-9 column-width-60">
+            <h2 class="govuk-heading-m">Details from existing prisoner record</h2>
+            <div class="prisoner-record-detail flex">
+                {{ prisonerSummaryDetail(prisonRecord, "existing-record") }}
+                <img src="{{ '/prisoners/' + prisonRecord.prisonNumber + '/image' if prisonRecord.prisonNumber else '/assets/images/placeholder-image.png' }}"
+                     class="prisoner-image-transfer govuk-!-margin-top-2"
+                     alt="{{ prisonRecord.lastName }}, {{ prisonRecord.firstName }}"
+                     data-qa="prisoner-image"
+                />
+            </div>
+        </div>
+    </div>
+{% endmacro %}
