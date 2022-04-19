@@ -30,19 +30,9 @@ context('Confirm temporary absence added To roll', () => {
     checkTemporaryAbsencePage.addToRoll().click()
 
     const confirmTemporaryAbsenceAddedToRollPage = Page.verifyOnPage(ConfirmTemporaryAbsenceAddedToRollPage)
-    confirmTemporaryAbsenceAddedToRollPage
-      .viewEstablishmentRoll()
-      .should('contain', 'View establishment roll')
-      .should('have.attr', 'href')
-      .then(href => {
-        expect(href).to.equal('https://digital-dev.prison.service.justice.gov.uk/establishment-roll')
-      })
-    confirmTemporaryAbsenceAddedToRollPage
-      .backToDigitalPrisonServices()
-      .should('contain', 'Back to Digital Prison Services')
-      .should('have.attr', 'href')
-      .then(href => {
-        expect(href).to.equal('https://digital-dev.prison.service.justice.gov.uk')
-      })
+
+    confirmTemporaryAbsenceAddedToRollPage.addCaseNote(temporaryAbsences[0].prisonNumber).exists()
+    confirmTemporaryAbsenceAddedToRollPage.viewEstablishmentRoll().exists()
+    confirmTemporaryAbsenceAddedToRollPage.backToDigitalPrisonServices().exists()
   })
 })
