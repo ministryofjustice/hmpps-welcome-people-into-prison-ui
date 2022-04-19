@@ -62,7 +62,7 @@ context('Multiple existing records', () => {
     changePrisonNumberPage.save().click()
     searchForExistingPage.pnc.change().click()
     const changePncNumberPage = Page.verifyOnPage(ChangePncNumberPage)
-    changePncNumberPage.pnc().clear().type('01/123456')
+    changePncNumberPage.pnc().clear().type('01/23456A')
     changePncNumberPage.save().click()
     searchForExistingPage.search().click()
 
@@ -71,7 +71,7 @@ context('Multiple existing records', () => {
     arrival.fieldName('prisoner-name').should('contain', 'Bob Smith')
     arrival.fieldName('dob').should('contain', '21 November 1972')
     arrival.fieldName('prison-number').should('contain', 'A1234AA')
-    arrival.fieldName('pnc-number').should('contain', '01/123456')
+    arrival.fieldName('pnc-number').should('contain', '01/23456A')
 
     let match
     match = multipleExistingRecordsFoundPage.chooseMatch(1)
