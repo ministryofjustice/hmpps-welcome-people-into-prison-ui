@@ -4,37 +4,40 @@
 
 {% block content %}
     <div class="govuk-width-container">
-        <main class="govuk-main-wrapper">
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-two-thirds">
-                    {{ govukPanel({
-                        titleText: firstName + " " + lastName + " " + "has returned to " + prison.description,
-                        html: "Prison number<br><strong>" + prisonNumber | escape + "</strong>",
-                        attributes: {
-                        'data-qa': 'confirmation-banner'
-                        } 
-                    }) }}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                {{ govukPanel({
+                    titleText: firstName + " " + lastName + " " + "has returned to " + prison.description,
+                    html: "Prison number<br><strong>" + prisonNumber | escape + "</strong>",
+                    attributes: {
+                    'data-qa': 'confirmation-banner'
+                    } 
+                }) }}
 
-                    <p data-qa="confirmation-paragraph">{{ firstName}} {{ lastName }} is on the establishment roll.</p>
-                    
-                    <p data-qa="location-paragraph">Their location is {{ location }}.</p>
+                <p data-qa="confirmation-paragraph">{{ firstName}} {{ lastName }} is on the establishment roll.</p>
+                
+                <p data-qa="location-paragraph">Their location is {{ location }}.</p>
 
-                    {{ govukButton({
-                        text: "View establishment roll",
-                        href: dpsUrl + "/establishment-roll",
-                        attributes: {
-                            'data-qa': 'view-establishment-roll',
-                            'target': '_blank'
-                        } 
-                    }) }}
-                    
-                    <p>
-                        <a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ dpsUrl }}" data-qa="back-to-dps">
-                            Back to Digital Prison Services
-                        </a>
-                    </p>
-                </div>
+                <h2 class="govuk-heading-m">Add more information about this person</h2>
+                        <p>
+                            <a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ dpsUrl }}/prisoner/{{prisonNumber}}/add-case-note" data-qa="add-case-note">
+                                Add a case note to their profile
+                            </a>
+                        </p>
+
+                <h2 class="govuk-heading-m">Manage people coming into this establishment</h2>
+                        <p>
+                            <a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ dpsUrl }}/establishment-roll" data-qa="view-establishment-roll" target="_blank">
+                                View establishment roll
+                            </a>
+                        </p>
+
+                <p class="govuk-!-margin-top-9">
+                    <a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ dpsUrl }}" data-qa="back-to-dps">
+                        Back to Digital Prison Services
+                    </a>
+                </p>
             </div>
-        </main>
+        </div>
     </div>
 {% endblock %}
