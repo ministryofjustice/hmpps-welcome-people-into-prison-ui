@@ -5,6 +5,15 @@ export default class ConfirmCourtReturnAddedToRollPage extends Page {
     super('has returned to Moorland (HMP & YOI)', { hasBackLink: false })
   }
 
+  addCaseNote = (prisonNumber: string) => ({
+    exists: () =>
+      Page.checkLink(
+        cy.get(`[data-qa=add-case-note]`),
+        'Add a case note to their profile',
+        `https://digital-dev.prison.service.justice.gov.uk/prisoner/${prisonNumber}/add-case-note`
+      ),
+  })
+
   addAnotherToRoll = (): PageElement => cy.get(`[data-qa=add-another-to-roll]`)
 
   viewEstablishmentRoll = () => ({
