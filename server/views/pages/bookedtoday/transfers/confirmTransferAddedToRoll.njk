@@ -4,47 +4,46 @@
 
 {% block content %}
     <div class="govuk-width-container">
-        <main class="govuk-main-wrapper">
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-two-thirds">
-                    {{ govukPanel({
-                        titleText: firstName + " " + lastName + " " + "has been added to the establishment roll",
-                        html: "Prison number<br><strong>" + prisonNumber | escape + "</strong>",
-                        attributes: {
-                        'data-qa': 'confirmation-banner'
-                        } 
-                    }) }}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                {{ govukPanel({
+                    titleText: firstName + " " + lastName + " " + "has been added to the establishment roll",
+                    html: "Prison number<br><strong>" + prisonNumber | escape + "</strong>",
+                    attributes: {
+                    'data-qa': 'confirmation-banner'
+                    } 
+                }) }}
 
-                    <p data-qa="confirmation-paragraph">{{ firstName}} {{ lastName }} is now part of the {{ prison.description }} establishment roll.</p>
+                <p data-qa="confirmation-paragraph">{{ firstName}} {{ lastName }} is now part of the {{ prison.description }} establishment roll.</p>
 
-                    <p data-qa="location-paragraph">Their location is {{ location }}.</p>
+                <p data-qa="location-paragraph">Their location is {{ location }}.</p>
 
-                    <div class="govuk-button-group">
-                        {{ govukButton({
-                            text: "Add another prisoner to the roll",
-                            href: '/confirm-arrival/choose-prisoner',
-                            attributes: {
-                                'data-qa': 'add-another-to-roll'
-                            } 
-                        }) }}
-
-                        {{ govukButton({
-                            text: "View establishment roll",
-                            href: dpsUrl + "/establishment-roll",
-                            classes: "govuk-button--secondary",
-                            attributes: {
-                                'data-qa': 'view-establishment-roll',
-                                'target': '_blank'
-                            }
-                        }) }}
-                    </div>
+                <h2 class="govuk-heading-m">Add more information about this person</h2>
                     <p>
-                        <a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ dpsUrl }}" data-qa="back-to-dps">
-                            Back to Digital Prison Services
+                        <a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ dpsUrl }}/prisoner/{{prisonNumber}}/add-case-note" data-qa="add-case-note">
+                            Add a case note to their profile
                         </a>
                     </p>
-                </div>
+
+                <h2 class="govuk-heading-m">Manage people coming into this establishment</h2>
+                    <p>
+                        <a class="govuk-body govuk-link govuk-link--no-visited-state" href="/confirm-arrival/choose-prisoner" data-qa="add-another-to-roll">
+                            Add another prisoner to the establishment roll
+                        </a>
+                    </p>
+
+                    <p>
+                        <a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ dpsUrl }}/establishment-roll" data-qa="view-establishment-roll" target="_blank">
+                            View establishment roll
+                        </a>
+                    </p>
+
+                <p class="govuk-!-margin-top-9">
+                    <a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ dpsUrl }}" data-qa="back-to-dps">
+                        Back to Digital Prison Services
+                    </a>
+                </p>
             </div>
-        </main>
+        </div>
     </div>
 {% endblock %}
