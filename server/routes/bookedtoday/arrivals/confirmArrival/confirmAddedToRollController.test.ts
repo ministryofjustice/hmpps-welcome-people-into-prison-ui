@@ -6,6 +6,7 @@ import PrisonService from '../../../../services/prisonService'
 import Role from '../../../../authentication/role'
 import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
 import { State } from '../state'
+import { createPrison } from '../../../../data/__testutils/testObjects'
 
 jest.mock('../../../../services/expectedArrivalsService')
 jest.mock('../../../../services/prisonService')
@@ -18,9 +19,7 @@ beforeEach(() => {
     services: { prisonService },
     roles: [Role.PRISON_RECEPTION],
   })
-  prisonService.getPrison.mockResolvedValue({
-    description: 'Moorland (HMP & YOI)',
-  })
+  prisonService.getPrison.mockResolvedValue(createPrison())
 })
 
 afterEach(() => {
