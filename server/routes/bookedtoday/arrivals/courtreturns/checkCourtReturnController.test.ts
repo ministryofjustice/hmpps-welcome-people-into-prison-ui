@@ -1,7 +1,6 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
-import moment from 'moment'
 import { appWithAllRoutes, flashProvider } from '../../../__testutils/appSetup'
 import { ExpectedArrivalsService, RaiseAnalyticsEvent } from '../../../../services'
 import Role from '../../../../authentication/role'
@@ -53,20 +52,6 @@ describe('checkCourtReturnController', () => {
         .expect(res => {
           const $ = cheerio.load(res.text)
           expect($('h1').text()).toContain('This person is returning from court')
-          expect($('.data-qa-per-record-prisoner-name').text()).toContain(`${arrival.firstName} ${arrival.lastName}`)
-          expect($('.data-qa-per-record-dob').text()).toContain(
-            moment(arrival.dateOfBirth, 'YYYY-MM-DD').format('D MMMM YYYY')
-          )
-          expect($('.data-qa-per-record-prison-number').text()).toContain(arrival.prisonNumber)
-          expect($('.data-qa-per-record-pnc-number').text()).toContain(arrival.pncNumber)
-          expect($('.data-qa-existing-record-prisoner-name').text()).toContain(
-            `${arrival.firstName} ${arrival.lastName}`
-          )
-          expect($('.data-qa-existing-record-dob').text()).toContain(
-            moment(arrival.dateOfBirth, 'YYYY-MM-DD').format('D MMMM YYYY')
-          )
-          expect($('.data-qa-existing-record-prison-number').text()).toContain(arrival.prisonNumber)
-          expect($('.data-qa-existing-record-pnc-number').text()).toContain(arrival.pncNumber)
         })
     })
   })

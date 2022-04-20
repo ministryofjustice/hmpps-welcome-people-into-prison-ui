@@ -37,16 +37,18 @@ context('Is Single Match', () => {
       expectedArrival.id,
       SingleMatchingRecordFoundPage
     )
-    singleMatchingRecordFoundPage.perName().should('contain.text', 'Bob Smith')
-    singleMatchingRecordFoundPage.perDob().should('contain.text', '1 January 1970')
-    singleMatchingRecordFoundPage.perPrisonNumber().should('contain.text', 'G0015GF')
-    singleMatchingRecordFoundPage.perPncNumber().should('contain.text', '01/2345A')
+
+    const { prisonerSplitView } = singleMatchingRecordFoundPage
+    prisonerSplitView.perName().should('contain.text', 'Bob Smith')
+    prisonerSplitView.perDob().should('contain.text', '1 January 1970')
+    prisonerSplitView.perPrisonNumber().should('contain.text', 'G0015GF')
+    prisonerSplitView.perPncNumber().should('contain.text', '01/2345A')
     singleMatchingRecordFoundPage.continue().should('have.attr', 'href', `/prisoners/${expectedArrival.id}/sex`)
 
-    singleMatchingRecordFoundPage.existingName().should('contain.text', 'Sam Smith')
-    singleMatchingRecordFoundPage.existingDob().should('contain.text', '1 February 1970')
-    singleMatchingRecordFoundPage.existingPrisonNumber().should('contain.text', 'A1234BC')
-    singleMatchingRecordFoundPage.existingPncNumber().should('contain.text', '01/4567A')
+    prisonerSplitView.existingName().should('contain.text', 'Sam Smith')
+    prisonerSplitView.existingDob().should('contain.text', '1 February 1970')
+    prisonerSplitView.existingPrisonNumber().should('contain.text', 'A1234BC')
+    prisonerSplitView.existingPncNumber().should('contain.text', '01/4567A')
     singleMatchingRecordFoundPage.continue().click()
 
     const imprisonmentStatusPage = Page.verifyOnPage(ImprisonmentStatusPage)

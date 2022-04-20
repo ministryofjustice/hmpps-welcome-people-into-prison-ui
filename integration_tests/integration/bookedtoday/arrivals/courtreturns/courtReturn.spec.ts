@@ -6,6 +6,7 @@ import ConfirmCourtReturnAddedToRollPage from '../../../../pages/bookedtoday/arr
 import CheckCourtReturnPage from '../../../../pages/bookedtoday/arrivals/courtreturns/checkCourtReturn'
 
 const expectedArrival = expectedArrivals.court.current
+const prisonerMatch = expectedArrival.potentialMatches[0]
 
 context('Confirm court return added To roll', () => {
   beforeEach(() => {
@@ -33,11 +34,22 @@ context('Confirm court return added To roll', () => {
   it('Can confirm court arrivals', () => {
     const checkCourtReturnPage = ChoosePrisonerPage.selectPrisoner(expectedArrival.id, CheckCourtReturnPage)
 
+    const { prisonerSplitView } = checkCourtReturnPage
+    prisonerSplitView.perName().should('contain.text', `${expectedArrival.firstName} ${expectedArrival.lastName}`)
+    prisonerSplitView.perDob().should('contain.text', '1 January 1971')
+    prisonerSplitView.perPrisonNumber().should('contain.text', expectedArrival.prisonNumber)
+    prisonerSplitView.perPncNumber().should('contain.text', expectedArrival.pncNumber)
+
+    prisonerSplitView.existingName().should('contain.text', `${prisonerMatch.firstName} ${prisonerMatch.lastName}`)
+    prisonerSplitView.existingDob().should('contain.text', '1 February 1970')
+    prisonerSplitView.existingPrisonNumber().should('contain.text', prisonerMatch.prisonNumber)
+    prisonerSplitView.existingPncNumber().should('contain.text', prisonerMatch.pncNumber)
+
     checkCourtReturnPage.addToRoll().click()
 
     const confirmCourtReturnAddedToRollPage = Page.verifyOnPage(ConfirmCourtReturnAddedToRollPage)
 
-    confirmCourtReturnAddedToRollPage.addCaseNote(expectedArrival.potentialMatches[0].prisonNumber).exists()
+    confirmCourtReturnAddedToRollPage.addCaseNote(prisonerMatch.prisonNumber).exists()
     confirmCourtReturnAddedToRollPage.viewEstablishmentRoll().exists()
     confirmCourtReturnAddedToRollPage.backToDigitalPrisonServices().exists()
     confirmCourtReturnAddedToRollPage.addAnotherToRoll().click()

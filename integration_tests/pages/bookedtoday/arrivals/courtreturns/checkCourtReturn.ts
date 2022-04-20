@@ -1,8 +1,12 @@
 import Page, { PageElement } from '../../../page'
+import PrisonerSplitViewComponent from '../../../../components/prisonerSplitView'
 
 export default class CheckCourtReturnPage extends Page {
+  prisonerSplitView: PrisonerSplitViewComponent
+
   constructor() {
     super('This person is returning from court')
+    this.prisonerSplitView = new PrisonerSplitViewComponent()
   }
 
   static goTo(id: string): CheckCourtReturnPage {
