@@ -1,7 +1,7 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "./prisoner-summary-detail.njk" import prisonerSummaryDetail %}
 
-{% macro prisonerSplitView(prisonerEscortRecord, prisonRecord, personDetailsHeaderText='Details from Person Escort Record') %}
+{% macro prisonerSplitView(prisonerEscortRecord, prisonRecord, personDetailsHeaderText) %}
     <div class="govuk-grid-row govuk-!-padding-left-3 govuk-!-margin-top-4 govuk-!-margin-bottom-8 flex">
         <div class="column-width-40 govuk-!-padding-right-9">
             <h2 class="govuk-heading-m">{{ personDetailsHeaderText }}</h2>
