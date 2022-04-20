@@ -11,6 +11,7 @@ import {
   statusWithManyReasons,
   statusWithSingleReason,
 } from '../../../../data/__testutils/testObjects'
+import Role from '../../../../authentication/role'
 
 jest.mock('../../../../services/imprisonmentStatusesService')
 
@@ -25,7 +26,7 @@ const imprisonmentStatuses = createImprisonmentStatuses()
 
 beforeEach(() => {
   stubCookie(State.newArrival, newArrival)
-  app = appWithAllRoutes({ services: { imprisonmentStatusesService } })
+  app = appWithAllRoutes({ services: { imprisonmentStatusesService }, roles: [Role.PRISON_RECEPTION] })
   imprisonmentStatusesService.getAllImprisonmentStatuses.mockResolvedValue(imprisonmentStatuses)
 })
 

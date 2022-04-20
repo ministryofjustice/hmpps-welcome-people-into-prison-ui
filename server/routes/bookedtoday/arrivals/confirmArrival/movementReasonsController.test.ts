@@ -6,6 +6,7 @@ import ImprisonmentStatusesService from '../../../../services/imprisonmentStatus
 import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
 import { State } from '../state'
 import { createNewArrival, statusWithManyReasons } from '../../../../data/__testutils/testObjects'
+import Role from '../../../../authentication/role'
 
 jest.mock('../../../../services/imprisonmentStatusesService')
 
@@ -22,7 +23,7 @@ const newArrival = createNewArrival()
 beforeEach(() => {
   stubCookie(State.newArrival, newArrival)
 
-  app = appWithAllRoutes({ services: { imprisonmentStatusesService } })
+  app = appWithAllRoutes({ services: { imprisonmentStatusesService }, roles: [Role.PRISON_RECEPTION] })
   imprisonmentStatusesService.getImprisonmentStatus.mockResolvedValue(imprisonmentStatus)
 })
 

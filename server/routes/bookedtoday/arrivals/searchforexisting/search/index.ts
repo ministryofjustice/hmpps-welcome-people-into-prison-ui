@@ -1,11 +1,9 @@
-import express, { RequestHandler, Router } from 'express'
-import SearchForExistingRecordController from './searchForExistingRecordController'
+import type { Router } from 'express'
+import type { Services } from '../../../../../services'
 
-import authorisationForUrlMiddleware from '../../../../../middleware/authorisationForUrlMiddleware'
-import asyncMiddleware from '../../../../../middleware/asyncMiddleware'
+import SearchForExistingRecordController from './searchForExistingRecordController'
 import validationMiddleware from '../../../../../middleware/validationMiddleware'
 
-import type { Services } from '../../../../../services'
 import Role from '../../../../../authentication/role'
 import ChangeNameController from './changeNameController'
 import ChangeDateOfBirthController from './changeDateOfBirthController'
@@ -14,74 +12,113 @@ import ChangePncNumberController from './changePncNumberController'
 import NameValidator from '../../validation/nameValidation'
 import DateOfBirthValidator from '../../validation/dateOfBirthValidation'
 import PrisonNumberValidator from '../../validation/prisonNumberValidation'
-import redirectIfDisabledMiddleware from '../../../../../middleware/redirectIfDisabledMiddleware'
-import config from '../../../../../config'
 import { State } from '../../state'
 import PncNumberValidator from '../../../validation/pncNumberValidation'
+import Routes from '../../../../../utils/routeBuilder'
+import config from '../../../../../config'
+import redirectIfDisabledMiddleware from '../../../../../middleware/redirectIfDisabledMiddleware'
 
 export default function routes(services: Services): Router {
-  const router = express.Router()
-
   const checkSearchDetailsPresent = State.searchDetails.ensurePresent('/')
 
-  const get = (path: string, handlers: RequestHandler[]) =>
-    router.get(
-      `/prisoners/:id/search-for-existing-record${path}`,
-      authorisationForUrlMiddleware([Role.PRISON_RECEPTION]),
-      [
-        redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
-        ...handlers.map(handler => asyncMiddleware(handler)),
-      ]
-    )
-
-  const post = (path: string, handlers: RequestHandler[]) =>
-    router.post(
-      `/prisoners/:id/search-for-existing-record${path}`,
-      authorisationForUrlMiddleware([Role.PRISON_RECEPTION]),
-      [
-        redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
-        ...handlers.map(handler => asyncMiddleware(handler)),
-      ]
-    )
-
   const searchForExistingRecordController = new SearchForExistingRecordController(services.expectedArrivalsService)
-  get('', [searchForExistingRecordController.showSearch()])
-  get('/new', [searchForExistingRecordController.newSearch()])
-  post('', [checkSearchDetailsPresent, searchForExistingRecordController.submitSearch()])
 
   const changeNameController = new ChangeNameController()
-  get('/change-name', [checkSearchDetailsPresent, changeNameController.showChangeName()])
-  post('/change-name', [
-    checkSearchDetailsPresent,
-    validationMiddleware(NameValidator),
-    changeNameController.changeName(),
-  ])
 
   const changeDateOfBirthController = new ChangeDateOfBirthController()
-  get('/change-date-of-birth', [checkSearchDetailsPresent, changeDateOfBirthController.showChangeDateOfBirth()])
-  post('/change-date-of-birth', [
-    checkSearchDetailsPresent,
-    validationMiddleware(DateOfBirthValidator),
-    changeDateOfBirthController.changeDateOfBirth(),
-  ])
 
   const changePrisonNumberController = new ChangePrisonNumberController()
-  get('/change-prison-number', [checkSearchDetailsPresent, changePrisonNumberController.showChangePrisonNumber()])
-  post('/change-prison-number', [
-    checkSearchDetailsPresent,
-    validationMiddleware(PrisonNumberValidator),
-    changePrisonNumberController.changePrisonNumber(),
-  ])
-  get('/remove-prison-number', [checkSearchDetailsPresent, changePrisonNumberController.removePrisonNumber()])
 
   const changePncNumberController = new ChangePncNumberController()
-  get('/change-pnc-number', [checkSearchDetailsPresent, changePncNumberController.showChangePncNumber()])
-  post('/change-pnc-number', [
-    checkSearchDetailsPresent,
-    validationMiddleware(PncNumberValidator),
-    changePncNumberController.changePncNumber(),
-  ])
-  get('/remove-pnc-number', [checkSearchDetailsPresent, changePncNumberController.removePncNumber()])
 
-  return router
+  const routePrefix = `/prisoners/:id/search-for-existing-record`
+
+  return Routes.forRole(Role.PRISON_RECEPTION)
+
+    .get(
+      routePrefix,
+      redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
+      searchForExistingRecordController.showSearch()
+    )
+    .get(
+      `${routePrefix}/new`,
+      redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
+      searchForExistingRecordController.newSearch()
+    )
+    .post(
+      `${routePrefix}`,
+      redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
+      checkSearchDetailsPresent,
+      searchForExistingRecordController.submitSearch()
+    )
+
+    .get(
+      `${routePrefix}/change-name`,
+      redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
+      checkSearchDetailsPresent,
+      changeNameController.showChangeName()
+    )
+    .post(
+      `${routePrefix}/change-name`,
+      redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
+      checkSearchDetailsPresent,
+      validationMiddleware(NameValidator),
+      changeNameController.changeName()
+    )
+
+    .get(
+      `${routePrefix}/change-date-of-birth`,
+      redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
+      checkSearchDetailsPresent,
+      changeDateOfBirthController.showChangeDateOfBirth()
+    )
+    .post(
+      `${routePrefix}/change-date-of-birth`,
+      redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
+      checkSearchDetailsPresent,
+      validationMiddleware(DateOfBirthValidator),
+      changeDateOfBirthController.changeDateOfBirth()
+    )
+
+    .get(
+      `${routePrefix}/change-prison-number`,
+      redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
+      checkSearchDetailsPresent,
+      changePrisonNumberController.showChangePrisonNumber()
+    )
+    .post(
+      `${routePrefix}/change-prison-number`,
+      redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
+      checkSearchDetailsPresent,
+      validationMiddleware(PrisonNumberValidator),
+      changePrisonNumberController.changePrisonNumber()
+    )
+    .get(
+      `${routePrefix}/remove-prison-number`,
+      redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
+      checkSearchDetailsPresent,
+      changePrisonNumberController.removePrisonNumber()
+    )
+
+    .get(
+      `${routePrefix}/change-pnc-number`,
+      redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
+      checkSearchDetailsPresent,
+      changePncNumberController.showChangePncNumber()
+    )
+    .post(
+      `${routePrefix}/change-pnc-number`,
+      redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
+      checkSearchDetailsPresent,
+      validationMiddleware(PncNumberValidator),
+      changePncNumberController.changePncNumber()
+    )
+    .get(
+      `${routePrefix}/remove-pnc-number`,
+      redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
+      checkSearchDetailsPresent,
+      changePncNumberController.removePncNumber()
+    )
+
+    .build()
 }
