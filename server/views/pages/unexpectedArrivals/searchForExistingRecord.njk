@@ -20,6 +20,8 @@
                     <p>If no existing prisoner record is found, you can create a new record for the prisoner.</p>
                 </div>
 
+                <p>Your search must include at least the person's last name and date of birth or a prison number or PNC number.</p>
+
                 <form method="post">
                     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
                         {% call govukFieldset({ legend: {} }) %}
@@ -79,8 +81,6 @@
                         {% endcall %}
 
                         {% set otherSearchDetails %}
-                            <p class="govuk-hint">Your search must include either a name, prison number or PNC number</p>
-                            
                             {{ govukInput({
                                 label: { text: 'Prison number' },
                                 hint: {text: "Enter in the format 'A1234AA'."},
