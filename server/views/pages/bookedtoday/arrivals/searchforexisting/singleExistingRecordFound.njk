@@ -3,33 +3,31 @@
 
 {% block content %}
     <div class="govuk-width-container">
-        <main class="govuk-main-wrapper">
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-two-thirds">
-                    <span class="govuk-caption-xl"> Confirm a prisoner's arrival </span>
-                    <h1 class="govuk-heading-l govuk-!-margin-bottom-7">This person has an existing prisoner record</h1>
-                    <p> {{ arrival.firstName }} {{ arrival.lastName }} will be booked into the establishment using their
-                        existing prisoner record.</p>
-                </div>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <span class="govuk-caption-xl"> Confirm a prisoner's arrival </span>
+                <h1 class="govuk-heading-l govuk-!-margin-bottom-7">This person has an existing prisoner record</h1>
+                <p> {{ arrival.firstName }} {{ arrival.lastName }} will be booked into the establishment using their
+                    existing prisoner record.</p>
             </div>
+        </div>
 
-            {{ prisonerSplitView(arrival, data.potentialMatch, 'Personal details') }}
+        {{ prisonerSplitView(arrival, data.potentialMatch, 'Personal details') }}
 
-            <div>
-                {{ govukButton({
-                    classes: "govuk-button govuk-!-margin-bottom-6",
-                    href: "/prisoners/" + data.id + "/sex",
-                    text: "Continue",
-                    attributes: {'data-qa': 'continue'}
-                }) }}
+        <div>
+            {{ govukButton({
+                classes: "govuk-button govuk-!-margin-bottom-6",
+                href: "/prisoners/" + data.id + "/sex",
+                text: "Continue",
+                attributes: {'data-qa': 'continue'}
+            }) }}
 
-                <p>
-                    <a class="govuk-body govuk-link govuk-link--no-visited-state"
-                       href="/confirm-arrival/choose-prisoner" data-qa="choose-prisoner">
-                        Return to list of prisoners arriving today
-                    </a>
-                </p>
-            </div>
-        </main>
+            <p>
+                <a class="govuk-body govuk-link govuk-link--no-visited-state"
+                   href="/confirm-arrival/choose-prisoner" data-qa="choose-prisoner">
+                    Return to list of prisoners arriving today
+                </a>
+            </p>
+        </div>
     </div>
 {% endblock %}
