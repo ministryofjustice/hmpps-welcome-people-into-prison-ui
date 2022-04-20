@@ -6,6 +6,7 @@ import ConfirmCourtReturnAddedToRollPage from '../../../../pages/bookedtoday/arr
 import CheckCourtReturnPage from '../../../../pages/bookedtoday/arrivals/courtreturns/checkCourtReturn'
 
 const expectedArrival = expectedArrivals.court.current
+const prisonRecordDetails = expectedArrival.potentialMatches[0]
 
 context('Confirm court return added To roll', () => {
   beforeEach(() => {
@@ -33,11 +34,13 @@ context('Confirm court return added To roll', () => {
   it('Can confirm court arrivals', () => {
     const checkCourtReturnPage = ChoosePrisonerPage.selectPrisoner(expectedArrival.id, CheckCourtReturnPage)
 
+    checkCourtReturnPage.prisonerSplitView.contains(expectedArrival, prisonRecordDetails)
+
     checkCourtReturnPage.addToRoll().click()
 
     const confirmCourtReturnAddedToRollPage = Page.verifyOnPage(ConfirmCourtReturnAddedToRollPage)
 
-    confirmCourtReturnAddedToRollPage.addCaseNote(expectedArrival.potentialMatches[0].prisonNumber).exists()
+    confirmCourtReturnAddedToRollPage.addCaseNote(prisonRecordDetails.prisonNumber).exists()
     confirmCourtReturnAddedToRollPage.viewEstablishmentRoll().exists()
     confirmCourtReturnAddedToRollPage.backToDigitalPrisonServices().exists()
     confirmCourtReturnAddedToRollPage.addAnotherToRoll().click()

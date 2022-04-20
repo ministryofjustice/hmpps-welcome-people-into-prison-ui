@@ -15,6 +15,7 @@ const expectedArrival = expectedArrivals.arrival({
   gender: null,
   potentialMatches: [expectedArrivals.potentialMatch],
 })
+const prisonRecordDetails = expectedArrival.potentialMatches[0]
 
 context('Is Single Match', () => {
   beforeEach(() => {
@@ -37,16 +38,10 @@ context('Is Single Match', () => {
       expectedArrival.id,
       SingleMatchingRecordFoundPage
     )
-    singleMatchingRecordFoundPage.perName().should('contain.text', 'Bob Smith')
-    singleMatchingRecordFoundPage.perDob().should('contain.text', '1 January 1970')
-    singleMatchingRecordFoundPage.perPrisonNumber().should('contain.text', 'G0015GF')
-    singleMatchingRecordFoundPage.perPncNumber().should('contain.text', '01/2345A')
-    singleMatchingRecordFoundPage.continue().should('have.attr', 'href', `/prisoners/${expectedArrival.id}/sex`)
 
-    singleMatchingRecordFoundPage.existingName().should('contain.text', 'Sam Smith')
-    singleMatchingRecordFoundPage.existingDob().should('contain.text', '1 February 1970')
-    singleMatchingRecordFoundPage.existingPrisonNumber().should('contain.text', 'A1234BC')
-    singleMatchingRecordFoundPage.existingPncNumber().should('contain.text', '01/4567A')
+    singleMatchingRecordFoundPage.prisonerSplitView.contains(expectedArrival, prisonRecordDetails)
+
+    singleMatchingRecordFoundPage.continue().should('have.attr', 'href', `/prisoners/${expectedArrival.id}/sex`)
     singleMatchingRecordFoundPage.continue().click()
 
     const imprisonmentStatusPage = Page.verifyOnPage(ImprisonmentStatusPage)
