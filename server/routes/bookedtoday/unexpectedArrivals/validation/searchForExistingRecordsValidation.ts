@@ -9,11 +9,15 @@ const SearchForExistingRecordsValidator: Validator = ({
   prisonNumber,
   pncNumber,
 }: Record<string, string>): ValidationError[] => {
-  if (firstName && !lastName && (!day || !month || !year)) {
+  if (firstName && !lastName && !day && !month && !year) {
     return [{ text: 'Enter a last name and a date of birth', href: '#last-name' }]
   }
 
-  if (!lastName && !prisonNumber && !pncNumber) {
+  if (firstName && !lastName) {
+    return [{ text: 'Enter a last name', href: '#last-name' }]
+  }
+
+  if ((!firstName && !lastName && day && month && year) || (!lastName && !prisonNumber && !pncNumber)) {
     return [
       {
         text: "You must search using either the prisoner's last name and date of birth, prison number or PNC Number",
