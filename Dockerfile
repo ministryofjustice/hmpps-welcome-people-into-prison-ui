@@ -1,8 +1,8 @@
+FROM node:16.14-bullseye as base
+
 # Stage: base image
 ARG BUILD_NUMBER=1_0_0
 ARG GIT_REF=not-available
-
-FROM node:16.14-bullseye as base
 
 LABEL maintainer="HMPPS Digital Studio <info@digital.justice.gov.uk>"
 
@@ -24,8 +24,6 @@ RUN apt-get update && \
 
 # Stage: build assets
 FROM base as build
-ARG BUILD_NUMBER
-ARG GIT_REF
 
 RUN apt-get update && \
     apt-get install -y make python g++
@@ -49,21 +47,21 @@ RUN apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
 
 COPY --from=build --chown=appuser:appgroup \
-        /app/package.json \
-        /app/package-lock.json \
-        ./
+    /app/package.json \
+    /app/package-lock.json \
+    ./
 
 COPY --from=build --chown=appuser:appgroup \
-        /app/build-info.json ./dist/build-info.json
+    /app/build-info.json ./dist/build-info.json
 
 COPY --from=build --chown=appuser:appgroup \
-        /app/assets ./assets
+    /app/assets ./assets
 
 COPY --from=build --chown=appuser:appgroup \
-        /app/dist ./dist
+    /app/dist ./dist
 
 COPY --from=build --chown=appuser:appgroup \
-        /app/node_modules ./node_modules
+    /app/node_modules ./node_modules
 
 EXPOSE 3000
 ENV NODE_ENV='production'
