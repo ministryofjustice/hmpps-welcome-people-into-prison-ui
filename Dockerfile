@@ -1,6 +1,6 @@
-FROM node:16.14-bullseye as base
-
 # Stage: base image
+FROM node:16.14-bullseye-slim as base
+
 ARG BUILD_NUMBER=1_0_0
 ARG GIT_REF=not-available
 
@@ -25,6 +25,9 @@ RUN apt-get update && \
 # Stage: build assets
 FROM base as build
 
+ARG BUILD_NUMBER=1_0_0
+ARG GIT_REF=not-available
+
 RUN apt-get update && \
     apt-get install -y make python g++
 
@@ -42,9 +45,6 @@ RUN npm prune --no-audit --production
 
 # Stage: copy production assets and dependencies
 FROM base
-
-RUN apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/*
 
 COPY --from=build --chown=appuser:appgroup \
     /app/package.json \
