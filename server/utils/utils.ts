@@ -66,6 +66,22 @@ export function assertHasOptionalStringValues<K extends string>(
   }
 }
 
+export function trimObjectValues(obj: unknown): Record<string, string> {
+  const isObject = obj && typeof obj === 'object'
+
+  if (!isObject) {
+    throw Error('Not a record')
+  }
+
+  if (Object.values(obj).some(s => typeof s !== 'string' && s !== undefined)) {
+    throw Error('Values present not all strings')
+  }
+  return Object.keys(obj).reduce((acc, curr) => {
+    acc[curr] = obj[curr].trim()
+    return acc
+  }, {})
+}
+
 export const createDate = (day: string, month: string, year: string) =>
   `${year.padStart(4, '0')}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
 

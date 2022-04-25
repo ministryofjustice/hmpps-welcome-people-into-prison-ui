@@ -1,5 +1,6 @@
 import {
   convertToTitleCase,
+  trimObjectValues,
   createDate,
   groupBy,
   compareByFullName,
@@ -36,6 +37,28 @@ describe('Convert to title case', () => {
   })
   it('Hyphenated', () => {
     expect(convertToTitleCase('Robert-John SmiTH-jONes-WILSON')).toEqual('Robert-John Smith-Jones-Wilson')
+  })
+})
+
+describe('trimObjectValues', () => {
+  it('Should trim single value', () => {
+    expect(trimObjectValues({ name: '   bob ' })).toEqual({ name: 'bob' })
+  })
+  it('Should trim multiple values', () => {
+    expect(trimObjectValues({ firstName: '   bob ', lastName: 'Smith' })).toEqual({
+      firstName: 'bob',
+      lastName: 'Smith',
+    })
+  })
+
+  it('Should throw if input is not an object', () => {
+    expect(() => trimObjectValues(123)).toThrowError('Not a record')
+  })
+
+  it('Should throw if object contains non-strings but can handle undefined values', () => {
+    expect(() => trimObjectValues({ name: 'Bob', age: 10, role: undefined })).toThrowError(
+      'Values present not all strings'
+    )
   })
 })
 
