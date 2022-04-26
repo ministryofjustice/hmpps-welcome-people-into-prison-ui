@@ -240,6 +240,13 @@ describe('Expected arrivals service', () => {
       expect(WelcomeClientFactory).toBeCalledWith(token)
       expect(welcomeClient.confirmCourtReturn).toBeCalledWith('12345-67890', 'MDI', 'A1234AA')
     })
+
+    it('Should return null', async () => {
+      welcomeClient.confirmCourtReturn.mockResolvedValue(null)
+
+      const result = await service.confirmCourtReturn('user1', '12345-67890', 'MDI', 'A1234AA')
+      expect(result).toBe(null)
+    })
   })
 
   describe('matching records', () => {
