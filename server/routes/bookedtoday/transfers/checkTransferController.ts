@@ -25,6 +25,10 @@ export default class CheckTransferController {
 
       const arrivalResponse = await this.transfersService.confirmTransfer(username, prisonNumber)
 
+      if (!arrivalResponse) {
+        return res.redirect('/feature-not-available')
+      }
+
       req.flash('prisoner', {
         firstName: data.firstName,
         lastName: data.lastName,
@@ -37,7 +41,7 @@ export default class CheckTransferController {
         `AgencyId: ${activeCaseLoadId}, From: ${data.fromLocation}, Type: 'PRISON',`
       )
 
-      res.redirect(`/prisoners/${prisonNumber}/confirm-transfer`)
+      return res.redirect(`/prisoners/${prisonNumber}/confirm-transfer`)
     }
   }
 }

@@ -13,7 +13,7 @@ export default class TransfersService {
     return welcomeClient.getTransfer(agencyId, prisonNumber)
   }
 
-  public async confirmTransfer(username: string, prisonNumber: string): Promise<ArrivalResponse> {
+  public async confirmTransfer(username: string, prisonNumber: string): Promise<ArrivalResponse | null> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
     return this.welcomeClientFactory(token).confirmTransfer(prisonNumber)
   }
