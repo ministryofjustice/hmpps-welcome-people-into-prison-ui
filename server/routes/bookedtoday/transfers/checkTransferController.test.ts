@@ -115,4 +115,13 @@ describe('POST addToRoll', () => {
       .expect(302)
       .expect('Location', '/prisoners/A1234AB/confirm-transfer')
   })
+  it('should redirect to feature-not-available', () => {
+    transfersService.confirmTransfer.mockResolvedValue(null)
+
+    return request(app)
+      .post('/prisoners/A1234AB/check-transfer')
+      .expect('Content-Type', 'text/plain; charset=utf-8')
+      .expect(302)
+      .expect('Location', '/feature-not-available')
+  })
 })
