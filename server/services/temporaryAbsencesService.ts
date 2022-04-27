@@ -23,7 +23,7 @@ export default class TemporaryAbsencesService {
     username: string,
     prisonNumber: string,
     agencyId: string
-  ): Promise<ArrivalResponse> {
+  ): Promise<ArrivalResponse | null> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
     return this.welcomeClientFactory(token).confirmTemporaryAbsence(prisonNumber, agencyId)
   }

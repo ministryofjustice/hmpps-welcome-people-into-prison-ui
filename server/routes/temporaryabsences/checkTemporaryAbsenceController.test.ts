@@ -116,4 +116,14 @@ describe('POST addToRoll', () => {
       .expect(302)
       .expect('Location', '/prisoners/G0013AB/prisoner-returned')
   })
+
+  it('should redirect to feature-not-available', () => {
+    temporaryAbsencesService.confirmTemporaryAbsence.mockResolvedValue(null)
+
+    return request(app)
+      .post('/prisoners/G0013AB/check-temporary-absence')
+      .expect('Content-Type', 'text/plain; charset=utf-8')
+      .expect(302)
+      .expect('Location', '/feature-not-available')
+  })
 })
