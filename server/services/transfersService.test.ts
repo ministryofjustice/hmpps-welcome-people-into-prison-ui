@@ -50,5 +50,11 @@ describe('Transfers service', () => {
       expect(WelcomeClientFactory).toBeCalledWith(token)
       expect(welcomeClient.confirmTransfer).toBeCalledWith('G0015GD')
     })
+    it('Should return null', async () => {
+      welcomeClient.confirmTransfer.mockResolvedValue(null)
+
+      const result = await await service.confirmTransfer('user1', 'G0015GD')
+      expect(result).toBe(null)
+    })
   })
 })

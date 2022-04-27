@@ -107,5 +107,15 @@ describe('checkCourtReturnController', () => {
         .expect(302)
         .expect('Location', '/prisoners/12345-67890/prisoner-returned-from-court')
     })
+
+    it('should redirect to feature-not-available', () => {
+      expectedArrivalsService.confirmCourtReturn.mockResolvedValue(null)
+
+      return request(app)
+        .post('/prisoners/12345-67890/check-court-return')
+        .expect('Content-Type', 'text/plain; charset=utf-8')
+        .expect(302)
+        .expect('Location', '/feature-not-available')
+    })
   })
 })

@@ -140,7 +140,7 @@ export default class ExpectedArrivalsService {
     id: string,
     prisonId: string,
     prisonNumber: string
-  ): Promise<ArrivalResponse> {
+  ): Promise<ArrivalResponse | null> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
     return this.welcomeClientFactory(token).confirmCourtReturn(id, prisonId, prisonNumber)
   }

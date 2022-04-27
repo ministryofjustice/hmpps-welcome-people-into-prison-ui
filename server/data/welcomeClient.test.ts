@@ -139,11 +139,29 @@ describe('welcomeClient', () => {
     const prisonNumber = 'A1234AB'
     it('should call rest client successfully', async () => {
       fakeWelcomeApi
-        .post(`/transfers/${prisonNumber}/confirm`, {})
+        .post(`/transfers/${prisonNumber}/confirm`)
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, arrivalResponse)
 
       return expect(welcomeClient.confirmTransfer(prisonNumber)).resolves.toStrictEqual(arrivalResponse)
+    })
+    it('should return null', async () => {
+      fakeWelcomeApi
+        .post(`/transfers/${prisonNumber}/confirm`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(404)
+
+      const output = await welcomeClient.confirmTransfer(prisonNumber)
+      return expect(output).toBe(null)
+    })
+
+    it('should throw server error', async () => {
+      fakeWelcomeApi
+        .post(`/transfers/${prisonNumber}/confirm`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(500)
+
+      await expect(welcomeClient.confirmTransfer(prisonNumber)).rejects.toThrow('Internal Server Error')
     })
   })
 
@@ -165,6 +183,24 @@ describe('welcomeClient', () => {
         .reply(200, arrivalResponse)
 
       return expect(welcomeClient.confirmCourtReturn(id, 'MDI', 'A1234AA')).resolves.toStrictEqual(arrivalResponse)
+    })
+    it('should return null', async () => {
+      fakeWelcomeApi
+        .post(`/court-returns/${id}/confirm`, { prisonId: 'MDI', prisonNumber: 'A1234AA' })
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(404)
+
+      const output = await welcomeClient.confirmCourtReturn(id, 'MDI', 'A1234AA')
+      return expect(output).toBe(null)
+    })
+
+    it('should throw server error', async () => {
+      fakeWelcomeApi
+        .post(`/court-returns/${id}/confirm`, { prisonId: 'MDI', prisonNumber: 'A1234AA' })
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(500)
+
+      await expect(welcomeClient.confirmCourtReturn(id, 'MDI', 'A1234AA')).rejects.toThrow('Internal Server Error')
     })
   })
 
