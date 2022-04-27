@@ -166,6 +166,24 @@ describe('welcomeClient', () => {
 
       return expect(welcomeClient.confirmCourtReturn(id, 'MDI', 'A1234AA')).resolves.toStrictEqual(arrivalResponse)
     })
+    it('should return null', async () => {
+      fakeWelcomeApi
+        .post(`/court-returns/${id}/confirm`, { prisonId: 'MDI', prisonNumber: 'A1234AA' })
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(404)
+
+      const output = await welcomeClient.confirmCourtReturn(id, 'MDI', 'A1234AA')
+      return expect(output).toBe(null)
+    })
+
+    it('should throw server error', async () => {
+      fakeWelcomeApi
+        .post(`/court-returns/${id}/confirm`, { prisonId: 'MDI', prisonNumber: 'A1234AA' })
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(500)
+
+      await expect(welcomeClient.confirmCourtReturn(id, 'MDI', 'A1234AA')).rejects.toThrow('Internal Server Error')
+    })
   })
 
   describe('getPrison', () => {

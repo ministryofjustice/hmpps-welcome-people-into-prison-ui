@@ -39,12 +39,19 @@ export default class WelcomeClient {
     }) as Promise<Arrival>
   }
 
-  async confirmCourtReturn(id: string, prisonId: string, prisonNumber: string): Promise<ArrivalResponse> {
+  async confirmCourtReturn(id: string, prisonId: string, prisonNumber: string): Promise<ArrivalResponse | null> {
     logger.info(`welcomeApi: confirmCourtReturn ${id})`)
-    return this.restClient.post({
-      path: `/court-returns/${id}/confirm`,
-      data: { prisonId, prisonNumber },
-    }) as Promise<ArrivalResponse>
+    try {
+      return (await this.restClient.post({
+        path: `/court-returns/${id}/confirm`,
+        data: { prisonId, prisonNumber },
+      })) as Promise<ArrivalResponse>
+    } catch (error) {
+      if (error.status >= 400 && error.status < 500) {
+        return null
+      }
+      throw error
+    }
   }
 
   async getTransfers(agencyId: string): Promise<Arrival[]> {
