@@ -79,5 +79,11 @@ describe('Temporary absences service', () => {
       expect(WelcomeClientFactory).toBeCalledWith(token)
       expect(welcomeClient.confirmTemporaryAbsence).toBeCalledWith('G0015GD', 'MDI')
     })
+    it('Should return null', async () => {
+      welcomeClient.confirmTemporaryAbsence.mockResolvedValue(null)
+
+      const result = await service.confirmTemporaryAbsence('user1', 'G0015GD', 'MDI')
+      expect(result).toBe(null)
+    })
   })
 })

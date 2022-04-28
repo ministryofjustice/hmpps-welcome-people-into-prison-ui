@@ -133,6 +133,25 @@ describe('welcomeClient', () => {
 
       return expect(welcomeClient.confirmTemporaryAbsence(prisonNumber, 'MDI')).resolves.toStrictEqual(arrivalResponse)
     })
+
+    it('should return null', async () => {
+      fakeWelcomeApi
+        .post(`/temporary-absences/${prisonNumber}/confirm`, { agencyId: 'MDI' })
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(404)
+
+      const output = await welcomeClient.confirmTemporaryAbsence(prisonNumber, 'MDI')
+      return expect(output).toBe(null)
+    })
+
+    it('should throw server error', async () => {
+      fakeWelcomeApi
+        .post(`/temporary-absences/${prisonNumber}/confirm`, { agencyId: 'MDI' })
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(500)
+
+      await expect(welcomeClient.confirmTemporaryAbsence(prisonNumber, 'MDI')).rejects.toThrow('Internal Server Error')
+    })
   })
 
   describe('confirmTransfer', () => {
