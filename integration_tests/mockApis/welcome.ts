@@ -147,6 +147,19 @@ export default {
       },
     })
   },
+
+  stubConfirmTransferReturnsError: ({ prisonNumber, status }: Record<string, string>): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/welcome/transfers/${prisonNumber}/confirm`,
+      },
+      response: {
+        status,
+      },
+    })
+  },
+
   stubTemporaryAbsence: ({
     activeCaseLoadId,
     prisonNumber,
@@ -194,6 +207,18 @@ export default {
       },
     })
   },
+
+  stubConfirmTemporaryAbsenceReturnsError: ({ prisonNumber, status }: Record<string, string>): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/welcome/temporary-absences/${prisonNumber}/confirm`,
+      },
+      response: {
+        status,
+      },
+    })
+  },
   stubConfirmCourtReturn: (arrivalId: string): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -204,6 +229,17 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: { prisonNumber: 'A1234AB', location: 'Reception' },
+      },
+    })
+  },
+  stubConfirmCourtReturnsError: ({ arrivalId, status }: Record<string, string>): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/welcome/court-returns/${arrivalId}/confirm`,
+      },
+      response: {
+        status,
       },
     })
   },
