@@ -103,3 +103,4 @@ generic-service:
 
 generic-prometheus-alerts:
   targetApplication: hmpps-welcome-people-into-prison-ui
+  alertSeverity: digital-prison-service-dev
