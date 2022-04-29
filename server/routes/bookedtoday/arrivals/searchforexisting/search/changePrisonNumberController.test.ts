@@ -51,7 +51,7 @@ describe('GET /search-for-existing-record/change-prison-number', () => {
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record/change-prison-number')
       .expect(302)
-      .expect('Location', '/')
+      .expect('Location', '/page-not-found')
   })
 })
 
@@ -69,7 +69,7 @@ describe('POST /search-for-existing-record/change-prison-number', () => {
     return request(app)
       .post('/prisoners/12345-67890/search-for-existing-record/change-prison-number')
       .expect(302)
-      .expect('Location', '/')
+      .expect('Location', '/page-not-found')
   })
 
   it('should update prison number in cookie', () => {
@@ -129,7 +129,7 @@ describe('GET /search-for-existing-record/remove-prison-number', () => {
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record/remove-prison-number')
       .expect(302)
-      .expect('Location', '/')
+      .expect('Location', '/page-not-found')
   })
 
   it('should update prison number in cookie', () => {

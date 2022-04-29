@@ -53,7 +53,7 @@ describe('GET /search-for-existing-record/change-pnc-number', () => {
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record/change-pnc-number')
       .expect(302)
-      .expect('Location', '/')
+      .expect('Location', '/page-not-found')
   })
 
   it('should display errors when present', () => {
@@ -89,7 +89,7 @@ describe('POST /search-for-existing-record/change-pnc-number', () => {
     return request(app)
       .post('/prisoners/12345-67890/search-for-existing-record/change-pnc-number')
       .expect(302)
-      .expect('Location', '/')
+      .expect('Location', '/page-not-found')
   })
 
   it('should update pnc number in cookie', () => {
@@ -148,7 +148,7 @@ describe('GET /search-for-existing-record/remove-pnc-number', () => {
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record/remove-pnc-number')
       .expect(302)
-      .expect('Location', '/')
+      .expect('Location', '/page-not-found')
   })
 
   it('should update prison number in cookie', () => {

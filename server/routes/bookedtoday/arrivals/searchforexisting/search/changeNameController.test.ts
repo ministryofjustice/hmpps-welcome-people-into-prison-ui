@@ -53,7 +53,7 @@ describe('GET /search-for-existing-record/change-name', () => {
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record/change-name')
       .expect(302)
-      .expect('Location', '/')
+      .expect('Location', '/page-not-found')
   })
 })
 
@@ -71,7 +71,7 @@ describe('POST /search-for-existing-record/change-name', () => {
     return request(app)
       .post('/prisoners/12345-67890/search-for-existing-record/change-name')
       .expect(302)
-      .expect('Location', '/')
+      .expect('Location', '/page-not-found')
   })
 
   it('should update name in cookie', () => {
