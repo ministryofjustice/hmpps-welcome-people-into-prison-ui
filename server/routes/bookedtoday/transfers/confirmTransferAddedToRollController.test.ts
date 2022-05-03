@@ -50,13 +50,13 @@ describe('GET /view', () => {
       })
   })
 
-  it('should redirect to /choose-prisoner page if both firstname and lastname absent', () => {
+  it('should redirect to /page-not-found if prisoner flash absent', () => {
     flashProvider.mockReturnValue([{}])
     return request(app)
       .get('/prisoners/A1234AB/confirm-transfer')
       .expect(302)
       .expect('Content-Type', 'text/plain; charset=utf-8')
-      .expect('Location', '/confirm-arrival/choose-prisoner')
+      .expect('Location', '/page-not-found')
       .expect(res => {
         expect(prisonService.getPrison).not.toHaveBeenCalled()
       })

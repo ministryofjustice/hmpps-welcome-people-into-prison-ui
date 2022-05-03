@@ -7,12 +7,10 @@ export default class ConfirmAddedToRollController {
 
   public view(): RequestHandler {
     return async (req, res) => {
-      const { firstName, lastName, prisonNumber, location } = req.flash('arrivalResponse')?.[0] as Record<
-        string,
-        string
-      >
+      const { firstName, lastName, prisonNumber, location } =
+        (req.flash('arrivalResponse')?.[0] as Record<string, string>) || {}
       if (!firstName || !lastName || !prisonNumber || !location) {
-        return res.redirect('/confirm-arrival/choose-prisoner')
+        return res.redirect('/page-not-found')
       }
       const { activeCaseLoadId } = res.locals.user
       const prison = await this.prisonService.getPrison(activeCaseLoadId)
