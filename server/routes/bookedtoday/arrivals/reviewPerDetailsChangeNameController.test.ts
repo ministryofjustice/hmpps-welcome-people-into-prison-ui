@@ -52,7 +52,10 @@ describe('GET /review-per-details/change-name', () => {
   })
 
   it('redirects when no cookie present', () => {
-    return request(app).get('/prisoners/12345-67890/review-per-details/change-name').expect(302).expect('Location', '/')
+    return request(app)
+      .get('/prisoners/12345-67890/review-per-details/change-name')
+      .expect(302)
+      .expect('Location', '/page-not-found')
   })
 })
 
@@ -70,7 +73,7 @@ describe('POST /review-per-details/change-name', () => {
     return request(app)
       .post('/prisoners/12345-67890/review-per-details/change-name')
       .expect(302)
-      .expect('Location', '/')
+      .expect('Location', '/page-not-found')
   })
 
   it('should update name in cookie', () => {

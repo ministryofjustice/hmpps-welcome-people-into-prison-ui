@@ -19,7 +19,7 @@ import config from '../../../../../config'
 import redirectIfDisabledMiddleware from '../../../../../middleware/redirectIfDisabledMiddleware'
 
 export default function routes(services: Services): Router {
-  const checkSearchDetailsPresent = State.searchDetails.ensurePresent('/')
+  const checkSearchDetailsPresent = State.searchDetails.ensurePresent('/page-not-found')
 
   const searchForExistingRecordController = new SearchForExistingRecordController(services.expectedArrivalsService)
 

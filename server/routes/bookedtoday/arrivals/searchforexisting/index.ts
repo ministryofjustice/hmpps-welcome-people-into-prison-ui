@@ -15,8 +15,8 @@ import searchRoutes from './search'
 import Routes from '../../../../utils/routeBuilder'
 
 export default function routes(services: Services): Router {
-  const checkSearchDetailsPresent = State.searchDetails.ensurePresent('/')
-  const checkNewArrivalPresent = State.newArrival.ensurePresent('/')
+  const checkSearchDetailsPresent = State.searchDetails.ensurePresent('/page-not-found')
+  const checkNewArrivalPresent = State.newArrival.ensurePresent('/page-not-found')
 
   const basePath = `/prisoners/:id/search-for-existing-record`
 

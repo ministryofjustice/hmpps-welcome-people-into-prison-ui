@@ -1,7 +1,6 @@
 import express from 'express'
 
 import path from 'path'
-import createError from 'http-errors'
 
 import config from './config'
 import routes from './routes'
@@ -38,9 +37,10 @@ export default function createApp(services: Services): express.Application {
   app.use(authorisationMiddleware())
   app.use(setUpCurrentUser(services))
   app.use(caseloadCheckMiddleware(config.enabledPrisons))
+  app.get('/page-not-found', (req, res) => res.render('pages/pageNotFound'))
   app.use(routes(services))
 
-  app.use((req, res, next) => next(createError(404, 'Not found')))
+  app.use((req, res, next) => next(res.redirect('/page-not-found')))
   app.use(errorHandler(process.env.NODE_ENV === 'production'))
 
   return app

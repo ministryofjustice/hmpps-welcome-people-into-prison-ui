@@ -19,7 +19,7 @@ import Role from '../../../authentication/role'
 import Routes from '../../../utils/routeBuilder'
 
 export default function routes(services: Services): Router {
-  const checkNewArrivalPresent = State.newArrival.ensurePresent('/')
+  const checkNewArrivalPresent = State.newArrival.ensurePresent('/page-not-found')
 
   const reviewPerDetailsController = new ReviewPerDetailsController(services.expectedArrivalsService)
 

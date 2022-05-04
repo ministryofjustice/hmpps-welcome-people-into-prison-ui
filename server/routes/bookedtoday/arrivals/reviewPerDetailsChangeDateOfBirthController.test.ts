@@ -55,7 +55,7 @@ describe('GET /review-per-details/change-date-of-birth', () => {
     return request(app)
       .get('/prisoners/12345-67890/review-per-details/change-date-of-birth')
       .expect(302)
-      .expect('Location', '/')
+      .expect('Location', '/page-not-found')
   })
 })
 
@@ -73,7 +73,7 @@ describe('POST /review-per-details/change-date-of-birth', () => {
     return request(app)
       .post('/prisoners/12345-67890/review-per-details/change-date-of-birth')
       .expect(302)
-      .expect('Location', '/')
+      .expect('Location', '/page-not-found')
   })
 
   it('should update date of birth in cookie', () => {

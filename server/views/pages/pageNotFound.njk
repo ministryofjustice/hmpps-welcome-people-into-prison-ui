@@ -1,0 +1,22 @@
+{% extends "../partials/layout.njk" %}
+{% set mainClasses = "govuk-main-wrapper--l" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set title =  "Page not found" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-7">{{ title }}</h1>
+            <p class="govuk-body">
+                Check you used the right web address, for example if you copied and pasted it from an email or used a bookmark.
+            </p>
+            <p class="govuk-body">
+                If you have gone back in your browser, the details you entered have been saved and you cannot return to this page.
+            </p>
+
+            <p><a href='/'>Return to Welcome people into prison</a></p>
+            <p><a href="{{dpsUrl}}">Exit to Digital Prison Services</a></p>
+        </div>
+    </div>
+{% endblock %}

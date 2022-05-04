@@ -53,7 +53,7 @@ describe('GET /search-for-existing-record/change-date-of-birth', () => {
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record/change-date-of-birth')
       .expect(302)
-      .expect('Location', '/')
+      .expect('Location', '/page-not-found')
   })
 })
 
@@ -71,14 +71,7 @@ describe('POST /search-for-existing-record/change-date-of-birth', () => {
     return request(app)
       .post('/prisoners/12345-67890/search-for-existing-record/change-date-of-birth')
       .expect(302)
-      .expect('Location', '/')
-  })
-
-  it('should redirect when no cookie present', () => {
-    return request(app)
-      .post('/prisoners/12345-67890/search-for-existing-record/change-date-of-birth')
-      .expect(302)
-      .expect('Location', '/')
+      .expect('Location', '/page-not-found')
   })
 
   it('should update date of birth in cookie', () => {

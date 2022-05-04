@@ -56,12 +56,12 @@ describe('GET /confirmation', () => {
       })
   })
 
-  it('should redirect to /choose-prisoner page if no arrival response present', () => {
+  it('should redirect to /page-not-found if arrival response absent', () => {
     flashProvider.mockReturnValue([{}])
     return request(app)
       .get('/prisoners/12345-67890/confirmation')
       .expect('Content-Type', 'text/plain; charset=utf-8')
-      .expect('Location', '/confirm-arrival/choose-prisoner')
+      .expect('Location', '/page-not-found')
       .expect(res => {
         expect(prisonService.getPrison).not.toHaveBeenCalled()
       })

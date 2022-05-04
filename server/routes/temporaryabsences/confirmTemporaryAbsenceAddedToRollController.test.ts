@@ -54,13 +54,13 @@ describe('confirmTemporaryAbsenceAddedToRollController', () => {
         })
     })
 
-    it('should redirect to /prisoners-returning page if any firstname lastname absent', () => {
+    it('should redirect to /page-not-found if prisoner flash absent', () => {
       flashProvider.mockReturnValue([{}])
       return request(app)
         .get('/prisoners/A1234AB/prisoner-returned')
         .expect(302)
         .expect('Content-Type', 'text/plain; charset=utf-8')
-        .expect('Location', '/prisoners-returning')
+        .expect('Location', '/page-not-found')
         .expect(res => {
           expect(prisonService.getPrison).toHaveBeenCalled()
         })
