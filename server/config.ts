@@ -93,4 +93,6 @@ export default {
   confirmCourtReturnEnabled: get('CONFIRM_COURT_RETURN_ENABLED', 'false', requiredInProduction) === 'true',
   confirmNoIdentifiersEnabled: get('CONFIRM_NO_IDENTIFIERS_ENABLED', 'false', requiredInProduction) === 'true',
   temporaryAbsencesEnabled: get('TEMPORARY_ABSENCE_ENABLED', 'false', requiredInProduction) === 'true',
+  supportingMultitransactionsEnabled:
+    get('SUPPORTING_MULTITRANSACTIONS_ENABLED', 'false', requiredInProduction) === 'true',
 }

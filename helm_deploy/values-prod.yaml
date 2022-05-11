@@ -20,6 +20,7 @@ generic-service:
     CONFIRM_NO_IDENTIFIERS_ENABLED: 'true'
     TEMPORARY_ABSENCE_ENABLED: 'true'
     CONFIRM_COURT_RETURN_ENABLED: 'true'
+    SUPPORTING_MULTITRANSACTIONS_ENABLED: 'false'
 
 generic-prometheus-alerts:
   targetApplication: hmpps-welcome-people-into-prison-ui
