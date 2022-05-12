@@ -2,7 +2,7 @@ import Page, { PageElement } from '../page'
 
 export default class TemporaryAbsencesPage extends Page {
   constructor() {
-    super('Select prisoner returning from temporary absence')
+    super('Prisoners currently out on temporary absence')
   }
 
   static goTo(): TemporaryAbsencesPage {

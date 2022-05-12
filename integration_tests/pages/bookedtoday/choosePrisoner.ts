@@ -2,7 +2,7 @@ import Page, { PageConstructor, PageElement } from '../page'
 
 export default class ChoosePrisonerPage extends Page {
   constructor() {
-    super('Select prisoner to add to the establishment roll')
+    super('Prisoners booked to arrive today')
   }
 
   static goTo(): ChoosePrisonerPage {
