@@ -4,6 +4,7 @@ import request from 'supertest'
 import * as cheerio from 'cheerio'
 import { user, appWithAllRoutes, stubCookie } from '../__testutils/appSetup'
 import { expectSettingCookie } from '../__testutils/requestTestUtils'
+import config from '../../config'
 
 import ExpectedArrivalsService, { LocationType } from '../../services/expectedArrivalsService'
 import { State } from './arrivals/state'
@@ -124,7 +125,24 @@ describe('GET /confirm-arrival/choose-prisoner', () => {
     expectedArrivalsService.getArrivalsForToday.mockResolvedValue(expectedArrivalsGroupedByType)
   })
 
-  it('should render /confirm-arrival/choose-prisoner page', () => {
+  it('should render /confirm-arrival/choose-prisoner page with correct title when supportingMultitransactionsEnabled is true', () => {
+    config.supportingMultitransactionsEnabled = true
+    app = appWithAllRoutes({ services: { expectedArrivalsService } })
+
+    return request(app)
+      .get('/confirm-arrival/choose-prisoner')
+      .expect(200)
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(res => {
+        const $ = cheerio.load(res.text)
+        expect($('h1').text()).toContain('Prisoners booked to arrive today')
+      })
+  })
+
+  it('should render /confirm-arrival/choose-prisoner page with correct title when supportingMultitransactionsEnabled is false', () => {
+    config.supportingMultitransactionsEnabled = false
+    app = appWithAllRoutes({ services: { expectedArrivalsService } })
+
     return request(app)
       .get('/confirm-arrival/choose-prisoner')
       .expect(200)
