@@ -58,6 +58,9 @@ afterEach(() => {
 
 describe('GET /prisoners-returning', () => {
   it('should render /prisoners-returning page with correct title when supportingMultitransactionsEnabled is true', () => {
+    config.supportingMultitransactionsEnabled = true
+    app = appWithAllRoutes({ services: { temporaryAbsencesService }, roles: [Role.PRISON_RECEPTION] })
+
     return request(app)
       .get('/prisoners-returning')
       .expect('Content-Type', 'text/html; charset=utf-8')
