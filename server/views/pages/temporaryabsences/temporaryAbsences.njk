@@ -1,12 +1,15 @@
 {% extends "../../partials/layout.njk" %}
 {% from  "../../partials/temporaryAbsenceCardMacro.njk" import temporaryAbsenceCard %}
 
-{% set pageTitle = "Select prisoner returning from temporary absence" %}
+{% set pageTitle = "Prisoners currently out on temporary absence" if supportingMultitransactionsEnabled == true else "Select prisoner returning from temporary absence" %}
+
 {% block content %}
     <div class="govuk-!-margin-bottom-8">
         <div class="govuk-width-container govuk-body">
-            <span class="govuk-caption-xl">Confirm a prisoner's arrival</span>
-            <h1 class="govuk-heading-l govuk-!-margin-bottom-9">Select prisoner returning from temporary absence</h1>
+            {% if supportingMultitransactionsEnabled == false %}
+                <span id="confirm-arrival-span" class="govuk-caption-xl">Confirm a prisoner's arrival</span>
+            {% endif %}
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-9">{{pageTitle}}</h1>
                 {% for absence in temporaryAbsences %} 
                     {{ temporaryAbsenceCard(absence, loop.index, user)}}
                 {% else %}

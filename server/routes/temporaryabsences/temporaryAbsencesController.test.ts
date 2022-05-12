@@ -4,6 +4,7 @@ import * as cheerio from 'cheerio'
 import { appWithAllRoutes, user } from '../__testutils/appSetup'
 import TemporaryAbsencesService from '../../services/temporaryAbsencesService'
 import Role from '../../authentication/role'
+import config from '../../config'
 
 jest.mock('../../services/temporaryAbsencesService')
 
@@ -56,13 +57,30 @@ afterEach(() => {
 })
 
 describe('GET /prisoners-returning', () => {
-  it('should render /prisoners-returning page', () => {
+  it('should render /prisoners-returning page with correct title when supportingMultitransactionsEnabled is true', () => {
+    return request(app)
+      .get('/prisoners-returning')
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(res => {
+        const $ = cheerio.load(res.text)
+        expect($('h1').text()).toContain('Prisoners currently out on temporary absence')
+        expect($('#confirm-arrival-span').text()).toBe('')
+        expect($('.app-card-wrapper')).toHaveLength(4)
+        expect($('#no-prisoners').text()).toContain('')
+      })
+  })
+
+  it('should render /prisoners-returning page with correct title when supportingMultitransactionsEnabled is false', () => {
+    config.supportingMultitransactionsEnabled = false
+    app = appWithAllRoutes({ services: { temporaryAbsencesService }, roles: [Role.PRISON_RECEPTION] })
+
     return request(app)
       .get('/prisoners-returning')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
         const $ = cheerio.load(res.text)
         expect($('h1').text()).toContain('Select prisoner returning from temporary absence')
+        expect($('#confirm-arrival-span').text()).toContain(`Confirm a prisoner's arrival`)
         expect($('.app-card-wrapper')).toHaveLength(4)
         expect($('#no-prisoners').text()).toContain('')
       })
