@@ -20,6 +20,7 @@ const arrivalResponse = createArrivalResponse()
 beforeEach(() => {
   app = appWithAllRoutes({ services: { expectedArrivalsService, raiseAnalyticsEvent }, roles: [Role.PRISON_RECEPTION] })
   config.confirmEnabled = true
+  config.confirmCourtReturnEnabled = true
   expectedArrivalsService.getPrisonerDetailsForArrival.mockResolvedValue(courtReturn)
   expectedArrivalsService.getArrival.mockResolvedValue(arrival)
   expectedArrivalsService.confirmCourtReturn.mockResolvedValue(arrivalResponse)
