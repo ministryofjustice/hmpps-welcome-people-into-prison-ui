@@ -90,6 +90,7 @@ export default {
   },
   enabledPrisons: get('ENABLED_PRISONS', '', requiredInProduction).split(','),
   confirmEnabled: get('CONFIRM_ENABLED', 'false', requiredInProduction) === 'true',
+  confirmCourtReturnEnabled: get('CONFIRM_COURT_RETURN_ENABLED', 'false', requiredInProduction) === 'true',
   confirmNoIdentifiersEnabled: get('CONFIRM_NO_IDENTIFIERS_ENABLED', 'false', requiredInProduction) === 'true',
   temporaryAbsencesEnabled: get('TEMPORARY_ABSENCE_ENABLED', 'false', requiredInProduction) === 'true',
 }

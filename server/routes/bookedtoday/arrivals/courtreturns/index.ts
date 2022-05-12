@@ -18,7 +18,7 @@ export default function routes(services: Services): Router {
   return Routes.forRole(Role.PRISON_RECEPTION)
     .get(
       '/prisoners/:id/check-court-return',
-      redirectIfDisabled(config.confirmEnabled),
+      redirectIfDisabled(config.confirmCourtReturnEnabled),
       checkCourtReturnController.checkCourtReturn()
     )
     .post(

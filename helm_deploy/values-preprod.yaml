@@ -20,3 +20,4 @@ generic-service:
     CONFIRM_ENABLED: 'true'
     CONFIRM_NO_IDENTIFIERS_ENABLED: 'true'
     TEMPORARY_ABSENCE_ENABLED: 'true'
+    CONFIRM_COURT_RETURN_ENABLED: 'false'
