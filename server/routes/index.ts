@@ -5,6 +5,7 @@ import Routes from '../utils/routeBuilder'
 import PrisonerController from './prisonerController'
 import temporaryAbsenceRoutes from './temporaryabsences'
 import bookedTodayRoutes from './bookedtoday'
+import recentArrivalsRoutes from './recentArrivals'
 
 export default function routes(services: Services): Router {
   const prisonerController = new PrisonerController(services.expectedArrivalsService)
@@ -15,5 +16,6 @@ export default function routes(services: Services): Router {
     .get('/feature-not-available', (req, res) => res.render('pages/featureNotAvailable'))
     .use(bookedTodayRoutes(services))
     .use(temporaryAbsenceRoutes(services))
+    .use(recentArrivalsRoutes())
     .build()
 }

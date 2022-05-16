@@ -1,0 +1,16 @@
+{% extends "../../partials/layout.njk" %}
+{% from  "../../partials/expectedArrivalCardMacro.njk" import expectedArrivalCard, transferCard  %}
+{% set pageTitle = "Prisoners who have arrived in the last 3 days" %}
+
+{% block content %}
+    <div class="govuk-!-margin-bottom-8">
+        <div class="govuk-width-container govuk-body">
+            <h1>{{pageTitle}}</h1>
+                <h2 class="govuk-heading-m govuk-!-margin-top-9">Wednesday 27 April</h2>
+
+                <h2 class="govuk-heading-m govuk-!-margin-top-9">Tuesday 26 April</h2>
+
+                <h2 class="govuk-heading-m govuk-!-margin-top-9">Monday 25 April</h2>
+        </div>
+    </div>
+{% endblock %}
