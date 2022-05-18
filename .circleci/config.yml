@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  hmpps: ministryofjustice/hmpps@3.12
+  hmpps: ministryofjustice/hmpps@5
   slack: circleci/slack@4.4.2
 
 parameters:
@@ -15,7 +15,7 @@ parameters:
 
   node-version:
     type: string
-    default: 16.14-browsers
+    default: 16.15-browsers
 
 jobs:
   build:
@@ -26,7 +26,7 @@ jobs:
       - checkout
       - run:
           name: Update npm
-          command: 'sudo npm install -g npm@latest'
+          command: 'npm install -g npm@latest'
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
@@ -76,7 +76,7 @@ jobs:
     executor:
       name: hmpps/node_redis
       node_tag: << pipeline.parameters.node-version >>
-      redis_tag: buster
+      redis_tag: '6.2'
     steps:
       - checkout
       - attach_workspace:
@@ -134,7 +134,7 @@ workflows:
                 - main
       - hmpps/deploy_env:
           name: deploy_dev
-          env: "dev"
+          env: 'dev'
           context: hmpps-common-vars
           filters:
             branches:
@@ -152,7 +152,7 @@ workflows:
             - deploy_dev
       - hmpps/deploy_env:
           name: deploy_preprod
-          env: "preprod"
+          env: 'preprod'
           context:
             - hmpps-common-vars
             - hmpps-welcome-people-into-prison-ui-preprod
@@ -164,7 +164,7 @@ workflows:
             - deploy_preprod
       - hmpps/deploy_env:
           name: deploy_prod
-          env: "prod"
+          env: 'prod'
           slack_notification: true
           slack_channel_name: << pipeline.parameters.releases-slack-channel >>
           context:
@@ -176,7 +176,7 @@ workflows:
   security:
     triggers:
       - schedule:
-          cron: "0 7 * * 1-5"
+          cron: '0 7 * * 1-5'
           filters:
             branches:
               only:
