@@ -39,7 +39,7 @@ export default {
   dpsUrl: get('DPS_URL', 'http://localhost:3000', requiredInProduction),
   hostname: process.env.APP_HOSTNAME || os.hostname(),
   redis: {
-    host: process.env.REDIS_HOST,
+    host: get('REDIS_HOST', 'localhost', requiredInProduction),
     port: parseInt(process.env.REDIS_PORT, 10) || 6379,
     password: process.env.REDIS_AUTH_TOKEN,
     tls_enabled: get('REDIS_TLS_ENABLED', 'false'),

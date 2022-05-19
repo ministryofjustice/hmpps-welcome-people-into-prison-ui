@@ -1,25 +1,22 @@
 import { v4 as uuidv4 } from 'uuid'
-import redis from 'redis'
 import session from 'express-session'
-import connectRedis from 'connect-redis'
+import connectRedis, { Client } from 'connect-redis'
 import express, { Router } from 'express'
 
 import config from '../config'
-
-const RedisStore = connectRedis(session)
-
-const client = redis.createClient({
-  port: config.redis.port,
-  password: config.redis.password,
-  host: config.redis.host,
-  tls: config.redis.tls_enabled === 'true' ? {} : false,
-})
+import logger from '../../logger'
+import { createRedisClient } from '../data/redisClient'
 
 export default function setUpWebSession(): Router {
+  const client = createRedisClient({ legacyMode: true })
+  client.connect().catch((err: Error) => logger.error(`Error connecting to Redis`, err))
+
+  const RedisStore = connectRedis(session)
+
   const router = express.Router()
   router.use(
     session({
-      store: new RedisStore({ client }),
+      store: new RedisStore({ client: client as unknown as Client }),
       name: config.session.name,
       cookie: {
         domain: config.session.domain,
