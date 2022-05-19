@@ -1,5 +1,6 @@
 import {
   type Arrival,
+  type RecentArrival,
   type ArrivalResponse,
   type ImprisonmentStatus,
   type PotentialMatch,
@@ -41,6 +42,22 @@ export const createArrival = ({
   fromLocationType,
   isCurrentPrisoner,
   potentialMatches,
+})
+
+export const createRecentArrival = ({
+  firstName = 'Jim',
+  lastName = 'Smith',
+  dateOfBirth = '1973-01-08',
+  prisonNumber = 'A1234AB',
+  movementDateTime = '2022-01-17T14:20:00',
+  location = 'MDI-1-3-004',
+} = {}): RecentArrival => ({
+  firstName,
+  lastName,
+  dateOfBirth,
+  prisonNumber,
+  movementDateTime,
+  location,
 })
 
 export const createPrisonerDetails = ({

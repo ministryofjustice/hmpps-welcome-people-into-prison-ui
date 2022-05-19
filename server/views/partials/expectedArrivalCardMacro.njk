@@ -1,4 +1,4 @@
-{% macro cardListContent(arrival, moveType, loopIndex) %}
+{% macro expectedArrivalCardListContent(arrival, moveType, loopIndex) %}
     <dl class="app-card__meta-list">
         <div class="app-card__meta-list-item">
             <dt class="app-card__meta-list-key">
@@ -39,6 +39,43 @@
     </dl>
 {% endmacro %}
 
+{% macro recentArrivalCardListContent(arrival, loopIndex) %}
+    <dl class="app-card__meta-list">
+        <div class="app-card__meta-list-item">
+            <dt class="app-card__meta-list-key">
+                Prison number
+            </dt>
+            <dd class="app-card__meta-list-value" data-qa="{{ moveType }}-prison-number-{{ loopIndex }}">
+                {{ arrival.prisonNumber }}
+            </dd>
+        </div>
+        <div class="app-card__meta-list-item">
+            <dt class="app-card__meta-list-key">
+                Date of birth
+            </dt>
+            <dd class="app-card__meta-list-value">
+                {{ arrival.dateOfBirth | formatDate('D MMMM YYYY') }}
+            </dd>
+        </div>
+        <div class="app-card__meta-list-item">
+            <dt class="app-card__meta-list-key">
+                Date and time arrived
+            </dt>
+            <dd class="app-card__meta-list-value" data-qa="{{ moveType }}-pnc-number-{{ loopIndex }}">
+                {{ arrival.movementDateTime | formatDate('D MMMM YYYY, HH:mm') }}
+            </dd>
+        </div>
+        <div class="app-card__meta-list-item">
+            <dt class="app-card__meta-list-key">
+                Location
+            </dt>
+            <dd class="app-card__meta-list-value">
+                {{ arrival.location }}
+            </dd>
+        </div>
+    </dl>
+{% endmacro %}
+
 {% macro expectedArrivalCard(arrival, moveType, loopIndex, user) %}
     <div class='app-card__content'>
         <div class="app-card app-card--with-aside">
@@ -59,7 +96,7 @@
                         {% endif %}
                     </h2>
                 </header>
-                {{ cardListContent(arrival, moveType, loopIndex) }}
+                {{ expectedArrivalCardListContent(arrival, moveType, loopIndex) }}
             </div>
         </div>
     </div>
@@ -85,7 +122,25 @@
                         {% endif %}
                     </h2>
                 </header>
-                {{ cardListContent(arrival, 'PRISON', loopIndex) }}
+                {{ expectedArrivalCardListContent(arrival, 'PRISON', loopIndex) }}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro recentArrivalCard(arrival, loopIndex, user) %}
+    <div class='app-card__content'>
+        <div class="app-card app-card--with-aside">
+            <aside class="app-card__aside">
+                <img src="{{ '/prisoners/' + arrival.prisonNumber + '/image' if arrival.prisonNumber else '/assets/images/placeholder-image.png' }}" class="app-card__image" alt="{{ arrival.lastName }}, {{ arrival.firstName }}" data-qa="prisoner-image"/>
+            </aside>
+            <div class="app-card__content">
+                <header class="app-card__header">
+                    <h2 class="app-card__title" data-qa="PRISON-title-{{ loopIndex }}">
+                        {{ arrival.lastName }}, {{ arrival.firstName }}
+                    </h2>
+                </header>
+                {{ recentArrivalCardListContent(arrival, loopIndex) }}
             </div>
         </div>
     </div>

@@ -16,6 +16,6 @@ export default function routes(services: Services): Router {
     .get('/feature-not-available', (req, res) => res.render('pages/featureNotAvailable'))
     .use(bookedTodayRoutes(services))
     .use(temporaryAbsenceRoutes(services))
-    .use(recentArrivalsRoutes())
+    .use(recentArrivalsRoutes(services))
     .build()
 }

@@ -1,5 +1,6 @@
 declare module 'welcome' {
   export type Arrival = schemas['Arrival']
+  export type RecentArrival = schemas['RecentArrival']
   export type Transfer = schemas['Transfer']
   export type TemporaryAbsence = schemas['TemporaryAbsence']
   export type ConfirmArrivalDetail = schemas['ConfirmArrivalDetail']
@@ -40,6 +41,14 @@ declare module 'welcome' {
       gender?: SexKeys
       potentialMatches?: PotentialMatch[]
       isCurrentPrisoner: boolean
+    }
+    RecentArrival: {
+      prisonNumber: string
+      dateOfBirth: string
+      firstName: string
+      lastName: string
+      movementDateTime: string
+      location: string
     }
     Transfer: {
       firstName: string

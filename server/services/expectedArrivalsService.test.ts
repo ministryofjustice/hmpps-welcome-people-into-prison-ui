@@ -7,6 +7,7 @@ import { NewArrival } from '../routes/bookedtoday/arrivals/state'
 import { raiseAnalyticsEvent } from './raiseAnalyticsEvent'
 import {
   createArrival,
+  createRecentArrival,
   createArrivalResponse,
   createMatchCriteria,
   createNewArrival,
@@ -90,6 +91,57 @@ describe('Expected arrivals service', () => {
 
     it('WelcomeClientFactory is called with a token', async () => {
       await service.getArrivalsForToday(res.locals.user.activeCaseLoadId)
+
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      expect(WelcomeClientFactory).toBeCalledWith(token)
+    })
+  })
+
+  describe('getRecentArrivals', () => {
+    beforeEach(() => {
+      const recentArrivals = [
+        createRecentArrival({ movementDateTime: '2022-01-17T13:16:00' }),
+        createRecentArrival({ movementDateTime: '2022-01-16T14:40:01' }),
+        createRecentArrival({ movementDateTime: '2022-01-15T18:20:00' }),
+        createRecentArrival({ movementDateTime: '2022-01-16T14:40:00' }),
+        createRecentArrival({ movementDateTime: '2022-01-17T09:12:00' }),
+        createRecentArrival({ movementDateTime: '2022-01-16T14:55:00' }),
+        createRecentArrival({ movementDateTime: '2022-01-17T13:15:00' }),
+      ]
+
+      welcomeClient.getRecentArrivals.mockResolvedValue(recentArrivals)
+    })
+
+    it('Retrieves recent arrivals sorted by date and time', async () => {
+      const result = await service.getRecentArrivalsGroupedByDate(res.locals.user.activeCaseLoadId)
+
+      expect(result).toStrictEqual(
+        new Map([
+          [
+            'Monday 17 January',
+            [
+              createRecentArrival({ movementDateTime: '2022-01-17T09:12:00' }),
+              createRecentArrival({ movementDateTime: '2022-01-17T13:15:00' }),
+              createRecentArrival({ movementDateTime: '2022-01-17T13:16:00' }),
+            ],
+          ],
+          [
+            'Sunday 16 January',
+            [
+              createRecentArrival({ movementDateTime: '2022-01-16T14:40:00' }),
+              createRecentArrival({ movementDateTime: '2022-01-16T14:40:01' }),
+              createRecentArrival({ movementDateTime: '2022-01-16T14:55:00' }),
+            ],
+          ],
+          ['Saturday 15 January', [createRecentArrival({ movementDateTime: '2022-01-15T18:20:00' })]],
+        ])
+      )
+
+      expect(welcomeClient.getRecentArrivals).toBeCalledWith(res.locals.user.activeCaseLoadId)
+    })
+
+    it('WelcomeClientFactory is called with a token', async () => {
+      await service.getRecentArrivalsGroupedByDate(res.locals.user.activeCaseLoadId)
 
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       expect(WelcomeClientFactory).toBeCalledWith(token)

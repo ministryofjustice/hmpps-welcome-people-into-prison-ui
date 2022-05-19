@@ -1,6 +1,7 @@
 import moment from 'moment'
 import type {
   Arrival,
+  RecentArrival,
   Transfer,
   TemporaryAbsence,
   ConfirmArrivalDetail,
@@ -10,9 +11,10 @@ import type {
   PotentialMatch,
   PotentialMatchCriteria,
   PrisonerDetails,
+  ArrivalResponse,
 } from 'welcome'
 import type { Readable } from 'stream'
-import { ArrivalResponse } from 'welcome'
+import recentArrivals from './recentArrivalsResponse'
 import config, { ApiConfig } from '../config'
 import RestClient from './restClient'
 import logger from '../../logger'
@@ -37,6 +39,11 @@ export default class WelcomeClient {
     return this.restClient.get({
       path: `/arrivals/${id}`,
     }) as Promise<Arrival>
+  }
+
+  async getRecentArrivals(agencyId: string): Promise<RecentArrival[]> {
+    logger.info(`welcomeApi: getRecentArrivals(${agencyId})`)
+    return recentArrivals
   }
 
   async confirmCourtReturn(id: string, prisonId: string, prisonNumber: string): Promise<ArrivalResponse | null> {

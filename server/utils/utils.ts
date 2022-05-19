@@ -5,6 +5,10 @@ interface Person {
   lastName: string
 }
 
+interface DateAndTime {
+  movementDateTime: string
+}
+
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
 
@@ -34,6 +38,10 @@ export const groupBy = <T, K>(items: T[], groupingFunction: (item: T) => K): Map
 export const compareByFullName = <T extends Person>(a: T, b: T): number => {
   const result = a.lastName.localeCompare(b.lastName)
   return result !== 0 ? result : a.firstName.localeCompare(b.firstName)
+}
+
+export const compareByDateAndTime = <T extends DateAndTime>(a: T, b: T): number => {
+  return moment(a.movementDateTime).unix() - moment(b.movementDateTime).unix()
 }
 
 export function assertHasStringValues<K extends keyof Record<string, unknown>>(

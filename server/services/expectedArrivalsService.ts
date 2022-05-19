@@ -1,7 +1,15 @@
-import type { Arrival, ArrivalResponse, PotentialMatchCriteria, PotentialMatch, PrisonerDetails, Sex } from 'welcome'
+import type {
+  Arrival,
+  RecentArrival,
+  ArrivalResponse,
+  PotentialMatchCriteria,
+  PotentialMatch,
+  PrisonerDetails,
+  Sex,
+} from 'welcome'
 import moment, { type Moment } from 'moment'
 import type { Readable } from 'stream'
-import { groupBy, compareByFullName } from '../utils/utils'
+import { groupBy, compareByFullName, compareByDateAndTime } from '../utils/utils'
 import type { RestClientBuilder, WelcomeClient, HmppsAuthClient } from '../data'
 import logger from '../../logger'
 import { RaiseAnalyticsEvent } from './raiseAnalyticsEvent'
@@ -28,11 +36,25 @@ export default class ExpectedArrivalsService {
     return expectedArrivals.sort(compareByFullName)
   }
 
+  private async getRecentArrivals(agencyId: string): Promise<RecentArrival[]> {
+    const token = await this.hmppsAuthClient.getSystemClientToken()
+    const welcomeClient = this.welcomeClientFactory(token)
+    const recentArrivals = await welcomeClient.getRecentArrivals(agencyId)
+    return recentArrivals.sort(compareByDateAndTime)
+  }
+
   private async getTransfers(agencyId: string): Promise<Arrival[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const welcomeClient = this.welcomeClientFactory(token)
     const transfers = await welcomeClient.getTransfers(agencyId)
     return transfers.map(transfer => ({ ...transfer, fromLocationType: LocationType.PRISON })).sort(compareByFullName)
+  }
+
+  public async getRecentArrivalsGroupedByDate(agencyId: string): Promise<Map<string, RecentArrival[]>> {
+    const recentArrivals = await this.getRecentArrivals(agencyId)
+    return groupBy(recentArrivals, (recentArrival: RecentArrival) =>
+      moment(recentArrival.movementDateTime).format('dddd D MMMM')
+    )
   }
 
   public async getArrivalsForToday(agencyId: string, now = () => moment()): Promise<Map<LocationType, Arrival[]>> {
