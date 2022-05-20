@@ -1,5 +1,7 @@
 import { config } from 'dotenv'
-import { setup, defaultClient, TelemetryClient, DistributedTracingModes } from 'applicationinsights'
+import { Contracts, defaultClient, DistributedTracingModes, setup, TelemetryClient } from 'applicationinsights'
+import { EnvelopeTelemetry } from 'applicationinsights/out/Declarations/Contracts'
+import { ClientRequest, RequestOptions } from 'http'
 import applicationVersion from '../applicationVersion'
 
 function defaultName(): string {
@@ -29,7 +31,29 @@ export function buildAppInsightsClient(name = defaultName()): TelemetryClient {
   if (process.env.APPINSIGHTS_INSTRUMENTATIONKEY) {
     defaultClient.context.tags['ai.cloud.role'] = name
     defaultClient.context.tags['ai.application.ver'] = version()
+    defaultClient.addTelemetryProcessor(addUserDataToRequests)
     return defaultClient
   }
   return null
+}
+
+export function addUserDataToRequests(
+  envelope: EnvelopeTelemetry,
+  contextObjects: RequestOptions | ClientRequest | Error
+) {
+  const isRequest = envelope.data.baseType === Contracts.TelemetryTypeString.Request
+  if (isRequest) {
+    const { username, activeCaseLoadId, activeCaseLoad, isReceptionUser } =
+      contextObjects?.['http.ServerRequest']?.res?.locals?.user || {}
+    const { properties } = envelope.data.baseData
+    // eslint-disable-next-line no-param-reassign
+    envelope.data.baseData.properties = {
+      username,
+      activeCaseLoadId,
+      activeCaseLoadDescription: activeCaseLoad?.description,
+      isReceptionUser,
+      ...properties,
+    }
+  }
+  return true
 }
