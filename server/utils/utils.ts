@@ -5,10 +5,6 @@ interface Person {
   lastName: string
 }
 
-interface DateAndTime {
-  movementDateTime: string
-}
-
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
 
@@ -40,9 +36,15 @@ export const compareByFullName = <T extends Person>(a: T, b: T): number => {
   return result !== 0 ? result : a.firstName.localeCompare(b.firstName)
 }
 
-export const compareByDateAndTime = <T extends DateAndTime>(a: T, b: T): number => {
-  return moment(a.movementDateTime).unix() - moment(b.movementDateTime).unix()
-}
+type DateFieldExtractor<T> = (t: T) => string
+
+export const compareByDateAndTime =
+  <T>(f: DateFieldExtractor<T>) =>
+  (a: T, b: T): number => {
+    const aValue = moment(f(a))
+    const bValue = moment(f(b))
+    return aValue.unix() - bValue.unix()
+  }
 
 export function assertHasStringValues<K extends keyof Record<string, unknown>>(
   obj: Record<string, unknown>,

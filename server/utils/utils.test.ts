@@ -210,7 +210,7 @@ describe('compareByFullName', () => {
 describe('compareByDateAndTime', () => {
   it('should compare by movementDateTime sorting earliest first', () => {
     expect(
-      compareByDateAndTime(
+      compareByDateAndTime<Record<string, string>>(a => a.movementDateTime)(
         {
           movementDateTime: '2022-05-18T13:08:00',
         },
@@ -218,10 +218,10 @@ describe('compareByDateAndTime', () => {
           movementDateTime: '2022-05-17T07:07:59',
         }
       )
-    ).toEqual(108001)
+    ).toBeGreaterThan(0)
 
     expect(
-      compareByDateAndTime(
+      compareByDateAndTime<Record<string, string>>(a => a.movementDateTime)(
         {
           movementDateTime: '2022-05-17T07:07:59',
         },
@@ -229,12 +229,12 @@ describe('compareByDateAndTime', () => {
           movementDateTime: '2022-05-18T13:08:00',
         }
       )
-    ).toEqual(-108001)
+    ).toBeLessThan(0)
   })
 
   it('should handle duplicate movementDateTimes', () => {
     expect(
-      compareByDateAndTime(
+      compareByDateAndTime<Record<string, string>>(a => a.movementDateTime)(
         {
           movementDateTime: '2022-05-18T14:13:27',
         },
@@ -243,56 +243,6 @@ describe('compareByDateAndTime', () => {
         }
       )
     ).toEqual(0)
-  })
-
-  it('should handle all types containing movementDateTime', () => {
-    expect(
-      compareByDateAndTime(
-        {
-          prisonNumber: 'G5155VP',
-          dateOfBirth: '1966-04-05',
-          firstName: 'Gideon',
-          lastName: 'Herkimer',
-          movementDateTime: '2022-05-17T07:08:00',
-          location: 'MDI-1-3-004',
-        },
-        {
-          prisonNumber: 'A7925DY',
-          dateOfBirth: '1997-05-06',
-          firstName: 'Bob',
-          lastName: 'Smith',
-          movementDateTime: '2022-05-17T07:07:59',
-          location: 'MDI-1-4-009',
-        }
-      )
-    ).toEqual(1)
-
-    expect(
-      compareByDateAndTime(
-        {
-          firstName: 'John',
-          lastName: 'Doe',
-          dateOfBirth: '1971-01-01',
-          prisonNumber: 'G0013AB',
-          pncNumber: '01/3456A',
-          date: '2021-09-01',
-          fromLocation: 'Reading',
-          moveType: 'PRISON_REMAND',
-          movementDateTime: '2022-05-17T07:07:59',
-        },
-        {
-          firstName: 'Karl',
-          lastName: 'Offender',
-          dateOfBirth: '1985-01-01',
-          prisonNumber: 'G0015GD',
-          pncNumber: '01/5678A',
-          date: '2021-09-01',
-          fromLocation: 'Leeds',
-          moveType: 'PRISON_TRANSFER',
-          movementDateTime: '2022-05-17T07:08:00',
-        }
-      )
-    ).toEqual(-1)
   })
 })
 

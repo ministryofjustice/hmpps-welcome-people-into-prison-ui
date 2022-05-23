@@ -40,7 +40,7 @@ export default class ExpectedArrivalsService {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const welcomeClient = this.welcomeClientFactory(token)
     const recentArrivals = await welcomeClient.getRecentArrivals(agencyId)
-    return recentArrivals.sort(compareByDateAndTime)
+    return recentArrivals.sort(compareByDateAndTime(a => a.movementDateTime))
   }
 
   private async getTransfers(agencyId: string): Promise<Arrival[]> {
@@ -50,11 +50,28 @@ export default class ExpectedArrivalsService {
     return transfers.map(transfer => ({ ...transfer, fromLocationType: LocationType.PRISON })).sort(compareByFullName)
   }
 
+  private getRecentArrivalsByDate =
+    (key: string) => (groupedArrivals: RecentArrival[], recentArrival: RecentArrival) => {
+      return moment(recentArrival.movementDateTime).format('dddd D MMMM') === key
+        ? [...groupedArrivals, recentArrival]
+        : groupedArrivals
+    }
+
   public async getRecentArrivalsGroupedByDate(agencyId: string): Promise<Map<string, RecentArrival[]>> {
     const recentArrivals = await this.getRecentArrivals(agencyId)
-    return groupBy(recentArrivals, (recentArrival: RecentArrival) =>
-      moment(recentArrival.movementDateTime).format('dddd D MMMM')
-    )
+    const today = moment().format('dddd D MMMM')
+    const oneDayAgo = moment().subtract(1, 'days').format('dddd D MMMM')
+    const twoDaysAgo = moment().subtract(2, 'days').format('dddd D MMMM')
+    const mappedArrivals = new Map([
+      [today, []],
+      [oneDayAgo, []],
+      [twoDaysAgo, []],
+    ])
+    mappedArrivals.forEach((value, key) => {
+      const groupedArrivals: RecentArrival[] = []
+      mappedArrivals.set(key, recentArrivals.reduce(this.getRecentArrivalsByDate(key), groupedArrivals))
+    })
+    return mappedArrivals
   }
 
   public async getArrivalsForToday(agencyId: string, now = () => moment()): Promise<Map<LocationType, Arrival[]>> {

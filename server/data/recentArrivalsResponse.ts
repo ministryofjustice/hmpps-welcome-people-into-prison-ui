@@ -1,10 +1,15 @@
+import moment from 'moment'
+
+const today = moment().format('YYYY-MM-DD')
+const twoDaysAgo = moment().subtract(2, 'days').format('YYYY-MM-DD')
+
 export default [
   {
     prisonNumber: 'G5155VP',
     dateOfBirth: '1966-04-05',
     firstName: 'Gideon',
     lastName: 'Herkimer',
-    movementDateTime: '2022-05-17T07:08:00',
+    movementDateTime: `${twoDaysAgo}T07:08:00`,
     location: 'MDI-1-3-004',
   },
   {
@@ -12,7 +17,7 @@ export default [
     dateOfBirth: '1997-05-06',
     firstName: 'Bob',
     lastName: 'Smith',
-    movementDateTime: '2022-05-18T14:15:27',
+    movementDateTime: `${today}T14:15:27`,
     location: 'MDI-1-4-009',
   },
   {
@@ -20,7 +25,7 @@ export default [
     dateOfBirth: '1996-04-16',
     firstName: 'Mark',
     lastName: 'Marks',
-    movementDateTime: '2022-05-18T14:14:27',
+    movementDateTime: `${today}T14:14:27`,
     location: 'MDI-RECV',
   },
   {
@@ -28,7 +33,7 @@ export default [
     dateOfBirth: '1997-05-06',
     firstName: 'Jimmy',
     lastName: 'Smith',
-    movementDateTime: '2022-05-18T14:13:27',
+    movementDateTime: `${today}T14:13:27`,
     location: 'MDI-1-3-099',
   },
   {
@@ -36,7 +41,7 @@ export default [
     dateOfBirth: '1997-05-06',
     firstName: 'Tim',
     lastName: 'Anon',
-    movementDateTime: '2022-05-18T18:15:28',
+    movementDateTime: `${today}T18:15:28`,
     location: 'MDI-1-3-088',
   },
   {
@@ -44,7 +49,7 @@ export default [
     dateOfBirth: '1997-05-06',
     firstName: 'Tony',
     lastName: 'Blyth',
-    movementDateTime: '2022-05-18T18:15:27',
+    movementDateTime: `${today}T18:15:27`,
     location: 'MDI-1-3-008',
   },
   {
@@ -52,7 +57,7 @@ export default [
     dateOfBirth: '1997-05-06',
     firstName: 'Sam',
     lastName: 'Smith',
-    movementDateTime: '2022-05-18T09:15:27',
+    movementDateTime: `${today}T09:15:27`,
     location: 'MDI-1-7-003',
   },
 ]

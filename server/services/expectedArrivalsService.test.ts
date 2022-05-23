@@ -98,17 +98,20 @@ describe('Expected arrivals service', () => {
   })
 
   describe('getRecentArrivals', () => {
+    const today = moment().format('YYYY-MM-DD')
+    const oneDayAgo = moment().subtract(1, 'days').format('YYYY-MM-DD')
+    const twoDaysAgo = moment().subtract(2, 'days').format('YYYY-MM-DD')
+
     beforeEach(() => {
       const recentArrivals = [
-        createRecentArrival({ movementDateTime: '2022-01-17T13:16:00' }),
-        createRecentArrival({ movementDateTime: '2022-01-16T14:40:01' }),
-        createRecentArrival({ movementDateTime: '2022-01-15T18:20:00' }),
-        createRecentArrival({ movementDateTime: '2022-01-16T14:40:00' }),
-        createRecentArrival({ movementDateTime: '2022-01-17T09:12:00' }),
-        createRecentArrival({ movementDateTime: '2022-01-16T14:55:00' }),
-        createRecentArrival({ movementDateTime: '2022-01-17T13:15:00' }),
+        createRecentArrival({ movementDateTime: `${today}T13:16:00` }),
+        createRecentArrival({ movementDateTime: `${oneDayAgo}T14:40:01` }),
+        createRecentArrival({ movementDateTime: `${twoDaysAgo}T18:20:00` }),
+        createRecentArrival({ movementDateTime: `${oneDayAgo}T14:40:00` }),
+        createRecentArrival({ movementDateTime: `${today}T09:12:00` }),
+        createRecentArrival({ movementDateTime: `${oneDayAgo}T14:55:00` }),
+        createRecentArrival({ movementDateTime: `${today}T13:15:00` }),
       ]
-
       welcomeClient.getRecentArrivals.mockResolvedValue(recentArrivals)
     })
 
@@ -118,22 +121,25 @@ describe('Expected arrivals service', () => {
       expect(result).toStrictEqual(
         new Map([
           [
-            'Monday 17 January',
+            moment().format('dddd D MMMM'),
             [
-              createRecentArrival({ movementDateTime: '2022-01-17T09:12:00' }),
-              createRecentArrival({ movementDateTime: '2022-01-17T13:15:00' }),
-              createRecentArrival({ movementDateTime: '2022-01-17T13:16:00' }),
+              createRecentArrival({ movementDateTime: `${today}T09:12:00` }),
+              createRecentArrival({ movementDateTime: `${today}T13:15:00` }),
+              createRecentArrival({ movementDateTime: `${today}T13:16:00` }),
             ],
           ],
           [
-            'Sunday 16 January',
+            moment().subtract(1, 'days').format('dddd D MMMM'),
             [
-              createRecentArrival({ movementDateTime: '2022-01-16T14:40:00' }),
-              createRecentArrival({ movementDateTime: '2022-01-16T14:40:01' }),
-              createRecentArrival({ movementDateTime: '2022-01-16T14:55:00' }),
+              createRecentArrival({ movementDateTime: `${oneDayAgo}T14:40:00` }),
+              createRecentArrival({ movementDateTime: `${oneDayAgo}T14:40:01` }),
+              createRecentArrival({ movementDateTime: `${oneDayAgo}T14:55:00` }),
             ],
           ],
-          ['Saturday 15 January', [createRecentArrival({ movementDateTime: '2022-01-15T18:20:00' })]],
+          [
+            moment().subtract(2, 'days').format('dddd D MMMM'),
+            [createRecentArrival({ movementDateTime: `${twoDaysAgo}T18:20:00` })],
+          ],
         ])
       )
 

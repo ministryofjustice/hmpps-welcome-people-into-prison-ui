@@ -20,6 +20,7 @@ const twoDaysAgo = moment().subtract(2, 'days').format('dddd D MMMM')
 const recentArrivals = new Map([
   [today, [createRecentArrival({ movementDateTime: moment().format() })]],
   [oneDayAgo, [createRecentArrival({ movementDateTime: moment().subtract(1, 'days').format() })]],
+  [twoDaysAgo, []],
 ])
 
 beforeEach(() => {
@@ -39,9 +40,9 @@ describe('GET /recent-arrivals', () => {
       .expect(res => {
         const $ = cheerio.load(res.text)
         expect($('h1').text()).toContain('Prisoners who have arrived in the last 3 days')
-        expect($('#today').text()).toBe(today)
-        expect($('#one-day-ago').text()).toBe(oneDayAgo)
-        expect($('#two-days-ago').text()).toBe(twoDaysAgo)
+        expect($('#date-1').text()).toBe(today)
+        expect($('#date-2').text()).toBe(oneDayAgo)
+        expect($('#date-3').text()).toBe(twoDaysAgo)
       })
   })
 
@@ -60,9 +61,9 @@ describe('GET /recent-arrivals', () => {
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
         const $ = cheerio.load(res.text)
-        expect($('#no-prisoners-today').text()).toContain('')
-        expect($('#no-prisoners-one-day-ago').text()).toContain('')
-        expect($('#no-prisoners-two-days-ago').text()).toContain('No prisoners arrived on this day.')
+        expect($('#no-prisoners-date-1').text()).toContain('')
+        expect($('#no-prisoners-date-2').text()).toContain('')
+        expect($('#no-prisoners-date-3').text()).toContain('No prisoners arrived on this day.')
       })
   })
 })

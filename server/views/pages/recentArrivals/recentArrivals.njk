@@ -1,29 +1,19 @@
 {% extends "../../partials/layout.njk" %}
-{% from  "../../partials/expectedArrivalCardMacro.njk" import recentArrivalCard  %}
+{% from  "../../partials/recentArrivalCardMacro.njk" import recentArrivalCard  %}
 {% set pageTitle = "Prisoners who have arrived in the last 3 days" %}
 
 {% block content %}
     <div class="govuk-!-margin-bottom-8">
         <div class="govuk-width-container govuk-body">
             <h1>{{pageTitle}}</h1>
-            <h2 class="govuk-heading-m govuk-!-margin-top-9" id='today'>{{dates.today}}</h2>
-                {% for arrival in recentArrivals.get(dates.today) %}
+            {% for date, groupedArrivals in recentArrivals %}
+            <h2 id="date-{{loop.index}}" class="govuk-heading-m govuk-!-margin-top-9">{{date}}</h2>
+                {% for arrival in groupedArrivals %}
                     {{ recentArrivalCard(arrival, loop.index)}}
                 {% else %}
-                    <p id='no-prisoners-today'>No prisoners arrived on this day.</p>
+                    <p id="no-prisoners-date-{{loop.index}}">No prisoners arrived on this day.</p>
                 {% endfor %}
-            <h2 class="govuk-heading-m govuk-!-margin-top-9" id='one-day-ago'>{{dates.oneDayAgo}}</h2>
-                {% for arrival in recentArrivals.get(dates.oneDayAgo) %}
-                    {{ recentArrivalCard(arrival, loop.index)}}
-                {% else %}
-                    <p id='no-prisoners-one-day-ago'>No prisoners arrived on this day.</p>
-                {% endfor %}
-            <h2 class="govuk-heading-m govuk-!-margin-top-9" id='two-days-ago'>{{dates.twoDaysAgo}}</h2>
-                {% for arrival in recentArrivals.get(dates.twoDaysAgo) %}
-                    {{ recentArrivalCard(arrival, loop.index)}}
-                {% else %}
-                    <p id='no-prisoners-two-days-ago'>No prisoners arrived on this day.</p>
-                {% endfor %}
+            {% endfor %}
         </div>
     </div>
 {% endblock %}
