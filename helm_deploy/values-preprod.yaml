@@ -16,7 +16,7 @@ generic-service:
     HMPPS_COOKIE_NAME: hmpps-session-preprod
     APP_HOSTNAME: welcome-preprod.prison.service.justice.gov.uk
     SYSTEM_PHASE: PRE-PRODUCTION
-    ENABLED_PRISONS: 'NMI,MDI,LII'
+    ENABLED_PRISONS: 'NMI,MDI,LII,DMI'
     CONFIRM_ENABLED: 'true'
     CONFIRM_NO_IDENTIFIERS_ENABLED: 'true'
     TEMPORARY_ABSENCE_ENABLED: 'true'
