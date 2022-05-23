@@ -6,7 +6,6 @@ const user = {
   activeCaseLoadId: 'LII',
   isReceptionUser: true,
   username: 'test-user',
-  activeCaseLoadDescription: 'Lincoln',
 }
 
 const createEnvelope = (properties: Record<string, string | boolean>, baseType = 'RequestData') =>
@@ -17,12 +16,7 @@ const createEnvelope = (properties: Record<string, string | boolean>, baseType =
     },
   } as unknown as EnvelopeTelemetry)
 
-const createContext = (
-  username: string,
-  activeCaseLoadId: string,
-  activeCaseLoadDescription: string,
-  isReceptionUser: boolean
-) =>
+const createContext = (username: string, activeCaseLoadId: string, isReceptionUser: boolean) =>
   ({
     'http.ServerRequest': {
       res: {
@@ -30,7 +24,6 @@ const createContext = (
           user: {
             username,
             activeCaseLoadId,
-            activeCaseLoad: { description: activeCaseLoadDescription },
             isReceptionUser,
           },
         },
@@ -38,12 +31,7 @@ const createContext = (
     },
   } as unknown as ClientRequest)
 
-const context = createContext(
-  user.username,
-  user.activeCaseLoadId,
-  user.activeCaseLoadDescription,
-  user.isReceptionUser
-)
+const context = createContext(user.username, user.activeCaseLoadId, user.isReceptionUser)
 
 describe('azureAppInsights', () => {
   describe('addUserDataToRequests', () => {

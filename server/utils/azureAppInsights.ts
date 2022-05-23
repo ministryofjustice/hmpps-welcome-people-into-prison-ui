@@ -43,14 +43,13 @@ export function addUserDataToRequests(
 ) {
   const isRequest = envelope.data.baseType === Contracts.TelemetryTypeString.Request
   if (isRequest) {
-    const { username, activeCaseLoadId, activeCaseLoad, isReceptionUser } =
+    const { username, activeCaseLoadId, isReceptionUser } =
       contextObjects?.['http.ServerRequest']?.res?.locals?.user || {}
     const { properties } = envelope.data.baseData
     // eslint-disable-next-line no-param-reassign
     envelope.data.baseData.properties = {
       username,
       activeCaseLoadId,
-      activeCaseLoadDescription: activeCaseLoad?.description,
       isReceptionUser,
       ...properties,
     }
