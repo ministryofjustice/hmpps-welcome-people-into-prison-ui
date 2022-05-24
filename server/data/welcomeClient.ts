@@ -12,9 +12,9 @@ import type {
   PotentialMatchCriteria,
   PrisonerDetails,
   ArrivalResponse,
+  PaginatedResponse,
 } from 'welcome'
 import type { Readable } from 'stream'
-import recentArrivals from './recentArrivalsResponse'
 import config, { ApiConfig } from '../config'
 import RestClient from './restClient'
 import logger from '../../logger'
@@ -41,9 +41,21 @@ export default class WelcomeClient {
     }) as Promise<Arrival>
   }
 
-  async getRecentArrivals(agencyId: string): Promise<RecentArrival[]> {
-    logger.info(`welcomeApi: getRecentArrivals(${agencyId})`)
-    return recentArrivals
+  async getRecentArrivals(
+    prisonId: string,
+    fromDate: moment.Moment,
+    toDate: moment.Moment
+  ): Promise<PaginatedResponse<RecentArrival>> {
+    logger.info(`welcomeApi: getRecentArrivals(${prisonId})`)
+    return this.restClient.get({
+      path: `/prisons/${prisonId}/recent-arrivals`,
+      query: {
+        fromDate: fromDate.format('YYYY-MM-DD'),
+        toDate: toDate.format('YYYY-MM-DD'),
+        pageSize: '50',
+        page: '0',
+      },
+    }) as Promise<PaginatedResponse<RecentArrival>>
   }
 
   async confirmCourtReturn(id: string, prisonId: string, prisonNumber: string): Promise<ArrivalResponse | null> {

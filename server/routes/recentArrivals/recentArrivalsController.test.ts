@@ -13,9 +13,9 @@ const expectedArrivalsService = new ExpectedArrivalsService(null, null, null) as
 
 let app: Express
 
-const today = moment().format('dddd D MMMM')
-const oneDayAgo = moment().subtract(1, 'days').format('dddd D MMMM')
-const twoDaysAgo = moment().subtract(2, 'days').format('dddd D MMMM')
+const today = moment().startOf('day')
+const oneDayAgo = moment().subtract(1, 'days').startOf('day')
+const twoDaysAgo = moment().subtract(2, 'days').startOf('day')
 
 const recentArrivals = new Map([
   [today, [createRecentArrival({ movementDateTime: moment().format() })]],
@@ -40,9 +40,9 @@ describe('GET /recent-arrivals', () => {
       .expect(res => {
         const $ = cheerio.load(res.text)
         expect($('h1').text()).toContain('Prisoners who have arrived in the last 3 days')
-        expect($('#date-1').text()).toBe(today)
-        expect($('#date-2').text()).toBe(oneDayAgo)
-        expect($('#date-3').text()).toBe(twoDaysAgo)
+        expect($('#date-1').text()).toBe(today.format('dddd D MMMM'))
+        expect($('#date-2').text()).toBe(oneDayAgo.format('dddd D MMMM'))
+        expect($('#date-3').text()).toBe(twoDaysAgo.format('dddd D MMMM'))
       })
   })
 

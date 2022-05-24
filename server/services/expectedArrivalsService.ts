@@ -36,11 +36,11 @@ export default class ExpectedArrivalsService {
     return expectedArrivals.sort(compareByFullName)
   }
 
-  private async getRecentArrivals(agencyId: string): Promise<RecentArrival[]> {
+  private async getRecentArrivals(agencyId: string, twoDaysAgo: Moment, today: Moment): Promise<RecentArrival[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const welcomeClient = this.welcomeClientFactory(token)
-    const recentArrivals = await welcomeClient.getRecentArrivals(agencyId)
-    return recentArrivals.sort(compareByDateAndTime(a => a.movementDateTime))
+    const recentArrivals = await welcomeClient.getRecentArrivals(agencyId, twoDaysAgo, today)
+    return recentArrivals.content.sort(compareByDateAndTime(a => a.movementDateTime))
   }
 
   private async getTransfers(agencyId: string): Promise<Arrival[]> {
@@ -50,27 +50,21 @@ export default class ExpectedArrivalsService {
     return transfers.map(transfer => ({ ...transfer, fromLocationType: LocationType.PRISON })).sort(compareByFullName)
   }
 
-  private getRecentArrivalsByDate =
-    (key: string) => (groupedArrivals: RecentArrival[], recentArrival: RecentArrival) => {
-      return moment(recentArrival.movementDateTime).format('dddd D MMMM') === key
-        ? [...groupedArrivals, recentArrival]
-        : groupedArrivals
-    }
+  private isArrivalArrivedOnDay = (day: Moment) => (recentArrival: RecentArrival) => {
+    return moment(recentArrival.movementDateTime).startOf('day').valueOf() === day.startOf('day').valueOf()
+  }
 
-  public async getRecentArrivalsGroupedByDate(agencyId: string): Promise<Map<string, RecentArrival[]>> {
-    const recentArrivals = await this.getRecentArrivals(agencyId)
-    const today = moment().format('dddd D MMMM')
-    const oneDayAgo = moment().subtract(1, 'days').format('dddd D MMMM')
-    const twoDaysAgo = moment().subtract(2, 'days').format('dddd D MMMM')
-    const mappedArrivals = new Map([
-      [today, []],
-      [oneDayAgo, []],
-      [twoDaysAgo, []],
-    ])
-    mappedArrivals.forEach((value, key) => {
-      const groupedArrivals: RecentArrival[] = []
-      mappedArrivals.set(key, recentArrivals.reduce(this.getRecentArrivalsByDate(key), groupedArrivals))
-    })
+  public async getRecentArrivalsGroupedByDate(agencyId: string): Promise<Map<Moment, RecentArrival[]>> {
+    const today = moment().startOf('day')
+    const oneDayAgo = moment().subtract(1, 'days').startOf('day')
+    const twoDaysAgo = moment().subtract(2, 'days').startOf('day')
+
+    const recentArrivals = await this.getRecentArrivals(agencyId, twoDaysAgo, today)
+    const mappedArrivals = new Map<Moment, RecentArrival[]>()
+
+    mappedArrivals.set(today, recentArrivals.filter(this.isArrivalArrivedOnDay(today)))
+    mappedArrivals.set(oneDayAgo, recentArrivals.filter(this.isArrivalArrivedOnDay(oneDayAgo)))
+    mappedArrivals.set(twoDaysAgo, recentArrivals.filter(this.isArrivalArrivedOnDay(twoDaysAgo)))
     return mappedArrivals
   }
 
