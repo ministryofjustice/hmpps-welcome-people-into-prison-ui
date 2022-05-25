@@ -1,7 +1,15 @@
-import type { Arrival, ArrivalResponse, PotentialMatchCriteria, PotentialMatch, PrisonerDetails, Sex } from 'welcome'
+import type {
+  Arrival,
+  RecentArrival,
+  ArrivalResponse,
+  PotentialMatchCriteria,
+  PotentialMatch,
+  PrisonerDetails,
+  Sex,
+} from 'welcome'
 import moment, { type Moment } from 'moment'
 import type { Readable } from 'stream'
-import { groupBy, compareByFullName } from '../utils/utils'
+import { groupBy, compareByFullName, compareByDateAndTime } from '../utils/utils'
 import type { RestClientBuilder, WelcomeClient, HmppsAuthClient } from '../data'
 import logger from '../../logger'
 import { RaiseAnalyticsEvent } from './raiseAnalyticsEvent'
@@ -28,11 +36,36 @@ export default class ExpectedArrivalsService {
     return expectedArrivals.sort(compareByFullName)
   }
 
+  private async getRecentArrivals(agencyId: string, twoDaysAgo: Moment, today: Moment): Promise<RecentArrival[]> {
+    const token = await this.hmppsAuthClient.getSystemClientToken()
+    const welcomeClient = this.welcomeClientFactory(token)
+    const recentArrivals = await welcomeClient.getRecentArrivals(agencyId, twoDaysAgo, today)
+    return recentArrivals.content.sort(compareByDateAndTime(a => a.movementDateTime))
+  }
+
   private async getTransfers(agencyId: string): Promise<Arrival[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const welcomeClient = this.welcomeClientFactory(token)
     const transfers = await welcomeClient.getTransfers(agencyId)
     return transfers.map(transfer => ({ ...transfer, fromLocationType: LocationType.PRISON })).sort(compareByFullName)
+  }
+
+  private isArrivalArrivedOnDay = (day: Moment) => (recentArrival: RecentArrival) => {
+    return moment(recentArrival.movementDateTime).startOf('day').valueOf() === day.startOf('day').valueOf()
+  }
+
+  public async getRecentArrivalsGroupedByDate(agencyId: string): Promise<Map<Moment, RecentArrival[]>> {
+    const today = moment().startOf('day')
+    const oneDayAgo = moment().subtract(1, 'days').startOf('day')
+    const twoDaysAgo = moment().subtract(2, 'days').startOf('day')
+
+    const recentArrivals = await this.getRecentArrivals(agencyId, twoDaysAgo, today)
+    const mappedArrivals = new Map<Moment, RecentArrival[]>()
+
+    mappedArrivals.set(today, recentArrivals.filter(this.isArrivalArrivedOnDay(today)))
+    mappedArrivals.set(oneDayAgo, recentArrivals.filter(this.isArrivalArrivedOnDay(oneDayAgo)))
+    mappedArrivals.set(twoDaysAgo, recentArrivals.filter(this.isArrivalArrivedOnDay(twoDaysAgo)))
+    return mappedArrivals
   }
 
   public async getArrivalsForToday(agencyId: string, now = () => moment()): Promise<Map<LocationType, Arrival[]>> {

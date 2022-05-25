@@ -1,6 +1,7 @@
 import moment from 'moment'
 import type {
   Arrival,
+  RecentArrival,
   Transfer,
   TemporaryAbsence,
   ConfirmArrivalDetail,
@@ -10,9 +11,10 @@ import type {
   PotentialMatch,
   PotentialMatchCriteria,
   PrisonerDetails,
+  ArrivalResponse,
+  PaginatedResponse,
 } from 'welcome'
 import type { Readable } from 'stream'
-import { ArrivalResponse } from 'welcome'
 import config, { ApiConfig } from '../config'
 import RestClient from './restClient'
 import logger from '../../logger'
@@ -37,6 +39,23 @@ export default class WelcomeClient {
     return this.restClient.get({
       path: `/arrivals/${id}`,
     }) as Promise<Arrival>
+  }
+
+  async getRecentArrivals(
+    prisonId: string,
+    fromDate: moment.Moment,
+    toDate: moment.Moment
+  ): Promise<PaginatedResponse<RecentArrival>> {
+    logger.info(`welcomeApi: getRecentArrivals(${prisonId})`)
+    return this.restClient.get({
+      path: `/prisons/${prisonId}/recent-arrivals`,
+      query: {
+        fromDate: fromDate.format('YYYY-MM-DD'),
+        toDate: toDate.format('YYYY-MM-DD'),
+        pageSize: '50',
+        page: '0',
+      },
+    }) as Promise<PaginatedResponse<RecentArrival>>
   }
 
   async confirmCourtReturn(id: string, prisonId: string, prisonNumber: string): Promise<ArrivalResponse | null> {

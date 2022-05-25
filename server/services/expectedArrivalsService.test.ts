@@ -7,7 +7,9 @@ import { NewArrival } from '../routes/bookedtoday/arrivals/state'
 import { raiseAnalyticsEvent } from './raiseAnalyticsEvent'
 import {
   createArrival,
+  createRecentArrival,
   createArrivalResponse,
+  createRecentArrivalResponse,
   createMatchCriteria,
   createNewArrival,
   createPotentialMatch,
@@ -90,6 +92,65 @@ describe('Expected arrivals service', () => {
 
     it('WelcomeClientFactory is called with a token', async () => {
       await service.getArrivalsForToday(res.locals.user.activeCaseLoadId)
+
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      expect(WelcomeClientFactory).toBeCalledWith(token)
+    })
+  })
+
+  describe('getRecentArrivals', () => {
+    const today = moment().startOf('day').format('YYYY-MM-DD')
+    const oneDayAgo = moment().subtract(1, 'days').startOf('day').format('YYYY-MM-DD')
+    const twoDaysAgo = moment().subtract(2, 'days').startOf('day').format('YYYY-MM-DD')
+
+    beforeEach(() => {
+      const recentArrivals = createRecentArrivalResponse({
+        content: [
+          createRecentArrival({ movementDateTime: `${today}T13:16:00` }),
+          createRecentArrival({ movementDateTime: `${oneDayAgo}T14:40:01` }),
+          createRecentArrival({ movementDateTime: `${twoDaysAgo}T18:20:00` }),
+          createRecentArrival({ movementDateTime: `${oneDayAgo}T14:40:00` }),
+          createRecentArrival({ movementDateTime: `${today}T09:12:00` }),
+          createRecentArrival({ movementDateTime: `${oneDayAgo}T14:55:00` }),
+          createRecentArrival({ movementDateTime: `${today}T13:15:00` }),
+        ],
+      })
+      welcomeClient.getRecentArrivals.mockResolvedValue(recentArrivals)
+    })
+
+    it('Retrieves recent arrivals sorted by date and time', async () => {
+      const dateTo = moment().startOf('day')
+      const middleDate = moment().subtract(1, 'days').startOf('day')
+      const dateFrom = moment().subtract(2, 'days').startOf('day')
+      const result = await service.getRecentArrivalsGroupedByDate(res.locals.user.activeCaseLoadId)
+
+      expect(result).toStrictEqual(
+        new Map([
+          [
+            dateTo,
+            [
+              createRecentArrival({ movementDateTime: `${today}T09:12:00` }),
+              createRecentArrival({ movementDateTime: `${today}T13:15:00` }),
+              createRecentArrival({ movementDateTime: `${today}T13:16:00` }),
+            ],
+          ],
+          [
+            middleDate,
+            [
+              createRecentArrival({ movementDateTime: `${oneDayAgo}T14:40:00` }),
+              createRecentArrival({ movementDateTime: `${oneDayAgo}T14:40:01` }),
+              createRecentArrival({ movementDateTime: `${oneDayAgo}T14:55:00` }),
+            ],
+          ],
+          [dateFrom, [createRecentArrival({ movementDateTime: `${twoDaysAgo}T18:20:00` })]],
+        ])
+      )
+
+      expect(welcomeClient.getRecentArrivals).toBeCalledWith(res.locals.user.activeCaseLoadId, dateFrom, dateTo)
+    })
+
+    it('WelcomeClientFactory is called with a token', async () => {
+      await service.getRecentArrivalsGroupedByDate(res.locals.user.activeCaseLoadId)
 
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       expect(WelcomeClientFactory).toBeCalledWith(token)

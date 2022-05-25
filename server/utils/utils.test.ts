@@ -4,6 +4,7 @@ import {
   createDate,
   groupBy,
   compareByFullName,
+  compareByDateAndTime,
   assertHasStringValues,
   assertHasOptionalStringValues,
   zip,
@@ -203,6 +204,45 @@ describe('compareByFullName', () => {
         }
       )
     ).toEqual(-1)
+  })
+})
+
+describe('compareByDateAndTime', () => {
+  it('should compare by movementDateTime sorting earliest first', () => {
+    expect(
+      compareByDateAndTime<Record<string, string>>(a => a.movementDateTime)(
+        {
+          movementDateTime: '2022-05-18T13:08:00',
+        },
+        {
+          movementDateTime: '2022-05-17T07:07:59',
+        }
+      )
+    ).toBeGreaterThan(0)
+
+    expect(
+      compareByDateAndTime<Record<string, string>>(a => a.movementDateTime)(
+        {
+          movementDateTime: '2022-05-17T07:07:59',
+        },
+        {
+          movementDateTime: '2022-05-18T13:08:00',
+        }
+      )
+    ).toBeLessThan(0)
+  })
+
+  it('should handle duplicate movementDateTimes', () => {
+    expect(
+      compareByDateAndTime<Record<string, string>>(a => a.movementDateTime)(
+        {
+          movementDateTime: '2022-05-18T14:13:27',
+        },
+        {
+          movementDateTime: '2022-05-18T14:13:27',
+        }
+      )
+    ).toEqual(0)
   })
 })
 

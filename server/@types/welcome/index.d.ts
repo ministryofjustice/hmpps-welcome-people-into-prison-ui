@@ -1,5 +1,6 @@
 declare module 'welcome' {
   export type Arrival = schemas['Arrival']
+  export type RecentArrival = schemas['RecentArrival']
   export type Transfer = schemas['Transfer']
   export type TemporaryAbsence = schemas['TemporaryAbsence']
   export type ConfirmArrivalDetail = schemas['ConfirmArrivalDetail']
@@ -24,7 +25,26 @@ declare module 'welcome' {
     MALE = 'MALE',
     TRANS = 'TRANS',
   }
-
+  export interface PaginatedResponse<T> {
+    content: T[]
+    pageable: {
+      sort: { empty: boolean; sorted: boolean; unsorted: boolean }
+      offset: number
+      pageSize: number
+      pageNumber: number
+      paged: boolean
+      unpaged: boolean
+    }
+    last: boolean
+    totalPages: number
+    totalElements: number
+    size: number
+    number: number
+    sort: { empty: boolean; sorted: boolean; unsorted: boolean }
+    first: boolean
+    numberOfElements: number
+    empty: boolean
+  }
   export interface schemas {
     Arrival: {
       id?: string
@@ -40,6 +60,14 @@ declare module 'welcome' {
       gender?: SexKeys
       potentialMatches?: PotentialMatch[]
       isCurrentPrisoner: boolean
+    }
+    RecentArrival: {
+      prisonNumber: string
+      dateOfBirth: string
+      firstName: string
+      lastName: string
+      movementDateTime: string
+      location: string
     }
     Transfer: {
       firstName: string
