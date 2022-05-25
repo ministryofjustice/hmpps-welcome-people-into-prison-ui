@@ -1,6 +1,5 @@
-import { EnvelopeTelemetry } from 'applicationinsights/out/Declarations/Contracts'
-import { ClientRequest } from 'http'
-import { addUserDataToRequests } from './azureAppInsights'
+import { DataTelemetry, EnvelopeTelemetry } from 'applicationinsights/out/Declarations/Contracts'
+import { addUserDataToRequests, ContextObject } from './azureAppInsights'
 
 const user = {
   activeCaseLoadId: 'LII',
@@ -13,8 +12,8 @@ const createEnvelope = (properties: Record<string, string | boolean>, baseType =
     data: {
       baseType,
       baseData: { properties },
-    },
-  } as unknown as EnvelopeTelemetry)
+    } as DataTelemetry,
+  } as EnvelopeTelemetry)
 
 const createContext = (username: string, activeCaseLoadId: string, isReceptionUser: boolean) =>
   ({
@@ -29,7 +28,7 @@ const createContext = (username: string, activeCaseLoadId: string, isReceptionUs
         },
       },
     },
-  } as unknown as ClientRequest)
+  } as ContextObject)
 
 const context = createContext(user.username, user.activeCaseLoadId, user.isReceptionUser)
 
@@ -67,7 +66,7 @@ describe('azureAppInsights', () => {
 
       addUserDataToRequests(envelope, {
         'http.ServerRequest': {},
-      } as unknown as ClientRequest)
+      } as ContextObject)
 
       expect(envelope.data.baseData.properties).toEqual({
         other: 'things',

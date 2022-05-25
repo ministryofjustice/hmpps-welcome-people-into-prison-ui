@@ -1,8 +1,12 @@
 import { config } from 'dotenv'
 import { Contracts, defaultClient, DistributedTracingModes, setup, TelemetryClient } from 'applicationinsights'
 import { EnvelopeTelemetry } from 'applicationinsights/out/Declarations/Contracts'
-import { ClientRequest, RequestOptions } from 'http'
 import applicationVersion from '../applicationVersion'
+
+export type ContextObject = {
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
+  [name: string]: any
+}
 
 function defaultName(): string {
   const {
@@ -37,10 +41,7 @@ export function buildAppInsightsClient(name = defaultName()): TelemetryClient {
   return null
 }
 
-export function addUserDataToRequests(
-  envelope: EnvelopeTelemetry,
-  contextObjects: RequestOptions | ClientRequest | Error
-) {
+export function addUserDataToRequests(envelope: EnvelopeTelemetry, contextObjects: ContextObject) {
   const isRequest = envelope.data.baseType === Contracts.TelemetryTypeString.Request
   if (isRequest) {
     const { username, activeCaseLoadId, isReceptionUser } =
