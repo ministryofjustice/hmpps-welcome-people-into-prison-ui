@@ -1,5 +1,6 @@
 import {
   type Arrival,
+  type RecentArrival,
   type ArrivalResponse,
   type ImprisonmentStatus,
   type PotentialMatch,
@@ -11,6 +12,7 @@ import {
   type Transfer,
   type UserCaseLoad,
   PrisonerDetails,
+  type PaginatedResponse,
 } from 'welcome'
 import type { NewArrival } from '../../routes/bookedtoday/arrivals/state'
 import type { User } from '../hmppsAuthClient'
@@ -41,6 +43,55 @@ export const createArrival = ({
   fromLocationType,
   isCurrentPrisoner,
   potentialMatches,
+})
+
+export const createRecentArrival = ({
+  firstName = 'Jim',
+  lastName = 'Smith',
+  dateOfBirth = '1973-01-08',
+  prisonNumber = 'A1234AB',
+  movementDateTime = '2022-01-17T14:20:00',
+  location = 'MDI-1-3-004',
+} = {}): RecentArrival => ({
+  firstName,
+  lastName,
+  dateOfBirth,
+  prisonNumber,
+  movementDateTime,
+  location,
+})
+
+export const createRecentArrivalResponse = ({
+  content = [],
+  pageable = {
+    sort: { empty: true, sorted: false, unsorted: true },
+    offset: 0,
+    pageSize: 50,
+    pageNumber: 0,
+    paged: true,
+    unpaged: false,
+  },
+  last = true,
+  totalPages = 0,
+  totalElements = 0,
+  size = 50,
+  number = 0,
+  sort = { empty: true, sorted: false, unsorted: true },
+  first = true,
+  numberOfElements = 0,
+  empty = true,
+} = {}): PaginatedResponse<RecentArrival> => ({
+  content,
+  pageable,
+  last,
+  totalPages,
+  totalElements,
+  size,
+  number,
+  sort,
+  first,
+  numberOfElements,
+  empty,
 })
 
 export const createPrisonerDetails = ({

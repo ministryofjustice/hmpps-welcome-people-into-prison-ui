@@ -1,4 +1,4 @@
-{% macro cardListContent(arrival, moveType, loopIndex) %}
+{% macro expectedArrivalCardListContent(arrival, moveType, loopIndex) %}
     <dl class="app-card__meta-list">
         <div class="app-card__meta-list-item">
             <dt class="app-card__meta-list-key">
@@ -59,7 +59,7 @@
                         {% endif %}
                     </h2>
                 </header>
-                {{ cardListContent(arrival, moveType, loopIndex) }}
+                {{ expectedArrivalCardListContent(arrival, moveType, loopIndex) }}
             </div>
         </div>
     </div>
@@ -85,7 +85,7 @@
                         {% endif %}
                     </h2>
                 </header>
-                {{ cardListContent(arrival, 'PRISON', loopIndex) }}
+                {{ expectedArrivalCardListContent(arrival, 'PRISON', loopIndex) }}
             </div>
         </div>
     </div>

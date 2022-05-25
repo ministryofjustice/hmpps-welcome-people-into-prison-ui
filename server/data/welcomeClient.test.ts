@@ -11,6 +11,8 @@ import {
   createPotentialMatch,
   createTemporaryAbsence,
   createTransfer,
+  createRecentArrival,
+  createRecentArrivalResponse,
 } from './__testutils/testObjects'
 
 describe('welcomeClient', () => {
@@ -61,6 +63,37 @@ describe('welcomeClient', () => {
 
       const output = await welcomeClient.getExpectedArrivals(activeCaseLoadId, date)
       expect(output).toEqual(arrivals)
+    })
+  })
+
+  describe('getRecentArrivals', () => {
+    const activeCaseLoadId = 'MDI'
+    const fromDate = moment().subtract(2, 'days')
+    const middleDate = moment().subtract(1, 'days')
+    const toDate = moment()
+    const recentArrivals = createRecentArrivalResponse({
+      content: [
+        createRecentArrival({ movementDateTime: `${toDate}T13:16:00` }),
+        createRecentArrival({ movementDateTime: `${middleDate}T14:40:01` }),
+        createRecentArrival({ movementDateTime: `${fromDate}T18:20:00` }),
+        createRecentArrival({ movementDateTime: `${middleDate}T14:40:00` }),
+        createRecentArrival({ movementDateTime: `${toDate}T09:12:00` }),
+        createRecentArrival({ movementDateTime: `${middleDate}T14:55:00` }),
+        createRecentArrival({ movementDateTime: `${toDate}T13:15:00` }),
+      ],
+    })
+    it('should return data from api', async () => {
+      fakeWelcomeApi
+        .get(
+          `/prisons/${activeCaseLoadId}/recent-arrivals?fromDate=${fromDate.format(
+            'YYYY-MM-DD'
+          )}&toDate=${toDate.format('YYYY-MM-DD')}&pageSize=50&page=0`
+        )
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, recentArrivals)
+
+      const output = await welcomeClient.getRecentArrivals(activeCaseLoadId, fromDate, toDate)
+      expect(output).toEqual(recentArrivals)
     })
   })
 
