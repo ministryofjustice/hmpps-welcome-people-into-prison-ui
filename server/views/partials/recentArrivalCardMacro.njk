@@ -24,14 +24,16 @@
                 {{ arrival.movementDateTime | formatDate('D MMMM YYYY, HH:mm') }}
             </dd>
         </div>
-        <div class="app-card__meta-list-item">
-            <dt class="app-card__meta-list-key">
-                Location
-            </dt>
-            <dd class="app-card__meta-list-value" data-qa="{{ date }}-location-{{ loopIndex }}">
-                {{ arrival.location }}
-            </dd>
-        </div>
+        {% if arrival.location %}
+            <div class="app-card__meta-list-item">
+                <dt class="app-card__meta-list-key">
+                    Location
+                </dt>
+                <dd class="app-card__meta-list-value" data-qa="{{ date }}-location-{{ loopIndex }}">
+                    {{ arrival.location }}
+                </dd>
+            </div>
+        {% endif %}
     </dl>
 {% endmacro %}
 
