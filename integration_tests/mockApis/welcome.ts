@@ -2,6 +2,7 @@ import { SuperAgentRequest } from 'superagent'
 import fs from 'fs'
 import path from 'path'
 import defaultUserCaseLoads from './responses/userCaseLoads'
+import recentArrivalsResponse from './responses/recentArrivals'
 import temporaryAbsences from './responses/temporaryAbsences'
 import imprisonmentStatuses from './responses/imprisonmentStatuses'
 import { getMatchingRequests, stubFor } from './wiremock'
@@ -62,6 +63,19 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: arrivals,
+      },
+    })
+  },
+  stubRecentArrivals: (caseLoadId: string): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/welcome/prisons/${caseLoadId}/recent-arrivals\\?fromDate=.*`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: recentArrivalsResponse,
       },
     })
   },

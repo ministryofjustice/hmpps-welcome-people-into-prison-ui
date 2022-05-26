@@ -1,5 +1,6 @@
 {% extends "../../partials/layout.njk" %}
 {% from  "../../partials/recentArrivalCardMacro.njk" import recentArrivalCard  %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% set pageTitle = "Prisoners who have arrived in the last 3 days" %}
 
 {% block content %}
@@ -9,9 +10,13 @@
             {% for date, groupedArrivals in recentArrivals %}
             <h2 id="date-{{loop.index}}" class="govuk-heading-m govuk-!-margin-top-9">{{date | formatDate('dddd D MMMM')}}</h2>
                 {% for arrival in groupedArrivals %}
-                    {{ recentArrivalCard(arrival, loop.index)}}
+                    {{ recentArrivalCard(arrival, loop.index, date | formatDate('YYYY-MM-DD'))}}
                 {% else %}
-                    <p id="no-prisoners-date-{{loop.index}}">No prisoners arrived on this day.</p>
+                    {{ govukInsetText({
+                        text: "No prisoners arrived on this day.",
+                        id: "no-prisoners-date-" + loop.index,
+                        attributes: { 'data-qa': "no-prisoners-" + date | formatDate('YYYY-MM-DD') }
+                    }) }}
                 {% endfor %}
             {% endfor %}
         </div>
