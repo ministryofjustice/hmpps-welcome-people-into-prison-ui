@@ -1,10 +1,10 @@
-{% macro recentArrivalCardListContent(arrival, loopIndex) %}
+{% macro recentArrivalCardListContent(arrival, loopIndex, date) %}
     <dl class="app-card__meta-list">
         <div class="app-card__meta-list-item">
             <dt class="app-card__meta-list-key">
                 Prison number
             </dt>
-            <dd class="app-card__meta-list-value" data-qa="{{ moveType }}-prison-number-{{ loopIndex }}">
+            <dd class="app-card__meta-list-value" data-qa="{{ date }}-prison-number-{{ loopIndex }}">
                 {{ arrival.prisonNumber }}
             </dd>
         </div>
@@ -12,7 +12,7 @@
             <dt class="app-card__meta-list-key">
                 Date of birth
             </dt>
-            <dd class="app-card__meta-list-value">
+            <dd class="app-card__meta-list-value" data-qa="{{ date }}-dob-{{ loopIndex }}">
                 {{ arrival.dateOfBirth | formatDate('D MMMM YYYY') }}
             </dd>
         </div>
@@ -20,7 +20,7 @@
             <dt class="app-card__meta-list-key">
                 Date and time arrived
             </dt>
-            <dd class="app-card__meta-list-value" data-qa="{{ moveType }}-pnc-number-{{ loopIndex }}">
+            <dd class="app-card__meta-list-value" data-qa="{{ date }}-movementDateTime-{{ loopIndex }}">
                 {{ arrival.movementDateTime | formatDate('D MMMM YYYY, HH:mm') }}
             </dd>
         </div>
@@ -28,26 +28,26 @@
             <dt class="app-card__meta-list-key">
                 Location
             </dt>
-            <dd class="app-card__meta-list-value">
+            <dd class="app-card__meta-list-value" data-qa="{{ date }}-location-{{ loopIndex }}">
                 {{ arrival.location }}
             </dd>
         </div>
     </dl>
 {% endmacro %}
 
-{% macro recentArrivalCard(arrival, loopIndex, user) %}
+{% macro recentArrivalCard(arrival, loopIndex, date) %}
     <div class='app-card__content'>
         <div class="app-card app-card--with-aside">
             <aside class="app-card__aside">
-                <img src="{{ '/prisoners/' + arrival.prisonNumber + '/image' if arrival.prisonNumber else '/assets/images/placeholder-image.png' }}" class="app-card__image" alt="{{ arrival.lastName }}, {{ arrival.firstName }}" data-qa="prisoner-image"/>
+                <img src="{{ '/prisoners/' + arrival.prisonNumber + '/image' }}" class="app-card__image" alt="Headshot of {{ arrival.lastName }}, {{ arrival.firstName }}" data-qa="prisoner-image"/>
             </aside>
             <div class="app-card__content">
                 <header class="app-card__header">
-                    <h2 class="app-card__title" data-qa="PRISON-title-{{ loopIndex }}">
+                    <h2 class="app-card__title" data-qa="{{ date }}-title-{{ loopIndex }}">
                         {{ arrival.lastName }}, {{ arrival.firstName }}
                     </h2>
                 </header>
-                {{ recentArrivalCardListContent(arrival, loopIndex) }}
+                {{ recentArrivalCardListContent(arrival, loopIndex, date) }}
             </div>
         </div>
     </div>
