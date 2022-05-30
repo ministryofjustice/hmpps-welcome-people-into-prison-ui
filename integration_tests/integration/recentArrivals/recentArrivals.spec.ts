@@ -6,7 +6,7 @@ const today = moment().format('YYYY-MM-DD')
 const oneDayAgo = moment().subtract(1, 'days').format('YYYY-MM-DD')
 const twoDaysAgo = moment().subtract(2, 'days').format('YYYY-MM-DD')
 
-context('A user can view all current temporary absences', () => {
+context('A user can view all recent arrivals', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', Role.PRISON_RECEPTION)
@@ -24,7 +24,10 @@ context('A user can view all current temporary absences', () => {
     recentArrivalsPage.recentArrivals(1, today).name().should('contain.text', 'Doe, John')
     recentArrivalsPage.recentArrivals(1, today).prisonNumber().should('contain.text', 'G0015GF')
     recentArrivalsPage.recentArrivals(1, today).dob().should('contain.text', '1 January 1973')
-    recentArrivalsPage.recentArrivals(1, today).movementDateTime().should('contain.text', '26 May 2022, 14:40')
+    recentArrivalsPage
+      .recentArrivals(1, today)
+      .movementDateTime()
+      .should('contain.text', `${moment().format('D MMMM YYYY')}, 14:40`)
     recentArrivalsPage.recentArrivals(1, today).location().should('contain.text', 'MDI-1-3-004')
     recentArrivalsPage.noRecentArrivlsOnDay(today).should('not.exist')
 
@@ -33,7 +36,10 @@ context('A user can view all current temporary absences', () => {
     recentArrivalsPage.recentArrivals(1, twoDaysAgo).name().should('contain.text', 'Smith, Jim')
     recentArrivalsPage.recentArrivals(1, twoDaysAgo).prisonNumber().should('contain.text', 'A1234AB')
     recentArrivalsPage.recentArrivals(1, twoDaysAgo).dob().should('contain.text', '8 January 1973')
-    recentArrivalsPage.recentArrivals(1, twoDaysAgo).movementDateTime().should('contain.text', '24 May 2022, 13:16')
+    recentArrivalsPage
+      .recentArrivals(1, twoDaysAgo)
+      .movementDateTime()
+      .should('contain.text', `${moment().subtract(2, 'days').format('D MMMM YYYY')}, 13:16`)
     recentArrivalsPage.recentArrivals(1, twoDaysAgo).location().should('contain.text', 'MDI-1-5-119')
     recentArrivalsPage.noRecentArrivlsOnDay(twoDaysAgo).should('not.exist')
   })
