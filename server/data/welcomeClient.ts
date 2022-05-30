@@ -52,8 +52,6 @@ export default class WelcomeClient {
       query: {
         fromDate: fromDate.format('YYYY-MM-DD'),
         toDate: toDate.format('YYYY-MM-DD'),
-        pageSize: '50',
-        page: '0',
       },
     }) as Promise<PaginatedResponse<RecentArrival>>
   }

@@ -84,7 +84,7 @@ describe('welcomeClient', () => {
     })
     it('should return data from api', async () => {
       fakeWelcomeApi
-        .get(`/prisons/${activeCaseLoadId}/recent-arrivals?fromDate=${fromDate}&toDate=${toDate}&pageSize=50&page=0`)
+        .get(`/prisons/${activeCaseLoadId}/recent-arrivals?fromDate=${fromDate}&toDate=${toDate}`)
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, recentArrivals)
 
