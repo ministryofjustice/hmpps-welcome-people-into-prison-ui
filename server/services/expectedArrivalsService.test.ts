@@ -157,6 +157,42 @@ describe('Expected arrivals service', () => {
     })
   })
 
+  describe('getRecentArrivalsSearchResults', () => {
+    const today = moment().startOf('day').format('YYYY-MM-DD')
+    const searchQuery = 'John Doe'
+
+    beforeEach(() => {
+      const recentArrivals = createRecentArrivalResponse({
+        content: [createRecentArrival({ firstName: 'John', lastName: 'Doe', movementDateTime: `${today}T13:15:00` })],
+      })
+      welcomeClient.getRecentArrivals.mockResolvedValue(recentArrivals)
+    })
+
+    it('Retrieves recent arrivals search results if search query present', async () => {
+      const dateTo = moment().startOf('day')
+      const dateFrom = moment().subtract(2, 'days').startOf('day')
+      const result = await service.getRecentArrivalsSearchResults(res.locals.user.activeCaseLoadId, searchQuery)
+
+      expect(result).toStrictEqual([
+        createRecentArrival({ firstName: 'John', lastName: 'Doe', movementDateTime: `${today}T13:15:00` }),
+      ])
+
+      expect(welcomeClient.getRecentArrivals).toBeCalledWith(
+        res.locals.user.activeCaseLoadId,
+        dateFrom,
+        dateTo,
+        searchQuery
+      )
+    })
+
+    it('WelcomeClientFactory is called with a token', async () => {
+      await service.getRecentArrivalsSearchResults(res.locals.user.activeCaseLoadId, searchQuery)
+
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      expect(WelcomeClientFactory).toBeCalledWith(token)
+    })
+  })
+
   describe('getArrival', () => {
     it('Calls upstream service correctly', async () => {
       await service.getArrival('12345-67890')

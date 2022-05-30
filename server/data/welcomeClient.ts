@@ -44,7 +44,8 @@ export default class WelcomeClient {
   async getRecentArrivals(
     prisonId: string,
     fromDate: moment.Moment,
-    toDate: moment.Moment
+    toDate: moment.Moment,
+    searchQuery?: string
   ): Promise<PaginatedResponse<RecentArrival>> {
     logger.info(`welcomeApi: getRecentArrivals(${prisonId})`)
     return this.restClient.get({
@@ -52,6 +53,7 @@ export default class WelcomeClient {
       query: {
         fromDate: fromDate.format('YYYY-MM-DD'),
         toDate: toDate.format('YYYY-MM-DD'),
+        query: searchQuery,
       },
     }) as Promise<PaginatedResponse<RecentArrival>>
   }
