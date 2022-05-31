@@ -68,6 +68,15 @@ export default class ExpectedArrivalsService {
     return mappedArrivals
   }
 
+  public async getRecentArrivalsSearchResults(agencyId: string, searchQuery: string): Promise<RecentArrival[]> {
+    const today = moment().startOf('day')
+    const twoDaysAgo = moment().subtract(2, 'days').startOf('day')
+    const token = await this.hmppsAuthClient.getSystemClientToken()
+    const welcomeClient = this.welcomeClientFactory(token)
+    const results = await welcomeClient.getRecentArrivals(agencyId, twoDaysAgo, today, searchQuery)
+    return results.content.sort(compareByDateAndTime(a => a.movementDateTime))
+  }
+
   public async getArrivalsForToday(agencyId: string, now = () => moment()): Promise<Map<LocationType, Arrival[]>> {
     const [expectedArrivals, transfers] = await Promise.all([
       this.getExpectedArrivals(agencyId, now()),

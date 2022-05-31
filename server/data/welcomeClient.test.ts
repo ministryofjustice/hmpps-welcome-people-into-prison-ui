@@ -71,6 +71,7 @@ describe('welcomeClient', () => {
     const fromDate = moment().subtract(2, 'days').format('YYYY-MM-DD')
     const middleDate = moment().subtract(1, 'days').format('YYYY-MM-DD')
     const toDate = moment().format('YYYY-MM-DD')
+    const searchQuery = 'John Doe'
     const recentArrivals = createRecentArrivalResponse({
       content: [
         createRecentArrival({ movementDateTime: `${toDate}T13:16:00` }),
@@ -80,11 +81,12 @@ describe('welcomeClient', () => {
         createRecentArrival({ movementDateTime: `${toDate}T09:12:00` }),
         createRecentArrival({ movementDateTime: `${middleDate}T14:55:00` }),
         createRecentArrival({ movementDateTime: `${toDate}T13:15:00` }),
+        createRecentArrival({ firstName: 'John', lastName: 'Doe', movementDateTime: `${toDate}T13:15:00` }),
       ],
     })
     it('should return data from api', async () => {
       fakeWelcomeApi
-        .get(`/prisons/${activeCaseLoadId}/recent-arrivals?fromDate=${fromDate}&toDate=${toDate}&pageSize=50&page=0`)
+        .get(`/prisons/${activeCaseLoadId}/recent-arrivals?fromDate=${fromDate}&toDate=${toDate}`)
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, recentArrivals)
 
@@ -92,6 +94,31 @@ describe('welcomeClient', () => {
       const toDateMoment = moment()
       const output = await welcomeClient.getRecentArrivals(activeCaseLoadId, fromDateMoment, toDateMoment)
       expect(output).toEqual(recentArrivals)
+    })
+
+    it('should return search results if search query present', async () => {
+      fakeWelcomeApi
+        .get(`/prisons/${activeCaseLoadId}/recent-arrivals?fromDate=${fromDate}&toDate=${toDate}&query=${searchQuery}`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(
+          200,
+          createRecentArrivalResponse({
+            content: [
+              createRecentArrival({ firstName: 'John', lastName: 'Doe', movementDateTime: `${toDate}T13:15:00` }),
+            ],
+          })
+        )
+
+      const fromDateMoment = moment().subtract(2, 'days')
+      const toDateMoment = moment()
+      const output = await welcomeClient.getRecentArrivals(activeCaseLoadId, fromDateMoment, toDateMoment, searchQuery)
+      expect(output).toEqual(
+        createRecentArrivalResponse({
+          content: [
+            createRecentArrival({ firstName: 'John', lastName: 'Doe', movementDateTime: `${toDate}T13:15:00` }),
+          ],
+        })
+      )
     })
   })
 
