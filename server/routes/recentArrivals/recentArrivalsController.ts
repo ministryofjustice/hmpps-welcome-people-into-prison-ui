@@ -13,4 +13,13 @@ export default class RecentArrivalsController {
       })
     }
   }
+
+  public search(): RequestHandler {
+    return async (req, res) => {
+      const { searchQuery } = req.body
+      req.flash('searchQuery', searchQuery)
+
+      return res.redirect('/recent-arrivals/search')
+    }
+  }
 }

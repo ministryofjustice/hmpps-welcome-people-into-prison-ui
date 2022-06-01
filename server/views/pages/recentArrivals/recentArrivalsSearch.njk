@@ -1,0 +1,20 @@
+{% extends "../../partials/layout.njk" %}
+{% from  "../../partials/recentArrivalCardMacro.njk" import recentArrivalCard %}
+{% from  "../../components/arrival-search.njk" import arrivalSearch %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% set pageTitle = "Prisoners who have arrived in the last 3 days" %}
+
+{% block content %}
+    <div class="govuk-!-margin-bottom-8">
+        <div class="govuk-width-container govuk-body">
+            <h1>{{pageTitle}}</h1>
+            {{ arrivalSearch(searchQuery, csrfToken) }}
+             <p class="govuk-!-margin-bottom-7"><a href="/recent-arrivals">Clear search</a></p>
+            {% for arrival in searchResults %}
+                {{ recentArrivalCard(arrival, loop.index)}}
+            {% else %}
+                <p id="no-results-found">No results found for '{{searchQuery}}'.</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -2,7 +2,7 @@ import type { Express } from 'express'
 import request from 'supertest'
 import moment from 'moment'
 import * as cheerio from 'cheerio'
-import { appWithAllRoutes, user } from '../__testutils/appSetup'
+import { appWithAllRoutes, user, flashProvider } from '../__testutils/appSetup'
 import Role from '../../authentication/role'
 import ExpectedArrivalsService from '../../services/expectedArrivalsService'
 import { createRecentArrival } from '../../data/__testutils/testObjects'
@@ -64,6 +64,20 @@ describe('GET /recent-arrivals', () => {
         expect($('#no-prisoners-date-1').text()).toContain('')
         expect($('#no-prisoners-date-2').text()).toContain('')
         expect($('#no-prisoners-date-3').text()).toContain('No prisoners arrived on this day.')
+      })
+  })
+})
+
+describe('POST /recent-arrivals', () => {
+  const flash = flashProvider.mockReturnValue([])
+  it('should store search query in flash and redirect to /recent-arrivals/search', () => {
+    return request(app)
+      .post('/recent-arrivals')
+      .send({ movementReason: undefined })
+      .expect(302)
+      .expect('Location', '/recent-arrivals/search')
+      .expect(res => {
+        expect(flash).toBeCalledTimes(1)
       })
   })
 })

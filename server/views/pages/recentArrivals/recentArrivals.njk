@@ -1,5 +1,6 @@
 {% extends "../../partials/layout.njk" %}
-{% from  "../../partials/recentArrivalCardMacro.njk" import recentArrivalCard  %}
+{% from  "../../partials/recentArrivalCardMacro.njk" import recentArrivalCard %}
+{% from  "../../components/arrival-search.njk" import arrivalSearch %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% set pageTitle = "Prisoners who have arrived in the last 3 days" %}
 
@@ -7,17 +8,18 @@
     <div class="govuk-!-margin-bottom-8">
         <div class="govuk-width-container govuk-body">
             <h1>{{pageTitle}}</h1>
+            {{ arrivalSearch(searchQuery, csrfToken) }}
             {% for date, groupedArrivals in recentArrivals %}
-            <h2 id="date-{{loop.index}}" class="govuk-heading-m govuk-!-margin-top-9">{{date | formatDate('dddd D MMMM')}}</h2>
-                {% for arrival in groupedArrivals %}
-                    {{ recentArrivalCard(arrival, loop.index, date | formatDate('YYYY-MM-DD'))}}
-                {% else %}
-                    {{ govukInsetText({
-                        text: "No prisoners arrived on this day.",
-                        id: "no-prisoners-date-" + loop.index,
-                        attributes: { 'data-qa': "no-prisoners-" + date | formatDate('YYYY-MM-DD') }
-                    }) }}
-                {% endfor %}
+                <h2 id="date-{{loop.index}}" class="govuk-heading-m govuk-!-margin-top-9">{{date | formatDate('dddd D MMMM')}}</h2>
+                    {% for arrival in groupedArrivals %}
+                        {{ recentArrivalCard(arrival, loop.index, date | formatDate('YYYY-MM-DD'))}}
+                    {% else %}
+                        {{ govukInsetText({
+                            text: "No prisoners arrived on this day.",
+                            id: "no-prisoners-date-" + loop.index,
+                            attributes: { 'data-qa': "no-prisoners-" + date | formatDate('YYYY-MM-DD') }
+                        }) }}
+                    {% endfor %}
             {% endfor %}
         </div>
     </div>
