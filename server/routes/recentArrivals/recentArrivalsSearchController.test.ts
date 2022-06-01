@@ -88,7 +88,6 @@ describe('POST /recent-arrivals/search', () => {
   it('should store search query in flash and redirect to /recent-arrivals/search', () => {
     return request(app)
       .post('/recent-arrivals/search')
-      .send({ movementReason: undefined })
       .expect(302)
       .expect('Location', '/recent-arrivals/search')
       .expect(res => {
