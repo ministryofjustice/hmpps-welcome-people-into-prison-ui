@@ -9,11 +9,11 @@
         <div class="govuk-width-container govuk-body">
             <h1>{{pageTitle}}</h1>
             {{ arrivalSearch(searchQuery, csrfToken) }}
-             <p class="govuk-!-margin-bottom-7"><a href="/recent-arrivals">Clear search</a></p>
+             <p class="govuk-!-margin-bottom-7"><a href="/recent-arrivals" data-qa="clear-search">Clear search</a></p>
             {% for arrival in searchResults %}
                 {{ recentArrivalCard(arrival, loop.index)}}
             {% else %}
-                <p id="no-results-found">No results found for '{{searchQuery}}'.</p>
+                <p id="no-results-found" data-qa="no-results-found">No results found for '{{searchQuery}}'.</p>
             {% endfor %}
         </div>
     </div>
