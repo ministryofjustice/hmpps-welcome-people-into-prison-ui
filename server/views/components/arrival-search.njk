@@ -1,0 +1,27 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% macro arrivalSearch(searchQuery, csrfToken) %}
+
+  <form method="post">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+    <div class="govuk-form-group govuk-!-margin-bottom-2">
+      <h1 class="govuk-label-wrapper">
+          <label class="govuk-label govuk-label--m" >
+            Search by prisoner name or prison number
+          </label>
+      </h1>
+      <input class="govuk-input govuk-input--width-20" id="searchQuery" name="searchQuery" value="{{searchQuery}}" type="text" data-qa="recent-arrival-search-input">
+
+      {{ govukButton({
+        text: "Search",
+        type: "submit",
+        classes: 'govuk-button govuk-!-margin-bottom-0 govuk-!-margin-left-1',
+        attributes: {
+          'data-qa': 'recent-arrival-search-submit'
+        }
+      }) }}
+    </div>
+  </form>
+{% endmacro %}

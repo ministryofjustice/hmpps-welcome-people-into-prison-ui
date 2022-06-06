@@ -10,6 +10,10 @@ export default class RecentArrivalsPage extends Page {
     return Page.verifyOnPage(RecentArrivalsPage)
   }
 
+  searchInput = (): PageElement => cy.get('[data-qa=recent-arrival-search-input]')
+
+  searchSubmit = (): PageElement => cy.get('[data-qa=recent-arrival-search-submit]')
+
   recentArrivals = (row: number, date: string): Record<string, () => PageElement> => ({
     name: () => cy.get(`[data-qa=${date}-title-${row}]`),
     prisonNumber: () => cy.get(`[data-qa=${date}-prison-number-${row}]`),
