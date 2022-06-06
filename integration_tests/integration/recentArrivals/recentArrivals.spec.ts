@@ -71,48 +71,37 @@ context('A user can view all recent arrivals', () => {
   })
 
   it('A user can successfully search for a recent arrival', () => {
-    const fromDate = moment().subtract(2, 'days').format('YYYY-MM-DD')
-    const toDate = moment().format('YYYY-MM-DD')
-    const recentArrivalsSearchResponse1 = recentArrivalsResponse.arrivals({
-      content: [
-        {
-          firstName: 'Jim',
-          lastName: 'Smith',
-          dateOfBirth: '1973-01-08',
-          prisonNumber: 'A1234AB',
-          movementDateTime: `${fromDate}T13:16:00`,
-          location: 'MDI-1-5-119',
-        },
-      ],
-    })
-    const recentArrivalsSearchResponse2 = recentArrivalsResponse.arrivals({
-      content: [
-        {
-          firstName: 'John',
-          lastName: 'Doe',
-          dateOfBirth: '1973-01-01',
-          prisonNumber: 'G0015GF',
-          movementDateTime: `${toDate}T14:40:01`,
-          location: 'MDI-1-3-004',
-        },
-      ],
-    })
     cy.signIn()
     const recentArrivalsPage = RecentArrivalsPage.goTo()
 
     recentArrivalsPage.searchInput().type('Smith')
     cy.task('stubRecentArrivals', {
       caseLoadId: 'MDI',
-      recentArrivals: recentArrivalsSearchResponse1,
+      recentArrivals: recentArrivalsResponse.arrivals({
+        content: [
+          recentArrivalsResponse.arrival({
+            firstName: 'Jim',
+            lastName: 'Smith',
+          }),
+        ],
+      }),
     })
     recentArrivalsPage.searchSubmit().click()
+
     const recentArrivalsSearchPage = Page.verifyOnPage(RecentArrivalsSearchPage)
     recentArrivalsSearchPage.recentArrivals(1).name().should('contain.text', 'Smith, Jim')
 
     recentArrivalsSearchPage.searchInput().clear().type('John')
     cy.task('stubRecentArrivals', {
       caseLoadId: 'MDI',
-      recentArrivals: recentArrivalsSearchResponse2,
+      recentArrivals: recentArrivalsResponse.arrivals({
+        content: [
+          recentArrivalsResponse.arrival({
+            firstName: 'John',
+            lastName: 'Doe',
+          }),
+        ],
+      }),
     })
     recentArrivalsPage.searchSubmit().click()
     Page.verifyOnPage(RecentArrivalsSearchPage)
@@ -121,23 +110,5 @@ context('A user can view all recent arrivals', () => {
     cy.task('stubRecentArrivals', { caseLoadId: 'MDI', recentArrivals })
     recentArrivalsSearchPage.clearSearch().click()
     Page.verifyOnPage(RecentArrivalsPage)
-  })
-
-  it('A user is shown no results message after search if no matching recent arrivals found', () => {
-    const recentArrivalsSearchResponse = recentArrivalsResponse.arrivals({
-      content: [],
-    })
-    cy.signIn()
-    const recentArrivalsPage = RecentArrivalsPage.goTo()
-
-    recentArrivalsPage.searchInput().type('Mark')
-    cy.task('stubRecentArrivals', {
-      caseLoadId: 'MDI',
-      recentArrivals: recentArrivalsSearchResponse,
-    })
-    recentArrivalsPage.searchSubmit().click()
-    const recentArrivalsSearchPage = Page.verifyOnPage(RecentArrivalsSearchPage)
-
-    recentArrivalsSearchPage.noResultsFound().should('contain.text', `No results found for 'Mark'.`)
   })
 })

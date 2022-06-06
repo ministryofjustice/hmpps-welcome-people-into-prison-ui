@@ -73,10 +73,11 @@ describe('POST /recent-arrivals', () => {
   it('should store search query in flash and redirect to /recent-arrivals/search', () => {
     return request(app)
       .post('/recent-arrivals')
+      .send({ searchQuery: 'Bob' })
       .expect(302)
       .expect('Location', '/recent-arrivals/search')
       .expect(res => {
-        expect(flash).toBeCalledTimes(1)
+        expect(flash).toBeCalledWith('searchQuery', 'Bob')
       })
   })
 })

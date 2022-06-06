@@ -4,6 +4,22 @@ const fromDate = moment().subtract(2, 'days').format('YYYY-MM-DD')
 const toDate = moment().format('YYYY-MM-DD')
 
 export default {
+  arrival: ({
+    firstName = 'John',
+    lastName = 'Doe',
+    dateOfBirth = '1973-01-01',
+    prisonNumber = 'G0015GF',
+    movementDateTime = `${toDate}T14:40:01`,
+    location = 'MDI-1-3-004',
+  }) => ({
+    firstName,
+    lastName,
+    dateOfBirth,
+    prisonNumber,
+    movementDateTime,
+    location,
+  }),
+
   arrivals: ({
     content = [
       {
