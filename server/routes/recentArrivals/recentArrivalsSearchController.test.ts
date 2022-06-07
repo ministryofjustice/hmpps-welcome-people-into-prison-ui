@@ -76,6 +76,7 @@ describe('GET /recent-arrivals/search', () => {
 
 describe('POST /recent-arrivals/search', () => {
   it('should store search query in cookie state and redirect to /recent-arrivals/search', () => {
+    stubCookie(State.searchQuery, { searchQuery: 'Bob' })
     return request(app)
       .post('/recent-arrivals/search')
       .send({ searchQuery: 'Bob' })
