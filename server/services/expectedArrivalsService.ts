@@ -74,7 +74,7 @@ export default class ExpectedArrivalsService {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const welcomeClient = this.welcomeClientFactory(token)
     const results = await welcomeClient.getRecentArrivals(agencyId, twoDaysAgo, today, searchQuery)
-    return results.content.sort(compareByDateAndTime(a => a.movementDateTime))
+    return results.content
   }
 
   public async getArrivalsForToday(agencyId: string, now = () => moment()): Promise<Map<LocationType, Arrival[]>> {

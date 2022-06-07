@@ -161,10 +161,12 @@ describe('Expected arrivals service', () => {
     const today = moment().startOf('day').format('YYYY-MM-DD')
     const searchQuery = 'John Doe'
 
+    const result1 = createRecentArrival({ firstName: 'John', lastName: 'Doe', movementDateTime: `${today}T13:15:00` })
+    const result2 = createRecentArrival({ firstName: 'Jim', lastName: 'Doe', movementDateTime: `${today}T15:15:00` })
+    const result3 = createRecentArrival({ firstName: 'James', lastName: 'Doe', movementDateTime: `${today}T12:15:00` })
+
     beforeEach(() => {
-      const recentArrivals = createRecentArrivalResponse({
-        content: [createRecentArrival({ firstName: 'John', lastName: 'Doe', movementDateTime: `${today}T13:15:00` })],
-      })
+      const recentArrivals = createRecentArrivalResponse({ content: [result1, result2, result3] })
       welcomeClient.getRecentArrivals.mockResolvedValue(recentArrivals)
     })
 
@@ -173,9 +175,7 @@ describe('Expected arrivals service', () => {
       const dateFrom = moment().subtract(2, 'days').startOf('day')
       const result = await service.getRecentArrivalsSearchResults(res.locals.user.activeCaseLoadId, searchQuery)
 
-      expect(result).toStrictEqual([
-        createRecentArrival({ firstName: 'John', lastName: 'Doe', movementDateTime: `${today}T13:15:00` }),
-      ])
+      expect(result).toStrictEqual([result1, result2, result3])
 
       expect(welcomeClient.getRecentArrivals).toBeCalledWith(
         res.locals.user.activeCaseLoadId,
