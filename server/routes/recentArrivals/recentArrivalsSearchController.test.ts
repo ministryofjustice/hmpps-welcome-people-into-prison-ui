@@ -1,10 +1,12 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
-import { appWithAllRoutes, user, flashProvider } from '../__testutils/appSetup'
+import { appWithAllRoutes, user, stubCookie } from '../__testutils/appSetup'
 import Role from '../../authentication/role'
 import ExpectedArrivalsService from '../../services/expectedArrivalsService'
 import { createRecentArrival } from '../../data/__testutils/testObjects'
+import { expectSettingCookie } from '../__testutils/requestTestUtils'
+import { State } from './state'
 
 jest.mock('../../services/expectedArrivalsService')
 
@@ -29,7 +31,7 @@ afterEach(() => {
 
 describe('GET /recent-arrivals/search', () => {
   it('should call service method correctly', () => {
-    flashProvider.mockReturnValue(['Smith'])
+    stubCookie(State.searchQuery, { searchQuery: 'Smith' })
     expectedArrivalsService.getRecentArrivalsSearchResults.mockResolvedValue([
       createRecentArrival({ firstName: 'Sam', lastName: 'Smith', prisonNumber: 'G0014GM' }),
     ])
@@ -44,7 +46,7 @@ describe('GET /recent-arrivals/search', () => {
       })
   })
   it('should retrieve search query from flash and render /recent-arrivals/search page with correct search results', () => {
-    flashProvider.mockReturnValue(['Smith'])
+    stubCookie(State.searchQuery, { searchQuery: 'Smith' })
     expectedArrivalsService.getRecentArrivalsSearchResults.mockResolvedValue([
       createRecentArrival({ firstName: 'Sam', lastName: 'Smith', prisonNumber: 'G0014GM' }),
     ])
@@ -60,7 +62,7 @@ describe('GET /recent-arrivals/search', () => {
   })
 
   it('should display alternative text if no search results to display', () => {
-    flashProvider.mockReturnValue(['Mark'])
+    stubCookie(State.searchQuery, { searchQuery: 'Mark' })
     expectedArrivalsService.getRecentArrivalsSearchResults.mockResolvedValue([])
     return request(app)
       .get('/recent-arrivals/search')
@@ -70,29 +72,17 @@ describe('GET /recent-arrivals/search', () => {
         expect($('#no-results-found').text()).toContain("No results found for 'Mark'.")
       })
   })
-
-  it('should redirect to /recent-arrivals if search query flash absent', () => {
-    flashProvider.mockReturnValue([])
-    return request(app)
-      .get('/recent-arrivals/search')
-      .expect(302)
-      .expect('Content-Type', 'text/plain; charset=utf-8')
-      .expect('Location', '/recent-arrivals')
-      .expect(res => {
-        expect(expectedArrivalsService.getRecentArrivalsSearchResults).not.toHaveBeenCalled()
-      })
-  })
 })
 
 describe('POST /recent-arrivals/search', () => {
-  const flash = flashProvider.mockReturnValue([])
-  it('should store search query in flash and redirect to /recent-arrivals/search', () => {
+  it('should store search query in cookie state and redirect to /recent-arrivals/search', () => {
     return request(app)
       .post('/recent-arrivals/search')
+      .send({ searchQuery: 'Bob' })
       .expect(302)
       .expect('Location', '/recent-arrivals/search')
       .expect(res => {
-        expect(flash).toBeCalledTimes(1)
+        expectSettingCookie(res, State.searchQuery).toStrictEqual({ searchQuery: 'Bob' })
       })
   })
 })
