@@ -9,7 +9,7 @@
         <div class="govuk-width-container govuk-body">
             <h1>{{pageTitle}}</h1>
             {{ arrivalSearch(searchQuery, csrfToken) }}
-             <p class="govuk-!-margin-bottom-7"><a href="/recent-arrivals" data-qa="clear-search">Clear search</a></p>
+             <p class="govuk-!-margin-bottom-7"><a href="/recent-arrivals" class="govuk-link govuk-link--no-visited-state" data-qa="clear-search">Clear search</a></p>
             {% for arrival in searchResults %}
                 {{ recentArrivalCard(arrival, loop.index)}}
             {% else %}
