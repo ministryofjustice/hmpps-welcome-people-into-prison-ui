@@ -13,6 +13,8 @@ interface GetRequest {
   headers?: Record<string, string>
   responseType?: string
   raw?: boolean
+  timeout?: Parameters<superagent.Request['timeout']>[0]
+  retryCount?: number
 }
 
 interface PostRequest {
@@ -44,13 +46,21 @@ export default class RestClient {
     return this.config.timeout
   }
 
-  async get({ path = null, query = {}, headers = {}, responseType = '', raw = false }: GetRequest): Promise<unknown> {
+  async get({
+    path = null,
+    query = {},
+    headers = {},
+    responseType = '',
+    raw = false,
+    timeout = this.timeoutConfig(),
+    retryCount = 2,
+  }: GetRequest): Promise<unknown> {
     logger.info(`Get using user credentials: calling ${this.name}: ${path}`)
     try {
       const result = await superagent
         .get(`${this.apiUrl()}${path}`)
         .agent(this.agent)
-        .retry(2, (err, res) => {
+        .retry(retryCount, (err, res) => {
           if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
@@ -58,7 +68,7 @@ export default class RestClient {
         .auth(this.token, { type: 'bearer' })
         .set(headers)
         .responseType(responseType)
-        .timeout(this.timeoutConfig())
+        .timeout(timeout)
 
       return raw ? result : result.body
     } catch (error) {

@@ -1,9 +1,9 @@
 import nock from 'nock'
 import { serviceCheckFactory } from './healthCheck'
-import { AgentConfig } from '../config'
+import { DEFAULT_AGENT_CONFIG } from '../config'
 
 describe('Service healthcheck', () => {
-  const healthcheck = serviceCheckFactory('externalService', 'http://test-service.com/ping', new AgentConfig(), {
+  const healthcheck = serviceCheckFactory('externalService', 'http://test-service.com/ping', DEFAULT_AGENT_CONFIG, {
     response: 100,
     deadline: 150,
   })
