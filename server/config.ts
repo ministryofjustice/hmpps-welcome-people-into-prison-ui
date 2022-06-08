@@ -15,21 +15,25 @@ function get<T>(name: string, fallback: T, options = { requireInProduction: fals
 
 const requiredInProduction = { requireInProduction: true }
 
-export class AgentConfig {
-  maxSockets: 100
-
-  maxFreeSockets: 10
-
-  freeSocketTimeout: 30000
-}
-
 export interface ApiConfig {
   url: string
   timeout: {
     response: number
     deadline: number
   }
-  agent: AgentConfig
+  agent: {
+    maxSockets: number
+    maxFreeSockets: number
+    freeSocketTimeout: number
+  }
+}
+
+export type AgentConfig = Readonly<ApiConfig['agent']>
+
+export const DEFAULT_AGENT_CONFIG: AgentConfig = {
+  maxSockets: 100,
+  maxFreeSockets: 10,
+  freeSocketTimeout: 30000,
 }
 
 export default {
@@ -58,7 +62,7 @@ export default {
         response: Number(get('HMPPS_AUTH_TIMEOUT_RESPONSE', 10000)),
         deadline: Number(get('HMPPS_AUTH_TIMEOUT_DEADLINE', 10000)),
       },
-      agent: new AgentConfig(),
+      agent: DEFAULT_AGENT_CONFIG,
       apiClientId: get('API_CLIENT_ID', 'clientid', requiredInProduction),
       apiClientSecret: get('API_CLIENT_SECRET', 'clientsecret', requiredInProduction),
       systemClientId: get('SYSTEM_CLIENT_ID', 'clientid', requiredInProduction),
@@ -70,7 +74,7 @@ export default {
         response: Number(get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000)),
         deadline: Number(get('TOKEN_VERIFICATION_API_TIMEOUT_DEADLINE', 5000)),
       },
-      agent: new AgentConfig(),
+      agent: DEFAULT_AGENT_CONFIG,
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
     },
     welcome: {
@@ -79,7 +83,7 @@ export default {
         response: Number(get('WELCOME_API_TIMEOUT_RESPONSE', 5000)),
         deadline: Number(get('WELCOME_API_TIMEOUT_DEADLINE', 5000)),
       },
-      agent: new AgentConfig(),
+      agent: DEFAULT_AGENT_CONFIG,
     },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),

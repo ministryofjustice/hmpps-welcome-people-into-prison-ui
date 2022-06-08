@@ -31,6 +31,8 @@ export default class WelcomeClient {
     return this.restClient.get({
       path: `/prisons/${agencyId}/arrivals`,
       query: { date: date.format('YYYY-MM-DD') },
+      timeout: 15000,
+      retryCount: 0,
     }) as Promise<Arrival[]>
   }
 
@@ -55,6 +57,8 @@ export default class WelcomeClient {
         toDate: toDate.format('YYYY-MM-DD'),
         query: searchQuery,
       },
+      timeout: 15000,
+      retryCount: 0,
     }) as Promise<PaginatedResponse<RecentArrival>>
   }
 
