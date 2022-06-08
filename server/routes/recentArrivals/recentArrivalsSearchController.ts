@@ -1,16 +1,14 @@
 import { RequestHandler } from 'express'
 import type { ExpectedArrivalsService } from '../../services'
+import { State } from './state'
 
 export default class RecentArrivalsSearchController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
 
   public showSearch(): RequestHandler {
     return async (req, res) => {
-      const searchQuery = req.flash('searchQuery')[0] as string
+      const { searchQuery } = State.searchQuery.get(req)
       const { activeCaseLoadId } = res.locals.user
-      if (!searchQuery) {
-        return res.redirect('/recent-arrivals')
-      }
       const searchResults = await this.expectedArrivalsService.getRecentArrivalsSearchResults(
         activeCaseLoadId,
         searchQuery
@@ -25,7 +23,7 @@ export default class RecentArrivalsSearchController {
   public submitSearch(): RequestHandler {
     return async (req, res) => {
       const { searchQuery } = req.body
-      req.flash('searchQuery', searchQuery)
+      State.searchQuery.set(res, { searchQuery })
 
       return res.redirect('/recent-arrivals/search')
     }

@@ -2,10 +2,12 @@ import type { Express } from 'express'
 import request from 'supertest'
 import moment from 'moment'
 import * as cheerio from 'cheerio'
-import { appWithAllRoutes, user, flashProvider } from '../__testutils/appSetup'
+import { appWithAllRoutes, user } from '../__testutils/appSetup'
 import Role from '../../authentication/role'
 import ExpectedArrivalsService from '../../services/expectedArrivalsService'
 import { createRecentArrival } from '../../data/__testutils/testObjects'
+import { expectSettingCookie } from '../__testutils/requestTestUtils'
+import { State } from './state'
 
 jest.mock('../../services/expectedArrivalsService')
 
@@ -55,6 +57,15 @@ describe('GET /recent-arrivals', () => {
       })
   })
 
+  it('should clear cookie state', () => {
+    return request(app)
+      .get('/recent-arrivals')
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(res => {
+        expectSettingCookie(res, State.searchQuery).toBeUndefined()
+      })
+  })
+
   it('should display alternative text if no prisoners to display', () => {
     return request(app)
       .get('/recent-arrivals')
@@ -69,15 +80,14 @@ describe('GET /recent-arrivals', () => {
 })
 
 describe('POST /recent-arrivals', () => {
-  const flash = flashProvider.mockReturnValue([])
-  it('should store search query in flash and redirect to /recent-arrivals/search', () => {
+  it('should set search query in state and redirect to /recent-arrivals/search', () => {
     return request(app)
       .post('/recent-arrivals')
       .send({ searchQuery: 'Bob' })
       .expect(302)
       .expect('Location', '/recent-arrivals/search')
       .expect(res => {
-        expect(flash).toBeCalledWith('searchQuery', 'Bob')
+        expectSettingCookie(res, State.searchQuery).toStrictEqual({ searchQuery: 'Bob' })
       })
   })
 })
