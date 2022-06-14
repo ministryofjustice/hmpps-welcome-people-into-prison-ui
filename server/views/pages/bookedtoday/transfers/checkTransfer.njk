@@ -75,10 +75,11 @@
                     <form method="post" action="/prisoners/{{ data.prisonNumber }}/check-transfer">
                         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
                         {{ govukButton({
-                        classes: "govuk-button govuk-!-margin-bottom-6",
-                        text: "Add to the establishment roll",
-                        attributes: {'data-qa': 'add-to-roll'},
-                        type: 'submit'
+                            classes: "govuk-button govuk-!-margin-bottom-6",
+                            text: "Add to the establishment roll",
+                            attributes: {'data-qa': 'add-to-roll'},
+                            type: 'submit',
+                            preventDoubleClick: true
                         }) }}
                     </form>
                     <p class="govuk-!-margin-top-4">
