@@ -185,7 +185,7 @@ describe('welcomeClient', () => {
 
     it('should call rest client successfully', async () => {
       fakeWelcomeApi
-        .post(`/temporary-absences/${prisonNumber}/confirm`, { agencyId: 'MDI' })
+        .post(`/temporary-absences/${prisonNumber}/confirm`, { prisonId: 'MDI' })
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, arrivalResponse)
 
@@ -194,7 +194,7 @@ describe('welcomeClient', () => {
 
     it('should return null', async () => {
       fakeWelcomeApi
-        .post(`/temporary-absences/${prisonNumber}/confirm`, { agencyId: 'MDI' })
+        .post(`/temporary-absences/${prisonNumber}/confirm`, { prisonId: 'MDI' })
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(404)
 
@@ -204,7 +204,7 @@ describe('welcomeClient', () => {
 
     it('should throw server error', async () => {
       fakeWelcomeApi
-        .post(`/temporary-absences/${prisonNumber}/confirm`, { agencyId: 'MDI' })
+        .post(`/temporary-absences/${prisonNumber}/confirm`, { prisonId: 'MDI' })
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(500)
 
@@ -216,11 +216,11 @@ describe('welcomeClient', () => {
     const prisonNumber = 'A1234AB'
     it('should call rest client successfully', async () => {
       fakeWelcomeApi
-        .post(`/transfers/${prisonNumber}/confirm`)
+        .post(`/transfers/${prisonNumber}/confirm`, { prisonId: 'MDI' })
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, arrivalResponse)
 
-      return expect(welcomeClient.confirmTransfer(prisonNumber)).resolves.toStrictEqual(arrivalResponse)
+      return expect(welcomeClient.confirmTransfer(prisonNumber, 'MDI')).resolves.toStrictEqual(arrivalResponse)
     })
     it('should return null', async () => {
       fakeWelcomeApi
@@ -228,7 +228,7 @@ describe('welcomeClient', () => {
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(404)
 
-      const output = await welcomeClient.confirmTransfer(prisonNumber)
+      const output = await welcomeClient.confirmTransfer(prisonNumber, 'MDI')
       return expect(output).toBe(null)
     })
 
@@ -238,7 +238,7 @@ describe('welcomeClient', () => {
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(500)
 
-      await expect(welcomeClient.confirmTransfer(prisonNumber)).rejects.toThrow('Internal Server Error')
+      await expect(welcomeClient.confirmTransfer(prisonNumber, 'MDI')).rejects.toThrow('Internal Server Error')
     })
   })
 

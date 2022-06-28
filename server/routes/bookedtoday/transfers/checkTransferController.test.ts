@@ -80,7 +80,7 @@ describe('POST addToRoll', () => {
       .post('/prisoners/A1234AB/check-transfer')
       .expect('Content-Type', 'text/plain; charset=utf-8')
       .expect(() => {
-        expect(transfersService.confirmTransfer).toHaveBeenCalledWith('user1', 'A1234AB')
+        expect(transfersService.confirmTransfer).toHaveBeenCalledWith('user1', 'A1234AB', 'MDI')
       })
   })
 

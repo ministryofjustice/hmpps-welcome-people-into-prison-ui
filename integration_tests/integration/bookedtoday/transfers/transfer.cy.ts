@@ -48,7 +48,7 @@ context('Confirm transfer added To roll', () => {
     Page.verifyOnPage(ChoosePrisonerPage)
 
     cy.task('getTransferConfirmationRequest', expectedArrival.prisonNumber).then(request => {
-      expect(request).to.deep.equal({})
+      expect(request).to.deep.equal({ prisonId: 'MDI' })
     })
   })
 })
