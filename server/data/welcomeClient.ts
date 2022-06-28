@@ -91,11 +91,12 @@ export default class WelcomeClient {
     }) as Promise<Transfer>
   }
 
-  async confirmTransfer(prisonNumber: string): Promise<ArrivalResponse | null> {
+  async confirmTransfer(prisonNumber: string, prisonId: string): Promise<ArrivalResponse | null> {
     logger.info(`welcomeApi: confirmTransfer ${prisonNumber})`)
     try {
       return (await this.restClient.post({
         path: `/transfers/${prisonNumber}/confirm`,
+        data: { prisonId },
       })) as Promise<ArrivalResponse>
     } catch (error) {
       if (error.status >= 400 && error.status < 500) {
@@ -119,12 +120,12 @@ export default class WelcomeClient {
     }) as Promise<TemporaryAbsence>
   }
 
-  async confirmTemporaryAbsence(prisonNumber: string, agencyId: string): Promise<ArrivalResponse | null> {
+  async confirmTemporaryAbsence(prisonNumber: string, prisonId: string): Promise<ArrivalResponse | null> {
     logger.info(`welcomeApi: confirmTemporaryAbsence ${prisonNumber})`)
     try {
       return (await this.restClient.post({
         path: `/temporary-absences/${prisonNumber}/confirm`,
-        data: { agencyId },
+        data: { prisonId },
       })) as Promise<ArrivalResponse>
     } catch (error) {
       if (error.status >= 400 && error.status < 500) {

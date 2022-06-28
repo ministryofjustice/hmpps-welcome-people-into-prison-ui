@@ -23,7 +23,7 @@ export default class CheckTransferController {
       const { activeCaseLoadId } = res.locals.user
       const data = await this.transfersService.getTransfer(activeCaseLoadId, prisonNumber)
 
-      const arrivalResponse = await this.transfersService.confirmTransfer(username, prisonNumber)
+      const arrivalResponse = await this.transfersService.confirmTransfer(username, prisonNumber, activeCaseLoadId)
 
       if (!arrivalResponse) {
         return res.redirect('/feature-not-available')

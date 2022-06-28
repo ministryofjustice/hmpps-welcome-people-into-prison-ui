@@ -44,16 +44,16 @@ describe('Transfers service', () => {
 
   describe('confirmTransfer', () => {
     it('Calls upstream services correctly', async () => {
-      await service.confirmTransfer('user1', 'G0015GD')
+      await service.confirmTransfer('user1', 'G0015GD', 'MDI')
 
       expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith('user1')
       expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.confirmTransfer).toBeCalledWith('G0015GD')
+      expect(welcomeClient.confirmTransfer).toBeCalledWith('G0015GD', 'MDI')
     })
     it('Should return null', async () => {
       welcomeClient.confirmTransfer.mockResolvedValue(null)
 
-      const result = await await service.confirmTransfer('user1', 'G0015GD')
+      const result = await await service.confirmTransfer('user1', 'G0015GD', 'MDI')
       expect(result).toBe(null)
     })
   })
