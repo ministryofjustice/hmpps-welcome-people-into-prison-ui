@@ -1,6 +1,11 @@
+import moment from 'moment'
 import DateOfBirthValidator from './dateOfBirthValidation'
 
 describe('DateOfBirthValidator', () => {
+  const tomorrowDate = moment().add(1, 'days')
+  const tomorrowDay = tomorrowDate.format('DD')
+  const tomorrowMonth = tomorrowDate.format('MM')
+  const tomorrowYear = tomorrowDate.format('YYYY')
   test.each([
     [
       {},
@@ -91,7 +96,15 @@ describe('DateOfBirthValidator', () => {
         },
       ],
     ],
-
+    [
+      { day: tomorrowDay, month: tomorrowMonth, year: tomorrowYear },
+      [
+        {
+          href: '#date-of-birth-day',
+          text: 'Date of birth must in the past',
+        },
+      ],
+    ],
     [
       { day: '29', month: '02', year: '1986' },
       [

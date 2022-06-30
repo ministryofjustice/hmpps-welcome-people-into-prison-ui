@@ -1,6 +1,11 @@
+import moment from 'moment'
 import SearchForExistingRecordsDateOfBirthValidation from './SearchForExistingRecordsDateOfBirthValidation'
 
 describe('SearchForExistingRecordsDateOfBirthValidation', () => {
+  const tomorrowDate = moment().add(1, 'days')
+  const tomorrowDay = tomorrowDate.format('DD')
+  const tomorrowMonth = tomorrowDate.format('MM')
+  const tomorrowYear = tomorrowDate.format('YYYY')
   test.each([
     [
       { month: '1', year: '2020' },
@@ -61,7 +66,15 @@ describe('SearchForExistingRecordsDateOfBirthValidation', () => {
         },
       ],
     ],
-
+    [
+      { day: tomorrowDay, month: tomorrowMonth, year: tomorrowYear },
+      [
+        {
+          href: '#date-of-birth-day',
+          text: 'Date of birth must in the past',
+        },
+      ],
+    ],
     [
       { day: '29', month: '02', year: '1986' },
       [

@@ -1,3 +1,4 @@
+import moment from 'moment'
 import {
   convertToTitleCase,
   trimObjectValues,
@@ -9,6 +10,7 @@ import {
   assertHasOptionalStringValues,
   zip,
   isValidDate,
+  isPastDate,
 } from './utils'
 
 describe('Convert to title case', () => {
@@ -394,5 +396,25 @@ describe('isValidDate', () => {
   it('has valid date', () => {
     const result = isValidDate('01', '05', '2000')
     expect(result).toEqual(true)
+  })
+})
+
+describe('isPastDate', () => {
+  it('has future date', () => {
+    const tomorrow = moment().add(1, 'days')
+    const day = tomorrow.format('DD')
+    const month = tomorrow.format('MM')
+    const year = tomorrow.format('YYYY')
+    const result = isPastDate(day, month, year)
+    expect(result).toEqual(true)
+  })
+
+  it('has past date', () => {
+    const yesterday = moment().subtract(1, 'days')
+    const day = yesterday.format('DD')
+    const month = yesterday.format('MM')
+    const year = yesterday.format('YYYY')
+    const result = isPastDate(day, month, year)
+    expect(result).toEqual(false)
   })
 })

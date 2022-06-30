@@ -97,6 +97,10 @@ export const createDate = (day: string, month: string, year: string) =>
 
 export const zip = <A, B>(a: A[], b: B[]): [A, B][] => a.map((k, i) => [k, b[i]])
 
+export const isPastDate = (day: string, month: string, year: string) => {
+  return moment(createDate(day, month, year)).isAfter()
+}
+
 export const isValidDate = (day: string, month: string, year: string) => {
   const validate = (d: unknown, m: unknown, y: unknown) => {
     const fullDate = createDate(d.toString(), m.toString(), y.toString())
