@@ -86,22 +86,12 @@ describe('DateOfBirthValidator', () => {
         },
       ],
     ],
-
     [
       { day: 'aaa' },
       [
         {
           href: '#date-of-birth-day',
           text: "Enter this person's date of birth",
-        },
-      ],
-    ],
-    [
-      { day: tomorrowDay, month: tomorrowMonth, year: tomorrowYear },
-      [
-        {
-          href: '#date-of-birth-day',
-          text: 'Date of birth must in the past',
         },
       ],
     ],
@@ -114,10 +104,18 @@ describe('DateOfBirthValidator', () => {
         },
       ],
     ],
-
     [{ day: '1', month: '2', year: '2020' }, []],
 
     [{ day: '01', month: '02', year: '2020' }, []],
+    [
+      { day: tomorrowDay, month: tomorrowMonth, year: tomorrowYear },
+      [
+        {
+          href: '#date-of-birth-day',
+          text: 'Date of birth must be in the past',
+        },
+      ],
+    ],
   ])('invalid cases : (%s, %s)', (fields, expectedErrors) => {
     expect(DateOfBirthValidator(fields)).toEqual(expectedErrors)
   })

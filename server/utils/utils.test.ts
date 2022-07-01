@@ -406,7 +406,7 @@ describe('isPastDate', () => {
     const month = tomorrow.format('MM')
     const year = tomorrow.format('YYYY')
     const result = isPastDate(day, month, year)
-    expect(result).toEqual(true)
+    expect(result).toEqual(false)
   })
 
   it('has past date', () => {
@@ -415,6 +415,6 @@ describe('isPastDate', () => {
     const month = yesterday.format('MM')
     const year = yesterday.format('YYYY')
     const result = isPastDate(day, month, year)
-    expect(result).toEqual(false)
+    expect(result).toEqual(true)
   })
 })
