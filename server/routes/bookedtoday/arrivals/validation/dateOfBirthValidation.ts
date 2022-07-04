@@ -1,5 +1,5 @@
 import { Validator } from '../../../../middleware/validationMiddleware'
-import { zip, isValidDate } from '../../../../utils/utils'
+import { zip, isValidDate, isPastDate } from '../../../../utils/utils'
 
 const fields = ['day', 'month', 'year']
 
@@ -21,6 +21,8 @@ const DateOfBirthValidator: Validator = ({ day: d, month: m, year: y }: Record<s
   if (missingFieldNames.length)
     return [{ text: `Date of birth must include a ${message}`, href: `#date-of-birth-${missingFieldNames[0]}` }]
 
-  return isValidDate(d, m, y) ? [] : [{ text: 'Date of birth must be a real date', href: '#date-of-birth-day' }]
+  if (!isValidDate(d, m, y)) return [{ text: 'Date of birth must be a real date', href: '#date-of-birth-day' }]
+
+  return isPastDate(d, m, y) ? [] : [{ text: 'Date of birth must be in the past', href: '#date-of-birth-day' }]
 }
 export default DateOfBirthValidator
