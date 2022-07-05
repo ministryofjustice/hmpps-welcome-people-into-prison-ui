@@ -1,3 +1,4 @@
+import { DependencyTypeName } from 'applicationinsights/out/Declarations/Constants'
 import moment from 'moment'
 
 interface Person {
@@ -99,7 +100,10 @@ export const zip = <A, B>(a: A[], b: B[]): [A, B][] => a.map((k, i) => [k, b[i]]
 
 export const isPastDate = (day: string, month: string, year: string) => {
   const pastCheck = (d: string, m: string, y: string) => {
-    return moment(createDate(d, m, y)).isBefore()
+    const today = moment()
+    return !moment(createDate(d, m, y)).isSameOrAfter(
+      createDate(today.format('DD'), today.format('MM'), today.format('YYYY'))
+    )
   }
   return !day || !month || !year || pastCheck(day, month, year)
 }
