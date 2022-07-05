@@ -1,4 +1,3 @@
-import { DependencyTypeName } from 'applicationinsights/out/Declarations/Constants'
 import moment from 'moment'
 
 interface Person {
