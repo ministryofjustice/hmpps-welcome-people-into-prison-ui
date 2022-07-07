@@ -409,7 +409,16 @@ describe('isPastDate', () => {
     expect(result).toEqual(false)
   })
 
-  it('has past date', () => {
+  it('handles todays date', () => {
+    const today = moment()
+    const day = today.format('DD')
+    const month = today.format('MM')
+    const year = today.format('YYYY')
+    const result = isPastDate(day, month, year)
+    expect(result).toEqual(false)
+  })
+
+  it('handles past date', () => {
     const yesterday = moment().subtract(1, 'days')
     const day = yesterday.format('DD')
     const month = yesterday.format('MM')
