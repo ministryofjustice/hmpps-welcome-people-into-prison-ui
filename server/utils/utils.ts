@@ -107,6 +107,14 @@ export const isPastDate = (day: string, month: string, year: string) => {
   return !day || !month || !year || pastCheck(day, month, year)
 }
 
+export const isFutureDate = (day: string, month: string, year: string) => {
+  const futureCheck = (d: string, m: string, y: string) => {
+    const today = moment()
+    return moment(createDate(d, m, y)).isAfter(createDate(today.format('DD'), today.format('MM'), today.format('YYYY')))
+  }
+  return !day || !month || !year || futureCheck(day, month, year)
+}
+
 export const isValidDate = (day: string, month: string, year: string) => {
   const validate = (d: unknown, m: unknown, y: unknown) => {
     const fullDate = createDate(d.toString(), m.toString(), y.toString())
