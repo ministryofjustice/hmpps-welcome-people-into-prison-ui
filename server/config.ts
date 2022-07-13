@@ -99,4 +99,8 @@ export default {
   temporaryAbsencesEnabled: get('TEMPORARY_ABSENCE_ENABLED', 'false', requiredInProduction) === 'true',
   supportingMultitransactionsEnabled:
     get('SUPPORTING_MULTITRANSACTIONS_ENABLED', 'false', requiredInProduction) === 'true',
+  eventPublishing: {
+    serviceAccountKey: get('GOOGLE_SERVICE_ACCOUNT_KEY', '', requiredInProduction),
+    spreadsheetId: get('EXPORT_SPREADSHEET_ID', '', requiredInProduction),
+  },
 }

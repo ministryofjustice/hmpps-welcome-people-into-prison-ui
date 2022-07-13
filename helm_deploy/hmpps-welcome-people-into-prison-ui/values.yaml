@@ -45,6 +45,7 @@ generic-service:
       SESSION_SECRET: "SESSION_SECRET"
       TAG_MANAGER_CONTAINER_ID: "TAG_MANAGER_CONTAINER_ID"
       TAG_MANAGER_ENVIRONMENT: "TAG_MANAGER_ENVIRONMENT"
+      GOOGLE_SERVICE_ACCOUNT_KEY: "GOOGLE_SERVICE_ACCOUNT_KEY"
       GOOGLE_ANALYTICS_ID: "GOOGLE_ANALYTICS_ID"
     elasticache-redis:
       REDIS_HOST: "primary_endpoint_address"
@@ -105,3 +106,6 @@ generic-service:
 generic-prometheus-alerts:
   targetApplication: hmpps-welcome-people-into-prison-ui
   alertSeverity: digital-prison-service-dev
+
+jobs:
+  cronspec: "59 * * * *"
