@@ -14,7 +14,7 @@
                 }) }}
             {% endif %}
 
-            <h1 class="govuk-fieldset__legend--l govuk-!-margin-top-0 govuk-!-margin-bottom-6">Record an X-ray body scan for {{ prisonerDetails.firstName }} {{ prisonerDetails.lastName }}</h1>
+            <h1 class="govuk-fieldset__legend--l govuk-!-margin-top-0 govuk-!-margin-bottom-6" data-qa="record-body-scan-title">Record an X-ray body scan for {{ prisonerDetails.firstName }} {{ prisonerDetails.lastName }}</h1>
 
             <form method="post" action="/prisoners/{{ prisonerDetails.prisonNumber }}/record-body-scan">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
@@ -37,17 +37,20 @@
                                 {
                                 classes: "govuk-input--width-2",
                                 name: "day",
-                                value: data.day
+                                value: data.day,
+                                attributes: {'data-qa': 'another-date-day'}
                                 },
                                 {
                                 classes: "govuk-input--width-2",
                                 name: "month",
-                                value: data.month
+                                value: data.month,
+                                attributes: {'data-qa': 'another-date-month'}
                                 },
                                 {
                                 classes: "govuk-input--width-4",
                                 name: "year",
-                                value: data.year
+                                value: data.year,
+                                attributes: {'data-qa': 'another-date-year'}
                                 }
                             ]
                         }) }}
