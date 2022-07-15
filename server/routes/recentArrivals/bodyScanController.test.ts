@@ -67,8 +67,12 @@ describe('POST /record-body-scan', () => {
 
             [
               {
-                href: '#date',
+                href: '#user-selected-date',
                 text: 'Select a date for the body scan',
+              },
+              {
+                href: '#reason',
+                text: 'Select a reason for the body scan',
               },
             ],
           ],

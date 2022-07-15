@@ -57,23 +57,23 @@
                     {% endset -%}
 
                 {{ govukRadios({
-                    name: "date",
+                    name: "userSelectedDate",
                     items: [
                         {
                             value: "today",
                             text: "Today",
-                            checked: data.date == 'today'
+                            checked: data.userSelectedDate == 'today'
                         },
                         {
                             value: "another-date",
                             text: "Another date",
-                            checked: data.date == 'another-date',
+                            checked: data.userSelectedDate == 'another-date',
                             conditional: {
                                 html: anotherDateHtml
                             }
                         }
                     ],
-                    errorMessage: errors | findError("date")
+                    errorMessage: errors | findError("user-selected-date")
                 }) }}
 
                 <h2 class="govuk-heading-m">Reason for body scan</h2>

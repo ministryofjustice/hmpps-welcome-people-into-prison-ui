@@ -11,14 +11,15 @@ describe('Body scan validation middleware', () => {
       {},
       [
         {
-          href: '#date',
+          href: '#user-selected-date',
           text: 'Select a date for the body scan',
         },
+        { text: 'Select a reason for the body scan', href: '#reason' },
       ],
     ],
 
     [
-      { date: 'another-date', month: '1', year: '2020' },
+      { userSelectedDate: 'another-date', month: '1', year: '2020', reason: 'intelligence' },
       [
         {
           href: '#another-date-day',
@@ -28,7 +29,7 @@ describe('Body scan validation middleware', () => {
     ],
 
     [
-      { date: 'another-date', day: '1', month: '2' },
+      { userSelectedDate: 'another-date', day: '1', month: '2', reason: 'intelligence' },
       [
         {
           href: '#another-date-year',
@@ -38,7 +39,7 @@ describe('Body scan validation middleware', () => {
     ],
 
     [
-      { date: 'another-date', day: '1', year: '2020' },
+      { userSelectedDate: 'another-date', day: '1', year: '2020', reason: 'intelligence' },
       [
         {
           href: '#another-date-month',
@@ -48,7 +49,7 @@ describe('Body scan validation middleware', () => {
     ],
 
     [
-      { date: 'another-date', day: '1' },
+      { userSelectedDate: 'another-date', day: '1', reason: 'intelligence' },
       [
         {
           href: '#another-date-month',
@@ -58,7 +59,7 @@ describe('Body scan validation middleware', () => {
     ],
 
     [
-      { date: 'another-date', month: '1' },
+      { userSelectedDate: 'another-date', month: '1', reason: 'intelligence' },
       [
         {
           href: '#another-date-day',
@@ -68,7 +69,7 @@ describe('Body scan validation middleware', () => {
     ],
 
     [
-      { date: 'another-date', year: '2020' },
+      { userSelectedDate: 'another-date', year: '2020', reason: 'intelligence' },
       [
         {
           href: '#another-date-day',
@@ -78,7 +79,7 @@ describe('Body scan validation middleware', () => {
     ],
 
     [
-      { date: 'another-date', day: '01', month: '02', year: '202' },
+      { userSelectedDate: 'another-date', day: '01', month: '02', year: '202', reason: 'intelligence' },
       [
         {
           href: '#another-date',
@@ -88,7 +89,21 @@ describe('Body scan validation middleware', () => {
     ],
 
     [
-      { date: 'another-date', day: '29', month: '02', year: '1986' },
+      { userSelectedDate: 'another-date', month: '02', year: '202', reason: 'intelligence' },
+      [
+        {
+          href: '#another-date-day',
+          text: 'Date must include a day',
+        },
+        {
+          href: '#another-date',
+          text: 'Year must include 4 numbers',
+        },
+      ],
+    ],
+
+    [
+      { userSelectedDate: 'another-date', day: '29', month: '02', year: '1986', reason: 'intelligence' },
       [
         {
           href: '#another-date',
@@ -98,7 +113,13 @@ describe('Body scan validation middleware', () => {
     ],
 
     [
-      { date: 'another-date', day: tomorrowDay, month: tomorrowMonth, year: tomorrowYear },
+      {
+        userSelectedDate: 'another-date',
+        day: tomorrowDay,
+        month: tomorrowMonth,
+        year: tomorrowYear,
+        reason: 'intelligence',
+      },
       [
         {
           href: '#another-date',
@@ -107,11 +128,21 @@ describe('Body scan validation middleware', () => {
       ],
     ],
 
-    [{ date: 'today', reason: 'intelligence' }, []],
+    [
+      { userSelectedDate: 'today' },
+      [
+        {
+          href: '#reason',
+          text: 'Select a reason for the body scan',
+        },
+      ],
+    ],
 
-    [{ date: 'another-date', day: '1', month: '2', year: '2020', reason: 'intelligence' }, []],
+    [{ userSelectedDate: 'today', reason: 'intelligence' }, []],
 
-    [{ date: 'another-date', day: '01', month: '02', year: '2020', reason: 'intelligence' }, []],
+    [{ userSelectedDate: 'another-date', day: '1', month: '2', year: '2020', reason: 'intelligence' }, []],
+
+    [{ userSelectedDate: 'another-date', day: '01', month: '02', year: '2020', reason: 'intelligence' }, []],
   ])('invalid cases : (%s, %s)', (fields, expectedErrors) => {
     expect(validation(fields)).toEqual(expectedErrors)
   })
