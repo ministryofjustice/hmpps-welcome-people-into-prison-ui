@@ -11,6 +11,7 @@ import {
   zip,
   isValidDate,
   isPastDate,
+  isFutureDate,
 } from './utils'
 
 describe('Convert to title case', () => {
@@ -389,10 +390,12 @@ describe('isValidDate', () => {
     const result = isValidDate('01', '42', '2000')
     expect(result).toEqual(false)
   })
+
   it('has no day month or year', () => {
     const result = isValidDate(undefined, undefined, undefined)
     expect(result).toEqual(true)
   })
+
   it('has valid date', () => {
     const result = isValidDate('01', '05', '2000')
     expect(result).toEqual(true)
@@ -400,7 +403,7 @@ describe('isValidDate', () => {
 })
 
 describe('isPastDate', () => {
-  it('has future date', () => {
+  it('handles future date', () => {
     const tomorrow = moment().add(1, 'days')
     const day = tomorrow.format('DD')
     const month = tomorrow.format('MM')
@@ -425,5 +428,34 @@ describe('isPastDate', () => {
     const year = yesterday.format('YYYY')
     const result = isPastDate(day, month, year)
     expect(result).toEqual(true)
+  })
+})
+
+describe('isFutureDate', () => {
+  it('handles future date', () => {
+    const tomorrow = moment().add(1, 'days')
+    const day = tomorrow.format('DD')
+    const month = tomorrow.format('MM')
+    const year = tomorrow.format('YYYY')
+    const result = isFutureDate(day, month, year)
+    expect(result).toEqual(true)
+  })
+
+  it('handles todays date', () => {
+    const today = moment()
+    const day = today.format('DD')
+    const month = today.format('MM')
+    const year = today.format('YYYY')
+    const result = isFutureDate(day, month, year)
+    expect(result).toEqual(false)
+  })
+
+  it('handles past date', () => {
+    const yesterday = moment().subtract(1, 'days')
+    const day = yesterday.format('DD')
+    const month = yesterday.format('MM')
+    const year = yesterday.format('YYYY')
+    const result = isFutureDate(day, month, year)
+    expect(result).toEqual(false)
   })
 })

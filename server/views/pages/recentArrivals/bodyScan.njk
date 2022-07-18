@@ -1,0 +1,118 @@
+{% extends "../../partials/layout.njk" %}
+
+{% set pageTitle = "Record an X-ray body scan" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            {% if errors.length %}
+                {{ govukErrorSummary({
+                    titleText: "There is a problem",
+                    errorList: errors,
+                    attributes: { 'data-qa-errors': true }
+                }) }}
+            {% endif %}
+
+            <h1 class="govuk-fieldset__legend--l govuk-!-margin-top-0 govuk-!-margin-bottom-6" data-qa="record-body-scan-title">Record an X-ray body scan for {{ prisonerDetails.firstName }} {{ prisonerDetails.lastName }}</h1>
+
+            <form method="post" action="/prisoners/{{ prisonerDetails.prisonNumber }}/record-body-scan">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+                <h2 class="govuk-heading-m">Date of body scan</h2>
+                    {% set anotherDateHtml %}
+                        {{ govukDateInput({
+                            id: "another-date-for-body-scan",
+                            fieldset: {
+                                legend: {
+                                    text: "Date",
+                                    classes: "govuk-label--s"
+                                }
+                            },
+                            hint: {
+                                text: "For example, 20 5 2021"
+                            },
+                            errorMessage: errors | findFirstError(["another-date-day", "another-date-month", "another-date-year", "another-date"]),
+                            items: [
+                                {
+                                classes: "govuk-input--width-2",
+                                name: "day",
+                                value: data.day,
+                                attributes: {'data-qa': 'another-date-day'}
+                                },
+                                {
+                                classes: "govuk-input--width-2",
+                                name: "month",
+                                value: data.month,
+                                attributes: {'data-qa': 'another-date-month'}
+                                },
+                                {
+                                classes: "govuk-input--width-4",
+                                name: "year",
+                                value: data.year,
+                                attributes: {'data-qa': 'another-date-year'}
+                                }
+                            ]
+                        }) }}
+                    {% endset -%}
+
+                {{ govukRadios({
+                    name: "userSelectedDate",
+                    items: [
+                        {
+                            value: "today",
+                            text: "Today",
+                            checked: data.userSelectedDate == 'today'
+                        },
+                        {
+                            value: "another-date",
+                            text: "Another date",
+                            checked: data.userSelectedDate == 'another-date',
+                            conditional: {
+                                html: anotherDateHtml
+                            }
+                        }
+                    ],
+                    errorMessage: errors | findError("user-selected-date")
+                }) }}
+
+                <h2 class="govuk-heading-m">Reason for body scan</h2>
+                {{ govukRadios({
+                    name: "reason",
+                    items: [
+                        {
+                            value: "intelligence",
+                            text: "Intelligence",
+                            checked: data.reason == 'intelligence',
+                            hint: {
+                                text: "For example, your prison scans all arrivals from court or other establishments."
+                            }
+                        },
+                        {
+                            value: "reasonable-suspicion",
+                            text: "Reasonable suspicion",
+                            checked: data.reason == 'reasonable-suspicion',
+                            hint: {
+                                text: "For example, you suspect a person you wouldn’t normally scan is concealing an item."
+                            }
+                        }
+                    ],
+                    errorMessage: errors | findError("reason")
+                }) }}
+
+
+                {{ govukDetails({
+                    summaryText: "How to add more information about this body scan",
+                    text: "Once you have recorded this body scan, you can add more information by creating a case note on their profile."
+                }) }}
+
+                {{ govukButton({
+                    text: "Submit",
+                    attributes: {"data-qa": "submit"},
+                    type: "submit"
+                }) }}
+
+            </form>
+        </div>
+    </div>
+{% endblock %}
