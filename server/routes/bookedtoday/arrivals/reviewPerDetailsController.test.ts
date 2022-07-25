@@ -47,7 +47,7 @@ describe('GET /review-per-details', () => {
       })
   })
 
-  it('should render page when no cookie state', () => {
+  it('new arrival cookie is set from retrieved search details cookie data', () => {
     expectedArrivalsService.getArrival.mockResolvedValue({
       firstName: 'James',
       lastName: 'Smyth',
@@ -57,17 +57,30 @@ describe('GET /review-per-details', () => {
       pncNumber: '99/98644M',
       potentialMatches: [],
     } as Arrival)
+
+    stubCookie(State.searchDetails, {
+      firstName: 'Jim',
+      lastName: 'Smith',
+      dateOfBirth: '1973-01-08',
+      prisonNumber: 'A1234AB',
+      pncNumber: '99/98644M',
+    })
 
     return request(app)
       .get('/prisoners/12345-67890/review-per-details')
       .expect(res => {
-        const $ = cheerio.load(res.text)
-        expect($('h1').text()).toContain('Review personal details from Person Escort Record')
-        expect($('a.govuk-button').attr('href')).toContain('/prisoners/12345-67890/sex')
+        expectSettingCookie(res, State.newArrival).toStrictEqual({
+          firstName: 'Jim',
+          lastName: 'Smith',
+          dateOfBirth: '1973-01-08',
+          sex: 'MALE',
+          pncNumber: '99/98644M',
+          expected: 'true',
+        })
       })
   })
 
-  it('cookie is set from retrieved data', () => {
+  it('new arrival cookie is set from retrieved data', () => {
     expectedArrivalsService.getArrival.mockResolvedValue({
       firstName: 'James',
       lastName: 'Smyth',
@@ -77,6 +90,8 @@ describe('GET /review-per-details', () => {
       pncNumber: '99/98644M',
       potentialMatches: [],
     } as Arrival)
+
+    stubCookie(State.searchDetails, {})
 
     return request(app)
       .get('/prisoners/12345-67890/review-per-details')
@@ -92,7 +107,29 @@ describe('GET /review-per-details', () => {
       })
   })
 
-  it('should render page with cookie state', () => {
+  it('should render page when no initial new arrival cookie state', () => {
+    expectedArrivalsService.getArrival.mockResolvedValue({
+      firstName: 'James',
+      lastName: 'Smyth',
+      dateOfBirth: '1973-01-08',
+      gender: 'MALE',
+      prisonNumber: 'A1234AB',
+      pncNumber: '99/98644M',
+      potentialMatches: [],
+    } as Arrival)
+
+    stubCookie(State.searchDetails, {})
+
+    return request(app)
+      .get('/prisoners/12345-67890/review-per-details')
+      .expect(res => {
+        const $ = cheerio.load(res.text)
+        expect($('h1').text()).toContain('Review personal details')
+        expect($('a.govuk-button').attr('href')).toContain('/prisoners/12345-67890/sex')
+      })
+  })
+
+  it('should render page with initial new arrival cookie state', () => {
     stubCookie(State.newArrival, {
       firstName: 'James',
       lastName: 'Smyth',
@@ -107,7 +144,7 @@ describe('GET /review-per-details', () => {
       .get('/prisoners/12345-67890/review-per-details')
       .expect(res => {
         const $ = cheerio.load(res.text)
-        expect($('h1').text()).toContain('Review personal details from Person Escort Record')
+        expect($('h1').text()).toContain('Review personal details')
       })
   })
 })

@@ -1,4 +1,4 @@
-import { RequestHandler, Response } from 'express'
+import { RequestHandler, Request, Response } from 'express'
 import type { ExpectedArrivalsService } from '../../../services'
 import { NewArrival, State } from './state'
 import { convertToTitleCase } from '../../../utils/utils'
@@ -6,15 +6,16 @@ import { convertToTitleCase } from '../../../utils/utils'
 export default class ReviewPerDetailsController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
 
-  private async loadData(id: string, res: Response): Promise<NewArrival> {
+  private async loadData(id: string, req: Request, res: Response): Promise<NewArrival> {
     const arrival = await this.expectedArrivalsService.getArrival(id)
+    const searchData = State.searchDetails.get(req)
 
     const data = {
-      firstName: convertToTitleCase(arrival.firstName),
-      lastName: convertToTitleCase(arrival.lastName),
-      dateOfBirth: arrival.dateOfBirth,
+      firstName: convertToTitleCase(searchData.firstName) || convertToTitleCase(arrival.firstName),
+      lastName: convertToTitleCase(searchData.lastName) || convertToTitleCase(arrival.lastName),
+      dateOfBirth: searchData.dateOfBirth || arrival.dateOfBirth,
       sex: arrival.gender,
-      pncNumber: arrival.pncNumber,
+      pncNumber: searchData.pncNumber || arrival.pncNumber,
       expected: true,
     }
 
@@ -35,7 +36,7 @@ export default class ReviewPerDetailsController {
     return async (req, res, next) => {
       const { id } = req.params
 
-      const data = State.newArrival.get(req) || (await this.loadData(id, res))
+      const data = State.newArrival.get(req) || (await this.loadData(id, req, res))
 
       res.render('pages/bookedtoday/arrivals/reviewPerDetails.njk', {
         data: { ...data, id },
