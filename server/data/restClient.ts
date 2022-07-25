@@ -104,6 +104,20 @@ export default class RestClient {
     }
   }
 
+  public pipeIntoStream(stream: NodeJS.WritableStream, { path = null, headers = {} }: StreamRequest = {}) {
+    superagent
+      .get(`${this.apiUrl()}${path}`)
+      .agent(this.agent)
+      .auth(this.token, { type: 'bearer' })
+      .retry(2, (err, res) => {
+        if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
+        return undefined // retry handler only for logging retries, not to influence retry logic
+      })
+      .timeout(this.timeoutConfig())
+      .set(headers)
+      .pipe(stream)
+  }
+
   async stream({ path = null, headers = {} }: StreamRequest = {}): Promise<unknown> {
     logger.info(`Get using user credentials: calling ${this.name}: ${path}`)
     return new Promise((resolve, reject) => {
