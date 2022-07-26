@@ -9,7 +9,7 @@ import EventsPusher from './eventsPusher'
 import logger from '../logger'
 import config from '../server/config'
 
-const { hmppsAuthClient, welcomeClientBuilder } = dataAccess()
+const { hmppsAuthClient, welcomeClientBuilder, redisClient } = dataAccess()
 
 const retriever = new EventsRetriever(hmppsAuthClient, welcomeClientBuilder)
 
@@ -18,6 +18,7 @@ const pusher = new EventsPusher(config.eventPublishing.serviceAccountKey, config
 const job = async () => {
   const events = await retriever.retrieveEventsForDay(moment())
   await pusher.pushEvents(events)
+  await redisClient.disconnect()
 }
 
 job().catch(error => {
