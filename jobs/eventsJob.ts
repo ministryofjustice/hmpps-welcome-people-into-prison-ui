@@ -18,10 +18,13 @@ const pusher = new EventsPusher(config.eventPublishing.serviceAccountKey, config
 const job = async () => {
   const events = await retriever.retrieveEventsForDay(moment())
   await pusher.pushEvents(events)
-  await redisClient.disconnect()
 }
 
-job().catch(error => {
-  process.exitCode = 1
-  logger.error(error)
-})
+job()
+  .catch(error => {
+    process.exitCode = 1
+    logger.error(error)
+  })
+  .finally(async () => {
+    await redisClient.disconnect()
+  })

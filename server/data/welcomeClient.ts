@@ -212,7 +212,7 @@ export default class WelcomeClient {
   public getEventsCSV(stream: NodeJS.WritableStream, date: moment.Moment, days?: number): void {
     const daysQP = days ? `&days=${days}` : ''
     this.restClient.pipeIntoStream(stream, {
-      path: `/events/video-link-booking-events?start-date=${date.format('YYYY-MM-DD')}${daysQP}`,
+      path: `/events?start-date=${date.format('YYYY-MM-DD')}${daysQP}`,
       headers: { Accept: 'text/csv' },
     })
   }
