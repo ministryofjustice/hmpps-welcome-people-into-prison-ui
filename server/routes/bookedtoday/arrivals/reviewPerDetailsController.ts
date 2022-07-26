@@ -11,11 +11,11 @@ export default class ReviewPerDetailsController {
     const searchData = State.searchDetails.get(req)
 
     const data = {
-      firstName: convertToTitleCase(searchData.firstName) || convertToTitleCase(arrival.firstName),
-      lastName: convertToTitleCase(searchData.lastName) || convertToTitleCase(arrival.lastName),
-      dateOfBirth: searchData.dateOfBirth || arrival.dateOfBirth,
+      firstName: convertToTitleCase(searchData?.firstName) || convertToTitleCase(arrival.firstName),
+      lastName: convertToTitleCase(searchData?.lastName) || convertToTitleCase(arrival.lastName),
+      dateOfBirth: searchData?.dateOfBirth || arrival.dateOfBirth,
       sex: arrival.gender,
-      pncNumber: searchData.pncNumber || arrival.pncNumber,
+      pncNumber: searchData?.pncNumber || arrival.pncNumber,
       expected: true,
     }
 
