@@ -35,7 +35,7 @@ export default class EventsPusher {
   }
 
   async pushEvents(events: string[][]): Promise<void> {
-    if (events.length < 2 || events[0].length < 1) {
+    if (events.length < 1 || events[0].length < 1) {
       logger.info(`EventsPusher: Finished. No events to push.`)
       return
     }
