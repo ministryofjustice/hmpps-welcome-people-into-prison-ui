@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: wpip-ui-update-events
   labels:
-    {{- include "app.labels" . | nindent 4 }}
+    {{- include "wpipui.labels" . | nindent 4 }}
 spec:
   schedule: {{ .Values.jobs.cronspec | quote }}
   concurrencyPolicy: Replace
@@ -20,9 +20,9 @@ spec:
           activeDeadlineSeconds: 240
           containers:
             - name: hmpps-welcome-people-into-prison-ui
-              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              image: {{ with index .Values "generic-service" }}{{ .image.repository }}:{{ .image.tag }}{{ end }}
               imagePullPolicy: IfNotPresent
               args:
                 - node
                 - backend/jobs/eventsJob
-{{ include "deployment.envs" (index .Values "generic-service") | nindent 12  }}
+{{ $context := index .Values "generic-service" }}{{- include "deployment.envs" $context | nindent 14 }}
