@@ -7,7 +7,7 @@ import Page from '../../pages/page'
 import Role from '../../../server/authentication/role'
 import expectedArrivals from '../../mockApis/responses/expectedArrivals'
 import NoMatchingRecordsFoundPage from '../../pages/bookedtoday/arrivals/autoMatchingRecords/noMatchingRecordsFound'
-import ReviewPerDetailsPage from '../../pages/bookedtoday/arrivals/reviewPerDetails'
+import ReviewDetailsPage from '../../pages/bookedtoday/arrivals/reviewDetails'
 
 context('Choose Prisoner', () => {
   beforeEach(() => {
@@ -141,7 +141,7 @@ context('Choose Prisoner', () => {
     noMatchingRecordsFoundPage.perPncNumber().should('contain.text', '01/2345A')
     noMatchingRecordsFoundPage.continue().click()
 
-    Page.verifyOnPage(ReviewPerDetailsPage)
+    Page.verifyOnPage(ReviewDetailsPage)
   })
 
   it('new bookings from court with match', () => {

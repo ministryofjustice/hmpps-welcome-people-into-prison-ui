@@ -3,7 +3,7 @@ import type { ExpectedArrivalsService } from '../../../services'
 import { NewArrival, State } from './state'
 import { convertToTitleCase } from '../../../utils/utils'
 
-export default class ReviewPerDetailsController {
+export default class ReviewDetailsController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
 
   private async loadData(id: string, req: Request, res: Response): Promise<NewArrival> {
@@ -38,7 +38,7 @@ export default class ReviewPerDetailsController {
 
       const data = State.newArrival.get(req) || (await this.loadData(id, req, res))
 
-      res.render('pages/bookedtoday/arrivals/reviewPerDetails.njk', {
+      res.render('pages/bookedtoday/arrivals/reviewDetails.njk', {
         data: { ...data, id },
       })
     }

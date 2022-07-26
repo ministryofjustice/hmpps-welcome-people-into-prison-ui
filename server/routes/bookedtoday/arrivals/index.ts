@@ -1,7 +1,7 @@
 import type { Router } from 'express'
 import type { Services } from '../../../services'
 
-import ReviewPerDetailsController from './reviewPerDetailsController'
+import ReviewDetailsController from './reviewDetailsController'
 import ReviewPerDetailsChangeNameController from './reviewPerDetailsChangeNameController'
 import ReviewPerDetailsChangeDateOfBirthController from './reviewPerDetailsChangeDateOfBirthController'
 
@@ -21,7 +21,7 @@ import Routes from '../../../utils/routeBuilder'
 export default function routes(services: Services): Router {
   const checkNewArrivalPresent = State.newArrival.ensurePresent('/page-not-found')
 
-  const reviewPerDetailsController = new ReviewPerDetailsController(services.expectedArrivalsService)
+  const reviewDetailsController = new ReviewDetailsController(services.expectedArrivalsService)
 
   const reviewPerDetailsChangeNameController = new ReviewPerDetailsChangeNameController()
 
@@ -29,8 +29,8 @@ export default function routes(services: Services): Router {
 
   return Routes.forRole(Role.PRISON_RECEPTION)
 
-    .get('/prisoners/:id/review-per-details/new', reviewPerDetailsController.newReview())
-    .get('/prisoners/:id/review-per-details', reviewPerDetailsController.showReview())
+    .get('/prisoners/:id/review-per-details/new', reviewDetailsController.newReview())
+    .get('/prisoners/:id/review-per-details', reviewDetailsController.showReview())
 
     .get(
       '/prisoners/:id/review-per-details/change-name',
