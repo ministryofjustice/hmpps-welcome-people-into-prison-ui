@@ -22,7 +22,7 @@ export default function routes(services: Services): Router {
 
   const multipleMatchFoundController = new MultipleExistingRecordsFoundController(services.expectedArrivalsService)
   const singleMatchFoundController = new SingleExistingRecordFoundController()
-  const noMatchFoundController = new NoExistingRecordsFoundController()
+  const noMatchFoundController = new NoExistingRecordsFoundController(services.expectedArrivalsService)
 
   return Routes.forRole(Role.PRISON_RECEPTION)
     .get(
@@ -46,6 +46,7 @@ export default function routes(services: Services): Router {
       singleMatchFoundController.view()
     )
     .get(`${basePath}/no-record-found`, noMatchFoundController.view())
+    .post(`${basePath}/no-record-found`, checkSearchDetailsPresent, noMatchFoundController.submit())
     .use(searchRoutes(services))
     .build()
 }

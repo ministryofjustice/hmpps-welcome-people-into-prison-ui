@@ -47,39 +47,6 @@ describe('GET /review-per-details', () => {
       })
   })
 
-  it('new arrival cookie is set from retrieved search details cookie data', () => {
-    expectedArrivalsService.getArrival.mockResolvedValue({
-      firstName: 'James',
-      lastName: 'Smyth',
-      dateOfBirth: '1973-01-08',
-      gender: 'MALE',
-      prisonNumber: 'A1234AB',
-      pncNumber: '99/98644M',
-      potentialMatches: [],
-    } as Arrival)
-
-    stubCookie(State.searchDetails, {
-      firstName: 'Jim',
-      lastName: 'Smith',
-      dateOfBirth: '1973-01-08',
-      prisonNumber: 'A1234AB',
-      pncNumber: '99/98644M',
-    })
-
-    return request(app)
-      .get('/prisoners/12345-67890/review-per-details')
-      .expect(res => {
-        expectSettingCookie(res, State.newArrival).toStrictEqual({
-          firstName: 'Jim',
-          lastName: 'Smith',
-          dateOfBirth: '1973-01-08',
-          sex: 'MALE',
-          pncNumber: '99/98644M',
-          expected: 'true',
-        })
-      })
-  })
-
   it('new arrival cookie is set from retrieved data', () => {
     expectedArrivalsService.getArrival.mockResolvedValue({
       firstName: 'James',
@@ -90,8 +57,6 @@ describe('GET /review-per-details', () => {
       pncNumber: '99/98644M',
       potentialMatches: [],
     } as Arrival)
-
-    stubCookie(State.searchDetails, {})
 
     return request(app)
       .get('/prisoners/12345-67890/review-per-details')
@@ -117,8 +82,6 @@ describe('GET /review-per-details', () => {
       pncNumber: '99/98644M',
       potentialMatches: [],
     } as Arrival)
-
-    stubCookie(State.searchDetails, {})
 
     return request(app)
       .get('/prisoners/12345-67890/review-per-details')

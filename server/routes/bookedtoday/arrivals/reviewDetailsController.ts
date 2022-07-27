@@ -8,14 +8,13 @@ export default class ReviewDetailsController {
 
   private async loadData(id: string, req: Request, res: Response): Promise<NewArrival> {
     const arrival = await this.expectedArrivalsService.getArrival(id)
-    const searchData = State.searchDetails.get(req)
 
     const data = {
-      firstName: convertToTitleCase(searchData?.firstName) || convertToTitleCase(arrival.firstName),
-      lastName: convertToTitleCase(searchData?.lastName) || convertToTitleCase(arrival.lastName),
-      dateOfBirth: searchData?.dateOfBirth || arrival.dateOfBirth,
+      firstName: convertToTitleCase(arrival.firstName),
+      lastName: convertToTitleCase(arrival.lastName),
+      dateOfBirth: arrival.dateOfBirth,
       sex: arrival.gender,
-      pncNumber: searchData?.pncNumber || arrival.pncNumber,
+      pncNumber: arrival.pncNumber,
       expected: true,
     }
 
