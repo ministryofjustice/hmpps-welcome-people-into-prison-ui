@@ -1,31 +1,17 @@
-import type { Arrival } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
 import { appWithAllRoutes, stubCookie } from '../../../__testutils/appSetup'
 import Role from '../../../../authentication/role'
 import config from '../../../../config'
-import { ExpectedArrivalsService } from '../../../../services'
 import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
 import { State } from '../state'
 
 let app: Express
 
-jest.mock('../../../../services/expectedArrivalsService')
-const expectedArrivalsService = new ExpectedArrivalsService(null, null, null) as jest.Mocked<ExpectedArrivalsService>
-
 beforeEach(() => {
   config.confirmNoIdentifiersEnabled = true
-  app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
-  expectedArrivalsService.getArrival.mockResolvedValue({
-    firstName: 'James',
-    lastName: 'Smyth',
-    dateOfBirth: '1973-01-08',
-    gender: 'MALE',
-    prisonNumber: undefined,
-    pncNumber: '99/98644M',
-    potentialMatches: [],
-  } as Arrival)
+  app = appWithAllRoutes({ roles: [Role.PRISON_RECEPTION] })
 
   stubCookie(State.searchDetails, {
     firstName: 'Jim',
@@ -65,14 +51,6 @@ describe('No records found', () => {
   })
 
   describe('POST /submit', () => {
-    it('should call service method correctly', () => {
-      return request(app)
-        .post('/prisoners/12345-67890/search-for-existing-record/no-record-found')
-        .expect('Content-Type', 'text/plain; charset=utf-8')
-        .expect(res => {
-          expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
-        })
-    })
     it('should update new arrival cookie and redirect to /review-per-details page', () => {
       return request(app)
         .post('/prisoners/12345-67890/search-for-existing-record/no-record-found')
@@ -85,8 +63,6 @@ describe('No records found', () => {
             firstName: 'Jim',
             lastName: 'Smith',
             pncNumber: '99/98644M',
-            prisonNumber: undefined,
-            sex: 'MALE',
           })
         })
     })

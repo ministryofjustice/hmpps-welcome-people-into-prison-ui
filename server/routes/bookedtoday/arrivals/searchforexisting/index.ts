@@ -22,7 +22,7 @@ export default function routes(services: Services): Router {
 
   const multipleMatchFoundController = new MultipleExistingRecordsFoundController(services.expectedArrivalsService)
   const singleMatchFoundController = new SingleExistingRecordFoundController()
-  const noMatchFoundController = new NoExistingRecordsFoundController(services.expectedArrivalsService)
+  const noMatchFoundController = new NoExistingRecordsFoundController()
 
   return Routes.forRole(Role.PRISON_RECEPTION)
     .get(
