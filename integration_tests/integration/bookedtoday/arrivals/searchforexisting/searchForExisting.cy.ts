@@ -133,10 +133,6 @@ context('Search for existing spec', () => {
     const changePncNumberPage = Page.verifyOnPage(ChangePncNumberPage)
     changePncNumberPage.pnc().should('have.value', '')
 
-    changePncNumberPage.pnc().clear().type('INVALID')
-    changePncNumberPage.save().click()
-    changePncNumberPage.hasError('Enter a PNC number in the format 01/23456A or 2001/23456A')
-
     changePncNumberPage.pnc().clear().type('01/23456A')
     changePncNumberPage.save().click()
 
