@@ -2,8 +2,8 @@ import type { Router } from 'express'
 import type { Services } from '../../../services'
 
 import ReviewDetailsController from './reviewDetailsController'
-import ReviewPerDetailsChangeNameController from './reviewPerDetailsChangeNameController'
-import ReviewPerDetailsChangeDateOfBirthController from './reviewPerDetailsChangeDateOfBirthController'
+import ReviewDetailsChangeNameController from './reviewDetailsChangeNameController'
+import ReviewDetailsChangeDateOfBirthController from './reviewDetailsChangeDateOfBirthController'
 
 import searchForExistingRecordRoutes from './searchforexisting'
 import courtReturnRoutes from './courtreturns'
@@ -23,9 +23,9 @@ export default function routes(services: Services): Router {
 
   const reviewDetailsController = new ReviewDetailsController(services.expectedArrivalsService)
 
-  const reviewPerDetailsChangeNameController = new ReviewPerDetailsChangeNameController()
+  const reviewDetailsChangeNameController = new ReviewDetailsChangeNameController()
 
-  const reviewPerDetailsChangeDateOfBirthController = new ReviewPerDetailsChangeDateOfBirthController()
+  const reviewDetailsChangeDateOfBirthController = new ReviewDetailsChangeDateOfBirthController()
 
   return Routes.forRole(Role.PRISON_RECEPTION)
 
@@ -35,25 +35,25 @@ export default function routes(services: Services): Router {
     .get(
       '/prisoners/:id/review-per-details/change-name',
       checkNewArrivalPresent,
-      reviewPerDetailsChangeNameController.showChangeName()
+      reviewDetailsChangeNameController.showChangeName()
     )
     .post(
       '/prisoners/:id/review-per-details/change-name',
       checkNewArrivalPresent,
       validationMiddleware(NameValidator),
-      reviewPerDetailsChangeNameController.changeName()
+      reviewDetailsChangeNameController.changeName()
     )
 
     .get(
       '/prisoners/:id/review-per-details/change-date-of-birth',
       checkNewArrivalPresent,
-      reviewPerDetailsChangeDateOfBirthController.showChangeDateOfBirth()
+      reviewDetailsChangeDateOfBirthController.showChangeDateOfBirth()
     )
     .post(
       '/prisoners/:id/review-per-details/change-date-of-birth',
       checkNewArrivalPresent,
       validationMiddleware(DateOfBirthValidator),
-      reviewPerDetailsChangeDateOfBirthController.changeDateOfBirth()
+      reviewDetailsChangeDateOfBirthController.changeDateOfBirth()
     )
 
     .use(searchForExistingRecordRoutes(services))
