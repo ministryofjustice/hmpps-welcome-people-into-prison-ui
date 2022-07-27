@@ -1,8 +1,8 @@
 import Page, { PageElement } from '../../page'
 
-export default class ReviewPerDetailsPage extends Page {
+export default class ReviewDetailsPage extends Page {
   constructor() {
-    super('Review personal details from Person Escort Record')
+    super('Review personal details')
   }
 
   name = {

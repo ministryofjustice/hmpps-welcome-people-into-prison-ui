@@ -1,7 +1,7 @@
 import type { RequestHandler } from 'express'
 import { State } from './state'
 
-export default class ReviewPerDetailsChangeNameController {
+export default class ReviewDetailsChangeNameController {
   public showChangeName(): RequestHandler {
     return async (req, res) => {
       const data = req.flash('input')[0] || State.newArrival.get(req)

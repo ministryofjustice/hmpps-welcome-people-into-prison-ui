@@ -3,7 +3,7 @@ import Page from '../../../../pages/page'
 import Role from '../../../../../server/authentication/role'
 import expectedArrivals from '../../../../mockApis/responses/expectedArrivals'
 import NoMatchingRecordsFoundPage from '../../../../pages/bookedtoday/arrivals/autoMatchingRecords/noMatchingRecordsFound'
-import ReviewPerDetailsPage from '../../../../pages/bookedtoday/arrivals/reviewPerDetails'
+import ReviewDetailsPage from '../../../../pages/bookedtoday/arrivals/reviewDetails'
 import ChangeNamePage from '../../../../pages/bookedtoday/arrivals/changeName'
 import ChangeDateOfBirthPage from '../../../../pages/bookedtoday/arrivals/changeDateOfBirth'
 import SearchForExistingPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/search/searchForExisting'
@@ -52,8 +52,8 @@ context('No match found', () => {
     const noMatchingRecordsFoundPage = Page.verifyOnPage(NoMatchingRecordsFoundPage)
     noMatchingRecordsFoundPage.continue().click()
     {
-      const reviewPerDetailsPage = Page.verifyOnPage(ReviewPerDetailsPage)
-      const { value, change } = reviewPerDetailsPage.name
+      const reviewDetailsPage = Page.verifyOnPage(ReviewDetailsPage)
+      const { value, change } = reviewDetailsPage.name
       value().contains('Bob Smith')
       change().click()
     }
@@ -72,8 +72,8 @@ context('No match found', () => {
     changeNamePage.save().click()
 
     {
-      const reviewPerDetailsPage = Page.verifyOnPage(ReviewPerDetailsPage)
-      reviewPerDetailsPage.name.value().contains('James Joyce')
+      const reviewDetailsPage = Page.verifyOnPage(ReviewDetailsPage)
+      reviewDetailsPage.name.value().contains('James Joyce')
     }
   })
 
@@ -81,8 +81,8 @@ context('No match found', () => {
     const noMatchingRecordsFoundPage = Page.verifyOnPage(NoMatchingRecordsFoundPage)
     noMatchingRecordsFoundPage.continue().click()
     {
-      const reviewPerDetailsPage = Page.verifyOnPage(ReviewPerDetailsPage)
-      const { value, change } = reviewPerDetailsPage.dob
+      const reviewDetailsPage = Page.verifyOnPage(ReviewDetailsPage)
+      const { value, change } = reviewDetailsPage.dob
       value().contains('1 January 1970')
       change().click()
     }
@@ -104,8 +104,8 @@ context('No match found', () => {
     changeDobPage.save().click()
 
     {
-      const reviewPerDetailsPage = Page.verifyOnPage(ReviewPerDetailsPage)
-      const { value } = reviewPerDetailsPage.dob
+      const reviewDetailsPage = Page.verifyOnPage(ReviewDetailsPage)
+      const { value } = reviewDetailsPage.dob
       value().contains('20 September 1982')
     }
   })
@@ -114,7 +114,7 @@ context('No match found', () => {
     const noMatchingRecordsFoundPage = Page.verifyOnPage(NoMatchingRecordsFoundPage)
     noMatchingRecordsFoundPage.continue().click()
 
-    Page.verifyOnPage(ReviewPerDetailsPage).continue().click()
+    Page.verifyOnPage(ReviewDetailsPage).continue().click()
 
     const imprisonmentStatusPage = Page.verifyOnPage(ImprisonmentStatusPage)
     imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()

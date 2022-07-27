@@ -1,12 +1,12 @@
-import { RequestHandler, Response } from 'express'
+import { RequestHandler, Request, Response } from 'express'
 import type { ExpectedArrivalsService } from '../../../services'
 import { NewArrival, State } from './state'
 import { convertToTitleCase } from '../../../utils/utils'
 
-export default class ReviewPerDetailsController {
+export default class ReviewDetailsController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
 
-  private async loadData(id: string, res: Response): Promise<NewArrival> {
+  private async loadData(id: string, req: Request, res: Response): Promise<NewArrival> {
     const arrival = await this.expectedArrivalsService.getArrival(id)
 
     const data = {
@@ -35,9 +35,9 @@ export default class ReviewPerDetailsController {
     return async (req, res, next) => {
       const { id } = req.params
 
-      const data = State.newArrival.get(req) || (await this.loadData(id, res))
+      const data = State.newArrival.get(req) || (await this.loadData(id, req, res))
 
-      res.render('pages/bookedtoday/arrivals/reviewPerDetails.njk', {
+      res.render('pages/bookedtoday/arrivals/reviewDetails.njk', {
         data: { ...data, id },
       })
     }
