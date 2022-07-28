@@ -13,7 +13,6 @@ import NameValidator from '../../validation/nameValidation'
 import DateOfBirthValidator from '../../validation/dateOfBirthValidation'
 import PrisonNumberValidator from '../../validation/prisonNumberValidation'
 import { State } from '../../state'
-import PncNumberValidator from '../../../validation/pncNumberValidation'
 import Routes from '../../../../../utils/routeBuilder'
 import config from '../../../../../config'
 import redirectIfDisabledMiddleware from '../../../../../middleware/redirectIfDisabledMiddleware'
@@ -110,7 +109,6 @@ export default function routes(services: Services): Router {
       `${routePrefix}/change-pnc-number`,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       checkSearchDetailsPresent,
-      validationMiddleware(PncNumberValidator),
       changePncNumberController.changePncNumber()
     )
     .get(
