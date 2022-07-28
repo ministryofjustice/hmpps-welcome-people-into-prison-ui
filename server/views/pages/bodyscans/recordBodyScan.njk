@@ -81,17 +81,17 @@
                     name: "reason",
                     items: [
                         {
-                            value: "intelligence",
+                            value: "INTELLIGENCE",
                             text: "Intelligence",
-                            checked: data.reason == 'intelligence',
+                            checked: data.reason == 'INTELLIGENCE',
                             hint: {
                                 text: "For example, your prison scans all arrivals from court or other establishments."
                             }
                         },
                         {
-                            value: "reasonable-suspicion",
+                            value: "REASONABLE_SUSPICION",
                             text: "Reasonable suspicion",
-                            checked: data.reason == 'reasonable-suspicion',
+                            checked: data.reason == 'REASONABLE_SUSPICION',
                             hint: {
                                 text: "For example, you suspect a person you wouldn’t normally scan is concealing an item."
                             }
@@ -104,6 +104,30 @@
                 {{ govukDetails({
                     summaryText: "How to add more information about this body scan",
                     text: "Once you have recorded this body scan, you can add more information by creating a case note on their profile."
+                }) }}
+
+                <h2 class="govuk-heading-m">Result</h2>
+                {{ govukRadios({
+                    name: "result",
+                    items: [
+                        {
+                            value: "POSITIVE",
+                            text: "Positive",
+                            checked: data.reason == 'POSITIVE'
+                        },
+                        {
+                            value: "NEGATIVE",
+                            text: "Negative",
+                            checked: data.reason == 'NEGATIVE'
+                        }
+                    ],
+                    errorMessage: errors | findError("result")
+                }) }}
+
+
+                {{ govukDetails({
+                    summaryText: "How to record an inconclusive scan",
+                    text: "Inconclusive scans should be recorded as positive. You should then follow your local process for scanning the person again."
                 }) }}
 
                 {{ govukButton({
