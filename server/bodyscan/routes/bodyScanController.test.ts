@@ -1,22 +1,22 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
-import { appWithAllRoutes, flashProvider } from '../__testutils/appSetup'
-import Role from '../../authentication/role'
-import ExpectedArrivalsService from '../../services/expectedArrivalsService'
+import { appWithAllRoutes, flashProvider } from '../../routes/__testutils/appSetup'
+import BodyScanService from '../services/bodyScanService'
 import { createPrisonerDetails } from '../../data/__testutils/testObjects'
+import Role from '../../authentication/role'
 
-jest.mock('../../services/expectedArrivalsService')
+jest.mock('../services/bodyScanService')
 
-const expectedArrivalsService = new ExpectedArrivalsService(null, null, null) as jest.Mocked<ExpectedArrivalsService>
+const bodyScanService = new BodyScanService(null, null) as jest.Mocked<BodyScanService>
 
 let app: Express
 
 const recentArrival = createPrisonerDetails({})
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
-  expectedArrivalsService.getPrisonerDetails.mockResolvedValue(recentArrival)
+  app = appWithAllRoutes({ bodyScanServices: { bodyScanService }, roles: [Role.PRISON_RECEPTION] })
+  bodyScanService.getPrisonerDetails.mockResolvedValue(recentArrival)
   flashProvider.mockReturnValue([])
 })
 
@@ -40,7 +40,7 @@ describe('GET /record-body-scan', () => {
       .get('/prisoners/A1234AB/record-body-scan')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
-        expect(expectedArrivalsService.getPrisonerDetails).toHaveBeenCalledWith('A1234AB')
+        expect(bodyScanService.getPrisonerDetails).toHaveBeenCalledWith('A1234AB')
       })
   })
 

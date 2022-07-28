@@ -1,4 +1,4 @@
-import { Validator, ValidationError } from '../validationMiddleware'
+import { Validator, ValidationError } from '../../middleware/validationMiddleware'
 import { zip, isValidDate, isFutureDate } from '../../utils/utils'
 
 const fields = ['day', 'month', 'year']

@@ -3,7 +3,8 @@ import express from 'express'
 import path from 'path'
 
 import config from './config'
-import routes from './routes'
+import wpipRoutes from './routes'
+import bodyScanRoutes from './bodyscan/routes'
 import nunjucksSetup from './utils/nunjucksSetup'
 import errorHandler from './errorHandler'
 import setUpCurrentUser from './middleware/setUpCurrentUser'
@@ -18,8 +19,9 @@ import setUpWebRequestParsing from './middleware/setupRequestParsing'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
 import type { Services } from './services'
 import caseloadCheckMiddleware from './middleware/caseloadCheckMiddleware'
+import { BodyScanServices } from './bodyscan/services'
 
-export default function createApp(services: Services): express.Application {
+export default function createApp(services: Services, bodyScanServices: BodyScanServices): express.Application {
   const app = express()
 
   app.set('json spaces', 2)
@@ -38,7 +40,8 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpCurrentUser(services))
   app.use(caseloadCheckMiddleware(config.enabledPrisons))
   app.get('/page-not-found', (req, res) => res.render('pages/pageNotFound'))
-  app.use(routes(services))
+  app.use(wpipRoutes(services))
+  app.use(bodyScanRoutes(bodyScanServices))
 
   app.use((req, res, next) => next(res.redirect('/page-not-found')))
   app.use(errorHandler(process.env.NODE_ENV === 'production'))

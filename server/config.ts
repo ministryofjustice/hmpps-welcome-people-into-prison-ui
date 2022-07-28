@@ -85,6 +85,14 @@ export default {
       },
       agent: DEFAULT_AGENT_CONFIG,
     },
+    bodyscan: {
+      url: get('WELCOME_API_URL', 'http://localhost:8100', requiredInProduction),
+      timeout: {
+        response: Number(get('WELCOME_API_TIMEOUT_RESPONSE', 5000)),
+        deadline: Number(get('WELCOME_API_TIMEOUT_DEADLINE', 5000)),
+      },
+      agent: DEFAULT_AGENT_CONFIG,
+    },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   analytics: {

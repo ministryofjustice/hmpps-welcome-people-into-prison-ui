@@ -22,6 +22,7 @@ export const services = () => {
   const prisonService = new PrisonService(hmppsAuthClient, welcomeClientBuilder)
 
   return {
+    hmppsAuthClient,
     userService,
     expectedArrivalsService,
     temporaryAbsencesService,
