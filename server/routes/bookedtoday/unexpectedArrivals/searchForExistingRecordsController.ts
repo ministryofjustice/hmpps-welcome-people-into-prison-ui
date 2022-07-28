@@ -12,10 +12,8 @@ export default class SearchForExistingRecordsController {
     return async (req, res) => {
       let expandDetails = false
       const errors = req.flash('errors') as FlashErrors
-      const prisonNumberOrPncErrors = errors.filter(
-        error => error.href === '#prison-number' || error.href === '#pnc-number'
-      )
-      if (prisonNumberOrPncErrors.length) {
+      const prisonNumberError = errors.filter(error => error.href === '#prison-number')
+      if (prisonNumberError.length) {
         expandDetails = true
       }
 
