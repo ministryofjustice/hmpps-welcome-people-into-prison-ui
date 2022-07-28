@@ -1,5 +1,5 @@
 import Role from '../../../server/authentication/role'
-import BodyScanPage from '../../pages/recentArrivals/bodyScan'
+import BodyScanPage from '../../pages/bodyscan/bodyScan'
 import expectedArrivals from '../../mockApis/responses/expectedArrivals'
 
 const arrival = expectedArrivals.potentialMatch

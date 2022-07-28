@@ -5,14 +5,16 @@ import createError from 'http-errors'
 import path from 'path'
 import config from '../../config'
 
-import routes from '../index'
+import wpipRoutes from '../index'
+import bodyScanRoutes from '../../bodyscan/routes'
 import nunjucksSetup from '../../utils/nunjucksSetup'
 import errorHandler from '../../errorHandler'
 import * as auth from '../../authentication/auth'
-import { Services } from '../../services'
+import type { Services } from '../../services'
 import Role from '../../authentication/role'
 import { StateOperations } from '../../utils/state'
 import { stubRequestCookie, stubRequestCookies, ExpectedCookie } from './requestTestUtils'
+import type { BodyScanServices } from '../../bodyscan/services'
 
 export const user = {
   firstName: 'first',
@@ -34,7 +36,13 @@ export const stubCookies = (cookies: ExpectedCookie<unknown>[]) => stubRequestCo
 
 export const flashProvider = jest.fn()
 
-function appSetup(services: Services, production: boolean, userSupplier: () => Express.User, roles: Role[]): Express {
+function appSetup(
+  services: Services,
+  bodyScanServices: BodyScanServices,
+  production: boolean,
+  userSupplier: () => Express.User,
+  roles: Role[]
+): Express {
   const app = express()
 
   app.set('view engine', 'njk')
@@ -52,7 +60,8 @@ function appSetup(services: Services, production: boolean, userSupplier: () => E
   })
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
-  app.use(routes(services))
+  app.use(wpipRoutes(services))
+  app.use(bodyScanRoutes(bodyScanServices))
   app.use((req, res, next) => next(createError(404, 'Not found')))
   app.use(errorHandler(production))
 
@@ -62,15 +71,17 @@ function appSetup(services: Services, production: boolean, userSupplier: () => E
 export function appWithAllRoutes({
   production = false,
   services = {},
+  bodyScanServices = {},
   userSupplier = () => user,
   roles = [] as Role[],
 }: {
   production?: boolean
   services?: Partial<Services>
+  bodyScanServices?: Partial<BodyScanServices>
   userSupplier?: () => Express.User
   roles?: Role[]
   signedCookies?: () => Record<string, Record<string, string>>
 }): Express {
   auth.default.authenticationMiddleware = () => (req, res, next) => next()
-  return appSetup(services as Services, production, userSupplier, roles)
+  return appSetup(services as Services, bodyScanServices as BodyScanServices, production, userSupplier, roles)
 }
