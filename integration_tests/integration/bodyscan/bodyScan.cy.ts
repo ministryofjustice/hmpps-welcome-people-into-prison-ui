@@ -35,5 +35,6 @@ context('A user can record a body scan', () => {
     bodyScanPage.year().should('have.value', '2022')
 
     bodyScanPage.hasError('Select a reason for the body scan')
+    bodyScanPage.hasError('Select a result for the body scan')
   })
 })

@@ -35,6 +35,7 @@ const BodyScanValidator: Validator = ({
   month: m,
   year: y,
   reason,
+  result,
 }: Record<string, string>) => {
   const errors: ValidationError[] = []
 
@@ -43,6 +44,8 @@ const BodyScanValidator: Validator = ({
   if (userSelectedDate === 'another-date') errors.push(...anotherDateValidation(d, m, y))
 
   if (!reason) errors.push({ text: 'Select a reason for the body scan', href: '#reason' })
+
+  if (!result) errors.push({ text: 'Select a result for the body scan', href: '#result' })
 
   return errors
 }
