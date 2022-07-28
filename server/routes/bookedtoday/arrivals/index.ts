@@ -1,9 +1,9 @@
 import type { Router } from 'express'
 import type { Services } from '../../../services'
 
-import ReviewPerDetailsController from './reviewPerDetailsController'
-import ReviewPerDetailsChangeNameController from './reviewPerDetailsChangeNameController'
-import ReviewPerDetailsChangeDateOfBirthController from './reviewPerDetailsChangeDateOfBirthController'
+import ReviewDetailsController from './reviewDetailsController'
+import ReviewDetailsChangeNameController from './reviewDetailsChangeNameController'
+import ReviewDetailsChangeDateOfBirthController from './reviewDetailsChangeDateOfBirthController'
 
 import searchForExistingRecordRoutes from './searchforexisting'
 import courtReturnRoutes from './courtreturns'
@@ -21,39 +21,39 @@ import Routes from '../../../utils/routeBuilder'
 export default function routes(services: Services): Router {
   const checkNewArrivalPresent = State.newArrival.ensurePresent('/page-not-found')
 
-  const reviewPerDetailsController = new ReviewPerDetailsController(services.expectedArrivalsService)
+  const reviewDetailsController = new ReviewDetailsController(services.expectedArrivalsService)
 
-  const reviewPerDetailsChangeNameController = new ReviewPerDetailsChangeNameController()
+  const reviewDetailsChangeNameController = new ReviewDetailsChangeNameController()
 
-  const reviewPerDetailsChangeDateOfBirthController = new ReviewPerDetailsChangeDateOfBirthController()
+  const reviewDetailsChangeDateOfBirthController = new ReviewDetailsChangeDateOfBirthController()
 
   return Routes.forRole(Role.PRISON_RECEPTION)
 
-    .get('/prisoners/:id/review-per-details/new', reviewPerDetailsController.newReview())
-    .get('/prisoners/:id/review-per-details', reviewPerDetailsController.showReview())
+    .get('/prisoners/:id/review-per-details/new', reviewDetailsController.newReview())
+    .get('/prisoners/:id/review-per-details', reviewDetailsController.showReview())
 
     .get(
       '/prisoners/:id/review-per-details/change-name',
       checkNewArrivalPresent,
-      reviewPerDetailsChangeNameController.showChangeName()
+      reviewDetailsChangeNameController.showChangeName()
     )
     .post(
       '/prisoners/:id/review-per-details/change-name',
       checkNewArrivalPresent,
       validationMiddleware(NameValidator),
-      reviewPerDetailsChangeNameController.changeName()
+      reviewDetailsChangeNameController.changeName()
     )
 
     .get(
       '/prisoners/:id/review-per-details/change-date-of-birth',
       checkNewArrivalPresent,
-      reviewPerDetailsChangeDateOfBirthController.showChangeDateOfBirth()
+      reviewDetailsChangeDateOfBirthController.showChangeDateOfBirth()
     )
     .post(
       '/prisoners/:id/review-per-details/change-date-of-birth',
       checkNewArrivalPresent,
       validationMiddleware(DateOfBirthValidator),
-      reviewPerDetailsChangeDateOfBirthController.changeDateOfBirth()
+      reviewDetailsChangeDateOfBirthController.changeDateOfBirth()
     )
 
     .use(searchForExistingRecordRoutes(services))

@@ -22,13 +22,15 @@
                 </div>
             </div> 
             <div>   
+           <form method="post">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
                 {{ govukButton({
                     classes: "govuk-button govuk-!-margin-bottom-6",
-                    href: "/prisoners/" + id + "/review-per-details",
+                    type: 'submit',
                     text: "Continue",
                     attributes: {'data-qa': 'continue'}
                 }) }}
-
+            </form>
                 <p>
                     <a class="govuk-body govuk-link govuk-link--no-visited-state" href="/confirm-arrival/choose-prisoner" data-qa="choose-prisoner">
                         Return to list of prisoners arriving today

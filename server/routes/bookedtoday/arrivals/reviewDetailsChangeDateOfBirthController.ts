@@ -2,7 +2,7 @@ import type { RequestHandler } from 'express'
 import { createDate } from '../../../utils/utils'
 import { State } from './state'
 
-export default class ReviewPerDetailsChangeDateOfBirthController {
+export default class ReviewDetailsChangeDateOfBirthController {
   public showChangeDateOfBirth(): RequestHandler {
     return async (req, res) => {
       const data = req.flash('input')[0] || State.newArrival.get(req)

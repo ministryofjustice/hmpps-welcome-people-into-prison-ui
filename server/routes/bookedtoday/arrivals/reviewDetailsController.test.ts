@@ -47,27 +47,7 @@ describe('GET /review-per-details', () => {
       })
   })
 
-  it('should render page when no cookie state', () => {
-    expectedArrivalsService.getArrival.mockResolvedValue({
-      firstName: 'James',
-      lastName: 'Smyth',
-      dateOfBirth: '1973-01-08',
-      gender: 'MALE',
-      prisonNumber: 'A1234AB',
-      pncNumber: '99/98644M',
-      potentialMatches: [],
-    } as Arrival)
-
-    return request(app)
-      .get('/prisoners/12345-67890/review-per-details')
-      .expect(res => {
-        const $ = cheerio.load(res.text)
-        expect($('h1').text()).toContain('Review personal details from Person Escort Record')
-        expect($('a.govuk-button').attr('href')).toContain('/prisoners/12345-67890/sex')
-      })
-  })
-
-  it('cookie is set from retrieved data', () => {
+  it('new arrival cookie is set from retrieved data', () => {
     expectedArrivalsService.getArrival.mockResolvedValue({
       firstName: 'James',
       lastName: 'Smyth',
@@ -92,7 +72,27 @@ describe('GET /review-per-details', () => {
       })
   })
 
-  it('should render page with cookie state', () => {
+  it('should render page when no initial new arrival cookie state', () => {
+    expectedArrivalsService.getArrival.mockResolvedValue({
+      firstName: 'James',
+      lastName: 'Smyth',
+      dateOfBirth: '1973-01-08',
+      gender: 'MALE',
+      prisonNumber: 'A1234AB',
+      pncNumber: '99/98644M',
+      potentialMatches: [],
+    } as Arrival)
+
+    return request(app)
+      .get('/prisoners/12345-67890/review-per-details')
+      .expect(res => {
+        const $ = cheerio.load(res.text)
+        expect($('h1').text()).toContain('Review personal details')
+        expect($('a.govuk-button').attr('href')).toContain('/prisoners/12345-67890/sex')
+      })
+  })
+
+  it('should render page with initial new arrival cookie state', () => {
     stubCookie(State.newArrival, {
       firstName: 'James',
       lastName: 'Smyth',
@@ -107,7 +107,7 @@ describe('GET /review-per-details', () => {
       .get('/prisoners/12345-67890/review-per-details')
       .expect(res => {
         const $ = cheerio.load(res.text)
-        expect($('h1').text()).toContain('Review personal details from Person Escort Record')
+        expect($('h1').text()).toContain('Review personal details')
       })
   })
 })

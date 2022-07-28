@@ -1,5 +1,6 @@
-import type { RequestHandler } from 'express'
+import type { RequestHandler, Request, Response } from 'express'
 import { State } from '../state'
+import { convertToTitleCase } from '../../../../utils/utils'
 
 export default class NoMatchingRecordsFoundController {
   public view(): RequestHandler {
@@ -15,6 +16,26 @@ export default class NoMatchingRecordsFoundController {
         },
         id,
       })
+    }
+  }
+
+  public submit(): RequestHandler {
+    return async (req: Request, res: Response) => {
+      const { id } = req.params
+
+      const searchData = State.searchDetails.get(req)
+
+      const data = {
+        firstName: convertToTitleCase(searchData.firstName),
+        lastName: convertToTitleCase(searchData.lastName),
+        dateOfBirth: searchData.dateOfBirth,
+        pncNumber: searchData?.pncNumber,
+        expected: true,
+      }
+
+      State.newArrival.set(res, data)
+
+      return res.redirect(`/prisoners/${id}/review-per-details`)
     }
   }
 }
