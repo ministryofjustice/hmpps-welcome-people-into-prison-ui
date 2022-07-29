@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express'
 import moment from 'moment'
 import { BodyScanService } from '../services'
+import parseBodyScan from '../services/bodyScan'
 
 export default class BodyScanController {
   public constructor(private readonly bodyScanService: BodyScanService) {}
@@ -27,7 +28,11 @@ export default class BodyScanController {
         return res.redirect(`/prisoners/${prisonNumber}/record-body-scan`)
       }
 
-      return res.redirect(`/prisoners/${prisonNumber}/record-body-scan`)
+      const bodyScan = parseBodyScan(req.body)
+      this.bodyScanService.addBodyScan(prisonNumber, bodyScan)
+      req.flash('body-scan', bodyScan)
+
+      return res.redirect(`/prisoners/${prisonNumber}/scan-confirmation`)
     }
   }
 }

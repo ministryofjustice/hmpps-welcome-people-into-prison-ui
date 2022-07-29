@@ -57,17 +57,17 @@
                     {% endset -%}
 
                 {{ govukRadios({
-                    name: "userSelectedDate",
+                    name: "dateType",
                     items: [
                         {
                             value: "today",
                             text: "Today",
-                            checked: data.userSelectedDate == 'today'
+                            checked: data.dateType == 'today'
                         },
                         {
                             value: "another-date",
                             text: "Another date",
-                            checked: data.userSelectedDate == 'another-date',
+                            checked: data.dateType == 'another-date',
                             conditional: {
                                 html: anotherDateHtml
                             }
