@@ -2,7 +2,7 @@ import type { BodyScan, ReasonCode, ResultCode } from 'body-scan'
 import moment from 'moment'
 import { assertHasOptionalStringValues, createDate } from '../../utils/utils'
 
-const REASON_CODES: ReasonCode[] = ['INTELLIGENCE', 'REASONABLE_DOUBT']
+const REASON_CODES: ReasonCode[] = ['INTELLIGENCE', 'REASONABLE_SUSPICION']
 const RESULT_CODES: ResultCode[] = ['POSITIVE', 'NEGATIVE']
 const DATE_TYPES = ['today', 'another-date']
 type DateType = typeof DATE_TYPES[number]
