@@ -10,11 +10,13 @@ generic-service:
   allowlist: false
 
   env:
-    INGRESS_URL: "https://welcome-dev.prison.service.justice.gov.uk"
-    HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
-    DPS_URL: "https://digital-dev.prison.service.justice.gov.uk"
-    TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
-    WELCOME_API_URL: "https://welcome-api-dev.prison.service.justice.gov.uk"
+    INGRESS_URL: 'https://welcome-dev.prison.service.justice.gov.uk'
+    HMPPS_AUTH_URL: 'https://sign-in-dev.hmpps.service.justice.gov.uk/auth'
+    DPS_URL: 'https://digital-dev.prison.service.justice.gov.uk'
+    TOKEN_VERIFICATION_API_URL: 'https://token-verification-api-dev.prison.service.justice.gov.uk'
+    WELCOME_API_URL: 'https://welcome-api-dev.prison.service.justice.gov.uk'
+    # Body scan functionality is currently located in WPIP API
+    BODYSCAN_API_URL: 'https://welcome-api-dev.prison.service.justice.gov.uk'
     HMPPS_COOKIE_NAME: hmpps-session-dev
     APP_HOSTNAME: welcome-dev.prison.service.justice.gov.uk
     SYSTEM_PHASE: DEV
@@ -24,4 +26,4 @@ generic-service:
     TEMPORARY_ABSENCE_ENABLED: 'true'
     CONFIRM_COURT_RETURN_ENABLED: 'true'
     SUPPORTING_MULTITRANSACTIONS_ENABLED: 'true'
-    EXPORT_SPREADSHEET_ID: "1d7KajxE_MyJOlMEQUAUE6yjX0qaLvyTPFB85OweBMKc"
+    EXPORT_SPREADSHEET_ID: '1d7KajxE_MyJOlMEQUAUE6yjX0qaLvyTPFB85OweBMKc'

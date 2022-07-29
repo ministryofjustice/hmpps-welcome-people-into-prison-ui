@@ -99,9 +99,15 @@ describe('POST /record-body-scan', () => {
       .expect(302)
       .expect('Location', '/prisoners/A1234AB/scan-confirmation')
       .expect(() => {
+        expect(bodyScanService.addBodyScan).toHaveBeenCalledWith('A1234AB', {
+          date: '2020-02-01',
+          reason: 'INTELLIGENCE',
+          result: 'POSITIVE',
+        })
         expect(flashProvider.mock.calls).toEqual([
           [
             'body-scan',
+
             {
               date: '2020-02-01',
               reason: 'INTELLIGENCE',

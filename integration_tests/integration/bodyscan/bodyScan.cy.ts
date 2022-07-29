@@ -11,7 +11,7 @@ context('A user can record a body scan', () => {
     cy.task('stubPrison', 'MDI')
     cy.task('stubAuthUser')
     cy.task('stubUserCaseLoads')
-    cy.task('stubPrisonerDetails', arrival)
+    cy.task('stubBodyScanPrisonerDetails', arrival)
   })
 
   it('Should display error message when needed', () => {
@@ -22,19 +22,32 @@ context('A user can record a body scan', () => {
     bodyScanPage.submit().click()
 
     bodyScanPage.hasError('Select a date for the body scan')
+    bodyScanPage.hasError('Select a reason for the body scan')
+    bodyScanPage.hasError('Select a result for the body scan')
 
-    bodyScanPage.dateRadioButtons('another-date').click()
+    bodyScanPage.dateType('another-date').click()
     bodyScanPage.day().type('13')
     bodyScanPage.month().type('07')
     bodyScanPage.year().type('2022')
     bodyScanPage.submit().click()
 
-    bodyScanPage.dateRadioButtons('another-date').should('be.checked')
+    bodyScanPage.dateType('another-date').should('be.checked')
     bodyScanPage.day().should('have.value', '13')
     bodyScanPage.month().should('have.value', '07')
     bodyScanPage.year().should('have.value', '2022')
 
-    bodyScanPage.hasError('Select a reason for the body scan')
-    bodyScanPage.hasError('Select a result for the body scan')
+    bodyScanPage.reason('INTELLIGENCE').click()
+    bodyScanPage.result('POSITIVE').click()
+
+    cy.task('stubAddBodyScan', { prisonNumber: arrival.prisonNumber })
+    bodyScanPage.submit().click()
+
+    cy.task('getAddBodyScanRequest', arrival.prisonNumber).then(request => {
+      expect(request).to.deep.equal({
+        date: '2022-07-13',
+        reason: 'INTELLIGENCE',
+        result: 'POSITIVE',
+      })
+    })
   })
 })

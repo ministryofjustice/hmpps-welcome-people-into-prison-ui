@@ -12,7 +12,7 @@ export default class BodyScanPage extends Page {
 
   bodyScanTitleName = (): PageElement => cy.get('[data-qa=record-body-scan-title]')
 
-  dateRadioButtons = (value): PageElement => cy.get('.govuk-radios__input[type="radio"]').check(value)
+  dateType = (value): PageElement => cy.get('[name=dateType]').check(value)
 
   day = (): PageElement => cy.get('[data-qa=another-date-day]')
 
@@ -20,7 +20,9 @@ export default class BodyScanPage extends Page {
 
   year = (): PageElement => cy.get('[data-qa=another-date-year]')
 
-  reasonRadioButtons = (value): PageElement => cy.get('.govuk-radios__input[type="radio"]').check(value)
+  reason = (value): PageElement => cy.get('[name=reason]').check(value)
+
+  result = (value): PageElement => cy.get('[name=result]').check(value)
 
   submit = (): PageElement => cy.get(`[data-qa=submit]`)
 }
