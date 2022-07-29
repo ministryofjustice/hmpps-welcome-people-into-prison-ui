@@ -84,4 +84,37 @@ describe('POST /record-body-scan', () => {
         ])
       })
   })
+
+  it('should submit new body scan', () => {
+    return request(app)
+      .post('/prisoners/A1234AB/record-body-scan')
+      .send({
+        day: '1',
+        month: '2',
+        year: '2020',
+        reason: 'INTELLIGENCE',
+        result: 'POSITIVE',
+        dateType: 'another-date',
+      })
+      .expect(302)
+      .expect('Location', '/prisoners/A1234AB/scan-confirmation')
+      .expect(() => {
+        expect(bodyScanService.addBodyScan).toHaveBeenCalledWith('A1234AB', {
+          date: '2020-02-01',
+          reason: 'INTELLIGENCE',
+          result: 'POSITIVE',
+        })
+        expect(flashProvider.mock.calls).toEqual([
+          [
+            'body-scan',
+
+            {
+              date: '2020-02-01',
+              reason: 'INTELLIGENCE',
+              result: 'POSITIVE',
+            },
+          ],
+        ])
+      })
+  })
 })

@@ -5,6 +5,7 @@ import { resetStubs } from './integration_tests/mockApis/wiremock'
 import auth from './integration_tests/mockApis/auth'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import welcome from './integration_tests/mockApis/welcome'
+import bodyscan from './integration_tests/mockApis/bodyScan'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -63,6 +64,12 @@ export default defineConfig({
         getConfirmationRequest: welcome.getConfirmationRequest,
         getUnexpectedConfirmationRequest: welcome.getUnexpectedConfirmationRequest,
         getTransferConfirmationRequest: welcome.getTransferConfirmationRequest,
+
+        // body-scan
+        stubBodyScanApiPing: bodyscan.stubPing,
+        stubAddBodyScan: bodyscan.stubAddBodyScan,
+        getAddBodyScanRequest: bodyscan.getAddBodyScanRequest,
+        stubBodyScanPrisonerDetails: bodyscan.stubBodyScanPrisonerDetails,
       })
     },
     baseUrl: 'http://localhost:3007',

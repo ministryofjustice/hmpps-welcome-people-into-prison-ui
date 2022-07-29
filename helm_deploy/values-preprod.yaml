@@ -13,6 +13,7 @@ generic-service:
     DPS_URL: "https://digital-preprod.prison.service.justice.gov.uk"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-preprod.prison.service.justice.gov.uk"
     WELCOME_API_URL: "https://welcome-api-preprod.prison.service.justice.gov.uk"
+    BODYSCAN_API_URL: "https://welcome-api-preprod.prison.service.justice.gov.uk"
     HMPPS_COOKIE_NAME: hmpps-session-preprod
     APP_HOSTNAME: welcome-preprod.prison.service.justice.gov.uk
     SYSTEM_PHASE: PRE-PRODUCTION

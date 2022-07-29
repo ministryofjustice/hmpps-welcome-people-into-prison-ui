@@ -1,5 +1,5 @@
 import nock from 'nock'
-import type { PrisonerDetails } from 'body-scan'
+import type { BodyScan, PrisonerDetails } from 'body-scan'
 import BodyScanClient from './bodyScanClient'
 import config from '../../config'
 
@@ -37,6 +37,23 @@ describe('bodyScanClient', () => {
 
       const output = await bodyScanClint.getPrisonerDetails(prisoner.prisonNumber)
       expect(output).toEqual(prisoner)
+    })
+  })
+
+  describe('addBodyScan', () => {
+    const bodyScan: BodyScan = {
+      date: '2022-01-23',
+      reason: 'INTELLIGENCE',
+      result: 'NEGATIVE',
+    }
+
+    it('should return data from api', async () => {
+      fakeBodyScanApi
+        .post(`/body-scans/prisoners/A1234AA`, bodyScan)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, {})
+
+      await bodyScanClint.addBodyScan('A1234AA', bodyScan)
     })
   })
 })
