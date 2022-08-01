@@ -1,6 +1,7 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
+import { LocationType } from 'welcome'
 import { appWithAllRoutes, flashProvider } from '../../../__testutils/appSetup'
 import { ExpectedArrivalsService, RaiseAnalyticsEvent } from '../../../../services'
 import Role from '../../../../authentication/role'
@@ -14,7 +15,7 @@ let app: Express
 const raiseAnalyticsEvent = jest.fn() as RaiseAnalyticsEvent
 
 const courtReturn = createPrisonerDetails()
-const arrival = createArrival({ fromLocationType: 'COURT', isCurrentPrisoner: true })
+const arrival = createArrival({ fromLocationType: LocationType.COURT, isCurrentPrisoner: true })
 const arrivalResponse = createArrivalResponse()
 
 beforeEach(() => {

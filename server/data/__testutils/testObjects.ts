@@ -13,6 +13,8 @@ import {
   type UserCaseLoad,
   PrisonerDetails,
   type PaginatedResponse,
+  BodyScanStatus,
+  LocationType,
 } from 'welcome'
 import type { NewArrival } from '../../routes/bookedtoday/arrivals/state'
 import type { User } from '../hmppsAuthClient'
@@ -27,8 +29,9 @@ export const createArrival = ({
   date = '2021-10-13',
   fromLocation = 'Reading Court',
   fromLocationId = 'REDCC',
-  fromLocationType = 'COURT',
+  fromLocationType = LocationType.COURT,
   isCurrentPrisoner = true,
+  bodyScanStatus = BodyScanStatus.CLOSE_TO_LIMIT,
   potentialMatches = [createPotentialMatch()],
 } = {}): Arrival => ({
   id,
@@ -43,6 +46,7 @@ export const createArrival = ({
   fromLocationType,
   isCurrentPrisoner,
   potentialMatches,
+  bodyScanStatus,
 })
 
 export const createRecentArrival = ({
@@ -52,6 +56,7 @@ export const createRecentArrival = ({
   prisonNumber = 'A1234AB',
   movementDateTime = '2022-01-17T14:20:00',
   location = 'MDI-1-3-004',
+  bodyScanStatus = BodyScanStatus.CLOSE_TO_LIMIT,
 } = {}): RecentArrival => ({
   firstName,
   lastName,
@@ -59,6 +64,7 @@ export const createRecentArrival = ({
   prisonNumber,
   movementDateTime,
   location,
+  bodyScanStatus,
 })
 
 export const createRecentArrivalResponse = ({
@@ -117,6 +123,7 @@ export const createTemporaryAbsence = ({
   prisonNumber = 'A1234AA',
   reasonForAbsence = 'Hospital appointment',
   movementDateTime = '2022-01-17T14:20:00',
+  bodyScanStatus = BodyScanStatus.CLOSE_TO_LIMIT,
 } = {}): TemporaryAbsence => ({
   firstName,
   lastName,
@@ -124,6 +131,7 @@ export const createTemporaryAbsence = ({
   prisonNumber,
   reasonForAbsence,
   movementDateTime,
+  bodyScanStatus,
 })
 
 export const createTransfer = ({
@@ -134,6 +142,7 @@ export const createTransfer = ({
   pncNumber = '01/1234X',
   date = '2020-02-23',
   fromLocation = 'Kingston-upon-Hull Crown Court',
+  bodyScanStatus = BodyScanStatus.CLOSE_TO_LIMIT,
 } = {}): Transfer => ({
   firstName,
   lastName,
@@ -142,6 +151,7 @@ export const createTransfer = ({
   pncNumber,
   date,
   fromLocation,
+  bodyScanStatus,
 })
 
 export const createArrivalResponse = ({ prisonNumber = 'A1234AB', location = 'Reception' } = {}): ArrivalResponse => ({

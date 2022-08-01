@@ -1,7 +1,6 @@
-import type { Arrival } from 'welcome'
+import { type Arrival, LocationType } from 'welcome'
 import type { RequestHandler, Response } from 'express'
 import type { ExpectedArrivalsService } from '../../services'
-import { LocationType } from '../../services/expectedArrivalsService'
 import { State } from './arrivals/state'
 
 export default class ChoosePrisonerController {

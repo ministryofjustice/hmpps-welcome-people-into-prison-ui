@@ -67,3 +67,14 @@ $_image-width: 90px;
   display: block;
   width: $_image-width;
 }
+
+.app-inset-text--narrow-border  {
+  border-left-width: 5px;
+  padding-left: 10px;
+}
+
+.app-inset-text--important {
+  padding-top: 0;
+  padding-bottom: 0;
+  border-color: $govuk-error-colour;
+}

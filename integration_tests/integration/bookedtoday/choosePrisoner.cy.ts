@@ -218,4 +218,42 @@ context('Choose Prisoner', () => {
     choosePrisonerPage.arrivalFrom('COURT')(3).confirm().should('not.exist')
     choosePrisonerPage.manuallyConfirmArrival().should('not.exist')
   })
+
+  it('A user can view warnings when too many scans', () => {
+    const doNotScanArrival = expectedArrivals.arrival({
+      fromLocationType: 'COURT',
+      bodyScanStatus: 'DO_NOT_SCAN',
+    })
+    const closeToLimitArrival = expectedArrivals.arrival({
+      fromLocationType: 'COURT',
+      bodyScanStatus: 'CLOSE_TO_LIMIT',
+    })
+    const okToScanArrival = expectedArrivals.arrival({
+      fromLocationType: 'COURT',
+      bodyScanStatus: 'OK_TO_SCAN',
+    })
+
+    cy.task('stubExpectedArrivals', {
+      caseLoadId: 'MDI',
+      arrivals: [doNotScanArrival, closeToLimitArrival, okToScanArrival],
+    })
+
+    cy.task('stubTransfers', {
+      caseLoadId: 'MDI',
+      transfers: [
+        expectedArrivals.prisonTransfer,
+        { ...expectedArrivals.prisonTransfer, bodyScanStatus: 'DO_NOT_SCAN' },
+      ],
+    })
+
+    cy.signIn()
+
+    const choosePrisonerPage = ChoosePrisonerPage.goTo()
+    choosePrisonerPage.doNotScan(1, 'COURT').should('exist')
+    choosePrisonerPage.doNotScan(2, 'COURT').should('not.exist')
+    choosePrisonerPage.doNotScan(3, 'COURT').should('not.exist')
+
+    choosePrisonerPage.doNotScan(1, 'PRISON').should('not.exist')
+    choosePrisonerPage.doNotScan(2, 'PRISON').should('exist')
+  })
 })

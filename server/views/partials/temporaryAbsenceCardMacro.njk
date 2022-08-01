@@ -1,3 +1,5 @@
+{% from "../components/do-not-scan.njk" import doNotScan %}
+
 {% macro temporaryAbsenceCard(temporaryAbsence, loopIndex, user) %}
     <div class='app-card-wrapper'>
         <div class="app-card app-card--with-aside">
@@ -19,7 +21,7 @@
                         {%  endif %}
                     </h2>
                 </header>
-                <dl class="app-card__meta-list">
+                <dl class="app-card__meta-list" data-qa="temporary-absence-{{loopIndex}}">
                     <div class="app-card__meta-list-item">
                         <dt class="app-card__meta-list-key">
                             Date of birth
@@ -51,6 +53,11 @@
                         <dd class="app-card__meta-list-value" data-qa="temporaryAbsence-movementDateTime-{{loopIndex}}">
                             {{ temporaryAbsence.movementDateTime | formatDate('D MMMM YYYY, HH:mm') }}
                         </dd>
+                    </div>
+                    <div class="app-card__meta-list-item">
+                        {% if temporaryAbsence.bodyScanStatus === 'DO_NOT_SCAN' %}
+                            {{ doNotScan() }}
+                        {% endif %}
                     </div>
                 </dl>
             </div>

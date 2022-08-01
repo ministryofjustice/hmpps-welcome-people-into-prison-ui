@@ -17,6 +17,7 @@ export default class TemporaryAbsencesPage extends Page {
     prisonNumber: () => cy.get(`[data-qa=temporaryAbsence-prisonNumber-${row}]`),
     reasonForAbsence: () => cy.get(`[data-qa=temporaryAbsence-reasonForAbsence-${row}]`),
     movementDateTime: () => cy.get(`[data-qa=temporaryAbsence-movementDateTime-${row}]`),
+    doNotScan: () => cy.get(`[data-qa=temporary-absence-${row}] [data-qa="do-not-scan"]`),
   })
 
   prisonerImage = (index: number): PageElement => cy.get(`[data-qa=prisoner-image]`).eq(index)

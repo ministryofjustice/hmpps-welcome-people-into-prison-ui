@@ -35,6 +35,9 @@ export default class ChoosePrisonerPage extends Page {
 
   pncNumber = (index: number, moveType: string): PageElement => cy.get(`[data-qa=${moveType}-pnc-number-${index}]`)
 
+  doNotScan = (index: number, moveType: string): PageElement =>
+    cy.get(`[data-qa=arrival-${moveType}-${index}] [data-qa=do-not-scan]`)
+
   arrivalFrom =
     (arrivalFromType: 'COURT' | 'PRISON' | 'CUSTODY_SUITE') =>
     (row: number): Record<string, () => PageElement> => ({

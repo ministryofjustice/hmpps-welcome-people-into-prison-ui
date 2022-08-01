@@ -88,4 +88,14 @@ context('A user can view all current temporary absences', () => {
     temporaryAbsencesPage.temporaryAbsences(1).confirm().click()
     Page.verifyOnPage(CheckTemporaryAbsencePage)
   })
+
+  it('Can view body scan warnings where appropriate', () => {
+    cy.signIn()
+    const temporaryAbsencesPage = TemporaryAbsencesPage.goTo()
+
+    temporaryAbsencesPage.temporaryAbsences(1).doNotScan().should('exist')
+    temporaryAbsencesPage.temporaryAbsences(2).doNotScan().should('not.exist')
+    temporaryAbsencesPage.temporaryAbsences(3).doNotScan().should('exist')
+    temporaryAbsencesPage.temporaryAbsences(4).doNotScan().should('not.exist')
+  })
 })

@@ -1,11 +1,12 @@
 export default {
   arrival: ({
     fromLocationType,
-    isCurrentPrisoner,
+    isCurrentPrisoner = false,
     dateOfBirth = '1970-01-01',
     pncNumber = '01/2345A',
     prisonNumber = 'G0015GF',
     gender = 'MALE',
+    bodyScanStatus = 'OK_TO_SCAN',
     potentialMatches = [],
   }) => ({
     id: '11111-11111',
@@ -21,6 +22,7 @@ export default {
     fromLocationType,
     isCurrentPrisoner,
     potentialMatches,
+    bodyScanStatus,
   }),
   potentialMatch: {
     firstName: 'Sam',
