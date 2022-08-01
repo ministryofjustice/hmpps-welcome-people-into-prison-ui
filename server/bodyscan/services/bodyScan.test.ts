@@ -47,7 +47,7 @@ describe('parseBodyScan', () => {
           reason: 'int',
           result: 'POSITIVE',
         })
-      ).toThrowError('int is not one of INTELLIGENCE,REASONABLE_DOUBT')
+      ).toThrowError('int is not one of INTELLIGENCE,REASONABLE_SUSPICION')
     })
 
     test('invalid result', () => {
