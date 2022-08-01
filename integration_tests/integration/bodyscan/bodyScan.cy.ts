@@ -1,6 +1,8 @@
+import Page from '../../pages/page'
 import Role from '../../../server/authentication/role'
 import BodyScanPage from '../../pages/bodyscan/bodyScan'
 import expectedArrivals from '../../mockApis/responses/expectedArrivals'
+import BodyScanConfirmation from '../../pages/bodyscan/bodyScanConfirmation'
 
 const arrival = expectedArrivals.potentialMatch
 
@@ -49,5 +51,10 @@ context('A user can record a body scan', () => {
         result: 'POSITIVE',
       })
     })
+    const bodyScanConfirmation = Page.verifyOnPage(BodyScanConfirmation)
+    bodyScanConfirmation.addCaseNote(expectedArrivals.potentialMatch.prisonNumber).exists()
+    bodyScanConfirmation.confirmationBanner().contains('Sam Smith')
+    bodyScanConfirmation.confirmationBanner().contains('Wednesday 13 July')
+    bodyScanConfirmation.confirmationBanner().contains('Intelligence - positive')
   })
 })
