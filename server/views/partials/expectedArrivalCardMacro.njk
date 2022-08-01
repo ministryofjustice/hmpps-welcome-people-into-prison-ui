@@ -1,5 +1,7 @@
+{% from "../components/do-not-scan.njk" import doNotScan %}
+
 {% macro expectedArrivalCardListContent(arrival, moveType, loopIndex) %}
-    <dl class="app-card__meta-list">
+    <dl class="app-card__meta-list" data-qa="arrival-{{moveType}}-{{loopIndex}}" >
         <div class="app-card__meta-list-item">
             <dt class="app-card__meta-list-key">
                 Date of birth
@@ -16,26 +18,31 @@
                 {{ arrival.fromLocation }}
             </dd>
         </div>
-        {% if arrival.prisonNumber %}
-            <div class="app-card__meta-list-item">
+        <div class="app-card__meta-list-item">
+            {% if arrival.prisonNumber %}
                 <dt class="app-card__meta-list-key">
                     Prison number
                 </dt>
                 <dd class="app-card__meta-list-value" data-qa="{{ moveType }}-prison-number-{{ loopIndex }}">
                     {{ arrival.prisonNumber }}
                 </dd>
-            </div>
-        {% endif %}
-        {% if arrival.pncNumber %}
-            <div class="app-card__meta-list-item">
+            {% endif %}
+        </div>
+        <div class="app-card__meta-list-item">
+            {% if arrival.pncNumber %}
                 <dt class="app-card__meta-list-key">
                     PNC number
                 </dt>
                 <dd class="app-card__meta-list-value" data-qa="{{ moveType }}-pnc-number-{{ loopIndex }}">
                     {{ arrival.pncNumber }}
                 </dd>
-            </div>
-        {% endif %}
+          {% endif %}
+        </div>
+        <div class="app-card__meta-list-item">
+            {% if arrival.bodyScanStatus === 'DO_NOT_SCAN' %}
+                {{ doNotScan() }}
+            {% endif %}
+        </div>
     </dl>
 {% endmacro %}
 

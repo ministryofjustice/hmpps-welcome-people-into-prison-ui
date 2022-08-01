@@ -1,11 +1,12 @@
-import type {
-  Arrival,
-  RecentArrival,
-  ArrivalResponse,
-  PotentialMatchCriteria,
-  PotentialMatch,
-  PrisonerDetails,
-  Sex,
+import {
+  type Arrival,
+  type RecentArrival,
+  type ArrivalResponse,
+  type PotentialMatchCriteria,
+  type PotentialMatch,
+  type PrisonerDetails,
+  type Sex,
+  LocationType,
 } from 'welcome'
 import moment, { type Moment } from 'moment'
 import type { Readable } from 'stream'
@@ -14,13 +15,6 @@ import type { RestClientBuilder, WelcomeClient, HmppsAuthClient } from '../data'
 import logger from '../../logger'
 import { RaiseAnalyticsEvent } from './raiseAnalyticsEvent'
 import { NewArrival } from '../routes/bookedtoday/arrivals/state'
-
-export enum LocationType {
-  COURT = 'COURT',
-  CUSTODY_SUITE = 'CUSTODY_SUITE',
-  PRISON = 'PRISON',
-  OTHER = 'OTHER',
-}
 
 export default class ExpectedArrivalsService {
   constructor(

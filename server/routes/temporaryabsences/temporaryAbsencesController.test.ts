@@ -1,10 +1,12 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
+import { type TemporaryAbsence } from 'welcome'
 import { appWithAllRoutes, user } from '../__testutils/appSetup'
 import TemporaryAbsencesService from '../../services/temporaryAbsencesService'
 import Role from '../../authentication/role'
 import config from '../../config'
+import { createTemporaryAbsence } from '../../data/__testutils/testObjects'
 
 jest.mock('../../services/temporaryAbsencesService')
 
@@ -12,39 +14,11 @@ const temporaryAbsencesService = new TemporaryAbsencesService(null, null) as jes
 
 let app: Express
 
-const temporaryAbsences = [
-  {
-    firstName: 'John',
-    lastName: 'Doe',
-    dateOfBirth: '1971-01-01',
-    prisonNumber: 'G0013AB',
-    reasonForAbsence: 'Hospital appointment',
-    movementDateTime: '2022-01-17T14:20:00',
-  },
-  {
-    firstName: 'Karl',
-    lastName: 'Offender',
-    dateOfBirth: '1985-01-01',
-    prisonNumber: 'G0015GD',
-    reasonForAbsence: 'Hospital appointment',
-    movementDateTime: '2022-01-05T10:20:00',
-  },
-  {
-    firstName: 'Mark',
-    lastName: 'Prisoner',
-    dateOfBirth: '1985-01-05',
-    prisonNumber: 'G0016GD',
-    reasonForAbsence: 'Hospital appointment',
-    movementDateTime: '2022-01-10T15:00:00',
-  },
-  {
-    firstName: 'Barry',
-    lastName: 'Smith',
-    dateOfBirth: '1970-01-01',
-    prisonNumber: 'G0012HK',
-    reasonForAbsence: 'External visit',
-    movementDateTime: '2022-01-16T12:30:00',
-  },
+const temporaryAbsences: TemporaryAbsence[] = [
+  createTemporaryAbsence(),
+  createTemporaryAbsence(),
+  createTemporaryAbsence(),
+  createTemporaryAbsence(),
 ]
 
 beforeEach(() => {

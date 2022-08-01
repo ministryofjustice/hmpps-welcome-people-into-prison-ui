@@ -34,6 +34,7 @@ context('A user can view all recent arrivals', () => {
       .movementDateTime()
       .should('contain.text', `${moment().format('D MMMM YYYY')}, 14:40`)
     recentArrivalsPage.recentArrivals(1, today).location().should('contain.text', 'MDI-1-3-004')
+    recentArrivalsPage.recentArrivals(1, today).doNotScan().should('not.exist')
     recentArrivalsPage.noRecentArrivlsOnDay(today).should('not.exist')
 
     recentArrivalsPage.noRecentArrivlsOnDay(oneDayAgo).should('be.visible')
@@ -41,6 +42,7 @@ context('A user can view all recent arrivals', () => {
     recentArrivalsPage.recentArrivals(1, twoDaysAgo).name().should('contain.text', 'Smith, Jim')
     recentArrivalsPage.recentArrivals(1, twoDaysAgo).prisonNumber().should('contain.text', 'A1234AB')
     recentArrivalsPage.recentArrivals(1, twoDaysAgo).dob().should('contain.text', '8 January 1973')
+    recentArrivalsPage.recentArrivals(1, twoDaysAgo).doNotScan().should('exist')
     recentArrivalsPage
       .recentArrivals(1, twoDaysAgo)
       .movementDateTime()

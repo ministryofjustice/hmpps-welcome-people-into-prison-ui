@@ -1,6 +1,6 @@
 import moment from 'moment'
-import type { Arrival } from 'welcome'
-import ExpectedArrivalsService, { LocationType } from './expectedArrivalsService'
+import { type Arrival, LocationType } from 'welcome'
+import ExpectedArrivalsService from './expectedArrivalsService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import WelcomeClient from '../data/welcomeClient'
 import { NewArrival } from '../routes/bookedtoday/arrivals/state'
@@ -51,12 +51,12 @@ describe('Expected arrivals service', () => {
 
     beforeEach(() => {
       const arrivals = [
-        createArrival({ fromLocationType: 'COURT' }),
-        createArrival({ fromLocationType: 'CUSTODY_SUITE' }),
-        createArrival({ fromLocationType: 'CUSTODY_SUITE' }),
-        createArrival({ fromLocationType: 'CUSTODY_SUITE' }),
-        createArrival({ fromLocationType: 'COURT' }),
-        createArrival({ fromLocationType: 'OTHER' }),
+        createArrival({ fromLocationType: LocationType.COURT }),
+        createArrival({ fromLocationType: LocationType.CUSTODY_SUITE }),
+        createArrival({ fromLocationType: LocationType.CUSTODY_SUITE }),
+        createArrival({ fromLocationType: LocationType.CUSTODY_SUITE }),
+        createArrival({ fromLocationType: LocationType.COURT }),
+        createArrival({ fromLocationType: LocationType.OTHER }),
       ]
 
       welcomeClient.getTransfers.mockResolvedValue([transferArrival])
@@ -71,18 +71,21 @@ describe('Expected arrivals service', () => {
         new Map([
           [
             LocationType.COURT,
-            [createArrival({ fromLocationType: 'COURT' }), createArrival({ fromLocationType: 'COURT' })],
+            [
+              createArrival({ fromLocationType: LocationType.COURT }),
+              createArrival({ fromLocationType: LocationType.COURT }),
+            ],
           ],
           [LocationType.PRISON, [transferArrival]],
           [
             LocationType.CUSTODY_SUITE,
             [
-              createArrival({ fromLocationType: 'CUSTODY_SUITE' }),
-              createArrival({ fromLocationType: 'CUSTODY_SUITE' }),
-              createArrival({ fromLocationType: 'CUSTODY_SUITE' }),
+              createArrival({ fromLocationType: LocationType.CUSTODY_SUITE }),
+              createArrival({ fromLocationType: LocationType.CUSTODY_SUITE }),
+              createArrival({ fromLocationType: LocationType.CUSTODY_SUITE }),
             ],
           ],
-          [LocationType.OTHER, [createArrival({ fromLocationType: 'OTHER' })]],
+          [LocationType.OTHER, [createArrival({ fromLocationType: LocationType.OTHER })]],
         ])
       )
 

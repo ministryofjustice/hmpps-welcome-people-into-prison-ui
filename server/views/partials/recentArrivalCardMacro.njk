@@ -1,5 +1,7 @@
+{% from "../components/do-not-scan.njk" import doNotScan %}
+
 {% macro recentArrivalCardListContent(arrival, loopIndex, date) %}
-    <dl class="app-card__meta-list">
+    <dl class="app-card__meta-list" data-qa="recent-arrival-{{date}}-{{loopIndex}}">
         <div class="app-card__meta-list-item">
             <dt class="app-card__meta-list-key">
                 Prison number
@@ -24,16 +26,21 @@
                 {{ arrival.movementDateTime | formatDate('D MMMM YYYY, HH:mm') }}
             </dd>
         </div>
-        {% if arrival.location %}
-            <div class="app-card__meta-list-item">
+        <div class="app-card__meta-list-item">
+            {% if arrival.location %}
                 <dt class="app-card__meta-list-key">
                     Location
                 </dt>
                 <dd class="app-card__meta-list-value" data-qa="{{ date }}-location-{{ loopIndex }}">
                     {{ arrival.location }}
                 </dd>
-            </div>
-        {% endif %}
+            {% endif %}
+        </div>
+        <div class="app-card__meta-list-item">
+            {% if arrival.bodyScanStatus === 'DO_NOT_SCAN' %}
+                {{ doNotScan() }}
+            {% endif %}
+        </div>
     </dl>
 {% endmacro %}
 

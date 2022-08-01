@@ -1,4 +1,4 @@
-import { Arrival, SexKeys, PotentialMatch } from 'welcome'
+import { type Arrival, SexKeys, type PotentialMatch, BodyScanStatus, LocationType } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
@@ -6,7 +6,7 @@ import { user, appWithAllRoutes, stubCookie } from '../__testutils/appSetup'
 import { expectSettingCookie } from '../__testutils/requestTestUtils'
 import config from '../../config'
 
-import ExpectedArrivalsService, { LocationType } from '../../services/expectedArrivalsService'
+import ExpectedArrivalsService from '../../services/expectedArrivalsService'
 import { State } from './arrivals/state'
 
 jest.mock('../../services/expectedArrivalsService')
@@ -198,6 +198,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
       potentialMatches,
       isCurrentPrisoner,
       fromLocationType,
+      bodyScanStatus: BodyScanStatus.CLOSE_TO_LIMIT,
     } as Arrival)
 
   describe('from court', () => {

@@ -20,6 +20,7 @@ export default class RecentArrivalsPage extends Page {
     dob: () => cy.get(`[data-qa=${date}-dob-${row}]`),
     movementDateTime: () => cy.get(`[data-qa=${date}-movementDateTime-${row}]`),
     location: () => cy.get(`[data-qa=${date}-location-${row}]`),
+    doNotScan: () => cy.get(`[data-qa=recent-arrival-${date}-${row}] [data-qa=do-not-scan]`),
   })
 
   noRecentArrivlsOnDay = (date: string): PageElement => cy.get(`[data-qa=no-prisoners-${date}`)
