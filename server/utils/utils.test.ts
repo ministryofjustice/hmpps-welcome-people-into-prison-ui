@@ -12,6 +12,7 @@ import {
   isValidDate,
   isPastDate,
   isFutureDate,
+  associateBy,
 } from './utils'
 
 describe('Convert to title case', () => {
@@ -87,6 +88,18 @@ describe('groupBy', () => {
   it('should handle lists with content', () => {
     expect(groupBy([1, 2, 3, 4, 5], i => (i % 2 === 0 ? 'even' : 'odd'))).toEqual(
       new Map(Object.entries({ odd: [1, 3, 5], even: [2, 4] }))
+    )
+  })
+})
+
+describe('associateBy', () => {
+  it('should handle empty lists', () => {
+    expect(associateBy([], i => i)).toEqual(new Map())
+  })
+
+  it('should handle lists with content', () => {
+    expect(associateBy(['Aaa', 'Bbb', 'Ccc'], i => i.charAt(0))).toEqual(
+      new Map(Object.entries({ A: 'Aaa', B: 'Bbb', C: 'Ccc' }))
     )
   })
 })

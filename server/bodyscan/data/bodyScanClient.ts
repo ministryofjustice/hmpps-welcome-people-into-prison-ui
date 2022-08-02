@@ -1,4 +1,4 @@
-import type { BodyScan, PrisonerDetails } from 'body-scan'
+import type { BodyScan, BodyScanInfo, PrisonerDetails } from 'body-scan'
 import config, { ApiConfig } from '../../config'
 import RestClient from '../../data/restClient'
 import logger from '../../../logger'
@@ -23,5 +23,12 @@ export default class BodyScanClient {
       path: `/body-scans/prisoners/${prisonNumber}`,
       data: bodyScan,
     })
+  }
+
+  async getSingleBodyScanInfo(prisonNumber: string): Promise<BodyScanInfo> {
+    logger.info(`bodyScanClient: getSingleBodyScan(${prisonNumber})`)
+    return (await this.restClient.get({
+      path: `/body-scans/prisoners/${prisonNumber}`,
+    })) as Promise<BodyScanInfo>
   }
 }

@@ -1,4 +1,5 @@
-import { type Arrival, SexKeys, type PotentialMatch, BodyScanStatus, LocationType } from 'welcome'
+import { type Arrival, SexKeys, type PotentialMatch, LocationType } from 'welcome'
+import { BodyScanStatus } from 'body-scan'
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'

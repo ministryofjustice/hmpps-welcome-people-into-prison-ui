@@ -31,6 +31,14 @@ export const groupBy = <T, K>(items: T[], groupingFunction: (item: T) => K): Map
   }, new Map<K, T[]>())
 }
 
+export const associateBy = <T, K>(items: T[], keySelector: (item: T) => K): Map<K, T> => {
+  return items.reduce((result, item) => {
+    const key = keySelector(item)
+    result.set(key, item)
+    return result
+  }, new Map<K, T>())
+}
+
 export const compareByFullName = <T extends Person>(a: T, b: T): number => {
   const result = a.lastName.localeCompare(b.lastName)
   return result !== 0 ? result : a.firstName.localeCompare(b.firstName)
