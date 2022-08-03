@@ -113,12 +113,12 @@
                         {
                             value: "POSITIVE",
                             text: "Positive",
-                            checked: data.reason == 'POSITIVE'
+                            checked: data.result == 'POSITIVE'
                         },
                         {
                             value: "NEGATIVE",
                             text: "Negative",
-                            checked: data.reason == 'NEGATIVE'
+                            checked: data.result == 'NEGATIVE'
                         }
                     ],
                     errorMessage: errors | findError("result")
