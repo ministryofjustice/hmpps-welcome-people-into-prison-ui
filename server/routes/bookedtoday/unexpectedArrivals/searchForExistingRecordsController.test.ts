@@ -10,7 +10,12 @@ import * as State from '../arrivals/state'
 
 jest.mock('../../../services/expectedArrivalsService')
 jest.mock('../arrivals/state')
-const expectedArrivalsService = new ExpectedArrivalsService(null, null, null) as jest.Mocked<ExpectedArrivalsService>
+const expectedArrivalsService = new ExpectedArrivalsService(
+  null,
+  null,
+  null,
+  null
+) as jest.Mocked<ExpectedArrivalsService>
 let app: Express
 
 const searchInputDetails = {

@@ -20,6 +20,14 @@ context('A user can view all recent arrivals', () => {
     cy.task('stubUserCaseLoads')
     cy.task('stubRecentArrivals', { caseLoadId: 'MDI', recentArrivals })
     cy.task('stubMissingPrisonerImage')
+    cy.task('stubGetBodyScanInfo', [
+      {
+        prisonNumber: 'A1234AB',
+        bodyScanStatus: 'DO_NOT_SCAN',
+        numberOfBodyScans: 120,
+      },
+      { prisonNumber: 'G0015GF', bodyScanStatus: 'OK_TO_SCAN', numberOfBodyScans: 1 },
+    ])
   })
 
   it('Should display list of recent arrivals for last three days and handle no arrivals for a day', () => {

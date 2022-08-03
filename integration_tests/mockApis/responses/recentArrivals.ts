@@ -11,7 +11,6 @@ export default {
     prisonNumber = 'G0015GF',
     movementDateTime = `${toDate}T14:40:01`,
     location = 'MDI-1-3-004',
-    bodyScanStatus = 'OK_TO_SCAN',
   }) => ({
     firstName,
     lastName,
@@ -19,7 +18,6 @@ export default {
     prisonNumber,
     movementDateTime,
     location,
-    bodyScanStatus,
   }),
 
   arrivals: ({
@@ -31,7 +29,6 @@ export default {
         prisonNumber: 'A1234AB',
         movementDateTime: `${fromDate}T13:16:00`,
         location: 'MDI-1-5-119',
-        bodyScanStatus: 'DO_NOT_SCAN',
       },
       {
         firstName: 'John',
@@ -40,7 +37,6 @@ export default {
         prisonNumber: 'G0015GF',
         movementDateTime: `${toDate}T14:40:01`,
         location: 'MDI-1-3-004',
-        bodyScanStatus: 'OK_TO_SCAN',
       },
     ],
     pageable = {

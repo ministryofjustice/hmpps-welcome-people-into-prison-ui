@@ -15,8 +15,14 @@ import {
   type PaginatedResponse,
   LocationType,
 } from 'welcome'
+import { BodyScanStatus } from 'body-scan'
 import type { NewArrival } from '../../routes/bookedtoday/arrivals/state'
 import type { User } from '../hmppsAuthClient'
+
+export const withBodyScanInfo = <T>(t: T, { bodyScanStatus = BodyScanStatus.OK_TO_SCAN } = {}) => ({
+  ...t,
+  bodyScanStatus,
+})
 
 export const createArrival = ({
   id = '1111-1111-1111-1111',

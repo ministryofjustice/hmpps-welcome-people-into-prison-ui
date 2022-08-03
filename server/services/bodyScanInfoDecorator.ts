@@ -6,7 +6,7 @@ type HasPrisonNumber = { prisonNumber: string }
 
 export type WithBodyScanInfo<T extends HasPrisonNumber> = T & { bodyScanStatus: BodyScanStatus }
 
-export default class BodyScanInfoDecorator {
+export class BodyScanInfoDecorator {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
     private readonly bodyScanClientFactory: RestClientBuilder<BodyScanClient>
@@ -17,6 +17,6 @@ export default class BodyScanInfoDecorator {
     const prisonNumbers = items.map(i => i.prisonNumber)
     const scanInfo = await this.bodyScanClientFactory(token).getBodyScanInfo(prisonNumbers)
     const prisonNumberToScan = associateBy(scanInfo, info => info.prisonNumber)
-    return items.map(i => ({ ...i, bodyScanStatus: prisonNumberToScan[i.prisonNumber].bodyScanStatus }))
+    return items.map(i => ({ ...i, bodyScanStatus: prisonNumberToScan.get(i.prisonNumber)?.bodyScanStatus }))
   }
 }

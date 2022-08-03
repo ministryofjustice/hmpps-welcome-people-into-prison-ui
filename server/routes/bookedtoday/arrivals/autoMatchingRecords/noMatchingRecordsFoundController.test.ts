@@ -8,7 +8,12 @@ import { createArrival } from '../../../../data/__testutils/testObjects'
 
 jest.mock('../../../../services/expectedArrivalsService')
 
-const expectedArrivalsService = new ExpectedArrivalsService(null, null, null) as jest.Mocked<ExpectedArrivalsService>
+const expectedArrivalsService = new ExpectedArrivalsService(
+  null,
+  null,
+  null,
+  null
+) as jest.Mocked<ExpectedArrivalsService>
 
 let app: Express
 

@@ -29,6 +29,7 @@ context('Choose Prisoner', () => {
     })
     cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [expectedArrivals.prisonTransfer] })
     cy.task('stubMissingPrisonerImage')
+    cy.task('stubGetBodyScanInfo', [])
   })
 
   it("Should display available prisoner info and the 'manually confirm' link", () => {
@@ -222,16 +223,46 @@ context('Choose Prisoner', () => {
   it('A user can view warnings when too many scans', () => {
     const doNotScanArrival = expectedArrivals.arrival({
       fromLocationType: 'COURT',
-      bodyScanStatus: 'DO_NOT_SCAN',
+      prisonNumber: 'A1234AA',
     })
     const closeToLimitArrival = expectedArrivals.arrival({
       fromLocationType: 'COURT',
-      bodyScanStatus: 'CLOSE_TO_LIMIT',
+      prisonNumber: 'A1234AB',
     })
     const okToScanArrival = expectedArrivals.arrival({
       fromLocationType: 'COURT',
-      bodyScanStatus: 'OK_TO_SCAN',
+      prisonNumber: 'A1234AC',
     })
+    const transfer1 = { ...expectedArrivals.prisonTransfer, prisonNumber: 'A1234AD' }
+    const transfer2 = { ...expectedArrivals.prisonTransfer, prisonNumber: 'A1234AE' }
+
+    cy.task('stubGetBodyScanInfo', [
+      {
+        prisonNumber: 'A1234AA',
+        bodyScanStatus: 'DO_NOT_SCAN',
+        numberOfBodyScans: 120,
+      },
+      {
+        prisonNumber: 'A1234AB',
+        bodyScanStatus: 'CLOSE_TO_LIMIT',
+        numberOfBodyScans: 114,
+      },
+      {
+        prisonNumber: 'A1234AC',
+        bodyScanStatus: 'OK_TO_SCAN',
+        numberOfBodyScans: 10,
+      },
+      {
+        prisonNumber: 'A1234AD',
+        bodyScanStatus: 'OK_TO_SCAN',
+        numberOfBodyScans: 43,
+      },
+      {
+        prisonNumber: 'A1234AE',
+        bodyScanStatus: 'DO_NOT_SCAN',
+        numberOfBodyScans: 170,
+      },
+    ])
 
     cy.task('stubExpectedArrivals', {
       caseLoadId: 'MDI',
@@ -240,10 +271,7 @@ context('Choose Prisoner', () => {
 
     cy.task('stubTransfers', {
       caseLoadId: 'MDI',
-      transfers: [
-        expectedArrivals.prisonTransfer,
-        { ...expectedArrivals.prisonTransfer, bodyScanStatus: 'DO_NOT_SCAN' },
-      ],
+      transfers: [transfer1, transfer2],
     })
 
     cy.signIn()

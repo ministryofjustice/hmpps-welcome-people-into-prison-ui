@@ -18,6 +18,28 @@ context('A user can view all current temporary absences', () => {
       temporaryAbsence: temporaryAbsences[0],
     })
     cy.task('stubMissingPrisonerImage')
+    cy.task('stubGetBodyScanInfo', [
+      {
+        prisonNumber: 'G0013AB',
+        bodyScanStatus: 'DO_NOT_SCAN',
+        numberOfBodyScans: 120,
+      },
+      {
+        prisonNumber: 'G0015GD',
+        bodyScanStatus: 'CLOSE_TO_LIMIT',
+        numberOfBodyScans: 114,
+      },
+      {
+        prisonNumber: 'G0016GD',
+        bodyScanStatus: 'DO_NOT_SCAN',
+        numberOfBodyScans: 121,
+      },
+      {
+        prisonNumber: 'G0012HK',
+        bodyScanStatus: 'OK_TO_SCAN',
+        numberOfBodyScans: 10,
+      },
+    ])
   })
 
   it('A user can view list of temporary absences and link to expected arrivals list', () => {

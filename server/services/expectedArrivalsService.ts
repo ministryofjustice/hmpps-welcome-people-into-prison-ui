@@ -15,12 +15,14 @@ import type { RestClientBuilder, WelcomeClient, HmppsAuthClient } from '../data'
 import logger from '../../logger'
 import { RaiseAnalyticsEvent } from './raiseAnalyticsEvent'
 import { NewArrival } from '../routes/bookedtoday/arrivals/state'
+import type { BodyScanInfoDecorator, WithBodyScanInfo } from './bodyScanInfoDecorator'
 
 export default class ExpectedArrivalsService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
     private readonly welcomeClientFactory: RestClientBuilder<WelcomeClient>,
-    private readonly raiseAnalyticsEvent: RaiseAnalyticsEvent
+    private readonly raiseAnalyticsEvent: RaiseAnalyticsEvent,
+    private readonly bodyScanDecorator: BodyScanInfoDecorator
   ) {}
 
   private async getExpectedArrivals(agencyId: string, now: Moment): Promise<Arrival[]> {
@@ -44,7 +46,7 @@ export default class ExpectedArrivalsService {
     return transfers.map(transfer => ({ ...transfer, fromLocationType: LocationType.PRISON })).sort(compareByFullName)
   }
 
-  private isArrivalArrivedOnDay = (day: Moment) => (recentArrival: RecentArrival) => {
+  private isArrivalArrivedOnDay = (day: Moment) => (recentArrival: WithBodyScanInfo<RecentArrival>) => {
     return moment(recentArrival.movementDateTime).startOf('day').valueOf() === day.startOf('day').valueOf()
   }
 
@@ -53,8 +55,9 @@ export default class ExpectedArrivalsService {
     const oneDayAgo = moment().subtract(1, 'days').startOf('day')
     const twoDaysAgo = moment().subtract(2, 'days').startOf('day')
 
-    const recentArrivals = await this.getRecentArrivals(agencyId, twoDaysAgo, today)
-    const mappedArrivals = new Map<Moment, RecentArrival[]>()
+    const rawRecentArrivals = await this.getRecentArrivals(agencyId, twoDaysAgo, today)
+    const recentArrivals = await this.bodyScanDecorator.decorate(rawRecentArrivals)
+    const mappedArrivals = new Map<Moment, WithBodyScanInfo<RecentArrival>[]>()
 
     mappedArrivals.set(today, recentArrivals.filter(this.isArrivalArrivedOnDay(today)))
     mappedArrivals.set(oneDayAgo, recentArrivals.filter(this.isArrivalArrivedOnDay(oneDayAgo)))
@@ -71,12 +74,16 @@ export default class ExpectedArrivalsService {
     return results.content
   }
 
-  public async getArrivalsForToday(agencyId: string, now = () => moment()): Promise<Map<LocationType, Arrival[]>> {
+  public async getArrivalsForToday(
+    agencyId: string,
+    now = () => moment()
+  ): Promise<Map<LocationType, WithBodyScanInfo<Arrival>[]>> {
     const [expectedArrivals, transfers] = await Promise.all([
       this.getExpectedArrivals(agencyId, now()),
       this.getTransfers(agencyId),
     ])
-    return groupBy([...expectedArrivals, ...transfers], (arrival: Arrival) => arrival.fromLocationType)
+    const allArrivals = await this.bodyScanDecorator.decorate([...expectedArrivals, ...transfers])
+    return groupBy(allArrivals, (arrival: WithBodyScanInfo<Arrival>) => arrival.fromLocationType)
   }
 
   public async getImage(prisonNumber: string): Promise<Readable> {

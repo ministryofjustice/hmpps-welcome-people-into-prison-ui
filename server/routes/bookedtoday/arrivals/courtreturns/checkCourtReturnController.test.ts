@@ -10,7 +10,12 @@ import { createArrival, createArrivalResponse, createPrisonerDetails } from '../
 
 jest.mock('../../../../services/expectedArrivalsService')
 
-const expectedArrivalsService = new ExpectedArrivalsService(null, null, null) as jest.Mocked<ExpectedArrivalsService>
+const expectedArrivalsService = new ExpectedArrivalsService(
+  null,
+  null,
+  null,
+  null
+) as jest.Mocked<ExpectedArrivalsService>
 let app: Express
 const raiseAnalyticsEvent = jest.fn() as RaiseAnalyticsEvent
 

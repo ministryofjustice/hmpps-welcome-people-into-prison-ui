@@ -6,7 +6,6 @@ export default [
     prisonNumber: 'G0013AB',
     reasonForAbsence: 'Hospital appointment',
     movementDateTime: '2022-01-17T14:20:00',
-    bodyScanStatus: 'DO_NOT_SCAN',
   },
   {
     firstName: 'Karl',
@@ -15,7 +14,6 @@ export default [
     prisonNumber: 'G0015GD',
     reasonForAbsence: 'Hospital appointment',
     movementDateTime: '2022-01-05T10:20:00',
-    bodyScanStatus: 'CLOSE_TO_LIMIT',
   },
   {
     firstName: 'Mark',
@@ -24,7 +22,6 @@ export default [
     prisonNumber: 'G0016GD',
     reasonForAbsence: 'Hospital appointment',
     movementDateTime: '2022-01-10T15:00:00',
-    bodyScanStatus: 'DO_NOT_SCAN',
   },
   {
     firstName: 'Barry',
@@ -33,6 +30,5 @@ export default [
     prisonNumber: 'G0012HK',
     reasonForAbsence: 'External visit',
     movementDateTime: '2022-01-16T12:30:00',
-    bodyScanStatus: 'OK_TO_SCAN',
   },
 ]
