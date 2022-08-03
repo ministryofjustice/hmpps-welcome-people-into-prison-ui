@@ -1,5 +1,5 @@
 import nock from 'nock'
-import type { BodyScan, PrisonerDetails } from 'body-scan'
+import { BodyScan, BodyScanInfo, BodyScanStatus, PrisonerDetails } from 'body-scan'
 import BodyScanClient from './bodyScanClient'
 import config from '../../config'
 
@@ -54,6 +54,24 @@ describe('bodyScanClient', () => {
         .reply(200, {})
 
       await bodyScanClint.addBodyScan('A1234AA', bodyScan)
+    })
+  })
+
+  describe('getSingleBodyScanInfo', () => {
+    const bodyScanInfo: BodyScanInfo = {
+      prisonNumber: 'A1234AA',
+      bodyScanStatus: BodyScanStatus.CLOSE_TO_LIMIT,
+      numberOfBodyScans: 110,
+    }
+
+    it('should return data from api', async () => {
+      fakeBodyScanApi
+        .get(`/body-scans/prisoners/A1234AA`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, bodyScanInfo)
+
+      const info = await bodyScanClint.getSingleBodyScanInfo('A1234AA')
+      expect(info).toStrictEqual(bodyScanInfo)
     })
   })
 })

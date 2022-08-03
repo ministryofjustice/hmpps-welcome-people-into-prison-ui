@@ -27,12 +27,6 @@ declare module 'welcome' {
     REFUSED = 'REF',
   }
 
-  export const enum BodyScanStatus {
-    DO_NOT_SCAN = 'DO_NOT_SCAN',
-    CLOSE_TO_LIMIT = 'CLOSE_TO_LIMIT',
-    OK_TO_SCAN = 'OK_TO_SCAN',
-  }
-
   export const enum SexKeys {
     FEMALE = 'FEMALE',
     MALE = 'MALE',
@@ -72,7 +66,6 @@ declare module 'welcome' {
       fromLocationType: LocationType
       gender?: SexKeys
       potentialMatches?: PotentialMatch[]
-      bodyScanStatus: BodyScanStatus
       isCurrentPrisoner: boolean
     }
     RecentArrival: {
@@ -81,7 +74,6 @@ declare module 'welcome' {
       firstName: string
       lastName: string
       movementDateTime: string
-      bodyScanStatus: BodyScanStatus
       location: string
     }
     Transfer: {
@@ -91,7 +83,6 @@ declare module 'welcome' {
       prisonNumber: string
       pncNumber: string
       date: string
-      bodyScanStatus: BodyScanStatus
       fromLocation: string
     }
     TemporaryAbsence: {
@@ -100,7 +91,6 @@ declare module 'welcome' {
       dateOfBirth: string
       prisonNumber: string
       reasonForAbsence: string
-      bodyScanStatus: BodyScanStatus
       movementDateTime: string
     }
     ErrorResponse: {
