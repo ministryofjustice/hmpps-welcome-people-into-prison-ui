@@ -11,7 +11,12 @@ import { State } from '../state'
 import { createArrival, createPotentialMatch } from '../../../../data/__testutils/testObjects'
 
 jest.mock('../../../../services/expectedArrivalsService')
-const expectedArrivalsService = new ExpectedArrivalsService(null, null, null) as jest.Mocked<ExpectedArrivalsService>
+const expectedArrivalsService = new ExpectedArrivalsService(
+  null,
+  null,
+  null,
+  null
+) as jest.Mocked<ExpectedArrivalsService>
 
 const arrival = createArrival({
   prisonNumber: 'A1234AA',

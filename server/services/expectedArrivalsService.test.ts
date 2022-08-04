@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { type Arrival, LocationType } from 'welcome'
+import { BodyScanStatus } from 'body-scan'
 import ExpectedArrivalsService from './expectedArrivalsService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import WelcomeClient from '../data/welcomeClient'
@@ -14,17 +15,21 @@ import {
   createNewArrival,
   createPotentialMatch,
   createTransfer,
+  withBodyScanInfo,
 } from '../data/__testutils/testObjects'
+import { BodyScanInfoDecorator } from './bodyScanInfoDecorator'
 
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/welcomeClient')
 jest.mock('./raiseAnalyticsEvent')
+jest.mock('./bodyScanInfoDecorator')
 
 const token = 'some token'
 
 describe('Expected arrivals service', () => {
   let welcomeClient: jest.Mocked<WelcomeClient>
   let hmppsAuthClient: jest.Mocked<HmppsAuthClient>
+  let bodyScanInfoDecorator: jest.Mocked<BodyScanInfoDecorator>
   let service: ExpectedArrivalsService
 
   const WelcomeClientFactory = jest.fn()
@@ -37,9 +42,18 @@ describe('Expected arrivals service', () => {
     jest.resetAllMocks()
     hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
     welcomeClient = new WelcomeClient(null) as jest.Mocked<WelcomeClient>
+    bodyScanInfoDecorator = new BodyScanInfoDecorator(null, null) as jest.Mocked<BodyScanInfoDecorator>
     WelcomeClientFactory.mockReturnValue(welcomeClient)
-    service = new ExpectedArrivalsService(hmppsAuthClient, WelcomeClientFactory, raiseAnalyticsEvent)
+    service = new ExpectedArrivalsService(
+      hmppsAuthClient,
+      WelcomeClientFactory,
+      raiseAnalyticsEvent,
+      bodyScanInfoDecorator
+    )
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
+    bodyScanInfoDecorator.decorate.mockImplementation(as =>
+      Promise.resolve(as.map(a => ({ ...a, bodyScanStatus: BodyScanStatus.OK_TO_SCAN })))
+    )
   })
 
   describe('getExpectedArrivals', () => {
@@ -72,20 +86,20 @@ describe('Expected arrivals service', () => {
           [
             LocationType.COURT,
             [
-              createArrival({ fromLocationType: LocationType.COURT }),
-              createArrival({ fromLocationType: LocationType.COURT }),
+              withBodyScanInfo(createArrival({ fromLocationType: LocationType.COURT })),
+              withBodyScanInfo(createArrival({ fromLocationType: LocationType.COURT })),
             ],
           ],
-          [LocationType.PRISON, [transferArrival]],
+          [LocationType.PRISON, [withBodyScanInfo(transferArrival)]],
           [
             LocationType.CUSTODY_SUITE,
             [
-              createArrival({ fromLocationType: LocationType.CUSTODY_SUITE }),
-              createArrival({ fromLocationType: LocationType.CUSTODY_SUITE }),
-              createArrival({ fromLocationType: LocationType.CUSTODY_SUITE }),
+              withBodyScanInfo(createArrival({ fromLocationType: LocationType.CUSTODY_SUITE })),
+              withBodyScanInfo(createArrival({ fromLocationType: LocationType.CUSTODY_SUITE })),
+              withBodyScanInfo(createArrival({ fromLocationType: LocationType.CUSTODY_SUITE })),
             ],
           ],
-          [LocationType.OTHER, [createArrival({ fromLocationType: LocationType.OTHER })]],
+          [LocationType.OTHER, [withBodyScanInfo(createArrival({ fromLocationType: LocationType.OTHER }))]],
         ])
       )
 
@@ -132,20 +146,20 @@ describe('Expected arrivals service', () => {
           [
             dateTo,
             [
-              createRecentArrival({ movementDateTime: `${today}T09:12:00` }),
-              createRecentArrival({ movementDateTime: `${today}T13:15:00` }),
-              createRecentArrival({ movementDateTime: `${today}T13:16:00` }),
+              withBodyScanInfo(createRecentArrival({ movementDateTime: `${today}T09:12:00` })),
+              withBodyScanInfo(createRecentArrival({ movementDateTime: `${today}T13:15:00` })),
+              withBodyScanInfo(createRecentArrival({ movementDateTime: `${today}T13:16:00` })),
             ],
           ],
           [
             middleDate,
             [
-              createRecentArrival({ movementDateTime: `${oneDayAgo}T14:40:00` }),
-              createRecentArrival({ movementDateTime: `${oneDayAgo}T14:40:01` }),
-              createRecentArrival({ movementDateTime: `${oneDayAgo}T14:55:00` }),
+              withBodyScanInfo(createRecentArrival({ movementDateTime: `${oneDayAgo}T14:40:00` })),
+              withBodyScanInfo(createRecentArrival({ movementDateTime: `${oneDayAgo}T14:40:01` })),
+              withBodyScanInfo(createRecentArrival({ movementDateTime: `${oneDayAgo}T14:55:00` })),
             ],
           ],
-          [dateFrom, [createRecentArrival({ movementDateTime: `${twoDaysAgo}T18:20:00` })]],
+          [dateFrom, [withBodyScanInfo(createRecentArrival({ movementDateTime: `${twoDaysAgo}T18:20:00` }))]],
         ])
       )
 

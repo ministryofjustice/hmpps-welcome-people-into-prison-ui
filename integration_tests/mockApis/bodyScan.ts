@@ -29,6 +29,21 @@ export default {
       },
     })
   },
+
+  stubGetBodyScanInfo: (details): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/bodyscan/body-scans/prisoners`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: details || [],
+      },
+    })
+  },
+
   stubAddBodyScan: ({ prisonNumber }: Record<string, number>): SuperAgentRequest => {
     return stubFor({
       request: {

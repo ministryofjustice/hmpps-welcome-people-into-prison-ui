@@ -9,7 +9,7 @@ import config from '../../config'
 import { createTemporaryAbsence } from '../../data/__testutils/testObjects'
 
 jest.mock('../../services/temporaryAbsencesService')
-const temporaryAbsencesService = new TemporaryAbsencesService(null, null) as jest.Mocked<TemporaryAbsencesService>
+const temporaryAbsencesService = new TemporaryAbsencesService(null, null, null) as jest.Mocked<TemporaryAbsencesService>
 let app: Express
 const raiseAnalyticsEvent = jest.fn() as RaiseAnalyticsEvent
 

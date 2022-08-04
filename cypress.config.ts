@@ -70,6 +70,7 @@ export default defineConfig({
         stubAddBodyScan: bodyscan.stubAddBodyScan,
         getAddBodyScanRequest: bodyscan.getAddBodyScanRequest,
         stubBodyScanPrisonerDetails: bodyscan.stubBodyScanPrisonerDetails,
+        stubGetBodyScanInfo: bodyscan.stubGetBodyScanInfo,
       })
     },
     baseUrl: 'http://localhost:3007',

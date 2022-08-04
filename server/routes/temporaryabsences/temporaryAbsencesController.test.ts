@@ -6,19 +6,20 @@ import { appWithAllRoutes, user } from '../__testutils/appSetup'
 import TemporaryAbsencesService from '../../services/temporaryAbsencesService'
 import Role from '../../authentication/role'
 import config from '../../config'
-import { createTemporaryAbsence } from '../../data/__testutils/testObjects'
+import { withBodyScanInfo, createTemporaryAbsence } from '../../data/__testutils/testObjects'
+import type { WithBodyScanInfo } from '../../services/bodyScanInfoDecorator'
 
 jest.mock('../../services/temporaryAbsencesService')
 
-const temporaryAbsencesService = new TemporaryAbsencesService(null, null) as jest.Mocked<TemporaryAbsencesService>
+const temporaryAbsencesService = new TemporaryAbsencesService(null, null, null) as jest.Mocked<TemporaryAbsencesService>
 
 let app: Express
 
-const temporaryAbsences: TemporaryAbsence[] = [
-  createTemporaryAbsence(),
-  createTemporaryAbsence(),
-  createTemporaryAbsence(),
-  createTemporaryAbsence(),
+const temporaryAbsences: WithBodyScanInfo<TemporaryAbsence>[] = [
+  withBodyScanInfo(createTemporaryAbsence()),
+  withBodyScanInfo(createTemporaryAbsence()),
+  withBodyScanInfo(createTemporaryAbsence()),
+  withBodyScanInfo(createTemporaryAbsence()),
 ]
 
 beforeEach(() => {

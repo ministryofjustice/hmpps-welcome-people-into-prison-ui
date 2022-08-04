@@ -51,6 +51,7 @@ context('Arrival matches multiple records', () => {
     cy.task('stubExpectedArrival', arrival)
     cy.task('stubImprisonmentStatus')
     cy.task('stubPrisonerDetails', arrival.potentialMatches[1])
+    cy.task('stubGetBodyScanInfo', [])
     cy.signIn()
 
     const choosePrisonerPage = ChoosePrisonerPage.goTo()

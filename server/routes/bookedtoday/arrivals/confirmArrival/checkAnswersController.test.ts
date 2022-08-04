@@ -12,7 +12,12 @@ import { createArrivalResponse, createNewArrival } from '../../../../data/__test
 jest.mock('../../../../services/expectedArrivalsService')
 jest.mock('../../../../services/imprisonmentStatusesService')
 
-const expectedArrivalsService = new ExpectedArrivalsService(null, null, null) as jest.Mocked<ExpectedArrivalsService>
+const expectedArrivalsService = new ExpectedArrivalsService(
+  null,
+  null,
+  null,
+  null
+) as jest.Mocked<ExpectedArrivalsService>
 const imprisonmentStatusesService = new ImprisonmentStatusesService(
   null,
   null
