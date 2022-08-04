@@ -2,20 +2,14 @@ import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
 import { appWithAllRoutes, stubCookie, flashProvider } from '../../../__testutils/appSetup'
-import ImprisonmentStatusesService from '../../../../services/imprisonmentStatusesService'
 import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
 import { State } from '../state'
 import { createNewArrival, statusWithManyReasons } from '../../../../data/__testutils/testObjects'
 import Role from '../../../../authentication/role'
-
-jest.mock('../../../../services/imprisonmentStatusesService')
-
-const imprisonmentStatusesService = new ImprisonmentStatusesService(
-  null,
-  null
-) as jest.Mocked<ImprisonmentStatusesService>
+import { createMockImprisonmentStatusesService } from '../../../../services/__testutils/mocks'
 
 let app: Express
+const imprisonmentStatusesService = createMockImprisonmentStatusesService()
 
 const imprisonmentStatus = statusWithManyReasons
 const newArrival = createNewArrival()

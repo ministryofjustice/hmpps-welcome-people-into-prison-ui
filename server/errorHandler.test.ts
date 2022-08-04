@@ -2,18 +2,10 @@ import type { Express } from 'express'
 import request from 'supertest'
 import createError from 'http-errors'
 import { appWithAllRoutes } from './routes/__testutils/appSetup'
-import ExpectedArrivalsService from './services/expectedArrivalsService'
-
-jest.mock('./services/expectedArrivalsService')
-
-const expectedArrivalsService = new ExpectedArrivalsService(
-  null,
-  null,
-  null,
-  null
-) as jest.Mocked<ExpectedArrivalsService>
+import { createMockExpectedArrivalsService } from './services/__testutils/mocks'
 
 let app: Express
+const expectedArrivalsService = createMockExpectedArrivalsService()
 
 beforeEach(() => {
   app = appWithAllRoutes({ services: { expectedArrivalsService } })

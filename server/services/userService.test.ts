@@ -1,16 +1,13 @@
 import UserService from './userService'
-import HmppsAuthClient from '../data/hmppsAuthClient'
-import WelcomeClient from '../data/welcomeClient'
-import { createUser, createUserCaseLoad } from '../data/__testutils/testObjects'
 
-jest.mock('../data/hmppsAuthClient')
-jest.mock('../data/welcomeClient')
+import { createUser, createUserCaseLoad } from '../data/__testutils/testObjects'
+import { createMockHmppsAuthClient, createMockWelcomeClient } from '../data/__testutils/mocks'
 
 const token = 'some token'
 
 describe('User service', () => {
-  const welcomeClient = new WelcomeClient(null) as jest.Mocked<WelcomeClient>
-  const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
+  const welcomeClient = createMockWelcomeClient()
+  const hmppsAuthClient = createMockHmppsAuthClient()
   let service: UserService
 
   const WelcomeClientFactory = jest.fn()

@@ -2,20 +2,12 @@ import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
 import { appWithAllRoutes } from '../../../__testutils/appSetup'
-import ExpectedArrivalsService from '../../../../services/expectedArrivalsService'
 import Role from '../../../../authentication/role'
 import { createArrival } from '../../../../data/__testutils/testObjects'
-
-jest.mock('../../../../services/expectedArrivalsService')
-
-const expectedArrivalsService = new ExpectedArrivalsService(
-  null,
-  null,
-  null,
-  null
-) as jest.Mocked<ExpectedArrivalsService>
+import { createMockExpectedArrivalsService } from '../../../../services/__testutils/mocks'
 
 let app: Express
+const expectedArrivalsService = createMockExpectedArrivalsService()
 
 const arrival = createArrival({
   potentialMatches: [],

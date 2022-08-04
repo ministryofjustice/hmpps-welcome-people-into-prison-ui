@@ -2,8 +2,6 @@ import moment from 'moment'
 import { type Arrival, LocationType } from 'welcome'
 import { BodyScanStatus } from 'body-scan'
 import ExpectedArrivalsService from './expectedArrivalsService'
-import HmppsAuthClient from '../data/hmppsAuthClient'
-import WelcomeClient from '../data/welcomeClient'
 import { NewArrival } from '../routes/bookedtoday/arrivals/state'
 import { raiseAnalyticsEvent } from './raiseAnalyticsEvent'
 import {
@@ -17,19 +15,17 @@ import {
   createTransfer,
   withBodyScanInfo,
 } from '../data/__testutils/testObjects'
-import { BodyScanInfoDecorator } from './bodyScanInfoDecorator'
+import { createMockHmppsAuthClient, createMockWelcomeClient } from '../data/__testutils/mocks'
+import { createMockBodyScanInfoDecorator } from './__testutils/mocks'
 
-jest.mock('../data/hmppsAuthClient')
-jest.mock('../data/welcomeClient')
 jest.mock('./raiseAnalyticsEvent')
-jest.mock('./bodyScanInfoDecorator')
 
 const token = 'some token'
 
 describe('Expected arrivals service', () => {
-  let welcomeClient: jest.Mocked<WelcomeClient>
-  let hmppsAuthClient: jest.Mocked<HmppsAuthClient>
-  let bodyScanInfoDecorator: jest.Mocked<BodyScanInfoDecorator>
+  const welcomeClient = createMockWelcomeClient()
+  const hmppsAuthClient = createMockHmppsAuthClient()
+  const bodyScanInfoDecorator = createMockBodyScanInfoDecorator()
   let service: ExpectedArrivalsService
 
   const WelcomeClientFactory = jest.fn()
@@ -40,9 +36,6 @@ describe('Expected arrivals service', () => {
 
   beforeEach(() => {
     jest.resetAllMocks()
-    hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
-    welcomeClient = new WelcomeClient(null) as jest.Mocked<WelcomeClient>
-    bodyScanInfoDecorator = new BodyScanInfoDecorator(null, null) as jest.Mocked<BodyScanInfoDecorator>
     WelcomeClientFactory.mockReturnValue(welcomeClient)
     service = new ExpectedArrivalsService(
       hmppsAuthClient,

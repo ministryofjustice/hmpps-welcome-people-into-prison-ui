@@ -3,26 +3,18 @@ import request from 'supertest'
 import * as cheerio from 'cheerio'
 
 import { appWithAllRoutes, user, stubCookie, flashProvider } from '../../../__testutils/appSetup'
-import { ExpectedArrivalsService, ImprisonmentStatusesService } from '../../../../services'
 import Role from '../../../../authentication/role'
 import config from '../../../../config'
 import { State } from '../state'
 import { createArrivalResponse, createNewArrival } from '../../../../data/__testutils/testObjects'
+import {
+  createMockExpectedArrivalsService,
+  createMockImprisonmentStatusesService,
+} from '../../../../services/__testutils/mocks'
 
-jest.mock('../../../../services/expectedArrivalsService')
-jest.mock('../../../../services/imprisonmentStatusesService')
-
-const expectedArrivalsService = new ExpectedArrivalsService(
-  null,
-  null,
-  null,
-  null
-) as jest.Mocked<ExpectedArrivalsService>
-const imprisonmentStatusesService = new ImprisonmentStatusesService(
-  null,
-  null
-) as jest.Mocked<ImprisonmentStatusesService>
 let app: Express
+const imprisonmentStatusesService = createMockImprisonmentStatusesService()
+const expectedArrivalsService = createMockExpectedArrivalsService()
 
 const arrivalId = '1111-2222-3333-4444'
 const newArrival = createNewArrival()

@@ -1,12 +1,7 @@
 import validation from './movementReasonsValidation'
-import ImprisonmentStatusesService from '../../services/imprisonmentStatusesService'
+import { createMockImprisonmentStatusesService } from '../../services/__testutils/mocks'
 
-jest.mock('../../services/imprisonmentStatusesService')
-
-const imprisonmentStatusesService = new ImprisonmentStatusesService(
-  null,
-  null
-) as jest.Mocked<ImprisonmentStatusesService>
+const imprisonmentStatusesService = createMockImprisonmentStatusesService()
 
 describe('Movement reasons validation middleware', () => {
   beforeEach(() => {

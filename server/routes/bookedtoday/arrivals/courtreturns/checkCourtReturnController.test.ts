@@ -3,20 +3,14 @@ import request from 'supertest'
 import * as cheerio from 'cheerio'
 import { LocationType } from 'welcome'
 import { appWithAllRoutes, flashProvider } from '../../../__testutils/appSetup'
-import { ExpectedArrivalsService, RaiseAnalyticsEvent } from '../../../../services'
+import { RaiseAnalyticsEvent } from '../../../../services'
 import Role from '../../../../authentication/role'
 import config from '../../../../config'
 import { createArrival, createArrivalResponse, createPrisonerDetails } from '../../../../data/__testutils/testObjects'
+import { createMockExpectedArrivalsService } from '../../../../services/__testutils/mocks'
 
-jest.mock('../../../../services/expectedArrivalsService')
-
-const expectedArrivalsService = new ExpectedArrivalsService(
-  null,
-  null,
-  null,
-  null
-) as jest.Mocked<ExpectedArrivalsService>
 let app: Express
+const expectedArrivalsService = createMockExpectedArrivalsService()
 const raiseAnalyticsEvent = jest.fn() as RaiseAnalyticsEvent
 
 const courtReturn = createPrisonerDetails()

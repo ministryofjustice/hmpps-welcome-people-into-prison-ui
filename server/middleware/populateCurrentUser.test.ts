@@ -1,14 +1,10 @@
 import type { Request, Response } from 'express'
 import { UserCaseLoad } from 'welcome'
-import UserService from '../services/userService'
-import PrisonService from '../services/prisonService'
 import populateCurrentUser from './populateCurrentUser'
+import { createMockPrisonService, createMockUserService } from '../services/__testutils/mocks'
 
-jest.mock('../services/userService')
-jest.mock('../services/expectedArrivalsService')
-
-const userService = new UserService(null, null) as jest.Mocked<UserService>
-const prisonService = new PrisonService(null, null) as jest.Mocked<PrisonService>
+const userService = createMockUserService()
+const prisonService = createMockPrisonService()
 
 const userCaseLoads: UserCaseLoad[] = [
   {

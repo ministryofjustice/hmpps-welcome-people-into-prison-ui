@@ -28,8 +28,7 @@ export default function routes(services: Services): Router {
 
   const checkAnswersController = new CheckAnswersController(
     services.expectedArrivalsService,
-    services.imprisonmentStatusesService,
-    services.raiseAnalyticsEvent
+    services.imprisonmentStatusesService
   )
 
   const confirmAddedToRollController = new ConfirmAddedToRollController(services.prisonService)

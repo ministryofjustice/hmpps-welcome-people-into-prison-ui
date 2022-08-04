@@ -5,18 +5,10 @@ import { appWithAllRoutes, flashProvider } from '../../../__testutils/appSetup'
 
 import Role from '../../../../authentication/role'
 import config from '../../../../config'
-import { ExpectedArrivalsService } from '../../../../services'
 import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
 import { State } from '../state'
 import { createArrival, createPotentialMatch } from '../../../../data/__testutils/testObjects'
-
-jest.mock('../../../../services/expectedArrivalsService')
-const expectedArrivalsService = new ExpectedArrivalsService(
-  null,
-  null,
-  null,
-  null
-) as jest.Mocked<ExpectedArrivalsService>
+import { createMockExpectedArrivalsService } from '../../../../services/__testutils/mocks'
 
 const arrival = createArrival({
   prisonNumber: 'A1234AA',
@@ -27,6 +19,7 @@ const arrival = createArrival({
 })
 
 let app: Express
+const expectedArrivalsService = createMockExpectedArrivalsService()
 
 beforeEach(() => {
   config.confirmNoIdentifiersEnabled = true

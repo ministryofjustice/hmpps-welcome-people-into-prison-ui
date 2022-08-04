@@ -5,17 +5,9 @@ import * as cheerio from 'cheerio'
 import { appWithAllRoutes, flashProvider, stubCookie } from '../../__testutils/appSetup'
 
 import Role from '../../../authentication/role'
-import { ExpectedArrivalsService } from '../../../services'
 import { State } from '../arrivals/state'
 import { expectSettingCookie } from '../../__testutils/requestTestUtils'
-
-jest.mock('../../../services/expectedArrivalsService')
-const expectedArrivalsService = new ExpectedArrivalsService(
-  null,
-  null,
-  null,
-  null
-) as jest.Mocked<ExpectedArrivalsService>
+import { createMockExpectedArrivalsService } from '../../../services/__testutils/mocks'
 
 const searchDetails = {
   firstName: 'Jim',
@@ -41,6 +33,7 @@ const potentialMatches = [
   },
 ]
 let app: Express
+const expectedArrivalsService = createMockExpectedArrivalsService()
 
 beforeEach(() => {
   app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })

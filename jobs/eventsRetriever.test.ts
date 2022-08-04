@@ -1,12 +1,10 @@
 import moment from 'moment'
 import { Readable } from 'stream'
 import EventsRetriever from './eventsRetriever'
-import { HmppsAuthClient, WelcomeClient } from '../server/data'
+import { createMockHmppsAuthClient, createMockWelcomeClient } from '../server/data/__testutils/mocks'
 
-jest.mock('../server/data')
-
-const welcomeClient = new WelcomeClient(null) as jest.Mocked<WelcomeClient>
-const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
+const welcomeClient = createMockWelcomeClient()
+const hmppsAuthClient = createMockHmppsAuthClient()
 
 let eventsRetriever: EventsRetriever
 

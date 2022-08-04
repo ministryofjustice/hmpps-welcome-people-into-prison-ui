@@ -3,20 +3,15 @@ import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
 import { appWithAllRoutes, flashProvider } from '../../__testutils/appSetup'
-import { ExpectedArrivalsService } from '../../../services'
 import Role from '../../../authentication/role'
 import config from '../../../config'
 import * as State from '../arrivals/state'
+import { createMockExpectedArrivalsService } from '../../../services/__testutils/mocks'
 
-jest.mock('../../../services/expectedArrivalsService')
 jest.mock('../arrivals/state')
-const expectedArrivalsService = new ExpectedArrivalsService(
-  null,
-  null,
-  null,
-  null
-) as jest.Mocked<ExpectedArrivalsService>
+
 let app: Express
+const expectedArrivalsService = createMockExpectedArrivalsService()
 
 const searchInputDetails = {
   firstName: 'James',

@@ -2,15 +2,15 @@ import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
 import { appWithAllRoutes, flashProvider } from '../__testutils/appSetup'
-import { TemporaryAbsencesService, RaiseAnalyticsEvent } from '../../services'
+import { RaiseAnalyticsEvent } from '../../services'
 
 import Role from '../../authentication/role'
 import config from '../../config'
 import { createTemporaryAbsence } from '../../data/__testutils/testObjects'
+import { createMockTemporaryAbsencesService } from '../../services/__testutils/mocks'
 
-jest.mock('../../services/temporaryAbsencesService')
-const temporaryAbsencesService = new TemporaryAbsencesService(null, null, null) as jest.Mocked<TemporaryAbsencesService>
 let app: Express
+const temporaryAbsencesService = createMockTemporaryAbsencesService()
 const raiseAnalyticsEvent = jest.fn() as RaiseAnalyticsEvent
 
 beforeEach(() => {
