@@ -11,6 +11,7 @@ export default class BodyScanController {
       const { prisonNumber } = req.params
       const today = moment().format('YYYY-MM-DD')
       const prisonerDetails = await this.bodyScanService.getPrisonerDetails(prisonNumber)
+      // call new method to retrieve body scan info add to template and show message
       return res.render('pages/bodyscans/recordBodyScan.njk', {
         errors: req.flash('errors'),
         today,

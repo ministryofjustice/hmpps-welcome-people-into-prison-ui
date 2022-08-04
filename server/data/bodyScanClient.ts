@@ -9,7 +9,8 @@ export default class BodyScanClient {
   constructor(token: string) {
     this.restClient = new RestClient('bodyScanClient', config.apis.bodyscan as ApiConfig, token)
   }
-
+// https://welcome-dev.prison.service.justice.gov.uk/prisoners/A5202DY/record-body-scan
+  // user this client method to retrieve body scan info
   async getSingleBodyScanInfo(prisonNumber: string): Promise<BodyScanInfo> {
     logger.info(`bodyScanClient: getSingleBodyScan(${prisonNumber})`)
     return (await this.restClient.get({

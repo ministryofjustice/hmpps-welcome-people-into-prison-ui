@@ -31,6 +31,7 @@ declare module 'body-scan' {
       prisonNumber: string
       bodyScanStatus: BodyScanStatus
       numberOfBodyScans: number
+      numberOfBodyScansRemaining: number
     }
   }
 }

@@ -19,4 +19,6 @@ export class BodyScanInfoDecorator {
     const prisonNumberToScan = associateBy(scanInfo, info => info.prisonNumber)
     return items.map(i => ({ ...i, bodyScanStatus: prisonNumberToScan.get(i.prisonNumber)?.bodyScanStatus }))
   }
+
+  // Create a new method for retrieve a body scan info based on prison number
 }
