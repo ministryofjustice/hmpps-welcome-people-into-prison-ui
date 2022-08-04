@@ -3,21 +3,14 @@ import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
 import { appWithAllRoutes, stubCookie } from '../../../../__testutils/appSetup'
-import { ExpectedArrivalsService } from '../../../../../services'
 import Role from '../../../../../authentication/role'
 import config from '../../../../../config'
 import { expectSettingCookie } from '../../../../__testutils/requestTestUtils'
 import { State } from '../../state'
+import { createMockExpectedArrivalsService } from '../../../../../services/__testutils/mocks'
 
-jest.mock('../../../../../services/expectedArrivalsService')
-
-const expectedArrivalsService = new ExpectedArrivalsService(
-  null,
-  null,
-  null,
-  null
-) as jest.Mocked<ExpectedArrivalsService>
 let app: Express
+const expectedArrivalsService = createMockExpectedArrivalsService()
 
 const searchDetails = {
   firstName: 'James',

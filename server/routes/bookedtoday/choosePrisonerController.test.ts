@@ -6,20 +6,11 @@ import * as cheerio from 'cheerio'
 import { user, appWithAllRoutes, stubCookie } from '../__testutils/appSetup'
 import { expectSettingCookie } from '../__testutils/requestTestUtils'
 import config from '../../config'
-
-import ExpectedArrivalsService from '../../services/expectedArrivalsService'
 import { State } from './arrivals/state'
-
-jest.mock('../../services/expectedArrivalsService')
-
-const expectedArrivalsService = new ExpectedArrivalsService(
-  null,
-  null,
-  null,
-  null
-) as jest.Mocked<ExpectedArrivalsService>
+import { createMockExpectedArrivalsService } from '../../services/__testutils/mocks'
 
 let app: Express
+const expectedArrivalsService = createMockExpectedArrivalsService()
 
 beforeEach(() => {
   stubCookie(State.newArrival, {

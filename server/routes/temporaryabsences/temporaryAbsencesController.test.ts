@@ -3,17 +3,14 @@ import request from 'supertest'
 import * as cheerio from 'cheerio'
 import { type TemporaryAbsence } from 'welcome'
 import { appWithAllRoutes, user } from '../__testutils/appSetup'
-import TemporaryAbsencesService from '../../services/temporaryAbsencesService'
 import Role from '../../authentication/role'
 import config from '../../config'
 import { withBodyScanInfo, createTemporaryAbsence } from '../../data/__testutils/testObjects'
 import type { WithBodyScanInfo } from '../../services/bodyScanInfoDecorator'
-
-jest.mock('../../services/temporaryAbsencesService')
-
-const temporaryAbsencesService = new TemporaryAbsencesService(null, null, null) as jest.Mocked<TemporaryAbsencesService>
+import { createMockTemporaryAbsencesService } from '../../services/__testutils/mocks'
 
 let app: Express
+const temporaryAbsencesService = createMockTemporaryAbsencesService()
 
 const temporaryAbsences: WithBodyScanInfo<TemporaryAbsence>[] = [
   withBodyScanInfo(createTemporaryAbsence()),

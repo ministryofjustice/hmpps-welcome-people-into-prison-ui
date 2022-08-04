@@ -2,16 +2,14 @@ import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
 import { appWithAllRoutes, flashProvider } from '../../__testutils/appSetup'
-import { TransfersService, RaiseAnalyticsEvent } from '../../../services'
-
+import { RaiseAnalyticsEvent } from '../../../services'
 import Role from '../../../authentication/role'
 import config from '../../../config'
 import { createTransfer } from '../../../data/__testutils/testObjects'
+import { createMockTransfersService } from '../../../services/__testutils/mocks'
 
-jest.mock('../../../services/transfersService')
-
-const transfersService = new TransfersService(null, null) as jest.Mocked<TransfersService>
 let app: Express
+const transfersService = createMockTransfersService()
 const raiseAnalyticsEvent = jest.fn() as RaiseAnalyticsEvent
 
 beforeEach(() => {

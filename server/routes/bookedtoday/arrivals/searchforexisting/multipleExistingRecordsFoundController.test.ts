@@ -6,17 +6,9 @@ import { appWithAllRoutes, flashProvider, stubCookie } from '../../../__testutil
 
 import Role from '../../../../authentication/role'
 import config from '../../../../config'
-import { ExpectedArrivalsService } from '../../../../services'
 import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
 import { State } from '../state'
-
-jest.mock('../../../../services/expectedArrivalsService')
-const expectedArrivalsService = new ExpectedArrivalsService(
-  null,
-  null,
-  null,
-  null
-) as jest.Mocked<ExpectedArrivalsService>
+import { createMockExpectedArrivalsService } from '../../../../services/__testutils/mocks'
 
 const searchDetails = {
   firstName: 'Jamie',
@@ -41,6 +33,7 @@ const potentialMatches = [
   },
 ]
 let app: Express
+const expectedArrivalsService = createMockExpectedArrivalsService()
 
 beforeEach(() => {
   config.confirmNoIdentifiersEnabled = true

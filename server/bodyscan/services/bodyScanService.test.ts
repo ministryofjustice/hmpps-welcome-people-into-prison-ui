@@ -1,24 +1,21 @@
 import { BodyScan } from 'body-scan'
-import { HmppsAuthClient } from '../../data'
+import { createMockHmppsAuthClient } from '../../data/__testutils/mocks'
 import { BodyScanClient } from '../data'
 import BodyScanService from './bodyScanService'
 
-jest.mock('../../data')
 jest.mock('../data')
 
 const token = 'some token'
 
 describe('Body scan service', () => {
-  let bodyScanClient: jest.Mocked<BodyScanClient>
-  let hmppsAuthClient: jest.Mocked<HmppsAuthClient>
+  const bodyScanClient = new BodyScanClient(null) as jest.Mocked<BodyScanClient>
+  const hmppsAuthClient = createMockHmppsAuthClient()
   let service: BodyScanService
 
   const BodyScanClientFactory = jest.fn()
 
   beforeEach(() => {
     jest.resetAllMocks()
-    hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
-    bodyScanClient = new BodyScanClient(null) as jest.Mocked<BodyScanClient>
     BodyScanClientFactory.mockReturnValue(bodyScanClient)
     service = new BodyScanService(hmppsAuthClient, BodyScanClientFactory)
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)

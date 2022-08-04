@@ -1,20 +1,15 @@
 import { BodyScanStatus } from 'body-scan'
 import TemporaryAbsencesService from './temporaryAbsencesService'
-import HmppsAuthClient from '../data/hmppsAuthClient'
-import WelcomeClient from '../data/welcomeClient'
 import { createTemporaryAbsence, withBodyScanInfo } from '../data/__testutils/testObjects'
-import { BodyScanInfoDecorator } from './bodyScanInfoDecorator'
-
-jest.mock('./bodyScanInfoDecorator')
-jest.mock('../data/hmppsAuthClient')
-jest.mock('../data/welcomeClient')
+import { createMockHmppsAuthClient, createMockWelcomeClient } from '../data/__testutils/mocks'
+import { createMockBodyScanInfoDecorator } from './__testutils/mocks'
 
 const token = 'some token'
 
 describe('Temporary absences service', () => {
-  const welcomeClient = new WelcomeClient(null) as jest.Mocked<WelcomeClient>
-  const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
-  const bodyScanInfoDecorator = new BodyScanInfoDecorator(null, null) as jest.Mocked<BodyScanInfoDecorator>
+  const welcomeClient = createMockWelcomeClient()
+  const hmppsAuthClient = createMockHmppsAuthClient()
+  const bodyScanInfoDecorator = createMockBodyScanInfoDecorator()
   let service: TemporaryAbsencesService
 
   const WelcomeClientFactory = jest.fn()

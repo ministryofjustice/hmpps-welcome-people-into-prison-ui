@@ -1,16 +1,12 @@
 import ImprisonmentStatusesService from './imprisonmentStatusesService'
-import HmppsAuthClient from '../data/hmppsAuthClient'
-import WelcomeClient from '../data/welcomeClient'
 import { createImprisonmentStatuses } from '../data/__testutils/testObjects'
-
-jest.mock('../data/hmppsAuthClient')
-jest.mock('../data/welcomeClient')
+import { createMockHmppsAuthClient, createMockWelcomeClient } from '../data/__testutils/mocks'
 
 const token = 'some token'
 
 describe('Imprisonment statuses service', () => {
-  let welcomeClient: jest.Mocked<WelcomeClient>
-  let hmppsAuthClient: jest.Mocked<HmppsAuthClient>
+  const welcomeClient = createMockWelcomeClient()
+  const hmppsAuthClient = createMockHmppsAuthClient()
   let service: ImprisonmentStatusesService
 
   const WelcomeClientFactory = jest.fn()
@@ -19,8 +15,6 @@ describe('Imprisonment statuses service', () => {
 
   beforeEach(() => {
     jest.resetAllMocks()
-    hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
-    welcomeClient = new WelcomeClient(null) as jest.Mocked<WelcomeClient>
     WelcomeClientFactory.mockReturnValue(welcomeClient)
     service = new ImprisonmentStatusesService(hmppsAuthClient, WelcomeClientFactory)
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)

@@ -3,21 +3,13 @@ import request from 'supertest'
 import * as cheerio from 'cheerio'
 import { appWithAllRoutes, user, stubCookie } from '../__testutils/appSetup'
 import Role from '../../authentication/role'
-import ExpectedArrivalsService from '../../services/expectedArrivalsService'
 import { createRecentArrival } from '../../data/__testutils/testObjects'
 import { expectSettingCookie } from '../__testutils/requestTestUtils'
 import { State } from './state'
-
-jest.mock('../../services/expectedArrivalsService')
-
-const expectedArrivalsService = new ExpectedArrivalsService(
-  null,
-  null,
-  null,
-  null
-) as jest.Mocked<ExpectedArrivalsService>
+import { createMockExpectedArrivalsService } from '../../services/__testutils/mocks'
 
 let app: Express
+const expectedArrivalsService = createMockExpectedArrivalsService()
 
 const recentArrivals = [
   createRecentArrival({ firstName: 'John', lastName: 'Doe', prisonNumber: 'A1234BC' }),

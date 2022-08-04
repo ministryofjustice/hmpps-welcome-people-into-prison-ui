@@ -1,12 +1,11 @@
 import { RequestHandler } from 'express'
-import type { ImprisonmentStatusesService, ExpectedArrivalsService, RaiseAnalyticsEvent } from '../../../../services'
+import type { ImprisonmentStatusesService, ExpectedArrivalsService } from '../../../../services'
 import { State } from '../state'
 
 export default class CheckAnswersController {
   public constructor(
     private readonly expectedArrivalsService: ExpectedArrivalsService,
-    private readonly imprisonmentStatusesService: ImprisonmentStatusesService,
-    private readonly raiseAnalyticsEvent: RaiseAnalyticsEvent
+    private readonly imprisonmentStatusesService: ImprisonmentStatusesService
   ) {}
 
   public view(): RequestHandler {

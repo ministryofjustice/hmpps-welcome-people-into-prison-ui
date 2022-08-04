@@ -1,26 +1,20 @@
 import TransfersService from './transfersService'
-import HmppsAuthClient from '../data/hmppsAuthClient'
-import WelcomeClient from '../data/welcomeClient'
 import { createTransfer } from '../data/__testutils/testObjects'
-
-jest.mock('../data/hmppsAuthClient')
-jest.mock('../data/welcomeClient')
+import { createMockHmppsAuthClient, createMockWelcomeClient } from '../data/__testutils/mocks'
 
 const token = 'some token'
 
 const transfer = createTransfer()
 
 describe('Transfers service', () => {
-  let welcomeClient: jest.Mocked<WelcomeClient>
-  let hmppsAuthClient: jest.Mocked<HmppsAuthClient>
+  const welcomeClient = createMockWelcomeClient()
+  const hmppsAuthClient = createMockHmppsAuthClient()
   let service: TransfersService
 
   const WelcomeClientFactory = jest.fn()
 
   beforeEach(() => {
     jest.resetAllMocks()
-    hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
-    welcomeClient = new WelcomeClient(null) as jest.Mocked<WelcomeClient>
     WelcomeClientFactory.mockReturnValue(welcomeClient)
     service = new TransfersService(hmppsAuthClient, WelcomeClientFactory)
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
