@@ -11,10 +11,12 @@ export default class BodyScanController {
       const { prisonNumber } = req.params
       const today = moment().format('YYYY-MM-DD')
       const prisonerDetails = await this.bodyScanService.getPrisonerDetails(prisonNumber)
+      const bodyScanInfo = await this.bodyScanService.retrieveBodyScanInfo(prisonNumber)
       return res.render('pages/bodyscans/recordBodyScan.njk', {
         errors: req.flash('errors'),
         today,
         prisonerDetails,
+        bodyScanInfo,
         data: req.flash('input')[0],
       })
     }
