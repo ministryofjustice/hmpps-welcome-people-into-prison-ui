@@ -21,7 +21,7 @@ describe('BodyScanInfoDecorater', () => {
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
   })
 
-  describe('getExpectedArrivals', () => {
+  describe('decorate', () => {
     const arrivals = [
       { prisonNumber: 'A1234AA' },
       { prisonNumber: 'A1234AB' },
@@ -58,6 +58,26 @@ describe('BodyScanInfoDecorater', () => {
         { bodyScanStatus: 'CLOSE_TO_LIMIT', prisonNumber: 'A1234AC' },
         { bodyScanStatus: undefined, prisonNumber: 'A1234AD' },
       ])
+
+      expect(bodyScanClient.getBodyScanInfo).toHaveBeenCalledWith(['A1234AA', 'A1234AB', 'A1234AC', 'A1234AD'])
+    })
+
+    test('does not request body scans for things without prison numbers', async () => {
+      const result = await service.decorate([
+        { prisonNumber: 'A1234AA' },
+        { prisonNumber: undefined },
+        { prisonNumber: 'A1234AC' },
+        { prisonNumber: undefined },
+      ])
+
+      expect(result).toStrictEqual([
+        { bodyScanStatus: 'OK_TO_SCAN', prisonNumber: 'A1234AA' },
+        { bodyScanStatus: undefined, prisonNumber: undefined },
+        { bodyScanStatus: 'CLOSE_TO_LIMIT', prisonNumber: 'A1234AC' },
+        { bodyScanStatus: undefined, prisonNumber: undefined },
+      ])
+
+      expect(bodyScanClient.getBodyScanInfo).toHaveBeenCalledWith(['A1234AA', 'A1234AC'])
     })
   })
 })
