@@ -28,6 +28,16 @@ describe('SearchForExistingRecordsDateOfBirthValidation', () => {
     ],
 
     [
+      { day: '1', month: '2', year: '20' },
+      [
+        {
+          href: '#date-of-birth-year',
+          text: 'Date of birth year must be in 4 digit format',
+        },
+      ],
+    ],
+
+    [
       { day: '1', year: '2020' },
       [
         {
