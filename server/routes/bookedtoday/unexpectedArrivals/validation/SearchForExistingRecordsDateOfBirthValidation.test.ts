@@ -32,7 +32,7 @@ describe('SearchForExistingRecordsDateOfBirthValidation', () => {
       [
         {
           href: '#date-of-birth-year',
-          text: 'Date of birth year must be in 4 digit format',
+          text: 'Year must include 4 numbers',
         },
       ],
     ],

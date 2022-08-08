@@ -22,7 +22,7 @@ const DateOfBirthValidator: Validator = ({ day: d, month: m, year: y }: Record<s
     return [{ text: `Date of birth must include a ${message}`, href: `#date-of-birth-${missingFieldNames[0]}` }]
 
   if (year && y.length !== 4) {
-    return [{ text: `Date of birth year must be in 4 digit format`, href: `#date-of-birth-year` }]
+    return [{ text: `Year must include 4 numbers`, href: `#date-of-birth-year` }]
   }
 
   if (!isValidDate(d, m, y)) return [{ text: 'Date of birth must be a real date', href: '#date-of-birth-day' }]
