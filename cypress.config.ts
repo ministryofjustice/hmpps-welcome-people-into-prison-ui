@@ -70,7 +70,7 @@ export default defineConfig({
         stubSubmitBodyScan: bodyscan.stubSubmitBodyScan,
         stubRetrieveBodyScanRequest: bodyscan.stubRetrieveBodyScanRequest,
         stubBodyScanPrisonerDetails: bodyscan.stubBodyScanPrisonerDetails,
-        stubAddBodyScan: bodyscan.stubAddBodyScan,
+        stubRetrieveMultipleBodyScans: bodyscan.stubRetrieveMultipleBodyScans,
         stubGetBodyScan: bodyscan.stubGetBodyScan,
       })
     },

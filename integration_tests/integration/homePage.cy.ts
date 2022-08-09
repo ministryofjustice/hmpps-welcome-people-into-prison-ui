@@ -19,7 +19,7 @@ context('A user can view the home page', () => {
     cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [expectedArrivals.prisonTransfer] })
     cy.task('stubTemporaryAbsences', 'MDI')
     cy.task('stubMissingPrisonerImage')
-    cy.task('stubAddBodyScan', [])
+    cy.task('stubRetrieveMultipleBodyScans', [])
 
     cy.signIn()
   })

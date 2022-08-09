@@ -20,7 +20,7 @@ context('A user can view all recent arrivals', () => {
     cy.task('stubUserCaseLoads')
     cy.task('stubRecentArrivals', { caseLoadId: 'MDI', recentArrivals })
     cy.task('stubMissingPrisonerImage')
-    cy.task('stubAddBodyScan', [
+    cy.task('stubRetrieveMultipleBodyScans', [
       {
         prisonNumber: 'A1234AB',
         bodyScanStatus: 'DO_NOT_SCAN',

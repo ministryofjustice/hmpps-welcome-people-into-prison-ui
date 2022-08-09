@@ -22,7 +22,7 @@ context('Confirm court return added To roll', () => {
     })
     cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [] })
     cy.task('stubConfirmCourtReturn', expectedArrival.id)
-    cy.task('stubAddBodyScan', [])
+    cy.task('stubRetrieveMultipleBodyScans', [])
     cy.signIn()
   })
 

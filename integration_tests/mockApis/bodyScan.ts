@@ -44,7 +44,7 @@ export default {
     })
   },
 
-  stubAddBodyScan: (details): SuperAgentRequest => {
+  stubRetrieveMultipleBodyScans: (details): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'POST',

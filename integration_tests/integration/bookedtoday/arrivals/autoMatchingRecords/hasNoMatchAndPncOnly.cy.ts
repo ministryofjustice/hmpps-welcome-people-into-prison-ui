@@ -30,7 +30,7 @@ context('No match found', () => {
     cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [arrival] })
     cy.task('stubExpectedArrival', arrival)
     cy.task('stubImprisonmentStatus')
-    cy.task('stubAddBodyScan', [])
+    cy.task('stubRetrieveMultipleBodyScans', [])
 
     cy.signIn()
 

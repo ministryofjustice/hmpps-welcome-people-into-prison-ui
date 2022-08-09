@@ -18,7 +18,7 @@ context('Search for existing spec', () => {
     cy.task('stubAuthUser')
     cy.task('stubUserCaseLoads')
     cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [] })
-    cy.task('stubAddBodyScan', [])
+    cy.task('stubRetrieveMultipleBodyScans', [])
     cy.task('stubMissingPrisonerImage')
     const arrival = expectedArrivals.arrival({
       fromLocationType: 'CUSTODY_SUITE',

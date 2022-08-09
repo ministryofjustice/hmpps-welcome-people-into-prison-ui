@@ -21,7 +21,7 @@ context('Feature not available', () => {
     cy.task('stubMissingPrisonerImage')
     cy.task('stubPrison', 'MDI')
     cy.task('stubImprisonmentStatus')
-    cy.task('stubAddBodyScan', [])
+    cy.task('stubRetrieveMultipleBodyScans', [])
   })
 
   it('Should display feature-not-available page when client error during confirmation of new prisoner from court', () => {
