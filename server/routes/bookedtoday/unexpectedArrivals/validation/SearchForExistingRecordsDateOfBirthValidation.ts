@@ -22,6 +22,10 @@ const SearchForExistingRecordsDateOfBirthValidation: Validator = ({
     return [{ text: `Date of birth must include a ${message}`, href: `#date-of-birth-${missingFieldNames[0]}` }]
   }
 
+  if (year && y.length !== 4) {
+    return [{ text: `Year must include 4 numbers`, href: `#date-of-birth-year` }]
+  }
+
   if (!isValidDate(d, m, y)) return [{ text: 'Date of birth must be a real date', href: '#date-of-birth-day' }]
 
   return isPastDate(d, m, y) ? [] : [{ text: 'Date of birth must be in the past', href: '#date-of-birth-day' }]
