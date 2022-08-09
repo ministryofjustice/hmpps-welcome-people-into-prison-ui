@@ -19,6 +19,20 @@
             <form method="post" action="/prisoners/{{ prisonerDetails.prisonNumber }}/record-body-scan">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
+                {% if bodyScanInfo.bodyScanStatus === 'DO_NOT_SCAN' %}
+                    {{ govukWarningText({
+                        text: prisonerDetails.firstName | escape + " " + prisonerDetails.lastName | escape + " has reached their annual body scan limit",
+                        iconFallbackText: "Warning",
+                        attributes: { 'data-qa': 'body-scan-limit-reached'}
+                    }) }}
+                {% elif bodyScanInfo.bodyScanStatus === 'CLOSE_TO_LIMIT'  %}
+                    {{ govukWarningText({
+                        text: prisonerDetails.firstName | escape + " " + prisonerDetails.lastName | escape + " can only be scanned" + " " + bodyScanInfo.numberOfBodyScansRemaining | escape + " more times this year",
+                        iconFallbackText: "Warning",
+                        attributes: { 'data-qa': 'body-scan-close-to-limit'}
+                    }) }}
+                {% endif %}
+
                 <h2 class="govuk-heading-m">Date of body scan</h2>
                     {% set anotherDateHtml %}
                         {{ govukDateInput({

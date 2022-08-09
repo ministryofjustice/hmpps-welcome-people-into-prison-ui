@@ -18,7 +18,7 @@ context('A user can view all current temporary absences', () => {
       temporaryAbsence: temporaryAbsences[0],
     })
     cy.task('stubMissingPrisonerImage')
-    cy.task('stubGetBodyScanInfo', [
+    cy.task('stubRetrieveMultipleBodyScans', [
       {
         prisonNumber: 'G0013AB',
         bodyScanStatus: 'DO_NOT_SCAN',

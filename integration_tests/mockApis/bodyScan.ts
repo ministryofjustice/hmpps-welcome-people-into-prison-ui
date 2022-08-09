@@ -30,7 +30,21 @@ export default {
     })
   },
 
-  stubGetBodyScanInfo: (details): SuperAgentRequest => {
+  stubGetBodyScan: ({ prisonNumber, details }: Record<string, number>): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/bodyscan/body-scans/prisoners/${prisonNumber}`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: details,
+      },
+    })
+  },
+
+  stubRetrieveMultipleBodyScans: (details): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'POST',
@@ -44,7 +58,7 @@ export default {
     })
   },
 
-  stubAddBodyScan: ({ prisonNumber }: Record<string, number>): SuperAgentRequest => {
+  stubSubmitBodyScan: ({ prisonNumber }: Record<string, number>): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'POST',
@@ -57,7 +71,7 @@ export default {
     })
   },
 
-  getAddBodyScanRequest: prisonNumber =>
+  stubRetrieveBodyScanRequest: prisonNumber =>
     getMatchingRequests({
       method: 'POST',
       urlPath: `/bodyscan/body-scans/prisoners/${prisonNumber}`,

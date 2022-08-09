@@ -62,6 +62,7 @@ describe('bodyScanClient', () => {
       prisonNumber: 'A1234AA',
       bodyScanStatus: BodyScanStatus.CLOSE_TO_LIMIT,
       numberOfBodyScans: 110,
+      numberOfBodyScansRemaining: 6,
     }
 
     it('should return data from api', async () => {

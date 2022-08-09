@@ -17,4 +17,9 @@ export default class BodyScanService {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     await this.bodyScanClientFactory(token).addBodyScan(prisonNumber, bodyScan)
   }
+
+  public async retrieveBodyScanInfo(prisonNumber: string) {
+    const token = await this.hmppsAuthClient.getSystemClientToken()
+    return this.bodyScanClientFactory(token).getSingleBodyScanInfo(prisonNumber)
+  }
 }

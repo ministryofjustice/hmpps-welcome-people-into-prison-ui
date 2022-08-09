@@ -19,7 +19,7 @@ context('Unexpected arrivals - no matching records page', () => {
     cy.task('stubImprisonmentStatus')
     cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [] })
     cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [] })
-    cy.task('stubGetBodyScanInfo', [])
+    cy.task('stubRetrieveMultipleBodyScans', [])
     cy.signIn()
     SearchForExistingPage.goTo()
   })
