@@ -10,6 +10,10 @@ export default class BodyScanPage extends Page {
     return Page.verifyOnPage(BodyScanPage)
   }
 
+  closeToLimitWarning = (): PageElement => cy.get('[data-qa=body-scan-close-to-limit]')
+
+  reachedLimitWarning = (): PageElement => cy.get('[data-qa=body-scan-limit-reached]')
+
   bodyScanTitleName = (): PageElement => cy.get('[data-qa=record-body-scan-title]')
 
   dateType = (value): PageElement => cy.get('[name=dateType]').check(value)

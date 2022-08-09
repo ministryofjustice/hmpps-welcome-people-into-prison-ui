@@ -29,7 +29,7 @@ context('Choose Prisoner', () => {
     })
     cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [expectedArrivals.prisonTransfer] })
     cy.task('stubMissingPrisonerImage')
-    cy.task('stubGetBodyScanInfo', [])
+    cy.task('stubAddBodyScan', [])
   })
 
   it("Should display available prisoner info and the 'manually confirm' link", () => {
@@ -236,7 +236,7 @@ context('Choose Prisoner', () => {
     const transfer1 = { ...expectedArrivals.prisonTransfer, prisonNumber: 'A1234AD' }
     const transfer2 = { ...expectedArrivals.prisonTransfer, prisonNumber: 'A1234AE' }
 
-    cy.task('stubGetBodyScanInfo', [
+    cy.task('stubAddBodyScan', [
       {
         prisonNumber: 'A1234AA',
         bodyScanStatus: 'DO_NOT_SCAN',

@@ -67,10 +67,11 @@ export default defineConfig({
 
         // body-scan
         stubBodyScanApiPing: bodyscan.stubPing,
-        stubAddBodyScan: bodyscan.stubAddBodyScan,
-        getAddBodyScanRequest: bodyscan.getAddBodyScanRequest,
+        stubSubmitBodyScan: bodyscan.stubSubmitBodyScan,
+        stubRetrieveBodyScanRequest: bodyscan.stubRetrieveBodyScanRequest,
         stubBodyScanPrisonerDetails: bodyscan.stubBodyScanPrisonerDetails,
-        stubGetBodyScanInfo: bodyscan.stubGetBodyScanInfo,
+        stubAddBodyScan: bodyscan.stubAddBodyScan,
+        stubGetBodyScan: bodyscan.stubGetBodyScan,
       })
     },
     baseUrl: 'http://localhost:3007',

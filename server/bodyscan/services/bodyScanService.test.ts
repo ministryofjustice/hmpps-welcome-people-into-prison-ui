@@ -45,4 +45,16 @@ describe('Body scan service', () => {
       expect(bodyScanClient.addBodyScan).toBeCalledWith(prisonNumber, bodyScan)
     })
   })
+
+  describe('Retrieve body scan data', () => {
+    it('calls upstream service with correct args', async () => {
+      const prisonNumber = 'A1234BC'
+
+      await service.retrieveBodyScanInfo(prisonNumber)
+
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      expect(BodyScanClientFactory).toBeCalledWith(token)
+      expect(bodyScanClient.getSingleBodyScanInfo).toBeCalledWith(prisonNumber)
+    })
+  })
 })

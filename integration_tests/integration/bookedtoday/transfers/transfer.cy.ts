@@ -25,7 +25,7 @@ context('Confirm transfer added To roll', () => {
       transfer: expectedArrival,
     })
     cy.task('stubConfirmTransfer', expectedArrival.prisonNumber)
-    cy.task('stubGetBodyScanInfo', [])
+    cy.task('stubAddBodyScan', [])
     cy.signIn()
   })
 

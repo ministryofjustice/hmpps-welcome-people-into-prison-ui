@@ -18,10 +18,22 @@ context('A user can record a body scan', () => {
 
   it('Should display error message when needed', () => {
     cy.signIn()
+    cy.task('stubGetBodyScan', {
+      prisonNumber: arrival.prisonNumber,
+      details: {
+        prisonNumber: 'A1234AA',
+        bodyScanStatus: 'OK_TO_SCAN',
+        numberOfBodyScans: 10,
+        numberOfBodyScansRemaining: 106,
+      },
+    })
     const bodyScanPage = BodyScanPage.goTo(arrival.prisonNumber)
 
     bodyScanPage.bodyScanTitleName().should('contain.text', 'Sam Smith')
     bodyScanPage.submit().click()
+
+    bodyScanPage.closeToLimitWarning().should('not.exist')
+    bodyScanPage.reachedLimitWarning().should('not.exist')
 
     bodyScanPage.hasError('Select a date for the body scan')
     bodyScanPage.hasError('Select a reason for the body scan')
@@ -41,10 +53,10 @@ context('A user can record a body scan', () => {
     bodyScanPage.reason('INTELLIGENCE').click()
     bodyScanPage.result('POSITIVE').click()
 
-    cy.task('stubAddBodyScan', { prisonNumber: arrival.prisonNumber })
+    cy.task('stubSubmitBodyScan', { prisonNumber: arrival.prisonNumber })
     bodyScanPage.submit().click()
 
-    cy.task('getAddBodyScanRequest', arrival.prisonNumber).then(request => {
+    cy.task('stubRetrieveBodyScanRequest', arrival.prisonNumber).then(request => {
       expect(request).to.deep.equal({
         date: '2022-07-13',
         reason: 'INTELLIGENCE',
@@ -56,5 +68,39 @@ context('A user can record a body scan', () => {
     bodyScanConfirmation.confirmationBanner().contains('Sam Smith')
     bodyScanConfirmation.confirmationBanner().contains('Wednesday 13 July')
     bodyScanConfirmation.confirmationBanner().contains('Intelligence - positive')
+  })
+
+  it('Should show close to limit message', () => {
+    cy.signIn()
+    cy.task('stubGetBodyScan', {
+      prisonNumber: arrival.prisonNumber,
+      details: {
+        prisonNumber: 'A1234AA',
+        bodyScanStatus: 'CLOSE_TO_LIMIT',
+        numberOfBodyScans: 102,
+        numberOfBodyScansRemaining: 14,
+      },
+    })
+    const bodyScanPage = BodyScanPage.goTo(arrival.prisonNumber)
+
+    bodyScanPage.closeToLimitWarning().should('exist')
+    bodyScanPage.reachedLimitWarning().should('not.exist')
+  })
+
+  it('Should show limit reached message', () => {
+    cy.signIn()
+    cy.task('stubGetBodyScan', {
+      prisonNumber: arrival.prisonNumber,
+      details: {
+        prisonNumber: 'A1234AA',
+        bodyScanStatus: 'DO_NOT_SCAN',
+        numberOfBodyScans: 116,
+        numberOfBodyScansRemaining: 0,
+      },
+    })
+    const bodyScanPage = BodyScanPage.goTo(arrival.prisonNumber)
+
+    bodyScanPage.closeToLimitWarning().should('not.exist')
+    bodyScanPage.reachedLimitWarning().should('exist')
   })
 })

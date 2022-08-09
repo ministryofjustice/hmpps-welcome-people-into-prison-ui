@@ -28,7 +28,7 @@ context('Is Single Match', () => {
     cy.task('stubMissingPrisonerImage')
     cy.task('stubPrison', 'MDI')
     cy.task('stubImprisonmentStatus')
-    cy.task('stubGetBodyScanInfo', [])
+    cy.task('stubAddBodyScan', [])
   })
 
   it('Can see PER and matched prison record', () => {
