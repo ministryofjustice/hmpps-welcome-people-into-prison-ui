@@ -38,6 +38,16 @@ describe('DateOfBirthValidator', () => {
     ],
 
     [
+      { day: '1', month: '2', year: '20' },
+      [
+        {
+          href: '#date-of-birth-year',
+          text: 'Year must include 4 numbers',
+        },
+      ],
+    ],
+
+    [
       { day: '1', year: '2020' },
       [
         {
