@@ -24,13 +24,4 @@ export default class ConfirmCourtReturnAddedToRollPage extends Page {
         'https://digital-dev.prison.service.justice.gov.uk/establishment-roll'
       ),
   })
-
-  backToDigitalPrisonServices = () => ({
-    exists: () =>
-      Page.checkLink(
-        cy.get('[data-qa=back-to-dps]'),
-        'Back to Digital Prison Services',
-        'https://digital-dev.prison.service.justice.gov.uk'
-      ),
-  })
 }

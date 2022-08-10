@@ -43,7 +43,6 @@ context('Confirm court return added To roll', () => {
 
     confirmCourtReturnAddedToRollPage.addCaseNote(prisonRecordDetails.prisonNumber).exists()
     confirmCourtReturnAddedToRollPage.viewEstablishmentRoll().exists()
-    confirmCourtReturnAddedToRollPage.backToDigitalPrisonServices().exists()
     confirmCourtReturnAddedToRollPage.addAnotherToRoll().click()
 
     Page.verifyOnPage(ChoosePrisonerPage)
