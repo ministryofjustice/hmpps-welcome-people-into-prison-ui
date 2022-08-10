@@ -43,7 +43,6 @@ context('Confirm transfer added To roll', () => {
     const confirmTransferAddedToRollPage = Page.verifyOnPage(ConfirmTransferAddedToRollPage)
     confirmTransferAddedToRollPage.addCaseNote(expectedArrivals.prisonTransfer.prisonNumber).exists()
     confirmTransferAddedToRollPage.viewEstablishmentRoll().exists()
-    confirmTransferAddedToRollPage.backToDigitalPrisonServices().exists()
     confirmTransferAddedToRollPage.addAnotherToRoll().click()
 
     Page.verifyOnPage(ChoosePrisonerPage)
