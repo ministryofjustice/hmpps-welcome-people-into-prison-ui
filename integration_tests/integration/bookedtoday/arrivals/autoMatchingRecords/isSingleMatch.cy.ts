@@ -79,7 +79,6 @@ context('Is Single Match', () => {
     })
     confirmAddedToRollPage.addCaseNote('A1234BC').exists()
     confirmAddedToRollPage.viewEstablishmentRoll().exists()
-    confirmAddedToRollPage.backToDigitalPrisonServices().exists()
     confirmAddedToRollPage.addAnotherToRoll().click()
 
     Page.verifyOnPage(ChoosePrisonerPage)

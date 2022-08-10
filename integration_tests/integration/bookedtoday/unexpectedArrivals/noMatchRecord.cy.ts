@@ -76,7 +76,6 @@ context('Unexpected arrivals - no matching records page', () => {
     })
     confirmAddedToRollPage.addCaseNote('G0014GM').exists()
     confirmAddedToRollPage.viewEstablishmentRoll().exists()
-    confirmAddedToRollPage.backToDigitalPrisonServices().exists()
     confirmAddedToRollPage.addAnotherToRoll().click()
 
     Page.verifyOnPage(ChoosePrisonerPage)

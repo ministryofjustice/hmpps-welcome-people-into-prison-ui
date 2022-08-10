@@ -80,7 +80,6 @@ context('Unexpected arrivals - Single matching record found', () => {
     })
     confirmAddedToRollPage.addCaseNote('G0014GM').exists()
     confirmAddedToRollPage.viewEstablishmentRoll().exists()
-    confirmAddedToRollPage.backToDigitalPrisonServices().exists()
     confirmAddedToRollPage.addAnotherToRoll().click()
 
     Page.verifyOnPage(ChoosePrisonerPage)
