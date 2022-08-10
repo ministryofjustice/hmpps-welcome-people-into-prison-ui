@@ -25,18 +25,26 @@
                             </a>
                         </p>
 
-                <h2 class="govuk-heading-m">Manage people coming into this establishment</h2>
-                        <p>
-                            <a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ dpsUrl }}/establishment-roll" data-qa="view-establishment-roll" target="_blank">
-                                View establishment roll
-                            </a>
-                        </p>
+                <div class="govuk-button-group govuk-!-padding-top-6">
+                    {{ govukButton({
+                        text: "Back to new arrivals",
+                        href: "/",
+                        attributes: {
+                            'data-qa': 'back-to-new-arrivals'
+                        } 
 
-                <p class="govuk-!-margin-top-9">
-                    <a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ dpsUrl }}" data-qa="back-to-dps">
-                        Back to Digital Prison Services
-                    </a>
-                </p>
+                    }) }}
+
+                    {{ govukButton({
+                        text: "View establishment roll",
+                        classes: "govuk-button--secondary",
+                        href: dpsUrl + "/establishment-roll",
+                        attributes: {
+                            'data-qa': 'view-establishment-roll',
+                            'target': '_blank'
+                        } 
+                    }) }}
+                </div>
             </div>
         </div>
     </div>
