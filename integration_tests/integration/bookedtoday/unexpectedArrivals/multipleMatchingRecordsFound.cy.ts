@@ -127,7 +127,6 @@ context('Unexpected arrivals - multiple matching records', () => {
     })
     confirmAddedToRollPage.addCaseNote(arrival.potentialMatches[0].prisonNumber).exists()
     confirmAddedToRollPage.viewEstablishmentRoll().exists()
-    confirmAddedToRollPage.backToDigitalPrisonServices().exists()
     confirmAddedToRollPage.addAnotherToRoll().click()
 
     Page.verifyOnPage(ChoosePrisonerPage)

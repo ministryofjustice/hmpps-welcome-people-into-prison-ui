@@ -33,7 +33,7 @@ context('Confirm temporary absence added To roll', () => {
     const confirmTemporaryAbsenceAddedToRollPage = Page.verifyOnPage(ConfirmTemporaryAbsenceAddedToRollPage)
 
     confirmTemporaryAbsenceAddedToRollPage.addCaseNote(temporaryAbsences[0].prisonNumber).exists()
+    confirmTemporaryAbsenceAddedToRollPage.backToNewArrivals().exists()
     confirmTemporaryAbsenceAddedToRollPage.viewEstablishmentRoll().exists()
-    confirmTemporaryAbsenceAddedToRollPage.backToDigitalPrisonServices().exists()
   })
 })
