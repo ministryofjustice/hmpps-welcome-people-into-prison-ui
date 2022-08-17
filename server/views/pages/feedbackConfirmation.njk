@@ -1,0 +1,20 @@
+{% extends "../partials/layout.njk" %}
+{% set hasBackLink = false %}
+{% set pageTitle = "Feedback submitted" %}
+{% set mainClasses = "govuk-main-wrapper--l" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">Thank you for your feedback</h1>
+            <p class="govuk-body">
+                Your feedback has been sent to the Welcome people into prison team.
+            </p>
+
+            <p class="govuk-body govuk-!-margin-top-7">
+                <a class="govuk-body govuk-link govuk-link--no-visited-state" href='/' data-qa="wpip">Back to Welcome people into prison</a>
+            </p>
+        </div>
+    </div>
+{% endblock %}
