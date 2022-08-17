@@ -37,6 +37,7 @@
                     id: "feedback",
                     name: "feedback",
                     value: data.feedback,
+                    attributes: {"data-qa": "feedback"},
                     errorMessage: errors | findError("feedback")
                 }) }}
 
@@ -51,6 +52,7 @@
                     id: "email",
                     name: "email",
                     value: data.email,
+                    attributes: {"data-qa": "email"},
                     errorMessage: errors | findError("email")
                 }) }}
 
