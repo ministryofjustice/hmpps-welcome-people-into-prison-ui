@@ -69,6 +69,19 @@ describe('feedbackController', () => {
         })
     })
 
+    it('should send default text for email if no email provided', () => {
+      return request(app)
+        .post('/feedback')
+        .send({ feedback: 'Some content' })
+        .expect('Content-Type', 'text/plain; charset=utf-8')
+        .expect(res => {
+          expect(notificationService.sendEmail).toHaveBeenCalledWith({
+            ...emailPersonalisation,
+            email: '(No email address provided)',
+          })
+        })
+    })
+
     it('should redirect to /', () => {
       return request(app)
         .post('/feedback')
