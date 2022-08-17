@@ -94,6 +94,11 @@ export default {
       agent: DEFAULT_AGENT_CONFIG,
     },
   },
+  notifications: {
+    notifyKey: get('NOTIFY_API_KEY', ''),
+    feedbackEmail: get('FEEDBACK_EMAIL', ''),
+    feedbackTemplateId: 'b753ee4e-f0fe-4788-b252-ac28631555f6',
+  },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   analytics: {
     googleAnalyticsId: get('GOOGLE_ANALYTICS_ID', ''),

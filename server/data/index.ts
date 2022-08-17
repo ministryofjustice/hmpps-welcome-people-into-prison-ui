@@ -9,6 +9,7 @@ import { createRedisClient } from './redisClient'
 import TokenStore from './tokenStore'
 import WelcomeClient from './welcomeClient'
 import BodyScanClient from './bodyScanClient'
+import notifyClient from './notifyClient'
 
 initialiseAppInsights()
 buildAppInsightsClient()
@@ -19,6 +20,7 @@ export const dataAccess = () => {
   const redisClient = createRedisClient({ legacyMode: false })
   return {
     redisClient,
+    notifyClient,
     hmppsAuthClient: new HmppsAuthClient(new TokenStore(redisClient)),
     welcomeClientBuilder: ((token: string) => new WelcomeClient(token)) as RestClientBuilder<WelcomeClient>,
     bodyScanClientBuilder: ((token: string) => new BodyScanClient(token)) as RestClientBuilder<BodyScanClient>,
