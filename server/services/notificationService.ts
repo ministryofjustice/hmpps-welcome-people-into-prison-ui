@@ -4,7 +4,7 @@ export type EmailPersonalisation = {
   username: string
   prison: string
   feedback: string
-  email?: string
+  email: string
 }
 
 export default class NotificationService {

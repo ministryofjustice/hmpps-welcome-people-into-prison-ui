@@ -1,7 +1,7 @@
 import NotificationService, { type EmailPersonalisation } from './notificationService'
 import config from '../config'
 
-const notifyApi = {
+const notifyClient = {
   sendEmail: jest.fn(),
 }
 
@@ -9,7 +9,7 @@ describe('Notification service', () => {
   let notificationService: NotificationService
 
   beforeEach(() => {
-    notificationService = new NotificationService(notifyApi)
+    notificationService = new NotificationService(notifyClient)
   })
 
   afterEach(() => {
@@ -21,23 +21,15 @@ describe('Notification service', () => {
       username: 'A_USER',
       prison: 'MDI',
       feedback: 'Some feedback',
+      email: 'a.user@email',
     }
 
-    it('Details are retrieved for user', async () => {
-      notifyApi.sendEmail.mockResolvedValue({})
+    it('should send personalisation', async () => {
+      notifyClient.sendEmail.mockResolvedValue({})
 
       await notificationService.sendEmail(feedbackEmail)
-    })
 
-    it('should send personalisation with optional fields', async () => {
-      notifyApi.sendEmail.mockResolvedValue({})
-
-      await notificationService.sendEmail({
-        ...feedbackEmail,
-        email: 'a.user@email',
-      })
-
-      expect(notifyApi.sendEmail).toHaveBeenCalledWith(
+      expect(notifyClient.sendEmail).toHaveBeenCalledWith(
         config.notifications.feedbackTemplateId,
         config.notifications.feedbackEmail,
         {
