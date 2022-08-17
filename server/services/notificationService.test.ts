@@ -19,7 +19,7 @@ describe('Notification service', () => {
   describe('Send feedback email', () => {
     const feedbackEmail: EmailPersonalisation = {
       username: 'A_USER',
-      agencyId: 'MDI',
+      prison: 'MDI',
       feedback: 'Some feedback',
     }
 
@@ -43,7 +43,7 @@ describe('Notification service', () => {
         {
           personalisation: {
             username: 'A_USER',
-            agencyId: 'MDI',
+            prison: 'MDI',
             feedback: 'Some feedback',
             email: 'a.user@email',
           },

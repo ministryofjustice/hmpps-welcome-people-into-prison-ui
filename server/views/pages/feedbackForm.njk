@@ -1,0 +1,65 @@
+{% extends "../partials/layout.njk" %}
+{% set pageTitle = "Feedback" %}
+{% set mainClasses = "govuk-main-wrapper--l" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {% if errors.length %}
+                {{ govukErrorSummary({
+                    titleText: "There is a problem",
+                    errorList: errors,
+                    attributes: { 'data-qa-errors': true }
+                }) }}
+            {% endif %}
+            <h1 class="govuk-heading-l">Give feedback on Welcome people into prison</h1>
+            <p class="govuk-body">
+                You can use this form to suggest an improvement, ask a question or report a problem with Welcome people into prison.
+            </p>
+            <p class="govuk-body">
+                We’ll respond as soon as we can if you have a problem or question.
+            </p>
+            <p class="govuk-body">
+                Your feedback will be treated confidentially and used to help us improve this service.
+            </p>
+
+            <form method="post">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                {{ govukInput({
+                    label: {
+                        text: "Your feedback",
+                        classes: "govuk-label--m"
+                    },
+                    hint: {
+                        text: "Do not include any personal information about a person in prison."
+                    },
+                    id: "feedback",
+                    name: "feedback",
+                    value: data.feedback,
+                    errorMessage: errors | findError("feedback")
+                }) }}
+
+                {{ govukInput({
+                    label: {
+                        text: "Your email address (optional)",
+                        classes: "govuk-label--m"
+                    },
+                    hint: {
+                        text: "We'll only use this to reply to your message."
+                    },
+                    id: "email",
+                    name: "email",
+                    value: data.email,
+                    errorMessage: errors | findError("email")
+                }) }}
+
+                {{ govukButton({
+                    text: "Submit",
+                    attributes: {"data-qa": "submit"},
+                    type: "submit"
+                }) }}
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -6,6 +6,7 @@ import {
   BodyScanInfoDecorator,
   TemporaryAbsencesService,
   UserService,
+  NotificationService,
 } from '..'
 
 jest.mock('..')
@@ -27,3 +28,5 @@ export const createMockTemporaryAbsencesService = () =>
   new TemporaryAbsencesService(null, null, null) as jest.Mocked<TemporaryAbsencesService>
 
 export const createMockUserService = () => new UserService(null, null) as jest.Mocked<UserService>
+
+export const createMockNotificationService = () => new NotificationService(null) as jest.Mocked<NotificationService>

@@ -2,7 +2,7 @@ import config from '../config'
 
 export type EmailPersonalisation = {
   username: string
-  agencyId: string
+  prison: string
   feedback: string
   email?: string
 }
