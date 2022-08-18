@@ -1,5 +1,8 @@
+import Page from '../pages/page'
 import Role from '../../server/authentication/role'
 import FeedbackFormPage from '../pages/feedback/feedbackForm'
+import FeedbackConfirmationPage from '../pages/feedback/feedbackConfirmation'
+import HomePage from '../pages/homePage'
 
 context('A user can provide feedback', () => {
   beforeEach(() => {
@@ -24,5 +27,11 @@ context('A user can provide feedback', () => {
     feedbackFormPage.email().clear().type('user@email.com')
 
     feedbackFormPage.submit().click()
+
+    const feedbackConfirmation = Page.verifyOnPage(FeedbackConfirmationPage)
+
+    feedbackConfirmation.backToWelcomePeopleIntoPrison().click()
+
+    Page.verifyOnPage(HomePage)
   })
 })

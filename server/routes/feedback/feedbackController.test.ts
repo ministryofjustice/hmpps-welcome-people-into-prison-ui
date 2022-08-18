@@ -87,7 +87,7 @@ describe('feedbackController', () => {
         .post('/feedback')
         .send({ feedback: 'Some content', email: 'a.user@email' })
         .expect(302)
-        .expect('Location', '/')
+        .expect('Location', '/feedback-submitted')
     })
   })
 })

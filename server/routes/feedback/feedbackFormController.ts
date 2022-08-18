@@ -41,7 +41,7 @@ export default class FeedbackController {
         logger.error('Notify failed: ', e)
       }
 
-      return res.redirect(`/`)
+      return res.redirect(`/feedback-submitted`)
     }
   }
 }
