@@ -8,13 +8,13 @@ describe('Body scan validation middleware', () => {
   const tomorrowYear = tomorrowDate.format('YYYY')
 
   describe('today', () => {
-    const validToday = { dateType: 'today', reason: 'INTELLIGENCE', result: 'POSITIVE' }
+    const validToday = { userSelectedDate: 'today', reason: 'INTELLIGENCE', result: 'POSITIVE' }
     test.each([
       [
         {},
         [
           {
-            href: '#user-selected-date',
+            href: '#userSelectedDate',
             text: 'Select a date for the body scan',
           },
           { text: 'Select a reason for the body scan', href: '#reason' },
@@ -53,7 +53,7 @@ describe('Body scan validation middleware', () => {
 
   describe('another-date', () => {
     const validAnotherDate = {
-      dateType: 'another-date',
+      userSelectedDate: 'another-date',
       day: '12',
       month: '1',
       year: '2020',

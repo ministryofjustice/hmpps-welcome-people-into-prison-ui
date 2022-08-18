@@ -4,7 +4,7 @@ import parseBodyScan from './bodyScan'
 describe('parseBodyScan', () => {
   describe('today', () => {
     test('success', () => {
-      const scan = parseBodyScan({ dateType: 'today', reason: 'INTELLIGENCE', result: 'POSITIVE' })
+      const scan = parseBodyScan({ userSelectedDate: 'today', reason: 'INTELLIGENCE', result: 'POSITIVE' })
 
       expect(scan).toStrictEqual({ date: moment().format('YYYY-MM-DD'), reason: 'INTELLIGENCE', result: 'POSITIVE' })
     })
@@ -13,7 +13,7 @@ describe('parseBodyScan', () => {
   describe('another-date', () => {
     test('success', () => {
       const scan = parseBodyScan({
-        dateType: 'another-date',
+        userSelectedDate: 'another-date',
         day: '12',
         month: '1',
         year: '2020',
@@ -27,7 +27,7 @@ describe('parseBodyScan', () => {
     test('invalid date-type', () => {
       expect(() =>
         parseBodyScan({
-          dateType: 'huh?',
+          userSelectedDate: 'huh?',
           day: '12',
           month: '1',
           year: '2020',
@@ -40,7 +40,7 @@ describe('parseBodyScan', () => {
     test('invalid reason', () => {
       expect(() =>
         parseBodyScan({
-          dateType: 'today',
+          userSelectedDate: 'today',
           day: '12',
           month: '1',
           year: '2020',
@@ -53,7 +53,7 @@ describe('parseBodyScan', () => {
     test('invalid result', () => {
       expect(() =>
         parseBodyScan({
-          dateType: 'today',
+          userSelectedDate: 'today',
           day: '12',
           month: '1',
           year: '2020',
