@@ -39,13 +39,13 @@ context('A user can record a body scan', () => {
     bodyScanPage.hasError('Select a reason for the body scan')
     bodyScanPage.hasError('Select a result for the body scan')
 
-    bodyScanPage.dateType('another-date').click()
+    bodyScanPage.userSelectedDate('another-date').click()
     bodyScanPage.day().type('13')
     bodyScanPage.month().type('07')
     bodyScanPage.year().type('2022')
     bodyScanPage.submit().click()
 
-    bodyScanPage.dateType('another-date').should('be.checked')
+    bodyScanPage.userSelectedDate('another-date').should('be.checked')
     bodyScanPage.day().should('have.value', '13')
     bodyScanPage.month().should('have.value', '07')
     bodyScanPage.year().should('have.value', '2022')

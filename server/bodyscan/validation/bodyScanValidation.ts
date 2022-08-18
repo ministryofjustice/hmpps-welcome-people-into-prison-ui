@@ -30,7 +30,7 @@ const anotherDateValidation = (d: string, m: string, y: string): ValidationError
 }
 
 const BodyScanValidator: Validator = ({
-  dateType,
+  userSelectedDate,
   day: d,
   month: m,
   year: y,
@@ -39,9 +39,9 @@ const BodyScanValidator: Validator = ({
 }: Record<string, string>) => {
   const errors: ValidationError[] = []
 
-  if (!dateType) errors.push({ text: 'Select a date for the body scan', href: '#user-selected-date' })
+  if (!userSelectedDate) errors.push({ text: 'Select a date for the body scan', href: '#userSelectedDate' })
 
-  if (dateType === 'another-date') errors.push(...anotherDateValidation(d, m, y))
+  if (userSelectedDate === 'another-date') errors.push(...anotherDateValidation(d, m, y))
 
   if (!reason) errors.push({ text: 'Select a reason for the body scan', href: '#reason' })
 

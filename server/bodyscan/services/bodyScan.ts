@@ -14,16 +14,16 @@ function checkIsMember<T extends string>(value: unknown, valid: T[]): asserts va
 }
 
 const parseBodyScan = (payload: Record<string, unknown>): BodyScan => {
-  assertHasOptionalStringValues(payload, ['reason', 'result', 'day', 'month', 'year', 'dateType'])
+  assertHasOptionalStringValues(payload, ['reason', 'result', 'day', 'month', 'year', 'userSelectedDate'])
   checkIsMember<ReasonCode>(payload.reason, REASON_CODES)
   checkIsMember<ResultCode>(payload.result, RESULT_CODES)
-  checkIsMember<DateType>(payload.dateType, DATE_TYPES)
+  checkIsMember<DateType>(payload.userSelectedDate, DATE_TYPES)
 
-  const { reason, result, day, month, year, dateType } = payload
+  const { reason, result, day, month, year, userSelectedDate } = payload
   return {
     reason,
     result,
-    date: dateType === 'another-date' ? createDate(day, month, year) : moment().format('YYYY-MM-DD'),
+    date: userSelectedDate === 'another-date' ? createDate(day, month, year) : moment().format('YYYY-MM-DD'),
   }
 }
 
