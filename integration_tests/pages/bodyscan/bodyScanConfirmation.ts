@@ -2,7 +2,7 @@ import Page, { PageElement } from '../page'
 
 export default class BodyScanConfirmation extends Page {
   constructor() {
-    super('Body scan recorded', { hasBackLink: false })
+    super('Body scan recorded', { hasBackLink: false }, { hasFeedbackBanner: true })
   }
 
   confirmationBanner = (): PageElement => cy.get(`[data-qa=confirmation-banner]`)
