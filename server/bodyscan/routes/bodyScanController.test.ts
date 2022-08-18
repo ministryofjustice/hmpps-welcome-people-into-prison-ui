@@ -67,7 +67,7 @@ describe('POST /record-body-scan', () => {
 
             [
               {
-                href: '#user-selected-date',
+                href: '#userSelectedDate',
                 text: 'Select a date for the body scan',
               },
               {
@@ -94,7 +94,7 @@ describe('POST /record-body-scan', () => {
         year: '2020',
         reason: 'INTELLIGENCE',
         result: 'POSITIVE',
-        dateType: 'another-date',
+        userSelectedDate: 'another-date',
       })
       .expect(302)
       .expect('Location', '/prisoners/A1234AB/scan-confirmation')

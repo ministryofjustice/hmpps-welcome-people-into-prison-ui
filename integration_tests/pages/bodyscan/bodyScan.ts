@@ -16,7 +16,7 @@ export default class BodyScanPage extends Page {
 
   bodyScanTitleName = (): PageElement => cy.get('[data-qa=record-body-scan-title]')
 
-  dateType = (value): PageElement => cy.get('[name=dateType]').check(value)
+  userSelectedDate = (value): PageElement => cy.get('[name=userSelectedDate]').check(value)
 
   day = (): PageElement => cy.get('[data-qa=another-date-day]')
 
