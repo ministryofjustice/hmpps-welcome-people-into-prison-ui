@@ -10,22 +10,24 @@
                     titleText: 'Body scan recorded',
                     html: "<strong>" + prisonerDetails.firstName | escape + " " + prisonerDetails.lastName | escape + "</strong><br>" + bodyScan.date | formatDate("dddd D MMMM") + "<br>" + bodyScan.reason | replace("_", " ") | capitalize + " - " + bodyScan.result | lower,
                     attributes: {
-                    'data-qa': 'confirmation-banner'
-                    } 
+                        'data-qa': 'confirmation-banner'
+                    }
                 }) }}
 
                 <h2 class="govuk-heading-m govuk-!-margin-top-6">Add more information about this body scan</h2>
                 <p>
-                    <a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ dpsUrl }}/prisoner/{{prisonNumber}}/add-case-note" data-qa="add-case-note">
-                                Add a case note on their profile
-                            </a>
+                    <a class="govuk-body govuk-link govuk-link--no-visited-state"
+                       href="{{ dpsUrl }}/save-backlink?service=welcome-people-into-prison&returnPath=/confirm-arrival/choose-prisoner&redirectPath=/prisoner/{{ prisonNumber }}/add-case-note"
+                       data-qa="add-case-note">
+                        Add a case note on their profile
+                    </a>
                 </p>
                 <p class="govuk-!-margin-top-9">
                     {{ govukButton({
-                    classes: "govuk-button govuk-!-margin-bottom-6",
-                    href: "/prisoners/" + prisonNumber,
-                    text: "Back to prisoner summary",
-                    attributes: {'data-qa': 'back-to-prisoner-summary'}
+                        classes: "govuk-button govuk-!-margin-bottom-6",
+                        href: "/prisoners/" + prisonNumber,
+                        text: "Back to prisoner summary",
+                        attributes: {'data-qa': 'back-to-prisoner-summary'}
                     }) }}
                 </p>
             </div>

@@ -12,7 +12,7 @@ export default class BodyScanConfirmation extends Page {
       Page.checkLink(
         cy.get(`[data-qa=add-case-note]`),
         'Add a case note on their profile',
-        `https://digital-dev.prison.service.justice.gov.uk/prisoner/${prisonNumber}/add-case-note`
+        `https://digital-dev.prison.service.justice.gov.uk/save-backlink?service=welcome-people-into-prison&returnPath=/confirm-arrival/choose-prisoner&redirectPath=/prisoner/${prisonNumber}/add-case-note`
       ),
   })
 }
