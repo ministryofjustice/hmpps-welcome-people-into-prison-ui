@@ -10,20 +10,23 @@
                     titleText: firstName + " " + lastName + " " + "has returned to " + prison.description,
                     html: "Prison number<br><strong>" + prisonNumber | escape + "</strong>",
                     attributes: {
-                    'data-qa': 'confirmation-banner'
-                    } 
+                        'data-qa': 'confirmation-banner'
+                    }
                 }) }}
 
-                <p data-qa="confirmation-paragraph">{{ firstName}} {{ lastName }} is on the establishment roll.</p>
-                
+                <p data-qa="confirmation-paragraph">{{ firstName }} {{ lastName }} is on the establishment roll.</p>
+
                 <p data-qa="location-paragraph">Their location is {{ location }}.</p>
 
                 <h2 class="govuk-heading-m">Add more information about this person</h2>
-                        <p>
-                            <a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ dpsUrl }}/prisoner/{{prisonNumber}}/add-case-note" data-qa="add-case-note">
-                                Add a case note on their profile
-                            </a>
-                        </p>
+                <p>
+                    <a class="govuk-body govuk-link govuk-link--no-visited-state"
+                       href="{{ dpsUrl }}/save-backlink?service=welcome-people-into-prison&returnPath=/=&redirectPath=/prisoner/{{ prisonNumber }}/add-case-note"
+                       data-qa="add-case-note"
+                    >
+                        Add a case note on their profile
+                    </a>
+                </p>
 
                 <div class="govuk-button-group govuk-!-padding-top-6">
                     {{ govukButton({
@@ -31,7 +34,7 @@
                         href: "/",
                         attributes: {
                             'data-qa': 'back-to-new-arrivals'
-                        } 
+                        }
 
                     }) }}
 
@@ -42,7 +45,7 @@
                         attributes: {
                             'data-qa': 'view-establishment-roll',
                             'target': '_blank'
-                        } 
+                        }
                     }) }}
                 </div>
             </div>

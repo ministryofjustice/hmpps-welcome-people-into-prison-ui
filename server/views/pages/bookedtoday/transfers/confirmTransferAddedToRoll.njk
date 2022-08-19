@@ -10,41 +10,44 @@
                     titleText: firstName + " " + lastName + " " + "has been added to the establishment roll",
                     html: "Prison number<br><strong>" + prisonNumber | escape + "</strong>",
                     attributes: {
-                    'data-qa': 'confirmation-banner'
-                    } 
+                        'data-qa': 'confirmation-banner'
+                    }
                 }) }}
 
-                <p data-qa="confirmation-paragraph">{{ firstName}} {{ lastName }} is now part of the {{ prison.description }} establishment roll.</p>
+                <p data-qa="confirmation-paragraph">{{ firstName }} {{ lastName }} is now part of
+                    the {{ prison.description }} establishment roll.</p>
 
                 <p data-qa="location-paragraph">Their location is {{ location }}.</p>
 
                 <h2 class="govuk-heading-m">Add more information about this person</h2>
-                    <p>
-                        <a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ dpsUrl }}/prisoner/{{prisonNumber}}/add-case-note" data-qa="add-case-note">
-                            Add a case note on their profile
-                        </a>
-                    </p>
+                <p>
+                    <a class="govuk-body govuk-link govuk-link--no-visited-state"
+                       href="{{ dpsUrl }}/save-backlink?service=welcome-people-into-prison&returnPath=/confirm-arrival/choose-prisoner&redirectPath=/prisoner/{{ prisonNumber }}/add-case-note"
+                       data-qa="add-case-note">
+                        Add a case note on their profile
+                    </a>
+                </p>
 
-                    <div class="govuk-button-group govuk-!-padding-top-6">
-                        {{ govukButton({
-                            text: "Add another prisoner to the roll",
-                            href: "/confirm-arrival/choose-prisoner",
-                            attributes: {
-                                'data-qa': 'add-another-to-roll'
-                            } 
+                <div class="govuk-button-group govuk-!-padding-top-6">
+                    {{ govukButton({
+                        text: "Add another prisoner to the roll",
+                        href: "/confirm-arrival/choose-prisoner",
+                        attributes: {
+                            'data-qa': 'add-another-to-roll'
+                        }
 
-                        }) }}
+                    }) }}
 
-                        {{ govukButton({
-                            text: "View establishment roll",
-                            classes: "govuk-button--secondary",
-                            href: dpsUrl + "/establishment-roll",
-                            attributes: {
-                                'data-qa': 'view-establishment-roll',
-                                'target': '_blank'
-                            } 
-                        }) }}
-                    </div>
+                    {{ govukButton({
+                        text: "View establishment roll",
+                        classes: "govuk-button--secondary",
+                        href: dpsUrl + "/establishment-roll",
+                        attributes: {
+                            'data-qa': 'view-establishment-roll',
+                            'target': '_blank'
+                        }
+                    }) }}
+                </div>
             </div>
         </div>
     </div>
