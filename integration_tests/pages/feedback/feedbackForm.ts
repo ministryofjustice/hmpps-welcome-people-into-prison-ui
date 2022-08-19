@@ -2,7 +2,7 @@ import Page, { PageElement } from '../page'
 
 export default class FeedbackFormPage extends Page {
   constructor() {
-    super('Give feedback on Welcome people into prison')
+    super('Give feedback on Welcome people into prison', { hasBackLink: true }, { hasFeedbackBanner: false })
   }
 
   static goTo(): FeedbackFormPage {

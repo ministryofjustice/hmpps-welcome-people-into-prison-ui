@@ -1,0 +1,16 @@
+{% from "govuk/components/footer/macro.njk" import govukFooter %}
+{% from "../components/feedback-banner.njk" import feedbackBanner %}
+
+  {% if hasFeedbackBanner !== false %}
+    {{
+      feedbackBanner({
+        feedbackBannerAdditionalClasses: feedbackBannerBackground
+      })
+    }}
+{% endif %}
+
+{% include "../components/feedback-banner.njk" %}
+
+{{ 
+  govukFooter() 
+}}
