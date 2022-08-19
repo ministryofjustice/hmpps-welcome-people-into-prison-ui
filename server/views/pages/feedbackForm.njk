@@ -27,17 +27,19 @@
 
             <form method="post">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-                {{ govukInput({
+                {{ govukTextarea({
                     label: {
                         text: "Your feedback",
-                        classes: "govuk-label--m"
+                        classes: "govuk-label--m govuk-!-margin-top-6"
                     },
                     hint: {
                         text: "Do not include any personal information about a person in prison."
                     },
                     id: "feedback",
                     name: "feedback",
+                    classes: "govuk-!-width-three-quarters",
                     value: data.feedback,
+                    rows: "5",
                     attributes: {"data-qa": "feedback"},
                     errorMessage: errors | findError("feedback")
                 }) }}
@@ -45,13 +47,14 @@
                 {{ govukInput({
                     label: {
                         text: "Your email address (optional)",
-                        classes: "govuk-label--m"
+                        classes: "govuk-label--m govuk-!-margin-top-6"
                     },
                     hint: {
                         text: "We'll only use this to reply to your message."
                     },
                     id: "email",
                     name: "email",
+                    classes: "govuk-!-width-three-quarters",
                     value: data.email,
                     attributes: {"data-qa": "email"},
                     errorMessage: errors | findError("email")
