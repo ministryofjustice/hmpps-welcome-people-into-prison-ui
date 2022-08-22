@@ -31,7 +31,7 @@ export default class BodyScanController {
       }
 
       const bodyScan = parseBodyScan(req.body)
-      await this.bodyScanService.addBodyScan(prisonNumber, bodyScan)
+      await this.bodyScanService.addBodyScan(req.user.username, prisonNumber, bodyScan)
       req.flash('body-scan', bodyScan)
 
       return res.redirect(`/prisoners/${prisonNumber}/scan-confirmation`)

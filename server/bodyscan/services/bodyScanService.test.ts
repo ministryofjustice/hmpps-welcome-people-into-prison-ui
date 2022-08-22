@@ -12,12 +12,12 @@ describe('Body scan service', () => {
   const hmppsAuthClient = createMockHmppsAuthClient()
   let service: BodyScanService
 
-  const BodyScanClientFactory = jest.fn()
+  const bodyScanClientFactory = jest.fn()
 
   beforeEach(() => {
     jest.resetAllMocks()
-    BodyScanClientFactory.mockReturnValue(bodyScanClient)
-    service = new BodyScanService(hmppsAuthClient, BodyScanClientFactory)
+    bodyScanClientFactory.mockReturnValue(bodyScanClient)
+    service = new BodyScanService(hmppsAuthClient, bodyScanClientFactory)
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
   })
 
@@ -28,7 +28,7 @@ describe('Body scan service', () => {
       await service.getPrisonerDetails(prisonNumber)
 
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-      expect(BodyScanClientFactory).toBeCalledWith(token)
+      expect(bodyScanClientFactory).toBeCalledWith(token)
       expect(bodyScanClient.getPrisonerDetails).toBeCalledWith(prisonNumber)
     })
   })
@@ -38,10 +38,10 @@ describe('Body scan service', () => {
       const prisonNumber = 'A1234BC'
       const bodyScan: BodyScan = { date: '2020-02-20', reason: 'INTELLIGENCE', result: 'POSITIVE' }
 
-      await service.addBodyScan(prisonNumber, bodyScan)
+      await service.addBodyScan('user-1', prisonNumber, bodyScan)
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-      expect(BodyScanClientFactory).toBeCalledWith(token)
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith('user-1')
+      expect(bodyScanClientFactory).toBeCalledWith(token)
       expect(bodyScanClient.addBodyScan).toBeCalledWith(prisonNumber, bodyScan)
     })
   })
@@ -53,7 +53,7 @@ describe('Body scan service', () => {
       await service.retrieveBodyScanInfo(prisonNumber)
 
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-      expect(BodyScanClientFactory).toBeCalledWith(token)
+      expect(bodyScanClientFactory).toBeCalledWith(token)
       expect(bodyScanClient.getSingleBodyScanInfo).toBeCalledWith(prisonNumber)
     })
   })
