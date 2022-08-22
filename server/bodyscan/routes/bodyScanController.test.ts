@@ -39,7 +39,7 @@ describe('GET /record-body-scan', () => {
     return request(app)
       .get('/prisoners/A1234AB/record-body-scan')
       .expect('Content-Type', 'text/html; charset=utf-8')
-      .expect(res => {
+      .expect(() => {
         expect(bodyScanService.getPrisonerDetails).toHaveBeenCalledWith('A1234AB')
       })
   })
@@ -99,7 +99,7 @@ describe('POST /record-body-scan', () => {
       .expect(302)
       .expect('Location', '/prisoners/A1234AB/scan-confirmation')
       .expect(() => {
-        expect(bodyScanService.addBodyScan).toHaveBeenCalledWith('A1234AB', {
+        expect(bodyScanService.addBodyScan).toHaveBeenCalledWith('user1', 'A1234AB', {
           date: '2020-02-01',
           reason: 'INTELLIGENCE',
           result: 'POSITIVE',
