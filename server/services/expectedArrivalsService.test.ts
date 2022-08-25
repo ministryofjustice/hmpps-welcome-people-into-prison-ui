@@ -14,9 +14,11 @@ import {
   createPotentialMatch,
   createTransfer,
   withBodyScanInfo,
+  withMatchType,
 } from '../data/__testutils/testObjects'
 import { createMockHmppsAuthClient, createMockWelcomeClient } from '../data/__testutils/mocks'
-import { createMockBodyScanInfoDecorator } from './__testutils/mocks'
+import { createMockBodyScanInfoDecorator, createMockMatchTypeDecorator } from './__testutils/mocks'
+import { MatchType } from './matchTypeDecorator'
 
 jest.mock('./raiseAnalyticsEvent')
 
@@ -26,6 +28,7 @@ describe('Expected arrivals service', () => {
   const welcomeClient = createMockWelcomeClient()
   const hmppsAuthClient = createMockHmppsAuthClient()
   const bodyScanInfoDecorator = createMockBodyScanInfoDecorator()
+  const matchTypeDecorator = createMockMatchTypeDecorator()
   let service: ExpectedArrivalsService
 
   const WelcomeClientFactory = jest.fn()
@@ -41,12 +44,15 @@ describe('Expected arrivals service', () => {
       hmppsAuthClient,
       WelcomeClientFactory,
       raiseAnalyticsEvent,
-      bodyScanInfoDecorator
+      bodyScanInfoDecorator,
+      matchTypeDecorator
     )
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
     bodyScanInfoDecorator.decorate.mockImplementation(as =>
       Promise.resolve(as.map(a => ({ ...a, bodyScanStatus: BodyScanStatus.OK_TO_SCAN })))
     )
+    matchTypeDecorator.decorate.mockImplementation(as => as.map(a => ({ ...a, matchType: MatchType.SINGLE_MATCH })))
+    matchTypeDecorator.decorateSingle.mockImplementation(a => ({ ...a, matchType: MatchType.SINGLE_MATCH }))
   })
 
   describe('getExpectedArrivals', () => {
@@ -74,25 +80,24 @@ describe('Expected arrivals service', () => {
       const today = moment()
       const result = await service.getArrivalsForToday(res.locals.user.activeCaseLoadId, () => today)
 
+      const arrival = (a: Parameters<typeof createArrival>[0]) => withMatchType(withBodyScanInfo(createArrival(a)))
+
       expect(result).toStrictEqual(
         new Map([
           [
             LocationType.COURT,
-            [
-              withBodyScanInfo(createArrival({ fromLocationType: LocationType.COURT })),
-              withBodyScanInfo(createArrival({ fromLocationType: LocationType.COURT })),
-            ],
+            [arrival({ fromLocationType: LocationType.COURT }), arrival({ fromLocationType: LocationType.COURT })],
           ],
-          [LocationType.PRISON, [withBodyScanInfo(transferArrival)]],
+          [LocationType.PRISON, [withMatchType(withBodyScanInfo(transferArrival))]],
           [
             LocationType.CUSTODY_SUITE,
             [
-              withBodyScanInfo(createArrival({ fromLocationType: LocationType.CUSTODY_SUITE })),
-              withBodyScanInfo(createArrival({ fromLocationType: LocationType.CUSTODY_SUITE })),
-              withBodyScanInfo(createArrival({ fromLocationType: LocationType.CUSTODY_SUITE })),
+              arrival({ fromLocationType: LocationType.CUSTODY_SUITE }),
+              arrival({ fromLocationType: LocationType.CUSTODY_SUITE }),
+              arrival({ fromLocationType: LocationType.CUSTODY_SUITE }),
             ],
           ],
-          [LocationType.OTHER, [withBodyScanInfo(createArrival({ fromLocationType: LocationType.OTHER }))]],
+          [LocationType.OTHER, [arrival({ fromLocationType: LocationType.OTHER })]],
         ])
       )
 
@@ -217,7 +222,7 @@ describe('Expected arrivals service', () => {
 
       const result = await service.getArrival('12345-67890')
 
-      expect(result).toStrictEqual(arrival)
+      expect(result).toStrictEqual({ ...arrival, matchType: MatchType.SINGLE_MATCH })
     })
   })
 

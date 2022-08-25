@@ -1,4 +1,4 @@
-import type { Arrival } from 'welcome'
+import { Arrival, SexKeys } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
@@ -7,6 +7,7 @@ import Role from '../../../authentication/role'
 import { expectSettingCookie } from '../../__testutils/requestTestUtils'
 import { State } from './state'
 import { createMockExpectedArrivalsService } from '../../../services/__testutils/mocks'
+import { MatchType, WithMatchType } from '../../../services/matchTypeDecorator'
 
 let app: Express
 const expectedArrivalsService = createMockExpectedArrivalsService()
@@ -50,11 +51,12 @@ describe('GET /review-per-details', () => {
       firstName: 'James',
       lastName: 'Smyth',
       dateOfBirth: '1973-01-08',
-      gender: 'MALE',
+      gender: SexKeys.MALE,
       prisonNumber: 'A1234AB',
       pncNumber: '99/98644M',
       potentialMatches: [],
-    } as Arrival)
+      matchType: MatchType.SINGLE_MATCH,
+    } as WithMatchType<Arrival>)
 
     return request(app)
       .get('/prisoners/12345-67890/review-per-details')
@@ -75,11 +77,12 @@ describe('GET /review-per-details', () => {
       firstName: 'James',
       lastName: 'Smyth',
       dateOfBirth: '1973-01-08',
-      gender: 'MALE',
+      gender: SexKeys.MALE,
       prisonNumber: 'A1234AB',
       pncNumber: '99/98644M',
       potentialMatches: [],
-    } as Arrival)
+      matchType: MatchType.SINGLE_MATCH,
+    } as WithMatchType<Arrival>)
 
     return request(app)
       .get('/prisoners/12345-67890/review-per-details')

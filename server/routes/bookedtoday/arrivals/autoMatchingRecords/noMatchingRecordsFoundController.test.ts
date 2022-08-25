@@ -5,13 +5,17 @@ import { appWithAllRoutes } from '../../../__testutils/appSetup'
 import Role from '../../../../authentication/role'
 import { createArrival } from '../../../../data/__testutils/testObjects'
 import { createMockExpectedArrivalsService } from '../../../../services/__testutils/mocks'
+import { MatchType } from '../../../../services/matchTypeDecorator'
 
 let app: Express
 const expectedArrivalsService = createMockExpectedArrivalsService()
 
-const arrival = createArrival({
-  potentialMatches: [],
-})
+const arrival = {
+  ...createArrival({
+    potentialMatches: [],
+  }),
+  matchType: MatchType.NO_MATCH,
+}
 
 beforeEach(() => {
   app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })

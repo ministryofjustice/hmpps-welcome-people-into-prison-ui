@@ -5,7 +5,7 @@ import * as cheerio from 'cheerio'
 import { appWithAllRoutes, user } from '../__testutils/appSetup'
 import Role from '../../authentication/role'
 
-import { createRecentArrival } from '../../data/__testutils/testObjects'
+import { createRecentArrival, withBodyScanInfo } from '../../data/__testutils/testObjects'
 import { expectSettingCookie } from '../__testutils/requestTestUtils'
 import { State } from './state'
 import { createMockExpectedArrivalsService } from '../../services/__testutils/mocks'
@@ -18,8 +18,8 @@ const oneDayAgo = moment().subtract(1, 'days').startOf('day')
 const twoDaysAgo = moment().subtract(2, 'days').startOf('day')
 
 const recentArrivals = new Map([
-  [today, [createRecentArrival({ movementDateTime: moment().format() })]],
-  [oneDayAgo, [createRecentArrival({ movementDateTime: moment().subtract(1, 'days').format() })]],
+  [today, [withBodyScanInfo(createRecentArrival({ movementDateTime: moment().format() }))]],
+  [oneDayAgo, [withBodyScanInfo(createRecentArrival({ movementDateTime: moment().subtract(1, 'days').format() }))]],
   [twoDaysAgo, []],
 ])
 

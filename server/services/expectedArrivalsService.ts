@@ -16,13 +16,17 @@ import logger from '../../logger'
 import { RaiseAnalyticsEvent } from './raiseAnalyticsEvent'
 import { NewArrival } from '../routes/bookedtoday/arrivals/state'
 import type { BodyScanInfoDecorator, WithBodyScanInfo } from './bodyScanInfoDecorator'
+import type { MatchTypeDecorator, WithMatchType } from './matchTypeDecorator'
+
+export type DecoratedArrival = WithBodyScanInfo<Arrival> & WithMatchType<Arrival>
 
 export default class ExpectedArrivalsService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
     private readonly welcomeClientFactory: RestClientBuilder<WelcomeClient>,
     private readonly raiseAnalyticsEvent: RaiseAnalyticsEvent,
-    private readonly bodyScanDecorator: BodyScanInfoDecorator
+    private readonly bodyScanDecorator: BodyScanInfoDecorator,
+    private readonly matchTypeDecorator: MatchTypeDecorator
   ) {}
 
   private async getExpectedArrivals(agencyId: string, now: Moment): Promise<Arrival[]> {
@@ -50,7 +54,9 @@ export default class ExpectedArrivalsService {
     return moment(recentArrival.movementDateTime).startOf('day').valueOf() === day.startOf('day').valueOf()
   }
 
-  public async getRecentArrivalsGroupedByDate(agencyId: string): Promise<Map<Moment, RecentArrival[]>> {
+  public async getRecentArrivalsGroupedByDate(
+    agencyId: string
+  ): Promise<Map<Moment, WithBodyScanInfo<RecentArrival>[]>> {
     const today = moment().startOf('day')
     const oneDayAgo = moment().subtract(1, 'days').startOf('day')
     const twoDaysAgo = moment().subtract(2, 'days').startOf('day')
@@ -77,13 +83,16 @@ export default class ExpectedArrivalsService {
   public async getArrivalsForToday(
     agencyId: string,
     now = () => moment()
-  ): Promise<Map<LocationType, WithBodyScanInfo<Arrival>[]>> {
+  ): Promise<Map<LocationType, DecoratedArrival[]>> {
     const [expectedArrivals, transfers] = await Promise.all([
       this.getExpectedArrivals(agencyId, now()),
       this.getTransfers(agencyId),
     ])
-    const allArrivals = await this.bodyScanDecorator.decorate([...expectedArrivals, ...transfers])
-    return groupBy(allArrivals, (arrival: WithBodyScanInfo<Arrival>) => arrival.fromLocationType)
+    const allArrivals = [...expectedArrivals, ...transfers]
+    const withBodyScan = await this.bodyScanDecorator.decorate(allArrivals)
+    const withBodyScanAndMatchType = this.matchTypeDecorator.decorate(withBodyScan)
+
+    return groupBy(withBodyScanAndMatchType, (arrival: DecoratedArrival) => arrival.fromLocationType)
   }
 
   public async getImage(prisonNumber: string): Promise<Readable> {
@@ -91,9 +100,10 @@ export default class ExpectedArrivalsService {
     return this.welcomeClientFactory(token).getImage(prisonNumber)
   }
 
-  public async getArrival(id: string): Promise<Arrival> {
+  public async getArrival(id: string): Promise<WithMatchType<Arrival>> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
-    return this.welcomeClientFactory(token).getArrival(id)
+    const arrival = await this.welcomeClientFactory(token).getArrival(id)
+    return this.matchTypeDecorator.decorateSingle(arrival)
   }
 
   public async getPrisonerDetailsForArrival(id: string): Promise<PrisonerDetails> {

@@ -7,14 +7,18 @@ import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
 import { State } from '../state'
 import { createArrival, createPotentialMatch } from '../../../../data/__testutils/testObjects'
 import { createMockExpectedArrivalsService } from '../../../../services/__testutils/mocks'
+import { MatchType } from '../../../../services/matchTypeDecorator'
 
 let app: Express
 const expectedArrivalsService = createMockExpectedArrivalsService()
 
-const arrival = createArrival({
-  prisonNumber: null,
-  potentialMatches: [createPotentialMatch({ prisonNumber: 'A1234AB' })],
-})
+const arrival = {
+  ...createArrival({
+    prisonNumber: null,
+    potentialMatches: [createPotentialMatch({ prisonNumber: 'A1234AB' })],
+  }),
+  matchType: MatchType.SINGLE_MATCH,
+}
 
 beforeEach(() => {
   app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })

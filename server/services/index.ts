@@ -8,18 +8,22 @@ import PrisonService from './prisonService'
 import NotificationService from './notificationService'
 import { raiseAnalyticsEvent, type RaiseAnalyticsEvent } from './raiseAnalyticsEvent'
 import { BodyScanInfoDecorator } from './bodyScanInfoDecorator'
+import { MatchTypeDecorator } from './matchTypeDecorator'
 
 export const services = () => {
   const { hmppsAuthClient, welcomeClientBuilder, bodyScanClientBuilder, notifyClient } = dataAccess()
 
   const bodyScanInfoDecorator = new BodyScanInfoDecorator(hmppsAuthClient, bodyScanClientBuilder)
+  const matchTypeDecorator = new MatchTypeDecorator()
+
   const userService = new UserService(hmppsAuthClient, welcomeClientBuilder)
   const notificationService = new NotificationService(notifyClient)
   const expectedArrivalsService = new ExpectedArrivalsService(
     hmppsAuthClient,
     welcomeClientBuilder,
     raiseAnalyticsEvent,
-    bodyScanInfoDecorator
+    bodyScanInfoDecorator,
+    matchTypeDecorator
   )
   const temporaryAbsencesService = new TemporaryAbsencesService(
     hmppsAuthClient,
@@ -47,6 +51,7 @@ export type Services = ReturnType<typeof services>
 
 export {
   BodyScanInfoDecorator,
+  MatchTypeDecorator,
   UserService,
   NotificationService,
   ExpectedArrivalsService,
