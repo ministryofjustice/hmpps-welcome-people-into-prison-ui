@@ -13,7 +13,11 @@ export default class MultipleRecordsFoundPage extends Page {
 
   match = index => ({
     fieldName: name => cy.get(`.data-qa-matching-record-${index}-${name}`),
-    prisonerImage: (): PageElement => cy.get(`[data-qa=prisoner-image-${index}]`),
+    prisonerImage: () => ({
+      check({ href, alt }: { href: string; alt: string }) {
+        Page.checkImage(cy.get(`[data-qa=prisoner-image-${index}]`), href, alt)
+      },
+    }),
     select: (): PageElement => cy.get(`#record-${index}`),
   })
 

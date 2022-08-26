@@ -62,7 +62,7 @@ context('Choose Prisoner', () => {
     choosePrisonerPage.noExpectedArrivalsFromAnotherEstablishment().should('be.visible')
   })
 
-  it("A user can view prisoner's actual image", () => {
+  it("A user can view prisoner's actual image if they are a single match", () => {
     const arrival = expectedArrivals.arrival({
       fromLocationType: 'COURT',
       prisonNumber: 'G0014GM',
@@ -75,39 +75,44 @@ context('Choose Prisoner', () => {
 
     cy.signIn()
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
-    choosePrisonerPage
-      .prisonerImage(0)
-      .should('be.visible')
-      .should('have.attr', 'src')
-      .then(src => {
-        expect(src).equal('/prisoners/G0014GM/image')
-      })
-
-    choosePrisonerPage
-      .prisonerImage(0)
-      .should('have.attr', 'alt')
-      .then(altText => {
-        expect(altText).equal('Smith, Bob')
-      })
+    choosePrisonerPage.prisonerImage(0).check({ href: '/prisoners/G0014GM/image', alt: 'Smith, Bob' })
   })
 
-  it('A user will see placeholder image as there is no prisoner number', () => {
+  it('A user will see placeholder image if there is no match', () => {
+    const arrival = expectedArrivals.arrival({
+      fromLocationType: 'COURT',
+      prisonNumber: 'G0014GM',
+      isCurrentPrisoner: false,
+      potentialMatches: [],
+    })
+    cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [arrival] })
+
     cy.signIn()
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
-    choosePrisonerPage
-      .prisonerImage(2)
-      .should('be.visible')
-      .should('have.attr', 'src')
-      .then(src => {
-        expect(src).equal('/assets/images/placeholder-image.png')
-      })
+    choosePrisonerPage.prisonerImage(0).check({
+      href: '/assets/images/placeholder-image.png',
+      alt: '',
+    })
+  })
 
-    choosePrisonerPage
-      .prisonerImage(2)
-      .should('have.attr', 'alt')
-      .then(altText => {
-        expect(altText).equal('Stanton, Harry')
-      })
+  it('A user will see placeholder image if there are multiple matches', () => {
+    const arrival = expectedArrivals.arrival({
+      fromLocationType: 'COURT',
+      prisonNumber: 'G0014GM',
+      isCurrentPrisoner: false,
+      potentialMatches: [
+        { ...expectedArrivals.potentialMatch, prisonNumber: 'G0014GM' },
+        { ...expectedArrivals.potentialMatch, prisonNumber: 'G0014GM' },
+      ],
+    })
+    cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [arrival] })
+
+    cy.signIn()
+    const choosePrisonerPage = ChoosePrisonerPage.goTo()
+    choosePrisonerPage.prisonerImage(0).check({
+      href: '/assets/images/placeholder-image.png',
+      alt: '',
+    })
   })
 
   it('Current bookings from court are processed as court returns', () => {

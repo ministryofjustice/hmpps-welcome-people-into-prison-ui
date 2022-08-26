@@ -71,20 +71,7 @@ context('A user can view all current temporary absences', () => {
 
     cy.signIn()
     const temporaryAbsencesPage = TemporaryAbsencesPage.goTo()
-    temporaryAbsencesPage
-      .prisonerImage(0)
-      .should('be.visible')
-      .should('have.attr', 'src')
-      .then(src => {
-        expect(src).equal('/prisoners/G0013AB/image')
-      })
-
-    temporaryAbsencesPage
-      .prisonerImage(0)
-      .should('have.attr', 'alt')
-      .then(altText => {
-        expect(altText).equal('Headshot of Doe, John')
-      })
+    temporaryAbsencesPage.prisonerImage(0).check({ href: '/prisoners/G0013AB/image', alt: 'Headshot of Doe, John' })
   })
 
   it('No links shown if not a reception user', () => {

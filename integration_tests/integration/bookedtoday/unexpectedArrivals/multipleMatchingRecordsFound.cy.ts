@@ -74,7 +74,7 @@ context('Unexpected arrivals - multiple matching records', () => {
     personalDetails.fieldName('prison-number').should('contain', 'A1234AA')
     personalDetails.fieldName('pnc-number').should('contain', '01/23456M')
 
-    let match
+    let match: ReturnType<typeof multipleRecordsFoundPage.match>
     match = multipleRecordsFoundPage.match(1)
     match.fieldName('prisoner-name').should('contain', 'Bob Smith')
     match.fieldName('dob').should('contain', '21 November 1972')
@@ -88,7 +88,9 @@ context('Unexpected arrivals - multiple matching records', () => {
     match.fieldName('prison-number').should('contain', arrival.potentialMatches[1].prisonNumber)
     match.fieldName('pnc-number').should('contain', arrival.potentialMatches[1].pncNumber)
     match.fieldName('cro-number').should('contain', arrival.potentialMatches[1].croNumber)
-    match.prisonerImage().should('have.attr', 'src', `/prisoners/${arrival.potentialMatches[1].prisonNumber}/image`)
+    match
+      .prisonerImage()
+      .check({ href: `/prisoners/${arrival.potentialMatches[1].prisonNumber}/image`, alt: 'Smyth, Robert' })
 
     multipleRecordsFoundPage.continue().click()
     multipleRecordsFoundPage.hasError('Select an existing record or search using different details')
