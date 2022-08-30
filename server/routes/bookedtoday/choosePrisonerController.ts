@@ -2,6 +2,7 @@ import { type Arrival, LocationType } from 'welcome'
 import type { RequestHandler, Response } from 'express'
 import type { ExpectedArrivalsService } from '../../services'
 import { State } from './arrivals/state'
+import { MatchType, type WithMatchType } from '../../services/matchTypeDecorator'
 
 export default class ChoosePrisonerController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
@@ -16,17 +17,23 @@ export default class ChoosePrisonerController {
     }
   }
 
-  private handleNewPrisoner(arrival: Arrival, res: Response): void | PromiseLike<void> {
-    if (!arrival.prisonNumber && !arrival.pncNumber) {
-      return res.redirect(`/prisoners/${arrival.id}/search-for-existing-record/new`)
+  private handleNewPrisoner(arrival: WithMatchType<Arrival>, res: Response): void {
+    switch (arrival.matchType) {
+      case MatchType.INSUFFICIENT_INFO:
+        return res.redirect(`/prisoners/${arrival.id}/search-for-existing-record/new`)
+
+      case MatchType.NO_MATCH:
+        return res.redirect(`/prisoners/${arrival.id}/no-record-found`)
+
+      case MatchType.SINGLE_MATCH:
+        return res.redirect(`/prisoners/${arrival.id}/record-found`)
+
+      case MatchType.MULTIPLE_POTENTIAL_MATCHES:
+        return res.redirect(`/prisoners/${arrival.id}/possible-records-found`)
+
+      default:
+        throw new Error(`Invalid matchType: ${arrival.matchType}`)
     }
-    if (arrival.potentialMatches.length > 1) {
-      return res.redirect(`/prisoners/${arrival.id}/possible-records-found`)
-    }
-    if (arrival.potentialMatches.length === 1) {
-      return res.redirect(`/prisoners/${arrival.id}/record-found`)
-    }
-    return res.redirect(`/prisoners/${arrival.id}/no-record-found`)
   }
 
   private handleCurrentPrisoner(arrival: Arrival, res: Response): void | PromiseLike<void> {

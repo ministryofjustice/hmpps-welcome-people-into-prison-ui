@@ -8,6 +8,7 @@ import config from '../../../../../config'
 import { expectSettingCookie } from '../../../../__testutils/requestTestUtils'
 import { State } from '../../state'
 import { createMockExpectedArrivalsService } from '../../../../../services/__testutils/mocks'
+import { MatchType, WithMatchType } from '../../../../../services/matchTypeDecorator'
 
 let app: Express
 const expectedArrivalsService = createMockExpectedArrivalsService()
@@ -87,7 +88,8 @@ describe('GET /search-for-existing-record', () => {
       prisonNumber: 'A1234AB',
       pncNumber: '99/98644M',
       potentialMatches: [],
-    } as Arrival)
+      matchType: MatchType.NO_MATCH,
+    } as WithMatchType<Arrival>)
 
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record')
@@ -105,7 +107,8 @@ describe('GET /search-for-existing-record', () => {
       prisonNumber: 'A1234AB',
       pncNumber: '99/98644M',
       potentialMatches: [],
-    } as Arrival)
+      matchType: MatchType.NO_MATCH,
+    } as WithMatchType<Arrival>)
 
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record')

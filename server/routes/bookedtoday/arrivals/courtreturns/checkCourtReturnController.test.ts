@@ -8,13 +8,21 @@ import Role from '../../../../authentication/role'
 import config from '../../../../config'
 import { createArrival, createArrivalResponse, createPrisonerDetails } from '../../../../data/__testutils/testObjects'
 import { createMockExpectedArrivalsService } from '../../../../services/__testutils/mocks'
+import { MatchType } from '../../../../services/matchTypeDecorator'
 
 let app: Express
 const expectedArrivalsService = createMockExpectedArrivalsService()
 const raiseAnalyticsEvent = jest.fn() as RaiseAnalyticsEvent
 
 const courtReturn = createPrisonerDetails()
-const arrival = createArrival({ fromLocationType: LocationType.COURT, isCurrentPrisoner: true })
+
+const arrival = {
+  ...createArrival({
+    fromLocationType: LocationType.COURT,
+    isCurrentPrisoner: true,
+  }),
+  matchType: MatchType.SINGLE_MATCH,
+}
 const arrivalResponse = createArrivalResponse()
 
 beforeEach(() => {

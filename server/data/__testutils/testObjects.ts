@@ -18,10 +18,16 @@ import {
 import { BodyScanStatus } from 'body-scan'
 import type { NewArrival } from '../../routes/bookedtoday/arrivals/state'
 import type { User } from '../hmppsAuthClient'
+import { MatchType } from '../../services/matchTypeDecorator'
 
 export const withBodyScanInfo = <T>(t: T, { bodyScanStatus = BodyScanStatus.OK_TO_SCAN } = {}) => ({
   ...t,
   bodyScanStatus,
+})
+
+export const withMatchType = <T>(t: T, { matchType = MatchType.SINGLE_MATCH } = {}) => ({
+  ...t,
+  matchType,
 })
 
 export const createArrival = ({
