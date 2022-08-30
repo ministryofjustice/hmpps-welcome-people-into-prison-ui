@@ -73,7 +73,10 @@ context('Arrival matches multiple records', () => {
       match.fieldName('prison-number').should('contain', arrival.potentialMatches[0].prisonNumber)
       match.fieldName('pnc-number').should('contain', arrival.potentialMatches[0].pncNumber)
       match.fieldName('cro-number').should('contain', arrival.potentialMatches[0].croNumber)
-      match.prisonerImage().should('have.attr', 'src', `/prisoners/${arrival.potentialMatches[0].prisonNumber}/image`)
+      match.prisonerImage.check({
+        href: `/prisoners/${arrival.potentialMatches[0].prisonNumber}/image`,
+        alt: 'Smoth, Sam',
+      })
     }
     {
       const match = multipleMatchingRecordsPage.match(2)
@@ -82,7 +85,10 @@ context('Arrival matches multiple records', () => {
       match.fieldName('prison-number').should('contain', arrival.potentialMatches[1].prisonNumber)
       match.fieldName('pnc-number').should('contain', arrival.potentialMatches[1].pncNumber)
       match.fieldName('cro-number').should('contain', arrival.potentialMatches[1].croNumber)
-      match.prisonerImage().should('have.attr', 'src', `/prisoners/${arrival.potentialMatches[1].prisonNumber}/image`)
+      match.prisonerImage.check({
+        href: `/prisoners/${arrival.potentialMatches[1].prisonNumber}/image`,
+        alt: 'Smoth, Sum',
+      })
     }
 
     multipleMatchingRecordsPage.continue().click()

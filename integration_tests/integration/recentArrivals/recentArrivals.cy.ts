@@ -64,20 +64,7 @@ context('A user can view all recent arrivals', () => {
 
     cy.signIn()
     const recentArrivalsPage = RecentArrivalsPage.goTo()
-    recentArrivalsPage
-      .prisonerImage(0)
-      .should('be.visible')
-      .should('have.attr', 'src')
-      .then(src => {
-        expect(src).equal('/prisoners/G0015GF/image')
-      })
-
-    recentArrivalsPage
-      .prisonerImage(0)
-      .should('have.attr', 'alt')
-      .then(altText => {
-        expect(altText).equal('Headshot of Doe, John')
-      })
+    recentArrivalsPage.prisonerImage(0).check({ href: '/prisoners/G0015GF/image', alt: 'Headshot of Doe, John' })
   })
 
   it('A user can successfully search for a recent arrival', () => {

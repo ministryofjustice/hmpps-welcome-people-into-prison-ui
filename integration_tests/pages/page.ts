@@ -17,6 +17,17 @@ export default abstract class Page {
       })
   }
 
+  static checkImage(element: PageElement, href: string, alt: string) {
+    element.should('be.visible').then(e => {
+      cy.wrap(e)
+        .should('have.attr', 'src')
+        .then(src => expect(src).equal(href))
+      cy.wrap(e)
+        .should('have.attr', 'alt')
+        .then(altAttr => expect(altAttr).equal(alt))
+    })
+  }
+
   constructor(
     private readonly title: string,
     private readonly backNavigationLink: BackLink = { hasBackLink: true },

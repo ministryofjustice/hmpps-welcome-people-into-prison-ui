@@ -86,7 +86,7 @@ context('Multiple existing records', () => {
     match.fieldName('prisoner-name').should('contain', 'Sammy Smith')
     match.fieldName('dob').should('contain', '1 February 1970')
 
-    multipleExistingRecordsFoundPage.prisonerImage().should('have.attr', 'src', `/prisoners/G0014GM/image`)
+    multipleExistingRecordsFoundPage.prisonerImage().check({ href: `/prisoners/G0014GM/image`, alt: 'Smith, Sam' })
   })
 
   it('should allow a new search', () => {

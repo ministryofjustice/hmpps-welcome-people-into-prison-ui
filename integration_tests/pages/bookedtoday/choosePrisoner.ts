@@ -28,7 +28,11 @@ export default class ChoosePrisonerPage extends Page {
   noExpectedArrivalsFromAnotherEstablishment = (): PageElement =>
     cy.get('[data-qa=no-arrivals-from-another-establishment]')
 
-  prisonerImage = (index: number): PageElement => cy.get(`[data-qa=prisoner-image]`).eq(index)
+  prisonerImage = (index: number) => ({
+    check({ href, alt }: { href: string; alt: string }) {
+      Page.checkImage(cy.get(`[data-qa=prisoner-image]`).eq(index), href, alt)
+    },
+  })
 
   prisonNumber = (index: number, moveType: string): PageElement =>
     cy.get(`[data-qa=${moveType}-prison-number-${index}]`)

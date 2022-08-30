@@ -14,7 +14,11 @@ export default class MultipleMatchingRecordsFoundPage extends Page {
     fieldName: name => cy.get(`.data-qa-per-record-${name}`),
   })
 
-  prisonerImage = (): PageElement => cy.get(`[data-qa=prisoner-image]`)
+  prisonerImage = () => ({
+    check({ href, alt }: { href: string; alt: string }) {
+      Page.checkImage(cy.get(`[data-qa=prisoner-image]`), href, alt)
+    },
+  })
 
   searchAgain = (): PageElement => cy.get('[data-qa=ammend-search]')
 

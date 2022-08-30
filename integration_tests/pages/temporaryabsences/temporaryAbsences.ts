@@ -20,7 +20,11 @@ export default class TemporaryAbsencesPage extends Page {
     doNotScan: () => cy.get(`[data-qa=temporary-absence-${row}] [data-qa="do-not-scan"]`),
   })
 
-  prisonerImage = (index: number): PageElement => cy.get(`[data-qa=prisoner-image]`).eq(index)
+  prisonerImage = (index: number) => ({
+    check({ href, alt }: { href: string; alt: string }) {
+      Page.checkImage(cy.get(`[data-qa=prisoner-image]`).eq(index), href, alt)
+    },
+  })
 
   linkToExpectedArrivals = (): PageElement => cy.get(`[data-qa=linkToExpectedArrivals]`)
 }
