@@ -1,26 +1,26 @@
 {% extends "../../partials/layout.njk" %}
 {% from  "../../partials/expectedArrivalCardMacro.njk" import expectedArrivalCard, transferCard  %}
-{% set pageTitle = "Prisoners booked to arrive today" if supportingMultitransactionsEnabled == true else "Select prisoner to add to the establishment roll" %}
+{% set pageTitle = "People booked to arrive today" if supportingMultitransactionsEnabled == true else "Select a person to add to the establishment roll" %}
 
 {% block content %}
     <div class="govuk-!-margin-bottom-8">
         <div class="govuk-width-container govuk-body">
             <h1>{{pageTitle}}</h1>
-                <h2 class="govuk-heading-m govuk-!-margin-top-9">Prisoners arriving from court</h2>
+                <h2 class="govuk-heading-m govuk-!-margin-top-9">Arriving from court</h2>
                     {% for arrival in expectedArrivals.get("COURT") %}
                         {{ expectedArrivalCard(arrival, "COURT", loop.index, user) }}
                     {% else %}
                         <p data-qa="no-arrivals-from-court">There are currently no prisoners booked to arrive from court today.</p>
                     {% endfor %}
 
-                <h2 class="govuk-heading-m govuk-!-margin-top-9">Prisoners arriving from a custody suite</h2>
+                <h2 class="govuk-heading-m govuk-!-margin-top-9">Arriving from a custody suite</h2>
                     {% for arrival in expectedArrivals.get("CUSTODY_SUITE") %}
                         {{ expectedArrivalCard(arrival, "CUSTODY_SUITE", loop.index, user) }}
                     {% else %}
                         <p data-qa="no-arrivals-from-custody-suite">There are currently no prisoners booked to arrive from a custody suite today.</p>
                     {% endfor %}
 
-                <h2 class="govuk-heading-m govuk-!-margin-top-9">Prisoners arriving from another establishment</h2>
+                <h2 class="govuk-heading-m govuk-!-margin-top-9">Arriving from another establishment</h2>
                     {% for arrival in expectedArrivals.get("PRISON") %}
                         {{ transferCard(arrival, loop.index, user) }}
                     {% else %}
@@ -28,7 +28,7 @@
                     {% endfor %}
 
                 {% if user.isReceptionUser %}
-                    <p class="govuk-inset-text" data-qa="manually-confirm-arrival">If the prisoner is not on this list, you can <a href="/manually-confirm-arrival/search-for-existing-record" class="govuk-link govuk-link--no-visited-state">manually confirm their arrival</a>.</p>
+                    <p class="govuk-inset-text" data-qa="manually-confirm-arrival">If the person is not on this list, you can <a href="/manually-confirm-arrival/search-for-existing-record" class="govuk-link govuk-link--no-visited-state">manually confirm their arrival</a>.</p>
                 {% endif %}
         </div>
     </div>
