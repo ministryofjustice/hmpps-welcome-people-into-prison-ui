@@ -38,7 +38,7 @@ describe('GET /prisoners-returning', () => {
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
         const $ = cheerio.load(res.text)
-        expect($('h1').text()).toContain('Prisoners currently out on temporary absence')
+        expect($('h1').text()).toContain('People returning from temporary absence')
         expect($('#confirm-arrival-span').text()).toBe('')
         expect($('.app-card-wrapper')).toHaveLength(4)
         expect($('#no-prisoners').text()).toContain('')
@@ -54,7 +54,7 @@ describe('GET /prisoners-returning', () => {
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
         const $ = cheerio.load(res.text)
-        expect($('h1').text()).toContain('Select prisoner returning from temporary absence')
+        expect($('h1').text()).toContain('Select a person returning from temporary absence')
         expect($('#confirm-arrival-span').text()).toContain(`Confirm a prisoner's arrival`)
         expect($('.app-card-wrapper')).toHaveLength(4)
         expect($('#no-prisoners').text()).toContain('')
