@@ -33,8 +33,8 @@ context('A user can view the home page', () => {
   it('A user can view the home page', () => {
     const homePage = Page.verifyOnPage(HomePage)
 
-    homePage.arrivalsTitle().contains('Prisoners booked to arrive today')
-    homePage.returnFromTemporaryAbsenceTitle().contains('Prisoners returning from temporary absence')
+    homePage.arrivalsTitle().contains('People booked to arrive today')
+    homePage.returnFromTemporaryAbsenceTitle().contains('People returning from temporary absence')
   })
 
   it('A user is taken to the choose prisoner page', () => {
