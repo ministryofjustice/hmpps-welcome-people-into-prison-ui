@@ -36,7 +36,7 @@ describe('GET /confirm-arrival/choose-prisoner', () => {
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
         const $ = cheerio.load(res.text)
-        expect($('h1').text()).toContain('Prisoners booked to arrive today')
+        expect($('h1').text()).toContain('People booked to arrive today')
       })
   })
 
@@ -50,7 +50,7 @@ describe('GET /confirm-arrival/choose-prisoner', () => {
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
         const $ = cheerio.load(res.text)
-        expect($('h1').text()).toContain('Select prisoner to add to the establishment roll')
+        expect($('h1').text()).toContain('Select a person to add to the establishment roll')
       })
   })
 
