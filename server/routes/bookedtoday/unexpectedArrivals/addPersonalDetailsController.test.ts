@@ -34,7 +34,7 @@ describe('add personal records', () => {
         .expect('Content-Type', /html/)
         .expect(res => {
           const $ = cheerio.load(res.text)
-          expect($('h1').text()).toContain("Add prisoner's personal details")
+          expect($('h1').text()).toContain('Add personal details')
         })
     })
   })
