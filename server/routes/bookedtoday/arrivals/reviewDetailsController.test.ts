@@ -89,7 +89,7 @@ describe('GET /review-per-details', () => {
       .expect(res => {
         const $ = cheerio.load(res.text)
         expect($('h1').text()).toContain('Review personal details')
-        expect($('a.govuk-button').attr('href')).toContain('/prisoners/12345-67890/sex')
+        expect($('a.govuk-button').attr('href')).toContain('/prisoners/12345-67890/start-confirmation')
       })
   })
 

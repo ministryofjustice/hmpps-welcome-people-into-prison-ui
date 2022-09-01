@@ -75,7 +75,7 @@ describe('add personal records', () => {
         })
     })
 
-    it('should redirect to /sex page if no errors', () => {
+    it('should redirect to /start-confirmation page if no errors', () => {
       return request(app)
         .post('/manually-confirm-arrival/add-personal-details')
         .send({
@@ -87,7 +87,7 @@ describe('add personal records', () => {
           sex: 'M',
         })
         .expect(302)
-        .expect('Location', '/prisoners/unexpected-arrival/sex')
+        .expect('Location', '/prisoners/unexpected-arrival/start-confirmation')
         .expect(res => {
           expect(flashProvider).not.toHaveBeenCalled()
           expectSettingCookie(res, State.newArrival).toStrictEqual({

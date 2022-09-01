@@ -134,12 +134,12 @@ describe('possible records found', () => {
         })
     })
 
-    it('should redirect to /sex page if no errors', () => {
+    it('should redirect to /start-confirmation page if no errors', () => {
       return request(app)
         .post('/manually-confirm-arrival/search-for-existing-record/possible-records-found')
         .send({ prisonNumber: potentialMatches[0].prisonNumber })
         .expect(302)
-        .expect('Location', '/prisoners/unexpected-arrivals/sex')
+        .expect('Location', '/prisoners/unexpected-arrivals/start-confirmation')
         .expect(res => {
           expect(flashProvider).not.toHaveBeenCalled()
           expect(expectedArrivalsService.getPrisonerDetails).toHaveBeenCalledWith('A1234BC')

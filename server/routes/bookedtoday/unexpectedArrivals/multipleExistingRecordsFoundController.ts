@@ -37,7 +37,7 @@ export default class MultipleExistingRecordsFoundController {
 
       State.newArrival.set(res, { ...selectedRecord, expected: false })
 
-      return res.redirect(`/prisoners/unexpected-arrivals/sex`)
+      return res.redirect(`/prisoners/unexpected-arrivals/start-confirmation`)
     }
   }
 }

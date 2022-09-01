@@ -76,12 +76,12 @@ describe('possible records found', () => {
         })
     })
 
-    it('should redirect to /sex page if no errors', () => {
+    it('should redirect to /start-confirmation page if no errors', () => {
       return request(app)
         .post('/prisoners/12345-67890/possible-records-found')
         .send({ prisonNumber: arrival.potentialMatches[0] })
         .expect(302)
-        .expect('Location', '/prisoners/12345-67890/sex')
+        .expect('Location', '/prisoners/12345-67890/start-confirmation')
         .expect(req => {
           expect(flashProvider).not.toHaveBeenCalled()
           expect(expectedArrivalsService.getPrisonerDetails).toHaveBeenCalledWith(arrival.potentialMatches[0])
