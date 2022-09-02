@@ -40,7 +40,7 @@ export default class MultipleExistingRecordsFoundController {
 
       State.newArrival.set(res, { ...selectedRecord, expected: true })
 
-      return res.redirect(`/prisoners/${id}/sex`)
+      return res.redirect(`/prisoners/${id}/start-confirmation`)
     }
   }
 }

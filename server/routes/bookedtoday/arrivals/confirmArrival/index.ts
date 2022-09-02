@@ -16,12 +16,13 @@ import Role from '../../../../authentication/role'
 import redirectIfDisabledMiddleware from '../../../../middleware/redirectIfDisabledMiddleware'
 import config from '../../../../config'
 import Routes from '../../../../utils/routeBuilder'
+import StartConfirmationController from './startConfirmationController'
 
 export default function routes(services: Services): Router {
   const checkNewArrivalPresent = State.newArrival.ensurePresent('/page-not-found')
 
+  const startConfirmationController = new StartConfirmationController()
   const sexController = new SexController()
-
   const imprisonmentStatusesController = new ImprisonmentStatusesController(services.imprisonmentStatusesService)
 
   const movementReasonsController = new MovementReasonsController(services.imprisonmentStatusesService)
@@ -34,6 +35,7 @@ export default function routes(services: Services): Router {
   const confirmAddedToRollController = new ConfirmAddedToRollController(services.prisonService)
 
   return Routes.forRole(Role.PRISON_RECEPTION)
+    .get('/prisoners/:id/start-confirmation', startConfirmationController.redirect())
     .get('/prisoners/:id/sex', sexController.view())
     .post('/prisoners/:id/sex', validationMiddleware(sexValidation), sexController.assignSex())
     .get('/prisoners/:id/imprisonment-status', imprisonmentStatusesController.view())

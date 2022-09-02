@@ -30,7 +30,7 @@ export default class AddPersonalDetailsController {
         expected: false,
       })
 
-      return res.redirect('/prisoners/unexpected-arrival/sex')
+      return res.redirect('/prisoners/unexpected-arrival/start-confirmation')
     }
   }
 }
