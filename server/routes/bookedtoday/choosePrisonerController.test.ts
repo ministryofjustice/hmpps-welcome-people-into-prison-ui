@@ -73,15 +73,7 @@ describe('GET /confirm-arrival/choose-prisoner', () => {
 })
 
 describe('GET /confirm-arrival/choose-prisoner/:id', () => {
-  const arrival = ({
-    isCurrentPrisoner,
-    fromLocationType,
-    matchType,
-  }: {
-    isCurrentPrisoner: boolean
-    fromLocationType: LocationType
-    matchType: MatchType
-  }) =>
+  const arrival = ({ matchType }: { matchType: MatchType }) =>
     ({
       id: '1111-2222-3333-4444',
       firstName: 'Harry',
@@ -92,8 +84,8 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
       date: '2021-09-01',
       fromLocation: 'Reading',
       moveType: 'PRISON_REMAND',
-      isCurrentPrisoner,
-      fromLocationType,
+      isCurrentPrisoner: true,
+      fromLocationType: LocationType.COURT,
       bodyScanStatus: BodyScanStatus.CLOSE_TO_LIMIT,
       matchType,
     } as WithMatchType<Arrival>)
@@ -102,8 +94,6 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
     it('should clear cookie', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
-          fromLocationType: LocationType.COURT,
-          isCurrentPrisoner: true,
           matchType: MatchType.SINGLE_MATCH,
         })
       )
@@ -117,9 +107,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
     it('should redirect to court transfer when current', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
-          fromLocationType: LocationType.COURT,
-          isCurrentPrisoner: true,
-          matchType: MatchType.SINGLE_MATCH,
+          matchType: MatchType.COURT_RETURN,
         })
       )
       return request(app)
@@ -131,8 +119,6 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
     it('should redirect to search when not current and no identifiers', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
-          fromLocationType: LocationType.COURT,
-          isCurrentPrisoner: false,
           matchType: MatchType.INSUFFICIENT_INFO,
         })
       )
@@ -145,8 +131,6 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
     it('should redirect to single match', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
-          fromLocationType: LocationType.COURT,
-          isCurrentPrisoner: false,
           matchType: MatchType.SINGLE_MATCH,
         })
       )
@@ -159,8 +143,6 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
     it('should redirect to multiple matches', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
-          fromLocationType: LocationType.COURT,
-          isCurrentPrisoner: false,
           matchType: MatchType.MULTIPLE_POTENTIAL_MATCHES,
         })
       )
@@ -173,52 +155,6 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
     it('should redirect to no match', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
-          fromLocationType: LocationType.COURT,
-          isCurrentPrisoner: false,
-          matchType: MatchType.NO_MATCH,
-        })
-      )
-      return request(app)
-        .get('/confirm-arrival/choose-prisoner/aaa-111-222')
-        .expect('Content-Type', /text\/plain/)
-        .expect('Location', '/prisoners/1111-2222-3333-4444/no-record-found')
-    })
-  })
-
-  describe('from custody suite', () => {
-    it('active prisoners should redirect to feature not available', () => {
-      expectedArrivalsService.getArrival.mockResolvedValue(
-        arrival({
-          fromLocationType: LocationType.CUSTODY_SUITE,
-          isCurrentPrisoner: true,
-          matchType: MatchType.SINGLE_MATCH,
-        })
-      )
-      return request(app)
-        .get('/confirm-arrival/choose-prisoner/aaa-111-222')
-        .expect('Content-Type', /text\/plain/)
-        .expect('Location', '/feature-not-available')
-    })
-
-    it('should redirect to search when not current and no identifiers', () => {
-      expectedArrivalsService.getArrival.mockResolvedValue(
-        arrival({
-          fromLocationType: LocationType.CUSTODY_SUITE,
-          isCurrentPrisoner: false,
-          matchType: MatchType.INSUFFICIENT_INFO,
-        })
-      )
-      return request(app)
-        .get('/confirm-arrival/choose-prisoner/aaa-111-222')
-        .expect('Content-Type', /text\/plain/)
-        .expect('Location', '/prisoners/1111-2222-3333-4444/search-for-existing-record/new')
-    })
-
-    it('should redirect to no match', () => {
-      expectedArrivalsService.getArrival.mockResolvedValue(
-        arrival({
-          fromLocationType: LocationType.CUSTODY_SUITE,
-          isCurrentPrisoner: false,
           matchType: MatchType.NO_MATCH,
         })
       )
@@ -232,8 +168,6 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
   it('should call service method correctly', () => {
     expectedArrivalsService.getArrival.mockResolvedValue(
       arrival({
-        fromLocationType: LocationType.COURT,
-        isCurrentPrisoner: true,
         matchType: MatchType.SINGLE_MATCH,
       })
     )

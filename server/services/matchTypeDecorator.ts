@@ -1,13 +1,20 @@
-import { PotentialMatch } from 'welcome'
+import { LocationType, PotentialMatch } from 'welcome'
 
 export const enum MatchType {
+  COURT_RETURN = 'COURT_RETURN',
   INSUFFICIENT_INFO = 'INSUFFICIENT_INFO',
   SINGLE_MATCH = 'SINGLE_MATCH',
   NO_MATCH = 'NO_MATCH',
   MULTIPLE_POTENTIAL_MATCHES = 'MULTIPLE_POTENTIAL_MATCHES',
 }
 
-export type ArrivalInfo = { prisonNumber?: string; pncNumber?: string; potentialMatches?: PotentialMatch[] }
+export type ArrivalInfo = {
+  prisonNumber?: string
+  pncNumber?: string
+  potentialMatches?: PotentialMatch[]
+  fromLocationType: LocationType
+  isCurrentPrisoner: boolean
+}
 
 export type WithMatchType<T extends ArrivalInfo> = T & { matchType: MatchType }
 
@@ -28,9 +35,12 @@ export class MatchTypeDecorator {
       case 0:
         return MatchType.NO_MATCH
       case 1:
-        return MatchType.SINGLE_MATCH
+        return this.isCourtReturn(item) ? MatchType.COURT_RETURN : MatchType.SINGLE_MATCH
       default:
         return MatchType.MULTIPLE_POTENTIAL_MATCHES
     }
   }
+
+  private isCourtReturn = <T extends ArrivalInfo>(item: T): boolean =>
+    item.isCurrentPrisoner && item.fromLocationType === LocationType.COURT
 }

@@ -1,20 +1,41 @@
-import { PotentialMatch } from 'welcome'
+import { LocationType, PotentialMatch } from 'welcome'
 import { ArrivalInfo, MatchType, MatchTypeDecorator } from './matchTypeDecorator'
 
 describe('MatchTypeDecorator', () => {
   const service = new MatchTypeDecorator()
 
   const potentialMatch = {} as PotentialMatch
-  const arrival = ({ prisonNumber, pncNumber, potentialMatches }: ArrivalInfo) => ({
+  const arrival = ({
     prisonNumber,
     pncNumber,
     potentialMatches,
+    fromLocationType = LocationType.OTHER,
+    isCurrentPrisoner = false,
+  }: Partial<ArrivalInfo>): ArrivalInfo => ({
+    prisonNumber,
+    pncNumber,
+    potentialMatches,
+    fromLocationType,
+    isCurrentPrisoner,
   })
 
   describe('getMatchType', () => {
     test('insufficient info', async () => {
       const result = service.getMatchType(arrival({}))
       expect(result).toBe(MatchType.INSUFFICIENT_INFO)
+    })
+
+    test('court return match', async () => {
+      const result = service.getMatchType(
+        arrival({
+          prisonNumber: 'A1234AA',
+          pncNumber: '01/12345A',
+          potentialMatches: [potentialMatch],
+          isCurrentPrisoner: true,
+          fromLocationType: LocationType.COURT,
+        })
+      )
+      expect(result).toBe(MatchType.COURT_RETURN)
     })
 
     test('no match - undefined matches', async () => {
