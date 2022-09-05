@@ -22,7 +22,8 @@ describe('/start-confirmation', () => {
       return request(app).get('/prisoners/12345-67890/start-confirmation').expect(302).expect('Location', '/autherror')
     })
 
-    it('should redirect to the sex page', () => {
+    it('should redirect to authentication error page for non reception users', () => {
+      app = appWithAllRoutes({ roles: [Role.PRISON_RECEPTION] })
       return request(app)
         .get('/prisoners/12345-67890/start-confirmation')
         .expect(302)

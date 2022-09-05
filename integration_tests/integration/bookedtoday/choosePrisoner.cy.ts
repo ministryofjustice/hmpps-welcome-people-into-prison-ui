@@ -1,5 +1,4 @@
 import ChoosePrisonerPage from '../../pages/bookedtoday/choosePrisoner'
-import FeatureNotAvailablePage from '../../pages/featureNotAvailable'
 
 import SingleMatchingRecordFoundPage from '../../pages/bookedtoday/arrivals/autoMatchingRecords/singleMatchingRecordFound'
 import CheckCourtReturnPage from '../../pages/bookedtoday/arrivals/courtreturns/checkCourtReturn'
@@ -116,7 +115,11 @@ context('Choose Prisoner', () => {
   })
 
   it('Current bookings from court are processed as court returns', () => {
-    const currentCourt = expectedArrivals.arrival({ fromLocationType: 'COURT', isCurrentPrisoner: true })
+    const currentCourt = expectedArrivals.arrival({
+      fromLocationType: 'COURT',
+      isCurrentPrisoner: true,
+      potentialMatches: [expectedArrivals.potentialMatch],
+    })
 
     cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [currentCourt] })
     cy.task('stubExpectedArrival', expectedArrivals.arrival(currentCourt))
@@ -164,18 +167,6 @@ context('Choose Prisoner', () => {
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
 
     Page.verifyOnPage(SingleMatchingRecordFoundPage)
-  })
-
-  it('Current bookings from police custody suite are not processable', () => {
-    const arrival = expectedArrivals.arrival({ fromLocationType: 'CUSTODY_SUITE', isCurrentPrisoner: true })
-    cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [arrival] })
-    cy.task('stubExpectedArrival', arrival)
-    cy.signIn()
-
-    const choosePrisonerPage = ChoosePrisonerPage.goTo()
-    choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(1).confirm().click()
-
-    Page.verifyOnPage(FeatureNotAvailablePage)
   })
 
   it('new bookings from police custody suite with no match', () => {
