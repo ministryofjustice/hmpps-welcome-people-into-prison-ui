@@ -1,16 +1,16 @@
-import {
-  type Arrival,
-  type RecentArrival,
-  type ArrivalResponse,
-  type ImprisonmentStatus,
-  type PotentialMatch,
-  type PotentialMatchCriteria,
-  type Prison,
-  type TemporaryAbsence,
-  type Transfer,
-  type UserCaseLoad,
-  type PrisonerDetails,
-  type PaginatedResponse,
+import type {
+  Arrival,
+  RecentArrival,
+  ArrivalResponse,
+  ImprisonmentStatus,
+  PotentialMatch,
+  PotentialMatchCriteria,
+  Prison,
+  TemporaryAbsence,
+  Transfer,
+  UserCaseLoad,
+  PrisonerDetails,
+  PaginatedResponse,
 } from 'welcome'
 import type { BodyScanStatus } from 'body-scan'
 
@@ -115,6 +115,7 @@ export const createPrisonerDetails = ({
   prisonNumber = 'A1234AB',
   pncNumber = '01/98644M',
   sex = 'MALE',
+  arrivalType = 'NEW_BOOKING',
 }: Partial<PrisonerDetails> = {}): PrisonerDetails => ({
   firstName,
   lastName,
@@ -122,6 +123,8 @@ export const createPrisonerDetails = ({
   prisonNumber,
   pncNumber,
   sex,
+  arrivalType,
+  arrivalTypeDescription: 'description',
 })
 
 export const createTemporaryAbsence = ({
@@ -207,7 +210,8 @@ export const createPotentialMatch = ({
   prisonNumber = 'A5534HA',
   pncNumber = '11/836373L',
   croNumber = '952184/22A',
-} = {}): PotentialMatch => ({
+  arrivalType = 'NEW_BOOKING',
+}: Partial<PotentialMatch> = {}): PrisonerDetails => ({
   firstName,
   lastName,
   dateOfBirth,
@@ -215,6 +219,8 @@ export const createPotentialMatch = ({
   pncNumber,
   croNumber,
   sex: 'MALE',
+  arrivalType,
+  arrivalTypeDescription: 'description',
 })
 
 export const createNewArrival = ({

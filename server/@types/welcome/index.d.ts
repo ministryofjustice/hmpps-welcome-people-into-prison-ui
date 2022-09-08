@@ -28,6 +28,15 @@ declare module 'welcome' {
 
   export type SexKeys = 'FEMALE' | 'MALE' | 'TRANS'
 
+  export type ArrivalType =
+    | 'NEW_BOOKING'
+    | 'TRANSFER'
+    | 'FROM_TEMPORARY_ABSENCE'
+    | 'FROM_COURT'
+    // The following shouldn't really happen
+    | 'CURRENTLY_IN'
+    | 'UNKNOWN'
+
   export interface PaginatedResponse<T> {
     content: T[]
     pageable: {
@@ -141,6 +150,8 @@ declare module 'welcome' {
       pncNumber?: string
       croNumber?: string
       sex: SexKeys
+      arrivalType: ArrivalType
+      arrivalTypeDescription: string
     }
     PrisonerDetails: {
       firstName: string
@@ -150,6 +161,8 @@ declare module 'welcome' {
       pncNumber?: string
       croNumber?: string
       sex: SexKeys
+      arrivalType: ArrivalType
+      arrivalTypeDescription: string
     }
   }
 }

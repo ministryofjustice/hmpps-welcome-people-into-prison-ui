@@ -21,7 +21,7 @@ import StartConfirmationController from './startConfirmationController'
 export default function routes(services: Services): Router {
   const checkNewArrivalPresent = State.newArrival.ensurePresent('/page-not-found')
 
-  const startConfirmationController = new StartConfirmationController()
+  const startConfirmationController = new StartConfirmationController(services.expectedArrivalsService)
   const sexController = new SexController()
   const imprisonmentStatusesController = new ImprisonmentStatusesController(services.imprisonmentStatusesService)
 
