@@ -39,7 +39,7 @@ describe('/sex', () => {
           .expect('Content-Type', 'text/html; charset=utf-8')
           .expect(res => {
             const $ = cheerio.load(res.text)
-            expect($('h1').text()).toContain('What is their sex?')
+            expect($('h1').text()).toContain(`What is Jim Smith's sex?`)
           })
       }
     )
