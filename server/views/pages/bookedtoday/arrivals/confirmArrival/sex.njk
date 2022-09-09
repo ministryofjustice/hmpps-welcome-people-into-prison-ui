@@ -16,7 +16,7 @@
 
             <span class="govuk-caption-xl"
                     data-qa="prisoner-name">Confirm arrival of {{ data.firstName }} {{ data.lastName }}</span>
-            <h1 class="govuk-fieldset__legend--l govuk-!-margin-0">{{ pageTitle }}</h1>
+            <h1 class="govuk-fieldset__legend--l govuk-!-margin-0">What is {{ data.firstName }} {{ data.lastName }}'s sex?</h1>
 
             {% if data.sex === 'TRANS' %}
                 {{ govukInsetText({

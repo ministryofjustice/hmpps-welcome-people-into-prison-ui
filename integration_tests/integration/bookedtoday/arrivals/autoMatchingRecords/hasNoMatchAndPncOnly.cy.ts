@@ -7,6 +7,7 @@ import ReviewDetailsPage from '../../../../pages/bookedtoday/arrivals/reviewDeta
 import ChangeNamePage from '../../../../pages/bookedtoday/arrivals/changeName'
 import ChangeDateOfBirthPage from '../../../../pages/bookedtoday/arrivals/changeDateOfBirth'
 import SearchForExistingPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/search/searchForExisting'
+import SexPage from '../../../../pages/bookedtoday/arrivals/confirmArrival/sexPage'
 import ImprisonmentStatusPage from '../../../../pages/bookedtoday/arrivals/confirmArrival/imprisonmentStatus'
 import CheckAnswersForCreateNewRecordPage from '../../../../pages/bookedtoday/arrivals/confirmArrival/checkAnswersForCreateNewRecord'
 import ConfirmAddedToRollPage from '../../../../pages/bookedtoday/arrivals/confirmArrival/confirmAddedToRoll'
@@ -109,6 +110,28 @@ context('No match found', () => {
       const { value } = reviewDetailsPage.dob
       value().contains('20 September 1982')
     }
+  })
+
+  it('Redirect to sex page if arrival has no existing sex', () => {
+    const arrivalWithNoSex = expectedArrivals.arrival({
+      prisonNumber: null,
+      fromLocationType: 'COURT',
+      isCurrentPrisoner: false,
+      gender: null,
+      potentialMatches: [],
+    })
+    cy.task('stubExpectedArrival', arrivalWithNoSex)
+
+    const noMatchingRecordsFoundPage = Page.verifyOnPage(NoMatchingRecordsFoundPage)
+    noMatchingRecordsFoundPage.continue().click()
+
+    Page.verifyOnPage(ReviewDetailsPage).continue().click()
+
+    const sexPage = Page.verifyOnPage(SexPage)
+    sexPage.sexRadioButtons('M').click()
+    sexPage.continue().click()
+
+    Page.verifyOnPage(ImprisonmentStatusPage)
   })
 
   it('Can process arrival', () => {
