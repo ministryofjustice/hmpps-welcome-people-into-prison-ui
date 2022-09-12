@@ -13,10 +13,10 @@ let app: Express
 const temporaryAbsencesService = createMockTemporaryAbsencesService()
 
 const temporaryAbsences: WithBodyScanInfo<TemporaryAbsence>[] = [
-  withBodyScanInfo(createTemporaryAbsence()),
-  withBodyScanInfo(createTemporaryAbsence()),
-  withBodyScanInfo(createTemporaryAbsence()),
-  withBodyScanInfo(createTemporaryAbsence()),
+  withBodyScanInfo(createTemporaryAbsence({})),
+  withBodyScanInfo(createTemporaryAbsence({})),
+  withBodyScanInfo(createTemporaryAbsence({})),
+  withBodyScanInfo(createTemporaryAbsence({})),
 ]
 
 beforeEach(() => {

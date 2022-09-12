@@ -12,26 +12,22 @@ declare module 'welcome' {
   export type PotentialMatch = schemas['PotentialMatch']
   export type PrisonerDetails = schemas['PrisonerDetails']
 
-  export const enum LocationType {
-    COURT = 'COURT',
-    CUSTODY_SUITE = 'CUSTODY_SUITE',
-    PRISON = 'PRISON',
-    OTHER = 'OTHER',
-  }
+  export type LocationType = 'COURT' | 'CUSTODY_SUITE' | 'PRISON' | 'OTHER'
 
-  export const enum Sex {
-    FEMALE = 'F',
-    MALE = 'M',
-    NOT_KNOWN = 'NK',
-    NOT_SPECIFIED = 'NS',
-    REFUSED = 'REF',
-  }
+  export type Sex =
+    // FEMALE =
+    | 'F'
+    // MALE =
+    | 'M'
+    // NOT_KNOWN =
+    | 'NK'
+    // NOT_SPECIFIED =
+    | 'NS'
+    // REFUSED =
+    | 'REF'
 
-  export const enum SexKeys {
-    FEMALE = 'FEMALE',
-    MALE = 'MALE',
-    TRANS = 'TRANS',
-  }
+  export type SexKeys = 'FEMALE' | 'MALE' | 'TRANS'
+
   export interface PaginatedResponse<T> {
     content: T[]
     pageable: {

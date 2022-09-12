@@ -1,6 +1,5 @@
 import moment from 'moment'
-import { type Arrival, LocationType } from 'welcome'
-import { BodyScanStatus } from 'body-scan'
+import { type Arrival } from 'welcome'
 import ExpectedArrivalsService from './expectedArrivalsService'
 import { NewArrival } from '../routes/bookedtoday/arrivals/state'
 import { raiseAnalyticsEvent } from './raiseAnalyticsEvent'
@@ -49,7 +48,7 @@ describe('Expected arrivals service', () => {
     )
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
     bodyScanInfoDecorator.decorate.mockImplementation(as =>
-      Promise.resolve(as.map(a => ({ ...a, bodyScanStatus: BodyScanStatus.OK_TO_SCAN })))
+      Promise.resolve(as.map(a => ({ ...a, bodyScanStatus: 'OK_TO_SCAN' })))
     )
     matchTypeDecorator.decorate.mockImplementation(as => as.map(a => ({ ...a, matchType: MatchType.SINGLE_MATCH })))
     matchTypeDecorator.decorateSingle.mockImplementation(a => ({ ...a, matchType: MatchType.SINGLE_MATCH }))
@@ -59,17 +58,17 @@ describe('Expected arrivals service', () => {
     const transferArrival: Arrival = {
       ...createTransfer(),
       isCurrentPrisoner: true,
-      fromLocationType: LocationType.PRISON,
+      fromLocationType: 'PRISON',
     }
 
     beforeEach(() => {
       const arrivals = [
-        createArrival({ fromLocationType: LocationType.COURT }),
-        createArrival({ fromLocationType: LocationType.CUSTODY_SUITE }),
-        createArrival({ fromLocationType: LocationType.CUSTODY_SUITE }),
-        createArrival({ fromLocationType: LocationType.CUSTODY_SUITE }),
-        createArrival({ fromLocationType: LocationType.COURT }),
-        createArrival({ fromLocationType: LocationType.OTHER }),
+        createArrival({ fromLocationType: 'COURT' }),
+        createArrival({ fromLocationType: 'CUSTODY_SUITE' }),
+        createArrival({ fromLocationType: 'CUSTODY_SUITE' }),
+        createArrival({ fromLocationType: 'CUSTODY_SUITE' }),
+        createArrival({ fromLocationType: 'COURT' }),
+        createArrival({ fromLocationType: 'OTHER' }),
       ]
 
       welcomeClient.getTransfers.mockResolvedValue([transferArrival])
@@ -84,20 +83,17 @@ describe('Expected arrivals service', () => {
 
       expect(result).toStrictEqual(
         new Map([
+          ['COURT', [arrival({ fromLocationType: 'COURT' }), arrival({ fromLocationType: 'COURT' })]],
+          ['PRISON', [withMatchType(withBodyScanInfo(transferArrival))]],
           [
-            LocationType.COURT,
-            [arrival({ fromLocationType: LocationType.COURT }), arrival({ fromLocationType: LocationType.COURT })],
-          ],
-          [LocationType.PRISON, [withMatchType(withBodyScanInfo(transferArrival))]],
-          [
-            LocationType.CUSTODY_SUITE,
+            'CUSTODY_SUITE',
             [
-              arrival({ fromLocationType: LocationType.CUSTODY_SUITE }),
-              arrival({ fromLocationType: LocationType.CUSTODY_SUITE }),
-              arrival({ fromLocationType: LocationType.CUSTODY_SUITE }),
+              arrival({ fromLocationType: 'CUSTODY_SUITE' }),
+              arrival({ fromLocationType: 'CUSTODY_SUITE' }),
+              arrival({ fromLocationType: 'CUSTODY_SUITE' }),
             ],
           ],
-          [LocationType.OTHER, [arrival({ fromLocationType: LocationType.OTHER })]],
+          ['OTHER', [arrival({ fromLocationType: 'OTHER' })]],
         ])
       )
 

@@ -1,4 +1,4 @@
-import { LocationType, PotentialMatch } from 'welcome'
+import type { PotentialMatch } from 'welcome'
 import { ArrivalInfo, MatchType, MatchTypeDecorator } from './matchTypeDecorator'
 
 describe('MatchTypeDecorator', () => {
@@ -9,7 +9,7 @@ describe('MatchTypeDecorator', () => {
     prisonNumber,
     pncNumber,
     potentialMatches,
-    fromLocationType = LocationType.OTHER,
+    fromLocationType = 'OTHER',
     isCurrentPrisoner = false,
   }: Partial<ArrivalInfo>): ArrivalInfo => ({
     prisonNumber,
@@ -32,7 +32,7 @@ describe('MatchTypeDecorator', () => {
           pncNumber: '01/12345A',
           potentialMatches: [potentialMatch],
           isCurrentPrisoner: true,
-          fromLocationType: LocationType.COURT,
+          fromLocationType: 'COURT',
         })
       )
       expect(result).toBe(MatchType.COURT_RETURN)

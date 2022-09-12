@@ -1,5 +1,5 @@
 import nock from 'nock'
-import { BodyScan, BodyScanInfo, BodyScanStatus, PrisonerDetails } from 'body-scan'
+import { BodyScan, BodyScanInfo, PrisonerDetails } from 'body-scan'
 import BodyScanClient from './bodyScanClient'
 import config from '../../config'
 
@@ -60,7 +60,7 @@ describe('bodyScanClient', () => {
   describe('getSingleBodyScanInfo', () => {
     const bodyScanInfo: BodyScanInfo = {
       prisonNumber: 'A1234AA',
-      bodyScanStatus: BodyScanStatus.CLOSE_TO_LIMIT,
+      bodyScanStatus: 'CLOSE_TO_LIMIT',
       numberOfBodyScans: 110,
       numberOfBodyScansRemaining: 6,
     }

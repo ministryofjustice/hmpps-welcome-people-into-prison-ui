@@ -1,6 +1,6 @@
 import nock from 'nock'
 import moment from 'moment'
-import { Sex, Arrival, ConfirmArrivalDetail, Prison, UserCaseLoad, TemporaryAbsence } from 'welcome'
+import type { Arrival, ConfirmArrivalDetail, Prison, UserCaseLoad, TemporaryAbsence } from 'welcome'
 import WelcomeClient from './welcomeClient'
 import config from '../config'
 import {
@@ -300,7 +300,7 @@ describe('welcomeClient', () => {
       firstName: 'Jim',
       lastName: 'Smith',
       dateOfBirth: '1973-01-08',
-      sex: Sex.NOT_SPECIFIED,
+      sex: 'NS',
       prisonId: 'MDI',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',
@@ -336,7 +336,7 @@ describe('welcomeClient', () => {
       firstName: 'Jim',
       lastName: 'Smith',
       dateOfBirth: '1973-01-08',
-      sex: Sex.NOT_SPECIFIED,
+      sex: 'NS',
       prisonId: 'MDI',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',

@@ -1,11 +1,11 @@
 import {
-  type Arrival,
-  type RecentArrival,
-  type ArrivalResponse,
-  type PotentialMatchCriteria,
-  type PotentialMatch,
-  type PrisonerDetails,
-  type Sex,
+  RecentArrival,
+  Arrival,
+  ArrivalResponse,
+  PotentialMatchCriteria,
+  PotentialMatch,
+  PrisonerDetails,
+  Sex,
   LocationType,
 } from 'welcome'
 import moment, { type Moment } from 'moment'
@@ -47,7 +47,7 @@ export default class ExpectedArrivalsService {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const welcomeClient = this.welcomeClientFactory(token)
     const transfers = await welcomeClient.getTransfers(agencyId)
-    return transfers.map(transfer => ({ ...transfer, fromLocationType: LocationType.PRISON })).sort(compareByFullName)
+    return transfers.map(transfer => ({ ...transfer, fromLocationType: 'PRISON' as const })).sort(compareByFullName)
   }
 
   private isArrivalArrivedOnDay = (day: Moment) => (recentArrival: WithBodyScanInfo<RecentArrival>) => {
