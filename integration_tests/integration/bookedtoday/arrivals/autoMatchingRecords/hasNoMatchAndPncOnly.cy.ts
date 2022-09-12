@@ -145,14 +145,14 @@ context('No match found', () => {
     imprisonmentStatusPage.continue().click()
 
     const checkAnswersPage = Page.verifyOnPage(CheckAnswersForCreateNewRecordPage)
-    checkAnswersPage.name().should('contain.text', 'Bob Smith')
-    checkAnswersPage.pncNumber().should('contain.text', '01/2345A')
-    checkAnswersPage.dob().should('contain.text', '1 January 1970')
-    checkAnswersPage.sex().should('contain.text', 'Male')
-    checkAnswersPage.reason().should('contain.text', 'On remand')
-    checkAnswersPage
-      .submissionParagraphTitle()
-      .should('contain.text', 'Create prisoner record and add to establishment roll')
+    checkAnswersPage.checkDetails({
+      name: 'Bob Smith',
+      dob: '1 January 1970',
+      sex: 'Male',
+      reason: 'On remand',
+      pncNumber: '01/2345A',
+      submissionParagraphTitle: 'Create prisoner record and add to establishment roll',
+    })
 
     cy.task('stubCreateOffenderRecordAndBooking', { arrivalId: arrival.id })
     checkAnswersPage.addToRoll().click()

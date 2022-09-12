@@ -1,5 +1,4 @@
 import type { Express } from 'express'
-import { ArrivalType } from 'welcome'
 import request from 'supertest'
 import { appWithAllRoutes, stubCookie } from '../../../__testutils/appSetup'
 import Role from '../../../../authentication/role'
@@ -40,7 +39,7 @@ describe('/start-confirmation', () => {
 
       it('should redirect to sex pages when NEW_BOOKING', () => {
         expectedArrivalsService.getPrisonerDetails.mockResolvedValue(
-          createPrisonerDetails({ arrivalType: ArrivalType.NEW_BOOKING })
+          createPrisonerDetails({ arrivalType: 'NEW_BOOKING' })
         )
         return request(app)
           .get('/prisoners/12345-67890/start-confirmation')
@@ -50,7 +49,7 @@ describe('/start-confirmation', () => {
 
       it('should redirect to court return flow when FROM_COURT', () => {
         expectedArrivalsService.getPrisonerDetails.mockResolvedValue(
-          createPrisonerDetails({ arrivalType: ArrivalType.FROM_COURT })
+          createPrisonerDetails({ arrivalType: 'FROM_COURT' })
         )
         return request(app)
           .get('/prisoners/12345-67890/start-confirmation')
@@ -60,7 +59,7 @@ describe('/start-confirmation', () => {
 
       it('should redirect to temporary absence flow when FROM_TEMPORARY_ABSENCE', () => {
         expectedArrivalsService.getPrisonerDetails.mockResolvedValue(
-          createPrisonerDetails({ arrivalType: ArrivalType.FROM_TEMPORARY_ABSENCE })
+          createPrisonerDetails({ arrivalType: 'FROM_TEMPORARY_ABSENCE' })
         )
         return request(app)
           .get('/prisoners/12345-67890/start-confirmation')
@@ -69,9 +68,7 @@ describe('/start-confirmation', () => {
       })
 
       it('should redirect to transfer flow when TRANSFER', () => {
-        expectedArrivalsService.getPrisonerDetails.mockResolvedValue(
-          createPrisonerDetails({ arrivalType: ArrivalType.TRANSFER })
-        )
+        expectedArrivalsService.getPrisonerDetails.mockResolvedValue(createPrisonerDetails({ arrivalType: 'TRANSFER' }))
         return request(app)
           .get('/prisoners/12345-67890/start-confirmation')
           .expect(302)
@@ -80,7 +77,7 @@ describe('/start-confirmation', () => {
 
       it('should redirect to feature not available when prisoner is currently in', () => {
         expectedArrivalsService.getPrisonerDetails.mockResolvedValue(
-          createPrisonerDetails({ arrivalType: ArrivalType.CURRENTLY_IN })
+          createPrisonerDetails({ arrivalType: 'CURRENTLY_IN' })
         )
         return request(app)
           .get('/prisoners/12345-67890/start-confirmation')
@@ -89,9 +86,7 @@ describe('/start-confirmation', () => {
       })
 
       it('should redirect to feature not available when prisoner is of unknown arrival type', () => {
-        expectedArrivalsService.getPrisonerDetails.mockResolvedValue(
-          createPrisonerDetails({ arrivalType: ArrivalType.UNKNOWN })
-        )
+        expectedArrivalsService.getPrisonerDetails.mockResolvedValue(createPrisonerDetails({ arrivalType: 'UNKNOWN' }))
         return request(app)
           .get('/prisoners/12345-67890/start-confirmation')
           .expect(302)

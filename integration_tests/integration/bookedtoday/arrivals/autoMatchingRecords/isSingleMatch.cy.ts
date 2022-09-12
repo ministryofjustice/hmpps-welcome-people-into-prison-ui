@@ -29,9 +29,10 @@ context('Is Single Match', () => {
     cy.task('stubPrison', 'MDI')
     cy.task('stubImprisonmentStatus')
     cy.task('stubRetrieveMultipleBodyScans', [])
+    cy.task('stubPrisonerDetails', { ...prisonRecordDetails, arrivalType: 'NEW_BOOKING' })
   })
 
-  it('Can see PER and matched prison record', () => {
+  it('Can confirm single record match', () => {
     cy.task('stubExpectedArrival', expectedArrival)
     cy.signIn()
 
@@ -39,11 +40,12 @@ context('Is Single Match', () => {
       expectedArrival.id,
       SingleMatchingRecordFoundPage
     )
-
+    singleMatchingRecordFoundPage.backNavigation().should('exist')
     singleMatchingRecordFoundPage.prisonerSplitView.contains(expectedArrival, prisonRecordDetails)
     singleMatchingRecordFoundPage.continue().click()
 
     const imprisonmentStatusPage = Page.verifyOnPage(ImprisonmentStatusPage)
+    imprisonmentStatusPage.backNavigation().should('exist')
     imprisonmentStatusPage.continue().click()
     imprisonmentStatusPage.hasError('Select why this person is in prison')
     imprisonmentStatusPage.imprisonmentStatusRadioButton('determinate-sentence').click()
@@ -56,20 +58,19 @@ context('Is Single Match', () => {
     movementReasonPage.continue().click()
 
     const checkAnswersPage = Page.verifyOnPage(CheckAnswersPage)
-
-    checkAnswersPage.name().should('contain.text', 'Sam Smith')
-    checkAnswersPage.dob().should('contain.text', '1 February 1970')
-    checkAnswersPage.prisonNumber().should('contain.text', 'A1234BC')
-    checkAnswersPage.pncNumber().should('contain.text', '01/4567A')
-    checkAnswersPage.sex().should('contain.text', 'Male')
-    checkAnswersPage
-      .reason()
-      .should('contain.text', 'Sentenced - fixed length of time - Extended sentence for public protection')
+    checkAnswersPage.checkDetails({
+      name: 'Sam Smith',
+      dob: '1 February 1970',
+      prisonNumber: 'A1234BC',
+      pncNumber: '01/4567A',
+      sex: 'Male',
+      reason: 'Sentenced - fixed length of time - Extended sentence for public protection',
+    })
     cy.task('stubCreateOffenderRecordAndBooking', { arrivalId: expectedArrival.id })
     checkAnswersPage.addToRoll().click()
 
     const confirmAddedToRollPage = Page.verifyOnPage(ConfirmAddedToRollPage)
-    confirmAddedToRollPage.details({
+    confirmAddedToRollPage.checkDetails({
       name: 'Sam Smith',
       prison: 'Moorland (HMP & YOI)',
       prisonNumber: 'A1234BC',
@@ -111,7 +112,7 @@ context('Is Single Match', () => {
     searchPage.name.value().should('contain.text', 'Bob Smith')
   })
 
-  it('Back link navigation is not displayed on confirmation page', () => {
+  it('Back link navigation', () => {
     cy.task('stubExpectedArrival', expectedArrival)
     cy.signIn()
 
@@ -119,16 +120,14 @@ context('Is Single Match', () => {
       expectedArrival.id,
       SingleMatchingRecordFoundPage
     )
-    singleMatchingRecordFoundPage.backNavigation().should('exist')
+
     singleMatchingRecordFoundPage.continue().click()
 
     const imprisonmentStatusPage = Page.verifyOnPage(ImprisonmentStatusPage)
-    imprisonmentStatusPage.backNavigation().should('exist')
     imprisonmentStatusPage.imprisonmentStatusRadioButton('on-remand').click()
     imprisonmentStatusPage.continue().click()
 
     const checkAnswersPage = Page.verifyOnPage(CheckAnswersPage)
-    checkAnswersPage.backNavigation().should('exist')
     checkAnswersPage.backNavigation().click()
 
     Page.verifyOnPage(ImprisonmentStatusPage)

@@ -5,7 +5,7 @@ import TemporaryAbsencePage from '../../pages/temporaryabsences/temporaryAbsence
 import ConfirmTemporaryAbsenceAddedToRollPage from '../../pages/temporaryabsences/confirmTemporaryAbsenceAddedToRoll'
 import CheckTemporaryAbsencePage from '../../pages/temporaryabsences/checkTemporaryAbsence'
 
-context('Confirm temporary absence added To roll', () => {
+context('Confirm temporary absence added', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', Role.PRISON_RECEPTION)
@@ -35,5 +35,11 @@ context('Confirm temporary absence added To roll', () => {
     confirmTemporaryAbsenceAddedToRollPage.addCaseNote(temporaryAbsences[0].prisonNumber).exists()
     confirmTemporaryAbsenceAddedToRollPage.backToNewArrivals().exists()
     confirmTemporaryAbsenceAddedToRollPage.viewEstablishmentRoll().exists()
+  })
+
+  it('Should return to prisoners-returning page when clicking Return to list link', () => {
+    const checkTemporaryAbsencePage = CheckTemporaryAbsencePage.goTo(temporaryAbsences[0].prisonNumber)
+    checkTemporaryAbsencePage.returnToTemporaryAbsencesList().click()
+    Page.verifyOnPage(TemporaryAbsencePage)
   })
 })

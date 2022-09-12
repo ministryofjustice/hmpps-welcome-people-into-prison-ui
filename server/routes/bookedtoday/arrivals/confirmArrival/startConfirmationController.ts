@@ -1,6 +1,5 @@
 import type { RequestHandler } from 'express'
 import { path } from 'static-path'
-import { ArrivalType } from 'welcome'
 import logger from '../../../../../logger'
 import { type ExpectedArrivalsService } from '../../../../services'
 import { type NewArrival, State } from '../state'
@@ -27,20 +26,20 @@ export default class StartConfirmationController {
     logger.info(`Movement type description for arrival: ${id}, is ${prisoner.arrivalTypeDescription}`)
 
     switch (prisoner.arrivalType) {
-      case ArrivalType.NEW_BOOKING:
+      case 'NEW_BOOKING':
         return urls.sex({ id })
 
-      case ArrivalType.FROM_COURT:
+      case 'FROM_COURT':
         return urls.courtReturn({ id })
 
-      case ArrivalType.FROM_TEMPORARY_ABSENCE:
+      case 'FROM_TEMPORARY_ABSENCE':
         return urls.temporaryAbsence({ prisonNumber })
 
-      case ArrivalType.TRANSFER:
+      case 'TRANSFER':
         return urls.transfers({ prisonNumber })
 
-      case ArrivalType.CURRENTLY_IN:
-      case ArrivalType.UNKNOWN:
+      case 'CURRENTLY_IN':
+      case 'UNKNOWN':
       default: {
         logger.error(
           `Unexpected arrival type for arrival: ${id}, type: ${prisoner.arrivalType}:${prisoner.arrivalTypeDescription}`

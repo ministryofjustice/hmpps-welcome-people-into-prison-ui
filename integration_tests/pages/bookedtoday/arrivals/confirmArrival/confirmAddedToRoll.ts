@@ -13,7 +13,7 @@ export default class ConfirmAddedToRollPage extends Page {
 
   confirmationParagraph = (): PageElement => cy.get(`[data-qa=confirmation-paragraph]`)
 
-  details = ({
+  checkDetails = ({
     prison,
     locationName,
     prisonNumber,

@@ -46,6 +46,7 @@ export default defineConfig({
         stubTemporaryAbsence: welcome.stubTemporaryAbsence,
         stubConfirmTemporaryAbsence: welcome.stubConfirmTemporaryAbsence,
         stubConfirmTemporaryAbsenceReturnsError: welcome.stubConfirmTemporaryAbsenceReturnsError,
+        getTemporaryAbsenceConfirmationRequest: welcome.getTemporaryAbsenceConfirmationRequest,
         stubConfirmCourtReturn: welcome.stubConfirmCourtReturn,
         stubConfirmCourtReturnsError: welcome.stubConfirmCourtReturnsError,
         stubPrison: welcome.stubPrison,

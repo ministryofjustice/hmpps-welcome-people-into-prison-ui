@@ -29,16 +29,19 @@ context('Confirm transfer added To roll', () => {
     cy.signIn()
   })
 
-  it('Can back out of confirmation', () => {
-    const checkTransferPage = CheckTransferPage.goTo(expectedArrivals.prisonTransfer.prisonNumber)
-    checkTransferPage.choosePrisoner().click()
-    Page.verifyOnPage(ChoosePrisonerPage)
-  })
-
   it('Can confirm prison transfers', () => {
-    ChoosePrisonerPage.goTo().arrivalFrom('PRISON')(1).confirm().click()
-    const checkTransferPage = Page.verifyOnPage(CheckTransferPage)
-    checkTransferPage.addToRoll().click()
+    {
+      ChoosePrisonerPage.goTo().arrivalFrom('PRISON')(1).confirm().click()
+      const checkTransferPage = Page.verifyOnPage(CheckTransferPage)
+      checkTransferPage.choosePrisoner().click()
+      Page.verifyOnPage(ChoosePrisonerPage)
+    }
+
+    {
+      ChoosePrisonerPage.goTo().arrivalFrom('PRISON')(1).confirm().click()
+      const checkTransferPage = Page.verifyOnPage(CheckTransferPage)
+      checkTransferPage.addToRoll().click()
+    }
 
     const confirmTransferAddedToRollPage = Page.verifyOnPage(ConfirmTransferAddedToRollPage)
     confirmTransferAddedToRollPage.addCaseNote(expectedArrivals.prisonTransfer.prisonNumber).exists()

@@ -17,5 +17,29 @@ export default class CheckAnswersPage extends Page {
 
   reason = (): PageElement => cy.get('.data-qa-reason')
 
+  checkDetails = ({
+    prisonNumber,
+    pncNumber,
+    name,
+    sex,
+    dob,
+    reason,
+  }: {
+    prisonNumber: string
+    pncNumber: string
+    name: string
+    dob: string
+    sex: string
+    reason: string
+  }) => {
+    this.backNavigation().should('exist')
+    this.name().should('contain.text', name)
+    this.dob().should('contain.text', dob)
+    this.prisonNumber().should('contain.text', prisonNumber)
+    this.pncNumber().should('contain.text', pncNumber)
+    this.sex().should('contain.text', sex)
+    this.reason().should('contain.text', reason)
+  }
+
   addToRoll = (): PageElement => cy.get('[data-qa=add-to-roll]')
 }

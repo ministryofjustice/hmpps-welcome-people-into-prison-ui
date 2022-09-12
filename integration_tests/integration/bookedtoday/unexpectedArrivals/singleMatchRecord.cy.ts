@@ -9,6 +9,15 @@ import ConfirmAddedToRollPage from '../../../pages/bookedtoday/arrivals/confirmA
 import ChoosePrisonerPage from '../../../pages/bookedtoday/choosePrisoner'
 
 context('Unexpected arrivals - Single matching record found', () => {
+  const arrival = {
+    firstName: 'Bob',
+    lastName: 'Smith',
+    dateOfBirth: '1972-11-21',
+    prisonNumber: 'G0014GM',
+    pncNumber: '01/1111A',
+    sex: 'MALE',
+  }
+
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', Role.PRISON_RECEPTION)
@@ -18,11 +27,13 @@ context('Unexpected arrivals - Single matching record found', () => {
     cy.task('stubImprisonmentStatus')
     cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [] })
     cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [] })
-    cy.task('stubRetrieveMultipleBodyScans', [])
+    cy.task('stubPrisonerDetails', { ...arrival, arrivalType: 'NEW_BOOKING' })
+    cy.task('stubRetrieveMultipleBodyScans', [arrival])
     cy.signIn()
     SearchForExistingPage.goTo()
   })
-  it('Display content in single match page', () => {
+
+  it('Can confirm a single match', () => {
     cy.task('stubUnexpectedArrivalsMatchedRecords', [
       {
         firstName: 'Bob',
@@ -33,6 +44,7 @@ context('Unexpected arrivals - Single matching record found', () => {
         sex: 'MALE',
       },
     ])
+
     const searchPage = Page.verifyOnPage(SearchForExistingPage)
     searchPage.otherSearchDetails().click()
     searchPage.firstName().type('James')
@@ -43,6 +55,7 @@ context('Unexpected arrivals - Single matching record found', () => {
     searchPage.otherSearchDetails().click()
     searchPage.prisonNumber().type('G0014GM')
     searchPage.search().click()
+
     const singleRecordPage = Page.verifyOnPage(SingleRecordFoundPage)
     singleRecordPage.existingRecordPrisonerName().contains('Bob Smith')
     singleRecordPage.existingRecordDob().contains('21 November 1972')
@@ -59,20 +72,19 @@ context('Unexpected arrivals - Single matching record found', () => {
     movementReasonPage.continue().click()
 
     const checkAnswersPage = Page.verifyOnPage(CheckAnswersPage)
-
-    checkAnswersPage.name().should('contain.text', 'Bob Smith')
-    checkAnswersPage.dob().should('contain.text', '21 November 1972')
-    checkAnswersPage.prisonNumber().should('contain.text', 'G0014GM')
-    checkAnswersPage.pncNumber().should('contain.text', '01/1111A')
-    checkAnswersPage.sex().should('contain.text', 'Male')
-    checkAnswersPage
-      .reason()
-      .should('contain.text', 'Sentenced - fixed length of time - Extended sentence for public protection')
+    checkAnswersPage.checkDetails({
+      name: 'Bob Smith',
+      dob: '21 November 1972',
+      sex: 'Male',
+      prisonNumber: 'G0014GM',
+      pncNumber: '01/1111A',
+      reason: 'Sentenced - fixed length of time - Extended sentence for public protection',
+    })
     cy.task('stubConfirmUnexpectedArrval', { prisonNumber: 'G0014GM', location: 'Reception' })
     checkAnswersPage.addToRoll().click()
 
     const confirmAddedToRollPage = Page.verifyOnPage(ConfirmAddedToRollPage)
-    confirmAddedToRollPage.details({
+    confirmAddedToRollPage.checkDetails({
       name: 'Bob Smith',
       prison: 'Moorland (HMP & YOI)',
       prisonNumber: 'G0014GM',
