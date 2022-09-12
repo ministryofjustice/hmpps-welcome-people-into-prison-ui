@@ -1,4 +1,4 @@
-import { Arrival, SexKeys } from 'welcome'
+import { Arrival } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
@@ -51,7 +51,7 @@ describe('GET /review-per-details', () => {
       firstName: 'James',
       lastName: 'Smyth',
       dateOfBirth: '1973-01-08',
-      gender: SexKeys.MALE,
+      gender: 'MALE',
       prisonNumber: 'A1234AB',
       pncNumber: '99/98644M',
       potentialMatches: [],
@@ -77,7 +77,7 @@ describe('GET /review-per-details', () => {
       firstName: 'James',
       lastName: 'Smyth',
       dateOfBirth: '1973-01-08',
-      gender: SexKeys.MALE,
+      gender: 'MALE',
       prisonNumber: 'A1234AB',
       pncNumber: '99/98644M',
       potentialMatches: [],

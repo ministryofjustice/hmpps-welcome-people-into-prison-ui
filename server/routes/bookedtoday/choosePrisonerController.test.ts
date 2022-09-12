@@ -1,5 +1,4 @@
-import { type Arrival, LocationType } from 'welcome'
-import { BodyScanStatus } from 'body-scan'
+import type { Arrival } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
@@ -85,8 +84,8 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
       fromLocation: 'Reading',
       moveType: 'PRISON_REMAND',
       isCurrentPrisoner: true,
-      fromLocationType: LocationType.COURT,
-      bodyScanStatus: BodyScanStatus.CLOSE_TO_LIMIT,
+      fromLocationType: 'COURT',
+      bodyScanStatus: 'CLOSE_TO_LIMIT',
       matchType,
     } as WithMatchType<Arrival>)
 

@@ -1,7 +1,8 @@
 import type { Express } from 'express'
 import request from 'supertest'
-import { SexKeys } from 'welcome'
 import * as cheerio from 'cheerio'
+import { PotentialMatch } from 'welcome'
+
 import { appWithAllRoutes, flashProvider, stubCookie } from '../../__testutils/appSetup'
 
 import Role from '../../../authentication/role'
@@ -23,15 +24,16 @@ const potentialMatches = [
     prisonNumber: 'A1234BC',
     pncNumber: '11/5678',
     croNumber: '12/0000',
-    sex: SexKeys.MALE,
+    sex: 'MALE',
   },
   {
     firstName: 'Jim',
     lastName: 'Smith',
     dateOfBirth: '1983-01-08',
-    sex: SexKeys.MALE,
+    sex: 'MALE',
   },
-]
+] as PotentialMatch[]
+
 let app: Express
 const expectedArrivalsService = createMockExpectedArrivalsService()
 
