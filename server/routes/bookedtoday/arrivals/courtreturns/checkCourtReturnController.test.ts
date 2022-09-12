@@ -1,7 +1,6 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
-import { LocationType } from 'welcome'
 import { appWithAllRoutes, flashProvider } from '../../../__testutils/appSetup'
 import { RaiseAnalyticsEvent } from '../../../../services'
 import Role from '../../../../authentication/role'
@@ -18,7 +17,7 @@ const courtReturn = createPrisonerDetails()
 
 const arrival = {
   ...createArrival({
-    fromLocationType: LocationType.COURT,
+    fromLocationType: 'COURT',
     isCurrentPrisoner: true,
   }),
   matchType: MatchType.SINGLE_MATCH,

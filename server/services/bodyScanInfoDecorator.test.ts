@@ -1,6 +1,4 @@
-import { BodyScanStatus } from 'body-scan'
 import { createMockBodyScanClient, createMockHmppsAuthClient } from '../data/__testutils/mocks'
-
 import { BodyScanInfoDecorator } from './bodyScanInfoDecorator'
 
 jest.mock('./raiseAnalyticsEvent')
@@ -33,19 +31,19 @@ describe('BodyScanInfoDecorater', () => {
       bodyScanClient.getBodyScanInfo.mockResolvedValue([
         {
           prisonNumber: 'A1234AA',
-          bodyScanStatus: BodyScanStatus.OK_TO_SCAN,
+          bodyScanStatus: 'OK_TO_SCAN',
           numberOfBodyScans: 10,
           numberOfBodyScansRemaining: 106,
         },
         {
           prisonNumber: 'A1234AB',
-          bodyScanStatus: BodyScanStatus.DO_NOT_SCAN,
+          bodyScanStatus: 'DO_NOT_SCAN',
           numberOfBodyScans: 120,
           numberOfBodyScansRemaining: 0,
         },
         {
           prisonNumber: 'A1234AC',
-          bodyScanStatus: BodyScanStatus.CLOSE_TO_LIMIT,
+          bodyScanStatus: 'CLOSE_TO_LIMIT',
           numberOfBodyScans: 112,
           numberOfBodyScansRemaining: 4,
         },

@@ -6,21 +6,22 @@ import {
   type PotentialMatch,
   type PotentialMatchCriteria,
   type Prison,
-  Sex,
-  SexKeys,
   type TemporaryAbsence,
   type Transfer,
   type UserCaseLoad,
-  PrisonerDetails,
+  type PrisonerDetails,
   type PaginatedResponse,
-  LocationType,
 } from 'welcome'
-import { BodyScanStatus } from 'body-scan'
+import type { BodyScanStatus } from 'body-scan'
+
 import type { NewArrival } from '../../routes/bookedtoday/arrivals/state'
 import type { User } from '../hmppsAuthClient'
 import { MatchType } from '../../services/matchTypeDecorator'
 
-export const withBodyScanInfo = <T>(t: T, { bodyScanStatus = BodyScanStatus.OK_TO_SCAN } = {}) => ({
+export const withBodyScanInfo = <T>(
+  t: T,
+  { bodyScanStatus = 'OK_TO_SCAN' }: { bodyScanStatus?: BodyScanStatus } = {}
+) => ({
   ...t,
   bodyScanStatus,
 })
@@ -40,10 +41,10 @@ export const createArrival = ({
   date = '2021-10-13',
   fromLocation = 'Reading Court',
   fromLocationId = 'REDCC',
-  fromLocationType = LocationType.COURT,
+  fromLocationType = 'COURT',
   isCurrentPrisoner = true,
   potentialMatches = [createPotentialMatch()],
-} = {}): Arrival => ({
+}: Partial<Arrival> = {}): Arrival => ({
   id,
   firstName,
   lastName,
@@ -113,8 +114,8 @@ export const createPrisonerDetails = ({
   dateOfBirth = '1973-01-08',
   prisonNumber = 'A1234AB',
   pncNumber = '01/98644M',
-  sex = SexKeys.MALE,
-} = {}): PrisonerDetails => ({
+  sex = 'MALE',
+}: Partial<PrisonerDetails> = {}): PrisonerDetails => ({
   firstName,
   lastName,
   dateOfBirth,
@@ -213,14 +214,14 @@ export const createPotentialMatch = ({
   prisonNumber,
   pncNumber,
   croNumber,
-  sex: SexKeys.MALE,
+  sex: 'MALE',
 })
 
 export const createNewArrival = ({
   firstName = 'Jim',
   lastName = 'Smith',
   dateOfBirth = '1973-01-08',
-  sex = Sex.NOT_SPECIFIED,
+  sex = 'NS',
   imprisonmentStatus = 'RX',
   movementReasonCode = 'N',
   prisonNumber = 'A1234AA',

@@ -1,4 +1,3 @@
-import { BodyScanStatus } from 'body-scan'
 import TemporaryAbsencesService from './temporaryAbsencesService'
 import { createTemporaryAbsence, withBodyScanInfo } from '../data/__testutils/testObjects'
 import { createMockHmppsAuthClient, createMockWelcomeClient } from '../data/__testutils/mocks'
@@ -22,7 +21,7 @@ describe('Temporary absences service', () => {
     service = new TemporaryAbsencesService(hmppsAuthClient, WelcomeClientFactory, bodyScanInfoDecorator)
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
     bodyScanInfoDecorator.decorate.mockImplementation(as =>
-      Promise.resolve(as.map(a => ({ ...a, bodyScanStatus: BodyScanStatus.OK_TO_SCAN })))
+      Promise.resolve(as.map(a => ({ ...a, bodyScanStatus: 'OK_TO_SCAN' })))
     )
   })
 

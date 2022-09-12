@@ -5,12 +5,7 @@ declare module 'body-scan' {
 
   export type ReasonCode = 'INTELLIGENCE' | 'REASONABLE_SUSPICION'
   export type ResultCode = 'POSITIVE' | 'NEGATIVE'
-
-  export const enum BodyScanStatus {
-    DO_NOT_SCAN = 'DO_NOT_SCAN',
-    CLOSE_TO_LIMIT = 'CLOSE_TO_LIMIT',
-    OK_TO_SCAN = 'OK_TO_SCAN',
-  }
+  export type BodyScanStatus = 'DO_NOT_SCAN' | 'CLOSE_TO_LIMIT' | 'OK_TO_SCAN'
 
   export interface schemas {
     PrisonerDetails: {

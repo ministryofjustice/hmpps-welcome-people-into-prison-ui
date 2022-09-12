@@ -1,4 +1,4 @@
-import { LocationType, PotentialMatch } from 'welcome'
+import type { LocationType, PotentialMatch } from 'welcome'
 
 export const enum MatchType {
   COURT_RETURN = 'COURT_RETURN',
@@ -42,5 +42,5 @@ export class MatchTypeDecorator {
   }
 
   private isCourtReturn = <T extends ArrivalInfo>(item: T): boolean =>
-    item.isCurrentPrisoner && item.fromLocationType === LocationType.COURT
+    item.isCurrentPrisoner && item.fromLocationType === 'COURT'
 }
