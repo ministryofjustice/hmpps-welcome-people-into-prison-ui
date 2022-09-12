@@ -21,7 +21,7 @@
     "record-build-info": "node ./bin/record-build-info",
     "lint": "eslint . --cache --max-warnings 0 && npm run typecheck",
     "typecheck": "tsc && tsc -p integration_tests",
-    "test": "jest --detectOpenHandles",
+    "test": "jest ",
     "security_audit": "npx audit-ci --config audit-ci.json",
     "int-test": "cypress run --config video=false",
     "int-test-ui": "cypress open",
@@ -33,6 +33,12 @@
   },
   "jest": {
     "preset": "ts-jest",
+    "globals": {
+      "ts-jest": {
+        "isolatedModules": true
+
+      }
+    },
     "collectCoverageFrom": [
       "server/**/*.{ts,js,jsx,mjs}"
     ],
