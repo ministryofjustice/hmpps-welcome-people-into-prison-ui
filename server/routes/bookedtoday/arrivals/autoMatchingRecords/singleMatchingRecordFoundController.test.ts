@@ -48,7 +48,7 @@ describe('GET /view', () => {
     return request(app)
       .get('/prisoners/12345-67890/record-found')
       .expect(res => {
-        const { croNumber, ...fields } = arrival.potentialMatches[0]
+        const { croNumber, arrivalType, arrivalTypeDescription, ...fields } = arrival.potentialMatches[0]
         expectSettingCookie(res, State.newArrival).toStrictEqual({ expected: 'true', ...fields })
       })
   })

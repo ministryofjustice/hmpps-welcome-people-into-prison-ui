@@ -57,18 +57,17 @@ context('Unexpected arrivals - no matching records page', () => {
     movementReasonPage.continue().click()
 
     const checkAnswersPage = Page.verifyOnPage(CheckAnswersForCreateNewRecordPage)
-
-    checkAnswersPage.name().should('contain.text', 'James Smith')
-    checkAnswersPage.dob().should('contain.text', '1 August 2000')
-    checkAnswersPage.sex().should('contain.text', 'Male')
-    checkAnswersPage
-      .reason()
-      .should('contain.text', 'Sentenced - fixed length of time - Extended sentence for public protection')
+    checkAnswersPage.checkDetails({
+      name: 'James Smith',
+      dob: '1 August 2000',
+      sex: 'Male',
+      reason: 'Sentenced - fixed length of time - Extended sentence for public protection',
+    })
     cy.task('stubConfirmUnexpectedArrval', { prisonNumber: 'G0014GM', location: 'Reception' })
     checkAnswersPage.addToRoll().click()
 
     const confirmAddedToRollPage = Page.verifyOnPage(ConfirmAddedToRollPage)
-    confirmAddedToRollPage.details({
+    confirmAddedToRollPage.checkDetails({
       name: 'James Smith',
       prison: 'Moorland (HMP & YOI)',
       prisonNumber: 'G0014GM',

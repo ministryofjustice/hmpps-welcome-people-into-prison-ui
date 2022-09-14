@@ -85,7 +85,7 @@ describe('possible records found', () => {
         .expect(req => {
           expect(flashProvider).not.toHaveBeenCalled()
           expect(expectedArrivalsService.getPrisonerDetails).toHaveBeenCalledWith(arrival.potentialMatches[0])
-          const { croNumber, ...fields } = arrival.potentialMatches[0]
+          const { croNumber, arrivalType, arrivalTypeDescription, ...fields } = arrival.potentialMatches[0]
           expectSettingCookie(req, State.newArrival).toStrictEqual({ expected: 'true', ...fields })
         })
     })

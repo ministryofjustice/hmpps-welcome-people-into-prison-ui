@@ -46,11 +46,10 @@ context('Arrival matches multiple records', () => {
     cy.task('stubUserCaseLoads')
     cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [] })
     cy.task('stubMissingPrisonerImage')
-
     cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [arrival] })
     cy.task('stubExpectedArrival', arrival)
     cy.task('stubImprisonmentStatus')
-    cy.task('stubPrisonerDetails', arrival.potentialMatches[1])
+    cy.task('stubPrisonerDetails', { ...arrival.potentialMatches[1], arrivalType: 'NEW_BOOKING' })
     cy.task('stubRetrieveMultipleBodyScans', [])
     cy.signIn()
 
@@ -110,15 +109,14 @@ context('Arrival matches multiple records', () => {
     movementReasonPage.continue().click()
 
     const checkAnswersPage = Page.verifyOnPage(CheckAnswersPage)
-
-    checkAnswersPage.name().should('contain.text', 'Sum Smoth')
-    checkAnswersPage.dob().should('contain.text', '3 February 1971')
-    checkAnswersPage.prisonNumber().should('contain.text', arrival.potentialMatches[1].prisonNumber)
-    checkAnswersPage.pncNumber().should('contain.text', arrival.potentialMatches[1].pncNumber)
-    checkAnswersPage.sex().should('contain.text', 'Male')
-    checkAnswersPage
-      .reason()
-      .should('contain.text', 'Sentenced - fixed length of time - Extended sentence for public protection')
+    checkAnswersPage.checkDetails({
+      name: 'Sum Smoth',
+      dob: '3 February 1971',
+      prisonNumber: arrival.potentialMatches[1].prisonNumber,
+      pncNumber: arrival.potentialMatches[1].pncNumber,
+      sex: 'Male',
+      reason: 'Sentenced - fixed length of time - Extended sentence for public protection',
+    })
     cy.task('stubCreateOffenderRecordAndBooking', {
       arrivalId: arrival.id,
       prisonNumber: arrival.potentialMatches[1].prisonNumber,
@@ -126,7 +124,7 @@ context('Arrival matches multiple records', () => {
     checkAnswersPage.addToRoll().click()
 
     const confirmAddedToRollPage = Page.verifyOnPage(ConfirmAddedToRollPage)
-    confirmAddedToRollPage.details({
+    confirmAddedToRollPage.checkDetails({
       name: 'Sum Smoth',
       prison: 'Moorland (HMP & YOI)',
       prisonNumber: arrival.potentialMatches[1].prisonNumber,

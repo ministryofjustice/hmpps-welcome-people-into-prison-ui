@@ -9,29 +9,28 @@ import config from '../../../../config'
 import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
 import { State } from '../state'
 import { createMockExpectedArrivalsService } from '../../../../services/__testutils/mocks'
+import { createPotentialMatch } from '../../../../data/__testutils/testObjects'
 
 const searchDetails = {
   firstName: 'Jamie',
   lastName: 'Smyth',
   dateOfBirth: '1973-01-08',
 }
-const potentialMatches = [
-  {
+const potentialMatches: PotentialMatch[] = [
+  createPotentialMatch({
     firstName: 'James',
     lastName: 'Smyth',
     dateOfBirth: '1973-01-08',
     prisonNumber: 'A1234BC',
     pncNumber: '11/5678',
-    croNumber: '12/0000',
-    sex: 'MALE',
-  },
-  {
+  }),
+  createPotentialMatch({
     firstName: 'Jim',
     lastName: 'Smith',
     dateOfBirth: '1983-01-08',
     sex: 'MALE',
-  },
-] as PotentialMatch[]
+  }),
+]
 let app: Express
 const expectedArrivalsService = createMockExpectedArrivalsService()
 

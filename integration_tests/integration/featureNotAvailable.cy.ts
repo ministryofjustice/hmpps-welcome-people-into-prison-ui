@@ -32,6 +32,7 @@ context('Feature not available', () => {
     })
 
     cy.task('stubExpectedArrival', expectedArrival)
+    cy.task('stubPrisonerDetails', { ...expectedArrival.potentialMatches[0], arrivalType: 'NEW_BOOKING' })
     cy.task('stubCreateOffenderRecordAndBookingReturnsError', { arrivalId: expectedArrival.id, status: 400 })
     cy.signIn()
 
@@ -46,10 +47,10 @@ context('Feature not available', () => {
     imprisonmentStatusPage.continue().click()
 
     const checkAnswersPage = Page.verifyOnPage(CheckAnswersPage)
-
     checkAnswersPage.addToRoll().click()
     Page.verifyOnPage(FeatureNotAvailable)
   })
+
   it('Should display feature-not-available page when client error during confirmation of court return of existing prisoner', () => {
     const expectedArrival = expectedArrivals.court.current
     const prisonRecordDetails = expectedArrival.potentialMatches[0]
@@ -98,6 +99,7 @@ context('Feature not available', () => {
 
     const temporaryAbsencePage = TemporaryAbsencePage.goTo()
     temporaryAbsencePage.temporaryAbsences(1).confirm().click()
+
     const checkTemporaryAbsencePage = Page.verifyOnPage(CheckTemporaryAbsencePage)
     checkTemporaryAbsencePage.addToRoll().click()
     Page.verifyOnPage(FeatureNotAvailable)

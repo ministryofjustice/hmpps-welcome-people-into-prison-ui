@@ -9,6 +9,7 @@ import { expectSettingCookie } from '../../../../__testutils/requestTestUtils'
 import { State } from '../../state'
 import { createMockExpectedArrivalsService } from '../../../../../services/__testutils/mocks'
 import { MatchType, WithMatchType } from '../../../../../services/matchTypeDecorator'
+import { createPotentialMatch } from '../../../../../data/__testutils/testObjects'
 
 let app: Express
 const expectedArrivalsService = createMockExpectedArrivalsService()
@@ -172,22 +173,20 @@ describe('POST /search-for-existing-record', () => {
   it('should clear new-arrival state and redirect when multiple existing potential records found', () => {
     stubCookie(State.searchDetails, searchDetails)
     expectedArrivalsService.getMatchingRecords.mockResolvedValue([
-      {
+      createPotentialMatch({
         firstName: 'James',
         lastName: 'Smyth',
         dateOfBirth: '1973-01-08',
-        sex: 'MALE',
         pncNumber: '88/98544M',
         prisonNumber: 'A1234AC',
-      },
-      {
+      }),
+      createPotentialMatch({
         firstName: 'Jim',
         lastName: 'Simon',
         dateOfBirth: '2003-03-01',
-        sex: 'MALE',
         prisonNumber: 'A1234AB',
         pncNumber: '99/98644M',
-      },
+      }),
     ])
 
     return request(app)
@@ -202,14 +201,13 @@ describe('POST /search-for-existing-record', () => {
   it('should set new-arrival state and redirect when one existing potential record found', () => {
     stubCookie(State.searchDetails, searchDetails)
     expectedArrivalsService.getMatchingRecords.mockResolvedValue([
-      {
+      createPotentialMatch({
         firstName: 'James',
         lastName: 'Smyth',
         dateOfBirth: '1973-01-08',
-        sex: 'MALE',
         pncNumber: '88/98544M',
         prisonNumber: 'A1234AC',
-      },
+      }),
     ])
 
     return request(app)

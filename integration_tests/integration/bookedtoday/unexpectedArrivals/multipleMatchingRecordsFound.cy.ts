@@ -47,7 +47,7 @@ context('Unexpected arrivals - multiple matching records', () => {
     cy.task('stubImprisonmentStatus')
     cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [] })
     cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [] })
-    cy.task('stubPrisonerDetails', arrival.potentialMatches[0])
+    cy.task('stubPrisonerDetails', { ...arrival.potentialMatches[0], arrivalType: 'NEW_BOOKING' })
     cy.task('stubRetrieveMultipleBodyScans', [])
     cy.signIn()
 
@@ -74,28 +74,31 @@ context('Unexpected arrivals - multiple matching records', () => {
     personalDetails.fieldName('prison-number').should('contain', 'A1234AA')
     personalDetails.fieldName('pnc-number').should('contain', '01/23456M')
 
-    let match: ReturnType<typeof multipleRecordsFoundPage.match>
-    match = multipleRecordsFoundPage.match(1)
-    match.fieldName('prisoner-name').should('contain', 'Bob Smith')
-    match.fieldName('dob').should('contain', '21 November 1972')
-    match.fieldName('prison-number').should('contain', arrival.potentialMatches[0].prisonNumber)
-    match.fieldName('pnc-number').should('contain', arrival.potentialMatches[0].pncNumber)
-    match.fieldName('cro-number').should('contain', arrival.potentialMatches[0].croNumber)
+    {
+      const match = multipleRecordsFoundPage.match(1)
+      match.fieldName('prisoner-name').should('contain', 'Bob Smith')
+      match.fieldName('dob').should('contain', '21 November 1972')
+      match.fieldName('prison-number').should('contain', arrival.potentialMatches[0].prisonNumber)
+      match.fieldName('pnc-number').should('contain', arrival.potentialMatches[0].pncNumber)
+      match.fieldName('cro-number').should('contain', arrival.potentialMatches[0].croNumber)
+    }
 
-    match = multipleRecordsFoundPage.match(2)
-    match.fieldName('prisoner-name').should('contain', 'Robert Smyth')
-    match.fieldName('dob').should('contain', '21 November 1982')
-    match.fieldName('prison-number').should('contain', arrival.potentialMatches[1].prisonNumber)
-    match.fieldName('pnc-number').should('contain', arrival.potentialMatches[1].pncNumber)
-    match.fieldName('cro-number').should('contain', arrival.potentialMatches[1].croNumber)
-    match
-      .prisonerImage()
-      .check({ href: `/prisoners/${arrival.potentialMatches[1].prisonNumber}/image`, alt: 'Smyth, Robert' })
+    {
+      const match = multipleRecordsFoundPage.match(2)
+      match.fieldName('prisoner-name').should('contain', 'Robert Smyth')
+      match.fieldName('dob').should('contain', '21 November 1982')
+      match.fieldName('prison-number').should('contain', arrival.potentialMatches[1].prisonNumber)
+      match.fieldName('pnc-number').should('contain', arrival.potentialMatches[1].pncNumber)
+      match.fieldName('cro-number').should('contain', arrival.potentialMatches[1].croNumber)
+      match
+        .prisonerImage()
+        .check({ href: `/prisoners/${arrival.potentialMatches[1].prisonNumber}/image`, alt: 'Smyth, Robert' })
+    }
 
     multipleRecordsFoundPage.continue().click()
     multipleRecordsFoundPage.hasError('Select an existing record or search using different details')
 
-    match.select().click()
+    multipleRecordsFoundPage.match(2).select().click()
     multipleRecordsFoundPage.continue().click()
 
     const imprisonmentStatusPage = Page.verifyOnPage(ImprisonmentStatusPage)
@@ -107,21 +110,24 @@ context('Unexpected arrivals - multiple matching records', () => {
     movementReasonPage.continue().click()
 
     const checkAnswersPage = Page.verifyOnPage(CheckAnswersPage)
+    checkAnswersPage.checkDetails({
+      name: 'Bob Smith',
+      dob: '21 November 1972',
+      sex: 'Male',
+      prisonNumber: 'G0014GM',
+      pncNumber: '01/1111A',
+      reason: 'Sentenced - fixed length of time - Extended sentence for public protection',
+    })
 
-    checkAnswersPage.name().should('contain.text', 'Bob Smith')
-    checkAnswersPage.dob().should('contain.text', '21 November 1972')
-    checkAnswersPage.sex().should('contain.text', 'Male')
-    checkAnswersPage
-      .reason()
-      .should('contain.text', 'Sentenced - fixed length of time - Extended sentence for public protection')
     cy.task('stubConfirmUnexpectedArrval', {
       prisonNumber: arrival.potentialMatches[0].prisonNumber,
       location: 'Reception',
     })
+
     checkAnswersPage.addToRoll().click()
 
     const confirmAddedToRollPage = Page.verifyOnPage(ConfirmAddedToRollPage)
-    confirmAddedToRollPage.details({
+    confirmAddedToRollPage.checkDetails({
       name: 'Bob Smith',
       prison: 'Moorland (HMP & YOI)',
       prisonNumber: arrival.potentialMatches[0].prisonNumber,

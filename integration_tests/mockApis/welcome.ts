@@ -226,7 +226,6 @@ export default {
       },
     })
   },
-
   stubConfirmTemporaryAbsenceReturnsError: ({ prisonNumber, status }: Record<string, string>): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -238,6 +237,18 @@ export default {
       },
     })
   },
+  getTemporaryAbsenceConfirmationRequest: (prisonNumber: string) =>
+    getMatchingRequests({
+      method: 'POST',
+      urlPath: `/welcome/temporary-absences/${prisonNumber}/confirm`,
+    }).then(data => {
+      const { requests } = data.body
+      if (!requests.length) {
+        throw new Error('No matching request')
+      }
+      return JSON.parse(requests[0].body)
+    }),
+
   stubConfirmCourtReturn: (arrivalId: string): SuperAgentRequest => {
     return stubFor({
       request: {

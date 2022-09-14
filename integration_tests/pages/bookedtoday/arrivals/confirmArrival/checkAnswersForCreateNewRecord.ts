@@ -17,5 +17,33 @@ export default class CheckAnswersForCreateNewRecordPage extends Page {
 
   submissionParagraphTitle = () => cy.get('h2')
 
+  checkDetails = ({
+    name,
+    sex,
+    dob,
+    reason,
+    pncNumber,
+    submissionParagraphTitle,
+  }: {
+    name: string
+    dob: string
+    sex: string
+    reason: string
+    pncNumber?: string
+    submissionParagraphTitle?: string
+  }) => {
+    this.backNavigation().should('exist')
+    this.name().should('contain.text', name)
+    this.dob().should('contain.text', dob)
+    this.sex().should('contain.text', sex)
+    this.reason().should('contain.text', reason)
+    if (pncNumber) {
+      this.pncNumber().should('contain.text', pncNumber)
+    }
+    if (submissionParagraphTitle) {
+      this.submissionParagraphTitle().should('contain.text', submissionParagraphTitle)
+    }
+  }
+
   addToRoll = (): PageElement => cy.get('[data-qa=add-to-roll]')
 }

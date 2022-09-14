@@ -1,5 +1,5 @@
-import type { PotentialMatch } from 'welcome'
 import type { Express } from 'express'
+import type { PotentialMatch } from 'welcome'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
 import { appWithAllRoutes, flashProvider } from '../../__testutils/appSetup'
@@ -7,6 +7,7 @@ import Role from '../../../authentication/role'
 import config from '../../../config'
 import * as State from '../arrivals/state'
 import { createMockExpectedArrivalsService } from '../../../services/__testutils/mocks'
+import { createPotentialMatch } from '../../../data/__testutils/testObjects'
 
 jest.mock('../arrivals/state')
 
@@ -22,23 +23,21 @@ const searchInputDetails = {
   prisonNumber: 'A1234AB',
   pncNumber: '99/55555M',
 }
-const potentialMatches = [
-  {
+const potentialMatches: PotentialMatch[] = [
+  createPotentialMatch({
     firstName: 'James',
     lastName: 'Smyth',
     dateOfBirth: '1973-01-08',
     prisonNumber: 'A1234BC',
     pncNumber: '11/5678',
     croNumber: '12/0000',
-    sex: 'MALE',
-  },
-  {
+  }),
+  createPotentialMatch({
     firstName: 'Jim',
     lastName: 'Smith',
     dateOfBirth: '1983-01-08',
-    sex: 'MALE',
-  },
-] as PotentialMatch[]
+  }),
+]
 
 beforeEach(() => {
   config.confirmNoIdentifiersEnabled = true
