@@ -118,7 +118,7 @@ context('Choose Prisoner', () => {
     const currentCourt = expectedArrivals.arrival({
       fromLocationType: 'COURT',
       isCurrentPrisoner: true,
-      potentialMatches: [expectedArrivals.potentialMatch],
+      potentialMatches: [{ ...expectedArrivals.potentialMatch, arrivalType: 'FROM_COURT' }],
     })
 
     cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [currentCourt] })

@@ -42,5 +42,5 @@ export class MatchTypeDecorator {
   }
 
   private isCourtReturn = <T extends ArrivalInfo>(item: T): boolean =>
-    item.isCurrentPrisoner && item.fromLocationType === 'COURT'
+    item.potentialMatches[0].arrivalType === 'FROM_COURT'
 }
