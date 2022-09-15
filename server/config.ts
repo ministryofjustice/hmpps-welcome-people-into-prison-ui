@@ -37,6 +37,7 @@ export const DEFAULT_AGENT_CONFIG: AgentConfig = {
 }
 
 export default {
+  production,
   https: production,
   staticResourceCacheDuration: 20,
   phaseName: process.env.SYSTEM_PHASE,
