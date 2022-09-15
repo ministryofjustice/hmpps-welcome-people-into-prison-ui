@@ -15,23 +15,47 @@ context('Choose Prisoner', () => {
     cy.task('stubPrison', 'MDI')
     cy.task('stubAuthUser')
     cy.task('stubUserCaseLoads')
-    cy.task('stubExpectedArrivals', {
-      caseLoadId: 'MDI',
-      arrivals: [
-        expectedArrivals.custodySuite.current,
-        expectedArrivals.custodySuite.notCurrent,
-        expectedArrivals.custodySuite.notMatched,
-        expectedArrivals.court.current,
-        expectedArrivals.court.notCurrent,
-        expectedArrivals.court.notMatched,
-      ],
-    })
     cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [expectedArrivals.prisonTransfer] })
     cy.task('stubMissingPrisonerImage')
     cy.task('stubRetrieveMultipleBodyScans', [])
   })
 
   it("Should display available prisoner info and the 'manually confirm' link", () => {
+    cy.task('stubExpectedArrivals', {
+      caseLoadId: 'MDI',
+      arrivals: [
+        expectedArrivals.arrival({
+          firstName: 'Mark',
+          lastName: 'Prisoner',
+          prisonNumber: 'G0016GD',
+          pncNumber: null,
+          fromLocationType: 'CUSTODY_SUITE',
+        }),
+        expectedArrivals.arrival({
+          firstName: 'John',
+          lastName: 'Doe',
+          prisonNumber: 'G0013AB',
+          pncNumber: '01/3456A',
+          fromLocationType: 'COURT',
+          potentialMatches: [
+            {
+              firstName: 'Sam',
+              lastName: 'Smith',
+              prisonNumber: 'G0013AB',
+              arrivalType: 'FROM_COURT',
+            },
+          ],
+        }),
+        expectedArrivals.arrival({
+          firstName: 'Harry',
+          lastName: 'Stanton',
+          prisonNumber: null,
+          pncNumber: '01/3456A',
+          fromLocationType: 'COURT',
+        }),
+      ],
+    })
+
     cy.signIn()
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
 
@@ -39,9 +63,9 @@ context('Choose Prisoner', () => {
     choosePrisonerPage.prisonNumber(1, 'COURT').should('contain.text', 'G0013AB')
     choosePrisonerPage.pncNumber(1, 'COURT').should('contain.text', '01/3456A')
 
-    choosePrisonerPage.expectedArrivalsFromCourt(3).should('contain.text', 'Stanton, Harry')
-    choosePrisonerPage.pncNumber(3, 'COURT').should('contain.text', '01/3456A')
-    choosePrisonerPage.prisonNumber(3, 'COURT').should('not.exist')
+    choosePrisonerPage.expectedArrivalsFromCourt(2).should('contain.text', 'Stanton, Harry')
+    choosePrisonerPage.pncNumber(2, 'COURT').should('contain.text', '01/3456A')
+    choosePrisonerPage.prisonNumber(2, 'COURT').should('not.exist')
 
     choosePrisonerPage.expectedArrivalsFromCustodySuite(1).should('contain.text', 'Prisoner, Mark')
     choosePrisonerPage.prisonNumber(1, 'CUSTODY_SUITE').should('contain.text', 'G0016GD')
@@ -202,17 +226,21 @@ context('Choose Prisoner', () => {
   })
 
   it('No links shown if not a reception user', () => {
+    cy.task('stubExpectedArrivals', {
+      caseLoadId: 'MDI',
+      arrivals: [
+        expectedArrivals.arrival({ fromLocationType: 'PRISON' }),
+        expectedArrivals.arrival({ fromLocationType: 'COURT' }),
+        expectedArrivals.arrival({ fromLocationType: 'CUSTODY_SUITE' }),
+      ],
+    })
     cy.task('stubSignIn')
     cy.signIn()
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
 
     choosePrisonerPage.arrivalFrom('PRISON')(1).confirm().should('not.exist')
     choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(1).confirm().should('not.exist')
-    choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(2).confirm().should('not.exist')
-    choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(3).confirm().should('not.exist')
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().should('not.exist')
-    choosePrisonerPage.arrivalFrom('COURT')(2).confirm().should('not.exist')
-    choosePrisonerPage.arrivalFrom('COURT')(3).confirm().should('not.exist')
     choosePrisonerPage.manuallyConfirmArrival().should('not.exist')
   })
 
