@@ -108,6 +108,7 @@ export default {
           dateOfBirth: '1970-02-01',
           prisonNumber: 'A1234BC',
           pncNumber: '01/4567A',
+          arrivalType: 'FROM_COURT',
         },
       ],
     },

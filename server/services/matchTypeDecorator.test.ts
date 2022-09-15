@@ -1,4 +1,5 @@
 import type { PotentialMatch } from 'welcome'
+import { createPotentialMatch } from '../data/__testutils/testObjects'
 import { ArrivalInfo, MatchType, MatchTypeDecorator } from './matchTypeDecorator'
 
 describe('MatchTypeDecorator', () => {
@@ -29,10 +30,11 @@ describe('MatchTypeDecorator', () => {
       const result = service.getMatchType(
         arrival({
           prisonNumber: 'A1234AA',
-          pncNumber: '01/12345A',
-          potentialMatches: [potentialMatch],
-          isCurrentPrisoner: true,
-          fromLocationType: 'COURT',
+          potentialMatches: [
+            createPotentialMatch({
+              arrivalType: 'FROM_COURT',
+            }),
+          ],
         })
       )
       expect(result).toBe(MatchType.COURT_RETURN)
