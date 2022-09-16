@@ -1,6 +1,5 @@
-/* eslint-disable import/first */
-/* eslint-disable import/order */
-import 'dotenv/config'
+// Require app insights before anything else to allow for instrumentation of bunyan
+import '../server/utils/azureAppInsights'
 
 import moment from 'moment'
 import { dataAccess } from '../server/data'

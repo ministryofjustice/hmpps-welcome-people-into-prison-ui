@@ -1,4 +1,4 @@
-import { config } from 'dotenv'
+import 'dotenv/config'
 import { Contracts, defaultClient, DistributedTracingModes, setup, TelemetryClient } from 'applicationinsights'
 import { EnvelopeTelemetry } from 'applicationinsights/out/Declarations/Contracts'
 import applicationVersion from '../applicationVersion'
@@ -21,9 +21,7 @@ function version(): string {
 }
 
 export function initialiseAppInsights(): void {
-  // Loads .env file contents into | process.env
-  config()
-  if (process.env.APPINSIGHTS_INSTRUMENTATIONKEY) {
+  if (process.env.APPLICATIONINSIGHTS_CONNECTION_STRING) {
     // eslint-disable-next-line no-console
     console.log('Enabling azure application insights')
 
@@ -32,7 +30,7 @@ export function initialiseAppInsights(): void {
 }
 
 export function buildAppInsightsClient(name = defaultName()): TelemetryClient {
-  if (process.env.APPINSIGHTS_INSTRUMENTATIONKEY) {
+  if (process.env.APPLICATIONINSIGHTS_CONNECTION_STRING) {
     defaultClient.context.tags['ai.cloud.role'] = name
     defaultClient.context.tags['ai.application.ver'] = version()
     defaultClient.addTelemetryProcessor(addUserDataToRequests)
