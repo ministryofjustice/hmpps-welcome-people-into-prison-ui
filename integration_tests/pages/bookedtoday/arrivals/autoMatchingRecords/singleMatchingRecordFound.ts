@@ -14,4 +14,6 @@ export default class SingleMatchingRecordFoundPage extends Page {
   continue = (): PageElement => cy.get(`[data-qa=continue]`)
 
   search = (): PageElement => cy.get('[data-qa=search-instead]')
+
+  createNew = (): PageElement => cy.get('[data-qa=create-new]')
 }
