@@ -1,4 +1,3 @@
-import 'dotenv/config'
 import { Contracts, defaultClient, DistributedTracingModes, setup, TelemetryClient } from 'applicationinsights'
 import { EnvelopeTelemetry } from 'applicationinsights/out/Declarations/Contracts'
 import applicationVersion from '../applicationVersion'
