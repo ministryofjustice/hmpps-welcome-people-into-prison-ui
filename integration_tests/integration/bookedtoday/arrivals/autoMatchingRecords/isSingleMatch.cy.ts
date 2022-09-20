@@ -8,6 +8,7 @@ import expectedArrivals from '../../../../mockApis/responses/expectedArrivals'
 import ChoosePrisonerPage from '../../../../pages/bookedtoday/choosePrisoner'
 import MovementReasonsPage from '../../../../pages/bookedtoday/arrivals/confirmArrival/movementReasons'
 import SearchForExistingPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/search/searchForExisting'
+import ReviewDetailsPage from '../../../../pages/bookedtoday/arrivals/reviewDetails'
 
 const expectedArrival = expectedArrivals.arrival({
   fromLocationType: 'COURT',
@@ -110,6 +111,21 @@ context('Is Single Match', () => {
 
     const searchPage = Page.verifyOnPage(SearchForExistingPage)
     searchPage.name.value().should('contain.text', 'Bob Smith')
+  })
+
+  it('Should allow navigation to create a new record', () => {
+    expectedArrival.prisonNumber = null
+    cy.task('stubExpectedArrival', expectedArrival)
+
+    cy.signIn()
+    const singleMatchingRecordFoundPage = ChoosePrisonerPage.selectPrisoner(
+      expectedArrival.id,
+      SingleMatchingRecordFoundPage
+    )
+    singleMatchingRecordFoundPage.createNew().click()
+
+    const reviewDetailsPage = Page.verifyOnPage(ReviewDetailsPage)
+    reviewDetailsPage.name.value().should('contain.text', 'Bob Smith')
   })
 
   it('Back link navigation', () => {

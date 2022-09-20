@@ -9,6 +9,19 @@ import ChangeNamePage from '../../../../pages/bookedtoday/arrivals/searchforexis
 import ChangeDateOfBirthPage from '../../../../pages/bookedtoday/arrivals/changeDateOfBirth'
 import ChangePrisonNumberPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/search/changePrisonNumber'
 import ChangePncNumberPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/search/changePncNumber'
+import ReviewDetailsPage from '../../../../pages/bookedtoday/arrivals/reviewDetails'
+
+const singleMatch = [
+  {
+    firstName: 'Bob',
+    lastName: 'Smith',
+    dateOfBirth: '1972-11-21',
+    prisonNumber: 'G0014GM',
+    pncNumber: '01/1111A',
+    croNumber: '01/0000A',
+    sex: 'MALE',
+  },
+]
 
 context('Search for existing spec', () => {
   beforeEach(() => {
@@ -146,22 +159,28 @@ context('Search for existing spec', () => {
     }
   })
 
-  it('Redirects to single match page', () => {
-    cy.task('stubMatchedRecords', [
-      {
-        firstName: 'Bob',
-        lastName: 'Smith',
-        dateOfBirth: '1972-11-21',
-        prisonNumber: 'G0014GM',
-        pncNumber: '01/1111A',
-        croNumber: '01/0000A',
-        sex: 'MALE',
-      },
-    ])
+  it('Redirects to single match page and allow navigation back to search for alternative', () => {
+    cy.task('stubMatchedRecords', singleMatch)
     const searchPage = Page.verifyOnPage(SearchForExistingPage)
     searchPage.search().click()
 
-    Page.verifyOnPage(SingleExistingRecordFoundPage)
+    const singleMatchingRecordFoundPage = Page.verifyOnPage(SingleExistingRecordFoundPage)
+    singleMatchingRecordFoundPage.search().click()
+
+    Page.verifyOnPage(SearchForExistingPage)
+    searchPage.name.value().should('contain.text', 'Bob Smith')
+  })
+
+  it('Should allow navigation to create a new record on single match page', () => {
+    cy.task('stubMatchedRecords', singleMatch)
+    const searchPage = Page.verifyOnPage(SearchForExistingPage)
+    searchPage.search().click()
+
+    const singleMatchingRecordFoundPage = Page.verifyOnPage(SingleExistingRecordFoundPage)
+    singleMatchingRecordFoundPage.createNew().click()
+
+    const reviewDetailsPage = Page.verifyOnPage(ReviewDetailsPage)
+    reviewDetailsPage.name.value().should('contain.text', 'Bob Smith')
   })
 
   it('Redirects to no match page', () => {

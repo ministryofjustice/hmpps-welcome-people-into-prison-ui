@@ -16,7 +16,7 @@
 
     <div>
         {{ govukInsetText({
-            html: 'If you think this is the wrong record, you can <a data-qa="search-instead" href="/prisoners/' + data.id + '/search-for-existing-record/new">search for a record using different details</a>.'
+            html: 'If you think this is the wrong record, you can <a class="govuk-body govuk-link govuk-link--no-visited-state" data-qa="search-instead" href="/prisoners/' + data.id + '/search-for-existing-record/new">search for a record using different details</a> or <a class="govuk-body govuk-link govuk-link--no-visited-state" data-qa="create-new" href="/prisoners/' + data.id + '/review-per-details/new">create a new record</a>.'
         }) }}
 
         {{ govukButton({
