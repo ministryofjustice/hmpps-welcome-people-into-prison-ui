@@ -1,4 +1,3 @@
-import 'dotenv/config'
 import os from 'os'
 
 const production = process.env.NODE_ENV === 'production'
