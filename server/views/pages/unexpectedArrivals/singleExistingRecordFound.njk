@@ -15,9 +15,6 @@
             <div class = "prisoner-record-detail prisoner-head">
                 {{ prisonerSearchDetail(data, "arrival" ) }}
             </div>
-            <p class="govuk-!-margin-top-4">
-                <a class="govuk-link govuk-link--no-visited-state" href="/manually-confirm-arrival/search-for-existing-record"  data-qa="search-again">Search using different details</a>
-            </p>
         </div>
         <div class=" border-left-grey govuk-!-padding-left-9 column-width-60">
             <h2 class="govuk-heading-m">Details from existing prisoner record</h2> 
@@ -32,15 +29,15 @@
         </div>
     </div> 
     <div>  
+        {{ govukInsetText({
+            html: 'If you think this is the wrong record, you can <a class="govuk-body govuk-link govuk-link--no-visited-state" data-qa="search-again" href="/manually-confirm-arrival/search-for-existing-record">search for a record using different details</a> or <a class="govuk-body govuk-link govuk-link--no-visited-state" data-qa="create-new" href="/manually-confirm-arrival/add-personal-details">create a new record</a>.'
+        }) }}
+
         {{ govukButton({
             classes: "govuk-button govuk-!-margin-bottom-6",
             href: "/prisoners/unexpected-arrivals/start-confirmation",
             text: "Continue using this record",
             attributes: {'data-qa': 'continue'}
-        }) }}
-
-        {{ govukInsetText({
-            html: 'If this is not the correct record, you can <a data-qa="create-new" class="govuk-link govuk-link--no-visited-state" href="/manually-confirm-arrival/add-personal-details"> create a new record</a>.'
         }) }}
         <p>
 
