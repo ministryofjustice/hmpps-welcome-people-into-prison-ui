@@ -47,14 +47,14 @@ describe('/start-confirmation', () => {
           .expect('Location', '/prisoners/12345-67890/sex')
       })
 
-      it('should redirect to court return flow when FROM_COURT', () => {
+      it('should redirect to feature not available flow when FROM_COURT', () => {
         expectedArrivalsService.getPrisonerDetails.mockResolvedValue(
           createPrisonerDetails({ arrivalType: 'FROM_COURT' })
         )
         return request(app)
           .get('/prisoners/12345-67890/start-confirmation')
           .expect(302)
-          .expect('Location', '/prisoners/12345-67890/check-court-return')
+          .expect('Location', '/feature-not-available')
       })
 
       it('should redirect to temporary absence flow when FROM_TEMPORARY_ABSENCE', () => {

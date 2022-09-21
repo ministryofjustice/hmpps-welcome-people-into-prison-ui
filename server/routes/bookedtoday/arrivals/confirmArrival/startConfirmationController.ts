@@ -8,7 +8,6 @@ const urls = {
   sex: path('/prisoners/:id/sex'),
   transfers: path('/prisoners/:prisonNumber/check-transfer'),
   temporaryAbsence: path('/prisoners/:prisonNumber/check-temporary-absence'),
-  courtReturn: path('/prisoners/:id/check-court-return'),
   featureNotAvailable: path('/feature-not-available'),
 }
 
@@ -30,7 +29,7 @@ export default class StartConfirmationController {
         return urls.sex({ id })
 
       case 'FROM_COURT':
-        return urls.courtReturn({ id })
+        return urls.featureNotAvailable({})
 
       case 'FROM_TEMPORARY_ABSENCE':
         return urls.temporaryAbsence({ prisonNumber })
