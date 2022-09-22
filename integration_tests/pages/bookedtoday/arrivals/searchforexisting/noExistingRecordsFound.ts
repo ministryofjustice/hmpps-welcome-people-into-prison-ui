@@ -5,5 +5,7 @@ export default class NoExistingRecordsFoundPage extends Page {
     super('This person does not have an existing prisoner record')
   }
 
+  search = (): PageElement => cy.get('[data-qa=search-instead]')
+
   continue = (): PageElement => cy.get(`[data-qa=continue]`)
 }
