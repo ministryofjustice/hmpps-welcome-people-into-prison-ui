@@ -37,7 +37,7 @@ context('Unexpected arrivals - no matching records page', () => {
     const noRecordPage = Page.verifyOnPage(NoRecordsFoundPage)
     noRecordPage.name().contains('James Smith')
     noRecordPage.dob().contains('1 August 2000')
-    noRecordPage.search()
+    noRecordPage.search().should('exist')
     noRecordPage.continue().click()
 
     const addPersonalDetailsPage = Page.verifyOnPage(AddPersonalDetailsPage)

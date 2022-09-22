@@ -189,6 +189,6 @@ context('Search for existing spec', () => {
     searchPage.search().click()
 
     const noExistingRecords = Page.verifyOnPage(NoExistingRecordsFoundPage)
-    noExistingRecords.search()
+    noExistingRecords.search().should('exist')
   })
 })
