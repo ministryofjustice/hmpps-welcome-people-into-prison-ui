@@ -9,5 +9,7 @@ export default class NoRecordsFoundPage extends Page {
 
   dob = (): PageElement => cy.get('.data-qa-arrival-dob')
 
+  search = (): PageElement => cy.get('[data-qa=search-instead]')
+
   continue = (): PageElement => cy.get('[data-qa=continue]')
 }
