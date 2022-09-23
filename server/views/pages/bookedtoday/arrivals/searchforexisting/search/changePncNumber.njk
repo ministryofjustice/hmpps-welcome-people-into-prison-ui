@@ -1,42 +1,37 @@
 {% extends "../../../../../partials/layout.njk" %}
-
 {% set pageTitle = "Add or change this person's PNC number" %}
-
 {% block content %}
-    <div class="govuk-width-container">
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-                {% if errors.length %}
-                    {{ govukErrorSummary({
-                        titleText: "There is a problem",
-                        errorList: errors,
-                        attributes: { 'data-qa-errors': true }
-                    }) }}
-                {% endif %}
-                <span class="govuk-caption-xl">Confirm an arrival</span>
-                <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
-                <form method="post">
-                    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-                    {{ govukInput({
-                        id: 'pnc-number',
-                        label: {
-                            text: 'PNC number'
-                        },
-                        hint: {
-                            text: "For example, 01/123456A."
-                        },
-                        classes: "govuk-!-width-one-quarter",
-                        name: "pncNumber",
-                        value: data.pncNumber
-                    }) }}
-
-                    {{ govukButton({
-                        classes: "govuk-button govuk-!-margin-bottom-3",
-                        text: "Save and continue",
-                        attributes: {'data-qa': 'save'}
-                    }) }}
-                </form>
-            </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {% if errors.length %}
+                {{ govukErrorSummary({
+                    titleText: "There is a problem",
+                    errorList: errors,
+                    attributes: { 'data-qa-errors': true }
+                }) }}
+            {% endif %}
+            <span class="govuk-caption-xl">Confirm an arrival</span>
+            <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+            <form method="post">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}"/> 
+                {{ govukInput({
+                    id: 'pnc-number',
+                    label: {
+                        text: 'PNC number'
+                    },
+                    hint: {
+                        text: "For example, 01/123456A."
+                    },
+                    classes: "govuk-!-width-one-quarter",
+                    name: "pncNumber",
+                    value: data.pncNumber
+                }) }}
+                {{ govukButton({
+                    classes: "govuk-button govuk-!-margin-bottom-3",
+                    text: "Save and continue",
+                    attributes: {'data-qa': 'save'}
+                }) }}
+            </form>
         </div>
     </div>
 {% endblock %}

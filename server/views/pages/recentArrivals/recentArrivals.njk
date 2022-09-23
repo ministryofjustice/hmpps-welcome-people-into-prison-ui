@@ -5,22 +5,20 @@
 {% set pageTitle = "Prisoners who have arrived in the last 3 days" %}
 
 {% block content %}
-    <div class="govuk-!-margin-bottom-8">
-        <div class="govuk-width-container govuk-body">
-            <h1>{{pageTitle}}</h1>
-            {{ arrivalSearch(searchQuery, csrfToken) }}
-            {% for date, groupedArrivals in recentArrivals %}
-                <h2 id="date-{{loop.index}}" class="govuk-heading-m govuk-!-margin-top-9">{{date | formatDate('dddd D MMMM')}}</h2>
-                    {% for arrival in groupedArrivals %}
-                        {{ recentArrivalCard(arrival, loop.index, date | formatDate('YYYY-MM-DD'))}}
-                    {% else %}
-                        {{ govukInsetText({
-                            text: "No prisoners arrived on this day.",
-                            id: "no-prisoners-date-" + loop.index,
-                            attributes: { 'data-qa': "no-prisoners-" + date | formatDate('YYYY-MM-DD') }
-                        }) }}
-                    {% endfor %}
+    <div class="govuk-!-margin-bottom-8 govuk-body">
+        <h1>{{ pageTitle }}</h1>
+        {{ arrivalSearch(searchQuery, csrfToken) }}
+        {% for date, groupedArrivals in recentArrivals %}
+            <h2 id="date-{{ loop.index }}" class="govuk-heading-m govuk-!-margin-top-9">{{ date | formatDate('dddd D MMMM') }}</h2>
+            {% for arrival in groupedArrivals %}
+                {{ recentArrivalCard(arrival, loop.index, date | formatDate('YYYY-MM-DD')) }}
+            {% else %}
+                {{ govukInsetText({
+                    text: "No prisoners arrived on this day.",
+                    id: "no-prisoners-date-" + loop.index,
+                    attributes: { 'data-qa': "no-prisoners-" + date | formatDate('YYYY-MM-DD') }
+                }) }}
             {% endfor %}
-        </div>
+        {% endfor %}
     </div>
 {% endblock %}

@@ -1,23 +1,20 @@
 {% extends "../../partials/layout.njk" %}
 {% from  "../../partials/temporaryAbsenceCardMacro.njk" import temporaryAbsenceCard %}
-
 {% set pageTitle = "People returning from temporary absence" if supportingMultitransactionsEnabled == true else "Select a person returning from temporary absence" %}
 
 {% block content %}
     <div class="govuk-!-margin-bottom-8">
-        <div class="govuk-width-container govuk-body">
-            {% if supportingMultitransactionsEnabled == false %}
-                <span id="confirm-arrival-span" class="govuk-caption-xl">Confirm a prisoner's arrival</span>
-            {% endif %}
-            <h1 class="govuk-heading-l govuk-!-margin-bottom-9">{{pageTitle}}</h1>
-                {% for absence in temporaryAbsences %} 
-                    {{ temporaryAbsenceCard(absence, loop.index, user)}}
-                {% else %}
-                    <p id='no-prisoners'>There are currently no prisoners out on temporary absence.</p>
-                {% endfor %}
-            {{ govukInsetText({
-                html: "<p class='govuk-body'>If the person is returning from court, they may be listed as <a href='/confirm-arrival/choose-prisoner' class='govuk-link govuk-link--no-visited-state' data-qa='linkToExpectedArrivals'>booked to arrive into prison</a>.</p>"
-            }) }}
-        </div>
+        {% if supportingMultitransactionsEnabled == false %}
+            <span id="confirm-arrival-span" class="govuk-caption-xl">Confirm a prisoner's arrival</span>
+        {% endif %}
+        <h1 class="govuk-heading-l govuk-!-margin-bottom-9">{{ pageTitle }}</h1>
+        {% for absence in temporaryAbsences %}
+            {{ temporaryAbsenceCard(absence, loop.index, user) }}
+        {% else %}
+            <p id='no-prisoners'>There are currently no prisoners out on temporary absence.</p>
+        {% endfor %}
+        {{ govukInsetText({
+            html: "<p class='govuk-body'>If the person is returning from court, they may be listed as <a href='/confirm-arrival/choose-prisoner' class='govuk-link govuk-link--no-visited-state' data-qa='linkToExpectedArrivals'>booked to arrive into prison</a>.</p>"
+        }) }}
     </div>
 {% endblock %}
