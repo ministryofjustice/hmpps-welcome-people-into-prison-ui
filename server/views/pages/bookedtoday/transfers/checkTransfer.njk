@@ -1,89 +1,84 @@
 {% extends "../../../partials/layout.njk" %}
 {% set pageTitle = "Confirm prisoner's arrival" %}
-
 {% block content %}
-    <main class="govuk-main-wrapper govuk-!-padding-bottom-0">
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-                <span class="govuk-caption-xl">Confirm an arrival</span>
-                <h1 class="govuk-heading-l">This person is being transferred from another establishment</h1>
-                <p>{{ data.firstName }} {{ data.lastName }} will be booked into this establishment using their existing prisoner record.</p>
-                <h2 class="govuk-heading-m">Details from prisoner record</h2>
-                <div class="prisoner-record-detail prisoner-header govuk-!-margin-bottom-8">
-                    <div>
-                        {{ govukSummaryList({
-                            attributes: {'data-qa':"list" },
-                            classes: "govuk-!-margin-bottom-0 govuk-summary-list--no-border",
-                            rows: [
-                                {
-                                key: {
-                                    text: "Name",
-                                    classes: "govuk-!-padding-bottom-0"
-                                },
-                                value: {
-                                    text: data.firstName + ' ' + data.lastName,
-                                    classes: "govuk-!-padding-bottom-0 data-qa-name"
-                                }
-                                },
-                                {
-                                key: {
-                                    text: "Date of birth",
-                                    classes: "govuk-!-padding-bottom-0"
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <span class="govuk-caption-xl">Confirm an arrival</span>
+            <h1 class="govuk-heading-l">This person is being transferred from another establishment</h1>
+            <p>{{ data.firstName }} {{ data.lastName }} will be booked into this establishment using their existing prisoner record.</p>
+            <h2 class="govuk-heading-m">Details from prisoner record</h2>
+            <div class="prisoner-record-detail prisoner-header govuk-!-margin-bottom-8">
+                <div>
+                    {{ govukSummaryList({
+                        attributes: {'data-qa':"list" },
+                        classes: "govuk-!-margin-bottom-0 govuk-summary-list--no-border",
+                        rows: [
+                            {
+                            key: {
+                                text: "Name",
+                                classes: "govuk-!-padding-bottom-0"
+                            },
+                            value: {
+                                text: data.firstName + ' ' + data.lastName,
+                                classes: "govuk-!-padding-bottom-0 data-qa-name"
+                            }
+                            },
+                            {
+                            key: {
+                                text: "Date of birth",
+                                classes: "govuk-!-padding-bottom-0"
 
-                                },
-                                value: {
-                                    text:  data.dateOfBirth | formatDate('D MMMM YYYY'),
-                                    classes: "govuk-!-padding-bottom-0 data-qa-dob"
-                                }
-
-                                },
-                                {
-                                key: {
-                                    text: "Prison number",
-                                    classes: "govuk-!-padding-bottom-0"
-                                },
-                                value: {
-                                    text:  data.prisonNumber,
-                                    classes: "govuk-!-padding-bottom-0 data-qa-prison-number"
-                                }
-                                },
-                                
-                                {
-                                key: {
-                                    text: "PNC number" if  data.pncNumber,
-                                    classes: "govuk-!-padding-bottom-0"
-                                },
-                                value: {
-                                    text:  data.pncNumber,
-                                    classes: "govuk-!-padding-bottom-0 data-qa-pnc-number"
-                                }
-                                }
-                            ]
-                        }) }}
-                    </div>
-                    <div>
-                        <img src="{{ '/prisoners/' + data.prisonNumber + '/image' if data.prisonNumber else '/assets/images/placeholder-image.png' }}" class="prisoner-image govuk-!-margin-top-2" alt="{{ data.lastName }}, {{ data.firstName }}" data-qa="prisoner-image"/>
-                    </div>
-                </div>
-                <form method="post" action="/prisoners/{{ data.prisonNumber }}/check-transfer">
-                <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-                    {{ govukButton({
-                        classes: "govuk-button govuk-!-margin-bottom-6",
-                        text: "Add to the establishment roll",
-                        attributes: {'data-qa': 'add-to-roll'},
-                        type: 'submit',
-                        preventDoubleClick: true
+                            },
+                            value: {
+                                text:  data.dateOfBirth | formatDate('D MMMM YYYY'),
+                                classes: "govuk-!-padding-bottom-0 data-qa-dob"
+                            }
+                            },
+                            {
+                            key: {
+                                text: "Prison number",
+                                classes: "govuk-!-padding-bottom-0"
+                            },
+                            value: {
+                                text:  data.prisonNumber,
+                                classes: "govuk-!-padding-bottom-0 data-qa-prison-number"
+                            }
+                            },
+                            {
+                            key: {
+                                text: "PNC number" if  data.pncNumber,
+                                classes: "govuk-!-padding-bottom-0"
+                            },
+                            value: {
+                                text:  data.pncNumber,
+                                classes: "govuk-!-padding-bottom-0 data-qa-pnc-number"
+                            }
+                            }
+                        ]
                     }) }}
-                </form>
-                <p class="govuk-!-margin-top-4">
-                    <a
-                        class="govuk-body govuk-link govuk-link--no-visited-state"
-                        href="/confirm-arrival/choose-prisoner"
-                        data-qa="choose-prisoner">
-                        Return to list of people arriving today
-                    </a>
-                </p>
+                </div>
+                <div>
+                    <img src="{{ '/prisoners/' + data.prisonNumber + '/image' if data.prisonNumber else '/assets/images/placeholder-image.png' }}" class="prisoner-image govuk-!-margin-top-2" alt="{{ data.lastName }}, {{ data.firstName }}" data-qa="prisoner-image"/>
+                </div>
             </div>
+            <form method="post" action="/prisoners/{{ data.prisonNumber }}/check-transfer">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+                {{ govukButton({
+                    classes: "govuk-button govuk-!-margin-bottom-6",
+                    text: "Add to the establishment roll",
+                    attributes: {'data-qa': 'add-to-roll'},
+                    type: 'submit',
+                    preventDoubleClick: true
+                }) }}
+            </form>
+            <p class="govuk-!-margin-top-4">
+                <a
+                    class="govuk-body govuk-link govuk-link--no-visited-state"
+                    href="/confirm-arrival/choose-prisoner"
+                    data-qa="choose-prisoner">
+                    Return to list of people arriving today
+                </a>
+            </p>
         </div>
-    </main>
+    </div>
 {% endblock %}
