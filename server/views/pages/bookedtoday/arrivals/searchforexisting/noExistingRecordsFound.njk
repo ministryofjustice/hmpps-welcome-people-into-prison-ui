@@ -23,7 +23,7 @@
             </div> 
             <div> 
                 {{ govukInsetText({
-                html: 'If you think this person has an existing prisoner record, you can <a class="govuk-link--no-visited-state" data-qa="search-instead" href="/prisoners/' + data.id + '/search-for-existing-record">search again using different details</a>.'
+                    html: 'If you think this person has an existing prisoner record, you can <a class="govuk-link--no-visited-state" data-qa="search-instead" href="/prisoners/' + id + '/search-for-existing-record/new">search again using different details</a>.'
                 }) }}  
                 <form method="post">
                     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
