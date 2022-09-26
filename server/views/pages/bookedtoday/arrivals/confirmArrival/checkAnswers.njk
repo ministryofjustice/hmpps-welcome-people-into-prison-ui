@@ -2,13 +2,11 @@
 {% set pageTitle = "Check answers" %}
 
 {% block content %}
-    <div class="govuk-width-container">
-        <div class="govuk-grid-row govuk-!-margin-bottom-6">
-            <div class="govuk-grid-column-two-thirds">
-                <span class="govuk-caption-xl"> Confirm arrival of {{ data.firstName}} {{ data.lastName }} </span>
-                <h1 class="govuk-heading-l govuk-!-margin-bottom-7">Check your answers before adding {{ data.firstName}} {{ data.lastName }} to the establishment roll</h1>
-
-                {{ govukSummaryList({
+    <div class="govuk-grid-row govuk-!-margin-bottom-6">
+        <div class="govuk-grid-column-two-thirds">
+            <span class="govuk-caption-xl">Confirm arrival of {{ data.firstName }} {{ data.lastName }}</span>
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-7">Check your answers before adding {{ data.firstName }} {{ data.lastName }} to the establishment roll</h1>
+            {{ govukSummaryList({
                 rows: [
                     {   key:     { text: "Name"},
                         value:   { text: data.firstName + " " + data.lastName, classes: "data-qa-prisoner-name"},
@@ -35,19 +33,17 @@
                         show:    data.reasonImprisonment
                     }
                 ] | selectattr("show")
-                }) }}
-            </div>
-        </div>
-
-        <form method="post" action = "/prisoners/{{ id }}/check-answers">
-            <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-            {{ govukButton({
-                classes: "govuk-button govuk-!-margin-bottom-6",
-                text: "Add to the establishment roll",
-                attributes: {'data-qa': 'add-to-roll'},
-                type: 'submit',
-                preventDoubleClick: true
             }) }}
-        </form>
+        </div>
     </div>
+    <form method="post" action="/prisoners/{{ id }}/check-answers">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        {{ govukButton({
+            classes: "govuk-button govuk-!-margin-bottom-6",
+            text: "Add to the establishment roll",
+            attributes: {'data-qa': 'add-to-roll'},
+            type: 'submit',
+            preventDoubleClick: true
+        }) }}
+    </form>
 {% endblock %}

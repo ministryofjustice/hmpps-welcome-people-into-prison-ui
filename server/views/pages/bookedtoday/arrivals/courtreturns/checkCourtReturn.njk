@@ -3,41 +3,34 @@
 {% from "../../../../components/prisoner-split-view.njk" import prisonerSplitView %}
 
 {% block content %}
-    <div class="govuk-width-container">
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-                <span class="govuk-caption-xl"> Confirm an arrival</span>
-                <h1 class="govuk-heading-l">This person is returning from court</h1>
-                <p>
-                    {{ data.firstName }} {{ data.lastName }} will be booked into the establishment using their
-                    existing prisoner record.
-                </p>
-            </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <span class="govuk-caption-xl">Confirm an arrival</span>
+            <h1 class="govuk-heading-l">This person is returning from court</h1>
+            <p>{{ data.firstName }} {{ data.lastName }} will be booked into the establishment using their existing prisoner record.</p>
         </div>
-
-        {{ prisonerSplitView(prisonerEscortRecord, data, 'Details from Person Escort Record') }}
-
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-                <form method="post" action="/prisoners/{{ id }}/check-court-return">
-                    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-                    {{ govukButton({
-                        classes: "govuk-button govuk-!-margin-bottom-6",
-                        text: "Confirm prisoner has returned",
-                        attributes: {'data-qa': 'add-to-roll'},
-                        type: 'submit',
-                        preventDoubleClick: true
-                    }) }}
-                </form>
-                <p class="govuk-!-margin-top-4">
-                    <a
-                            class="govuk-body govuk-link govuk-link--no-visited-state"
-                            href="/confirm-arrival/choose-prisoner"
-                            data-qa="return-to-arrivals-list">
-                        Return to list of people arriving today
-                    </a>
-                </p>
-            </div>
+    </div>
+    {{ prisonerSplitView(prisonerEscortRecord, data, 'Details from Person Escort Record') }}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form method="post" action="/prisoners/{{ id }}/check-court-return">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+                {{ govukButton({
+                    classes: "govuk-button govuk-!-margin-bottom-6",
+                    text: "Confirm prisoner has returned",
+                    attributes: {'data-qa': 'add-to-roll'},
+                    type: 'submit',
+                    preventDoubleClick: true
+                }) }}
+            </form>
+            <p class="govuk-!-margin-top-4">
+                <a
+                    class="govuk-body govuk-link govuk-link--no-visited-state"
+                    href="/confirm-arrival/choose-prisoner"
+                    data-qa="return-to-arrivals-list">
+                    Return to list of people arriving today
+                </a>
+            </p>
         </div>
     </div>
 {% endblock %}

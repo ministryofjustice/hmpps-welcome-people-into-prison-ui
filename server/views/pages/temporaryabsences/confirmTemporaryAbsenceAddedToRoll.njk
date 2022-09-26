@@ -3,51 +3,40 @@
 {% set pageTitle = "This person has returned to prison" %}
 
 {% block content %}
-    <div class="govuk-width-container">
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-                {{ govukPanel({
-                    titleText: firstName + " " + lastName + " " + "has returned to " + prison.description,
-                    html: "Prison number<br><strong>" + prisonNumber | escape + "</strong>",
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {{ govukPanel({
+                titleText: firstName + " " + lastName + " " + "has returned to " + prison.description,
+                html: "Prison number<br><strong>" + prisonNumber | escape + "</strong>",
+                attributes: {
+                    'data-qa': 'confirmation-banner'
+                }
+            }) }}
+            <p data-qa="confirmation-paragraph">{{ firstName }} {{ lastName }} is on the establishment roll.</p>
+            <p data-qa="location-paragraph">Their location is {{ location }}.</p>
+            <h2 class="govuk-heading-m">Add more information about this person</h2>
+            <p>
+                <a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ dpsUrl }}/save-backlink?service=welcome-people-into-prison&returnPath=/&redirectPath=/prisoner/{{ prisonNumber }}/add-case-note" data-qa="add-case-note">
+                    Add a case note on their profile
+                </a>
+            </p>
+            <div class="govuk-button-group govuk-!-padding-top-6">
+                {{ govukButton({
+                    text: "Back to new arrivals",
+                    href: "/",
                     attributes: {
-                        'data-qa': 'confirmation-banner'
+                        'data-qa': 'back-to-new-arrivals'
                     }
                 }) }}
-
-                <p data-qa="confirmation-paragraph">{{ firstName }} {{ lastName }} is on the establishment roll.</p>
-
-                <p data-qa="location-paragraph">Their location is {{ location }}.</p>
-
-                <h2 class="govuk-heading-m">Add more information about this person</h2>
-                <p>
-                    <a class="govuk-body govuk-link govuk-link--no-visited-state"
-                       href="{{ dpsUrl }}/save-backlink?service=welcome-people-into-prison&returnPath=/&redirectPath=/prisoner/{{ prisonNumber }}/add-case-note"
-                       data-qa="add-case-note"
-                    >
-                        Add a case note on their profile
-                    </a>
-                </p>
-
-                <div class="govuk-button-group govuk-!-padding-top-6">
-                    {{ govukButton({
-                        text: "Back to new arrivals",
-                        href: "/",
-                        attributes: {
-                            'data-qa': 'back-to-new-arrivals'
-                        }
-
-                    }) }}
-
-                    {{ govukButton({
-                        text: "View establishment roll",
-                        classes: "govuk-button--secondary",
-                        href: dpsUrl + "/establishment-roll",
-                        attributes: {
-                            'data-qa': 'view-establishment-roll',
-                            'target': '_blank'
-                        }
-                    }) }}
-                </div>
+                {{ govukButton({
+                    text: "View establishment roll",
+                    classes: "govuk-button--secondary",
+                    href: dpsUrl + "/establishment-roll",
+                    attributes: {
+                        'data-qa': 'view-establishment-roll',
+                        'target': '_blank'
+                    }
+                }) }}
             </div>
         </div>
     </div>

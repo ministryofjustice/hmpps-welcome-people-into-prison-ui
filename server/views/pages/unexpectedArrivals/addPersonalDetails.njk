@@ -1,113 +1,100 @@
 {% extends "../../partials/layout.njk" %}
-
 {% set pageTitle = "Add personal details" %}
 
 {% block content %}
-    <div class="govuk-width-container">
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-
-                {% if errors.length %}
-                    {{ govukErrorSummary({
-                        titleText: "There is a problem",
-                        errorList: errors,
-                        attributes: { 'data-qa-errors': true }
-                    }) }}
-                {% endif %}
-
-                <span class="govuk-caption-xl">Confirm an arrival</span>
-                <h1 class="govuk-heading-l">{{pageTitle}}</h1>    
-                <p>This information will be used to create a new prisoner record for this person.</p> 
-                <p>You should add details exactly as they appear on the warrant.</p>
-
-                <form method="post">
-                    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-
-                    {% call govukFieldset({ legend: {text: "Name", classes: "govuk-fieldset__legend--m"} }) %}
-                        {{ govukInput({
-                            label: { text: 'First name' },
-                            id: "first-name",
-                            name: "firstName",
-                            classes: 'govuk-input govuk-input--width-20',
-                            value: data.firstName,
-                            errorMessage: errors | findError("first-name"),
-                            attributes: {"data-qa": "first-name"}
-                        }) }}
-
-                        {{ govukInput({
-                            label: { text: 'Last name' },
-                            id: "last-name",
-                            name: "lastName",
-                            classes: 'govuk-input govuk-input--width-20',
-                            value: data.lastName,
-                            errorMessage: errors | findError("last-name"),
-                            attributes: {"data-qa": "last-name"}
-                        }) }}
-                    {% endcall %}
-
-                    {% call govukFieldset({ legend: {text: "Date of birth", classes: "govuk-fieldset__legend--m"} }) %}
-                        {{ govukDateInput({
-                            id: "date-of-birth",
-                            hint: {
-                                text: "For example, 31 3 1980."
-                            },
-                            errorMessage: errors | findFirstError(["date-of-birth-day", "date-of-birth-month", "date-of-birth-year"]),
-                            items: [
-                                {
-                                classes: "govuk-input--width-2",
-                                name: "day",
-                                value: data.day | default(data.dateOfBirth | formatDate('DD')),
-                                attributes: {"data-qa": "day"}
-
-                                },
-                                {
-                                classes: "govuk-input--width-2",
-                                name: "month",
-                                value: data.month | default(data.dateOfBirth | formatDate('MM')),
-                                attributes: {"data-qa": "month"}
-                                },
-                                {
-                                classes: "govuk-input--width-4",
-                                name: "year",
-                                value: data.year | default(data.dateOfBirth | formatDate('YYYY')),
-                                attributes: {"data-qa": "year"}
-                                }
-                            ]
-                        }) }}
-                    {% endcall %}
-
-                    {% call govukFieldset({ legend: {text: "Sex", classes: "govuk-fieldset__legend--m"} }) %}
-                        {{ govukRadios({
-                            name: "sex",
-                            hint: {
-                                text: "This is the sex recorded on the person's birth certificate or Gender Recognition Certificate."
-                            },
-                            items: [
-                                {
-                                    value: 'F',
-                                    text: "Female",
-                                    checked: data.sex == 'F',
-                                    attributes: {"data-qa": "female"}
-                                },
-                                {
-                                    value: 'M',
-                                    text: "Male",
-                                    checked: data.sex == 'M',
-                                    attributes: {"data-qa": "male"}
-                                }
-                            ],
-                            errorMessage: errors | findError("sex")
-                        }) }}
-                    {% endcall %}
-
-                    {{ govukButton({
-                            classes: "govuk-button govuk-!-margin-bottom-3",
-                            text: "Continue",
-                            attributes: {'data-qa': 'continue'},
-                            type: 'submit'
-                    }) }}         
-                 </form>                              
-            </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {% if errors.length %}
+                {{ govukErrorSummary({
+                    titleText: "There is a problem",
+                    errorList: errors,
+                    attributes: { 'data-qa-errors': true }
+                }) }}
+            {% endif %}
+            <span class="govuk-caption-xl">Confirm an arrival</span>
+            <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+            <p>This information will be used to create a new prisoner record for this person.</p>
+            <p>You should add details exactly as they appear on the warrant.</p>
+            <form method="post">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}"/> {% call govukFieldset({ legend: {text: "Name", classes: "govuk-fieldset__legend--m"} }) %}
+                {{ govukInput({
+                    label: { text: 'First name' },
+                    id: "first-name",
+                    name: "firstName",
+                    classes: 'govuk-input govuk-input--width-20',
+                    value: data.firstName,
+                    errorMessage: errors | findError("first-name"),
+                    attributes: {"data-qa": "first-name"}
+                }) }}
+                {{ govukInput({
+                    label: { text: 'Last name' },
+                    id: "last-name",
+                    name: "lastName",
+                    classes: 'govuk-input govuk-input--width-20',
+                    value: data.lastName,
+                    errorMessage: errors | findError("last-name"),
+                    attributes: {"data-qa": "last-name"}
+                }) }}
+                {% endcall %}
+                {% call govukFieldset({ legend: {text: "Date of birth", classes: "govuk-fieldset__legend--m"} }) %}
+                {{ govukDateInput({
+                    id: "date-of-birth",
+                    hint: {
+                        text: "For example, 31 3 1980."
+                    },
+                    errorMessage: errors | findFirstError(["date-of-birth-day", "date-of-birth-month", "date-of-birth-year"]),
+                    items: [
+                        {
+                        classes: "govuk-input--width-2",
+                        name: "day",
+                        value: data.day | default(data.dateOfBirth | formatDate('DD')),
+                        attributes: {"data-qa": "day"}
+                        },
+                        {
+                        classes: "govuk-input--width-2",
+                        name: "month",
+                        value: data.month | default(data.dateOfBirth | formatDate('MM')),
+                        attributes: {"data-qa": "month"}
+                        },
+                        {
+                        classes: "govuk-input--width-4",
+                        name: "year",
+                        value: data.year | default(data.dateOfBirth | formatDate('YYYY')),
+                        attributes: {"data-qa": "year"}
+                        }
+                    ]
+                }) }}
+                {% endcall %}
+                {% call govukFieldset({ legend: {text: "Sex", classes: "govuk-fieldset__legend--m"} }) %}
+                {{ govukRadios({
+                    name: "sex",
+                    hint: {
+                        text: "This is the sex recorded on the person's birth certificate or Gender Recognition Certificate."
+                    },
+                    items: [
+                        {
+                            value: 'F',
+                            text: "Female",
+                            checked: data.sex == 'F',
+                            attributes: {"data-qa": "female"}
+                        },
+                        {
+                            value: 'M',
+                            text: "Male",
+                            checked: data.sex == 'M',
+                            attributes: {"data-qa": "male"}
+                        }
+                    ],
+                    errorMessage: errors | findError("sex")
+                }) }}
+                {% endcall %}
+                {{ govukButton({
+                    classes: "govuk-button govuk-!-margin-bottom-3",
+                    text: "Continue",
+                    attributes: {'data-qa': 'continue'},
+                    type: 'submit'
+                }) }}
+            </form>
         </div>
     </div>
 {% endblock %}
