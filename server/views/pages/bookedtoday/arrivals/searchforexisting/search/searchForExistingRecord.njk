@@ -2,55 +2,52 @@
 {% set pageTitle = "Search for an existing prisoner record" %}
 {% set baseUrl = '/prisoners/' + data.id + '/search-for-existing-record' %}
 {% block content %}
-    <div class="govuk-width-container">
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-                <span class="govuk-caption-xl">Confirm an arrival</span>
-                <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
-                <p>Check this person's details are correct and add or change their PNC or prison number if you have one.</p>
-                <h2 class="govuk-heading-m">Personal details</h2>
-                {% set details = [
-                    {   key:     { text: "Name" },
-                        value:   { text: data.firstName + " " + data.lastName, classes: 'data-qa-name' },
-                        actions: { items: [
-                            { href: baseUrl + '/change-name', text: "Change", visuallyHiddenText: "name", attributes: { 'data-qa': 'change-name' } }]}
-                    },
-                    {   key:     { text: "Date of birth" },
-                        value:   { text: data.dateOfBirth | formatDate('D MMMM YYYY'), classes: 'data-qa-dob' },
-                        actions: { items: [
-                            { href: baseUrl + '/change-date-of-birth', text: "Change", visuallyHiddenText: "date of birth", attributes: { 'data-qa': 'change-dob' } }]}
-                    }
-                ] %}
-                {{ govukSummaryList({ rows: details }) }}
-                <h3 class="govuk-heading-m">Identifiers</h3>
-                {% set identifiers = [
-                    {   key:     { text: "PNC number" },
-                        value:   { text: data.pncNumber | default('Not entered', true), classes: 'data-qa-pnc-number' },
-                        actions: { items: [
-                            { href: baseUrl + '/change-pnc-number', text: "Change" if data.pncNumber else "Add", visuallyHiddenText: "PNC number", show: true, attributes: { 'data-qa': 'change-pnc' } },
-                            { href: baseUrl + '/remove-pnc-number', text: "Remove" if data.pncNumber, visuallyHiddenText: "PNC number", show: data.pncNumber, attributes: { 'data-qa': 'remove-pnc' } }]
-                            | selectattr("show")}
-                    },
-                    {   key:     { text: "Prison number" },
-                        value:   { text: data.prisonNumber | default('Not entered', true), classes: 'data-qa-prison-number' },
-                        actions: { items: [
-                            { href: baseUrl + '/change-prison-number', text: "Change" if data.prisonNumber else "Add", visuallyHiddenText: "Prison number", show: true, attributes: { 'data-qa': 'change-prison-number' } },
-                            { href: baseUrl + '/remove-prison-number', text: "Remove", visuallyHiddenText: "Prison number", show: data.prisonNumber, attributes: { 'data-qa': 'remove-prison-number' } }]
-                            | selectattr("show")}
-                    }
-                ] %}
-                {{ govukSummaryList({ rows: identifiers, classes: 'search-identifiers' }) }}
-
-                <form method="post" action = "/prisoners/{{ data.id }}/search-for-existing-record">
-                    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-                    {{ govukButton({
-                            classes: "govuk-button govuk-!-margin-top-9 govuk-!-margin-bottom-3",
-                            text: "Search",
-                            type: 'submit',
-                            attributes: {'data-qa': 'search'}
-                    }) }}
-                </form>
-            </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <span class="govuk-caption-xl">Confirm an arrival</span>
+            <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+            <p>Check this person's details are correct and add or change their PNC or prison number if you have one.</p>
+            <h2 class="govuk-heading-m">Personal details</h2>
+            {% set details = [
+                {   key:     { text: "Name" },
+                    value:   { text: data.firstName + " " + data.lastName, classes: 'data-qa-name' },
+                    actions: { items: [
+                        { href: baseUrl + '/change-name', text: "Change", visuallyHiddenText: "name", attributes: { 'data-qa': 'change-name' } }]}
+                },
+                {   key:     { text: "Date of birth" },
+                    value:   { text: data.dateOfBirth | formatDate('D MMMM YYYY'), classes: 'data-qa-dob' },
+                    actions: { items: [
+                        { href: baseUrl + '/change-date-of-birth', text: "Change", visuallyHiddenText: "date of birth", attributes: { 'data-qa': 'change-dob' } }]}
+                }
+            ] %}
+            {{ govukSummaryList({ rows: details }) }}
+            <h3 class="govuk-heading-m">Identifiers</h3>
+            {% set identifiers = [
+                {   key:     { text: "PNC number" },
+                    value:   { text: data.pncNumber | default('Not entered', true), classes: 'data-qa-pnc-number' },
+                    actions: { items: [
+                        { href: baseUrl + '/change-pnc-number', text: "Change" if data.pncNumber else "Add", visuallyHiddenText: "PNC number", show: true, attributes: { 'data-qa': 'change-pnc' } },
+                        { href: baseUrl + '/remove-pnc-number', text: "Remove" if data.pncNumber, visuallyHiddenText: "PNC number", show: data.pncNumber, attributes: { 'data-qa': 'remove-pnc' } }]
+                        | selectattr("show")}
+                },
+                {   key:     { text: "Prison number" },
+                    value:   { text: data.prisonNumber | default('Not entered', true), classes: 'data-qa-prison-number' },
+                    actions: { items: [
+                        { href: baseUrl + '/change-prison-number', text: "Change" if data.prisonNumber else "Add", visuallyHiddenText: "Prison number", show: true, attributes: { 'data-qa': 'change-prison-number' } },
+                        { href: baseUrl + '/remove-prison-number', text: "Remove", visuallyHiddenText: "Prison number", show: data.prisonNumber, attributes: { 'data-qa': 'remove-prison-number' } }]
+                        | selectattr("show")}
+                }
+            ] %}
+            {{ govukSummaryList({ rows: identifiers, classes: 'search-identifiers' }) }}
+            <form method="post" action="/prisoners/{{ data.id }}/search-for-existing-record">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+                {{ govukButton({
+                    classes: "govuk-button govuk-!-margin-top-6 govuk-!-margin-bottom-3",
+                    text: "Search",
+                    type: 'submit',
+                    attributes: {'data-qa': 'search'}
+                }) }}
+            </form>
         </div>
     </div>
 {% endblock %}

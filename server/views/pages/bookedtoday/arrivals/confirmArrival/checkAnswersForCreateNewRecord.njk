@@ -1,14 +1,11 @@
 {% extends "../../../../partials/layout.njk" %}
 {% set pageTitle = "Check answers" %}
-
 {% block content %}
-    <div class="govuk-width-container">
-        <div class="govuk-grid-row govuk-!-margin-bottom-6">
-            <div class="govuk-grid-column-two-thirds">
-                <span class="govuk-caption-xl">Confirm arrival of {{ data.firstName}} {{ data.lastName }}</span>
-                <h1 class="govuk-heading-l govuk-!-margin-bottom-7">You're about to add this person to the establishment roll</h1>
-                
-                {{ govukSummaryList({
+    <div class="govuk-grid-row govuk-!-margin-bottom-6">
+        <div class="govuk-grid-column-two-thirds">
+            <span class="govuk-caption-xl">Confirm arrival of {{ data.firstName }} {{ data.lastName }}</span>
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-7">You're about to add this person to the establishment roll</h1>
+            {{ govukSummaryList({
                 attributes: {'data-qa': dataQa},
                 rows: [
                     {   key:     { text: "Name"},
@@ -32,25 +29,19 @@
                         show:    data.reasonImprisonment
                     }
                 ] | selectattr("show")
+            }) }}
+            <h2 class="govuk-heading-m">Create prisoner record and add to establishment roll</h2>
+            <p class="govuk-body">By submitting this form, you will create a new prisoner record, add this person to your establishment roll and generate a new prison number.</p>
+            <form method="post" action="/prisoners/{{ id }}/check-answers">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+                {{ govukButton({
+                    classes: "govuk-button govuk-!-margin-bottom-1",
+                    text: "Create record and add to establishment roll",
+                    attributes: {'data-qa': 'add-to-roll'},
+                    type: 'submit',
+                    preventDoubleClick: true
                 }) }}
-
-                <h2 class="govuk-heading-m">Create prisoner record and add to establishment roll</h2>
-                <p class="govuk-body">
-                    By submitting this form, you will create a new prisoner record, add this person to your 
-                    establishment roll and generate a new prison number.
-                </p>
-
-                <form method="post" action = "/prisoners/{{ id }}/check-answers">
-                    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-                    {{ govukButton({
-                        classes: "govuk-button govuk-!-margin-bottom-1",
-                        text: "Create record and add to establishment roll",
-                        attributes: {'data-qa': 'add-to-roll'},
-                        type: 'submit',
-                        preventDoubleClick: true
-                    }) }}
-                </form>
-            </div>
+            </form>
         </div>
     </div>
 {% endblock %}

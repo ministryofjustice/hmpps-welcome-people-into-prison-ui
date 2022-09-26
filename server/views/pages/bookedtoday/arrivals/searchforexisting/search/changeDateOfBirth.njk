@@ -1,54 +1,49 @@
 {% extends "../../../../../partials/layout.njk" %}
-
 {% set pageTitle = "Change this person's date of birth" %}
-
 {% block content %}
-    <div class="govuk-width-container">
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-                {% if errors.length %}
-                    {{ govukErrorSummary({
-                        titleText: "There is a problem",
-                        errorList: errors,
-                        attributes: { 'data-qa-errors': true }
-                    }) }}
-                {% endif %}
-                <span class="govuk-caption-xl">Confirm an arrival</span>
-                <h1 class="govuk-heading-l">{{pageTitle}}</h1>
-                <form method="post">
-                    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-                    {{ govukDateInput({
-                        id: "date-of-birth",
-                        hint: {
-                            text: "For example, 31 3 1980."
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {% if errors.length %}
+                {{ govukErrorSummary({
+                    titleText: "There is a problem",
+                    errorList: errors,
+                    attributes: { 'data-qa-errors': true }
+                }) }}
+            {% endif %}
+            <span class="govuk-caption-xl">Confirm an arrival</span>
+            <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+            <form method="post">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}"/> 
+                {{ govukDateInput({
+                    id: "date-of-birth",
+                    hint: {
+                        text: "For example, 31 3 1980."
+                    },
+                    errorMessage: errors | findFirstError(["date-of-birth-day", "date-of-birth-month", "date-of-birth-year"]),
+                    items: [
+                        {
+                        classes: "govuk-input--width-2",
+                        name: "day",
+                        value: data.day | default(data.dateOfBirth | formatDate('DD'))
                         },
-                        errorMessage: errors | findFirstError(["date-of-birth-day", "date-of-birth-month", "date-of-birth-year"]),
-                        items: [
-                            {
-                            classes: "govuk-input--width-2",
-                            name: "day",
-                            value: data.day | default(data.dateOfBirth | formatDate('DD'))
-                            },
-                            {
-                            classes: "govuk-input--width-2",
-                            name: "month",
-                            value: data.month | default(data.dateOfBirth | formatDate('MM'))
-                            },
-                            {
-                            classes: "govuk-input--width-4",
-                            name: "year",
-                            value: data.year | default(data.dateOfBirth | formatDate('YYYY'))
-                            }
-                        ]
-                    }) }}
-
-                    {{ govukButton({
-                            classes: "govuk-button govuk-!-margin-bottom-3",
-                            text: "Save and continue",
-                            attributes: {'data-qa': 'save'}
-                    }) }}
-                </form>
-            </div>
+                        {
+                        classes: "govuk-input--width-2",
+                        name: "month",
+                        value: data.month | default(data.dateOfBirth | formatDate('MM'))
+                        },
+                        {
+                        classes: "govuk-input--width-4",
+                        name: "year",
+                        value: data.year | default(data.dateOfBirth | formatDate('YYYY'))
+                        }
+                    ]
+                }) }}
+                {{ govukButton({
+                    classes: "govuk-button govuk-!-margin-bottom-3",
+                    text: "Save and continue",
+                    attributes: {'data-qa': 'save'}
+                }) }}
+            </form>
         </div>
     </div>
 {% endblock %}

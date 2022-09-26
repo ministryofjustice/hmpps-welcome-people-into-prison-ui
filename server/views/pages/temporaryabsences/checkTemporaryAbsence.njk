@@ -1,97 +1,86 @@
 {% extends "../../partials/layout.njk" %}
 {% set pageTitle = "This person will be returned to prison" %}
-
 {% block content %}
-    <div class="govuk-width-container">
-        <main class="govuk-main-wrapper govuk-!-padding-bottom-0">
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-two-thirds">
-                    <span class="govuk-caption-xl"> Confirm return of {{ data.firstName }} {{ data.lastName }}</span>
-                    <h1 class="govuk-heading-l">This person will be returned to prison</h1>
-                    <p>
-                        {{ data.firstName }} {{ data.lastName }} will be added to the establishment roll using their existing prisoner record.
-                    </p>
-                    <h2 class="govuk-heading-m">Details from prisoner record</h2>
-                        <div class = "prisoner-record-detail prisoner-header govuk-!-margin-bottom-8">
-                            <div>
-                                {{ govukSummaryList({
-                                attributes: {'data-qa':"list" },
-                                classes: "govuk-!-margin-bottom-0 govuk-summary-list--no-border",
-                                rows: [
-                                    {
-                                    key: {
-                                        text: "Name",
-                                        classes: "govuk-!-padding-bottom-0"
-                                    },
-                                    value: {
-                                        text: data.firstName + ' ' + data.lastName,
-                                        classes: "govuk-!-padding-bottom-0 data-qa-name"
-                                    }
-                                    },
-                                    {
-                                    key: {
-                                        text: "Date of birth",
-                                        classes: "govuk-!-padding-bottom-0"
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <span class="govuk-caption-xl">Confirm return of {{ data.firstName }} {{ data.lastName }}</span>
+            <h1 class="govuk-heading-l">This person will be returned to prison</h1>
+            <p>{{ data.firstName }} {{ data.lastName }} will be added to the establishment roll using their existing prisoner record.</p>
+            <h2 class="govuk-heading-m">Details from prisoner record</h2>
+            <div class="prisoner-record-detail prisoner-header govuk-!-margin-bottom-8">
+                <div>
+                    {{ govukSummaryList({
+                        attributes: {'data-qa':"list" },
+                        classes: "govuk-!-margin-bottom-0 govuk-summary-list--no-border",
+                        rows: [
+                            {
+                            key: {
+                                text: "Name",
+                                classes: "govuk-!-padding-bottom-0"
+                            },
+                            value: {
+                                text: data.firstName + ' ' + data.lastName,
+                                classes: "govuk-!-padding-bottom-0 data-qa-name"
+                            }
+                            },
+                            {
+                            key: {
+                                text: "Date of birth",
+                                classes: "govuk-!-padding-bottom-0"
 
-                                    },
-                                    value: {
-                                        text:  data.dateOfBirth | formatDate('D MMMM YYYY'),
-                                        classes: "govuk-!-padding-bottom-0 data-qa-dob"
-                                    }
+                            },
+                            value: {
+                                text:  data.dateOfBirth | formatDate('D MMMM YYYY'),
+                                classes: "govuk-!-padding-bottom-0 data-qa-dob"
+                            }
 
-                                    },
-                                    {
-                                    key: {
-                                        text: "Prison number",
-                                        classes: "govuk-!-padding-bottom-0"
-                                    },
-                                    value: {
-                                        text:  data.prisonNumber,
-                                        classes: "govuk-!-padding-bottom-0 data-qa-prison-number"
-                                    }
-                                    },
-                                    
-                                    {
-                                    key: {
-                                        text: "Reason for absence" if  data.reasonForAbsence,
-                                        classes: "govuk-!-padding-bottom-0"
-                                    },
-                                    value: {
-                                        text:  data.reasonForAbsence,
-                                        classes: "govuk-!-padding-bottom-0 data-qa-reason-for-absence"
-                                    }
-                                    }
-                                ]
-                                }) }}
-                            </div>
-                            <div>
-                                <img src="{{ '/prisoners/' + data.prisonNumber + '/image' if data.prisonNumber else '/assets/images/placeholder-image.png' }}" 
-                                class="prisoner-image govuk-!-margin-top-2"
-                                alt="{{ data.lastName }}, {{ data.firstName }}" 
-                                data-qa="prisoner-image" 
-                                />
-                            </div>
-                        </div>
-                    <form method="post" action="/prisoners/{{ data.prisonNumber }}/check-temporary-absence">
-                        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-                        {{ govukButton({
-                            classes: "govuk-button govuk-!-margin-bottom-6",
-                            text: "Confirm person has returned",
-                            attributes: {'data-qa': 'add-to-roll'},
-                            type: 'submit',
-                            preventDoubleClick: true
-                        }) }}
-                    </form>
-                    <p class="govuk-!-margin-top-4">
-                        <a
-                            class="govuk-body govuk-link govuk-link--no-visited-state"
-                            href="/prisoners-returning"
-                            data-qa="return-to-temporary-absences-list">
-                            Return to list of people out on temporary absence
-                        </a>
-                    </p>   
+                            },
+                            {
+                            key: {
+                                text: "Prison number",
+                                classes: "govuk-!-padding-bottom-0"
+                            },
+                            value: {
+                                text:  data.prisonNumber,
+                                classes: "govuk-!-padding-bottom-0 data-qa-prison-number"
+                            }
+                            },
+                            
+                            {
+                            key: {
+                                text: "Reason for absence" if  data.reasonForAbsence,
+                                classes: "govuk-!-padding-bottom-0"
+                            },
+                            value: {
+                                text:  data.reasonForAbsence,
+                                classes: "govuk-!-padding-bottom-0 data-qa-reason-for-absence"
+                            }
+                            }
+                        ]
+                    }) }}
                 </div>
-            </div> 
-        </main>
+                <div>
+                    <img src="{{ '/prisoners/' + data.prisonNumber + '/image' if data.prisonNumber else '/assets/images/placeholder-image.png' }}" class="prisoner-image govuk-!-margin-top-2" alt="{{ data.lastName }}, {{ data.firstName }}" data-qa="prisoner-image"/>
+                </div>
+            </div>
+            <form method="post" action="/prisoners/{{ data.prisonNumber }}/check-temporary-absence">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+                {{ govukButton({
+                    classes: "govuk-button govuk-!-margin-bottom-6",
+                    text: "Confirm person has returned",
+                    attributes: {'data-qa': 'add-to-roll'},
+                    type: 'submit',
+                    preventDoubleClick: true
+                }) }}
+            </form>
+            <p class="govuk-!-margin-top-4">
+                <a
+                    class="govuk-body govuk-link govuk-link--no-visited-state"
+                    href="/prisoners-returning"
+                    data-qa="return-to-temporary-absences-list">
+                    Return to list of people out on temporary absence
+                </a>
+            </p>
+        </div>
     </div>
 {% endblock %}
