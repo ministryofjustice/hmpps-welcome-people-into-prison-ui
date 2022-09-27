@@ -1,5 +1,5 @@
 import type { RequestHandler } from 'express'
-import type { TransfersService, RaiseAnalyticsEvent } from '../../../services'
+import type { RaiseAnalyticsEvent, TransfersService } from '../../../services'
 
 export default class CheckTransferController {
   public constructor(
@@ -10,9 +10,10 @@ export default class CheckTransferController {
   public checkTransfer(): RequestHandler {
     return async (req, res) => {
       const { activeCaseLoadId } = res.locals.user
+      const { arrivalId } = req.query
       const { prisonNumber } = req.params
       const data = await this.transfersService.getTransfer(activeCaseLoadId, prisonNumber)
-      return res.render('pages/bookedtoday/transfers/checkTransfer.njk', { data })
+      return res.render('pages/bookedtoday/transfers/checkTransfer.njk', { data, arrivalId })
     }
   }
 
@@ -20,10 +21,16 @@ export default class CheckTransferController {
     return async (req, res) => {
       const { prisonNumber } = req.params
       const { username } = req.user
+      const { arrivalId } = req.body
       const { activeCaseLoadId } = res.locals.user
       const data = await this.transfersService.getTransfer(activeCaseLoadId, prisonNumber)
 
-      const arrivalResponse = await this.transfersService.confirmTransfer(username, prisonNumber, activeCaseLoadId)
+      const arrivalResponse = await this.transfersService.confirmTransfer(
+        username,
+        prisonNumber,
+        activeCaseLoadId,
+        arrivalId
+      )
 
       if (!arrivalResponse) {
         return res.redirect('/feature-not-available')

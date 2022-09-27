@@ -28,6 +28,7 @@ const arrival = expectedArrivals.arrival({
       sex: 'MALE',
     },
     {
+      id: '11111-11111',
       firstName: 'Sum',
       lastName: 'Smoth',
       dateOfBirth: '1971-02-03',
@@ -74,6 +75,7 @@ context('Redirect logic once a record for an arrival has been resolved', () => {
     multipleMatchingRecordsPage.continue().click()
 
     const checkTemporaryAbsencePage = Page.verifyOnPage(CheckTemporaryAbsencePage)
+    checkTemporaryAbsencePage.arrivalId().should('have.value', chosenMatch.id)
     checkTemporaryAbsencePage.addToRoll().click()
     Page.verifyOnPage(ConfirmTemporaryAbsenceAddedToRollPage)
 
@@ -96,6 +98,7 @@ context('Redirect logic once a record for an arrival has been resolved', () => {
     multipleMatchingRecordsPage.continue().click()
 
     const checkTransferPage = Page.verifyOnPage(CheckTransferPage)
+    checkTransferPage.arrivalId().should('have.value', chosenMatch.id)
     checkTransferPage.addToRoll().click()
 
     Page.verifyOnPage(ConfirmTransferAddedToRollPage)

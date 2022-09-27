@@ -47,11 +47,12 @@ describe('GET checkTemporaryAbsence', () => {
 
   it('should render the correct data in /check-temporary-absence page', () => {
     return request(app)
-      .get('/prisoners/A1234AA/check-temporary-absence')
+      .get('/prisoners/A1234AA/check-temporary-absence?arrivalId=abc-123')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
         const $ = cheerio.load(res.text)
         expect($('h1').text()).toContain('This person will be returned to prison')
+        expect($('input[name = "arrivalId"]').attr('value')).toContain('abc-123')
         expect(res.text).toContain('/prisoners/A1234AA/check-temporary-absence')
       })
   })
@@ -68,7 +69,27 @@ describe('POST addToRoll', () => {
       .post('/prisoners/A1234AA/check-temporary-absence')
       .expect('Content-Type', 'text/plain; charset=utf-8')
       .expect(() => {
-        expect(temporaryAbsencesService.confirmTemporaryAbsence).toHaveBeenCalledWith('user1', 'A1234AA', 'MDI')
+        expect(temporaryAbsencesService.confirmTemporaryAbsence).toHaveBeenCalledWith(
+          'user1',
+          'A1234AA',
+          'MDI',
+          undefined
+        )
+      })
+  })
+
+  it('should call service to confirm the temporary absence with arrivalId when present', () => {
+    return request(app)
+      .post('/prisoners/A1234AA/check-temporary-absence')
+      .send({ arrivalId: 'abc-123' })
+      .expect('Content-Type', 'text/plain; charset=utf-8')
+      .expect(() => {
+        expect(temporaryAbsencesService.confirmTemporaryAbsence).toHaveBeenCalledWith(
+          'user1',
+          'A1234AA',
+          'MDI',
+          'abc-123'
+        )
       })
   })
 

@@ -42,12 +42,21 @@ describe('Transfers service', () => {
 
       expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith('user1')
       expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.confirmTransfer).toBeCalledWith('G0015GD', 'MDI')
+      expect(welcomeClient.confirmTransfer).toBeCalledWith('G0015GD', 'MDI', undefined)
     })
+
+    it('Calls upstream services correctly when arrivalId present', async () => {
+      await service.confirmTransfer('user1', 'G0015GD', 'MDI', 'abc-123')
+
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith('user1')
+      expect(WelcomeClientFactory).toBeCalledWith(token)
+      expect(welcomeClient.confirmTransfer).toBeCalledWith('G0015GD', 'MDI', 'abc-123')
+    })
+
     it('Should return null', async () => {
       welcomeClient.confirmTransfer.mockResolvedValue(null)
 
-      const result = await await service.confirmTransfer('user1', 'G0015GD', 'MDI')
+      const result = await service.confirmTransfer('user1', 'G0015GD', 'MDI')
       expect(result).toBe(null)
     })
   })

@@ -12,5 +12,7 @@ export default class CheckTransferPage extends Page {
 
   choosePrisoner = (): PageElement => cy.get('[data-qa=choose-prisoner]')
 
+  arrivalId = (): PageElement => cy.get(`input[name=arrivalId]`)
+
   addToRoll = (): PageElement => cy.get('[data-qa=add-to-roll]')
 }

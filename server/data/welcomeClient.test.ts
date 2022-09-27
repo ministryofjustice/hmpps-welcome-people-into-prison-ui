@@ -1,6 +1,6 @@
 import nock from 'nock'
 import moment from 'moment'
-import type { Arrival, ConfirmArrivalDetail, Prison, UserCaseLoad, TemporaryAbsence } from 'welcome'
+import type { Arrival, ConfirmArrivalDetail, Prison, TemporaryAbsence, UserCaseLoad } from 'welcome'
 import WelcomeClient from './welcomeClient'
 import config from '../config'
 import {
@@ -9,10 +9,10 @@ import {
   createImprisonmentStatuses,
   createMatchCriteria,
   createPotentialMatch,
-  createTemporaryAbsence,
-  createTransfer,
   createRecentArrival,
   createRecentArrivalResponse,
+  createTemporaryAbsence,
+  createTransfer,
 } from './__testutils/testObjects'
 
 describe('welcomeClient', () => {
@@ -222,6 +222,18 @@ describe('welcomeClient', () => {
 
       return expect(welcomeClient.confirmTransfer(prisonNumber, 'MDI')).resolves.toStrictEqual(arrivalResponse)
     })
+
+    it('should call rest client successfully with arrivalId', async () => {
+      fakeWelcomeApi
+        .post(`/transfers/${prisonNumber}/confirm?arrivalId=abc-123`, { prisonId: 'MDI' })
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, arrivalResponse)
+
+      return expect(welcomeClient.confirmTransfer(prisonNumber, 'MDI', 'abc-123')).resolves.toStrictEqual(
+        arrivalResponse
+      )
+    })
+
     it('should return null', async () => {
       fakeWelcomeApi
         .post(`/transfers/${prisonNumber}/confirm`)

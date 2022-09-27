@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express'
-import type { TemporaryAbsencesService, RaiseAnalyticsEvent } from '../../services'
+import type { RaiseAnalyticsEvent, TemporaryAbsencesService } from '../../services'
 
 export default class CheckTemporaryAbsenceController {
   public constructor(
@@ -10,9 +10,10 @@ export default class CheckTemporaryAbsenceController {
   public checkTemporaryAbsence(): RequestHandler {
     return async (req, res) => {
       const { activeCaseLoadId } = res.locals.user
+      const { arrivalId } = req.query
       const { prisonNumber } = req.params
       const data = await this.temporaryAbsencesService.getTemporaryAbsence(activeCaseLoadId, prisonNumber)
-      return res.render('pages/temporaryabsences/checkTemporaryAbsence.njk', { data })
+      return res.render('pages/temporaryabsences/checkTemporaryAbsence.njk', { data, arrivalId })
     }
   }
 
@@ -20,13 +21,15 @@ export default class CheckTemporaryAbsenceController {
     return async (req, res) => {
       const { prisonNumber } = req.params
       const { username } = req.user
+      const { arrivalId } = req.body
       const { activeCaseLoadId } = res.locals.user
       const data = await this.temporaryAbsencesService.getTemporaryAbsence(activeCaseLoadId, prisonNumber)
 
       const arrivalResponse = await this.temporaryAbsencesService.confirmTemporaryAbsence(
         username,
         prisonNumber,
-        activeCaseLoadId
+        activeCaseLoadId,
+        arrivalId
       )
 
       if (!arrivalResponse) {

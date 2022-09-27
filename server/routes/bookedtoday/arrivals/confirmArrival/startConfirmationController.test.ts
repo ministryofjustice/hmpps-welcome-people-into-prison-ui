@@ -3,7 +3,7 @@ import request from 'supertest'
 import { appWithAllRoutes, stubCookie } from '../../../__testutils/appSetup'
 import Role from '../../../../authentication/role'
 import { createMockExpectedArrivalsService } from '../../../../services/__testutils/mocks'
-import { createPrisonerDetails, createNewArrival } from '../../../../data/__testutils/testObjects'
+import { createNewArrival, createPrisonerDetails } from '../../../../data/__testutils/testObjects'
 import { State } from '../state'
 
 let app: Express
@@ -57,7 +57,8 @@ describe('/start-confirmation', () => {
           .expect('Location', '/feature-not-available')
       })
 
-      it('should redirect to temporary absence flow when FROM_TEMPORARY_ABSENCE', () => {
+      it('should redirect to temporary absence flow when FROM_TEMPORARY_ABSENCE and arrival is unexpected', () => {
+        stubCookie(State.newArrival, createNewArrival({ expected: false }))
         expectedArrivalsService.getPrisonerDetails.mockResolvedValue(
           createPrisonerDetails({ arrivalType: 'FROM_TEMPORARY_ABSENCE' })
         )
@@ -67,12 +68,31 @@ describe('/start-confirmation', () => {
           .expect('Location', '/prisoners/A1234AA/check-temporary-absence')
       })
 
-      it('should redirect to transfer flow when TRANSFER', () => {
+      it('should redirect to temporary absence with arrivalId flow when FROM_TEMPORARY_ABSENCE and arrival is expected', () => {
+        expectedArrivalsService.getPrisonerDetails.mockResolvedValue(
+          createPrisonerDetails({ arrivalType: 'FROM_TEMPORARY_ABSENCE' })
+        )
+        return request(app)
+          .get('/prisoners/12345-67890/start-confirmation')
+          .expect(302)
+          .expect('Location', '/prisoners/A1234AA/check-temporary-absence?arrivalId=12345-67890')
+      })
+
+      it('should redirect to transfer flow when TRANSFER and arrival is unexpected', () => {
+        stubCookie(State.newArrival, createNewArrival({ expected: false }))
         expectedArrivalsService.getPrisonerDetails.mockResolvedValue(createPrisonerDetails({ arrivalType: 'TRANSFER' }))
         return request(app)
           .get('/prisoners/12345-67890/start-confirmation')
           .expect(302)
           .expect('Location', '/prisoners/A1234AA/check-transfer')
+      })
+
+      it('should redirect to transfer with arrivalId flow when TRANSFER and arrival is expected', () => {
+        expectedArrivalsService.getPrisonerDetails.mockResolvedValue(createPrisonerDetails({ arrivalType: 'TRANSFER' }))
+        return request(app)
+          .get('/prisoners/12345-67890/start-confirmation')
+          .expect(302)
+          .expect('Location', '/prisoners/A1234AA/check-transfer?arrivalId=12345-67890')
       })
 
       it('should redirect to feature not available when prisoner is currently in', () => {

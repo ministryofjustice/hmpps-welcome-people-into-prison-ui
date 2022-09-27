@@ -157,7 +157,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: `/welcome/transfers/${prisonNumber}/confirm`,
+        urlPath: `/welcome/transfers/${prisonNumber}/confirm`,
       },
       response: {
         status: 200,
@@ -217,7 +217,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: `/welcome/temporary-absences/${prisonNumber}/confirm`,
+        urlPath: `/welcome/temporary-absences/${prisonNumber}/confirm`,
       },
       response: {
         status: 200,

@@ -12,5 +12,7 @@ export default class CheckTemporaryAbsencePage extends Page {
 
   addToRoll = (): PageElement => cy.get(`[data-qa=add-to-roll]`)
 
+  arrivalId = (): PageElement => cy.get(`input[name=arrivalId]`)
+
   returnToTemporaryAbsencesList = (): PageElement => cy.get('[data-qa=return-to-temporary-absences-list]')
 }

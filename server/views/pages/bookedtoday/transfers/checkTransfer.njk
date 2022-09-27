@@ -14,42 +14,42 @@
                         classes: "govuk-!-margin-bottom-0 govuk-summary-list--no-border",
                         rows: [
                             {
-                            key: {
+                                key: {
                                 text: "Name",
                                 classes: "govuk-!-padding-bottom-0"
                             },
-                            value: {
+                                value: {
                                 text: data.firstName + ' ' + data.lastName,
                                 classes: "govuk-!-padding-bottom-0 data-qa-name"
                             }
                             },
                             {
-                            key: {
+                                key: {
                                 text: "Date of birth",
                                 classes: "govuk-!-padding-bottom-0"
 
                             },
-                            value: {
+                                value: {
                                 text:  data.dateOfBirth | formatDate('D MMMM YYYY'),
                                 classes: "govuk-!-padding-bottom-0 data-qa-dob"
                             }
                             },
                             {
-                            key: {
+                                key: {
                                 text: "Prison number",
                                 classes: "govuk-!-padding-bottom-0"
                             },
-                            value: {
+                                value: {
                                 text:  data.prisonNumber,
                                 classes: "govuk-!-padding-bottom-0 data-qa-prison-number"
                             }
                             },
                             {
-                            key: {
+                                key: {
                                 text: "PNC number" if  data.pncNumber,
                                 classes: "govuk-!-padding-bottom-0"
                             },
-                            value: {
+                                value: {
                                 text:  data.pncNumber,
                                 classes: "govuk-!-padding-bottom-0 data-qa-pnc-number"
                             }
@@ -58,11 +58,13 @@
                     }) }}
                 </div>
                 <div>
-                    <img src="{{ '/prisoners/' + data.prisonNumber + '/image' if data.prisonNumber else '/assets/images/placeholder-image.png' }}" class="prisoner-image govuk-!-margin-top-2" alt="{{ data.lastName }}, {{ data.firstName }}" data-qa="prisoner-image"/>
+                    <img src="{{ '/prisoners/' + data.prisonNumber + '/image' if data.prisonNumber else '/assets/images/placeholder-image.png' }}" class="prisoner-image govuk-!-margin-top-2" alt="{{ data.lastName }}, {{ data.firstName }}" data-qa="prisoner-image" />
                 </div>
             </div>
             <form method="post" action="/prisoners/{{ data.prisonNumber }}/check-transfer">
-            <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                {% if arrivalId %} <input type="hidden" name="arrivalId" value="{{ arrivalId }}" /> {% endif %}
+
                 {{ govukButton({
                     classes: "govuk-button govuk-!-margin-bottom-6",
                     text: "Add to the establishment roll",
