@@ -75,12 +75,11 @@ context('Redirect logic once a record for an arrival has been resolved', () => {
     multipleMatchingRecordsPage.continue().click()
 
     const checkTemporaryAbsencePage = Page.verifyOnPage(CheckTemporaryAbsencePage)
-    checkTemporaryAbsencePage.arrivalId().should('have.value', chosenMatch.id)
     checkTemporaryAbsencePage.addToRoll().click()
     Page.verifyOnPage(ConfirmTemporaryAbsenceAddedToRollPage)
 
     cy.task('getTemporaryAbsenceConfirmationRequest', arrival.prisonNumber).then(request => {
-      expect(request).to.deep.equal({ prisonId: 'MDI' })
+      expect(request).to.deep.equal({ prisonId: 'MDI', arrivalId: chosenMatch.id })
     })
   })
 
@@ -98,13 +97,12 @@ context('Redirect logic once a record for an arrival has been resolved', () => {
     multipleMatchingRecordsPage.continue().click()
 
     const checkTransferPage = Page.verifyOnPage(CheckTransferPage)
-    checkTransferPage.arrivalId().should('have.value', chosenMatch.id)
     checkTransferPage.addToRoll().click()
 
     Page.verifyOnPage(ConfirmTransferAddedToRollPage)
 
     cy.task('getTransferConfirmationRequest', chosenMatch.prisonNumber).then(request => {
-      expect(request).to.deep.equal({ prisonId: 'MDI' })
+      expect(request).to.deep.equal({ prisonId: 'MDI', arrivalId: chosenMatch.id })
     })
   })
 
