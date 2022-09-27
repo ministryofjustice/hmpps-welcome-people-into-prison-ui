@@ -83,8 +83,17 @@ describe('Temporary absences service', () => {
 
       expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith('user1')
       expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.confirmTemporaryAbsence).toBeCalledWith('G0015GD', 'MDI')
+      expect(welcomeClient.confirmTemporaryAbsence).toBeCalledWith('G0015GD', 'MDI', undefined)
     })
+
+    it('Calls upstream services correctly when arrivalId present', async () => {
+      await service.confirmTemporaryAbsence('user1', 'G0015GD', 'MDI', 'abc-123')
+
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith('user1')
+      expect(WelcomeClientFactory).toBeCalledWith(token)
+      expect(welcomeClient.confirmTemporaryAbsence).toBeCalledWith('G0015GD', 'MDI', 'abc-123')
+    })
+
     it('Should return null', async () => {
       welcomeClient.confirmTemporaryAbsence.mockResolvedValue(null)
 

@@ -1,6 +1,6 @@
 import nock from 'nock'
 import moment from 'moment'
-import type { Arrival, ConfirmArrivalDetail, Prison, UserCaseLoad, TemporaryAbsence } from 'welcome'
+import type { Arrival, ConfirmArrivalDetail, Prison, TemporaryAbsence, UserCaseLoad } from 'welcome'
 import WelcomeClient from './welcomeClient'
 import config from '../config'
 import {
@@ -9,10 +9,10 @@ import {
   createImprisonmentStatuses,
   createMatchCriteria,
   createPotentialMatch,
-  createTemporaryAbsence,
-  createTransfer,
   createRecentArrival,
   createRecentArrivalResponse,
+  createTemporaryAbsence,
+  createTransfer,
 } from './__testutils/testObjects'
 
 describe('welcomeClient', () => {
@@ -185,11 +185,13 @@ describe('welcomeClient', () => {
 
     it('should call rest client successfully', async () => {
       fakeWelcomeApi
-        .post(`/temporary-absences/${prisonNumber}/confirm`, { prisonId: 'MDI' })
+        .post(`/temporary-absences/${prisonNumber}/confirm`, { prisonId: 'MDI', arrivalId: 'abc-123' })
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, arrivalResponse)
 
-      return expect(welcomeClient.confirmTemporaryAbsence(prisonNumber, 'MDI')).resolves.toStrictEqual(arrivalResponse)
+      return expect(welcomeClient.confirmTemporaryAbsence(prisonNumber, 'MDI', 'abc-123')).resolves.toStrictEqual(
+        arrivalResponse
+      )
     })
 
     it('should return null', async () => {
@@ -216,12 +218,15 @@ describe('welcomeClient', () => {
     const prisonNumber = 'A1234AB'
     it('should call rest client successfully', async () => {
       fakeWelcomeApi
-        .post(`/transfers/${prisonNumber}/confirm`, { prisonId: 'MDI' })
+        .post(`/transfers/${prisonNumber}/confirm`, { prisonId: 'MDI', arrivalId: 'abc-123' })
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, arrivalResponse)
 
-      return expect(welcomeClient.confirmTransfer(prisonNumber, 'MDI')).resolves.toStrictEqual(arrivalResponse)
+      return expect(welcomeClient.confirmTransfer(prisonNumber, 'MDI', 'abc-123')).resolves.toStrictEqual(
+        arrivalResponse
+      )
     })
+
     it('should return null', async () => {
       fakeWelcomeApi
         .post(`/transfers/${prisonNumber}/confirm`)

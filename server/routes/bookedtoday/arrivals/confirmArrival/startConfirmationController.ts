@@ -32,10 +32,14 @@ export default class StartConfirmationController {
         return urls.featureNotAvailable({})
 
       case 'FROM_TEMPORARY_ABSENCE':
-        return urls.temporaryAbsence({ prisonNumber })
+        return arrival.expected
+          ? `${urls.temporaryAbsence({ prisonNumber })}?arrivalId=${id}`
+          : urls.temporaryAbsence({ prisonNumber })
 
       case 'TRANSFER':
-        return urls.transfers({ prisonNumber })
+        return arrival.expected
+          ? `${urls.transfers({ prisonNumber })}?arrivalId=${id}`
+          : urls.transfers({ prisonNumber })
 
       case 'CURRENTLY_IN':
       case 'UNKNOWN':

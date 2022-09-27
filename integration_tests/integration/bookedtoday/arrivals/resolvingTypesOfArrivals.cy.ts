@@ -28,6 +28,7 @@ const arrival = expectedArrivals.arrival({
       sex: 'MALE',
     },
     {
+      id: '11111-11111',
       firstName: 'Sum',
       lastName: 'Smoth',
       dateOfBirth: '1971-02-03',
@@ -78,7 +79,7 @@ context('Redirect logic once a record for an arrival has been resolved', () => {
     Page.verifyOnPage(ConfirmTemporaryAbsenceAddedToRollPage)
 
     cy.task('getTemporaryAbsenceConfirmationRequest', arrival.prisonNumber).then(request => {
-      expect(request).to.deep.equal({ prisonId: 'MDI' })
+      expect(request).to.deep.equal({ prisonId: 'MDI', arrivalId: chosenMatch.id })
     })
   })
 
@@ -101,7 +102,7 @@ context('Redirect logic once a record for an arrival has been resolved', () => {
     Page.verifyOnPage(ConfirmTransferAddedToRollPage)
 
     cy.task('getTransferConfirmationRequest', chosenMatch.prisonNumber).then(request => {
-      expect(request).to.deep.equal({ prisonId: 'MDI' })
+      expect(request).to.deep.equal({ prisonId: 'MDI', arrivalId: chosenMatch.id })
     })
   })
 

@@ -43,12 +43,13 @@ describe('GET checkTransfer', () => {
 
   it('should render the correct data in /check-transfer page', () => {
     return request(app)
-      .get('/prisoners/A1234AA/check-transfer')
+      .get('/prisoners/A1234AA/check-transfer?arrivalId=abc-123')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
         const $ = cheerio.load(res.text)
         expect($('h1').text()).toContain('This person is being transferred from another establishment')
         expect($('[data-qa = "add-to-roll"]').text()).toContain('Add to the establishment roll')
+        expect($('input[name = "arrivalId"]').attr('value')).toContain('abc-123')
         expect(res.text).toContain('/prisoners/A1234AA/check-transfer')
       })
   })
@@ -65,7 +66,17 @@ describe('POST addToRoll', () => {
       .post('/prisoners/A1234AA/check-transfer')
       .expect('Content-Type', 'text/plain; charset=utf-8')
       .expect(() => {
-        expect(transfersService.confirmTransfer).toHaveBeenCalledWith('user1', 'A1234AA', 'MDI')
+        expect(transfersService.confirmTransfer).toHaveBeenCalledWith('user1', 'A1234AA', 'MDI', undefined)
+      })
+  })
+
+  it('should call service to confirm the transfer with arrivalId when present', () => {
+    return request(app)
+      .post('/prisoners/A1234AA/check-transfer')
+      .send({ arrivalId: 'abc-123' })
+      .expect('Content-Type', 'text/plain; charset=utf-8')
+      .expect(() => {
+        expect(transfersService.confirmTransfer).toHaveBeenCalledWith('user1', 'A1234AA', 'MDI', 'abc-123')
       })
   })
 

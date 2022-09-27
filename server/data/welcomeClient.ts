@@ -1,18 +1,18 @@
 import moment from 'moment'
 import type {
   Arrival,
-  RecentArrival,
-  Transfer,
-  TemporaryAbsence,
+  ArrivalResponse,
   ConfirmArrivalDetail,
-  Prison,
   ImprisonmentStatus,
-  UserCaseLoad,
+  PaginatedResponse,
   PotentialMatch,
   PotentialMatchCriteria,
+  Prison,
   PrisonerDetails,
-  ArrivalResponse,
-  PaginatedResponse,
+  RecentArrival,
+  TemporaryAbsence,
+  Transfer,
+  UserCaseLoad,
 } from 'welcome'
 import type { Readable } from 'stream'
 import config, { ApiConfig } from '../config'
@@ -91,12 +91,12 @@ export default class WelcomeClient {
     }) as Promise<Transfer>
   }
 
-  async confirmTransfer(prisonNumber: string, prisonId: string): Promise<ArrivalResponse | null> {
+  async confirmTransfer(prisonNumber: string, prisonId: string, arrivalId?: string): Promise<ArrivalResponse | null> {
     logger.info(`welcomeApi: confirmTransfer ${prisonNumber})`)
     try {
       return (await this.restClient.post({
         path: `/transfers/${prisonNumber}/confirm`,
-        data: { prisonId },
+        data: { prisonId, arrivalId },
       })) as Promise<ArrivalResponse>
     } catch (error) {
       if (error.status >= 400 && error.status < 500) {
@@ -120,12 +120,16 @@ export default class WelcomeClient {
     }) as Promise<TemporaryAbsence>
   }
 
-  async confirmTemporaryAbsence(prisonNumber: string, prisonId: string): Promise<ArrivalResponse | null> {
+  async confirmTemporaryAbsence(
+    prisonNumber: string,
+    prisonId: string,
+    arrivalId?: string
+  ): Promise<ArrivalResponse | null> {
     logger.info(`welcomeApi: confirmTemporaryAbsence ${prisonNumber})`)
     try {
       return (await this.restClient.post({
         path: `/temporary-absences/${prisonNumber}/confirm`,
-        data: { prisonId },
+        data: { prisonId, arrivalId },
       })) as Promise<ArrivalResponse>
     } catch (error) {
       if (error.status >= 400 && error.status < 500) {
