@@ -5,14 +5,26 @@ import { appWithAllRoutes, stubCookies } from '../../../__testutils/appSetup'
 import Role from '../../../../authentication/role'
 import config from '../../../../config'
 import { State } from '../state'
+import { createPotentialMatch } from '../../../../data/__testutils/testObjects'
+import { createMockExpectedArrivalsService } from '../../../../services/__testutils/mocks'
+
+const potentialMatch = createPotentialMatch({
+  firstName: 'Jim',
+  lastName: 'Smith',
+  dateOfBirth: '1973-01-08',
+  prisonNumber: 'A1234AB',
+  pncNumber: '01/98644M',
+})
+const expectedArrivalsService = createMockExpectedArrivalsService()
 
 let app: Express
 
 beforeEach(() => {
   config.confirmNoIdentifiersEnabled = true
-  app = appWithAllRoutes({ roles: [Role.PRISON_RECEPTION] })
-
+  expectedArrivalsService.getMatchingRecords.mockResolvedValue([potentialMatch])
+  app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
   stubCookies([
+    // FIXME: Look into why removing the newArrival state breaks the tests
     [
       State.newArrival,
       {
@@ -49,6 +61,22 @@ describe('GET /view', () => {
       .get('/prisoners/12345-67890/search-for-existing-record/record-found')
       .expect(302)
       .expect('Location', '/autherror')
+  })
+
+  it('should throw error when multiple matches found', () => {
+    expectedArrivalsService.getMatchingRecords.mockResolvedValue([potentialMatch, potentialMatch])
+    return request(app)
+      .get('/prisoners/12345-67890/search-for-existing-record/record-found')
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(500)
+  })
+
+  it('should throw error when no matches', () => {
+    expectedArrivalsService.getMatchingRecords.mockResolvedValue([])
+    return request(app)
+      .get('/prisoners/12345-67890/search-for-existing-record/record-found')
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(500)
   })
 
   it('should display correct page content', () => {

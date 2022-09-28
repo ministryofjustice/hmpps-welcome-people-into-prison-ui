@@ -21,7 +21,7 @@ export default function routes(services: Services): Router {
   const basePath = `/prisoners/:id/search-for-existing-record`
 
   const multipleMatchFoundController = new MultipleExistingRecordsFoundController(services.expectedArrivalsService)
-  const singleMatchFoundController = new SingleExistingRecordFoundController()
+  const singleMatchFoundController = new SingleExistingRecordFoundController(services.expectedArrivalsService)
   const noMatchFoundController = new NoExistingRecordsFoundController()
 
   return Routes.forRole(Role.PRISON_RECEPTION)
