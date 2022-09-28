@@ -1,6 +1,7 @@
 import ChoosePrisonerPage from '../../../../pages/bookedtoday/choosePrisoner'
 import MultipleExistingRecordsFoundPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/multipleExistingRecordsFound'
 import SearchForExistingPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/search/searchForExisting'
+import ReviewDetailsPage from '../../../../pages/bookedtoday/arrivals/reviewDetails'
 import ImprisonmentStatus from '../../../../pages/bookedtoday/arrivals/confirmArrival/imprisonmentStatus'
 
 import Page from '../../../../pages/page'
@@ -104,5 +105,14 @@ context('Multiple existing records', () => {
     const multipleExistingRecordsFoundPage = MultipleExistingRecordsFoundPage.goTo('11111-11111')
     multipleExistingRecordsFoundPage.searchAgain().click()
     Page.verifyOnPage(SearchForExistingPage)
+  })
+
+  it('Should allow navigation to create a new record', () => {
+    const multipleExistingRecordsFoundPage = MultipleExistingRecordsFoundPage.goTo('11111-11111')
+    multipleExistingRecordsFoundPage.createNewDetailsReveal().click()
+    multipleExistingRecordsFoundPage.createNew().click()
+
+    const reviewDetailsPage = Page.verifyOnPage(ReviewDetailsPage)
+    reviewDetailsPage.name.value().should('contain.text', 'Bob Smith')
   })
 })
