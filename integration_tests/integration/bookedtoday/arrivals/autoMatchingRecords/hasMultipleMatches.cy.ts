@@ -8,6 +8,7 @@ import MovementReasonsPage from '../../../../pages/bookedtoday/arrivals/confirmA
 import CheckAnswersPage from '../../../../pages/bookedtoday/arrivals/confirmArrival/checkAnswers'
 import ConfirmAddedToRollPage from '../../../../pages/bookedtoday/arrivals/confirmArrival/confirmAddedToRoll'
 import SearchForExistingPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/search/searchForExisting'
+import ReviewDetailsPage from '../../../../pages/bookedtoday/arrivals/reviewDetails'
 
 const arrival = expectedArrivals.arrival({
   fromLocationType: 'COURT',
@@ -155,5 +156,14 @@ context('Arrival matches multiple records', () => {
     const multipleMatchingRecordsPage = Page.verifyOnPage(MultipleMatchingRecordsPage)
     multipleMatchingRecordsPage.search().click()
     Page.verifyOnPage(SearchForExistingPage)
+  })
+
+  it('Should allow navigation to create a new record', () => {
+    const multipleMatchingRecordsPage = Page.verifyOnPage(MultipleMatchingRecordsPage)
+    multipleMatchingRecordsPage.createNewDetailsReveal().click()
+    multipleMatchingRecordsPage.createNew().click()
+
+    const reviewDetailsPage = Page.verifyOnPage(ReviewDetailsPage)
+    reviewDetailsPage.name.value().should('contain.text', 'Bob Smith')
   })
 })
