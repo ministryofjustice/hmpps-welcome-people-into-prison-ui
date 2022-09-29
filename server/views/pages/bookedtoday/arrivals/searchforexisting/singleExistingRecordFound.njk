@@ -13,12 +13,18 @@
         {{ govukInsetText({
             html: 'If you think this is the wrong record, you can <a class="govuk-body govuk-link govuk-link--no-visited-state" data-qa="search-instead" href="/prisoners/' + data.id + '/search-for-existing-record/new">search for a record using different details</a> or <a class="govuk-body govuk-link govuk-link--no-visited-state" data-qa="create-new" href="/prisoners/' + data.id + '/review-per-details/new">create a new record</a>.'
         }) }}
-        {{ govukButton({
-            classes: "govuk-button govuk-!-margin-bottom-6",
-            href: "/prisoners/" + data.id + "/start-confirmation",
-            text: "Continue",
-            attributes: {'data-qa': 'continue'}
-        }) }}
+
+        <form method="post" action={{ "/prisoners/" + data.id + "/search-for-existing-record/record-found" }}>
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+            {{ govukButton({
+                classes: "govuk-button govuk-!-margin-bottom-6",
+                text: "Continue",
+                attributes: {'data-qa': 'continue'},
+                preventDoubleClick: true,
+                type: 'submit'
+            }) }}
+        </form>
         <p>
             <a
                 class="govuk-body govuk-link govuk-link--no-visited-state"
