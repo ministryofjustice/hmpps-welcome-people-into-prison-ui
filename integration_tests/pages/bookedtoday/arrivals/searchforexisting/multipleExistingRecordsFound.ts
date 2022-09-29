@@ -22,6 +22,10 @@ export default class MultipleMatchingRecordsFoundPage extends Page {
 
   searchAgain = (): PageElement => cy.get('[data-qa=ammend-search]')
 
+  createNewDetailsReveal = (): PageElement => cy.get('[data-qa=create-new-details-reveal]')
+
+  createNew = (): PageElement => cy.get('[data-qa=create-new]')
+
   chooseMatch = match => ({
     fieldName: name => cy.get(`.data-qa-matching-record-${match}-${name}`),
   })
