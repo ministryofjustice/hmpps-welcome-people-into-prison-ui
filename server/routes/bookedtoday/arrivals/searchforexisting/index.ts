@@ -16,12 +16,11 @@ import Routes from '../../../../utils/routeBuilder'
 
 export default function routes(services: Services): Router {
   const checkSearchDetailsPresent = State.searchDetails.ensurePresent('/page-not-found')
-  const checkNewArrivalPresent = State.newArrival.ensurePresent('/page-not-found')
 
   const basePath = `/prisoners/:id/search-for-existing-record`
 
   const multipleMatchFoundController = new MultipleExistingRecordsFoundController(services.expectedArrivalsService)
-  const singleMatchFoundController = new SingleExistingRecordFoundController()
+  const singleMatchFoundController = new SingleExistingRecordFoundController(services.expectedArrivalsService)
   const noMatchFoundController = new NoExistingRecordsFoundController()
 
   return Routes.forRole(Role.PRISON_RECEPTION)
@@ -41,9 +40,14 @@ export default function routes(services: Services): Router {
     .get(
       `${basePath}/record-found`,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
-      checkNewArrivalPresent,
       checkSearchDetailsPresent,
       singleMatchFoundController.view()
+    )
+    .post(
+      `${basePath}/record-found`,
+      redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
+      checkSearchDetailsPresent,
+      singleMatchFoundController.submit()
     )
     .get(`${basePath}/no-record-found`, noMatchFoundController.view())
     .post(`${basePath}/no-record-found`, checkSearchDetailsPresent, noMatchFoundController.submit())

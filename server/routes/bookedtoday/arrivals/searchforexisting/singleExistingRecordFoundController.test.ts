@@ -1,41 +1,36 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
-import { appWithAllRoutes, stubCookies } from '../../../__testutils/appSetup'
+import { appWithAllRoutes, stubCookie } from '../../../__testutils/appSetup'
 import Role from '../../../../authentication/role'
 import config from '../../../../config'
-import { State } from '../state'
+import { SearchDetails, State } from '../state'
+import { createPotentialMatch } from '../../../../data/__testutils/testObjects'
+import { createMockExpectedArrivalsService } from '../../../../services/__testutils/mocks'
+
+const potentialMatch = createPotentialMatch({
+  firstName: 'Jim',
+  lastName: 'Smith',
+  dateOfBirth: '1973-01-08',
+  prisonNumber: 'A1234AB',
+  pncNumber: '01/98644M',
+})
+const expectedArrivalsService = createMockExpectedArrivalsService()
+const searchData = {
+  firstName: 'James',
+  lastName: 'Smyth',
+  dateOfBirth: '1973-01-08',
+  prisonNumber: undefined,
+  pncNumber: '01/98644M',
+} as SearchDetails
 
 let app: Express
 
 beforeEach(() => {
   config.confirmNoIdentifiersEnabled = true
-  app = appWithAllRoutes({ roles: [Role.PRISON_RECEPTION] })
-
-  stubCookies([
-    [
-      State.newArrival,
-      {
-        firstName: 'Jim',
-        lastName: 'Smith',
-        dateOfBirth: '1973-01-08',
-        sex: 'MALE',
-        prisonNumber: 'A1234AB',
-        pncNumber: '01/98644M',
-        expected: true,
-      },
-    ],
-    [
-      State.searchDetails,
-      {
-        firstName: 'James',
-        lastName: 'Smyth',
-        dateOfBirth: '1973-01-08',
-        prisonNumber: undefined,
-        pncNumber: '01/98644M',
-      },
-    ],
-  ])
+  expectedArrivalsService.getMatchingRecords.mockResolvedValue([potentialMatch])
+  app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
+  stubCookie(State.searchDetails, searchData)
 })
 
 afterEach(() => {
@@ -49,6 +44,22 @@ describe('GET /view', () => {
       .get('/prisoners/12345-67890/search-for-existing-record/record-found')
       .expect(302)
       .expect('Location', '/autherror')
+  })
+
+  it('should throw error when multiple matches found', () => {
+    expectedArrivalsService.getMatchingRecords.mockResolvedValue([potentialMatch, potentialMatch])
+    return request(app)
+      .get('/prisoners/12345-67890/search-for-existing-record/record-found')
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(500)
+  })
+
+  it('should throw error when no matches', () => {
+    expectedArrivalsService.getMatchingRecords.mockResolvedValue([])
+    return request(app)
+      .get('/prisoners/12345-67890/search-for-existing-record/record-found')
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(500)
   })
 
   it('should display correct page content', () => {
@@ -68,5 +79,44 @@ describe('GET /view', () => {
         expect($('.data-qa-existing-record-pnc-number').text()).toContain('01/98644M')
         expect($('[data-qa = "continue"]').text()).toContain('Continue')
       })
+  })
+})
+
+describe('POST /submit', () => {
+  it('should redirect to authentication error page for non reception users', () => {
+    app = appWithAllRoutes({ roles: [] })
+    return request(app)
+      .post('/prisoners/12345-67890/search-for-existing-record/record-found')
+      .expect(302)
+      .expect('Location', '/autherror')
+  })
+
+  it('should throw error when multiple matches found', () => {
+    expectedArrivalsService.getMatchingRecords.mockResolvedValue([potentialMatch, potentialMatch])
+    return request(app)
+      .post('/prisoners/12345-67890/search-for-existing-record/record-found')
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(500)
+  })
+
+  it('should throw error when no matches', () => {
+    expectedArrivalsService.getMatchingRecords.mockResolvedValue([])
+    return request(app)
+      .post('/prisoners/12345-67890/search-for-existing-record/record-found')
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(500)
+  })
+
+  it('should call upstream services', () => {
+    return request(app).post('/prisoners/12345-67890/search-for-existing-record/record-found')
+    expect(expectedArrivalsService).toHaveBeenCalledWith(searchData)
+  })
+
+  it('should redirect to start-confirmation journey on success', () => {
+    return request(app)
+      .post('/prisoners/12345-67890/search-for-existing-record/record-found')
+      .expect(302)
+      .expect('Location', `/prisoners/12345-67890/start-confirmation`)
+    expect(expectedArrivalsService).toHaveBeenCalledWith(searchData)
   })
 })
