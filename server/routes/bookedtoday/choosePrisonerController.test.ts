@@ -2,7 +2,7 @@ import type { Arrival } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
-import { user, appWithAllRoutes } from '../__testutils/appSetup'
+import { user, appWithAllRoutes, stubCookie } from '../__testutils/appSetup'
 import { expectSettingCookie } from '../__testutils/requestTestUtils'
 import config from '../../config'
 import { State } from './arrivals/state'
@@ -89,8 +89,16 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
       matchType,
     } as WithMatchType<Arrival>)
 
+  stubCookie(State.searchDetails, {
+    firstName: 'James',
+    lastName: 'Smyth',
+    dateOfBirth: '1973-01-08',
+    pncNumber: '99/98644M',
+    prisonNumber: 'A1234AB',
+  })
+
   describe('from court', () => {
-    it('should clear cookie', () => {
+    it('should clear both new arrival and search details cookies', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
           matchType: MatchType.SINGLE_MATCH,
@@ -100,6 +108,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
         .get('/confirm-arrival/choose-prisoner/aaa-111-222')
         .expect(res => {
           expectSettingCookie(res, State.newArrival).toBeUndefined()
+          expectSettingCookie(res, State.searchDetails).toBeUndefined()
         })
     })
 
