@@ -19,6 +19,7 @@ export default class ChoosePrisonerController {
   public redirectToConfirm(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
+      State.searchDetails.clear(res)
       State.newArrival.clear(res)
       const arrival = await this.expectedArrivalsService.getArrival(id)
 

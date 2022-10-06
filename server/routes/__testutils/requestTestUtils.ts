@@ -74,8 +74,9 @@ export const expectSettingCookie = <T>(
   res: superAgent.Response,
   stateOperations: StateOperations<T>
 ): jest.JestMatchers<T> => {
-  const [cookie] = res.header['set-cookie']
-  const [, name, value] = cookie.match(/^(.*?)=(.*?);/)
+  const cookies = res.header['set-cookie']
+  const matchedCookie = cookies.find((c: string) => c.includes(stateOperations.cookieName))
+  const [, name, value] = matchedCookie.match(/^(.*?)=(.*?);/)
 
   expect(name).toBe(stateOperations.cookieName)
 

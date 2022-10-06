@@ -72,7 +72,7 @@ describe('GET /review-per-details', () => {
       })
   })
 
-  it('should render page when no initial new arrival cookie state', () => {
+  it('should render page when no initial search details cookie or new arrival cookie state', () => {
     expectedArrivalsService.getArrival.mockResolvedValue({
       firstName: 'James',
       lastName: 'Smyth',
@@ -93,7 +93,7 @@ describe('GET /review-per-details', () => {
       })
   })
 
-  it('should render page with initial new arrival cookie state', () => {
+  it('should render page with initial new arrival cookie state if present and search details cookie absent', () => {
     stubCookie(State.newArrival, {
       firstName: 'James',
       lastName: 'Smyth',
@@ -109,6 +109,35 @@ describe('GET /review-per-details', () => {
       .expect(res => {
         const $ = cheerio.load(res.text)
         expect($('h1').text()).toContain('Review personal details')
+        expect($('.data-qa-name').text()).toContain('James Smyth')
+      })
+  })
+
+  it('should render page with search details cookie state if present', () => {
+    stubCookie(State.newArrival, {
+      firstName: 'James',
+      lastName: 'Smyth',
+      dateOfBirth: '1973-01-08',
+      sex: 'MALE',
+      prisonNumber: 'A1234AB',
+      pncNumber: '99/98644M',
+      expected: true,
+    })
+
+    stubCookie(State.searchDetails, {
+      firstName: 'Jim',
+      lastName: 'Smyth',
+      dateOfBirth: '1973-01-08',
+      pncNumber: '99/98644M',
+      prisonNumber: 'A1234AB',
+    })
+
+    return request(app)
+      .get('/prisoners/12345-67890/review-per-details')
+      .expect(res => {
+        const $ = cheerio.load(res.text)
+        expect($('h1').text()).toContain('Review personal details')
+        expect($('.data-qa-name').text()).toContain('Jim Smyth')
       })
   })
 })

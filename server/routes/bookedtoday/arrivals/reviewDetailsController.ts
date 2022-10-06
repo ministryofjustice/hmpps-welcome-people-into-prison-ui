@@ -35,7 +35,7 @@ export default class ReviewDetailsController {
     return async (req, res, next) => {
       const { id } = req.params
 
-      const data = State.newArrival.get(req) || (await this.loadData(id, req, res))
+      const data = State.searchDetails.get(req) || State.newArrival.get(req) || (await this.loadData(id, req, res))
 
       res.render('pages/bookedtoday/arrivals/reviewDetails.njk', {
         data: { ...data, id },
