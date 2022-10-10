@@ -5,7 +5,8 @@ generic-service:
   replicaCount: 4
 
   ingress:
-    host: welcome.prison.service.justice.gov.uk
+    hosts:
+      - welcome.prison.service.justice.gov.uk
 
   env:
     INGRESS_URL: "https://welcome.prison.service.justice.gov.uk"
