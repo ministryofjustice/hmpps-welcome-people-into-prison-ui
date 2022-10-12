@@ -180,7 +180,6 @@ export default {
   },
 
   stubTemporaryAbsence: ({
-    activeCaseLoadId,
     prisonNumber,
     temporaryAbsence,
   }: {
@@ -191,7 +190,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/welcome/prison/${activeCaseLoadId}/temporary-absences/${prisonNumber}`,
+        urlPattern: `/welcome/temporary-absences/${prisonNumber}`,
       },
       response: {
         status: 200,

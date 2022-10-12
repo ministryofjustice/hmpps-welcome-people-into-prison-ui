@@ -113,10 +113,10 @@ export default class WelcomeClient {
     }) as Promise<TemporaryAbsence[]>
   }
 
-  async getTemporaryAbsence(agencyId: string, prisonNumber: string): Promise<TemporaryAbsence> {
-    logger.info(`welcomeApi: getTemporaryAbsence(${agencyId} ${prisonNumber})`)
+  async getTemporaryAbsence(prisonNumber: string): Promise<TemporaryAbsence> {
+    logger.info(`welcomeApi: getTemporaryAbsence(${prisonNumber})`)
     return this.restClient.get({
-      path: `/prison/${agencyId}/temporary-absences/${prisonNumber}`,
+      path: `/temporary-absences/${prisonNumber}`,
     }) as Promise<TemporaryAbsence>
   }
 

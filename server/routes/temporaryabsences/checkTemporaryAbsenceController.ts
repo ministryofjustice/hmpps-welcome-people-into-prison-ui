@@ -9,10 +9,9 @@ export default class CheckTemporaryAbsenceController {
 
   public checkTemporaryAbsence(): RequestHandler {
     return async (req, res) => {
-      const { activeCaseLoadId } = res.locals.user
       const { arrivalId } = req.query
       const { prisonNumber } = req.params
-      const data = await this.temporaryAbsencesService.getTemporaryAbsence(activeCaseLoadId, prisonNumber)
+      const data = await this.temporaryAbsencesService.getTemporaryAbsence(prisonNumber)
       return res.render('pages/temporaryabsences/checkTemporaryAbsence.njk', { data, arrivalId })
     }
   }
@@ -23,7 +22,7 @@ export default class CheckTemporaryAbsenceController {
       const { username } = req.user
       const { arrivalId } = req.body
       const { activeCaseLoadId } = res.locals.user
-      const data = await this.temporaryAbsencesService.getTemporaryAbsence(activeCaseLoadId, prisonNumber)
+      const data = await this.temporaryAbsencesService.getTemporaryAbsence(prisonNumber)
 
       const arrivalResponse = await this.temporaryAbsencesService.confirmTemporaryAbsence(
         username,
