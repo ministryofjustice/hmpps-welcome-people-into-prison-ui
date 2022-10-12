@@ -62,16 +62,16 @@ describe('Temporary absences service', () => {
       welcomeClient.getTemporaryAbsence.mockResolvedValue(temporaryAbsence)
     })
     it('Calls upstream service correctly', async () => {
-      await service.getTemporaryAbsence('MDI', 'G0013AB')
+      await service.getTemporaryAbsence('G0013AB')
 
       expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.getTemporaryAbsence).toBeCalledWith('MDI', 'G0013AB')
+      expect(welcomeClient.getTemporaryAbsence).toBeCalledWith('G0013AB')
     })
 
     it('Should return correct data', async () => {
       welcomeClient.getTemporaryAbsence.mockResolvedValue(temporaryAbsence)
 
-      const result = await service.getTemporaryAbsence('MDI', 'G0013AB')
+      const result = await service.getTemporaryAbsence('G0013AB')
 
       expect(result).toStrictEqual(temporaryAbsence)
     })

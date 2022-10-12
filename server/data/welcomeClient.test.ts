@@ -166,16 +166,15 @@ describe('welcomeClient', () => {
   })
 
   describe('getTemporaryAbsence', () => {
-    const activeCaseLoadId = 'MDI'
     const prisonNumber = 'A1234AB'
     const temporaryAbsence = createTemporaryAbsence()
     it('should return single a transfer from api', async () => {
       fakeWelcomeApi
-        .get(`/prison/${activeCaseLoadId}/temporary-absences/${prisonNumber}`)
+        .get(`/temporary-absences/${prisonNumber}`)
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, temporaryAbsence)
 
-      const output = await welcomeClient.getTemporaryAbsence(activeCaseLoadId, prisonNumber)
+      const output = await welcomeClient.getTemporaryAbsence(prisonNumber)
       expect(output).toEqual(temporaryAbsence)
     })
   })

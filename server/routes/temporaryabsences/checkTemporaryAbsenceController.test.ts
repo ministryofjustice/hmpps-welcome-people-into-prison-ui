@@ -41,7 +41,7 @@ describe('GET checkTemporaryAbsence', () => {
       .get('/prisoners/A1234AA/check-temporary-absence')
       .expect('Content-Type', /text\/html/)
       .expect(() => {
-        expect(temporaryAbsencesService.getTemporaryAbsence).toHaveBeenCalledWith('MDI', 'A1234AA')
+        expect(temporaryAbsencesService.getTemporaryAbsence).toHaveBeenCalledWith('A1234AA')
       })
   })
 
