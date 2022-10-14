@@ -2,13 +2,15 @@
 import '../server/utils/azureAppInsights'
 
 import moment from 'moment'
-import { dataAccess } from '../server/data'
+import { HmppsAuthClient, WelcomeClient, type RestClientBuilder } from '../server/data'
+import { InMemoryTokenStore } from '../server/data/tokenStore'
 import EventsRetriever from './eventsRetriever'
 import EventsPusher from './eventsPusher'
 import logger from '../logger'
 import config from '../server/config'
 
-const { hmppsAuthClient, welcomeClientBuilder, redisClient } = dataAccess()
+const hmppsAuthClient = new HmppsAuthClient(new InMemoryTokenStore())
+const welcomeClientBuilder: RestClientBuilder<WelcomeClient> = (token: string) => new WelcomeClient(token)
 
 const retriever = new EventsRetriever(hmppsAuthClient, welcomeClientBuilder)
 
@@ -19,11 +21,7 @@ const job = async () => {
   await pusher.pushEvents(events)
 }
 
-job()
-  .catch(error => {
-    process.exitCode = 1
-    logger.error(error)
-  })
-  .finally(async () => {
-    await redisClient.disconnect()
-  })
+job().catch(error => {
+  process.exitCode = 1
+  logger.error(error)
+})
