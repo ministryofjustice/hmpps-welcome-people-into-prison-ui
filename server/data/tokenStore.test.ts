@@ -1,5 +1,5 @@
 import { RedisClient } from './redisClient'
-import TokenStore from './tokenStore'
+import { RedisTokenStore } from './tokenStore'
 
 const redisClient = {
   get: jest.fn(),
@@ -10,10 +10,10 @@ const redisClient = {
 } as unknown as jest.Mocked<RedisClient>
 
 describe('tokenStore', () => {
-  let tokenStore: TokenStore
+  let tokenStore: RedisTokenStore
 
   beforeEach(() => {
-    tokenStore = new TokenStore(redisClient as unknown as RedisClient)
+    tokenStore = new RedisTokenStore(redisClient as unknown as RedisClient)
   })
 
   afterEach(() => {

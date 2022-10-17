@@ -1,6 +1,6 @@
 import superagent from 'superagent'
 import querystring from 'querystring'
-import type TokenStore from './tokenStore'
+import type { TokenStore } from './tokenStore'
 
 import logger from '../../logger'
 import config from '../config'
