@@ -34,8 +34,7 @@ export default function routes(services: Services): Router {
   )
 
   const addLockId = doubleClickPrevention.lockIdGenerator()
-  const obtainLock = doubleClickPrevention.obtainLock(services.lockManager)
-  const releaseLock = doubleClickPrevention.releaseLock(services.lockManager)
+  const obtainLock = doubleClickPrevention.obtainLock(services.lockManager, '/confirm-arrival/choose-prisoner')
 
   const confirmAddedToRollController = new ConfirmAddedToRollController(services.prisonService)
 
@@ -71,8 +70,7 @@ export default function routes(services: Services): Router {
       checkNewArrivalPresent,
       redirectIfDisabledMiddleware(config.confirmEnabled),
       obtainLock,
-      checkAnswersController.addToRoll(),
-      releaseLock
+      checkAnswersController.addToRoll()
     )
     .get('/prisoners/:id/confirmation', confirmAddedToRollController.view())
     .build()

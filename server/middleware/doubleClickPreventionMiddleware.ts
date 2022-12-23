@@ -1,6 +1,7 @@
 import type { RequestHandler } from 'express'
 import crypto from 'crypto'
 
+import { reseller } from 'googleapis/build/src/apis/reseller'
 import logger from '../../logger'
 import LockManager from '../data/lockManager'
 
@@ -13,29 +14,19 @@ export function lockIdGenerator(): RequestHandler {
   }
 }
 
-export function obtainLock(lockManager: LockManager): RequestHandler {
-  return async (req, _, next) => {
+export function obtainLock(lockManager: LockManager, location: string): RequestHandler {
+  return async (req, res, next) => {
     const key = req.body[LOCK_ID_KEY]
     if (!key) {
+      logger.info('No lock ID present!')
       throw new Error(`No lock ID present!`)
     }
     const lockSuccessful = await lockManager.lock(key, 30)
     if (!lockSuccessful) {
-      throw new Error(`Failed to acquire lock: ${key}`)
+      logger.warn(`Unable to obtain lock - double click? redirecting to: ${location}`)
+      return res.redirect(location)
     }
     logger.info(`Obtained lock: ${key}`)
     return next()
-  }
-}
-
-/** There is no way to await/try/catch on next so have to do this as a separate piece of middleware  */
-export function releaseLock(lockManager: LockManager): RequestHandler {
-  return async (req, res, next) => {
-    const key = req.body[LOCK_ID_KEY]
-    if (key) {
-      const unlockSuccessful = await lockManager.unlock(key)
-      logger.info(`Attempted to release lock: ${key}, result: ${unlockSuccessful}`)
-    }
-    return res.end()
   }
 }

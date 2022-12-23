@@ -24,10 +24,4 @@ export default class LockManager {
     const result = await this.client.set(`${this.prefix}${key}`, 'LOCKED', { NX: true, EX: durationSeconds })
     return Boolean(result)
   }
-
-  public async unlock(key: string): Promise<boolean> {
-    await this.ensureConnected()
-    const result = await this.client.del(`${this.prefix}${key}`)
-    return Boolean(result)
-  }
 }

@@ -7,12 +7,14 @@ import Role from '../../../../authentication/role'
 import config from '../../../../config'
 import { State } from '../state'
 import { createArrivalResponse, createNewArrival } from '../../../../data/__testutils/testObjects'
+import { createLockManager } from '../../../../data/__testutils/mocks'
 import {
   createMockExpectedArrivalsService,
   createMockImprisonmentStatusesService,
 } from '../../../../services/__testutils/mocks'
 
 let app: Express
+const lockManager = createLockManager()
 const imprisonmentStatusesService = createMockImprisonmentStatusesService()
 const expectedArrivalsService = createMockExpectedArrivalsService()
 
@@ -23,7 +25,7 @@ const arrivalResponse = createArrivalResponse()
 beforeEach(() => {
   stubCookie(State.newArrival, newArrival)
   app = appWithAllRoutes({
-    services: { expectedArrivalsService, imprisonmentStatusesService },
+    services: { expectedArrivalsService, imprisonmentStatusesService, lockManager },
     roles: [Role.PRISON_RECEPTION],
   })
   config.confirmEnabled = true
@@ -31,6 +33,7 @@ beforeEach(() => {
   imprisonmentStatusesService.getReasonForImprisonment.mockResolvedValue(
     'Sentenced - fixed length of time - Extended sentence for public protection'
   )
+  lockManager.lock.mockResolvedValue(true)
 })
 
 afterEach(() => {
@@ -87,6 +90,7 @@ describe('/checkAnswers', () => {
 
       return request(app)
         .post(`/prisoners/${arrivalId}/check-answers`)
+        .send({ lockId: 'A1234' })
         .expect(302)
         .expect('Location', '/feature-not-available')
     })
@@ -99,6 +103,7 @@ describe('/checkAnswers', () => {
     it('should call service methods correctly', () => {
       return request(app)
         .post(`/prisoners/${arrivalId}/check-answers`)
+        .send({ lockId: 'A1234' })
         .expect(302)
         .expect(() => {
           expect(expectedArrivalsService.confirmArrival).toHaveBeenCalledWith(
@@ -113,6 +118,7 @@ describe('/checkAnswers', () => {
     it('should redirect to /confirmation page, store arrival response data in flash', () => {
       return request(app)
         .post(`/prisoners/${arrivalId}/check-answers`)
+        .send({ lockId: 'A1234' })
         .expect(302)
         .expect('Location', `/prisoners/${arrivalId}/confirmation`)
         .expect(() => {

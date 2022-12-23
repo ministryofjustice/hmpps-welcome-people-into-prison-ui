@@ -30,4 +30,4 @@ export const dataAccess = () => {
 }
 export type DataAccess = ReturnType<typeof dataAccess>
 
-export { WelcomeClient, BodyScanClient, HmppsAuthClient, RestClientBuilder }
+export { WelcomeClient, BodyScanClient, HmppsAuthClient, RestClientBuilder, LockManager }
