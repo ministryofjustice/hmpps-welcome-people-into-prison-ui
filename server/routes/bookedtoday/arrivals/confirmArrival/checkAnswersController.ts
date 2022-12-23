@@ -40,7 +40,9 @@ export default class CheckAnswersController {
         prisonNumber: arrivalResponse.prisonNumber,
         location: arrivalResponse.location,
       })
-      return res.redirect(`/prisoners/${id}/confirmation`)
+      res.redirect(`/prisoners/${id}/confirmation`)
+      // Pass through to next middleware, which will end the request
+      return next()
     }
   }
 }

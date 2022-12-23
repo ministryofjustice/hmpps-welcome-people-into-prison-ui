@@ -9,6 +9,7 @@ import imprisonmentStatusesValidation from '../../../../middleware/validation/im
 import movementReasonsValidation from '../../../../middleware/validation/movementReasonsValidation'
 import sexValidation from '../../../../middleware/validation/sexValidation'
 import validationMiddleware from '../../../../middleware/validationMiddleware'
+import * as doubleClickPrevention from '../../../../middleware/doubleClickPreventionMiddleware'
 
 import { State } from '../state'
 import type { Services } from '../../../../services'
@@ -31,6 +32,10 @@ export default function routes(services: Services): Router {
     services.expectedArrivalsService,
     services.imprisonmentStatusesService
   )
+
+  const addLockId = doubleClickPrevention.lockIdGenerator()
+  const obtainLock = doubleClickPrevention.obtainLock(services.lockManager)
+  const releaseLock = doubleClickPrevention.releaseLock(services.lockManager)
 
   const confirmAddedToRollController = new ConfirmAddedToRollController(services.prisonService)
 
@@ -58,13 +63,16 @@ export default function routes(services: Services): Router {
       '/prisoners/:id/check-answers',
       checkNewArrivalPresent,
       redirectIfDisabledMiddleware(config.confirmEnabled),
+      addLockId,
       checkAnswersController.view()
     )
     .post(
       '/prisoners/:id/check-answers',
       checkNewArrivalPresent,
       redirectIfDisabledMiddleware(config.confirmEnabled),
-      checkAnswersController.addToRoll()
+      obtainLock,
+      checkAnswersController.addToRoll(),
+      releaseLock
     )
     .get('/prisoners/:id/confirmation', confirmAddedToRollController.view())
     .build()

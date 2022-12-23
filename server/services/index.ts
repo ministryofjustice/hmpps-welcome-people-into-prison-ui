@@ -11,7 +11,7 @@ import { BodyScanInfoDecorator } from './bodyScanInfoDecorator'
 import { MatchTypeDecorator } from './matchTypeDecorator'
 
 export const services = () => {
-  const { hmppsAuthClient, welcomeClientBuilder, bodyScanClientBuilder, notifyClient } = dataAccess()
+  const { hmppsAuthClient, welcomeClientBuilder, bodyScanClientBuilder, notifyClient, lockManager } = dataAccess()
 
   const bodyScanInfoDecorator = new BodyScanInfoDecorator(hmppsAuthClient, bodyScanClientBuilder)
   const matchTypeDecorator = new MatchTypeDecorator()
@@ -44,6 +44,7 @@ export const services = () => {
     transfersService,
     prisonService,
     raiseAnalyticsEvent,
+    lockManager,
   }
 }
 
