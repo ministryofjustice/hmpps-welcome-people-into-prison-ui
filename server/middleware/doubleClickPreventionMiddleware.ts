@@ -1,17 +1,18 @@
 import type { RequestHandler } from 'express'
 import crypto from 'crypto'
 
-import { reseller } from 'googleapis/build/src/apis/reseller'
 import logger from '../../logger'
-import LockManager from '../data/lockManager'
+import type LockManager from '../data/lockManager'
 
 const LOCK_ID_KEY = 'lockId'
 
 export function lockIdGenerator(): RequestHandler {
-  return async (_, res, next) => {
-    res.locals[LOCK_ID_KEY] = crypto.randomBytes(10).toString('hex')
-    return next()
-  }
+  return async (_, res, next) =>
+    crypto.randomBytes(10, (err, buff) => {
+      if (err) return next(err)
+      res.locals[LOCK_ID_KEY] = buff.toString('hex')
+      return next()
+    })
 }
 
 export function obtainLock(lockManager: LockManager, location: string): RequestHandler {
