@@ -68,7 +68,7 @@ export const mockResponse = ({ locals = { context: {}, user: {} } }: ResponsePar
     clearCookie: jest.fn(),
   } as unknown as jest.Mocked<Response>)
 
-export const mockNext = (): NextFunction => jest.fn()
+export const mockNext = (): jest.MockedFunction<NextFunction> => jest.fn()
 
 export const expectSettingCookie = <T>(
   res: superAgent.Response,

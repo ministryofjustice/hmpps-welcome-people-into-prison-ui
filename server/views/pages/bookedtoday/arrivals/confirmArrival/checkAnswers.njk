@@ -37,7 +37,8 @@
         </div>
     </div>
     <form method="post" action="/prisoners/{{ id }}/check-answers">
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        <input type="hidden" name="lockId" value="{{ lockId }}"/>    
         {{ govukButton({
             classes: "govuk-button govuk-!-margin-bottom-6",
             text: "Add to the establishment roll",

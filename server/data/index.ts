@@ -10,6 +10,7 @@ import { RedisTokenStore } from './tokenStore'
 import WelcomeClient from './welcomeClient'
 import BodyScanClient from './bodyScanClient'
 import notifyClient from './notifyClient'
+import LockManager from './lockManager'
 
 initialiseAppInsights()
 buildAppInsightsClient()
@@ -24,8 +25,9 @@ export const dataAccess = () => {
     hmppsAuthClient: new HmppsAuthClient(new RedisTokenStore(redisClient)),
     welcomeClientBuilder: ((token: string) => new WelcomeClient(token)) as RestClientBuilder<WelcomeClient>,
     bodyScanClientBuilder: ((token: string) => new BodyScanClient(token)) as RestClientBuilder<BodyScanClient>,
+    lockManager: new LockManager(redisClient),
   }
 }
 export type DataAccess = ReturnType<typeof dataAccess>
 
-export { WelcomeClient, BodyScanClient, HmppsAuthClient, RestClientBuilder }
+export { WelcomeClient, BodyScanClient, HmppsAuthClient, RestClientBuilder, LockManager }
