@@ -59,7 +59,7 @@ export default abstract class Page {
   manageDetails = (): PageElement => cy.get('[data-qa=manageDetails]')
 
   hasError = (message: string) => {
-    cy.get('#error-summary-title').contains('There is a problem')
+    cy.get('.govuk-error-summary__title').contains('There is a problem')
     cy.get('.govuk-error-summary__body').contains(message)
     cy.get('.govuk-error-message').contains(message)
   }
