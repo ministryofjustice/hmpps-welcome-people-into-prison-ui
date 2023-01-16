@@ -72,6 +72,25 @@ describe('GET /review-per-details', () => {
       })
   })
 
+  it('should update new arrival cookie from search details cookie when search details present and new arrival undefined', () => {
+    stubCookie(State.searchDetails, {
+      firstName: 'James',
+      lastName: 'Smyth',
+      dateOfBirth: '1973-01-08',
+    })
+
+    return request(app)
+      .get('/prisoners/12345-67890/review-per-details')
+      .expect(res => {
+        expectSettingCookie(res, State.newArrival).toStrictEqual({
+          firstName: 'James',
+          lastName: 'Smyth',
+          dateOfBirth: '1973-01-08',
+          expected: 'true',
+        })
+      })
+  })
+
   it('should render page when no initial search details cookie or new arrival cookie state', () => {
     expectedArrivalsService.getArrival.mockResolvedValue({
       firstName: 'James',
