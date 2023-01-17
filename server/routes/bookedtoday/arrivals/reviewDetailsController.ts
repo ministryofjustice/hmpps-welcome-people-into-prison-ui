@@ -37,6 +37,17 @@ export default class ReviewDetailsController {
 
       const data = State.searchDetails.get(req) || State.newArrival.get(req) || (await this.loadData(id, req, res))
 
+      if (State.searchDetails.isStatePresent(req) && !State.newArrival.isStatePresent(req)) {
+        const updateNewArrival = {
+          firstName: convertToTitleCase(data.firstName),
+          lastName: convertToTitleCase(data.lastName),
+          dateOfBirth: data.dateOfBirth,
+          expected: true,
+        }
+
+        State.newArrival.set(res, updateNewArrival)
+      }
+
       res.render('pages/bookedtoday/arrivals/reviewDetails.njk', {
         data: { ...data, id },
       })
