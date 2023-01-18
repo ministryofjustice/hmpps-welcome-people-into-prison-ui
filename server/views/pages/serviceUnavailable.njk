@@ -3,9 +3,15 @@
 {% set hasBackLink = false %}
 
 {% block content %}
+    <div class="govuk-!-margin-bottom-3 govuk-!-margin-top-0">
+        {{ govukBackLink({
+        text: "Digital Prison Services",
+        classes: "backLinkUrl",
+        href: dpsUrl
+        }) }}
+    </div>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-        <p><a href="{{dpsUrl}}">Digital Prison Services</a></p>
         <h1 class="govuk-heading-l">This service is currently unavailable</h1>
         <p>You will be able to use Welcome people into prison again from 12pm on Thursday 19 January 2023.</p>
         <p>You’ll need to confirm any arrivals on NOMIS instead.</p>
