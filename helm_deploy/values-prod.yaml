@@ -23,7 +23,7 @@ generic-service:
     CONFIRM_COURT_RETURN_ENABLED: 'true'
     SUPPORTING_MULTITRANSACTIONS_ENABLED: 'false'
     EXPORT_SPREADSHEET_ID: "1oLOz5x3xqyEHHiSU1TZd7OG8T75YilUhUXAzPFOCfQY"
-    SERVICE_IS_UNAVAILABLE: "false"
+    SERVICE_IS_UNAVAILABLE: "true"
 
 generic-prometheus-alerts:
   targetApplication: hmpps-welcome-people-into-prison-ui
