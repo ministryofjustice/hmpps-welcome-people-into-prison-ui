@@ -40,6 +40,12 @@ export default function createApp(services: Services, bodyScanServices: BodyScan
   app.use(setUpCurrentUser(services))
   app.use(caseloadCheckMiddleware(config.enabledPrisons))
   app.get('/page-not-found', (req, res) => res.render('pages/pageNotFound'))
+
+  if (config.serviceIsUnvailable) {
+    app.all('*', (req, res) => {
+      res.render('pages/serviceUnavailable.njk')
+    })
+  }
   app.use(wpipRoutes(services))
   app.use(bodyScanRoutes(bodyScanServices))
 
