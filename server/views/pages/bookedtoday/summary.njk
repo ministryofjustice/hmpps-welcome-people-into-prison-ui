@@ -1,0 +1,11 @@
+{% extends "../../partials/layout.njk" %}
+{% from  "../../partials/expectedArrivalCardMacro.njk" import expectedArrivalCard, transferCard %}
+{% set pageTitle = "Person booked to arrive" %}
+
+{% block content %}
+    <div class="govuk-!-margin-bottom-8">
+        <div class="govuk-body">
+            <h1 class="govuk-!-margin-0">{{ arrival.lastName }}, {{ arrival.firstName }}</h1>
+        </div>
+    </div>
+{% endblock %}
