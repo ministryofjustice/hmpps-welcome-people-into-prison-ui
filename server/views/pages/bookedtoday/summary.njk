@@ -5,6 +5,11 @@
 {% block content %}
     <div class="govuk-!-margin-bottom-8">
         <div class="govuk-body">
+            {% if arrival.prisonNumber or arrival.pncNumber %}
+                <span class="govuk-caption-l">
+                    {% if arrival.prisonNumber %}Prison number: {{ arrival.prisonNumber }}{% endif %}{% if arrival.prisonNumber and arrival.pncNumber %} | {% endif %}{% if arrival.pncNumber %}PNC: {{ arrival.pncNumber }}{% endif %}
+                </span>
+            {% endif %}
             <h1 class="govuk-!-margin-0">{{ arrival.lastName }}, {{ arrival.firstName }}</h1>
         </div>
     </div>
