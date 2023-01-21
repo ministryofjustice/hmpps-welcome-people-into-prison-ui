@@ -30,7 +30,7 @@ describe('GET /prisoner/:id/summary', () => {
     expectedArrivalsService.getArrival.mockResolvedValue(arrival)
   })
 
-  it('should render /summary page with offender name as title', () => {
+  it('should render summary page', () => {
     return request(app)
       .get('/prisoners/123/summary')
       .expect(200)
@@ -38,6 +38,7 @@ describe('GET /prisoner/:id/summary', () => {
       .expect(res => {
         const $ = cheerio.load(res.text)
         expect($('h1').text()).toContain('Smith, Jim')
+        expect($('.summary-card').text()).toContain('8 January 1973')
       })
   })
 
