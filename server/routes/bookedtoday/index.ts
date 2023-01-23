@@ -19,6 +19,7 @@ export default function routes(services: Services): Router {
 
     .forRole(Role.PRISON_RECEPTION)
     .get('/prisoners/:id/summary', summaryController.view())
+    .get('/confirm-arrival/choose-prisoner/:id', summaryController.redirectToConfirm())
 
     .use(transferRoutes(services))
     .use(arrivalRoutes(services))
