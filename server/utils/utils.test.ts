@@ -13,6 +13,7 @@ import {
   isPastDate,
   isFutureDate,
   associateBy,
+  calculateAge,
 } from './utils'
 
 describe('Convert to title case', () => {
@@ -470,5 +471,12 @@ describe('isFutureDate', () => {
     const year = yesterday.format('YYYY')
     const result = isFutureDate(day, month, year)
     expect(result).toEqual(false)
+  })
+})
+
+describe('calculateAge', () => {
+  test('calculate age from date of birth', () => {
+    const twentyYearsAgo = moment().subtract(20, 'years').format('YYYY-MM-DD')
+    expect(calculateAge(twentyYearsAgo)).toBe(20)
   })
 })

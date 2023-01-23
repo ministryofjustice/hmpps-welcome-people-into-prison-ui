@@ -25,16 +25,12 @@
                         titleText: "Booking overview",
                         rows: [
                             {
-                                key: {  text: "Arrival Status" },
-                                value: { html: "<strong class=\"govuk-tag govuk-tag--grey\">" + arrival.potentialMatches[0].arrivalType + "</strong>" }
+                                key: { text: "Arrival Status" },
+                                value: { html: "<strong class=\"govuk-tag govuk-tag--grey\">NOT ARRIVED</strong>" }
                             },
                             {
-                                key: {  text: "Arriving from" },
+                                key: { text: "Arriving from" },
                                 value: { text: arrival.fromLocation }
-                            },
-                            {
-                                key: {  text: "Court outcome" },
-                                value: { text: "" }
                             }
                         ]
                     }) }}
@@ -52,8 +48,8 @@
                                 value: { text: arrival.dateOfBirth | formatDate('D MMMM YYYY')}
                             },
                             {
-                                key: {  text: "Age	35 years old" },
-                                value: { text: "" }
+                                key: {  text: "Age" },
+                                value: { text: arrivalAge + " years old"}
                             }
                         ]
                     }) }}

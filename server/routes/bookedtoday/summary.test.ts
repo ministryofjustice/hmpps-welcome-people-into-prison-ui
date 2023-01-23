@@ -4,18 +4,13 @@ import * as cheerio from 'cheerio'
 import { appWithAllRoutes } from '../__testutils/appSetup'
 import { createMockExpectedArrivalsService } from '../../services/__testutils/mocks'
 import Role from '../../authentication/role'
-import { createArrival } from '../../data/__testutils/testObjects'
+import { createArrival, withMatchType } from '../../data/__testutils/testObjects'
 import { MatchType } from '../../services/matchTypeDecorator'
 
 let app: Express
 const expectedArrivalsService = createMockExpectedArrivalsService()
 
-const arrival = {
-  ...createArrival({
-    potentialMatches: [],
-  }),
-  matchType: MatchType.NO_MATCH,
-}
+const arrival = withMatchType(createArrival())
 
 beforeEach(() => {
   app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
@@ -30,9 +25,18 @@ describe('GET /prisoner/:id/summary', () => {
     expectedArrivalsService.getArrival.mockResolvedValue(arrival)
   })
 
+  it('should call service method correctly', () => {
+    expectedArrivalsService.getArrival.mockResolvedValue(arrival)
+    return request(app)
+      .get('/prisoners/1111-1111-1111-1111/summary')
+      .expect(res => {
+        expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('1111-1111-1111-1111')
+      })
+  })
+
   it('should render summary page', () => {
     return request(app)
-      .get('/prisoners/123/summary')
+      .get('/prisoners/1111-1111-1111-1111/summary')
       .expect(200)
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
@@ -45,7 +49,7 @@ describe('GET /prisoner/:id/summary', () => {
   describe('caption', () => {
     it('should render both PNC Number and Prison Number when both are given', () => {
       return request(app)
-        .get('/prisoners/123/summary')
+        .get('/prisoners/1111-1111-1111-1111/summary')
         .expect(200)
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
@@ -61,7 +65,7 @@ describe('GET /prisoner/:id/summary', () => {
       })
 
       return request(app)
-        .get('/prisoners/123/summary')
+        .get('/prisoners/1111-1111-1111-1111/summary')
         .expect(200)
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
@@ -77,7 +81,7 @@ describe('GET /prisoner/:id/summary', () => {
       })
 
       return request(app)
-        .get('/prisoners/123/summary')
+        .get('/prisoners/1111-1111-1111-1111/summary')
         .expect(200)
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {

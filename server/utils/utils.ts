@@ -132,3 +132,7 @@ export const isValidDate = (day: string, month: string, year: string) => {
   }
   return !day || !month || !year || validate(day, month, year)
 }
+
+export const calculateAge = (dateOfBirth: string) => {
+  return moment().diff(dateOfBirth, 'years')
+}
