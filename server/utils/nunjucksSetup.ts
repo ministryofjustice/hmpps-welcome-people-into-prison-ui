@@ -4,6 +4,7 @@ import moment from 'moment'
 import express from 'express'
 import * as pathModule from 'path'
 import config from '../config'
+import { calculateAge } from './utils'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -50,6 +51,10 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
 
   njkEnv.addFilter('formatDate', (value, format) => {
     return value ? moment(value).format(format) : null
+  })
+
+  njkEnv.addFilter('calculateAge', value => {
+    return calculateAge(value)
   })
 
   njkEnv.addFilter('toOptions', (array, id: string, valueKey, textKey) => {

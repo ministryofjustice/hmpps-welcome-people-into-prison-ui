@@ -1,6 +1,5 @@
 import type { RequestHandler } from 'express'
 import { ExpectedArrivalsService } from '../../services'
-import { calculateAge } from '../../utils/utils'
 import { State } from './arrivals/state'
 import { MatchType } from '../../services/matchTypeDecorator'
 
@@ -11,8 +10,7 @@ export default class SummaryController {
     return async (req, res) => {
       const { id } = req.params
       const arrival = await this.expectedArrivalsService.getArrival(id)
-      const arrivalAge = calculateAge(arrival.dateOfBirth)
-      return res.render('pages/bookedtoday/summary.njk', { arrival, arrivalAge })
+      return res.render('pages/bookedtoday/summary.njk', { arrival })
     }
   }
 
