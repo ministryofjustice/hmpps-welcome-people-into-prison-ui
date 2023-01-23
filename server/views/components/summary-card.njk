@@ -1,0 +1,35 @@
+{% macro summaryCard(params) %}
+    <section class="summary-card{%- if params.classes %} {{ params.classes }}{% endif %}">
+
+        {% if params.titleHtml or params.titleText %}
+            <header class="summary-card__header">
+                <h2 class="summary-card__title">
+                    {{ params.titleHtml | safe if params.titleHtml else params.titleText }}
+                </h2>
+            </header>
+        {% endif %}
+
+        {% if params.rows %}
+            <div class="summary-card__body">
+                <dl class="govuk-summary-list">
+                    {% for row in params.rows %}
+                        {% if row %}
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">
+                                    {{ row.key.html | safe if row.key.html else row.key.text }}
+                                    {% if row.key.caption %}
+                                        <span class="govuk-!-font-size-16 govuk-!-font-weight-regular">{{ row.key.caption }}</span>
+                                    {% endif %}
+                                </dt>
+                                <dd class="govuk-summary-list__value">
+                                    {{ row.value.html | indent(8) | trim | safe if row.value.html else row.value.text }}
+                                </dd>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </dl>
+            </div>
+        {% endif %}
+
+    </section>
+{% endmacro %}

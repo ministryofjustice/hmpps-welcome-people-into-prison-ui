@@ -6,16 +6,23 @@ import transferRoutes from './transfers'
 import arrivalRoutes from './arrivals'
 import unexpectedArrivalsRoutes from './unexpectedArrivals'
 import Routes from '../../utils/routeBuilder'
+import Role from '../../authentication/role'
+import SummaryController from './summary'
 
 export default function routes(services: Services): Router {
   const choosePrisonerController = new ChoosePrisonerController(services.expectedArrivalsService)
+  const summaryController = new SummaryController(services.expectedArrivalsService)
 
   return Routes.forAnyRole()
     .get('/confirm-arrival/choose-prisoner', choosePrisonerController.view())
     .get('/confirm-arrival/choose-prisoner/:id', choosePrisonerController.redirectToConfirm())
 
+    .forRole(Role.PRISON_RECEPTION)
+    .get('/prisoners/:id/summary', summaryController.view())
+
     .use(transferRoutes(services))
     .use(arrivalRoutes(services))
     .use(unexpectedArrivalsRoutes(services))
+
     .build()
 }
