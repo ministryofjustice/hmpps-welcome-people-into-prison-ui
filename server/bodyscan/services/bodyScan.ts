@@ -5,7 +5,7 @@ import { assertHasOptionalStringValues, createDate } from '../../utils/utils'
 const REASON_CODES: ReasonCode[] = ['INTELLIGENCE', 'REASONABLE_SUSPICION']
 const RESULT_CODES: ResultCode[] = ['POSITIVE', 'NEGATIVE']
 const DATE_TYPES = ['today', 'another-date']
-type DateType = typeof DATE_TYPES[number]
+type DateType = (typeof DATE_TYPES)[number]
 
 function checkIsMember<T extends string>(value: unknown, valid: T[]): asserts value is T {
   if (!valid.includes(value as T)) {
