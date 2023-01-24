@@ -1,7 +1,5 @@
 import type { RequestHandler } from 'express'
 import { ExpectedArrivalsService } from '../../services'
-import { State } from './arrivals/state'
-import { MatchType } from '../../services/matchTypeDecorator'
 
 export default class SummaryController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
@@ -11,35 +9,6 @@ export default class SummaryController {
       const { id } = req.params
       const arrival = await this.expectedArrivalsService.getArrival(id)
       return res.render('pages/bookedtoday/summary.njk', { arrival })
-    }
-  }
-
-  public redirectToConfirm(): RequestHandler {
-    return async (req, res) => {
-      const { id } = req.params
-      State.searchDetails.clear(res)
-      State.newArrival.clear(res)
-      const arrival = await this.expectedArrivalsService.getArrival(id)
-
-      switch (arrival.matchType) {
-        case MatchType.INSUFFICIENT_INFO:
-          return res.redirect(`/prisoners/${arrival.id}/search-for-existing-record/new`)
-
-        case MatchType.COURT_RETURN:
-          return res.redirect(`/prisoners/${arrival.id}/check-court-return`)
-
-        case MatchType.NO_MATCH:
-          return res.redirect(`/prisoners/${arrival.id}/no-record-found`)
-
-        case MatchType.SINGLE_MATCH:
-          return res.redirect(`/prisoners/${arrival.id}/record-found`)
-
-        case MatchType.MULTIPLE_POTENTIAL_MATCHES:
-          return res.redirect(`/prisoners/${arrival.id}/possible-records-found`)
-
-        default:
-          throw new Error(`Invalid matchType: ${arrival.matchType}`)
-      }
     }
   }
 }
