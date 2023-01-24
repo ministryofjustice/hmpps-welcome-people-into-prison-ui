@@ -1,19 +1,19 @@
 import moment from 'moment'
 import {
-  convertToTitleCase,
-  trimObjectValues,
-  createDate,
-  groupBy,
-  compareByFullName,
-  compareByDateAndTime,
-  assertHasStringValues,
   assertHasOptionalStringValues,
-  zip,
-  isValidDate,
-  isPastDate,
-  isFutureDate,
+  assertHasStringValues,
   associateBy,
   calculateAge,
+  compareByDateAndTime,
+  compareByFullName,
+  convertToTitleCase,
+  createDate,
+  groupBy,
+  isFutureDate,
+  isPastDate,
+  isValidDate,
+  trimObjectValues,
+  zip,
 } from './utils'
 
 describe('Convert to title case', () => {
@@ -475,8 +475,18 @@ describe('isFutureDate', () => {
 })
 
 describe('calculateAge', () => {
-  test('calculate age from date of birth', () => {
+  it('returns correct age if birthday is today', () => {
     const twentyYearsAgo = moment().subtract(20, 'years').format('YYYY-MM-DD')
     expect(calculateAge(twentyYearsAgo)).toBe(20)
+  })
+
+  it('returns correct age when birthday has occurred this year', () => {
+    const twentyYearsAgo = moment().subtract(20, 'years').subtract(1, 'day').format('YYYY-MM-DD')
+    expect(calculateAge(twentyYearsAgo)).toBe(20)
+  })
+
+  it('returns correct age when birthday has not occurred this year', () => {
+    const twentyYearsAgo = moment().subtract(20, 'years').add(1, 'day').format('YYYY-MM-DD')
+    expect(calculateAge(twentyYearsAgo)).toBe(19)
   })
 })
