@@ -7,7 +7,7 @@ import arrivalRoutes from './arrivals'
 import unexpectedArrivalsRoutes from './unexpectedArrivals'
 import Routes from '../../utils/routeBuilder'
 import Role from '../../authentication/role'
-import SummaryController from './summary'
+import SummaryController from './summaryController'
 
 export default function routes(services: Services): Router {
   const choosePrisonerController = new ChoosePrisonerController(services.expectedArrivalsService)
