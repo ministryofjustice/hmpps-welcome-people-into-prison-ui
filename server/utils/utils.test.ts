@@ -1,18 +1,19 @@
 import moment from 'moment'
 import {
+  assertHasOptionalStringValues,
+  assertHasStringValues,
+  associateBy,
+  calculateAge,
+  compareByDateAndTime,
+  compareByFullName,
   convertToTitleCase,
-  trimObjectValues,
   createDate,
   groupBy,
-  compareByFullName,
-  compareByDateAndTime,
-  assertHasStringValues,
-  assertHasOptionalStringValues,
-  zip,
-  isValidDate,
-  isPastDate,
   isFutureDate,
-  associateBy,
+  isPastDate,
+  isValidDate,
+  trimObjectValues,
+  zip,
 } from './utils'
 
 describe('Convert to title case', () => {
@@ -470,5 +471,22 @@ describe('isFutureDate', () => {
     const year = yesterday.format('YYYY')
     const result = isFutureDate(day, month, year)
     expect(result).toEqual(false)
+  })
+})
+
+describe('calculateAge', () => {
+  it('returns correct age if birthday is today', () => {
+    const twentyYearsAgo = moment().subtract(20, 'years').format('YYYY-MM-DD')
+    expect(calculateAge(twentyYearsAgo)).toBe(20)
+  })
+
+  it('returns correct age when birthday has occurred this year', () => {
+    const twentyYearsAgo = moment().subtract(20, 'years').subtract(1, 'day').format('YYYY-MM-DD')
+    expect(calculateAge(twentyYearsAgo)).toBe(20)
+  })
+
+  it('returns correct age when birthday has not occurred this year', () => {
+    const twentyYearsAgo = moment().subtract(20, 'years').add(1, 'day').format('YYYY-MM-DD')
+    expect(calculateAge(twentyYearsAgo)).toBe(19)
   })
 })
