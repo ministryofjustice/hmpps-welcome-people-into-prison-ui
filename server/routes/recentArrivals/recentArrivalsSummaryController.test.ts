@@ -24,9 +24,18 @@ describe('GET /recent-arrivals/:id/summary', () => {
     expectedArrivalsService.getArrival.mockResolvedValue(arrival)
   })
 
+  it('should call service method correctly', () => {
+    expectedArrivalsService.getArrival.mockResolvedValue(arrival)
+    return request(app)
+      .get('/recent-arrivals/1111-1111-1111-1111/summary')
+      .expect(res => {
+        expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('1111-1111-1111-1111')
+      })
+  })
+
   it('should render summary page', () => {
     return request(app)
-      .get('/recent-arrivals/123/summary')
+      .get('/recent-arrivals/1111-1111-1111-1111/summary')
       .expect(200)
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
@@ -36,15 +45,59 @@ describe('GET /recent-arrivals/:id/summary', () => {
       })
   })
 
-  describe('caption', () => {
-    it('should render both PNC Number and Prison Number when both are given', () => {
+  it('should display breadcrumbs correctly', () => {
+    return request(app)
+      .get('/recent-arrivals/1111-1111-1111-1111/summary')
+      .expect(200)
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(res => {
+        const $ = cheerio.load(res.text)
+        expect($('[data-qa=breadcrumbs] li').length).toEqual(3)
+        expect($('[data-qa=breadcrumbs] li a').first().text()).toEqual('Home')
+        expect($('[data-qa=breadcrumbs] li a').first().attr('href')).toEqual('/')
+        expect($('[data-qa=breadcrumbs] li:nth-child(2) a').text()).toEqual('Recent arrivals')
+        expect($('[data-qa=breadcrumbs] li:nth-child(2) a').attr('href')).toEqual('/recent-arrivals')
+        expect($('[data-qa=breadcrumbs] li').last().text()).toEqual('Smith, Jim')
+      })
+  })
+
+  describe('prisoner image', () => {
+    it('should render prisoner image when Prison Number provided', () => {
       return request(app)
-        .get('/recent-arrivals/123/summary')
+        .get('/recent-arrivals/1111-1111-1111-1111/summary')
         .expect(200)
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           const $ = cheerio.load(res.text)
-          expect($('span.govuk-caption-l').text().trim()).toStrictEqual('Prison number: A1234AB | PNC: 01/98644M')
+          expect($('[data-qa=prisoner-image]').attr('src')).toEqual('/prisoners/A1111-1111-1111-11114AB/image')
+        })
+    })
+
+    it('should render placeholder image when no Prison Number provided', () => {
+      expectedArrivalsService.getArrival.mockResolvedValue(withMatchType(createArrival({ prisonNumber: null })))
+
+      return request(app)
+        .get('/recent-arrivals/1111-1111-1111-1111/summary')
+        .expect(200)
+        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect(res => {
+          const $ = cheerio.load(res.text)
+          expect($('[data-qa=prisoner-image]').attr('src')).toEqual('/assets/images/placeholder-image.png')
+        })
+    })
+  })
+
+  describe('caption', () => {
+    it('should render both PNC Number and Prison Number when both are given', () => {
+      return request(app)
+        .get('/recent-arrivals/1111-1111-1111-1111/summary')
+        .expect(200)
+        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect(res => {
+          const $ = cheerio.load(res.text)
+          expect($('span.govuk-caption-l').text().trim()).toStrictEqual(
+            'Prison number: A1111-1111-1111-11114AB | PNC: 01/98644M'
+          )
         })
     })
 
@@ -52,12 +105,12 @@ describe('GET /recent-arrivals/:id/summary', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(withMatchType(createArrival({ pncNumber: null })))
 
       return request(app)
-        .get('/recent-arrivals/123/summary')
+        .get('/recent-arrivals/1111-1111-1111-1111/summary')
         .expect(200)
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           const $ = cheerio.load(res.text)
-          expect($('span.govuk-caption-l').text().trim()).toStrictEqual('Prison number: A1234AB')
+          expect($('span.govuk-caption-l').text().trim()).toStrictEqual('Prison number: A1111-1111-1111-11114AB')
         })
     })
 
@@ -65,7 +118,7 @@ describe('GET /recent-arrivals/:id/summary', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(withMatchType(createArrival({ prisonNumber: null })))
 
       return request(app)
-        .get('/recent-arrivals/123/summary')
+        .get('/recent-arrivals/1111-1111-1111-1111/summary')
         .expect(200)
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
@@ -73,5 +126,18 @@ describe('GET /recent-arrivals/:id/summary', () => {
           expect($('span.govuk-caption-l').text().trim()).toStrictEqual('PNC: 01/98644M')
         })
     })
+  })
+
+  it('should generate correct link to dps', () => {
+    return request(app)
+      .get('/recent-arrivals/1111-1111-1111-1111/summary')
+      .expect(200)
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(res => {
+        const $ = cheerio.load(res.text)
+        expect($('[data-qa=add-case-note-button]').attr('href')).toContain(
+          '/save-backlink?service=welcome-people-into-prison&returnPath=/recent-arrivals/1111-1111-1111-1111/summary&redirectPath=/prisoner/A1234AB/add-case-note'
+        )
+      })
   })
 })
