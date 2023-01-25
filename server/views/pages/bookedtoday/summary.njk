@@ -1,12 +1,20 @@
 {% extends "../../partials/layout.njk" %}
 {% from "components/summary-card.njk" import summaryCard %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from  "../../partials/expectedArrivalCardMacro.njk" import expectedArrivalCard, transferCard %}
+
 {% set pageTitle = "Person booked to arrive" %}
+{% set hasBackLink = false %}
+{% set breadCrumbs = {
+    enabled: true,
+    pageTitle:  arrival.lastName + "," + arrival.firstName,
+    data: [{
+        title: 'People booked to arrive today',
+        href: '/confirm-arrival/choose-prisoner'
+    }]} %}
+
 
 {% block content %}
     <div class="govuk-!-margin-bottom-8">
-
         <div class="govuk-body">
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-one-half">
@@ -27,7 +35,7 @@
             </div>
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-full">
-                    <div class="govuk-inset-text">
+                    <div class="govuk-inset-text govuk-!-margin-top-0">
                         This summary contains information from the escort move and prison record.
                     </div>
                 </div>
@@ -64,17 +72,6 @@
                             {
                                 key: {  text: "Age" },
                                 value: { text: arrival.dateOfBirth | calculateAge + " years old"}
-                            }
-                        ]
-                    }) }}
-
-                    {{ summaryCard({
-                        classes: "govuk-!-margin-bottom-6",
-                        titleText: "X-ray body scan",
-                        rows: [
-                            {
-                                key: {  text: "Total number of scans", caption: "testing" },
-                                value: { text:  "testing" }
                             }
                         ]
                     }) }}
