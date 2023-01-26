@@ -69,7 +69,7 @@ describe('GET /recent-arrivals/:id/summary', () => {
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           const $ = cheerio.load(res.text)
-          expect($('[data-qa=prisoner-image]').attr('src')).toEqual('/prisoners/A1111-1111-1111-11114AB/image')
+          expect($('[data-qa=prisoner-image]').attr('src')).toEqual('/prisoners/A1234AB/image')
         })
     })
 
@@ -95,9 +95,7 @@ describe('GET /recent-arrivals/:id/summary', () => {
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           const $ = cheerio.load(res.text)
-          expect($('span.govuk-caption-l').text().trim()).toStrictEqual(
-            'Prison number: A1111-1111-1111-11114AB | PNC: 01/98644M'
-          )
+          expect($('span.govuk-caption-l').text().trim()).toStrictEqual('Prison number: A1234AB | PNC: 01/98644M')
         })
     })
 
@@ -110,7 +108,7 @@ describe('GET /recent-arrivals/:id/summary', () => {
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           const $ = cheerio.load(res.text)
-          expect($('span.govuk-caption-l').text().trim()).toStrictEqual('Prison number: A1111-1111-1111-11114AB')
+          expect($('span.govuk-caption-l').text().trim()).toStrictEqual('Prison number: A1234AB')
         })
     })
 
