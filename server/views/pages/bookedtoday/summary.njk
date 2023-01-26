@@ -6,7 +6,7 @@
 {% set hasBackLink = false %}
 {% set breadCrumbs = {
     enabled: true,
-    pageTitle:  arrival.lastName + "," + arrival.firstName,
+    pageTitle:  arrival.lastName + ", " + arrival.firstName,
     data: [{
         title: 'People booked to arrive today',
         href: '/confirm-arrival/choose-prisoner'
@@ -76,8 +76,19 @@
                         ]
                     }) }}
                 </div>
-            </div>
 
+                <div class='govuk-grid-column-one-third'>
+                    <aside class="float-right">
+                        <img
+                            src="{{ '/prisoners/' + arrival.prisonNumber + '/image' if arrival.prisonNumber else '/assets/images/placeholder-image.png' }}"
+                            class="float-right"
+                            width="160px"
+                            alt="Headshot of {{ arrival.lastName }}, {{ arrival.firstName }}"
+                            data-qa="prisoner-image"
+                        />
+                    </aside>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
