@@ -28,7 +28,7 @@
                 <div class="govuk-grid-column-one-half">
                     {{ govukButton({
                         text: "Add a case note",
-                        href: dpsUrl + "/save-backlink?service=welcome-people-into-prison&returnPath=/recent-arrivals/" + arrival.id + "/summary&redirectPath=/prisoner/" + arrival.prisonNumber + "/add-case-note",
+                        href: dpsUrl + "/save-backlink?service=welcome-people-into-prison&returnPath=/recent-arrivals/" + arrival.prisonNumber + "/summary&redirectPath=/prisoner/" + arrival.prisonNumber + "/add-case-note",
                         classes: "govuk-button--secondary float-right",
                         attributes: {'data-qa': 'add-case-note-button'}
                     }) }}
@@ -50,10 +50,6 @@
                             {
                                 key: {  text: "Arrival Status" },
                                 value: { html: "<strong class=\"govuk-tag govuk-tag\">Arrived</strong>" }
-                            },
-                            {
-                                key: {  text: "Arrived from" },
-                                value: { text: arrival.fromLocation }
                             }
                         ]
                     }) }}
