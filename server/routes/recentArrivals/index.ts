@@ -21,7 +21,7 @@ export default function routes(services: Services): Router {
     .post('/recent-arrivals/search', checkSearchQueryPresent, recentArrivalsSearch.submitSearch())
 
     .forRole(Role.PRISON_RECEPTION)
-    .get('/recent-arrivals/:id/summary', recentArrivalsSummaryController.view())
+    .get('/recent-arrivals/:prisonNumber/summary', recentArrivalsSummaryController.view())
 
     .build()
 }
