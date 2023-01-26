@@ -25,7 +25,8 @@
     {{ govukBreadcrumbs({
         collapseOnMobile: true,
         items: completedRows,
-        classes: "govuk-!-display-none-print govuk-!-margin-top-6"
+        classes: "govuk-!-display-none-print govuk-!-margin-top-6",
+        attributes: {"data-qa": "breadcrumbs"}
     }) }}
 
 {% endmacro %}
