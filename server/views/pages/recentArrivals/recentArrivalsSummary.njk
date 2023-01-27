@@ -21,7 +21,7 @@
                     <span class="govuk-caption-l">
                         Prison number: {{ arrival.prisonNumber }}{% if arrival.pncNumber %} | PNC: {{ arrival.pncNumber }}{% endif %}
                     </span>
-                    <h1 class="govuk-!-margin-0">{{ arrival.lastName }}, {{ arrival.firstName }}</h1>
+                    <h1 class="govuk-heading-l">{{ arrival.lastName }}, {{ arrival.firstName }}</h1>
                 </div>
                 <div class="govuk-grid-column-one-half">
                     {{ govukButton({
@@ -34,7 +34,7 @@
             </div>
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-full">
-                    <div class="govuk-inset-text govuk-!-margin-top-5">
+                    <div class="govuk-inset-text govuk-!-margin-top-0">
                         This summary contains information from the escort move and prison record.
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                         titleText: "Booking overview",
                         rows: [
                             {
-                                key: {  text: "Arrival Status" },
+                                key: {  text: "Arrival status" },
                                 value: { html: "<strong class=\"govuk-tag govuk-tag\">Arrived</strong>" }
                             }
                         ]
@@ -73,15 +73,15 @@
                 </div>
 
                 <div class='govuk-grid-column-one-third'>
-                    <aside class="float-right">
+                    <div class="profile-align-image">
                         <img
                             src="{{ '/prisoners/' + arrival.prisonNumber + '/image' }}"
-                            class="float-right"
+                            class="govuk-!-margin-bottom-8"
                             width="160px"
                             alt="Headshot of {{ arrival.lastName }}, {{ arrival.firstName }}"
                             data-qa="prisoner-image"
                         />
-                    </aside>
+                    </div>
                 </div>
             </div>
         </div>
