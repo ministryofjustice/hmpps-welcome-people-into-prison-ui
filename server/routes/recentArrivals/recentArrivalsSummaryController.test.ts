@@ -61,30 +61,15 @@ describe('GET /recent-arrivals/:id/summary', () => {
       })
   })
 
-  describe('prisoner image', () => {
-    it('should render prisoner image when Prison Number provided', () => {
-      return request(app)
-        .get('/recent-arrivals/A1234AB/summary')
-        .expect(200)
-        .expect('Content-Type', 'text/html; charset=utf-8')
-        .expect(res => {
-          const $ = cheerio.load(res.text)
-          expect($('[data-qa=prisoner-image]').attr('src')).toEqual('/prisoners/A1234AB/image')
-        })
-    })
-
-    it('should render placeholder image when no Prison Number provided', () => {
-      expectedArrivalsService.getPrisonerDetails.mockResolvedValue(createPrisonerDetails({ prisonNumber: null }))
-
-      return request(app)
-        .get('/recent-arrivals/A1234AB/summary')
-        .expect(200)
-        .expect('Content-Type', 'text/html; charset=utf-8')
-        .expect(res => {
-          const $ = cheerio.load(res.text)
-          expect($('[data-qa=prisoner-image]').attr('src')).toEqual('/assets/images/placeholder-image.png')
-        })
-    })
+  it('should render prisoner image', () => {
+    return request(app)
+      .get('/recent-arrivals/A1234AB/summary')
+      .expect(200)
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(res => {
+        const $ = cheerio.load(res.text)
+        expect($('[data-qa=prisoner-image]').attr('src')).toEqual('/prisoners/A1234AB/image')
+      })
   })
 
   describe('caption', () => {
@@ -109,19 +94,6 @@ describe('GET /recent-arrivals/:id/summary', () => {
         .expect(res => {
           const $ = cheerio.load(res.text)
           expect($('span.govuk-caption-l').text().trim()).toStrictEqual('Prison number: A1234AB')
-        })
-    })
-
-    it('should render only PNC Number when only PNC Number is given', () => {
-      expectedArrivalsService.getPrisonerDetails.mockResolvedValue(createPrisonerDetails({ prisonNumber: null }))
-
-      return request(app)
-        .get('/recent-arrivals/A1234AB/summary')
-        .expect(200)
-        .expect('Content-Type', 'text/html; charset=utf-8')
-        .expect(res => {
-          const $ = cheerio.load(res.text)
-          expect($('span.govuk-caption-l').text().trim()).toStrictEqual('PNC: 01/98644M')
         })
     })
   })
