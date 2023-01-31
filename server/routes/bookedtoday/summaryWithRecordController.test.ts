@@ -19,7 +19,7 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET /prisoner/:id/summary', () => {
+describe('GET /prisoner/:id/summary-with-record', () => {
   beforeEach(() => {
     expectedArrivalsService.getArrival.mockResolvedValue(arrival)
   })
@@ -27,15 +27,15 @@ describe('GET /prisoner/:id/summary', () => {
   it('should call service method correctly', () => {
     expectedArrivalsService.getArrival.mockResolvedValue(arrival)
     return request(app)
-      .get('/prisoners/1111-1111-1111-1111/summary')
+      .get('/prisoners/1111-1111-1111-1111/summary-with-record')
       .expect(res => {
         expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('1111-1111-1111-1111')
       })
   })
 
-  it('should render summary page', () => {
+  it('should render summary-with-record page', () => {
     return request(app)
-      .get('/prisoners/1111-1111-1111-1111/summary')
+      .get('/prisoners/1111-1111-1111-1111/summary-with-record')
       .expect(200)
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
@@ -47,7 +47,7 @@ describe('GET /prisoner/:id/summary', () => {
 
   it('should display breadcrumbs correctly', () => {
     return request(app)
-      .get('/prisoners/1111-1111-1111-1111/summary')
+      .get('/prisoners/1111-1111-1111-1111/summary-with-record')
       .expect(200)
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
@@ -64,7 +64,7 @@ describe('GET /prisoner/:id/summary', () => {
   describe('prisoner image', () => {
     it('should render prisoner image when Prison Number provided', () => {
       return request(app)
-        .get('/prisoners/1111-1111-1111-1111/summary')
+        .get('/prisoners/1111-1111-1111-1111/summary-with-record')
         .expect(200)
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
@@ -77,7 +77,7 @@ describe('GET /prisoner/:id/summary', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(withMatchType(createArrival({ prisonNumber: null })))
 
       return request(app)
-        .get('/prisoners/1111-1111-1111-1111/summary')
+        .get('/prisoners/1111-1111-1111-1111/summary-with-record')
         .expect(200)
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
@@ -90,7 +90,7 @@ describe('GET /prisoner/:id/summary', () => {
   describe('caption', () => {
     it('should render both PNC Number and Prison Number when both are given', () => {
       return request(app)
-        .get('/prisoners/1111-1111-1111-1111/summary')
+        .get('/prisoners/1111-1111-1111-1111/summary-with-record')
         .expect(200)
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
@@ -103,7 +103,7 @@ describe('GET /prisoner/:id/summary', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(withMatchType(createArrival({ pncNumber: null })))
 
       return request(app)
-        .get('/prisoners/1111-1111-1111-1111/summary')
+        .get('/prisoners/1111-1111-1111-1111/summary-with-record')
         .expect(200)
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
@@ -116,7 +116,7 @@ describe('GET /prisoner/:id/summary', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(withMatchType(createArrival({ prisonNumber: null })))
 
       return request(app)
-        .get('/prisoners/1111-1111-1111-1111/summary')
+        .get('/prisoners/1111-1111-1111-1111/summary-with-record')
         .expect(200)
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
