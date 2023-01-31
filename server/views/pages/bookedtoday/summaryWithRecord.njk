@@ -18,11 +18,9 @@
         <div class="govuk-body">
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-one-half">
-                    {% if singleMatch.prisonNumber or singleMatch.pncNumber %}
                         <span class="govuk-caption-l">
-                            {% if singleMatch.prisonNumber %}Prison number: {{ singleMatch.prisonNumber }}{% endif %}{% if singleMatch.prisonNumber and singleMatch.pncNumber %} | {% endif %}{% if singleMatch.pncNumber %}PNC: {{ singleMatch.pncNumber }}{% endif %}
+                            Prison number: {{ singleMatch.prisonNumber }} | PNC: {{ singleMatch.pncNumber }}
                         </span>
-                    {% endif %}
                     <h1 class="govuk-heading-l">{{ arrival.lastName }}, {{ arrival.firstName }}</h1>
                 </div>
                 <div class="govuk-grid-column-one-half">
