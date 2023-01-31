@@ -8,7 +8,8 @@ export default class SummaryWithRecordController {
     return async (req, res) => {
       const { id } = req.params
       const arrival = await this.expectedArrivalsService.getArrival(id)
-      return res.render('pages/bookedtoday/summaryWithRecord.njk', { arrival })
+      const singleMatch = arrival.potentialMatches[0]
+      return res.render('pages/bookedtoday/summaryWithRecord.njk', { arrival, singleMatch })
     }
   }
 }

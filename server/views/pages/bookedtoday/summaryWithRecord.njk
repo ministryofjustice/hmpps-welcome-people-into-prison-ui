@@ -18,9 +18,9 @@
         <div class="govuk-body">
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-one-half">
-                    {% if arrival.prisonNumber or arrival.pncNumber %}
+                    {% if singleMatch.prisonNumber or singleMatch.pncNumber %}
                         <span class="govuk-caption-l">
-                            {% if arrival.prisonNumber %}Prison number: {{ arrival.prisonNumber }}{% endif %}{% if arrival.prisonNumber and arrival.pncNumber %} | {% endif %}{% if arrival.pncNumber %}PNC: {{ arrival.pncNumber }}{% endif %}
+                            {% if singleMatch.prisonNumber %}Prison number: {{ singleMatch.prisonNumber }}{% endif %}{% if singleMatch.prisonNumber and singleMatch.pncNumber %} | {% endif %}{% if singleMatch.pncNumber %}PNC: {{ singleMatch.pncNumber }}{% endif %}
                         </span>
                     {% endif %}
                     <h1 class="govuk-heading-l">{{ arrival.lastName }}, {{ arrival.firstName }}</h1>
@@ -80,7 +80,7 @@
                 <div class='govuk-grid-column-one-third'>
                     <div class="profile-align-image">
                         <img
-                            src="{{ '/prisoners/' + arrival.prisonNumber + '/image' if arrival.prisonNumber else '/assets/images/placeholder-image.png' }}"
+                            src="{{ '/prisoners/' + singleMatch.prisonNumber + '/image' if singleMatch.prisonNumber else '/assets/images/placeholder-image.png' }}"
                             class="govuk-!-margin-bottom-8"
                             width="160px"
                             alt="Headshot of {{ arrival.lastName }}, {{ arrival.firstName }}"
