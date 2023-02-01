@@ -18,9 +18,11 @@
         <div class="govuk-body">
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-one-half">
+                    {% if arrival.pncNumber %}
                         <span class="govuk-caption-l">
-                            Prison number: {{ singleMatch.prisonNumber }} | PNC: {{ singleMatch.pncNumber }}
+                            PNC: {{ arrival.pncNumber }}
                         </span>
+                    {% endif %}
                     <h1 class="govuk-heading-l">{{ arrival.lastName }}, {{ arrival.firstName }}</h1>
                 </div>
                 <div class="govuk-grid-column-one-half">
@@ -34,7 +36,7 @@
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-full">
                     <div class="govuk-inset-text govuk-!-margin-top-0">
-                        This summary contains information from the escort move and prison record.
+                        This summary contains information from the escort move.
                     </div>
                 </div>
             </div>
@@ -78,7 +80,7 @@
                 <div class='govuk-grid-column-one-third'>
                     <div class="profile-align-image">
                         <img
-                            src="{{ '/prisoners/' + singleMatch.prisonNumber + '/image' }}"
+                            src="/assets/images/placeholder-image.png"
                             class="govuk-!-margin-bottom-8"
                             width="160px"
                             alt="Headshot of {{ arrival.lastName }}, {{ arrival.firstName }}"
