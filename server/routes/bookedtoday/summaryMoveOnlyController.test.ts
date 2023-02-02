@@ -19,7 +19,7 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET /prisoner/:id/summary-without-record', () => {
+describe('GET /prisoner/:id/summary-move-only', () => {
   beforeEach(() => {
     expectedArrivalsService.getArrival.mockResolvedValue(arrival)
   })
@@ -27,15 +27,15 @@ describe('GET /prisoner/:id/summary-without-record', () => {
   it('should call service method correctly', () => {
     expectedArrivalsService.getArrival.mockResolvedValue(arrival)
     return request(app)
-      .get('/prisoners/1111-1111-1111-1111/summary-without-record')
+      .get('/prisoners/1111-1111-1111-1111/summary-move-only')
       .expect(res => {
         expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('1111-1111-1111-1111')
       })
   })
 
-  it('should render summary-without-record page', () => {
+  it('should render summary-move-only page', () => {
     return request(app)
-      .get('/prisoners/1111-1111-1111-1111/summary-without-record')
+      .get('/prisoners/1111-1111-1111-1111/summary-move-only')
       .expect(200)
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
@@ -47,7 +47,7 @@ describe('GET /prisoner/:id/summary-without-record', () => {
 
   it('should display breadcrumbs correctly', () => {
     return request(app)
-      .get('/prisoners/1111-1111-1111-1111/summary-without-record')
+      .get('/prisoners/1111-1111-1111-1111/summary-move-only')
       .expect(200)
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
@@ -66,7 +66,7 @@ describe('GET /prisoner/:id/summary-without-record', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(withMatchType(createArrival(arrival)))
 
       return request(app)
-        .get('/prisoners/1111-1111-1111-1111/summary-without-record')
+        .get('/prisoners/1111-1111-1111-1111/summary-move-only')
         .expect(200)
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
@@ -79,7 +79,7 @@ describe('GET /prisoner/:id/summary-without-record', () => {
   describe('caption', () => {
     it('should render PNC Number when provided', () => {
       return request(app)
-        .get('/prisoners/1111-1111-1111-1111/summary-without-record')
+        .get('/prisoners/1111-1111-1111-1111/summary-move-only')
         .expect(200)
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
