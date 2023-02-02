@@ -136,3 +136,7 @@ export const isValidDate = (day: string, month: string, year: string) => {
 export const calculateAge = (dateOfBirth: string) => {
   return moment().diff(dateOfBirth, 'years')
 }
+
+export const generateCurrentYear = () => {
+  return moment().year()
+}
