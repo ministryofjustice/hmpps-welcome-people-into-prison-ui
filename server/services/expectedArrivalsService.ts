@@ -15,10 +15,10 @@ import type { RestClientBuilder, WelcomeClient, HmppsAuthClient } from '../data'
 import logger from '../../logger'
 import { RaiseAnalyticsEvent } from './raiseAnalyticsEvent'
 import { NewArrival } from '../routes/bookedtoday/arrivals/state'
-import type { BodyScanInfoDecorator, WithBodyScanInfo } from './bodyScanInfoDecorator'
+import type { BodyScanInfoDecorator, WithBodyScanStatus, WithBodyScanInfo } from './bodyScanInfoDecorator'
 import type { MatchTypeDecorator, WithMatchType } from './matchTypeDecorator'
 
-export type DecoratedArrival = WithBodyScanInfo<Arrival> & WithMatchType<Arrival>
+export type DecoratedArrival = WithBodyScanStatus<Arrival> & WithMatchType<Arrival>
 
 export default class ExpectedArrivalsService {
   constructor(
@@ -50,20 +50,20 @@ export default class ExpectedArrivalsService {
     return transfers.map(transfer => ({ ...transfer, fromLocationType: 'PRISON' as const })).sort(compareByFullName)
   }
 
-  private isArrivalArrivedOnDay = (day: Moment) => (recentArrival: WithBodyScanInfo<RecentArrival>) => {
+  private isArrivalArrivedOnDay = (day: Moment) => (recentArrival: WithBodyScanStatus<RecentArrival>) => {
     return moment(recentArrival.movementDateTime).startOf('day').valueOf() === day.startOf('day').valueOf()
   }
 
   public async getRecentArrivalsGroupedByDate(
     agencyId: string
-  ): Promise<Map<Moment, WithBodyScanInfo<RecentArrival>[]>> {
+  ): Promise<Map<Moment, WithBodyScanStatus<RecentArrival>[]>> {
     const today = moment().startOf('day')
     const oneDayAgo = moment().subtract(1, 'days').startOf('day')
     const twoDaysAgo = moment().subtract(2, 'days').startOf('day')
 
     const rawRecentArrivals = await this.getRecentArrivals(agencyId, twoDaysAgo, today)
     const recentArrivals = await this.bodyScanDecorator.decorate(rawRecentArrivals)
-    const mappedArrivals = new Map<Moment, WithBodyScanInfo<RecentArrival>[]>()
+    const mappedArrivals = new Map<Moment, WithBodyScanStatus<RecentArrival>[]>()
 
     mappedArrivals.set(today, recentArrivals.filter(this.isArrivalArrivedOnDay(today)))
     mappedArrivals.set(oneDayAgo, recentArrivals.filter(this.isArrivalArrivedOnDay(oneDayAgo)))
@@ -106,7 +106,7 @@ export default class ExpectedArrivalsService {
     return this.matchTypeDecorator.decorateSingle(arrival)
   }
 
-  public async getPrisonerDetailsForArrival(id: string): Promise<PrisonerDetails> {
+  public async getPrisonerDetailsForArrival(id: string): Promise<PotentialMatch> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const arrival = await this.welcomeClientFactory(token).getArrival(id)
     if (arrival.potentialMatches.length > 1) {
@@ -206,5 +206,11 @@ export default class ExpectedArrivalsService {
   public async getPrisonerDetails(prisonNumber: string): Promise<PrisonerDetails> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     return this.welcomeClientFactory(token).getPrisonerDetails(prisonNumber)
+  }
+
+  public async getPrisonerSummaryDetails(prisonNumber: string): Promise<WithBodyScanInfo<PrisonerDetails>> {
+    const token = await this.hmppsAuthClient.getSystemClientToken()
+    const prisonerDetails = await this.welcomeClientFactory(token).getPrisonerDetails(prisonNumber)
+    return this.bodyScanDecorator.decorateSingle(prisonerDetails)
   }
 }

@@ -5,18 +5,18 @@ import { type TemporaryAbsence } from 'welcome'
 import { appWithAllRoutes, user } from '../__testutils/appSetup'
 import Role from '../../authentication/role'
 import config from '../../config'
-import { withBodyScanInfo, createTemporaryAbsence } from '../../data/__testutils/testObjects'
-import type { WithBodyScanInfo } from '../../services/bodyScanInfoDecorator'
+import { withBodyScanStatus, createTemporaryAbsence } from '../../data/__testutils/testObjects'
+import type { WithBodyScanStatus } from '../../services/bodyScanInfoDecorator'
 import { createMockTemporaryAbsencesService } from '../../services/__testutils/mocks'
 
 let app: Express
 const temporaryAbsencesService = createMockTemporaryAbsencesService()
 
-const temporaryAbsences: WithBodyScanInfo<TemporaryAbsence>[] = [
-  withBodyScanInfo(createTemporaryAbsence({})),
-  withBodyScanInfo(createTemporaryAbsence({})),
-  withBodyScanInfo(createTemporaryAbsence({})),
-  withBodyScanInfo(createTemporaryAbsence({})),
+const temporaryAbsences: WithBodyScanStatus<TemporaryAbsence>[] = [
+  withBodyScanStatus(createTemporaryAbsence({})),
+  withBodyScanStatus(createTemporaryAbsence({})),
+  withBodyScanStatus(createTemporaryAbsence({})),
+  withBodyScanStatus(createTemporaryAbsence({})),
 ]
 
 beforeEach(() => {

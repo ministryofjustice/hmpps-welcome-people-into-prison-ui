@@ -11,8 +11,9 @@ import {
   createMatchCriteria,
   createNewArrival,
   createPotentialMatch,
+  createPrisonerDetails,
   createTransfer,
-  withBodyScanInfo,
+  withBodyScanStatus,
   withMatchType,
 } from '../data/__testutils/testObjects'
 import { createMockHmppsAuthClient, createMockWelcomeClient } from '../data/__testutils/mocks'
@@ -50,6 +51,13 @@ describe('Expected arrivals service', () => {
     bodyScanInfoDecorator.decorate.mockImplementation(as =>
       Promise.resolve(as.map(a => ({ ...a, bodyScanStatus: 'OK_TO_SCAN' })))
     )
+    bodyScanInfoDecorator.decorateSingle.mockImplementation(as =>
+      Promise.resolve({
+        ...as,
+        numberOfBodyScans: 0,
+        numberOfBodyScansRemaining: 116,
+      })
+    )
     matchTypeDecorator.decorate.mockImplementation(as => as.map(a => ({ ...a, matchType: MatchType.SINGLE_MATCH })))
     matchTypeDecorator.decorateSingle.mockImplementation(a => ({ ...a, matchType: MatchType.SINGLE_MATCH }))
   })
@@ -79,12 +87,12 @@ describe('Expected arrivals service', () => {
       const today = moment()
       const result = await service.getArrivalsForToday(res.locals.user.activeCaseLoadId, () => today)
 
-      const arrival = (a: Parameters<typeof createArrival>[0]) => withMatchType(withBodyScanInfo(createArrival(a)))
+      const arrival = (a: Parameters<typeof createArrival>[0]) => withMatchType(withBodyScanStatus(createArrival(a)))
 
       expect(result).toStrictEqual(
         new Map([
           ['COURT', [arrival({ fromLocationType: 'COURT' }), arrival({ fromLocationType: 'COURT' })]],
-          ['PRISON', [withMatchType(withBodyScanInfo(transferArrival))]],
+          ['PRISON', [withMatchType(withBodyScanStatus(transferArrival))]],
           [
             'CUSTODY_SUITE',
             [
@@ -140,20 +148,20 @@ describe('Expected arrivals service', () => {
           [
             dateTo,
             [
-              withBodyScanInfo(createRecentArrival({ movementDateTime: `${today}T09:12:00` })),
-              withBodyScanInfo(createRecentArrival({ movementDateTime: `${today}T13:15:00` })),
-              withBodyScanInfo(createRecentArrival({ movementDateTime: `${today}T13:16:00` })),
+              withBodyScanStatus(createRecentArrival({ movementDateTime: `${today}T09:12:00` })),
+              withBodyScanStatus(createRecentArrival({ movementDateTime: `${today}T13:15:00` })),
+              withBodyScanStatus(createRecentArrival({ movementDateTime: `${today}T13:16:00` })),
             ],
           ],
           [
             middleDate,
             [
-              withBodyScanInfo(createRecentArrival({ movementDateTime: `${oneDayAgo}T14:40:00` })),
-              withBodyScanInfo(createRecentArrival({ movementDateTime: `${oneDayAgo}T14:40:01` })),
-              withBodyScanInfo(createRecentArrival({ movementDateTime: `${oneDayAgo}T14:55:00` })),
+              withBodyScanStatus(createRecentArrival({ movementDateTime: `${oneDayAgo}T14:40:00` })),
+              withBodyScanStatus(createRecentArrival({ movementDateTime: `${oneDayAgo}T14:40:01` })),
+              withBodyScanStatus(createRecentArrival({ movementDateTime: `${oneDayAgo}T14:55:00` })),
             ],
           ],
-          [dateFrom, [withBodyScanInfo(createRecentArrival({ movementDateTime: `${twoDaysAgo}T18:20:00` }))]],
+          [dateFrom, [withBodyScanStatus(createRecentArrival({ movementDateTime: `${twoDaysAgo}T18:20:00` }))]],
         ])
       )
 
@@ -378,6 +386,27 @@ describe('Expected arrivals service', () => {
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       expect(WelcomeClientFactory).toBeCalledWith(token)
       expect(welcomeClient.getPrisonerDetails).toBeCalledWith(prisonNumber)
+    })
+  })
+
+  describe('get prisoner summary details', () => {
+    it('calls upstream service with correct args', async () => {
+      const prisonNumber = 'A1234AB'
+
+      await service.getPrisonerSummaryDetails(prisonNumber)
+
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      expect(WelcomeClientFactory).toBeCalledWith(token)
+      expect(welcomeClient.getPrisonerDetails).toBeCalledWith(prisonNumber)
+    })
+
+    it('Returns response of client', async () => {
+      const prisonerSummaryDetails = createPrisonerDetails()
+      welcomeClient.getPrisonerDetails.mockResolvedValue(prisonerSummaryDetails)
+
+      const result = await service.getPrisonerSummaryDetails('A1234AB')
+
+      expect(result).toStrictEqual({ ...prisonerSummaryDetails, numberOfBodyScans: 0, numberOfBodyScansRemaining: 116 })
     })
   })
 })

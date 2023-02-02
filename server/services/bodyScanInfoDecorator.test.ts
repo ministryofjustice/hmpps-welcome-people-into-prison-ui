@@ -1,4 +1,5 @@
 import { createMockBodyScanClient, createMockHmppsAuthClient } from '../data/__testutils/mocks'
+import { createPrisonerDetails } from '../data/__testutils/testObjects'
 import { BodyScanInfoDecorator } from './bodyScanInfoDecorator'
 
 jest.mock('./raiseAnalyticsEvent')
@@ -79,6 +80,34 @@ describe('BodyScanInfoDecorater', () => {
       ])
 
       expect(bodyScanClient.getBodyScanInfo).toHaveBeenCalledWith(['A1234AA', 'A1234AC'])
+    })
+  })
+
+  describe('decorateSingle', () => {
+    test('decorate body scan info for single prisoner', async () => {
+      bodyScanClient.getSingleBodyScanInfo.mockResolvedValue({
+        prisonNumber: 'A1234AB',
+        bodyScanStatus: 'OK_TO_SCAN',
+        numberOfBodyScans: 10,
+        numberOfBodyScansRemaining: 106,
+      })
+
+      const result = await service.decorateSingle(createPrisonerDetails())
+
+      expect(result).toStrictEqual({
+        numberOfBodyScans: 10,
+        numberOfBodyScansRemaining: 106,
+        firstName: 'Jim',
+        lastName: 'Smith',
+        dateOfBirth: '1973-01-08',
+        prisonNumber: 'A1234AB',
+        pncNumber: '01/98644M',
+        sex: 'MALE',
+        arrivalType: 'NEW_BOOKING',
+        arrivalTypeDescription: 'description',
+      })
+
+      expect(bodyScanClient.getSingleBodyScanInfo).toHaveBeenCalledWith('A1234AB')
     })
   })
 })

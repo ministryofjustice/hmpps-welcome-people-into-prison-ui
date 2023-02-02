@@ -27,6 +27,7 @@ const potentialMatches: PotentialMatch[] = [
   createPotentialMatch({
     firstName: 'Jim',
     lastName: 'Smith',
+    prisonNumber: 'A1234AB',
     dateOfBirth: '1983-01-08',
     sex: 'MALE',
   }),
