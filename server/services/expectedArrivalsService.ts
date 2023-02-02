@@ -5,7 +5,6 @@ import {
   PotentialMatchCriteria,
   PotentialMatch,
   PrisonerDetails,
-  PrisonerSummaryDetails,
   Sex,
   LocationType,
 } from 'welcome'
@@ -209,11 +208,9 @@ export default class ExpectedArrivalsService {
     return this.welcomeClientFactory(token).getPrisonerDetails(prisonNumber)
   }
 
-  public async getPrisonerSummaryDetails(prisonNumber: string): Promise<WithBodyScanInfo<PrisonerSummaryDetails>> {
+  public async getPrisonerSummaryDetails(prisonNumber: string): Promise<WithBodyScanInfo<PrisonerDetails>> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
-    const prisonerDetails = (await this.welcomeClientFactory(token).getPrisonerDetails(
-      prisonNumber
-    )) as PrisonerSummaryDetails
+    const prisonerDetails = await this.welcomeClientFactory(token).getPrisonerDetails(prisonNumber)
     return this.bodyScanDecorator.decorateSingle(prisonerDetails)
   }
 }

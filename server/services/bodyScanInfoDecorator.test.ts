@@ -1,5 +1,5 @@
 import { createMockBodyScanClient, createMockHmppsAuthClient } from '../data/__testutils/mocks'
-import { createPrisonerSummaryDetails } from '../data/__testutils/testObjects'
+import { createPrisonerDetails } from '../data/__testutils/testObjects'
 import { BodyScanInfoDecorator } from './bodyScanInfoDecorator'
 
 jest.mock('./raiseAnalyticsEvent')
@@ -92,7 +92,7 @@ describe('BodyScanInfoDecorater', () => {
         numberOfBodyScansRemaining: 106,
       })
 
-      const result = await service.decorateSingle(createPrisonerSummaryDetails())
+      const result = await service.decorateSingle(createPrisonerDetails())
 
       expect(result).toStrictEqual({
         numberOfBodyScans: 10,

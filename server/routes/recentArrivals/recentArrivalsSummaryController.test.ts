@@ -4,12 +4,12 @@ import * as cheerio from 'cheerio'
 import { appWithAllRoutes } from '../__testutils/appSetup'
 import { createMockExpectedArrivalsService } from '../../services/__testutils/mocks'
 import Role from '../../authentication/role'
-import { createPrisonerSummaryDetails, withBodyScanInfo } from '../../data/__testutils/testObjects'
+import { createPrisonerDetails, withBodyScanInfo } from '../../data/__testutils/testObjects'
 
 let app: Express
 const expectedArrivalsService = createMockExpectedArrivalsService()
 
-const arrival = withBodyScanInfo(createPrisonerSummaryDetails())
+const arrival = withBodyScanInfo(createPrisonerDetails())
 
 beforeEach(() => {
   app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
@@ -86,7 +86,7 @@ describe('GET /recent-arrivals/:id/summary', () => {
 
     it('should render only Prison Number when only Prison Number is given', () => {
       expectedArrivalsService.getPrisonerSummaryDetails.mockResolvedValue(
-        withBodyScanInfo(createPrisonerSummaryDetails({ pncNumber: null }))
+        withBodyScanInfo(createPrisonerDetails({ pncNumber: null }))
       )
 
       return request(app)

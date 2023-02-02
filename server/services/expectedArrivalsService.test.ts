@@ -11,7 +11,7 @@ import {
   createMatchCriteria,
   createNewArrival,
   createPotentialMatch,
-  createPrisonerSummaryDetails,
+  createPrisonerDetails,
   createTransfer,
   withBodyScanStatus,
   withMatchType,
@@ -401,7 +401,7 @@ describe('Expected arrivals service', () => {
     })
 
     it('Returns response of client', async () => {
-      const prisonerSummaryDetails = createPrisonerSummaryDetails()
+      const prisonerSummaryDetails = createPrisonerDetails()
       welcomeClient.getPrisonerDetails.mockResolvedValue(prisonerSummaryDetails)
 
       const result = await service.getPrisonerSummaryDetails('A1234AB')

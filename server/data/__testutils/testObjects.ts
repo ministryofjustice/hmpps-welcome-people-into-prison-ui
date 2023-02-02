@@ -10,7 +10,6 @@ import type {
   Transfer,
   UserCaseLoad,
   PrisonerDetails,
-  PrisonerSummaryDetails,
   PaginatedResponse,
 } from 'welcome'
 import type { BodyScanStatus } from 'body-scan'
@@ -130,25 +129,6 @@ export const createPrisonerDetails = ({
   sex = 'MALE',
   arrivalType = 'NEW_BOOKING',
 }: Partial<PrisonerDetails> = {}): PrisonerDetails => ({
-  firstName,
-  lastName,
-  dateOfBirth,
-  prisonNumber,
-  pncNumber,
-  sex,
-  arrivalType,
-  arrivalTypeDescription: 'description',
-})
-
-export const createPrisonerSummaryDetails = ({
-  firstName = 'Jim',
-  lastName = 'Smith',
-  dateOfBirth = '1973-01-08',
-  prisonNumber = 'A1234AB',
-  pncNumber = '01/98644M',
-  sex = 'MALE',
-  arrivalType = 'NEW_BOOKING',
-}: Partial<PrisonerSummaryDetails> = {}): PrisonerSummaryDetails => ({
   firstName,
   lastName,
   dateOfBirth,

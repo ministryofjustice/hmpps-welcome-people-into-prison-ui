@@ -1,7 +1,7 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
-import { PotentialMatch } from 'welcome'
+import { PotentialMatch, PrisonerDetails } from 'welcome'
 
 import { appWithAllRoutes, flashProvider, stubCookie } from '../../__testutils/appSetup'
 
@@ -37,7 +37,7 @@ const expectedArrivalsService = createMockExpectedArrivalsService()
 beforeEach(() => {
   app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
   expectedArrivalsService.getMatchingRecords.mockResolvedValue(potentialMatches)
-  expectedArrivalsService.getPrisonerDetails.mockResolvedValue(potentialMatches[0])
+  expectedArrivalsService.getPrisonerDetails.mockResolvedValue(potentialMatches[0] as PrisonerDetails)
   flashProvider.mockReturnValue([])
 })
 
