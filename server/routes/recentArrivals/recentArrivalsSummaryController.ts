@@ -7,7 +7,7 @@ export default class RecentArrivalsSummaryController {
   public view(): RequestHandler {
     return async (req, res) => {
       const { prisonNumber } = req.params
-      const arrival = await this.expectedArrivalsService.getPrisonerDetails(prisonNumber)
+      const arrival = await this.expectedArrivalsService.getPrisonerSummaryDetails(prisonNumber)
       return res.render('pages/recentArrivals/recentArrivalsSummary.njk', { arrival })
     }
   }

@@ -10,6 +10,7 @@ import type {
   Transfer,
   UserCaseLoad,
   PrisonerDetails,
+  PrisonerSummaryDetails,
   PaginatedResponse,
 } from 'welcome'
 import type { BodyScanStatus } from 'body-scan'
@@ -18,12 +19,24 @@ import type { NewArrival } from '../../routes/bookedtoday/arrivals/state'
 import type { User } from '../hmppsAuthClient'
 import { MatchType } from '../../services/matchTypeDecorator'
 
-export const withBodyScanInfo = <T>(
+export const withBodyScanStatus = <T>(
   t: T,
   { bodyScanStatus = 'OK_TO_SCAN' }: { bodyScanStatus?: BodyScanStatus } = {}
 ) => ({
   ...t,
   bodyScanStatus,
+})
+
+export const withBodyScanInfo = <T>(
+  t: T,
+  {
+    numberOfBodyScans = 0,
+    numberOfBodyScansRemaining = 116,
+  }: { numberOfBodyScans?: number; numberOfBodyScansRemaining?: number } = {}
+) => ({
+  ...t,
+  numberOfBodyScans,
+  numberOfBodyScansRemaining,
 })
 
 export const withMatchType = <T>(t: T, { matchType = MatchType.SINGLE_MATCH } = {}) => ({
@@ -117,6 +130,25 @@ export const createPrisonerDetails = ({
   sex = 'MALE',
   arrivalType = 'NEW_BOOKING',
 }: Partial<PrisonerDetails> = {}): PrisonerDetails => ({
+  firstName,
+  lastName,
+  dateOfBirth,
+  prisonNumber,
+  pncNumber,
+  sex,
+  arrivalType,
+  arrivalTypeDescription: 'description',
+})
+
+export const createPrisonerSummaryDetails = ({
+  firstName = 'Jim',
+  lastName = 'Smith',
+  dateOfBirth = '1973-01-08',
+  prisonNumber = 'A1234AB',
+  pncNumber = '01/98644M',
+  sex = 'MALE',
+  arrivalType = 'NEW_BOOKING',
+}: Partial<PrisonerSummaryDetails> = {}): PrisonerSummaryDetails => ({
   firstName,
   lastName,
   dateOfBirth,

@@ -4,12 +4,12 @@ import * as cheerio from 'cheerio'
 import { appWithAllRoutes } from '../__testutils/appSetup'
 import { createMockExpectedArrivalsService } from '../../services/__testutils/mocks'
 import Role from '../../authentication/role'
-import { createPrisonerDetails } from '../../data/__testutils/testObjects'
+import { createPrisonerSummaryDetails, withBodyScanInfo } from '../../data/__testutils/testObjects'
 
 let app: Express
 const expectedArrivalsService = createMockExpectedArrivalsService()
 
-const arrival = createPrisonerDetails()
+const arrival = withBodyScanInfo(createPrisonerSummaryDetails())
 
 beforeEach(() => {
   app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
@@ -21,15 +21,15 @@ afterEach(() => {
 
 describe('GET /recent-arrivals/:id/summary', () => {
   beforeEach(() => {
-    expectedArrivalsService.getPrisonerDetails.mockResolvedValue(arrival)
+    expectedArrivalsService.getPrisonerSummaryDetails.mockResolvedValue(arrival)
   })
 
   it('should call service method correctly', () => {
-    expectedArrivalsService.getPrisonerDetails.mockResolvedValue(arrival)
+    expectedArrivalsService.getPrisonerSummaryDetails.mockResolvedValue(arrival)
     return request(app)
       .get('/recent-arrivals/A1234AB/summary')
       .expect(res => {
-        expect(expectedArrivalsService.getPrisonerDetails).toHaveBeenCalledWith('A1234AB')
+        expect(expectedArrivalsService.getPrisonerSummaryDetails).toHaveBeenCalledWith('A1234AB')
       })
   })
 
@@ -85,7 +85,9 @@ describe('GET /recent-arrivals/:id/summary', () => {
     })
 
     it('should render only Prison Number when only Prison Number is given', () => {
-      expectedArrivalsService.getPrisonerDetails.mockResolvedValue(createPrisonerDetails({ pncNumber: null }))
+      expectedArrivalsService.getPrisonerSummaryDetails.mockResolvedValue(
+        withBodyScanInfo(createPrisonerSummaryDetails({ pncNumber: null }))
+      )
 
       return request(app)
         .get('/recent-arrivals/A1234AB/summary')

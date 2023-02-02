@@ -11,6 +11,7 @@ declare module 'welcome' {
   export type PotentialMatchCriteria = schemas['PotentialMatchCriteria']
   export type PotentialMatch = schemas['PotentialMatch']
   export type PrisonerDetails = schemas['PrisonerDetails']
+  export type PrisonerSummaryDetails = schemas['PrisonerSummaryDetails']
 
   export type LocationType = 'COURT' | 'CUSTODY_SUITE' | 'PRISON' | 'OTHER'
 
@@ -158,6 +159,17 @@ declare module 'welcome' {
       lastName: string
       dateOfBirth: string
       prisonNumber?: string
+      pncNumber?: string
+      croNumber?: string
+      sex: SexKeys
+      arrivalType: ArrivalType
+      arrivalTypeDescription: string
+    }
+    PrisonerSummaryDetails: {
+      firstName: string
+      lastName: string
+      dateOfBirth: string
+      prisonNumber: string
       pncNumber?: string
       croNumber?: string
       sex: SexKeys

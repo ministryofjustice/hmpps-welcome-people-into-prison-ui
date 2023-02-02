@@ -1,5 +1,5 @@
 import TemporaryAbsencesService from './temporaryAbsencesService'
-import { createTemporaryAbsence, withBodyScanInfo } from '../data/__testutils/testObjects'
+import { createTemporaryAbsence, withBodyScanStatus } from '../data/__testutils/testObjects'
 import { createMockHmppsAuthClient, createMockWelcomeClient } from '../data/__testutils/mocks'
 import { createMockBodyScanInfoDecorator } from './__testutils/mocks'
 
@@ -39,10 +39,10 @@ describe('Temporary absences service', () => {
       const result = await service.getTemporaryAbsences(res.locals.user.activeCaseLoadId)
 
       expect(result).toStrictEqual([
-        withBodyScanInfo(ant),
-        withBodyScanInfo(bat),
-        withBodyScanInfo(cat),
-        withBodyScanInfo(dog),
+        withBodyScanStatus(ant),
+        withBodyScanStatus(bat),
+        withBodyScanStatus(cat),
+        withBodyScanStatus(dog),
       ])
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       expect(welcomeClient.getTemporaryAbsences).toBeCalledWith(res.locals.user.activeCaseLoadId)

@@ -4,7 +4,12 @@ import { associateBy } from '../utils/utils'
 
 type HasPrisonNumber = { prisonNumber: string }
 
-export type WithBodyScanInfo<T extends HasPrisonNumber> = T & { bodyScanStatus: BodyScanStatus }
+export type WithBodyScanStatus<T extends HasPrisonNumber> = T & { bodyScanStatus: BodyScanStatus }
+
+export type WithBodyScanInfo<T extends HasPrisonNumber> = T & {
+  numberOfBodyScans: number
+  numberOfBodyScansRemaining: number
+}
 
 export class BodyScanInfoDecorator {
   constructor(
@@ -12,11 +17,19 @@ export class BodyScanInfoDecorator {
     private readonly bodyScanClientFactory: RestClientBuilder<BodyScanClient>
   ) {}
 
-  public async decorate<T extends HasPrisonNumber>(items: T[]): Promise<WithBodyScanInfo<T>[]> {
+  public async decorate<T extends HasPrisonNumber>(items: T[]): Promise<WithBodyScanStatus<T>[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const prisonNumbers = items.map(i => i.prisonNumber).filter(Boolean)
     const scanInfo = await this.bodyScanClientFactory(token).getBodyScanInfo(prisonNumbers)
     const prisonNumberToScan = associateBy(scanInfo, info => info.prisonNumber)
     return items.map(i => ({ ...i, bodyScanStatus: prisonNumberToScan.get(i.prisonNumber)?.bodyScanStatus }))
+  }
+
+  public async decorateSingle<T extends HasPrisonNumber>(item: T): Promise<WithBodyScanInfo<T>> {
+    const token = await this.hmppsAuthClient.getSystemClientToken()
+    const { numberOfBodyScans, numberOfBodyScansRemaining } = await this.bodyScanClientFactory(
+      token
+    ).getSingleBodyScanInfo(item.prisonNumber)
+    return { ...item, numberOfBodyScans, numberOfBodyScansRemaining }
   }
 }
