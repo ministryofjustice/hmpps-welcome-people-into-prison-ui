@@ -1,7 +1,7 @@
 import type { RequestHandler } from 'express'
 import { ExpectedArrivalsService } from '../../services'
 
-export default class summaryMoveOnlyController {
+export default class SummaryMoveOnlyController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
 
   public view(): RequestHandler {
