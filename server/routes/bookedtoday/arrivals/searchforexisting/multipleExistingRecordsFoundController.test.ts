@@ -2,7 +2,6 @@ import type { Express } from 'express'
 import type { PotentialMatch } from 'welcome'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
-import { PrisonerDetails } from 'welcome'
 import { appWithAllRoutes, flashProvider, stubCookie } from '../../../__testutils/appSetup'
 
 import Role from '../../../../authentication/role'
@@ -28,6 +27,7 @@ const potentialMatches: PotentialMatch[] = [
   createPotentialMatch({
     firstName: 'Jim',
     lastName: 'Smith',
+    prisonNumber: 'A1234AB',
     dateOfBirth: '1983-01-08',
     sex: 'MALE',
   }),
@@ -39,7 +39,7 @@ beforeEach(() => {
   config.confirmNoIdentifiersEnabled = true
   app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
   expectedArrivalsService.getMatchingRecords.mockResolvedValue(potentialMatches)
-  expectedArrivalsService.getPrisonerDetails.mockResolvedValue(potentialMatches[0] as PrisonerDetails)
+  expectedArrivalsService.getPrisonerDetails.mockResolvedValue(potentialMatches[0])
   flashProvider.mockReturnValue([])
   stubCookie(State.searchDetails, searchDetails)
 })

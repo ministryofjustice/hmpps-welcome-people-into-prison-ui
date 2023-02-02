@@ -1,7 +1,6 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
-import { PrisonerDetails } from 'welcome'
 import { appWithAllRoutes, flashProvider } from '../../../__testutils/appSetup'
 
 import Role from '../../../../authentication/role'
@@ -30,7 +29,7 @@ beforeEach(() => {
   config.confirmNoIdentifiersEnabled = true
   app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
   expectedArrivalsService.getArrival.mockResolvedValue(arrival)
-  expectedArrivalsService.getPrisonerDetails.mockResolvedValue(arrival.potentialMatches[0] as PrisonerDetails)
+  expectedArrivalsService.getPrisonerDetails.mockResolvedValue(arrival.potentialMatches[0])
   flashProvider.mockReturnValue([])
 })
 

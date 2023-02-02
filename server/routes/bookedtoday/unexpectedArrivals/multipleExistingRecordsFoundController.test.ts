@@ -1,7 +1,7 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
-import { PotentialMatch, PrisonerDetails } from 'welcome'
+import { PotentialMatch } from 'welcome'
 
 import { appWithAllRoutes, flashProvider, stubCookie } from '../../__testutils/appSetup'
 
@@ -28,6 +28,7 @@ const potentialMatches: PotentialMatch[] = [
   createPotentialMatch({
     firstName: 'Jim',
     lastName: 'Smith',
+    prisonNumber: 'A1234AB',
     dateOfBirth: '1983-01-08',
   }),
 ]
@@ -37,7 +38,7 @@ const expectedArrivalsService = createMockExpectedArrivalsService()
 beforeEach(() => {
   app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
   expectedArrivalsService.getMatchingRecords.mockResolvedValue(potentialMatches)
-  expectedArrivalsService.getPrisonerDetails.mockResolvedValue(potentialMatches[0] as PrisonerDetails)
+  expectedArrivalsService.getPrisonerDetails.mockResolvedValue(potentialMatches[0])
   flashProvider.mockReturnValue([])
 })
 

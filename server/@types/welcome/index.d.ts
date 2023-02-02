@@ -146,7 +146,7 @@ declare module 'welcome' {
       firstName: string
       lastName: string
       dateOfBirth: string
-      prisonNumber?: string
+      prisonNumber: string
       pncNumber?: string
       croNumber?: string
       sex: SexKeys
