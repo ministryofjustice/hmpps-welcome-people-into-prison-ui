@@ -57,10 +57,6 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     return calculateAge(value)
   })
 
-  njkEnv.addFilter('generateCurrentYear', string => {
-    return string ? generateCurrentYear() : null
-  })
-
   njkEnv.addFilter('toOptions', (array, id: string, valueKey, textKey) => {
     return array.map((item: Record<string, string>, index: number) => ({
       value: item[valueKey],
@@ -103,6 +99,7 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addGlobal('dpsUrl', config.dpsUrl)
   njkEnv.addGlobal('temporaryAbsencesEnabled', config.temporaryAbsencesEnabled)
   njkEnv.addGlobal('supportingMultitransactionsEnabled', config.supportingMultitransactionsEnabled)
+  njkEnv.addGlobal('generateCurrentYear', generateCurrentYear())
 
   return njkEnv
 }
