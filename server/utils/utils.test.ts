@@ -494,17 +494,14 @@ describe('calculateAge', () => {
 
 describe('generateCurrentYear', () => {
   it('returns current year of now', () => {
-    const now = moment('2023-02-03 13:00:00')
-    expect(generateCurrentYear(now)).toBe(2023)
+    expect(generateCurrentYear(() => moment('2023-02-03 13:00:00'))).toBe(2023)
   })
 
   it('returns current year when now is the very start of the year', () => {
-    const now = moment('2023-01-01 00:00:00')
-    expect(generateCurrentYear(now)).toBe(2023)
+    expect(generateCurrentYear(() => moment('2023-01-01 00:00:00'))).toBe(2023)
   })
 
   it('returns current year when now is the very end of the year', () => {
-    const now = moment('2023-12-31 23:59:59')
-    expect(generateCurrentYear(now)).toBe(2023)
+    expect(generateCurrentYear(() => moment('2023-12-31 23:59:59'))).toBe(2023)
   })
 })

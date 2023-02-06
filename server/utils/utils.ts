@@ -137,6 +137,6 @@ export const calculateAge = (dateOfBirth: string) => {
   return moment().diff(dateOfBirth, 'years')
 }
 
-export const generateCurrentYear = (now: moment.Moment = moment()) => {
-  return now.year()
+export const generateCurrentYear = (nowGetter = () => moment()) => {
+  return nowGetter().year()
 }
