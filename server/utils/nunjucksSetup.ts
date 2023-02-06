@@ -4,7 +4,7 @@ import moment from 'moment'
 import express from 'express'
 import * as pathModule from 'path'
 import config from '../config'
-import { calculateAge } from './utils'
+import { calculateAge, generateCurrentYear } from './utils'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -99,6 +99,7 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addGlobal('dpsUrl', config.dpsUrl)
   njkEnv.addGlobal('temporaryAbsencesEnabled', config.temporaryAbsencesEnabled)
   njkEnv.addGlobal('supportingMultitransactionsEnabled', config.supportingMultitransactionsEnabled)
+  njkEnv.addGlobal('generateCurrentYear', generateCurrentYear)
 
   return njkEnv
 }

@@ -70,6 +70,17 @@
                             }
                         ]
                     }) }}
+
+                    {{ summaryCard({
+                        classes: "govuk-!-margin-bottom-6",
+                        titleText: "X-ray body scan",
+                        rows: [
+                            {
+                                key: {  text: "Total number of scans", caption: "Since 1 January " + generateCurrentYear() },
+                                value:  { text: arrival.numberOfBodyScans }
+                            }
+                        ]
+                    }) }}
                 </div>
 
                 <div class='govuk-grid-column-one-third'>

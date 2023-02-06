@@ -4,6 +4,7 @@ import {
   assertHasStringValues,
   associateBy,
   calculateAge,
+  generateCurrentYear,
   compareByDateAndTime,
   compareByFullName,
   convertToTitleCase,
@@ -488,5 +489,19 @@ describe('calculateAge', () => {
   it('returns correct age when birthday has not occurred this year', () => {
     const twentyYearsAgo = moment().subtract(20, 'years').add(1, 'day').format('YYYY-MM-DD')
     expect(calculateAge(twentyYearsAgo)).toBe(19)
+  })
+})
+
+describe('generateCurrentYear', () => {
+  it('returns current year of now', () => {
+    expect(generateCurrentYear(() => moment('2023-02-03 13:00:00'))).toBe(2023)
+  })
+
+  it('returns current year when now is the very start of the year', () => {
+    expect(generateCurrentYear(() => moment('2023-01-01 00:00:00'))).toBe(2023)
+  })
+
+  it('returns current year when now is the very end of the year', () => {
+    expect(generateCurrentYear(() => moment('2023-12-31 23:59:59'))).toBe(2023)
   })
 })
