@@ -19,6 +19,25 @@
     margin: 0;
   }
 
+  .summary-card__actions {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 16px;
+    font-size: 1rem;
+    line-height: 1.25;
+  }
+
+  @media (min-width: 40.0625em) {
+    .summary-card__actions {
+      font-size: 19px;
+      font-size: 1.1875rem;
+      line-height: 1.31579;
+      float: right;
+    }
+  }
+
   .summary-card__body {
     @include govuk-font($size: 19);
     padding: 15px;
@@ -42,7 +61,6 @@
   .govuk-table__row:last-child .govuk-table__cell {
     border-bottom: 0;
   }
-
 }
 
 @media print {

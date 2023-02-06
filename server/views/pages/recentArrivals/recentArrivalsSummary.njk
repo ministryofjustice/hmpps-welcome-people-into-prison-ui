@@ -74,6 +74,10 @@
                     {{ summaryCard({
                         classes: "govuk-!-margin-bottom-6",
                         titleText: "X-ray body scan",
+                        actions: {items: [{ 
+                                    href: "/prisoners/" + arrival.prisonNumber + "/record-body-scan", 
+                                    text: "Record an X-ray body scan", 
+                                    attributes: { 'data-qa': 'record-body-scan' } }] if arrival.arrivalType == 'CURRENTLY_IN' else []},
                         rows: [
                             {
                                 key: {  text: "Total number of scans", caption: "Since 1 January " + generateCurrentYear() },
