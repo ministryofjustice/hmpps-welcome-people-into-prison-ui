@@ -148,17 +148,17 @@ describe('Expected arrivals service', () => {
           [
             dateTo,
             [
-              withBodyScanStatus(createRecentArrival({ movementDateTime: `${today}T09:12:00` })),
-              withBodyScanStatus(createRecentArrival({ movementDateTime: `${today}T13:15:00` })),
               withBodyScanStatus(createRecentArrival({ movementDateTime: `${today}T13:16:00` })),
+              withBodyScanStatus(createRecentArrival({ movementDateTime: `${today}T13:15:00` })),
+              withBodyScanStatus(createRecentArrival({ movementDateTime: `${today}T09:12:00` })),
             ],
           ],
           [
             middleDate,
             [
-              withBodyScanStatus(createRecentArrival({ movementDateTime: `${oneDayAgo}T14:40:00` })),
-              withBodyScanStatus(createRecentArrival({ movementDateTime: `${oneDayAgo}T14:40:01` })),
               withBodyScanStatus(createRecentArrival({ movementDateTime: `${oneDayAgo}T14:55:00` })),
+              withBodyScanStatus(createRecentArrival({ movementDateTime: `${oneDayAgo}T14:40:01` })),
+              withBodyScanStatus(createRecentArrival({ movementDateTime: `${oneDayAgo}T14:40:00` })),
             ],
           ],
           [dateFrom, [withBodyScanStatus(createRecentArrival({ movementDateTime: `${twoDaysAgo}T18:20:00` }))]],

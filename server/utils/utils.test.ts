@@ -226,7 +226,7 @@ describe('compareByFullName', () => {
 })
 
 describe('compareByDateAndTime', () => {
-  it('should compare by movementDateTime sorting earliest first', () => {
+  it('should compare by movementDateTime sorting latest first', () => {
     expect(
       compareByDateAndTime<Record<string, string>>(a => a.movementDateTime)(
         {
@@ -236,7 +236,7 @@ describe('compareByDateAndTime', () => {
           movementDateTime: '2022-05-17T07:07:59',
         }
       )
-    ).toBeGreaterThan(0)
+    ).toBeLessThan(0)
 
     expect(
       compareByDateAndTime<Record<string, string>>(a => a.movementDateTime)(
@@ -247,7 +247,7 @@ describe('compareByDateAndTime', () => {
           movementDateTime: '2022-05-18T13:08:00',
         }
       )
-    ).toBeLessThan(0)
+    ).toBeGreaterThan(0)
   })
 
   it('should handle duplicate movementDateTimes', () => {
