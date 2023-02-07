@@ -5,7 +5,7 @@ import {
   associateBy,
   calculateAge,
   generateCurrentYear,
-  compareByDateAndTime,
+  compareByDescendingDateAndTime,
   compareByFullName,
   convertToTitleCase,
   createDate,
@@ -225,10 +225,10 @@ describe('compareByFullName', () => {
   })
 })
 
-describe('compareByDateAndTime', () => {
+describe('compareByDescendingDateAndTime', () => {
   it('should compare by movementDateTime sorting latest first', () => {
     expect(
-      compareByDateAndTime<Record<string, string>>(a => a.movementDateTime)(
+      compareByDescendingDateAndTime<Record<string, string>>(a => a.movementDateTime)(
         {
           movementDateTime: '2022-05-18T13:08:00',
         },
@@ -239,7 +239,7 @@ describe('compareByDateAndTime', () => {
     ).toBeLessThan(0)
 
     expect(
-      compareByDateAndTime<Record<string, string>>(a => a.movementDateTime)(
+      compareByDescendingDateAndTime<Record<string, string>>(a => a.movementDateTime)(
         {
           movementDateTime: '2022-05-17T07:07:59',
         },
@@ -252,7 +252,7 @@ describe('compareByDateAndTime', () => {
 
   it('should handle duplicate movementDateTimes', () => {
     expect(
-      compareByDateAndTime<Record<string, string>>(a => a.movementDateTime)(
+      compareByDescendingDateAndTime<Record<string, string>>(a => a.movementDateTime)(
         {
           movementDateTime: '2022-05-18T14:13:27',
         },

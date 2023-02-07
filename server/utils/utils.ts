@@ -46,7 +46,7 @@ export const compareByFullName = <T extends Person>(a: T, b: T): number => {
 
 type DateFieldExtractor<T> = (t: T) => string
 
-export const compareByDateAndTime =
+export const compareByDescendingDateAndTime =
   <T>(f: DateFieldExtractor<T>) =>
   (a: T, b: T): number => {
     const aValue = moment(f(a))
