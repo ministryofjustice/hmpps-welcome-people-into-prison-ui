@@ -19,7 +19,7 @@
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-one-half">
                         <span class="govuk-caption-l">
-                            Prison number: {{ prisonerSummaryDetails.prisonNumber }} | PNC: {{ prisonerSummaryDetails.pncNumber }}
+                            Prison number: {{ summary.prisonNumber }} | PNC: {{ summary.pncNumber }}
                         </span>
                     <h1 class="govuk-heading-l">{{ arrival.lastName }}, {{ arrival.firstName }}</h1>
                 </div>
@@ -80,7 +80,7 @@
                         rows: [
                             {
                                 key: {  text: "Total number of scans", caption: "Since 1 January " + generateCurrentYear() },
-                                value:  { text: prisonerSummaryDetails.numberOfBodyScans }
+                                value:  { text: summary.numberOfBodyScans }
                             }
                         ]
                     }) }}
@@ -89,7 +89,7 @@
                 <div class='govuk-grid-column-one-third'>
                     <div class="profile-align-image">
                         <img
-                            src="{{ '/prisoners/' + prisonerSummaryDetails.prisonNumber + '/image' }}"
+                            src="{{ '/prisoners/' + summary.prisonNumber + '/image' }}"
                             class="govuk-!-margin-bottom-8"
                             width="160px"
                             alt="Headshot of {{ arrival.lastName }}, {{ arrival.firstName }}"

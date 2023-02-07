@@ -15,8 +15,10 @@ import {
 let app: Express
 const expectedArrivalsService = createMockExpectedArrivalsService()
 
-const arrival = withMatchType(createArrival({ potentialMatches: [createPotentialMatch({ prisonNumber: 'A1234AB' })] }))
-const prisonerDetails = withBodyScanInfo(createPrisonerDetails())
+const arrivalAndSummaryDetails = {
+  arrival: withMatchType(createArrival({ potentialMatches: [createPotentialMatch({ prisonNumber: 'A1234AB' })] })),
+  summary: withBodyScanInfo(createPrisonerDetails()),
+}
 
 beforeEach(() => {
   app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
@@ -28,17 +30,14 @@ afterEach(() => {
 
 describe('GET /prisoner/:id/summary-with-record', () => {
   beforeEach(() => {
-    expectedArrivalsService.getArrival.mockResolvedValue(arrival)
-    expectedArrivalsService.getPrisonerSummaryDetails.mockResolvedValue(prisonerDetails)
+    expectedArrivalsService.getArrivalAndSummaryDetails.mockResolvedValue(arrivalAndSummaryDetails)
   })
 
   it('should call service methods correctly', () => {
-    expectedArrivalsService.getArrival.mockResolvedValue(arrival)
     return request(app)
       .get('/prisoners/1111-1111-1111-1111/summary-with-record')
       .expect(res => {
-        expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('1111-1111-1111-1111')
-        expect(expectedArrivalsService.getPrisonerSummaryDetails).toHaveBeenCalledWith('A1234AB')
+        expect(expectedArrivalsService.getArrivalAndSummaryDetails).toHaveBeenCalledWith('1111-1111-1111-1111')
       })
   })
 
