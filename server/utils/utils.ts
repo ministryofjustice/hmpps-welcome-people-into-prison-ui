@@ -46,12 +46,12 @@ export const compareByFullName = <T extends Person>(a: T, b: T): number => {
 
 type DateFieldExtractor<T> = (t: T) => string
 
-export const compareByDateAndTime =
+export const compareByDescendingDateAndTime =
   <T>(f: DateFieldExtractor<T>) =>
   (a: T, b: T): number => {
     const aValue = moment(f(a))
     const bValue = moment(f(b))
-    return aValue.unix() - bValue.unix()
+    return bValue.unix() - aValue.unix()
   }
 
 export function assertHasStringValues<K extends keyof Record<string, unknown>>(

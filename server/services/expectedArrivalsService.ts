@@ -10,7 +10,7 @@ import {
 } from 'welcome'
 import moment, { type Moment } from 'moment'
 import type { Readable } from 'stream'
-import { groupBy, compareByFullName, compareByDateAndTime } from '../utils/utils'
+import { groupBy, compareByFullName, compareByDescendingDateAndTime } from '../utils/utils'
 import type { RestClientBuilder, WelcomeClient, HmppsAuthClient } from '../data'
 import logger from '../../logger'
 import { RaiseAnalyticsEvent } from './raiseAnalyticsEvent'
@@ -40,7 +40,7 @@ export default class ExpectedArrivalsService {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const welcomeClient = this.welcomeClientFactory(token)
     const recentArrivals = await welcomeClient.getRecentArrivals(agencyId, twoDaysAgo, today)
-    return recentArrivals.content.sort(compareByDateAndTime(a => a.movementDateTime))
+    return recentArrivals.content.sort(compareByDescendingDateAndTime(a => a.movementDateTime))
   }
 
   private async getTransfers(agencyId: string): Promise<Arrival[]> {
