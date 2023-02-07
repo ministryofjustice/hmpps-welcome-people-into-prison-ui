@@ -6,9 +6,9 @@
                 <h2 class="summary-card__title">
                     {{ params.titleHtml | safe if params.titleHtml else params.titleText }}
                 </h2>
-        {% if params.actions.items.length %}
+        {% if params.action %}
             <div class="app-summary-card__actions">
-                <a class="govuk-link govuk-link--no-visited-state" href="{{ params.actions.items[0].href }}">{{ params.actions.items[0].text }}</a>
+                <a class="govuk-link govuk-link--no-visited-state" href="{{ params.action.href }}">{{ params.action.text }}</a>
             </div>
         {% endif %}
             </header>
