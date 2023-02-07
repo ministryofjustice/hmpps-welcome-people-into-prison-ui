@@ -9,7 +9,10 @@ export default class SummaryWithRecordController {
       const { id } = req.params
       const arrival = await this.expectedArrivalsService.getArrival(id)
       const singleMatch = arrival.potentialMatches[0]
-      return res.render('pages/bookedtoday/summaryWithRecord.njk', { arrival, singleMatch })
+      const prisonerSummaryDetails = await this.expectedArrivalsService.getPrisonerSummaryDetails(
+        singleMatch.prisonNumber
+      )
+      return res.render('pages/bookedtoday/summaryWithRecord.njk', { arrival, prisonerSummaryDetails })
     }
   }
 }
