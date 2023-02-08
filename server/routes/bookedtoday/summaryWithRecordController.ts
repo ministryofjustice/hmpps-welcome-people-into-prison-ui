@@ -7,9 +7,8 @@ export default class SummaryWithRecordController {
   public view(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
-      const arrival = await this.expectedArrivalsService.getArrival(id)
-      const singleMatch = arrival.potentialMatches[0]
-      return res.render('pages/bookedtoday/summaryWithRecord.njk', { arrival, singleMatch })
+      const data = await this.expectedArrivalsService.getArrivalAndSummaryDetails(id)
+      return res.render('pages/bookedtoday/summaryWithRecord.njk', data)
     }
   }
 }

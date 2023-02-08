@@ -14,6 +14,7 @@ import {
   createPrisonerDetails,
   createTransfer,
   withBodyScanStatus,
+  withBodyScanInfo,
   withMatchType,
 } from '../data/__testutils/testObjects'
 import { createMockHmppsAuthClient, createMockWelcomeClient } from '../data/__testutils/mocks'
@@ -239,6 +240,27 @@ describe('Expected arrivals service', () => {
       expect(WelcomeClientFactory).toBeCalledWith(token)
       expect(welcomeClient.getArrival).toBeCalledWith('12345-67890')
       expect(result).toStrictEqual(createPotentialMatch(arrival.potentialMatches[0]))
+    })
+  })
+
+  describe('getArrivalAndSummaryDetails', () => {
+    it('Calls upstream service correctly', async () => {
+      const arrival = createArrival({ potentialMatches: [createPotentialMatch({ prisonNumber: 'A1234AB' })] })
+      const prisonerSummaryDetails = withBodyScanInfo(createPrisonerDetails())
+
+      welcomeClient.getArrival.mockResolvedValue(arrival)
+      welcomeClient.getPrisonerDetails.mockResolvedValue(createPrisonerDetails())
+
+      const result = await service.getArrivalAndSummaryDetails('12345-67890')
+
+      expect(WelcomeClientFactory).toBeCalledWith(token)
+      expect(welcomeClient.getArrival).toBeCalledWith('12345-67890')
+      expect(welcomeClient.getPrisonerDetails).toBeCalledWith('A1234AB')
+
+      expect(result).toStrictEqual({
+        arrival: withMatchType(arrival),
+        summary: { ...prisonerSummaryDetails, numberOfBodyScans: 0, numberOfBodyScansRemaining: 116 },
+      })
     })
   })
 

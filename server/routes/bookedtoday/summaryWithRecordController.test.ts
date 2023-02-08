@@ -4,12 +4,21 @@ import * as cheerio from 'cheerio'
 import { appWithAllRoutes } from '../__testutils/appSetup'
 import { createMockExpectedArrivalsService } from '../../services/__testutils/mocks'
 import Role from '../../authentication/role'
-import { createArrival, withMatchType } from '../../data/__testutils/testObjects'
+import {
+  createArrival,
+  createPrisonerDetails,
+  createPotentialMatch,
+  withMatchType,
+  withBodyScanInfo,
+} from '../../data/__testutils/testObjects'
 
 let app: Express
 const expectedArrivalsService = createMockExpectedArrivalsService()
 
-const arrival = withMatchType(createArrival())
+const arrivalAndSummaryDetails = {
+  arrival: withMatchType(createArrival({ potentialMatches: [createPotentialMatch({ prisonNumber: 'A1234AB' })] })),
+  summary: withBodyScanInfo(createPrisonerDetails()),
+}
 
 beforeEach(() => {
   app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
@@ -21,15 +30,14 @@ afterEach(() => {
 
 describe('GET /prisoner/:id/summary-with-record', () => {
   beforeEach(() => {
-    expectedArrivalsService.getArrival.mockResolvedValue(arrival)
+    expectedArrivalsService.getArrivalAndSummaryDetails.mockResolvedValue(arrivalAndSummaryDetails)
   })
 
-  it('should call service method correctly', () => {
-    expectedArrivalsService.getArrival.mockResolvedValue(arrival)
+  it('should call service methods correctly', () => {
     return request(app)
       .get('/prisoners/1111-1111-1111-1111/summary-with-record')
       .expect(res => {
-        expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('1111-1111-1111-1111')
+        expect(expectedArrivalsService.getArrivalAndSummaryDetails).toHaveBeenCalledWith('1111-1111-1111-1111')
       })
   })
 
@@ -69,7 +77,7 @@ describe('GET /prisoner/:id/summary-with-record', () => {
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           const $ = cheerio.load(res.text)
-          expect($('[data-qa=prisoner-image]').attr('src')).toEqual('/prisoners/A5534HA/image')
+          expect($('[data-qa=prisoner-image]').attr('src')).toEqual('/prisoners/A1234AB/image')
         })
     })
   })
@@ -82,7 +90,7 @@ describe('GET /prisoner/:id/summary-with-record', () => {
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           const $ = cheerio.load(res.text)
-          expect($('span.govuk-caption-l').text().trim()).toStrictEqual('Prison number: A5534HA | PNC: 11/836373L')
+          expect($('span.govuk-caption-l').text().trim()).toStrictEqual('Prison number: A1234AB | PNC: 01/98644M')
         })
     })
   })

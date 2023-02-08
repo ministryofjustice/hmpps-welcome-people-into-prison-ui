@@ -19,6 +19,7 @@ import type { BodyScanInfoDecorator, WithBodyScanStatus, WithBodyScanInfo } from
 import type { MatchTypeDecorator, WithMatchType } from './matchTypeDecorator'
 
 export type DecoratedArrival = WithBodyScanStatus<Arrival> & WithMatchType<Arrival>
+export type ArrivalWithSummaryDetails = { arrival: WithMatchType<Arrival>; summary: WithBodyScanInfo<PrisonerDetails> }
 
 export default class ExpectedArrivalsService {
   constructor(
@@ -113,6 +114,13 @@ export default class ExpectedArrivalsService {
       logger.warn(`multiple matches for move: ${id}`)
     }
     return arrival.potentialMatches[0]
+  }
+
+  public async getArrivalAndSummaryDetails(id: string): Promise<ArrivalWithSummaryDetails> {
+    const arrival = await this.getArrival(id)
+    const singleMatch = arrival.potentialMatches[0]
+    const summary = await this.getPrisonerSummaryDetails(singleMatch.prisonNumber)
+    return { arrival, summary }
   }
 
   public async confirmArrival(
