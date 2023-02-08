@@ -97,6 +97,7 @@ describe('BodyScanInfoDecorater', () => {
       expect(result).toStrictEqual({
         numberOfBodyScans: 10,
         numberOfBodyScansRemaining: 106,
+        bodyScanStatus: 'OK_TO_SCAN',
         firstName: 'Jim',
         lastName: 'Smith',
         dateOfBirth: '1973-01-08',
