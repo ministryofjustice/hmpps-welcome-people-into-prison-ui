@@ -31,11 +31,13 @@ export const withBodyScanInfo = <T>(
   {
     numberOfBodyScans = 0,
     numberOfBodyScansRemaining = 116,
-  }: { numberOfBodyScans?: number; numberOfBodyScansRemaining?: number } = {}
+    bodyScanStatus = 'OK_TO_SCAN',
+  }: { numberOfBodyScans?: number; numberOfBodyScansRemaining?: number; bodyScanStatus?: BodyScanStatus } = {}
 ) => ({
   ...t,
   numberOfBodyScans,
   numberOfBodyScansRemaining,
+  bodyScanStatus,
 })
 
 export const withMatchType = <T>(t: T, { matchType = MatchType.SINGLE_MATCH } = {}) => ({

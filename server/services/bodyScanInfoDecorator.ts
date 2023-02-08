@@ -9,6 +9,7 @@ export type WithBodyScanStatus<T extends HasPrisonNumber> = T & { bodyScanStatus
 export type WithBodyScanInfo<T extends HasPrisonNumber> = T & {
   numberOfBodyScans: number
   numberOfBodyScansRemaining: number
+  bodyScanStatus: BodyScanStatus
 }
 
 export class BodyScanInfoDecorator {
@@ -27,9 +28,9 @@ export class BodyScanInfoDecorator {
 
   public async decorateSingle<T extends HasPrisonNumber>(item: T): Promise<WithBodyScanInfo<T>> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
-    const { numberOfBodyScans, numberOfBodyScansRemaining } = await this.bodyScanClientFactory(
+    const { numberOfBodyScans, numberOfBodyScansRemaining, bodyScanStatus } = await this.bodyScanClientFactory(
       token
     ).getSingleBodyScanInfo(item.prisonNumber)
-    return { ...item, numberOfBodyScans, numberOfBodyScansRemaining }
+    return { ...item, numberOfBodyScans, numberOfBodyScansRemaining, bodyScanStatus }
   }
 }

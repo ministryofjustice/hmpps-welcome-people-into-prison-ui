@@ -57,6 +57,7 @@ describe('Expected arrivals service', () => {
         ...as,
         numberOfBodyScans: 0,
         numberOfBodyScansRemaining: 116,
+        bodyScanStatus: 'OK_TO_SCAN',
       })
     )
     matchTypeDecorator.decorate.mockImplementation(as => as.map(a => ({ ...a, matchType: MatchType.SINGLE_MATCH })))
@@ -259,7 +260,12 @@ describe('Expected arrivals service', () => {
 
       expect(result).toStrictEqual({
         arrival: withMatchType(arrival),
-        summary: { ...prisonerSummaryDetails, numberOfBodyScans: 0, numberOfBodyScansRemaining: 116 },
+        summary: {
+          ...prisonerSummaryDetails,
+          numberOfBodyScans: 0,
+          numberOfBodyScansRemaining: 116,
+          bodyScanStatus: 'OK_TO_SCAN',
+        },
       })
     })
   })
@@ -428,7 +434,12 @@ describe('Expected arrivals service', () => {
 
       const result = await service.getPrisonerSummaryDetails('A1234AB')
 
-      expect(result).toStrictEqual({ ...prisonerSummaryDetails, numberOfBodyScans: 0, numberOfBodyScansRemaining: 116 })
+      expect(result).toStrictEqual({
+        ...prisonerSummaryDetails,
+        numberOfBodyScans: 0,
+        numberOfBodyScansRemaining: 116,
+        bodyScanStatus: 'OK_TO_SCAN',
+      })
     })
   })
 })
