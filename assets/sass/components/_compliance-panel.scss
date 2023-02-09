@@ -1,0 +1,9 @@
+.compliance-panel {
+    padding: govuk-spacing(3);
+    color: govuk-colour("white");
+    background: govuk-colour("dark-grey");
+  
+    p {
+      color: inherit;
+    }
+}
