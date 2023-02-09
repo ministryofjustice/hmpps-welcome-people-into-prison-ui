@@ -70,7 +70,13 @@
                             }
                         ]
                     }) }}
-
+                    {% if arrival.bodyScanStatus === 'CLOSE_TO_LIMIT'  %}
+                        <div class="compliance-panel">
+                            <p class="govuk-!-margin-bottom-0 govuk-!-font-weight-bold">
+                                {{ arrival.firstName }} {{ arrival.lastName }} can only be scanned {{ arrival.numberOfBodyScansRemaining }} more times this year
+                            </p>
+                        </div>
+                    {% endif %}
                     {{ summaryCard({
                         classes: "govuk-!-margin-bottom-6",
                         titleText: "X-ray body scan",
