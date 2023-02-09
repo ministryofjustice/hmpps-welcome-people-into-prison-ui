@@ -73,7 +73,13 @@
                             }
                         ]
                     }) }}
-                    {% if summary.bodyScanStatus === 'CLOSE_TO_LIMIT'  %}
+                    {% if summary.bodyScanStatus === 'DO_NOT_SCAN' %}
+                        <div class="compliance-panel compliance-panel--red">
+                            <p class="govuk-!-margin-bottom-0 govuk-!-font-weight-bold">
+                                Do not scan – annual body scan limit reached
+                            </p>
+                        </div>
+                    {% elif summary.bodyScanStatus === 'CLOSE_TO_LIMIT'  %}
                         <div class="compliance-panel">
                             <p class="govuk-!-margin-bottom-0 govuk-!-font-weight-bold">
                                 {{ arrival.firstName }} {{ arrival.lastName }} can only be scanned {{ summary.numberOfBodyScansRemaining }} more times this year
