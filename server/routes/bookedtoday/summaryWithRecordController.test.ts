@@ -21,7 +21,7 @@ const arrivalAndSummaryDetails = {
 }
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
+  app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [] })
 })
 
 afterEach(() => {
@@ -91,6 +91,55 @@ describe('GET /prisoner/:id/summary-with-record', () => {
         .expect(res => {
           const $ = cheerio.load(res.text)
           expect($('span.govuk-caption-l').text().trim()).toStrictEqual('Prison number: A1234AB | PNC: 01/98644M')
+        })
+    })
+  })
+
+  describe('DPS prisoner profile button', () => {
+    it('should be displayed', () => {
+      app = appWithAllRoutes({
+        services: { expectedArrivalsService },
+        roles: [Role.PRISON_RECEPTION, Role.ROLE_INACTIVE_BOOKINGS],
+      })
+
+      return request(app)
+        .get('/prisoners/1111-1111-1111-1111/summary-with-record')
+        .expect(200)
+        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect(res => {
+          const $ = cheerio.load(res.text)
+          expect($('[data-qa=dps-link]').length).toBe(1)
+        })
+    })
+    it('should not be displayed without Prison Reception role', () => {
+      app = appWithAllRoutes({
+        services: { expectedArrivalsService },
+        roles: [Role.ROLE_INACTIVE_BOOKINGS],
+      })
+
+      return request(app)
+        .get('/prisoners/1111-1111-1111-1111/summary-with-record')
+        .expect(200)
+        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect(res => {
+          const $ = cheerio.load(res.text)
+          expect($('[data-qa=dps-link]').length).toBe(0)
+        })
+    })
+
+    it('should not be present without Released Prisoner role', () => {
+      app = appWithAllRoutes({
+        services: { expectedArrivalsService },
+        roles: [Role.PRISON_RECEPTION],
+      })
+
+      return request(app)
+        .get('/prisoners/1111-1111-1111-1111/summary-with-record')
+        .expect(200)
+        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect(res => {
+          const $ = cheerio.load(res.text)
+          expect($('[data-qa=dps-link]').length).toBe(0)
         })
     })
   })

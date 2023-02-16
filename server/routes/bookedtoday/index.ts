@@ -6,7 +6,6 @@ import transferRoutes from './transfers'
 import arrivalRoutes from './arrivals'
 import unexpectedArrivalsRoutes from './unexpectedArrivals'
 import Routes from '../../utils/routeBuilder'
-import Role from '../../authentication/role'
 import SummaryWithRecordController from './summaryWithRecordController'
 import SummaryMoveOnlyController from './summaryMoveOnlyController'
 
@@ -19,7 +18,6 @@ export default function routes(services: Services): Router {
     .get('/confirm-arrival/choose-prisoner', choosePrisonerController.view())
     .get('/confirm-arrival/choose-prisoner/:id', choosePrisonerController.redirectToConfirm())
 
-    .forRole(Role.PRISON_RECEPTION)
     .get('/prisoners/:id/summary-with-record', summaryWithRecordController.view())
     .get('/prisoners/:id/summary-move-only', summaryMoveOnlyController.view())
 

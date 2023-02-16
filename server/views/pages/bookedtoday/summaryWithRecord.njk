@@ -24,6 +24,14 @@
                     <h1 class="govuk-heading-l">{{ arrival.lastName }}, {{ arrival.firstName }}</h1>
                 </div>
                 <div class="govuk-grid-column-one-half">
+                    {% if(enableDpsLink) %}
+                        {{ govukButton({
+                            text: "View full prisoner profile",
+                            href: dpsUrl + "/prisoner/" + arrival.prisonNumber,
+                            attributes: {'data-qa':'dps-link'},
+                            classes: "govuk-button--secondary moj-button-menu__item govuk-!-margin-left-3 govuk-!-margin-right-0 float-right"
+                        }) }}
+                    {% endif %}
                     {{ govukButton({
                         text: "Confirm arrival",
                         href: "/confirm-arrival/choose-prisoner/" + arrival.id,
