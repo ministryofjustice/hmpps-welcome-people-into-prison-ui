@@ -27,7 +27,7 @@
                     {% if(enableDpsLink) %}
                         {{ govukButton({
                             text: "View full prisoner profile",
-                            href: dpsUrl + "/prisoner/" + arrival.prisonNumber,
+                            href: dpsUrl + "/save-backlink?service=welcome-people-into-prison&returnPath=/prisoners/" + arrival.id + "/summary-with-record&redirectPath=/prisoner/" + arrival.prisonNumber,
                             attributes: {'data-qa':'dps-link'},
                             classes: "govuk-button--secondary moj-button-menu__item govuk-!-margin-left-3 govuk-!-margin-right-0 float-right"
                         }) }}
