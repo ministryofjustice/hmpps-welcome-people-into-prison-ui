@@ -25,6 +25,12 @@
                 </div>
                 <div class="govuk-grid-column-one-half">
                     {{ govukButton({
+                        text: "View full prisoner profile",
+                        href: dpsUrl + "/save-backlink?service=welcome-people-into-prison&returnPath=/recent-arrivals/" + arrival.prisonNumber + "/summary&redirectPath=/prisoner/" + arrival.prisonNumber,
+                        classes: "govuk-button--secondary govuk-!-margin-left-3 float-right",
+                        attributes: {'data-qa':'dps-prisoner-profile-button'}
+                    }) }}
+                    {{ govukButton({
                         text: "Add a case note",
                         href: dpsUrl + "/save-backlink?service=welcome-people-into-prison&returnPath=/recent-arrivals/" + arrival.prisonNumber + "/summary&redirectPath=/prisoner/" + arrival.prisonNumber + "/add-case-note",
                         classes: "govuk-button--secondary float-right",
