@@ -4,7 +4,6 @@ import RecentArrivalsController from './recentArrivalsController'
 import RecentArrivalsSearchController from './recentArrivalsSearchController'
 import Routes from '../../utils/routeBuilder'
 import { State } from './state'
-import Role from '../../authentication/role'
 import RecentArrivalsSummaryController from './recentArrivalsSummaryController'
 
 export default function routes(services: Services): Router {
@@ -20,7 +19,6 @@ export default function routes(services: Services): Router {
     .get('/recent-arrivals/search', checkSearchQueryPresent, recentArrivalsSearch.showSearch())
     .post('/recent-arrivals/search', checkSearchQueryPresent, recentArrivalsSearch.submitSearch())
 
-    .forRole(Role.PRISON_RECEPTION)
     .get('/recent-arrivals/:prisonNumber/summary', recentArrivalsSummaryController.view())
 
     .build()
