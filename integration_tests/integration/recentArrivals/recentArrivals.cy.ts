@@ -3,6 +3,7 @@ import Page from '../../pages/page'
 import Role from '../../../server/authentication/role'
 import RecentArrivalsPage from '../../pages/recentArrivals/recentArrivals'
 import RecentArrivalsSearchPage from '../../pages/recentArrivals/recentArrivalsSearch'
+import PrisonerSummaryPage from '../../pages/recentArrivals/prisonerSummary'
 import recentArrivalsResponse from '../../mockApis/responses/recentArrivals'
 
 const today = moment().format('YYYY-MM-DD')
@@ -107,5 +108,33 @@ context('A user can view all recent arrivals', () => {
     cy.task('stubRecentArrivals', { caseLoadId: 'MDI', recentArrivals })
     recentArrivalsSearchPage.clearSearch().click()
     Page.verifyOnPage(RecentArrivalsPage)
+  })
+
+  it('Should display prisoner summary page', () => {
+    const recentArrival = recentArrivalsResponse.arrival({})
+    cy.task('stubGetPrisonerDetails', {
+      prisonNumber: recentArrival.prisonNumber,
+      details: recentArrival,
+    })
+
+    cy.task('stubGetBodyScan', {
+      prisonNumber: recentArrival.prisonNumber,
+      details: {
+        prisonNumber: recentArrival.prisonNumber,
+        bodyScanStatus: 'OK_TO_SCAN',
+        numberOfBodyScans: 1,
+        numberOfBodyScansRemaining: 100,
+      },
+    })
+
+    cy.signIn()
+    const recentArrivalsPage = RecentArrivalsPage.goTo()
+    recentArrivalsPage.recentArrivals(1, today).name().click()
+    const prisonerSummaryPage = new PrisonerSummaryPage(
+      `${recentArrival.lastName}, ${recentArrival.firstName}`,
+      { hasBackLink: false },
+      { hasFeedbackBanner: true }
+    )
+    prisonerSummaryPage.checkOnPage()
   })
 })

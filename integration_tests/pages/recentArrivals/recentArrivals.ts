@@ -15,7 +15,7 @@ export default class RecentArrivalsPage extends Page {
   searchSubmit = (): PageElement => cy.get('[data-qa=recent-arrival-search-submit]')
 
   recentArrivals = (row: number, date: string): Record<string, () => PageElement> => ({
-    name: () => cy.get(`[data-qa=${date}-title-${row}]`),
+    name: () => cy.get(`[data-qa=recent-arrivals-${date}-name-${row}]`),
     prisonNumber: () => cy.get(`[data-qa=${date}-prison-number-${row}]`),
     dob: () => cy.get(`[data-qa=${date}-dob-${row}]`),
     movementDateTime: () => cy.get(`[data-qa=${date}-movementDateTime-${row}]`),
