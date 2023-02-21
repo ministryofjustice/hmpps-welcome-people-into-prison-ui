@@ -53,7 +53,7 @@
             <div class="app-card__content">
                 <header class="app-card__header">
                     <h2 class="app-card__title title-{{ loopIndex }}" data-qa="{{ date }}-title-{{ loopIndex }}">
-                        {{ arrival.lastName }}, {{ arrival.firstName }}
+                        <a href="/recent-arrivals/{{ arrival.prisonNumber }}/summary" class="govuk-link" data-qa="recent-arrivals-{{ date }}-name-{{loopIndex}}">{{ arrival.lastName }}, {{ arrival.firstName }}</a>
                     </h2>
                 </header>
                 {{ recentArrivalCardListContent(arrival, loopIndex, date) }}

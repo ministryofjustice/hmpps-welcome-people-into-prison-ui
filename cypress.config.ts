@@ -36,6 +36,7 @@ export default defineConfig({
         stubUserCaseLoads: welcome.stubUserCaseLoads,
         stubExpectedArrival: welcome.stubExpectedArrival,
         stubExpectedArrivals: welcome.stubExpectedArrivals,
+        stubGetPrisonerDetails: welcome.stubGetPrisonerDetails,
         stubRecentArrivals: welcome.stubRecentArrivals,
         stubTransfers: welcome.stubTransfers,
         stubTransfer: welcome.stubTransfer,
