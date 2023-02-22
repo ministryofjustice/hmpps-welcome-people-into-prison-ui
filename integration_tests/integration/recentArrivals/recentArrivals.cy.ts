@@ -11,6 +11,7 @@ const oneDayAgo = moment().subtract(1, 'days').format('YYYY-MM-DD')
 const twoDaysAgo = moment().subtract(2, 'days').format('YYYY-MM-DD')
 
 const recentArrivals = recentArrivalsResponse.arrivals({})
+const recentArrival = recentArrivalsResponse.arrival({})
 
 context('A user can view all recent arrivals', () => {
   beforeEach(() => {
@@ -29,6 +30,10 @@ context('A user can view all recent arrivals', () => {
       },
       { prisonNumber: 'G0015GF', bodyScanStatus: 'OK_TO_SCAN', numberOfBodyScans: 1 },
     ])
+    cy.task('stubGetPrisonerDetails', {
+      prisonNumber: recentArrival.prisonNumber,
+      details: recentArrival,
+    })
   })
 
   it('Should display list of recent arrivals for last three days and handle no arrivals for a day', () => {
@@ -111,12 +116,6 @@ context('A user can view all recent arrivals', () => {
   })
 
   it('Should display prisoner summary page', () => {
-    const recentArrival = recentArrivalsResponse.arrival({})
-    cy.task('stubGetPrisonerDetails', {
-      prisonNumber: recentArrival.prisonNumber,
-      details: recentArrival,
-    })
-
     cy.task('stubGetBodyScan', {
       prisonNumber: recentArrival.prisonNumber,
       details: {
@@ -130,11 +129,63 @@ context('A user can view all recent arrivals', () => {
     cy.signIn()
     const recentArrivalsPage = RecentArrivalsPage.goTo()
     recentArrivalsPage.recentArrivals(1, today).name().click()
+
     const prisonerSummaryPage = new PrisonerSummaryPage(
       `${recentArrival.lastName}, ${recentArrival.firstName}`,
       { hasBackLink: false },
       { hasFeedbackBanner: true }
     )
     prisonerSummaryPage.checkOnPage()
+    prisonerSummaryPage.compliancePanelText().should('not.exist')
+  })
+
+  it('Should display correct message when body scan count is close to limit', () => {
+    cy.task('stubGetBodyScan', {
+      prisonNumber: recentArrival.prisonNumber,
+      details: {
+        prisonNumber: recentArrival.prisonNumber,
+        bodyScanStatus: 'CLOSE_TO_LIMIT',
+        numberOfBodyScans: 114,
+        numberOfBodyScansRemaining: 1,
+      },
+    })
+
+    cy.signIn()
+    const recentArrivalsPage = RecentArrivalsPage.goTo()
+    recentArrivalsPage.recentArrivals(1, today).name().click()
+
+    const prisonerSummaryPage = new PrisonerSummaryPage(
+      `${recentArrival.lastName}, ${recentArrival.firstName}`,
+      { hasBackLink: false },
+      { hasFeedbackBanner: true }
+    )
+
+    prisonerSummaryPage
+      .compliancePanelText()
+      .should('contain.text', 'John Doe can only be scanned 1 more times this year')
+  })
+
+  it('Should display correct message when body scan count limit reached', () => {
+    cy.task('stubGetBodyScan', {
+      prisonNumber: recentArrival.prisonNumber,
+      details: {
+        prisonNumber: recentArrival.prisonNumber,
+        bodyScanStatus: 'DO_NOT_SCAN',
+        numberOfBodyScans: 120,
+        numberOfBodyScansRemaining: 0,
+      },
+    })
+
+    cy.signIn()
+    const recentArrivalsPage = RecentArrivalsPage.goTo()
+    recentArrivalsPage.recentArrivals(1, today).name().click()
+
+    const prisonerSummaryPage = new PrisonerSummaryPage(
+      `${recentArrival.lastName}, ${recentArrival.firstName}`,
+      { hasBackLink: false },
+      { hasFeedbackBanner: true }
+    )
+
+    prisonerSummaryPage.compliancePanelText().should('contain.text', 'Do not scan')
   })
 })
