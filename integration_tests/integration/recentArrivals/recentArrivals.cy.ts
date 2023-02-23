@@ -130,9 +130,7 @@ context('A user can view all recent arrivals', () => {
     const recentArrivalsPage = RecentArrivalsPage.goTo()
     recentArrivalsPage.recentArrivals(1, today).name().click()
 
-    const prisonerSummaryPage = new PrisonerSummaryPage(`${recentArrival.lastName}, ${recentArrival.firstName}`, {
-      hasBackLink: false,
-    })
+    const prisonerSummaryPage = new PrisonerSummaryPage(`${recentArrival.lastName}, ${recentArrival.firstName}`)
     prisonerSummaryPage.checkOnPage()
     prisonerSummaryPage.compliancePanelText().should('not.exist')
   })
@@ -152,9 +150,7 @@ context('A user can view all recent arrivals', () => {
     const recentArrivalsPage = RecentArrivalsPage.goTo()
     recentArrivalsPage.recentArrivals(1, today).name().click()
 
-    const prisonerSummaryPage = new PrisonerSummaryPage(`${recentArrival.lastName}, ${recentArrival.firstName}`, {
-      hasBackLink: false,
-    })
+    const prisonerSummaryPage = new PrisonerSummaryPage(`${recentArrival.lastName}, ${recentArrival.firstName}`)
 
     prisonerSummaryPage
       .compliancePanelText()
@@ -176,9 +172,7 @@ context('A user can view all recent arrivals', () => {
     const recentArrivalsPage = RecentArrivalsPage.goTo()
     recentArrivalsPage.recentArrivals(1, today).name().click()
 
-    const prisonerSummaryPage = new PrisonerSummaryPage(`${recentArrival.lastName}, ${recentArrival.firstName}`, {
-      hasBackLink: false,
-    })
+    const prisonerSummaryPage = new PrisonerSummaryPage(`${recentArrival.lastName}, ${recentArrival.firstName}`)
 
     prisonerSummaryPage.compliancePanelText().should('contain.text', 'Do not scan')
   })
