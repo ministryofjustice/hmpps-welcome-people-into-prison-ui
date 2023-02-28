@@ -5,12 +5,12 @@ import { getRequests, stubFor } from './wiremock'
 import tokenVerification from './tokenVerification'
 import Role from '../../server/authentication/role'
 
-const createToken = (role: Role[]) => {
+const createToken = (roles: Role[]) => {
   const payload = {
     user_name: 'USER1',
     scope: ['read'],
     auth_source: 'nomis',
-    authorities: role,
+    authorities: roles,
     jti: '83b50a10-cca6-41db-985f-e87efb303ddb',
     client_id: 'clientid',
   }
