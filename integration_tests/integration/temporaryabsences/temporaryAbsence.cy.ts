@@ -8,7 +8,7 @@ import CheckTemporaryAbsencePage from '../../pages/temporaryabsences/checkTempor
 context('Confirm temporary absence added', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn', Role.PRISON_RECEPTION)
+    cy.task('stubSignIn', [Role.PRISON_RECEPTION])
     cy.task('stubPrison', 'MDI')
     cy.task('stubAuthUser')
     cy.task('stubUserCaseLoads')

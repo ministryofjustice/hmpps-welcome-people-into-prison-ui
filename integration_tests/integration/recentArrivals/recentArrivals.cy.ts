@@ -16,7 +16,7 @@ const recentArrival = recentArrivalsResponse.arrival({})
 context('A user can view all recent arrivals', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn', Role.PRISON_RECEPTION)
+    cy.task('stubSignIn', [Role.PRISON_RECEPTION])
     cy.task('stubPrison', 'MDI')
     cy.task('stubAuthUser')
     cy.task('stubUserCaseLoads')

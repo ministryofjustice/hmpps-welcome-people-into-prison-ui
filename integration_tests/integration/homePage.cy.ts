@@ -8,7 +8,7 @@ import expectedArrivals from '../mockApis/responses/expectedArrivals'
 context('A user can view the home page', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn', Role.PRISON_RECEPTION)
+    cy.task('stubSignIn', [Role.PRISON_RECEPTION])
     cy.task('stubPrison', 'MDI')
     cy.task('stubAuthUser')
     cy.task('stubUserCaseLoads')

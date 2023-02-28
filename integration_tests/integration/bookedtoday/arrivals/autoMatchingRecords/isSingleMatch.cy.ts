@@ -21,7 +21,7 @@ const prisonRecordDetails = expectedArrival.potentialMatches[0]
 context('Is Single Match', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn', Role.PRISON_RECEPTION)
+    cy.task('stubSignIn', [Role.PRISON_RECEPTION])
     cy.task('stubAuthUser')
     cy.task('stubUserCaseLoads')
     cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [] })

@@ -41,7 +41,7 @@ const arrival = expectedArrivals.arrival({
 context('Arrival matches multiple records', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn', Role.PRISON_RECEPTION)
+    cy.task('stubSignIn', [Role.PRISON_RECEPTION])
     cy.task('stubPrison', 'MDI')
     cy.task('stubAuthUser')
     cy.task('stubUserCaseLoads')

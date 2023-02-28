@@ -12,7 +12,7 @@ import CheckAnswersForCreateNewRecordPage from '../../../pages/bookedtoday/arriv
 context('Unexpected arrivals - no matching records page', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn', Role.PRISON_RECEPTION)
+    cy.task('stubSignIn', [Role.PRISON_RECEPTION])
     cy.task('stubPrison', 'MDI')
     cy.task('stubAuthUser')
     cy.task('stubUserCaseLoads')

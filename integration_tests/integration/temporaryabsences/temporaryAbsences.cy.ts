@@ -7,7 +7,7 @@ import temporaryAbsences from '../../mockApis/responses/temporaryAbsences'
 context('A user can view all current temporary absences', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn', Role.PRISON_RECEPTION)
+    cy.task('stubSignIn', [Role.PRISON_RECEPTION])
     cy.task('stubPrison', 'MDI')
     cy.task('stubAuthUser')
     cy.task('stubUserCaseLoads')
