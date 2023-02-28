@@ -11,11 +11,11 @@ export default class ChoosePrisonerPage extends Page {
   }
 
   static selectPrisoner<T extends Page>(id: string, expectedPage: PageConstructor<T>): T {
-    cy.visit(`/confirm-arrival/choose-prisoner/${id}`)
+    cy.visit(`/confirm-arrival/choose-prisoner/${id}/summary`)
     return Page.verifyOnPage(expectedPage)
   }
 
-  expectedArrivalsFromCourt = (index: number): PageElement => cy.get(`[data-qa=COURT-title-${index}]`)
+  expectedArrivalsFromCourt = (index: number): PageElement => cy.get(`[data-qa=COURT-title-${index}] > a`)
 
   noExpectedArrivalsFromCourt = (): PageElement => cy.get('[data-qa=no-arrivals-from-court]')
 

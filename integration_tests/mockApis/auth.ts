@@ -94,7 +94,7 @@ const manageDetails = () =>
     },
   })
 
-const token = (role: Role[]) =>
+const token = (roles: Role[]) =>
   stubFor({
     request: {
       method: 'POST',
@@ -107,7 +107,7 @@ const token = (role: Role[]) =>
         Location: 'http://localhost:3007/sign-in/callback?code=codexxxx&state=stateyyyy',
       },
       jsonBody: {
-        access_token: createToken(role),
+        access_token: createToken(roles),
         token_type: 'bearer',
         user_name: 'USER1',
         expires_in: 599,
@@ -156,7 +156,7 @@ const stubUserRoles = () =>
 export default {
   getSignInUrl,
   stubPing: (): Promise<[Response, Response]> => Promise.all([ping(), tokenVerification.stubPing()]),
-  stubSignIn: (role: Role[]): Promise<[Response, Response, Response, Response, Response, Response]> =>
-    Promise.all([favicon(), redirect(), signOut(), manageDetails(), token(role), tokenVerification.stubVerifyToken()]),
+  stubSignIn: (roles: Role[]): Promise<[Response, Response, Response, Response, Response, Response]> =>
+    Promise.all([favicon(), redirect(), signOut(), manageDetails(), token(roles), tokenVerification.stubVerifyToken()]),
   stubUser: (): Promise<[Response, Response]> => Promise.all([stubUser(), stubUserRoles()]),
 }
