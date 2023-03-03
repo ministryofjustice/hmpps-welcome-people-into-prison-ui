@@ -18,9 +18,9 @@ export default function routes(services: Services): Router {
   const summaryController = new SummaryController(services.expectedArrivalsService)
 
   return Routes.forAnyRole()
+    .get('/confirm-arrival/choose-prisoner/:id/summary', summaryController.redirectToSummary())
     .get('/confirm-arrival/choose-prisoner', choosePrisonerController.view())
     .get('/confirm-arrival/choose-prisoner/:id', choosePrisonerController.redirectToConfirm())
-    .get('/confirm-arrival/choose-prisoner/:id/summary', summaryController.redirectToSummary())
 
     .get('/prisoners/:id/summary-with-record', summaryWithRecordController.view())
     .get('/prisoners/:id/summary-move-only', summaryMoveOnlyController.view())

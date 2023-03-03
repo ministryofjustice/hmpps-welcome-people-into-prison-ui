@@ -3,6 +3,7 @@ import Role from '../../../server/authentication/role'
 import BodyScanPage from '../../pages/bodyscan/bodyScan'
 import expectedArrivals from '../../mockApis/responses/expectedArrivals'
 import BodyScanConfirmation from '../../pages/bodyscan/bodyScanConfirmation'
+import bodyScans from '../../mockApis/responses/bodyScans'
 
 const arrival = expectedArrivals.potentialMatch
 
@@ -20,12 +21,7 @@ context('A user can record a body scan', () => {
     cy.signIn()
     cy.task('stubGetBodyScan', {
       prisonNumber: arrival.prisonNumber,
-      details: {
-        prisonNumber: 'A1234AA',
-        bodyScanStatus: 'OK_TO_SCAN',
-        numberOfBodyScans: 10,
-        numberOfBodyScansRemaining: 106,
-      },
+      details: bodyScans.okToScan(),
     })
     const bodyScanPage = BodyScanPage.goTo(arrival.prisonNumber)
 
@@ -74,12 +70,7 @@ context('A user can record a body scan', () => {
     cy.signIn()
     cy.task('stubGetBodyScan', {
       prisonNumber: arrival.prisonNumber,
-      details: {
-        prisonNumber: 'A1234AA',
-        bodyScanStatus: 'CLOSE_TO_LIMIT',
-        numberOfBodyScans: 102,
-        numberOfBodyScansRemaining: 14,
-      },
+      details: bodyScans.closeToLimit(),
     })
     const bodyScanPage = BodyScanPage.goTo(arrival.prisonNumber)
 
@@ -91,12 +82,7 @@ context('A user can record a body scan', () => {
     cy.signIn()
     cy.task('stubGetBodyScan', {
       prisonNumber: arrival.prisonNumber,
-      details: {
-        prisonNumber: 'A1234AA',
-        bodyScanStatus: 'DO_NOT_SCAN',
-        numberOfBodyScans: 116,
-        numberOfBodyScansRemaining: 0,
-      },
+      details: bodyScans.doNotScan(),
     })
     const bodyScanPage = BodyScanPage.goTo(arrival.prisonNumber)
 

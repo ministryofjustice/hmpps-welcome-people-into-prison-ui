@@ -1,6 +1,6 @@
 import Page, { PageElement } from '../page'
 
-export default class PrisonerSummaryWithRecordPage extends Page {
+export default class PrisonerSummaryMoveOnlyPage extends Page {
   constructor(title: string) {
     super(title, { hasBackLink: false })
   }

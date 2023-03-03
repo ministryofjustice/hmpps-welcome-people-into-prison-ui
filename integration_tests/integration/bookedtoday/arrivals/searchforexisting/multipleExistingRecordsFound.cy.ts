@@ -9,6 +9,7 @@ import Role from '../../../../../server/authentication/role'
 import expectedArrivals from '../../../../mockApis/responses/expectedArrivals'
 import ChangePrisonNumberPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/search/changePrisonNumber'
 import ChangePncNumberPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/search/changePncNumber'
+import PrisonerSummaryMoveOnlyPage from '../../../../pages/bookedtoday/prisonerSummaryMoveOnly'
 
 const matchedRecords = [
   {
@@ -53,6 +54,9 @@ context('Multiple existing records', () => {
 
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
+    const prisonerSummaryWithRecordPage = new PrisonerSummaryMoveOnlyPage(`${arrival.lastName}, ${arrival.firstName}`)
+    prisonerSummaryWithRecordPage.checkOnPage()
+    prisonerSummaryWithRecordPage.confirmArrival().click()
   })
 
   it('Processing multiple matches', () => {

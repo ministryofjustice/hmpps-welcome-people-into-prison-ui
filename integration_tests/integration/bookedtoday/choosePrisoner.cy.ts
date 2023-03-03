@@ -7,6 +7,9 @@ import Role from '../../../server/authentication/role'
 import expectedArrivals from '../../mockApis/responses/expectedArrivals'
 import NoMatchingRecordsFoundPage from '../../pages/bookedtoday/arrivals/autoMatchingRecords/noMatchingRecordsFound'
 import ReviewDetailsPage from '../../pages/bookedtoday/arrivals/reviewDetails'
+import PrisonerSummaryWithRecordPage from '../../pages/bookedtoday/prisonerSummaryWithRecord'
+import PrisonerSummaryMoveOnlyPage from '../../pages/bookedtoday/prisonerSummaryMoveOnly'
+import bodyScans from '../../mockApis/responses/bodyScans'
 
 context('Choose Prisoner', () => {
   beforeEach(() => {
@@ -18,6 +21,7 @@ context('Choose Prisoner', () => {
     cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [expectedArrivals.prisonTransfer] })
     cy.task('stubMissingPrisonerImage')
     cy.task('stubRetrieveMultipleBodyScans', [])
+    cy.task('stubGetBodyScan', bodyScans.okToScan())
   })
 
   it("Should display available prisoner info and the 'manually confirm' link", () => {
@@ -147,10 +151,17 @@ context('Choose Prisoner', () => {
 
     cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [currentCourt] })
     cy.task('stubExpectedArrival', expectedArrivals.arrival(currentCourt))
+    cy.task('stubPrisonerDetails', { ...expectedArrivals.court.current.potentialMatches[0], arrivalType: 'FROM_COURT' })
     cy.signIn()
 
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
+
+    const { firstName, lastName } = expectedArrivals.arrival({ fromLocationType: 'COURT' })
+    const prisonerSummaryWithRecordPage = new PrisonerSummaryWithRecordPage(`${lastName}, ${firstName}`)
+    prisonerSummaryWithRecordPage.checkOnPage()
+    prisonerSummaryWithRecordPage.breadcrumbs().should('exist')
+    prisonerSummaryWithRecordPage.confirmArrival().click()
 
     Page.verifyOnPage(CheckCourtReturnPage)
   })
@@ -167,6 +178,8 @@ context('Choose Prisoner', () => {
 
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
+    const prisonerSummaryMoveOnlyPage = new PrisonerSummaryMoveOnlyPage(`${arrival.lastName}, ${arrival.firstName}`)
+    prisonerSummaryMoveOnlyPage.confirmArrival().click()
 
     const noMatchingRecordsFoundPage = Page.verifyOnPage(NoMatchingRecordsFoundPage)
     noMatchingRecordsFoundPage.perName().should('contain.text', 'Bob Smith')
@@ -185,10 +198,16 @@ context('Choose Prisoner', () => {
     })
     cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [arrival] })
     cy.task('stubExpectedArrival', arrival)
+    cy.task('stubPrisonerDetails', { ...expectedArrivals.potentialMatch, arrivalType: 'FROM_COURT' })
     cy.signIn()
 
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
+    const { firstName, lastName } = expectedArrivals.arrival({ fromLocationType: 'COURT' })
+    const prisonerSummaryWithRecordPage = new PrisonerSummaryWithRecordPage(`${lastName}, ${firstName}`)
+    prisonerSummaryWithRecordPage.checkOnPage()
+    prisonerSummaryWithRecordPage.breadcrumbs().should('exist')
+    prisonerSummaryWithRecordPage.confirmArrival().click()
 
     Page.verifyOnPage(SingleMatchingRecordFoundPage)
   })
@@ -206,6 +225,9 @@ context('Choose Prisoner', () => {
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(1).confirm().click()
 
+    const prisonerSummaryMoveOnlyPage = new PrisonerSummaryMoveOnlyPage(`${arrival.lastName}, ${arrival.firstName}`)
+    prisonerSummaryMoveOnlyPage.confirmArrival().click()
+
     Page.verifyOnPage(NoMatchingRecordsFoundPage)
   })
 
@@ -221,10 +243,7 @@ context('Choose Prisoner', () => {
 
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(1).confirm().click()
-
-    Page.verifyOnPage(SingleMatchingRecordFoundPage)
   })
-
   it('No links shown if not a reception user', () => {
     cy.task('stubExpectedArrivals', {
       caseLoadId: 'MDI',

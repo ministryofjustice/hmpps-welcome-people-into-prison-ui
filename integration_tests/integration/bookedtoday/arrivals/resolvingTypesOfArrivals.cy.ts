@@ -10,6 +10,7 @@ import ConfirmTransferAddedToRollPage from '../../../pages/bookedtoday/transfers
 import CheckCourtReturnPage from '../../../pages/bookedtoday/arrivals/courtreturns/checkCourtReturn'
 import ConfirmCourtReturnAddedToRollPage from '../../../pages/bookedtoday/arrivals/courtreturns/confirmCourtReturnAddedToRoll'
 import FeatureNotAvailablePage from '../../../pages/featureNotAvailable'
+import PrisonerSummaryWithRecordPage from '../../../pages/bookedtoday/prisonerSummaryWithRecord'
 
 const arrival = expectedArrivals.arrival({
   fromLocationType: 'COURT',
@@ -59,6 +60,9 @@ context('Redirect logic once a record for an arrival has been resolved', () => {
 
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
+    const prisonerSummaryWithRecordPage = new PrisonerSummaryWithRecordPage(`${arrival.lastName}, ${arrival.firstName}`)
+    prisonerSummaryWithRecordPage.checkOnPage()
+    prisonerSummaryWithRecordPage.confirmArrival().click()
   })
 
   it('Can choose and confirm arrival of a temporay absence', () => {

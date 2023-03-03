@@ -11,6 +11,8 @@ import CheckTransferPage from '../pages/bookedtoday/transfers/checkTransfer'
 import temporaryAbsences from '../mockApis/responses/temporaryAbsences'
 import TemporaryAbsencePage from '../pages/temporaryabsences/temporaryAbsences'
 import CheckTemporaryAbsencePage from '../pages/temporaryabsences/checkTemporaryAbsence'
+import PrisonerSummaryWithRecordPage from '../pages/bookedtoday/prisonerSummaryWithRecord'
+import bodyScans from '../mockApis/responses/bodyScans'
 
 context('Feature not available', () => {
   beforeEach(() => {
@@ -22,6 +24,7 @@ context('Feature not available', () => {
     cy.task('stubPrison', 'MDI')
     cy.task('stubImprisonmentStatus')
     cy.task('stubRetrieveMultipleBodyScans', [])
+    cy.task('stubGetBodyScan', bodyScans.okToScan())
   })
 
   it('Should display feature-not-available page when client error during confirmation of new prisoner from court', () => {
@@ -31,15 +34,26 @@ context('Feature not available', () => {
       potentialMatches: [expectedArrivals.potentialMatch],
     })
 
+    cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [{}] })
+    cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [expectedArrival] })
+
     cy.task('stubExpectedArrival', expectedArrival)
     cy.task('stubPrisonerDetails', { ...expectedArrival.potentialMatches[0], arrivalType: 'NEW_BOOKING' })
     cy.task('stubCreateOffenderRecordAndBookingReturnsError', { arrivalId: expectedArrival.id, status: 400 })
     cy.signIn()
 
-    const singleMatchingRecordFoundPage = ChoosePrisonerPage.selectPrisoner(
-      expectedArrival.id,
-      SingleMatchingRecordFoundPage
+    const choosePrisonerPage = ChoosePrisonerPage.goTo()
+    choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
+
+    const prisonerSummaryWithRecordPage = new PrisonerSummaryWithRecordPage(
+      `${expectedArrival.lastName}, ${expectedArrival.firstName}`
     )
+    prisonerSummaryWithRecordPage.checkOnPage()
+    prisonerSummaryWithRecordPage.breadcrumbs().should('exist')
+    prisonerSummaryWithRecordPage.confirmArrival().click()
+
+    const singleMatchingRecordFoundPage = Page.verifyOnPage(SingleMatchingRecordFoundPage)
+
     singleMatchingRecordFoundPage.continue().click()
 
     const imprisonmentStatusPage = Page.verifyOnPage(ImprisonmentStatusPage)
@@ -54,12 +68,24 @@ context('Feature not available', () => {
   it('Should display feature-not-available page when client error during confirmation of court return of existing prisoner', () => {
     const expectedArrival = expectedArrivals.court.current
     const prisonRecordDetails = expectedArrival.potentialMatches[0]
-
+    cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [{}] })
+    cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [expectedArrival] })
+    cy.task('stubPrisonerDetails', { ...expectedArrival.potentialMatches[0], arrivalType: 'NEW_BOOKING' })
     cy.task('stubConfirmCourtReturnsError', { arrivalId: expectedArrival.id, status: 404 })
     cy.task('stubExpectedArrival', expectedArrival)
     cy.signIn()
 
-    const checkCourtReturnPage = ChoosePrisonerPage.selectPrisoner(expectedArrival.id, CheckCourtReturnPage)
+    const choosePrisonerPage = ChoosePrisonerPage.goTo()
+    choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
+
+    const prisonerSummaryWithRecordPage = new PrisonerSummaryWithRecordPage(
+      `${expectedArrival.lastName}, ${expectedArrival.firstName}`
+    )
+    prisonerSummaryWithRecordPage.checkOnPage()
+    prisonerSummaryWithRecordPage.breadcrumbs().should('exist')
+    prisonerSummaryWithRecordPage.confirmArrival().click()
+
+    const checkCourtReturnPage = Page.verifyOnPage(CheckCourtReturnPage)
     checkCourtReturnPage.prisonerSplitView.contains(expectedArrival, prisonRecordDetails)
     checkCourtReturnPage.addToRoll().click()
     Page.verifyOnPage(FeatureNotAvailable)

@@ -15,7 +15,7 @@ export default class ChoosePrisonerPage extends Page {
     return Page.verifyOnPage(expectedPage)
   }
 
-  expectedArrivalsFromCourt = (index: number): PageElement => cy.get(`[data-qa=COURT-title-${index}] > a`)
+  expectedArrivalsFromCourt = (index: number): PageElement => cy.get(`[data-qa=COURT-title-${index}]`)
 
   noExpectedArrivalsFromCourt = (): PageElement => cy.get('[data-qa=no-arrivals-from-court]')
 

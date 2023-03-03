@@ -11,6 +11,7 @@ import SexPage from '../../../../pages/bookedtoday/arrivals/confirmArrival/sexPa
 import ImprisonmentStatusPage from '../../../../pages/bookedtoday/arrivals/confirmArrival/imprisonmentStatus'
 import CheckAnswersForCreateNewRecordPage from '../../../../pages/bookedtoday/arrivals/confirmArrival/checkAnswersForCreateNewRecord'
 import ConfirmAddedToRollPage from '../../../../pages/bookedtoday/arrivals/confirmArrival/confirmAddedToRoll'
+import PrisonerSummaryMoveOnlyPage from '../../../../pages/bookedtoday/prisonerSummaryMoveOnly'
 
 const arrival = expectedArrivals.arrival({
   prisonNumber: null,
@@ -40,6 +41,11 @@ context('No match found', () => {
   })
 
   it('Check no match page', () => {
+    const prisonerSummaryMoveOnlyPage = new PrisonerSummaryMoveOnlyPage(`${arrival.lastName}, ${arrival.firstName}`)
+    prisonerSummaryMoveOnlyPage.checkOnPage()
+    prisonerSummaryMoveOnlyPage.breadcrumbs().should('exist')
+    prisonerSummaryMoveOnlyPage.confirmArrival().click()
+
     const noMatchingRecordsFoundPage = Page.verifyOnPage(NoMatchingRecordsFoundPage)
     noMatchingRecordsFoundPage.perName().should('contain.text', 'Bob Smith')
     noMatchingRecordsFoundPage.perDob().should('contain.text', '1 January 1970')
@@ -51,6 +57,11 @@ context('No match found', () => {
   })
 
   it('Change name', () => {
+    const prisonerSummaryMoveOnlyPage = new PrisonerSummaryMoveOnlyPage(`${arrival.lastName}, ${arrival.firstName}`)
+    prisonerSummaryMoveOnlyPage.checkOnPage()
+    prisonerSummaryMoveOnlyPage.breadcrumbs().should('exist')
+    prisonerSummaryMoveOnlyPage.confirmArrival().click()
+
     const noMatchingRecordsFoundPage = Page.verifyOnPage(NoMatchingRecordsFoundPage)
     noMatchingRecordsFoundPage.continue().click()
     {
@@ -80,6 +91,11 @@ context('No match found', () => {
   })
 
   it('Change date of birth', () => {
+    const prisonerSummaryMoveOnlyPage = new PrisonerSummaryMoveOnlyPage(`${arrival.lastName}, ${arrival.firstName}`)
+    prisonerSummaryMoveOnlyPage.checkOnPage()
+    prisonerSummaryMoveOnlyPage.breadcrumbs().should('exist')
+    prisonerSummaryMoveOnlyPage.confirmArrival().click()
+
     const noMatchingRecordsFoundPage = Page.verifyOnPage(NoMatchingRecordsFoundPage)
     noMatchingRecordsFoundPage.continue().click()
     {
@@ -121,6 +137,10 @@ context('No match found', () => {
       potentialMatches: [],
     })
     cy.task('stubExpectedArrival', arrivalWithNoSex)
+    const prisonerSummaryMoveOnlyPage = new PrisonerSummaryMoveOnlyPage(`${arrival.lastName}, ${arrival.firstName}`)
+    prisonerSummaryMoveOnlyPage.checkOnPage()
+    prisonerSummaryMoveOnlyPage.breadcrumbs().should('exist')
+    prisonerSummaryMoveOnlyPage.confirmArrival().click()
 
     const noMatchingRecordsFoundPage = Page.verifyOnPage(NoMatchingRecordsFoundPage)
     noMatchingRecordsFoundPage.continue().click()
@@ -135,6 +155,11 @@ context('No match found', () => {
   })
 
   it('Can process arrival', () => {
+    const prisonerSummaryMoveOnlyPage = new PrisonerSummaryMoveOnlyPage(`${arrival.lastName}, ${arrival.firstName}`)
+    prisonerSummaryMoveOnlyPage.checkOnPage()
+    prisonerSummaryMoveOnlyPage.breadcrumbs().should('exist')
+    prisonerSummaryMoveOnlyPage.confirmArrival().click()
+
     const noMatchingRecordsFoundPage = Page.verifyOnPage(NoMatchingRecordsFoundPage)
     noMatchingRecordsFoundPage.continue().click()
 

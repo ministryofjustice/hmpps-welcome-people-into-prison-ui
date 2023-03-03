@@ -108,7 +108,7 @@ describe('GET /prisoner/:id/summary-with-record', () => {
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           const $ = cheerio.load(res.text)
-          expect($('[data-qa=dps-link]').length).toBe(1)
+          expect($('[data-qa=prisoner-profile]').length).toBe(1)
         })
     })
     it('should not be displayed without Prison Reception role', () => {
@@ -123,7 +123,7 @@ describe('GET /prisoner/:id/summary-with-record', () => {
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           const $ = cheerio.load(res.text)
-          expect($('[data-qa=dps-link]').length).toBe(0)
+          expect($('[data-qa=prisoner-profile]').length).toBe(0)
         })
     })
 
@@ -139,8 +139,62 @@ describe('GET /prisoner/:id/summary-with-record', () => {
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           const $ = cheerio.load(res.text)
-          expect($('[data-qa=dps-link]').length).toBe(0)
+          expect($('[data-qa=prisoner-profile]').length).toBe(0)
         })
     })
+
+    it('should not display the scan compliance panel', () => {
+      arrivalAndSummaryDetails.summary.bodyScanStatus = 'OK_TO_SCAN'
+
+      app = appWithAllRoutes({
+        services: { expectedArrivalsService },
+        roles: [Role.PRISON_RECEPTION],
+      })
+
+      return request(app)
+        .get('/prisoners/1111-1111-1111-1111/summary-with-record')
+        .expect(200)
+        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect(res => {
+          const $ = cheerio.load(res.text)
+          expect($('.compliance-panel').length).toBe(0)
+        })
+    })
+  })
+
+  it("should not display the 'close to limit' scan compliance panel", () => {
+    arrivalAndSummaryDetails.summary.bodyScanStatus = 'CLOSE_TO_LIMIT'
+
+    app = appWithAllRoutes({
+      services: { expectedArrivalsService },
+      roles: [Role.PRISON_RECEPTION],
+    })
+
+    return request(app)
+      .get('/prisoners/1111-1111-1111-1111/summary-with-record')
+      .expect(200)
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(res => {
+        const $ = cheerio.load(res.text)
+        expect($('[data-qa="close-to-limit"]').length).toBe(1)
+      })
+  })
+
+  it("should display the 'do not scan' compliance panel", () => {
+    arrivalAndSummaryDetails.summary.bodyScanStatus = 'DO_NOT_SCAN'
+
+    app = appWithAllRoutes({
+      services: { expectedArrivalsService },
+      roles: [Role.PRISON_RECEPTION],
+    })
+
+    return request(app)
+      .get('/prisoners/1111-1111-1111-1111/summary-with-record')
+      .expect(200)
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(res => {
+        const $ = cheerio.load(res.text)
+        expect($('[data-qa="do-not-scan"]').length).toBe(1)
+      })
   })
 })

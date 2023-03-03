@@ -29,7 +29,8 @@
                     {{ govukButton({
                         text: "Confirm arrival",
                         href: "/confirm-arrival/choose-prisoner/" + arrival.id,
-                        classes: "float-right"
+                        classes: "float-right",
+                        attributes: {'data-qa':'confirm-arrival'}
                     }) }}
                 </div>
             </div>
