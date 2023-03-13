@@ -11,7 +11,7 @@ export default class ChoosePrisonerPage extends Page {
   }
 
   static selectPrisoner<T extends Page>(id: string, expectedPage: PageConstructor<T>): T {
-    cy.visit(`/confirm-arrival/choose-prisoner/${id}`)
+    cy.visit(`/confirm-arrival/choose-prisoner/${id}/summary`)
     return Page.verifyOnPage(expectedPage)
   }
 

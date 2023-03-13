@@ -10,6 +10,7 @@ import ChangeDateOfBirthPage from '../../../../pages/bookedtoday/arrivals/change
 import ChangePrisonNumberPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/search/changePrisonNumber'
 import ChangePncNumberPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/search/changePncNumber'
 import ReviewDetailsPage from '../../../../pages/bookedtoday/arrivals/reviewDetails'
+import PrisonerSummaryMoveOnlyPage from '../../../../pages/bookedtoday/prisonerSummaryMoveOnly'
 
 const singleMatch = [
   {
@@ -47,6 +48,9 @@ context('Search for existing spec', () => {
 
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(1).confirm().click()
+    const prisonerSummaryMoveOnlyPage = new PrisonerSummaryMoveOnlyPage(`${arrival.lastName}, ${arrival.firstName}`)
+    prisonerSummaryMoveOnlyPage.checkOnPage()
+    prisonerSummaryMoveOnlyPage.confirmArrival().click()
   })
 
   it('Change name', () => {

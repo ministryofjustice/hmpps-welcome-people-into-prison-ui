@@ -5,6 +5,7 @@ import RecentArrivalsPage from '../../pages/recentArrivals/recentArrivals'
 import RecentArrivalsSearchPage from '../../pages/recentArrivals/recentArrivalsSearch'
 import PrisonerSummaryPage from '../../pages/recentArrivals/prisonerSummary'
 import recentArrivalsResponse from '../../mockApis/responses/recentArrivals'
+import bodyScans from '../../mockApis/responses/bodyScans'
 
 const today = moment().format('YYYY-MM-DD')
 const oneDayAgo = moment().subtract(1, 'days').format('YYYY-MM-DD')
@@ -30,10 +31,7 @@ context('A user can view all recent arrivals', () => {
       },
       { prisonNumber: 'G0015GF', bodyScanStatus: 'OK_TO_SCAN', numberOfBodyScans: 1 },
     ])
-    cy.task('stubGetPrisonerDetails', {
-      prisonNumber: recentArrival.prisonNumber,
-      details: recentArrival,
-    })
+    cy.task('stubPrisonerDetails', recentArrival)
   })
 
   it('Should display list of recent arrivals for last three days and handle no arrivals for a day', () => {
@@ -118,14 +116,12 @@ context('A user can view all recent arrivals', () => {
   it('Should display prisoner summary page', () => {
     cy.task('stubGetBodyScan', {
       prisonNumber: recentArrival.prisonNumber,
-      details: {
-        prisonNumber: recentArrival.prisonNumber,
-        bodyScanStatus: 'OK_TO_SCAN',
-        numberOfBodyScans: 1,
-        numberOfBodyScansRemaining: 100,
-      },
+      details: bodyScans.okToScan(),
     })
 
+    cy.task('stubPrisonerDetails', {
+      details: recentArrival,
+    })
     cy.signIn()
     const recentArrivalsPage = RecentArrivalsPage.goTo()
     recentArrivalsPage.recentArrivals(1, today).name().click()
@@ -138,12 +134,7 @@ context('A user can view all recent arrivals', () => {
   it('Should display correct message when body scan count is close to limit', () => {
     cy.task('stubGetBodyScan', {
       prisonNumber: recentArrival.prisonNumber,
-      details: {
-        prisonNumber: recentArrival.prisonNumber,
-        bodyScanStatus: 'CLOSE_TO_LIMIT',
-        numberOfBodyScans: 114,
-        numberOfBodyScansRemaining: 1,
-      },
+      details: bodyScans.closeToLimit(recentArrival.prisonNumber),
     })
 
     cy.signIn()
@@ -160,12 +151,7 @@ context('A user can view all recent arrivals', () => {
   it('Should display correct message when body scan count limit reached', () => {
     cy.task('stubGetBodyScan', {
       prisonNumber: recentArrival.prisonNumber,
-      details: {
-        prisonNumber: recentArrival.prisonNumber,
-        bodyScanStatus: 'DO_NOT_SCAN',
-        numberOfBodyScans: 120,
-        numberOfBodyScansRemaining: 0,
-      },
+      details: bodyScans.doNotScan(),
     })
 
     cy.signIn()

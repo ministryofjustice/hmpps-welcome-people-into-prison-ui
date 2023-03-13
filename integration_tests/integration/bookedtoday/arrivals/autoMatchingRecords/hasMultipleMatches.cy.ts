@@ -9,6 +9,7 @@ import CheckAnswersPage from '../../../../pages/bookedtoday/arrivals/confirmArri
 import ConfirmAddedToRollPage from '../../../../pages/bookedtoday/arrivals/confirmArrival/confirmAddedToRoll'
 import SearchForExistingPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/search/searchForExisting'
 import ReviewDetailsPage from '../../../../pages/bookedtoday/arrivals/reviewDetails'
+import PrisonerSummaryMoveOnlyPage from '../../../../pages/bookedtoday/prisonerSummaryMoveOnly'
 
 const arrival = expectedArrivals.arrival({
   fromLocationType: 'COURT',
@@ -59,6 +60,11 @@ context('Arrival matches multiple records', () => {
   })
 
   it('Can choose and confirm arrival', () => {
+    const prisonerSummaryMoveOnlyPage = new PrisonerSummaryMoveOnlyPage(`${arrival.lastName}, ${arrival.firstName}`)
+    prisonerSummaryMoveOnlyPage.checkOnPage()
+    prisonerSummaryMoveOnlyPage.breadcrumbs().should('exist')
+    prisonerSummaryMoveOnlyPage.confirmArrival().click()
+
     const multipleMatchingRecordsPage = Page.verifyOnPage(MultipleMatchingRecordsPage)
     const personalDetails = multipleMatchingRecordsPage.arrival()
     personalDetails.fieldName('prisoner-name').should('contain', 'Bob Smith')
@@ -153,12 +159,22 @@ context('Arrival matches multiple records', () => {
   })
 
   it('should allow searching with different details', () => {
+    const prisonerSummaryMoveOnlyPage = new PrisonerSummaryMoveOnlyPage(`${arrival.lastName}, ${arrival.firstName}`)
+    prisonerSummaryMoveOnlyPage.checkOnPage()
+    prisonerSummaryMoveOnlyPage.breadcrumbs().should('exist')
+    prisonerSummaryMoveOnlyPage.confirmArrival().click()
+
     const multipleMatchingRecordsPage = Page.verifyOnPage(MultipleMatchingRecordsPage)
     multipleMatchingRecordsPage.search().click()
     Page.verifyOnPage(SearchForExistingPage)
   })
 
   it('Should allow navigation to create a new record', () => {
+    const prisonerSummaryMoveOnlyPage = new PrisonerSummaryMoveOnlyPage(`${arrival.lastName}, ${arrival.firstName}`)
+    prisonerSummaryMoveOnlyPage.checkOnPage()
+    prisonerSummaryMoveOnlyPage.breadcrumbs().should('exist')
+    prisonerSummaryMoveOnlyPage.confirmArrival().click()
+
     const multipleMatchingRecordsPage = Page.verifyOnPage(MultipleMatchingRecordsPage)
     multipleMatchingRecordsPage.createNewDetailsReveal().click()
     multipleMatchingRecordsPage.createNew().click()

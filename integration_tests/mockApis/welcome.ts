@@ -65,25 +65,6 @@ export default {
       },
     })
   },
-  stubGetPrisonerDetails: ({
-    prisonNumber,
-    details,
-  }: {
-    prisonNumber: string
-    details: Record<string, unknown>
-  }): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: `/welcome/prisoners/${prisonNumber}`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: details,
-      },
-    })
-  },
   stubRecentArrivals: ({
     caseLoadId,
     recentArrivals,

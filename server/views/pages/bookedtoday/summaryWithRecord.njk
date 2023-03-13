@@ -28,14 +28,15 @@
                         {{ govukButton({
                             text: "View full prisoner profile",
                             href: dpsUrl + "/save-backlink?service=welcome-people-into-prison&returnPath=/prisoners/" + arrival.id + "/summary-with-record&redirectPath=/prisoner/" + arrival.prisonNumber,
-                            attributes: {'data-qa':'dps-link'},
+                            attributes: {'data-qa':'prisoner-profile'},
                             classes: "govuk-button--secondary moj-button-menu__item govuk-!-margin-left-3 govuk-!-margin-right-0 float-right"
                         }) }}
                     {% endif %}
                     {{ govukButton({
                         text: "Confirm arrival",
                         href: "/confirm-arrival/choose-prisoner/" + arrival.id,
-                        classes: "float-right"
+                        classes: "float-right",
+                        attributes: {'data-qa':'confirm-arrival'}
                     }) }}
                 </div>
             </div>
@@ -82,13 +83,13 @@
                         ]
                     }) }}
                     {% if summary.bodyScanStatus === 'DO_NOT_SCAN' %}
-                        <div class="compliance-panel compliance-panel--red">
+                        <div class="compliance-panel compliance-panel--red" data-qa="do-not-scan">
                             <p class="govuk-!-margin-bottom-0 govuk-!-font-weight-bold">
                                 Do not scan – annual body scan limit reached
                             </p>
                         </div>
                     {% elif summary.bodyScanStatus === 'CLOSE_TO_LIMIT'  %}
-                        <div class="compliance-panel">
+                        <div class="compliance-panel" data-qa="close-to-limit">
                             <p class="govuk-!-margin-bottom-0 govuk-!-font-weight-bold">
                                 {{ arrival.firstName }} {{ arrival.lastName }} can only be scanned {{ summary.numberOfBodyScansRemaining }} more times this year
                             </p>
