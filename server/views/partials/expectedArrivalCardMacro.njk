@@ -58,9 +58,15 @@
             <div class="app-card__content">
                 <header class="app-card__header">
                     <h2 class="app-card__title" data-qa="{{ moveType }}-title-{{ loopIndex }}">
-                        {% if user.isReceptionUser %}
+                        {% if user.isReceptionUser and showExpectedArrivalPrisonerSummary %}
                             <a
                                 href="/confirm-arrival/choose-prisoner/{{ arrival.id }}/summary"
+                                class="govuk-link govuk-link--no-visited-state"
+                                data-qa="confirm-arrival">
+                                {{ arrival.lastName }}, {{ arrival.firstName }}</a>
+                        {% elif user.isReceptionUser%}
+                            <a
+                                href="/confirm-arrival/choose-prisoner/{{ arrival.id }}"
                                 class="govuk-link govuk-link--no-visited-state"
                                 data-qa="confirm-arrival">
                                 {{ arrival.lastName }}, {{ arrival.firstName }}</a>
