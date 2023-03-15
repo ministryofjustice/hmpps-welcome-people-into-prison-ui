@@ -7,6 +7,8 @@ export default class BodyScanConfirmation extends Page {
 
   confirmationBanner = (): PageElement => cy.get(`[data-qa=confirmation-banner]`)
 
+  backToPrisonerSummaryButton = (): PageElement => cy.get(`[data-qa=back-to-prisoner-summary]`)
+
   addCaseNote = (prisonNumber: string) => ({
     exists: () =>
       Page.checkLink(
