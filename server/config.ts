@@ -117,4 +117,6 @@ export default {
     serviceAccountKey: get('GOOGLE_SERVICE_ACCOUNT_KEY', '', requiredInProduction),
     spreadsheetId: get('EXPORT_SPREADSHEET_ID', '', requiredInProduction),
   },
+  showExpectedArrivalPrisonerSummary:
+    get('SHOW_EXPECTED_ARRIVAL_PRISONER_SUMMARY', 'false', requiredInProduction) === 'true',
 }
