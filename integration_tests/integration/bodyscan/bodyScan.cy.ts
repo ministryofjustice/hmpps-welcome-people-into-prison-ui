@@ -4,6 +4,7 @@ import BodyScanPage from '../../pages/bodyscan/bodyScan'
 import expectedArrivals from '../../mockApis/responses/expectedArrivals'
 import BodyScanConfirmation from '../../pages/bodyscan/bodyScanConfirmation'
 import bodyScans from '../../mockApis/responses/bodyScans'
+import PrisonerSummaryPage from '../../pages/recentArrivals/prisonerSummary'
 
 const arrival = expectedArrivals.potentialMatch
 
@@ -88,5 +89,28 @@ context('A user can record a body scan', () => {
 
     bodyScanPage.closeToLimitWarning().should('not.exist')
     bodyScanPage.reachedLimitWarning().should('exist')
+  })
+
+  it('Should record and confirm a scan then return to prisoner summary page', () => {
+    cy.signIn()
+    cy.task('stubGetBodyScan', {
+      prisonNumber: arrival.prisonNumber,
+      details: bodyScans.okToScan(),
+    })
+
+    cy.task('stubPrisonerDetails', arrival)
+    cy.task('stubSubmitBodyScan', { prisonNumber: arrival.prisonNumber })
+
+    const bodyScanPage = BodyScanPage.goTo(arrival.prisonNumber)
+    bodyScanPage.userSelectedDate('today').click()
+    bodyScanPage.reason('INTELLIGENCE').click()
+    bodyScanPage.result('POSITIVE').click()
+    bodyScanPage.submit().click()
+
+    const bodyScanConfirmation = Page.verifyOnPage(BodyScanConfirmation)
+    bodyScanConfirmation.backToPrisonerSummaryButton().click()
+
+    const prisonerSummaryPage = new PrisonerSummaryPage(`${arrival.lastName}, ${arrival.firstName}`)
+    prisonerSummaryPage.checkOnPage()
   })
 })
