@@ -47,4 +47,15 @@ context('A user can view the home page', () => {
     homePage.returnFromTemporaryAbsenceTitle().click()
     Page.verifyOnPage(TemporaryAbsencesPage)
   })
+
+  it('There is a valid  DPS homepage breadcrumb', () => {
+    const homePage = Page.verifyOnPage(HomePage)
+    homePage
+      .dpsLink()
+      .should('contain', 'Digital Prison Services')
+      .should('have.attr', 'href')
+      .then(href => {
+        expect(href).to.equal('https://digital-dev.prison.service.justice.gov.uk')
+      })
+  })
 })

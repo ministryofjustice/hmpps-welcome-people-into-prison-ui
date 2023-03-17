@@ -78,21 +78,27 @@
 {% block bodyStart %}
 {% endblock %}
 
-    {% block beforeContent %}
-        {% if hasBackLink !== false %}
-            {{ govukBackLink({
-                text: "Back",
-                classes: "backLinkUrl",
-                attributes: {'data-qa': 'back-link'},
-                href: "#"
-            }) }}
-        {% endif %}
+{% block beforeContent %}
+    {% if hasBackLink !== false %}
+        {{ govukBackLink({
+            text: "Back",
+            classes: "backLinkUrl",
+            attributes: {'data-qa': 'back-link'},
+            href: "#"
+        }) }}
+    {% elif hasDpsBackLink !== false %}
+        {{ govukBackLink({
+            text: "Digital Prison Services",
+            classes: "backLinkUrl",
+            attributes: {'data-qa': 'dps-link'},
+            href: dpsUrl
+        }) }}
+    {% endif %}
 
-        {% if breadCrumbs.enabled === true %}
-            {{ breadCrumb(breadCrumbs.pageTitle, breadCrumbs.data) }}
-        {% endif %}
-
-    {% endblock %}
+    {% if breadCrumbs.enabled === true %}
+        {{ breadCrumb(breadCrumbs.pageTitle, breadCrumbs.data) }}
+    {% endif %}
+{% endblock %}
 
 {% block bodyEnd %}
     {# Run JavaScript at end of the
