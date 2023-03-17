@@ -1,6 +1,18 @@
 {% extends "../../partials/layout.njk" %}
 {% from  "../../partials/temporaryAbsenceCardMacro.njk" import temporaryAbsenceCard %}
 {% set pageTitle = "People returning from temporary absence" if supportingMultitransactionsEnabled == true else "Select a person returning from temporary absence" %}
+{% set hasDpsBackLink = false %}
+
+{% if showBreadCrumb %}
+    {% set hasBackLink = false %}
+    {% set breadCrumbs = {
+        enabled: true,
+        pageTitle:  'People returning from temporary absence',
+        data: []} 
+    %}
+{% else %}
+    {% set hasBackLink = true %}
+{% endif %}
 
 {% block content %}
     <div class="govuk-!-margin-bottom-8">
