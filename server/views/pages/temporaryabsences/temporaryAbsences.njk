@@ -1,7 +1,7 @@
 {% extends "../../partials/layout.njk" %}
 {% from  "../../partials/temporaryAbsenceCardMacro.njk" import temporaryAbsenceCard %}
 {% set pageTitle = "People returning from temporary absence" if supportingMultitransactionsEnabled == true else "Select a person returning from temporary absence" %}
-{% set hasDpsBackLink = false %}
+{% set hasDpsLink = false %}
 
 {% if showBreadCrumb %}
     {% set hasBackLink = false %}
