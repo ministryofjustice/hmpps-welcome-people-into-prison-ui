@@ -40,7 +40,7 @@ describe('GET checkTemporaryAbsence', () => {
     return request(app).get('/prisoners/A1234AA/check-temporary-absence').expect(302).expect('Location', '/autherror')
   })
 
-  it('should display backlink not breadcrumbs', () => {
+  it('should only display back navigation of the back link type', () => {
     config.showBreadCrumb = false
     createAppWithAllRoutes()
     return request(app)
@@ -48,12 +48,12 @@ describe('GET checkTemporaryAbsence', () => {
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
         const $ = cheerio.load(res.text)
-        expect($("[data-qa='back-link']").text()).toContain('Back')
-        expect($("[data-qa='breadcrumbs']")).toHaveLength(0)
+        expect($("[data-qa='back-link-navigation']").text()).toContain('Back')
+        expect($("[data-qa='back-link-navigation']")).toHaveLength(1)
       })
   })
 
-  it('should display breadcrumb not backlink', () => {
+  it('should only display back navigation of the breadcrumb type', () => {
     config.showBreadCrumb = true
     createAppWithAllRoutes()
 
@@ -62,9 +62,9 @@ describe('GET checkTemporaryAbsence', () => {
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
         const $ = cheerio.load(res.text)
-        expect($("[data-qa='breadcrumbs']").text()).toContain('Home')
-        expect($("[data-qa='breadcrumbs']").text()).toContain('People returning from temporary absence')
-        expect($("[data-qa='back-link']")).toHaveLength(0)
+        expect($("[data-qa='back-link-navigation']").text()).toContain('Home')
+        expect($("[data-qa='back-link-navigation']").text()).toContain('People returning from temporary absence')
+        expect($("[data-qa='back-link-navigation']")).toHaveLength(1)
       })
   })
 
