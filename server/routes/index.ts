@@ -12,7 +12,7 @@ export default function routes(services: Services): Router {
   const prisonerController = new PrisonerController(services.expectedArrivalsService)
 
   return Routes.forAnyRole()
-    .get('/', (_, res) => res.render('pages/home', { hasDpsLink: true }))
+    .get('/', (_, res) => res.render('pages/home'))
     .get('/prisoners/:prisonNumber/image', prisonerController.getImage())
     .get('/feature-not-available', (req, res) => res.render('pages/featureNotAvailable'))
     .use(bookedTodayRoutes(services))
