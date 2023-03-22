@@ -25,7 +25,7 @@ describe('GET /confirm-arrival/choose-prisoner', () => {
     expectedArrivalsService.getArrivalsForToday.mockResolvedValue(new Map())
   })
 
-  it('should only display back navigation odf the breadcrumb type', () => {
+  it('should only display back navigation of the breadcrumb type', () => {
     config.showBreadCrumb = true
     app = appWithAllRoutes({ services: { expectedArrivalsService } })
 

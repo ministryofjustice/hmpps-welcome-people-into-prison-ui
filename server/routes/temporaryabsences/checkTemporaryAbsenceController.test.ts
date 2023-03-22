@@ -13,10 +13,11 @@ let app: Express
 const temporaryAbsencesService = createMockTemporaryAbsencesService()
 const raiseAnalyticsEvent = jest.fn() as RaiseAnalyticsEvent
 
-const createAppWithAllRoutes = () => {
-  app = appWithAllRoutes({
+const createApp = ({ breadcrumb }: { breadcrumb: boolean } = { breadcrumb: true }, roles = [Role.PRISON_RECEPTION]) => {
+  config.showBreadCrumb = breadcrumb
+  return appWithAllRoutes({
     services: { temporaryAbsencesService, raiseAnalyticsEvent },
-    roles: [Role.PRISON_RECEPTION],
+    roles,
   })
 }
 
@@ -36,14 +37,14 @@ afterEach(() => {
 
 describe('GET checkTemporaryAbsence', () => {
   it('should redirect to authentication error page for non reception users', () => {
-    app = appWithAllRoutes({ roles: [] })
-    return request(app).get('/prisoners/A1234AA/check-temporary-absence').expect(302).expect('Location', '/autherror')
+    return request(createApp({ breadcrumb: true }, []))
+      .get('/prisoners/A1234AA/check-temporary-absence')
+      .expect(302)
+      .expect('Location', '/autherror')
   })
 
   it('should only display back navigation of the back link type', () => {
-    config.showBreadCrumb = false
-    createAppWithAllRoutes()
-    return request(app)
+    return request(createApp({ breadcrumb: false }))
       .get('/prisoners-returning')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
@@ -54,10 +55,7 @@ describe('GET checkTemporaryAbsence', () => {
   })
 
   it('should only display back navigation of the breadcrumb type', () => {
-    config.showBreadCrumb = true
-    createAppWithAllRoutes()
-
-    return request(app)
+    return request(createApp())
       .get('/prisoners-returning')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
@@ -69,9 +67,7 @@ describe('GET checkTemporaryAbsence', () => {
   })
 
   it('should call service method correctly', () => {
-    createAppWithAllRoutes()
-
-    return request(app)
+    return request(createApp())
       .get('/prisoners/A1234AA/check-temporary-absence')
       .expect('Content-Type', /text\/html/)
       .expect(() => {
@@ -80,8 +76,7 @@ describe('GET checkTemporaryAbsence', () => {
   })
 
   it('should render the correct data in /check-temporary-absence page', () => {
-    createAppWithAllRoutes()
-    return request(app)
+    return request(createApp())
       .get('/prisoners/A1234AA/check-temporary-absence?arrivalId=abc-123')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
@@ -100,8 +95,7 @@ describe('POST addToRoll', () => {
   })
 
   it('should call service to confirm the temporary absence', () => {
-    createAppWithAllRoutes()
-    return request(app)
+    return request(createApp())
       .post('/prisoners/A1234AA/check-temporary-absence')
       .expect('Content-Type', 'text/plain; charset=utf-8')
       .expect(() => {
@@ -115,8 +109,7 @@ describe('POST addToRoll', () => {
   })
 
   it('should call service to confirm the temporary absence with arrivalId when present', () => {
-    createAppWithAllRoutes()
-    return request(app)
+    return request(createApp())
       .post('/prisoners/A1234AA/check-temporary-absence')
       .send({ arrivalId: 'abc-123' })
       .expect('Content-Type', 'text/plain; charset=utf-8')
@@ -131,8 +124,7 @@ describe('POST addToRoll', () => {
   })
 
   it('should set flash with correct args', () => {
-    createAppWithAllRoutes()
-    return request(app)
+    return request(createApp())
       .post('/prisoners/A1234AA/check-temporary-absence')
       .expect(() => {
         expect(flashProvider).toHaveBeenCalledWith('prisoner', {
@@ -144,8 +136,7 @@ describe('POST addToRoll', () => {
   })
 
   it('should call google analytics', () => {
-    createAppWithAllRoutes()
-    return request(app)
+    return request(createApp())
       .post('/prisoners/A1234AA/check-temporary-absence')
       .expect(() => {
         expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
@@ -157,8 +148,7 @@ describe('POST addToRoll', () => {
   })
 
   it('should redirect to added to roll confirmation page', () => {
-    createAppWithAllRoutes()
-    return request(app)
+    return request(createApp())
       .post('/prisoners/A1234AA/check-temporary-absence')
       .expect('Content-Type', 'text/plain; charset=utf-8')
       .expect(302)
@@ -167,9 +157,7 @@ describe('POST addToRoll', () => {
 
   it('should redirect to feature-not-available', () => {
     temporaryAbsencesService.confirmTemporaryAbsence.mockResolvedValue(null)
-    createAppWithAllRoutes()
-
-    return request(app)
+    return request(createApp())
       .post('/prisoners/A1234AA/check-temporary-absence')
       .expect('Content-Type', 'text/plain; charset=utf-8')
       .expect(302)

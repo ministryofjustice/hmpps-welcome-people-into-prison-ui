@@ -1,7 +1,6 @@
 {% extends "../../partials/layout.njk" %}
 {% from  "../../partials/expectedArrivalCardMacro.njk" import expectedArrivalCard, transferCard  %}
 {% set pageTitle = "People booked to arrive today" if supportingMultitransactionsEnabled == true else "Select a person to add to the establishment roll" %}
-{% set hasDpsLink = false %}
 
 {% if showBreadCrumb %}
     {% set hasBackLink = false %}
