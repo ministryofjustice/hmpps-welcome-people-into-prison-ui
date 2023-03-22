@@ -25,6 +25,7 @@ generic-service:
     EXPORT_SPREADSHEET_ID: "1oLOz5x3xqyEHHiSU1TZd7OG8T75YilUhUXAzPFOCfQY"
     SERVICE_IS_UNAVAILABLE: "false"
     SHOW_EXPECTED_ARRIVAL_PRISONER_SUMMARY: 'false'
+    SHOW_BREADCRUMB: 'false'
 
 generic-prometheus-alerts:
   targetApplication: hmpps-welcome-people-into-prison-ui

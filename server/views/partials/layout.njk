@@ -78,21 +78,25 @@
 {% block bodyStart %}
 {% endblock %}
 
-    {% block beforeContent %}
-        {% if hasBackLink !== false %}
-            {{ govukBackLink({
-                text: "Back",
-                classes: "backLinkUrl",
-                attributes: {'data-qa': 'back-link'},
-                href: "#"
-            }) }}
-        {% endif %}
-
-        {% if breadCrumbs.enabled === true %}
-            {{ breadCrumb(breadCrumbs.pageTitle, breadCrumbs.data) }}
-        {% endif %}
-
-    {% endblock %}
+{% block beforeContent %}
+    {% if hasBackLink !== false %}
+        {{ govukBackLink({
+            text: "Back",
+            classes: "backLinkUrl",
+            attributes: {'data-qa': 'back-link-navigation'},
+            href: "#"
+        }) }}
+    {% elif hasDpsLink %}
+        {{ govukBackLink({
+            text: "Digital Prison Services",
+            classes: "backLinkUrl",
+            attributes: {'data-qa': 'dps-link'},
+            href: dpsUrl
+        }) }}
+    {% elif breadCrumbs.enabled === true %}
+        {{ breadCrumb(breadCrumbs.pageTitle, breadCrumbs.data) }}
+    {% endif %}
+{% endblock %}
 
 {% block bodyEnd %}
     {# Run JavaScript at end of the

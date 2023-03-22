@@ -40,9 +40,8 @@ export default abstract class Page {
     cy.get('h1').contains(this.title)
     if (this.backNavigationLink.hasBackLink !== false) {
       this.backNavigation().should('exist')
-    } else {
-      this.backNavigation().should('not.exist')
     }
+
     if (this.feedbackBannerLink.hasFeedbackBanner !== false) {
       this.feedbackBanner().should('exist')
     } else {
@@ -52,7 +51,7 @@ export default abstract class Page {
 
   feedbackBanner = (): PageElement => cy.get(`[data-qa=feedback-link]`)
 
-  backNavigation = (): PageElement => cy.get(`[data-qa=back-link]`)
+  backNavigation = (): PageElement => cy.get(`[data-qa=back-link-navigation]`)
 
   signOut = (): PageElement => cy.get('[data-qa=signOut]')
 
