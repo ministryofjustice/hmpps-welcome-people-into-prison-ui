@@ -2,6 +2,17 @@
 {% from  "../../partials/expectedArrivalCardMacro.njk" import expectedArrivalCard, transferCard  %}
 {% set pageTitle = "People booked to arrive today" if supportingMultitransactionsEnabled == true else "Select a person to add to the establishment roll" %}
 
+{% if showBreadCrumb %}
+    {% set hasBackLink = false %}
+    {% set breadCrumbs = {
+        enabled: true,
+        pageTitle:  'People booked to arrive today',
+        data: []} 
+    %}
+{% else %}
+    {% set hasBackLink = true %}
+{% endif %}
+
 {% block content %}
     <div class="govuk-!-margin-bottom-8">
         <div class="govuk-body">

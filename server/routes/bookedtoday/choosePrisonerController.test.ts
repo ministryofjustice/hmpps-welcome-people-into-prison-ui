@@ -25,6 +25,36 @@ describe('GET /confirm-arrival/choose-prisoner', () => {
     expectedArrivalsService.getArrivalsForToday.mockResolvedValue(new Map())
   })
 
+  it('should only display back navigation of the breadcrumb type', () => {
+    config.showBreadCrumb = true
+    app = appWithAllRoutes({ services: { expectedArrivalsService } })
+
+    return request(app)
+      .get('/confirm-arrival/choose-prisoner')
+      .expect(200)
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(res => {
+        const $ = cheerio.load(res.text)
+        expect($("[data-qa='back-link-navigation']").text()).toContain('Home')
+        expect($("[data-qa='back-link-navigation']").text()).toContain('People booked to arrive today')
+        expect($("[data-qa='back-link-navigation']")).toHaveLength(1)
+      })
+  })
+
+  it('should only display back navigation of the back link type', () => {
+    config.showBreadCrumb = false
+    app = appWithAllRoutes({ services: { expectedArrivalsService } })
+
+    return request(app)
+      .get('/confirm-arrival/choose-prisoner')
+      .expect(200)
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(res => {
+        const $ = cheerio.load(res.text)
+        expect($("[data-qa='back-link-navigation']").text()).toContain('Back')
+        expect($("[data-qa='back-link-navigation']")).toHaveLength(1)
+      })
+  })
   it('should render /confirm-arrival/choose-prisoner page with correct title when supportingMultitransactionsEnabled is true', () => {
     config.supportingMultitransactionsEnabled = true
     app = appWithAllRoutes({ services: { expectedArrivalsService } })

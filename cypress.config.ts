@@ -36,7 +36,6 @@ export default defineConfig({
         stubUserCaseLoads: welcome.stubUserCaseLoads,
         stubExpectedArrival: welcome.stubExpectedArrival,
         stubExpectedArrivals: welcome.stubExpectedArrivals,
-        stubGetPrisonerDetails: welcome.stubGetPrisonerDetails,
         stubRecentArrivals: welcome.stubRecentArrivals,
         stubTransfers: welcome.stubTransfers,
         stubTransfer: welcome.stubTransfer,
@@ -80,5 +79,6 @@ export default defineConfig({
     excludeSpecPattern: '**/!(*.cy).ts',
     specPattern: 'integration_tests/integration/**/*.cy.{js,jsx,ts,tsx}',
     supportFile: 'integration_tests/support/index.ts',
+    experimentalRunAllSpecs: true,
   },
 })
