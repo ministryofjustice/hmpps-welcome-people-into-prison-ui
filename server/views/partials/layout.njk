@@ -86,13 +86,6 @@
             attributes: {'data-qa': 'back-link-navigation'},
             href: "#"
         }) }}
-    {% elif hasDpsLink %}
-        {{ govukBackLink({
-            text: "Digital Prison Services",
-            classes: "backLinkUrl",
-            attributes: {'data-qa': 'dps-link'},
-            href: dpsUrl
-        }) }}
     {% elif breadCrumbs.enabled === true %}
         {{ breadCrumb(breadCrumbs.pageTitle, breadCrumbs.data) }}
     {% endif %}
