@@ -4,6 +4,17 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% set pageTitle = "Prisoners who have arrived in the last 3 days" %}
 
+{% if showBreadCrumb %}
+    {% set hasBackLink = false %}
+    {% set breadCrumbs = {
+        enabled: true,
+        pageTitle:  'Recent arrivals',
+        data: []} 
+    %}
+{% else %}
+    {% set hasBackLink = true %}
+{% endif %}
+
 {% block content %}
     <div class="govuk-!-margin-bottom-8 govuk-body">
         <h1>{{ pageTitle }}</h1>
