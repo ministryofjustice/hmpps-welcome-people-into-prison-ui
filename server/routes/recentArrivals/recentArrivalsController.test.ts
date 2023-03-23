@@ -7,6 +7,7 @@ import Role from '../../authentication/role'
 
 import { createRecentArrival, withBodyScanStatus } from '../../data/__testutils/testObjects'
 import { expectSettingCookie } from '../__testutils/requestTestUtils'
+import config from '../../config'
 import { State } from './state'
 import { createMockExpectedArrivalsService } from '../../services/__testutils/mocks'
 
@@ -33,6 +34,37 @@ afterEach(() => {
 })
 
 describe('GET /recent-arrivals', () => {
+  it('should only display back navigation of the breadcrumb type', () => {
+    config.showBreadCrumb = true
+    app = appWithAllRoutes({ services: { expectedArrivalsService } })
+
+    return request(app)
+      .get('/recent-arrivals')
+      .expect(200)
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(res => {
+        const $ = cheerio.load(res.text)
+        expect($("[data-qa='back-link-navigation']").text()).toContain('Home')
+        expect($("[data-qa='back-link-navigation']").text()).toContain('Recent arrivals')
+        expect($("[data-qa='back-link-navigation']")).toHaveLength(1)
+      })
+  })
+
+  it('should only display back navigation of the back link type', () => {
+    config.showBreadCrumb = false
+    app = appWithAllRoutes({ services: { expectedArrivalsService } })
+
+    return request(app)
+      .get('/recent-arrivals')
+      .expect(200)
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(res => {
+        const $ = cheerio.load(res.text)
+        expect($("[data-qa='back-link-navigation']").text()).toContain('Back')
+        expect($("[data-qa='back-link-navigation']")).toHaveLength(1)
+      })
+  })
+
   it('should render /recent-arrivals page with correct content', () => {
     return request(app)
       .get('/recent-arrivals')
