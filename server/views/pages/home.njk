@@ -19,28 +19,43 @@
     </div>
     <div class="homepage-content">
         <div class="govuk-width-container">
-            <ul class="govuk-grid-row card-group">
-                <li class="govuk-grid-column-one-third card-group__item">
-                    {{ card({
-                        "href": '/confirm-arrival/choose-prisoner',
-                        "clickable": "true",
-                        "heading": 'People booked to arrive today',
-                        "description": 'Confirm the arrival of prisoners booked to arrive today.',
-                        "data-qa": "choose-prisoner"
-                    }) }}
-                </li>
-                {% if temporaryAbsencesEnabled %}
+            <h2 class="govuk-heading-m govuk-!-margin-top-7">Prepare for and confirm new arrivals</h2>
+                <ul class="govuk-grid-row card-group">
                     <li class="govuk-grid-column-one-third card-group__item">
                         {{ card({
-                            "href": '/prisoners-returning',
+                            "href": '/confirm-arrival/choose-prisoner',
                             "clickable": "true",
-                            "heading": 'People returning from temporary absence',
-                            "description": 'Confirm the return of prisoners out on temporary absence.',
-                            "data-qa": "return-from-temporary-absence"
+                            "heading": 'People booked to arrive today',
+                            "description": 'Confirm the arrival of prisoners arriving from court, a custody suite or another establishment.',
+                            "data-qa": "choose-prisoner"
                         }) }}
                     </li>
-                {% endif %}
-            </ul>
+                    {% if temporaryAbsencesEnabled %}
+                        <li class="govuk-grid-column-one-third card-group__item">
+                            {{ card({
+                                "href": '/prisoners-returning',
+                                "clickable": "true",
+                                "heading": 'People returning from temporary absence',
+                                "description": 'Confirm the return of prisoners out on temporary absence.',
+                                "data-qa": "return-from-temporary-absence"
+                            }) }}
+                        </li>
+                    {% endif %}
+                </ul>
+            {% if supportingMultitransactionsEnabled %}
+                <h2 class="govuk-heading-m govuk-!-margin-top-7">Manage recent arrivals</h2>
+                    <ul class="govuk-grid-row card-group">
+                            <li class="govuk-grid-column-one-third card-group__item">
+                                {{ card({
+                                    "href": '/recent-arrivals',
+                                    "clickable": "true",
+                                    "heading": 'Recent arrivals',
+                                    "description": 'Record a body scan and add a case note for prisoners who have arrived within the last 3 days.',
+                                    "data-qa": "recent-arrivals"
+                                }) }}
+                            </li>
+                    </ul>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

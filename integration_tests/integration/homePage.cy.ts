@@ -2,8 +2,12 @@ import Page from '../pages/page'
 import HomePage from '../pages/homePage'
 import ChoosePrisonerPage from '../pages/bookedtoday/choosePrisoner'
 import TemporaryAbsencesPage from '../pages/temporaryabsences/temporaryAbsences'
+import RecentArrivalsPage from '../pages/recentArrivals/recentArrivals'
+import recentArrivalsResponse from '../mockApis/responses/recentArrivals'
 import Role from '../../server/authentication/role'
 import expectedArrivals from '../mockApis/responses/expectedArrivals'
+
+const recentArrivals = recentArrivalsResponse.arrivals({})
 
 context('A user can view the home page', () => {
   beforeEach(() => {
@@ -16,6 +20,7 @@ context('A user can view the home page', () => {
       caseLoadId: 'MDI',
       arrivals: [expectedArrivals.court.current],
     })
+    cy.task('stubRecentArrivals', { caseLoadId: 'MDI', recentArrivals })
     cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [expectedArrivals.prisonTransfer] })
     cy.task('stubTemporaryAbsences', 'MDI')
     cy.task('stubMissingPrisonerImage')
@@ -35,6 +40,7 @@ context('A user can view the home page', () => {
 
     homePage.arrivalsTitle().contains('People booked to arrive today')
     homePage.returnFromTemporaryAbsenceTitle().contains('People returning from temporary absence')
+    homePage.recentArrivalsTitle().contains('Recent arrivals')
   })
 
   it('A user is taken to the choose prisoner page', () => {
@@ -46,6 +52,12 @@ context('A user can view the home page', () => {
     const homePage = Page.verifyOnPage(HomePage)
     homePage.returnFromTemporaryAbsenceTitle().click()
     Page.verifyOnPage(TemporaryAbsencesPage)
+  })
+
+  it('A user is taken to the recent arrivals page', () => {
+    const homePage = Page.verifyOnPage(HomePage)
+    homePage.recentArrivalsTitle().click()
+    Page.verifyOnPage(RecentArrivalsPage)
   })
 
   it('There is a valid  DPS homepage breadcrumb', () => {
