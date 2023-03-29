@@ -47,9 +47,9 @@ context('A user can view all recent arrivals', () => {
       .should('contain.text', `${moment().format('D MMMM YYYY')}, 14:40`)
     recentArrivalsPage.recentArrivals(1, today).location().should('contain.text', 'MDI-1-3-004')
     recentArrivalsPage.recentArrivals(1, today).doNotScan().should('not.exist')
-    recentArrivalsPage.noRecentArrivlsOnDay(today).should('not.exist')
+    recentArrivalsPage.noRecentArrivalsOnDay(today).should('not.exist')
 
-    recentArrivalsPage.noRecentArrivlsOnDay(oneDayAgo).should('be.visible')
+    recentArrivalsPage.noRecentArrivalsOnDay(oneDayAgo).should('be.visible')
 
     recentArrivalsPage.recentArrivals(1, twoDaysAgo).name().should('contain.text', 'Smith, Jim')
     recentArrivalsPage.recentArrivals(1, twoDaysAgo).prisonNumber().should('contain.text', 'A1234AB')
@@ -60,7 +60,7 @@ context('A user can view all recent arrivals', () => {
       .movementDateTime()
       .should('contain.text', `${moment().subtract(2, 'days').format('D MMMM YYYY')}, 13:16`)
     recentArrivalsPage.recentArrivals(1, twoDaysAgo).location().should('contain.text', 'MDI-1-5-119')
-    recentArrivalsPage.noRecentArrivlsOnDay(twoDaysAgo).should('not.exist')
+    recentArrivalsPage.noRecentArrivalsOnDay(twoDaysAgo).should('not.exist')
   })
 
   it("A user can view prisoner's actual image", () => {

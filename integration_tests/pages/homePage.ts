@@ -13,6 +13,8 @@ export default class HomePage extends Page {
 
   returnFromTemporaryAbsenceTitle = (): PageElement => cy.get('[data-qa=return-from-temporary-absence]')
 
+  recentArrivalsTitle = (): PageElement => cy.get('[data-qa=recent-arrivals]')
+
   dpsLink = (): PageElement => cy.get('[data-qa=dps-link]')
 
   loggedInName = (): PageElement => cy.get('[data-qa="header-user-name"]')

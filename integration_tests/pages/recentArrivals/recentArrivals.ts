@@ -23,7 +23,7 @@ export default class RecentArrivalsPage extends Page {
     doNotScan: () => cy.get(`[data-qa=recent-arrival-${date}-${row}] [data-qa=do-not-scan]`),
   })
 
-  noRecentArrivlsOnDay = (date: string): PageElement => cy.get(`[data-qa=no-prisoners-${date}`)
+  noRecentArrivalsOnDay = (date: string): PageElement => cy.get(`[data-qa=no-prisoners-${date}`)
 
   prisonerImage = (index: number) => ({
     check({ href, alt }: { href: string; alt: string }) {
