@@ -30,17 +30,15 @@
                             "data-qa": "choose-prisoner"
                         }) }}
                     </li>
-                    {% if temporaryAbsencesEnabled %}
-                        <li class="govuk-grid-column-one-third card-group__item">
-                            {{ card({
-                                "href": '/prisoners-returning',
-                                "clickable": "true",
-                                "heading": 'People returning from temporary absence',
-                                "description": 'Confirm the return of prisoners out on temporary absence.',
-                                "data-qa": "return-from-temporary-absence"
-                            }) }}
-                        </li>
-                    {% endif %}
+                    <li class="govuk-grid-column-one-third card-group__item">
+                        {{ card({
+                            "href": '/prisoners-returning',
+                            "clickable": "true",
+                            "heading": 'People returning from temporary absence',
+                            "description": 'Confirm the return of prisoners out on temporary absence.',
+                            "data-qa": "return-from-temporary-absence"
+                        }) }}
+                    </li>
                 </ul>
             {% if supportingMultitransactionsEnabled %}
                 <h2 class="govuk-heading-m govuk-!-margin-top-7">Manage recent arrivals</h2>
