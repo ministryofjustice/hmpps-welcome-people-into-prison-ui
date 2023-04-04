@@ -22,6 +22,7 @@ const prisonRecordDetails = expectedArrival.potentialMatches[0]
 
 context('Is Single Match', () => {
   beforeEach(() => {
+    cy.task('resetRedis')
     cy.task('reset')
     cy.task('stubSignIn', [Role.PRISON_RECEPTION, Role.ROLE_INACTIVE_BOOKINGS])
     cy.task('stubAuthUser')
@@ -116,7 +117,7 @@ context('Is Single Match', () => {
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
 
     const prisonerSummaryWithRecordPage = new PrisonerSummaryWithRecordPage(
-      `${expectedArrival.lastName}, ${expectedArrival.firstName}`
+      `${expectedArrival.lastName}, ${expectedArrival.firstName}`,
     )
     prisonerSummaryWithRecordPage.checkOnPage()
     prisonerSummaryWithRecordPage.confirmArrival().click()
@@ -137,7 +138,7 @@ context('Is Single Match', () => {
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
 
     const prisonerSummaryWithRecordPage = new PrisonerSummaryWithRecordPage(
-      `${expectedArrival.lastName}, ${expectedArrival.firstName}`
+      `${expectedArrival.lastName}, ${expectedArrival.firstName}`,
     )
     prisonerSummaryWithRecordPage.checkOnPage()
     prisonerSummaryWithRecordPage.confirmArrival().click()
@@ -157,7 +158,7 @@ context('Is Single Match', () => {
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
 
     const prisonerSummaryWithRecordPage = new PrisonerSummaryWithRecordPage(
-      `${expectedArrival.lastName}, ${expectedArrival.firstName}`
+      `${expectedArrival.lastName}, ${expectedArrival.firstName}`,
     )
     prisonerSummaryWithRecordPage.checkOnPage()
     prisonerSummaryWithRecordPage.confirmArrival().click()

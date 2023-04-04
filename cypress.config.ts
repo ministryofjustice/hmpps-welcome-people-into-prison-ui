@@ -1,6 +1,7 @@
 import { defineConfig } from 'cypress'
 
 import { resetStubs } from './integration_tests/mockApis/wiremock'
+import resetRedisDb from './integration_tests/integration/redis'
 
 import auth from './integration_tests/mockApis/auth'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
@@ -24,6 +25,8 @@ export default defineConfig({
     setupNodeEvents(on) {
       on('task', {
         reset: resetStubs,
+
+        resetRedis: resetRedisDb,
 
         getSignInUrl: auth.getSignInUrl,
         stubSignIn: role => auth.stubSignIn(role),

@@ -41,6 +41,7 @@ const arrival = expectedArrivals.arrival({
 
 context('Arrival matches multiple records', () => {
   beforeEach(() => {
+    cy.task('resetRedis')
     cy.task('reset')
     cy.task('stubSignIn', [Role.PRISON_RECEPTION])
     cy.task('stubPrison', 'MDI')
