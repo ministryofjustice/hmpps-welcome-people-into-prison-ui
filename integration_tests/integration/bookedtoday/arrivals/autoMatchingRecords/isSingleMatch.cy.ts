@@ -117,7 +117,7 @@ context('Is Single Match', () => {
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
 
     const prisonerSummaryWithRecordPage = new PrisonerSummaryWithRecordPage(
-      `${expectedArrival.lastName}, ${expectedArrival.firstName}`,
+      `${expectedArrival.lastName}, ${expectedArrival.firstName}`
     )
     prisonerSummaryWithRecordPage.checkOnPage()
     prisonerSummaryWithRecordPage.confirmArrival().click()
@@ -138,7 +138,7 @@ context('Is Single Match', () => {
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
 
     const prisonerSummaryWithRecordPage = new PrisonerSummaryWithRecordPage(
-      `${expectedArrival.lastName}, ${expectedArrival.firstName}`,
+      `${expectedArrival.lastName}, ${expectedArrival.firstName}`
     )
     prisonerSummaryWithRecordPage.checkOnPage()
     prisonerSummaryWithRecordPage.confirmArrival().click()
@@ -158,7 +158,7 @@ context('Is Single Match', () => {
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
 
     const prisonerSummaryWithRecordPage = new PrisonerSummaryWithRecordPage(
-      `${expectedArrival.lastName}, ${expectedArrival.firstName}`,
+      `${expectedArrival.lastName}, ${expectedArrival.firstName}`
     )
     prisonerSummaryWithRecordPage.checkOnPage()
     prisonerSummaryWithRecordPage.confirmArrival().click()
