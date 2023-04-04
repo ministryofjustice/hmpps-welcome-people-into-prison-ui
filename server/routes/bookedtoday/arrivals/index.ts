@@ -17,6 +17,7 @@ import validationMiddleware from '../../../middleware/validationMiddleware'
 import { State } from './state'
 import Role from '../../../authentication/role'
 import Routes from '../../../utils/routeBuilder'
+import * as doubleClickPrevention from '../../../middleware/doubleClickPreventionMiddleware'
 
 export default function routes(services: Services): Router {
   const checkNewArrivalPresent = State.newArrival.ensurePresent('/page-not-found')
@@ -27,14 +28,17 @@ export default function routes(services: Services): Router {
 
   const reviewDetailsChangeDateOfBirthController = new ReviewDetailsChangeDateOfBirthController()
 
+  const checkIsLocked = doubleClickPrevention.isLocked(services.lockManager, '/duplicate-booking-prevention')
+
   return Routes.forRole(Role.PRISON_RECEPTION)
 
-    .get('/prisoners/:id/review-per-details/new', reviewDetailsController.newReview())
-    .get('/prisoners/:id/review-per-details', reviewDetailsController.showReview())
+    .get('/prisoners/:id/review-per-details/new', checkIsLocked, reviewDetailsController.newReview())
+    .get('/prisoners/:id/review-per-details', checkIsLocked, reviewDetailsController.showReview())
 
     .get(
       '/prisoners/:id/review-per-details/change-name',
       checkNewArrivalPresent,
+      checkIsLocked,
       reviewDetailsChangeNameController.showChangeName()
     )
     .post(
@@ -47,6 +51,7 @@ export default function routes(services: Services): Router {
     .get(
       '/prisoners/:id/review-per-details/change-date-of-birth',
       checkNewArrivalPresent,
+      checkIsLocked,
       reviewDetailsChangeDateOfBirthController.showChangeDateOfBirth()
     )
     .post(

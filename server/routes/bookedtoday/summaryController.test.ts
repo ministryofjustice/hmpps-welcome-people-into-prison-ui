@@ -4,12 +4,16 @@ import request from 'supertest'
 import { appWithAllRoutes } from '../__testutils/appSetup'
 import { createMockExpectedArrivalsService } from '../../services/__testutils/mocks'
 import { MatchType, WithMatchType } from '../../services/matchTypeDecorator'
+import { createLockManager } from '../../data/__testutils/mocks'
 
 let app: Express
+const lockManager = createLockManager()
+
 const expectedArrivalsService = createMockExpectedArrivalsService()
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { expectedArrivalsService } })
+  lockManager.getLockStatus.mockResolvedValue(false)
+  app = appWithAllRoutes({ services: { expectedArrivalsService, lockManager } })
 })
 
 afterEach(() => {
@@ -24,6 +28,15 @@ describe('GET /confirm-arrival/choose-prisoner/:moveId/summary', () => {
     } as WithMatchType<Arrival>)
 
   describe('Summary controller', () => {
+    it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
+      lockManager.getLockStatus.mockResolvedValue(true)
+      app = appWithAllRoutes({ services: { expectedArrivalsService, lockManager } })
+
+      return request(app)
+        .get('/confirm-arrival/choose-prisoner/aaa-111-222/summary')
+        .expect(302)
+        .expect('Location', '/duplicate-booking-prevention')
+    })
     it('should redirect to /summary-with-record for COURT_RETURN', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({

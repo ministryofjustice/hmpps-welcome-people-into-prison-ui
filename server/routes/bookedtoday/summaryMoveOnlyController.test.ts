@@ -5,14 +5,17 @@ import { appWithAllRoutes } from '../__testutils/appSetup'
 import { createMockExpectedArrivalsService } from '../../services/__testutils/mocks'
 import Role from '../../authentication/role'
 import { createArrival, withMatchType } from '../../data/__testutils/testObjects'
+import { createLockManager } from '../../data/__testutils/mocks'
 
 let app: Express
+const lockManager = createLockManager()
 const expectedArrivalsService = createMockExpectedArrivalsService()
 
 const arrival = withMatchType(createArrival({ prisonNumber: null, potentialMatches: [] }))
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
+  lockManager.getLockStatus.mockResolvedValue(false)
+  app = appWithAllRoutes({ services: { expectedArrivalsService, lockManager }, roles: [Role.PRISON_RECEPTION] })
 })
 
 afterEach(() => {
@@ -22,6 +25,19 @@ afterEach(() => {
 describe('GET /prisoner/:id/summary-move-only', () => {
   beforeEach(() => {
     expectedArrivalsService.getArrival.mockResolvedValue(arrival)
+  })
+
+  it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
+    lockManager.getLockStatus.mockResolvedValue(true)
+    app = appWithAllRoutes({
+      services: { lockManager },
+      roles: [Role.PRISON_RECEPTION],
+    })
+
+    return request(app)
+      .get('/prisoners/1111-1111-1111-1111/summary-move-only')
+      .expect(302)
+      .expect('Location', '/duplicate-booking-prevention')
   })
 
   it('should call service method correctly', () => {

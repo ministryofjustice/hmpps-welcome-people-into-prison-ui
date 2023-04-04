@@ -34,6 +34,7 @@ beforeEach(() => {
     'Sentenced - fixed length of time - Extended sentence for public protection'
   )
   lockManager.lock.mockResolvedValue(true)
+  lockManager.getLockStatus.mockResolvedValue(false)
 })
 
 afterEach(() => {
@@ -42,11 +43,21 @@ afterEach(() => {
 
 describe('/checkAnswers', () => {
   describe('view()', () => {
+    it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
+      lockManager.getLockStatus.mockResolvedValue(true)
+      app = appWithAllRoutes({
+        services: { expectedArrivalsService, imprisonmentStatusesService, lockManager },
+        roles: [Role.PRISON_RECEPTION],
+      })
+      return request(app)
+        .get(`/prisoners/${arrivalId}/check-answers`)
+        .expect(302)
+        .expect('Location', '/duplicate-booking-prevention')
+    })
     it('should redirect to authentication error page for non reception users', () => {
       app = appWithAllRoutes({ roles: [] })
       return request(app).get(`/prisoners/${arrivalId}/check-answers`).expect(302).expect('Location', '/autherror')
     })
-
     it('should call service methods correctly', () => {
       return request(app)
         .get(`/prisoners/${arrivalId}/check-answers`)

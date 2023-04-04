@@ -7,15 +7,17 @@ import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
 import Role from '../../../../authentication/role'
 import { State } from '../state'
 import { createNewArrival } from '../../../../data/__testutils/testObjects'
+import { createLockManager } from '../../../../data/__testutils/mocks'
 
 let app: Express
+const lockManager = createLockManager()
 const newArrival = createNewArrival()
 
 beforeEach(() => {
   stubCookie(State.newArrival, newArrival)
-  app = appWithAllRoutes({
-    roles: [Role.PRISON_RECEPTION],
-  })
+  lockManager.getLockStatus.mockResolvedValue(false)
+
+  app = appWithAllRoutes({ services: { lockManager }, roles: [Role.PRISON_RECEPTION] })
 })
 
 afterEach(() => {
@@ -27,6 +29,18 @@ describe('/sex', () => {
     it('should redirect to authentication error page for non reception users', () => {
       app = appWithAllRoutes({ roles: [] })
       return request(app).get('/prisoners/12345-67890/sex').expect(302).expect('Location', '/autherror')
+    })
+
+    it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
+      lockManager.getLockStatus.mockResolvedValue(true)
+      app = appWithAllRoutes({
+        services: { lockManager },
+        roles: [Role.PRISON_RECEPTION],
+      })
+      return request(app)
+        .get('/prisoners/12345-67890/sex')
+        .expect(302)
+        .expect('Location', '/duplicate-booking-prevention')
     })
 
     it.each([{ sex: 'blas' as SexKeys }, { sex: undefined }, { sex: 'TRANS' }])(

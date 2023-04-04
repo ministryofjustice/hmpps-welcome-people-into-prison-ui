@@ -1,0 +1,21 @@
+{% extends "../../../partials/layout.njk" %}
+{% set hasBackLink = false %}
+{% set hasFeedbackBanner = false %}
+
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l govuk-!-margin-bottom-7">This person is being booked in</h1>
+        <p>  It may take a few seconds for the booking to be confirmed. </p>
+        <p>  Don't try to book the person in again. </p>
+        <p >
+            <a class="govuk-link govuk-link--no-visited-state" rel="noreferrer noopener" target="_blank" href="{{dpsUrl}}/establishment-roll">Check the establishment roll (opens in a new tab)</a> to see if they have been added.
+        </p>
+
+        <p class="govuk-!-margin-top-7 ">
+            <a  class="govuk-link govuk-link--no-visited-state" href="/">Return to Welcome people into prison</a>
+        </p>
+    <div>
+</div>
+{% endblock %}
