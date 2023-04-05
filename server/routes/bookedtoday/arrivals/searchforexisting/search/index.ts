@@ -16,6 +16,7 @@ import { State } from '../../state'
 import Routes from '../../../../../utils/routeBuilder'
 import config from '../../../../../config'
 import redirectIfDisabledMiddleware from '../../../../../middleware/redirectIfDisabledMiddleware'
+import * as backTrackPrevention from '../../../../../middleware/backTrackPreventionMiddleware'
 
 export default function routes(services: Services): Router {
   const checkSearchDetailsPresent = State.searchDetails.ensurePresent('/page-not-found')
@@ -30,17 +31,21 @@ export default function routes(services: Services): Router {
 
   const changePncNumberController = new ChangePncNumberController()
 
+  const checkIsLocked = backTrackPrevention.isLocked(services.lockManager, '/duplicate-booking-prevention')
+
   const routePrefix = `/prisoners/:id/search-for-existing-record`
 
   return Routes.forRole(Role.PRISON_RECEPTION)
 
     .get(
       routePrefix,
+      checkIsLocked,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       searchForExistingRecordController.showSearch()
     )
     .get(
       `${routePrefix}/new`,
+      checkIsLocked,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       searchForExistingRecordController.newSearch()
     )
@@ -53,6 +58,7 @@ export default function routes(services: Services): Router {
 
     .get(
       `${routePrefix}/change-name`,
+      checkIsLocked,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       checkSearchDetailsPresent,
       changeNameController.showChangeName()
@@ -67,6 +73,7 @@ export default function routes(services: Services): Router {
 
     .get(
       `${routePrefix}/change-date-of-birth`,
+      checkIsLocked,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       checkSearchDetailsPresent,
       changeDateOfBirthController.showChangeDateOfBirth()
@@ -81,6 +88,7 @@ export default function routes(services: Services): Router {
 
     .get(
       `${routePrefix}/change-prison-number`,
+      checkIsLocked,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       checkSearchDetailsPresent,
       changePrisonNumberController.showChangePrisonNumber()
@@ -94,6 +102,7 @@ export default function routes(services: Services): Router {
     )
     .get(
       `${routePrefix}/remove-prison-number`,
+      checkIsLocked,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       checkSearchDetailsPresent,
       changePrisonNumberController.removePrisonNumber()
@@ -101,6 +110,7 @@ export default function routes(services: Services): Router {
 
     .get(
       `${routePrefix}/change-pnc-number`,
+      checkIsLocked,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       checkSearchDetailsPresent,
       changePncNumberController.showChangePncNumber()
@@ -113,6 +123,7 @@ export default function routes(services: Services): Router {
     )
     .get(
       `${routePrefix}/remove-pnc-number`,
+      checkIsLocked,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       checkSearchDetailsPresent,
       changePncNumberController.removePncNumber()

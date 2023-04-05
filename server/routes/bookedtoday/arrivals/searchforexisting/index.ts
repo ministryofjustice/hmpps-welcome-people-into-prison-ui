@@ -13,6 +13,7 @@ import config from '../../../../config'
 import { State } from '../state'
 import searchRoutes from './search'
 import Routes from '../../../../utils/routeBuilder'
+import * as backTrackPrevention from '../../../../middleware/backTrackPreventionMiddleware'
 
 export default function routes(services: Services): Router {
   const checkSearchDetailsPresent = State.searchDetails.ensurePresent('/page-not-found')
@@ -22,10 +23,12 @@ export default function routes(services: Services): Router {
   const multipleMatchFoundController = new MultipleExistingRecordsFoundController(services.expectedArrivalsService)
   const singleMatchFoundController = new SingleExistingRecordFoundController(services.expectedArrivalsService)
   const noMatchFoundController = new NoExistingRecordsFoundController()
+  const checkIsLocked = backTrackPrevention.isLocked(services.lockManager, '/duplicate-booking-prevention')
 
   return Routes.forRole(Role.PRISON_RECEPTION)
     .get(
       `${basePath}/possible-records-found`,
+      checkIsLocked,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       checkSearchDetailsPresent,
       multipleMatchFoundController.view()
@@ -39,6 +42,7 @@ export default function routes(services: Services): Router {
     )
     .get(
       `${basePath}/record-found`,
+      checkIsLocked,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       checkSearchDetailsPresent,
       singleMatchFoundController.view()
@@ -49,7 +53,7 @@ export default function routes(services: Services): Router {
       checkSearchDetailsPresent,
       singleMatchFoundController.submit()
     )
-    .get(`${basePath}/no-record-found`, noMatchFoundController.view())
+    .get(`${basePath}/no-record-found`, checkIsLocked, noMatchFoundController.view())
     .post(`${basePath}/no-record-found`, checkSearchDetailsPresent, noMatchFoundController.submit())
     .use(searchRoutes(services))
     .build()
