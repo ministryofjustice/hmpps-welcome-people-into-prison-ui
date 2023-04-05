@@ -17,7 +17,7 @@ import validationMiddleware from '../../../middleware/validationMiddleware'
 import { State } from './state'
 import Role from '../../../authentication/role'
 import Routes from '../../../utils/routeBuilder'
-import * as doubleClickPrevention from '../../../middleware/doubleClickPreventionMiddleware'
+import * as backTrackPrevention from '../../../middleware/backTrackPreventionMiddleware'
 
 export default function routes(services: Services): Router {
   const checkNewArrivalPresent = State.newArrival.ensurePresent('/page-not-found')
@@ -28,7 +28,7 @@ export default function routes(services: Services): Router {
 
   const reviewDetailsChangeDateOfBirthController = new ReviewDetailsChangeDateOfBirthController()
 
-  const checkIsLocked = doubleClickPrevention.isLocked(services.lockManager, '/duplicate-booking-prevention')
+  const checkIsLocked = backTrackPrevention.isLocked(services.lockManager, '/duplicate-booking-prevention')
 
   return Routes.forRole(Role.PRISON_RECEPTION)
 

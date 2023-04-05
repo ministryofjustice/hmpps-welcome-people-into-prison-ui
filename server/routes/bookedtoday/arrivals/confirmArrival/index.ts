@@ -9,7 +9,7 @@ import imprisonmentStatusesValidation from '../../../../middleware/validation/im
 import movementReasonsValidation from '../../../../middleware/validation/movementReasonsValidation'
 import sexValidation from '../../../../middleware/validation/sexValidation'
 import validationMiddleware from '../../../../middleware/validationMiddleware'
-import * as doubleClickPrevention from '../../../../middleware/doubleClickPreventionMiddleware'
+import * as backTrackPrevention from '../../../../middleware/backTrackPreventionMiddleware'
 
 import { State } from '../state'
 import type { Services } from '../../../../services'
@@ -33,8 +33,8 @@ export default function routes(services: Services): Router {
     services.imprisonmentStatusesService
   )
 
-  const setLock = doubleClickPrevention.setLock(services.lockManager, '/confirm-arrival/choose-prisoner')
-  const checkIsLocked = doubleClickPrevention.isLocked(services.lockManager, '/duplicate-booking-prevention')
+  const setLock = backTrackPrevention.setLock(services.lockManager, '/confirm-arrival/choose-prisoner')
+  const checkIsLocked = backTrackPrevention.isLocked(services.lockManager, '/duplicate-booking-prevention')
 
   const confirmAddedToRollController = new ConfirmAddedToRollController(services.prisonService)
 

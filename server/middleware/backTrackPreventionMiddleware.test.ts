@@ -1,4 +1,4 @@
-import { setLock, isLocked } from './doubleClickPreventionMiddleware'
+import { setLock, isLocked } from './backTrackPreventionMiddleware'
 import { mockNext, mockRequest, mockResponse } from '../routes/__testutils/requestTestUtils'
 import { createLockManager } from '../data/__testutils/mocks'
 

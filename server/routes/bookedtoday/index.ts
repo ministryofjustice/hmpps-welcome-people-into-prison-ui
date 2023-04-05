@@ -10,14 +10,14 @@ import unexpectedArrivalsRoutes from './unexpectedArrivals'
 import Routes from '../../utils/routeBuilder'
 import SummaryWithRecordController from './summaryWithRecordController'
 import SummaryMoveOnlyController from './summaryMoveOnlyController'
-import * as doubleClickPrevention from '../../middleware/doubleClickPreventionMiddleware'
+import * as backTrackPrevention from '../../middleware/backTrackPreventionMiddleware'
 
 export default function routes(services: Services): Router {
   const choosePrisonerController = new ChoosePrisonerController(services.expectedArrivalsService)
   const summaryWithRecordController = new SummaryWithRecordController(services.expectedArrivalsService)
   const summaryMoveOnlyController = new SummaryMoveOnlyController(services.expectedArrivalsService)
   const summaryController = new SummaryController(services.expectedArrivalsService)
-  const isLocked = doubleClickPrevention.isLocked(services.lockManager, '/duplicate-booking-prevention')
+  const isLocked = backTrackPrevention.isLocked(services.lockManager, '/duplicate-booking-prevention')
 
   return Routes.forAnyRole()
     .get('/confirm-arrival/choose-prisoner/:id/summary', isLocked, summaryController.redirectToSummary())
