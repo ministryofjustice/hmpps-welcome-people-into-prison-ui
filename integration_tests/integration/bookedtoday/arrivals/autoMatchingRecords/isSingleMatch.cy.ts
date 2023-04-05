@@ -22,7 +22,6 @@ const prisonRecordDetails = expectedArrival.potentialMatches[0]
 
 context('Is Single Match', () => {
   beforeEach(() => {
-    cy.task('resetRedis')
     cy.task('reset')
     cy.task('stubSignIn', [Role.PRISON_RECEPTION, Role.ROLE_INACTIVE_BOOKINGS])
     cy.task('stubAuthUser')

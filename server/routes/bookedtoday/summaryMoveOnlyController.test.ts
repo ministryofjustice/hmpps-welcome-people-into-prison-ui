@@ -14,7 +14,7 @@ const expectedArrivalsService = createMockExpectedArrivalsService()
 const arrival = withMatchType(createArrival({ prisonNumber: null, potentialMatches: [] }))
 
 beforeEach(() => {
-  lockManager.getLockStatus.mockResolvedValue(false)
+  lockManager.isLocked.mockResolvedValue(false)
   app = appWithAllRoutes({ services: { expectedArrivalsService, lockManager }, roles: [Role.PRISON_RECEPTION] })
 })
 
@@ -28,12 +28,7 @@ describe('GET /prisoner/:id/summary-move-only', () => {
   })
 
   it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
-    lockManager.getLockStatus.mockResolvedValue(true)
-    app = appWithAllRoutes({
-      services: { lockManager },
-      roles: [Role.PRISON_RECEPTION],
-    })
-
+    lockManager.isLocked.mockResolvedValue(true)
     return request(app)
       .get('/prisoners/1111-1111-1111-1111/summary-move-only')
       .expect(302)

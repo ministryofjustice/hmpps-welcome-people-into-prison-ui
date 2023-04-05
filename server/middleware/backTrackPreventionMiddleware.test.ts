@@ -42,7 +42,7 @@ describe('caseloadCheck', () => {
 
         await isLocked(lockManager, '/some-where')(req, res, next)
 
-        expect(lockManager.getLockStatus).toHaveBeenCalledWith('some-move-id')
+        expect(lockManager.isLocked).toHaveBeenCalledWith('some-move-id')
         expect(next).toHaveBeenCalledWith()
       })
     })

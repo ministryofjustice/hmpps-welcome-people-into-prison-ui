@@ -12,7 +12,7 @@ const lockManager = createLockManager()
 const expectedArrivalsService = createMockExpectedArrivalsService()
 
 beforeEach(() => {
-  lockManager.getLockStatus.mockResolvedValue(false)
+  lockManager.isLocked.mockResolvedValue(false)
   app = appWithAllRoutes({ services: { expectedArrivalsService, lockManager } })
 })
 
@@ -29,9 +29,7 @@ describe('GET /confirm-arrival/choose-prisoner/:moveId/summary', () => {
 
   describe('Summary controller', () => {
     it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
-      lockManager.getLockStatus.mockResolvedValue(true)
-      app = appWithAllRoutes({ services: { expectedArrivalsService, lockManager } })
-
+      lockManager.isLocked.mockResolvedValue(true)
       return request(app)
         .get('/confirm-arrival/choose-prisoner/aaa-111-222/summary')
         .expect(302)

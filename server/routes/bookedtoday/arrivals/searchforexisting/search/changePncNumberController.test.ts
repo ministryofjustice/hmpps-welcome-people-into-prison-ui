@@ -20,7 +20,7 @@ const searchDetails = {
 }
 
 beforeEach(() => {
-  lockManager.getLockStatus.mockResolvedValue(false)
+  lockManager.isLocked.mockResolvedValue(false)
   config.confirmNoIdentifiersEnabled = true
   app = appWithAllRoutes({ services: { lockManager }, roles: [Role.PRISON_RECEPTION] })
 })
@@ -38,13 +38,7 @@ describe('GET /search-for-existing-record/change-pnc-number', () => {
       .expect('Location', '/autherror')
   })
   it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
-    lockManager.getLockStatus.mockResolvedValue(true)
-
-    app = appWithAllRoutes({
-      services: { lockManager },
-      roles: [Role.PRISON_RECEPTION],
-    })
-
+    lockManager.isLocked.mockResolvedValue(true)
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record/change-pnc-number')
       .expect(302)

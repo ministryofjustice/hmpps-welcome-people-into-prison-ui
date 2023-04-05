@@ -29,7 +29,7 @@ let app: Express
 const lockManager = createLockManager()
 
 beforeEach(() => {
-  lockManager.getLockStatus.mockResolvedValue(false)
+  lockManager.isLocked.mockResolvedValue(false)
   config.confirmNoIdentifiersEnabled = true
   expectedArrivalsService.getMatchingRecords.mockResolvedValue([potentialMatch])
   app = appWithAllRoutes({ services: { expectedArrivalsService, lockManager }, roles: [Role.PRISON_RECEPTION] })
@@ -50,13 +50,7 @@ describe('GET /view', () => {
   })
 
   it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
-    lockManager.getLockStatus.mockResolvedValue(true)
-
-    app = appWithAllRoutes({
-      services: { lockManager },
-      roles: [Role.PRISON_RECEPTION],
-    })
-
+    lockManager.isLocked.mockResolvedValue(true)
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record/record-found')
       .expect(302)

@@ -21,9 +21,9 @@ export function isLocked(lockManager: LockManager, location: string): RequestHan
   return async (req, res, next) => {
     const { id: moveid } = req.params
 
-    const getLockStatus = await lockManager.getLockStatus(moveid)
+    const locked = await lockManager.isLocked(moveid)
 
-    if (getLockStatus) {
+    if (locked) {
       logger.warn('duplicate booking prevention triggered')
       return res.redirect(location)
     }

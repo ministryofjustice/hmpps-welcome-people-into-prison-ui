@@ -13,7 +13,6 @@ import bodyScans from '../../mockApis/responses/bodyScans'
 
 context('Choose Prisoner', () => {
   beforeEach(() => {
-    cy.task('resetRedis')
     cy.task('reset')
     cy.task('stubSignIn', [Role.PRISON_RECEPTION])
     cy.task('stubPrison', 'MDI')

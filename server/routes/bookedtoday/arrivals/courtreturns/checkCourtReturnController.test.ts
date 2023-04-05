@@ -27,7 +27,7 @@ const arrival = {
 const arrivalResponse = createArrivalResponse()
 
 beforeEach(() => {
-  lockManager.getLockStatus.mockResolvedValue(false)
+  lockManager.isLocked.mockResolvedValue(false)
   app = appWithAllRoutes({
     services: { expectedArrivalsService, raiseAnalyticsEvent, lockManager },
     roles: [Role.PRISON_RECEPTION],
@@ -51,13 +51,7 @@ describe('checkCourtReturnController', () => {
     })
 
     it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
-      lockManager.getLockStatus.mockResolvedValue(true)
-
-      app = appWithAllRoutes({
-        services: { lockManager },
-        roles: [Role.PRISON_RECEPTION],
-      })
-
+      lockManager.isLocked.mockResolvedValue(true)
       return request(app)
         .get('/prisoners/12345-67890/check-court-return')
         .expect(302)

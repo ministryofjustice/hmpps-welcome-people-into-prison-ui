@@ -13,7 +13,7 @@ const lockManager = createLockManager()
 
 describe('confirmCourtReturnAddedToRollController', () => {
   beforeEach(() => {
-    lockManager.getLockStatus.mockResolvedValue(false)
+    lockManager.isLocked.mockResolvedValue(false)
 
     app = appWithAllRoutes({
       services: { prisonService, lockManager },
@@ -41,13 +41,7 @@ describe('confirmCourtReturnAddedToRollController', () => {
     })
 
     it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
-      lockManager.getLockStatus.mockResolvedValue(true)
-
-      app = appWithAllRoutes({
-        services: { lockManager },
-        roles: [Role.PRISON_RECEPTION],
-      })
-
+      lockManager.isLocked.mockResolvedValue(true)
       return request(app)
         .get('/prisoners/12345-67890/prisoner-returned-from-court')
         .expect(302)

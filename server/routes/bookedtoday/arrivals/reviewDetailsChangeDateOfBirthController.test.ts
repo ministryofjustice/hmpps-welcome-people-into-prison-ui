@@ -22,7 +22,7 @@ const newArrival: NewArrival = {
 }
 
 beforeEach(() => {
-  lockManager.getLockStatus.mockResolvedValue(false)
+  lockManager.isLocked.mockResolvedValue(false)
   config.confirmNoIdentifiersEnabled = true
   app = appWithAllRoutes({ services: { lockManager }, roles: [Role.PRISON_RECEPTION] })
 })
@@ -41,14 +41,8 @@ describe('GET /review-per-details/change-date-of-birth', () => {
   })
 
   it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
-    lockManager.getLockStatus.mockResolvedValue(true)
+    lockManager.isLocked.mockResolvedValue(true)
     stubCookie(State.newArrival, newArrival)
-
-    app = appWithAllRoutes({
-      services: { lockManager },
-      roles: [Role.PRISON_RECEPTION],
-    })
-
     return request(app)
       .get('/prisoners/12345-67890/review-per-details/change-date-of-birth')
       .expect(302)

@@ -25,7 +25,7 @@ export default class LockManager {
     return Boolean(result)
   }
 
-  public async getLockStatus(moveId: string): Promise<boolean> {
+  public async isLocked(moveId: string): Promise<boolean> {
     await this.ensureConnected()
     const result = await this.client.get(`${this.prefix}${moveId}`)
     return Boolean(result)

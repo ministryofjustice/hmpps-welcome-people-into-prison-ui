@@ -36,12 +36,7 @@ describe('GET /review-per-details/new', () => {
 
 describe('GET /review-per-details', () => {
   it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
-    lockManager.getLockStatus.mockResolvedValue(true)
-    app = appWithAllRoutes({
-      services: { lockManager },
-      roles: [Role.PRISON_RECEPTION],
-    })
-
+    lockManager.isLocked.mockResolvedValue(true)
     return request(app)
       .get('/prisoners/12345-67890/review-per-details')
       .expect(302)

@@ -29,7 +29,7 @@ const lockManager = createLockManager()
 
 beforeEach(() => {
   config.confirmNoIdentifiersEnabled = true
-  lockManager.getLockStatus.mockResolvedValue(false)
+  lockManager.isLocked.mockResolvedValue(false)
   app = appWithAllRoutes({ services: { expectedArrivalsService, lockManager }, roles: [Role.PRISON_RECEPTION] })
   expectedArrivalsService.getArrival.mockResolvedValue(arrival)
   expectedArrivalsService.getPrisonerDetails.mockResolvedValue(arrival.potentialMatches[0])
@@ -61,13 +61,7 @@ describe('possible records found', () => {
         })
     })
     it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
-      lockManager.getLockStatus.mockResolvedValue(true)
-
-      app = appWithAllRoutes({
-        services: { lockManager },
-        roles: [Role.PRISON_RECEPTION],
-      })
-
+      lockManager.isLocked.mockResolvedValue(true)
       return request(app)
         .get(`/prisoners/${arrival.id}/possible-records-found`)
         .expect(302)

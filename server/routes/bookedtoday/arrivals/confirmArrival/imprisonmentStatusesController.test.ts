@@ -23,7 +23,7 @@ const imprisonmentStatuses = createImprisonmentStatuses()
 
 beforeEach(() => {
   stubCookie(State.newArrival, newArrival)
-  lockManager.getLockStatus.mockResolvedValue(false)
+  lockManager.isLocked.mockResolvedValue(false)
   app = appWithAllRoutes({ services: { imprisonmentStatusesService, lockManager }, roles: [Role.PRISON_RECEPTION] })
   imprisonmentStatusesService.getAllImprisonmentStatuses.mockResolvedValue(imprisonmentStatuses)
 })
@@ -35,11 +35,7 @@ afterEach(() => {
 describe('/imprisonment-status', () => {
   describe('view()', () => {
     it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
-      lockManager.getLockStatus.mockResolvedValue(true)
-      app = appWithAllRoutes({
-        services: { lockManager },
-        roles: [Role.PRISON_RECEPTION],
-      })
+      lockManager.isLocked.mockResolvedValue(true)
       return request(app)
         .get(`/prisoners/12345-67890/imprisonment-status`)
         .expect(302)
