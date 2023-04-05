@@ -109,7 +109,7 @@ describe('checkCourtReturnController', () => {
           expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
             'Add to the establishment roll',
             'Confirmed court return returned',
-            `AgencyId: MDI, From: ${arrival.fromLocation}, Type: ${arrival.fromLocationType},`,
+            `AgencyId: MDI, From: ${arrival.fromLocation}, Type: ${arrival.fromLocationType},`
           )
         })
     })
@@ -122,7 +122,7 @@ describe('checkCourtReturnController', () => {
             'user1',
             '12345-67890',
             'MDI',
-            'A1234AB',
+            'A1234AB'
           )
         })
     })
