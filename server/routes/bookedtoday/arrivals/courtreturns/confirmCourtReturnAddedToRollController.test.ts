@@ -5,14 +5,18 @@ import { appWithAllRoutes, flashProvider } from '../../../__testutils/appSetup'
 import Role from '../../../../authentication/role'
 import config from '../../../../config'
 import { createMockPrisonService } from '../../../../services/__testutils/mocks'
+import { createLockManager } from '../../../../data/__testutils/mocks'
 
 let app: Express
 const prisonService = createMockPrisonService()
+const lockManager = createLockManager()
 
 describe('confirmCourtReturnAddedToRollController', () => {
   beforeEach(() => {
+    lockManager.getLockStatus.mockResolvedValue(false)
+
     app = appWithAllRoutes({
-      services: { prisonService },
+      services: { prisonService, lockManager },
       roles: [Role.PRISON_RECEPTION],
     })
 
@@ -36,6 +40,19 @@ describe('confirmCourtReturnAddedToRollController', () => {
         .expect('Location', '/autherror')
     })
 
+    it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
+      lockManager.getLockStatus.mockResolvedValue(true)
+
+      app = appWithAllRoutes({
+        services: { lockManager },
+        roles: [Role.PRISON_RECEPTION],
+      })
+
+      return request(app)
+        .get('/prisoners/12345-67890/prisoner-returned-from-court')
+        .expect(302)
+        .expect('Location', '/duplicate-booking-prevention')
+    })
     it('should call service methods correctly', () => {
       flashProvider.mockReturnValue([
         { firstName: 'Jim', lastName: 'Smith', prisonNumber: 'A1234AB', location: 'Reception' },

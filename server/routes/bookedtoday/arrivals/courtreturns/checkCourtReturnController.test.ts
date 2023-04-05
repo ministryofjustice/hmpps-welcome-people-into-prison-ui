@@ -8,10 +8,12 @@ import config from '../../../../config'
 import { createArrival, createArrivalResponse, createPrisonerDetails } from '../../../../data/__testutils/testObjects'
 import { createMockExpectedArrivalsService } from '../../../../services/__testutils/mocks'
 import { MatchType } from '../../../../services/matchTypeDecorator'
+import { createLockManager } from '../../../../data/__testutils/mocks'
 
 let app: Express
 const expectedArrivalsService = createMockExpectedArrivalsService()
 const raiseAnalyticsEvent = jest.fn() as RaiseAnalyticsEvent
+const lockManager = createLockManager()
 
 const courtReturn = createPrisonerDetails()
 
@@ -25,7 +27,11 @@ const arrival = {
 const arrivalResponse = createArrivalResponse()
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { expectedArrivalsService, raiseAnalyticsEvent }, roles: [Role.PRISON_RECEPTION] })
+  lockManager.getLockStatus.mockResolvedValue(false)
+  app = appWithAllRoutes({
+    services: { expectedArrivalsService, raiseAnalyticsEvent, lockManager },
+    roles: [Role.PRISON_RECEPTION],
+  })
   config.confirmEnabled = true
   config.confirmCourtReturnEnabled = true
   expectedArrivalsService.getPrisonerDetailsForArrival.mockResolvedValue(courtReturn)
@@ -44,6 +50,19 @@ describe('checkCourtReturnController', () => {
       return request(app).get('/prisoners/12345-67890/check-court-return').expect(302).expect('Location', '/autherror')
     })
 
+    it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
+      lockManager.getLockStatus.mockResolvedValue(true)
+
+      app = appWithAllRoutes({
+        services: { lockManager },
+        roles: [Role.PRISON_RECEPTION],
+      })
+
+      return request(app)
+        .get('/prisoners/12345-67890/check-court-return')
+        .expect(302)
+        .expect('Location', '/duplicate-booking-prevention')
+    })
     it('should call service method correctly', () => {
       return request(app)
         .get('/prisoners/12345-67890/check-court-return')
@@ -90,7 +109,7 @@ describe('checkCourtReturnController', () => {
           expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
             'Add to the establishment roll',
             'Confirmed court return returned',
-            `AgencyId: MDI, From: ${arrival.fromLocation}, Type: ${arrival.fromLocationType},`
+            `AgencyId: MDI, From: ${arrival.fromLocation}, Type: ${arrival.fromLocationType},`,
           )
         })
     })
@@ -103,7 +122,7 @@ describe('checkCourtReturnController', () => {
             'user1',
             '12345-67890',
             'MDI',
-            'A1234AB'
+            'A1234AB',
           )
         })
     })

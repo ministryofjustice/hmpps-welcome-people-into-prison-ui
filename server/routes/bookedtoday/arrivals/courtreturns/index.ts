@@ -7,6 +7,7 @@ import Role from '../../../../authentication/role'
 import redirectIfDisabled from '../../../../middleware/redirectIfDisabledMiddleware'
 import config from '../../../../config'
 import Routes from '../../../../utils/routeBuilder'
+import * as backTrackPrevention from '../../../../middleware/backTrackPreventionMiddleware'
 
 export default function routes(services: Services): Router {
   const checkCourtReturnController = new CheckCourtReturnController(
@@ -14,10 +15,12 @@ export default function routes(services: Services): Router {
     services.raiseAnalyticsEvent
   )
   const confirmCourtReturnAddedToRollController = new ConfirmCourtReturnAddedToRollController(services.prisonService)
+  const checkIsLocked = backTrackPrevention.isLocked(services.lockManager, '/duplicate-booking-prevention')
 
   return Routes.forRole(Role.PRISON_RECEPTION)
     .get(
       '/prisoners/:id/check-court-return',
+      checkIsLocked,
       redirectIfDisabled(config.confirmCourtReturnEnabled),
       checkCourtReturnController.checkCourtReturn()
     )
@@ -28,6 +31,7 @@ export default function routes(services: Services): Router {
     )
     .get(
       '/prisoners/:id/prisoner-returned-from-court',
+      checkIsLocked,
       redirectIfDisabled(config.confirmEnabled),
       confirmCourtReturnAddedToRollController.view()
     )
