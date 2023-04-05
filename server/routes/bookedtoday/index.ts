@@ -17,15 +17,15 @@ export default function routes(services: Services): Router {
   const summaryWithRecordController = new SummaryWithRecordController(services.expectedArrivalsService)
   const summaryMoveOnlyController = new SummaryMoveOnlyController(services.expectedArrivalsService)
   const summaryController = new SummaryController(services.expectedArrivalsService)
-  const isLocked = backTrackPrevention.isLocked(services.lockManager, '/duplicate-booking-prevention')
+  const checkIsLocked = backTrackPrevention.isLocked(services.lockManager, '/duplicate-booking-prevention')
 
   return Routes.forAnyRole()
-    .get('/confirm-arrival/choose-prisoner/:id/summary', isLocked, summaryController.redirectToSummary())
+    .get('/confirm-arrival/choose-prisoner/:id/summary', checkIsLocked, summaryController.redirectToSummary())
     .get('/confirm-arrival/choose-prisoner', choosePrisonerController.view())
-    .get('/confirm-arrival/choose-prisoner/:id', isLocked, choosePrisonerController.redirectToConfirm())
+    .get('/confirm-arrival/choose-prisoner/:id', checkIsLocked, choosePrisonerController.redirectToConfirm())
 
-    .get('/prisoners/:id/summary-with-record', isLocked, summaryWithRecordController.view())
-    .get('/prisoners/:id/summary-move-only', isLocked, summaryMoveOnlyController.view())
+    .get('/prisoners/:id/summary-with-record', checkIsLocked, summaryWithRecordController.view())
+    .get('/prisoners/:id/summary-move-only', checkIsLocked, summaryMoveOnlyController.view())
 
     .use(transferRoutes(services))
     .use(arrivalRoutes(services))
