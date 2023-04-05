@@ -10,15 +10,18 @@ import validate from '../../../../middleware/validationMiddleware'
 import MatchedRecordSelectionValidation from '../searchforexisting/validation/matchedRecordSelectionValidation'
 import Routes from '../../../../utils/routeBuilder'
 
+import * as backTrackPrevention from '../../../../middleware/backTrackPreventionMiddleware'
+
 export default function routes(services: Services): Router {
   const singleMatchController = new SingleMatchingRecordFoundController(services.expectedArrivalsService)
   const noMatchController = new NoMatchingRecordsFoundController(services.expectedArrivalsService)
   const mulitipleMatchController = new MultipleMatchingRecordsFoundController(services.expectedArrivalsService)
+  const checkIsLocked = backTrackPrevention.isLocked(services.lockManager, '/duplicate-booking-prevention')
 
   return Routes.forRole(Role.PRISON_RECEPTION)
-    .get('/prisoners/:id/record-found', singleMatchController.view())
-    .get('/prisoners/:id/no-record-found', noMatchController.view())
-    .get('/prisoners/:id/possible-records-found', mulitipleMatchController.view())
+    .get('/prisoners/:id/record-found', checkIsLocked, singleMatchController.view())
+    .get('/prisoners/:id/no-record-found', checkIsLocked, noMatchController.view())
+    .get('/prisoners/:id/possible-records-found', checkIsLocked, mulitipleMatchController.view())
     .post(
       '/prisoners/:id/possible-records-found',
       validate(MatchedRecordSelectionValidation),

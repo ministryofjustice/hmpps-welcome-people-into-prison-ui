@@ -8,9 +8,11 @@ import { State } from '../state'
 import { createArrival, createPotentialMatch } from '../../../../data/__testutils/testObjects'
 import { createMockExpectedArrivalsService } from '../../../../services/__testutils/mocks'
 import { MatchType } from '../../../../services/matchTypeDecorator'
+import { createLockManager } from '../../../../data/__testutils/mocks'
 
 let app: Express
 const expectedArrivalsService = createMockExpectedArrivalsService()
+const lockManager = createLockManager()
 
 const arrival = {
   ...createArrival({
@@ -21,7 +23,8 @@ const arrival = {
 }
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
+  lockManager.getLockStatus.mockResolvedValue(false)
+  app = appWithAllRoutes({ services: { expectedArrivalsService, lockManager }, roles: [Role.PRISON_RECEPTION] })
   expectedArrivalsService.getArrival.mockResolvedValue(arrival)
 })
 
@@ -34,7 +37,19 @@ describe('GET /view', () => {
     app = appWithAllRoutes({ roles: [] })
     return request(app).get('/prisoners/12345-67890/record-found').expect(302).expect('Location', '/autherror')
   })
+  it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
+    lockManager.getLockStatus.mockResolvedValue(true)
 
+    app = appWithAllRoutes({
+      services: { lockManager },
+      roles: [Role.PRISON_RECEPTION],
+    })
+
+    return request(app)
+      .get('/prisoners/12345-67890/record-found')
+      .expect(302)
+      .expect('Location', '/duplicate-booking-prevention')
+  })
   it('should call service method correctly', () => {
     return request(app)
       .get('/prisoners/12345-67890/record-found')

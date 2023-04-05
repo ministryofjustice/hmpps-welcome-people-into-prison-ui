@@ -10,6 +10,7 @@ import { State } from '../state'
 import { createArrival, createPotentialMatch } from '../../../../data/__testutils/testObjects'
 import { createMockExpectedArrivalsService } from '../../../../services/__testutils/mocks'
 import { MatchType } from '../../../../services/matchTypeDecorator'
+import { createLockManager } from '../../../../data/__testutils/mocks'
 
 const arrival = {
   ...createArrival({
@@ -24,10 +25,12 @@ const arrival = {
 
 let app: Express
 const expectedArrivalsService = createMockExpectedArrivalsService()
+const lockManager = createLockManager()
 
 beforeEach(() => {
   config.confirmNoIdentifiersEnabled = true
-  app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
+  lockManager.getLockStatus.mockResolvedValue(false)
+  app = appWithAllRoutes({ services: { expectedArrivalsService, lockManager }, roles: [Role.PRISON_RECEPTION] })
   expectedArrivalsService.getArrival.mockResolvedValue(arrival)
   expectedArrivalsService.getPrisonerDetails.mockResolvedValue(arrival.potentialMatches[0])
   flashProvider.mockReturnValue([])
@@ -56,6 +59,19 @@ describe('possible records found', () => {
           const $ = cheerio.load(res.text)
           expect($('h1').text()).toContain('Possible existing records have been found')
         })
+    })
+    it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
+      lockManager.getLockStatus.mockResolvedValue(true)
+
+      app = appWithAllRoutes({
+        services: { lockManager },
+        roles: [Role.PRISON_RECEPTION],
+      })
+
+      return request(app)
+        .get(`/prisoners/${arrival.id}/possible-records-found`)
+        .expect(302)
+        .expect('Location', '/duplicate-booking-prevention')
     })
   })
 
