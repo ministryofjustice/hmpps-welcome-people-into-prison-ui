@@ -2,7 +2,7 @@ import Page, { PageElement } from '../page'
 
 export default class RecentArrivalsPage extends Page {
   constructor() {
-    super('Prisoners who have arrived in the last 3 days')
+    super('People who have arrived in the last 3 days')
   }
 
   static goTo(): RecentArrivalsPage {
