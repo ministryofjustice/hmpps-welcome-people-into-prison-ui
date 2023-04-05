@@ -8,12 +8,15 @@ import { expectSettingCookie } from '../../__testutils/requestTestUtils'
 import { State } from './state'
 import { createMockExpectedArrivalsService } from '../../../services/__testutils/mocks'
 import { MatchType, WithMatchType } from '../../../services/matchTypeDecorator'
+import { createLockManager } from '../../../data/__testutils/mocks'
 
 let app: Express
+const lockManager = createLockManager()
 const expectedArrivalsService = createMockExpectedArrivalsService()
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
+  app = appWithAllRoutes({ services: { expectedArrivalsService, lockManager }, roles: [Role.PRISON_RECEPTION] })
+
   expectedArrivalsService.getArrival.mockResolvedValue(null)
 })
 
@@ -32,6 +35,13 @@ describe('GET /review-per-details/new', () => {
 })
 
 describe('GET /review-per-details', () => {
+  it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
+    lockManager.isLocked.mockResolvedValue(true)
+    return request(app)
+      .get('/prisoners/12345-67890/review-per-details')
+      .expect(302)
+      .expect('Location', '/duplicate-booking-prevention')
+  })
   it('should redirect to authentication error page for non reception users', () => {
     app = appWithAllRoutes({ roles: [] })
     return request(app).get('/prisoners/12345-67890/review-per-details').expect(302).expect('Location', '/autherror')

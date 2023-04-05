@@ -7,17 +7,20 @@ import { State } from '../state'
 import { createNewArrival, statusWithManyReasons } from '../../../../data/__testutils/testObjects'
 import Role from '../../../../authentication/role'
 import { createMockImprisonmentStatusesService } from '../../../../services/__testutils/mocks'
+import { createLockManager } from '../../../../data/__testutils/mocks'
 
 let app: Express
+const lockManager = createLockManager()
 const imprisonmentStatusesService = createMockImprisonmentStatusesService()
 
 const imprisonmentStatus = statusWithManyReasons
 const newArrival = createNewArrival()
 
 beforeEach(() => {
+  lockManager.isLocked.mockResolvedValue(false)
   stubCookie(State.newArrival, newArrival)
 
-  app = appWithAllRoutes({ services: { imprisonmentStatusesService }, roles: [Role.PRISON_RECEPTION] })
+  app = appWithAllRoutes({ services: { imprisonmentStatusesService, lockManager }, roles: [Role.PRISON_RECEPTION] })
   imprisonmentStatusesService.getImprisonmentStatus.mockResolvedValue(imprisonmentStatus)
 })
 
@@ -27,6 +30,13 @@ afterEach(() => {
 
 describe('/determinate-sentence', () => {
   describe('view()', () => {
+    it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
+      lockManager.isLocked.mockResolvedValue(true)
+      return request(app)
+        .get(`/prisoners/12345-67890/imprisonment-status/${imprisonmentStatus.code}`)
+        .expect(302)
+        .expect('Location', '/duplicate-booking-prevention')
+    })
     it('should call service methods correctly', () => {
       return request(app)
         .get(`/prisoners/12345-67890/imprisonment-status/${imprisonmentStatus.code}`)

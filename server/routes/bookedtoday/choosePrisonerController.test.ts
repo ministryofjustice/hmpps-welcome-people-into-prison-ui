@@ -8,12 +8,14 @@ import config from '../../config'
 import { State } from './arrivals/state'
 import { createMockExpectedArrivalsService } from '../../services/__testutils/mocks'
 import { MatchType, WithMatchType } from '../../services/matchTypeDecorator'
+import { createLockManager } from '../../data/__testutils/mocks'
 
 let app: Express
+const lockManager = createLockManager()
 const expectedArrivalsService = createMockExpectedArrivalsService()
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { expectedArrivalsService } })
+  app = appWithAllRoutes({ services: { expectedArrivalsService, lockManager } })
 })
 
 afterEach(() => {

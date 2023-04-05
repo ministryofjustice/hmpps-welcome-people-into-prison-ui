@@ -15,6 +15,9 @@ export default function routes(services: Services): Router {
     .get('/', (_, res) => res.render('pages/home'))
     .get('/prisoners/:prisonNumber/image', prisonerController.getImage())
     .get('/feature-not-available', (req, res) => res.render('pages/featureNotAvailable'))
+    .get('/duplicate-booking-prevention', (req, res) =>
+      res.render('pages/bookedtoday/arrivals/preventDuplicateBooking')
+    )
     .use(bookedTodayRoutes(services))
     .use(temporaryAbsenceRoutes(services))
     .use(recentArrivalsRoutes(services))
