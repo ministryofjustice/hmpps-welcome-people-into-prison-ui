@@ -50,8 +50,8 @@ export default function routes(services: Services): Router {
     )
     .get(
       '/prisoners/:id/imprisonment-status/:imprisonmentStatus',
-      checkNewArrivalPresent,
       checkIsLocked,
+      checkNewArrivalPresent,
       movementReasonsController.view()
     )
     .post(
@@ -61,9 +61,9 @@ export default function routes(services: Services): Router {
     )
     .get(
       '/prisoners/:id/check-answers',
+      checkIsLocked,
       checkNewArrivalPresent,
       redirectIfDisabledMiddleware(config.confirmEnabled),
-      checkIsLocked,
       checkAnswersController.view()
     )
     .post(
