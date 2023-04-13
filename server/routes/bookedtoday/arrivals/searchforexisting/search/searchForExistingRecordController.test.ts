@@ -10,9 +10,11 @@ import { State } from '../../state'
 import { createMockExpectedArrivalsService } from '../../../../../services/__testutils/mocks'
 import { MatchType, WithMatchType } from '../../../../../services/matchTypeDecorator'
 import { createPotentialMatch } from '../../../../../data/__testutils/testObjects'
+import { createLockManager } from '../../../../../data/__testutils/mocks'
 
 let app: Express
 const expectedArrivalsService = createMockExpectedArrivalsService()
+const lockManager = createLockManager()
 
 const searchDetails = {
   firstName: 'James',
@@ -24,7 +26,8 @@ const searchDetails = {
 
 beforeEach(() => {
   config.confirmNoIdentifiersEnabled = true
-  app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
+  lockManager.isLocked.mockResolvedValue(false)
+  app = appWithAllRoutes({ services: { expectedArrivalsService, lockManager }, roles: [Role.PRISON_RECEPTION] })
   expectedArrivalsService.getArrival.mockResolvedValue(null)
   expectedArrivalsService.getMatchingRecords.mockResolvedValue(null)
 })
@@ -44,7 +47,7 @@ describe('GET /search-for-existing-record/new', () => {
 
   it('redirects when disabled', () => {
     config.confirmNoIdentifiersEnabled = false
-    app = appWithAllRoutes({ roles: [Role.PRISON_RECEPTION] })
+    app = appWithAllRoutes({ services: { lockManager }, roles: [Role.PRISON_RECEPTION] })
 
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record/new')
@@ -62,6 +65,13 @@ describe('GET /search-for-existing-record', () => {
       .expect('Location', '/autherror')
   })
 
+  it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
+    lockManager.isLocked.mockResolvedValue(true)
+    return request(app)
+      .get('/prisoners/12345-67890/search-for-existing-record')
+      .expect(302)
+      .expect('Location', '/duplicate-booking-prevention')
+  })
   it('should call service method correctly', () => {
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record')
@@ -73,7 +83,7 @@ describe('GET /search-for-existing-record', () => {
 
   it('redirects when disabled', () => {
     config.confirmNoIdentifiersEnabled = false
-    app = appWithAllRoutes({ roles: [Role.PRISON_RECEPTION] })
+    app = appWithAllRoutes({ services: { lockManager }, roles: [Role.PRISON_RECEPTION] })
 
     return request(app)
       .get('/prisoners/12345-67890/search-for-existing-record')

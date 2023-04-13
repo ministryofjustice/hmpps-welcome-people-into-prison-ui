@@ -19,9 +19,15 @@ export default class LockManager {
     }
   }
 
-  public async lock(key: string, durationSeconds: number): Promise<boolean> {
+  public async lock(moveId: string, durationSeconds: number): Promise<boolean> {
     await this.ensureConnected()
-    const result = await this.client.set(`${this.prefix}${key}`, 'LOCKED', { NX: true, EX: durationSeconds })
+    const result = await this.client.set(`${this.prefix}${moveId}`, 'LOCKED', { NX: true, EX: durationSeconds })
+    return Boolean(result)
+  }
+
+  public async isLocked(moveId: string): Promise<boolean> {
+    await this.ensureConnected()
+    const result = await this.client.get(`${this.prefix}${moveId}`)
     return Boolean(result)
   }
 }

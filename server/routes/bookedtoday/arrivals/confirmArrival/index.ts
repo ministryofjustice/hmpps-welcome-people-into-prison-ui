@@ -9,7 +9,7 @@ import imprisonmentStatusesValidation from '../../../../middleware/validation/im
 import movementReasonsValidation from '../../../../middleware/validation/movementReasonsValidation'
 import sexValidation from '../../../../middleware/validation/sexValidation'
 import validationMiddleware from '../../../../middleware/validationMiddleware'
-import * as doubleClickPrevention from '../../../../middleware/doubleClickPreventionMiddleware'
+import * as backTrackPrevention from '../../../../middleware/backTrackPreventionMiddleware'
 
 import { State } from '../state'
 import type { Services } from '../../../../services'
@@ -33,16 +33,16 @@ export default function routes(services: Services): Router {
     services.imprisonmentStatusesService
   )
 
-  const addLockId = doubleClickPrevention.lockIdGenerator()
-  const obtainLock = doubleClickPrevention.obtainLock(services.lockManager, '/confirm-arrival/choose-prisoner')
+  const setLock = backTrackPrevention.setLock(services.lockManager, '/confirm-arrival/choose-prisoner')
+  const checkIsLocked = backTrackPrevention.isLocked(services.lockManager, '/duplicate-booking-prevention')
 
   const confirmAddedToRollController = new ConfirmAddedToRollController(services.prisonService)
 
   return Routes.forRole(Role.PRISON_RECEPTION)
-    .get('/prisoners/:id/start-confirmation', startConfirmationController.redirect())
-    .get('/prisoners/:id/sex', sexController.view())
+    .get('/prisoners/:id/start-confirmation', checkIsLocked, startConfirmationController.redirect())
+    .get('/prisoners/:id/sex', checkIsLocked, sexController.view())
     .post('/prisoners/:id/sex', validationMiddleware(sexValidation), sexController.assignSex())
-    .get('/prisoners/:id/imprisonment-status', imprisonmentStatusesController.view())
+    .get('/prisoners/:id/imprisonment-status', checkIsLocked, imprisonmentStatusesController.view())
     .post(
       '/prisoners/:id/imprisonment-status',
       validationMiddleware(imprisonmentStatusesValidation),
@@ -50,6 +50,7 @@ export default function routes(services: Services): Router {
     )
     .get(
       '/prisoners/:id/imprisonment-status/:imprisonmentStatus',
+      checkIsLocked,
       checkNewArrivalPresent,
       movementReasonsController.view()
     )
@@ -60,16 +61,16 @@ export default function routes(services: Services): Router {
     )
     .get(
       '/prisoners/:id/check-answers',
+      checkIsLocked,
       checkNewArrivalPresent,
       redirectIfDisabledMiddleware(config.confirmEnabled),
-      addLockId,
       checkAnswersController.view()
     )
     .post(
       '/prisoners/:id/check-answers',
       checkNewArrivalPresent,
       redirectIfDisabledMiddleware(config.confirmEnabled),
-      obtainLock,
+      setLock,
       checkAnswersController.addToRoll()
     )
     .get('/prisoners/:id/confirmation', confirmAddedToRollController.view())

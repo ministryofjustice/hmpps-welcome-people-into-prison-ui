@@ -5,14 +5,18 @@ import Role from '../../../../authentication/role'
 import { createMockExpectedArrivalsService } from '../../../../services/__testutils/mocks'
 import { createNewArrival, createPrisonerDetails } from '../../../../data/__testutils/testObjects'
 import { State } from '../state'
+import { createLockManager } from '../../../../data/__testutils/mocks'
 
 let app: Express
+const lockManager = createLockManager()
 const expectedArrivalsService = createMockExpectedArrivalsService()
 
 beforeEach(() => {
   stubCookie(State.newArrival, createNewArrival())
+  lockManager.isLocked.mockResolvedValue(false)
+
   app = appWithAllRoutes({
-    services: { expectedArrivalsService },
+    services: { expectedArrivalsService, lockManager },
     roles: [Role.PRISON_RECEPTION],
   })
 })
@@ -28,6 +32,13 @@ describe('/start-confirmation', () => {
       return request(app).get('/prisoners/12345-67890/start-confirmation').expect(302).expect('Location', '/autherror')
     })
 
+    it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
+      lockManager.isLocked.mockResolvedValue(true)
+      return request(app)
+        .get(`/prisoners/12345-67890/start-confirmation`)
+        .expect(302)
+        .expect('Location', '/duplicate-booking-prevention')
+    })
     describe('redirect behaviour', () => {
       it('should redirect to confirm arrival flow when no prison number present', () => {
         expectedArrivalsService.getPrisonerDetails.mockResolvedValue(createPrisonerDetails({ prisonNumber: undefined }))

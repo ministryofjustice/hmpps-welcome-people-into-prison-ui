@@ -7,6 +7,7 @@ import config from '../../../../config'
 import { SearchDetails, State } from '../state'
 import { createPotentialMatch } from '../../../../data/__testutils/testObjects'
 import { createMockExpectedArrivalsService } from '../../../../services/__testutils/mocks'
+import { createLockManager } from '../../../../data/__testutils/mocks'
 
 const potentialMatch = createPotentialMatch({
   firstName: 'Jim',
@@ -25,11 +26,13 @@ const searchData = {
 } as SearchDetails
 
 let app: Express
+const lockManager = createLockManager()
 
 beforeEach(() => {
+  lockManager.isLocked.mockResolvedValue(false)
   config.confirmNoIdentifiersEnabled = true
   expectedArrivalsService.getMatchingRecords.mockResolvedValue([potentialMatch])
-  app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
+  app = appWithAllRoutes({ services: { expectedArrivalsService, lockManager }, roles: [Role.PRISON_RECEPTION] })
   stubCookie(State.searchDetails, searchData)
 })
 
@@ -46,6 +49,13 @@ describe('GET /view', () => {
       .expect('Location', '/autherror')
   })
 
+  it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
+    lockManager.isLocked.mockResolvedValue(true)
+    return request(app)
+      .get('/prisoners/12345-67890/search-for-existing-record/record-found')
+      .expect(302)
+      .expect('Location', '/duplicate-booking-prevention')
+  })
   it('should throw error when multiple matches found', () => {
     expectedArrivalsService.getMatchingRecords.mockResolvedValue([potentialMatch, potentialMatch])
     return request(app)

@@ -6,12 +6,15 @@ import Role from '../../../../authentication/role'
 import config from '../../../../config'
 import { expectSettingCookie } from '../../../__testutils/requestTestUtils'
 import { State } from '../state'
+import { createLockManager } from '../../../../data/__testutils/mocks'
 
 let app: Express
+const lockManager = createLockManager()
 
 beforeEach(() => {
+  lockManager.isLocked.mockResolvedValue(false)
   config.confirmNoIdentifiersEnabled = true
-  app = appWithAllRoutes({ roles: [Role.PRISON_RECEPTION] })
+  app = appWithAllRoutes({ services: { lockManager }, roles: [Role.PRISON_RECEPTION] })
 
   stubCookie(State.searchDetails, {
     firstName: 'Jim',
@@ -34,6 +37,14 @@ describe('No records found', () => {
         .get('/prisoners/12345-67890/search-for-existing-record/no-record-found')
         .expect(302)
         .expect('Location', '/autherror')
+    })
+
+    it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
+      lockManager.isLocked.mockResolvedValue(true)
+      return request(app)
+        .get('/prisoners/12345-67890/search-for-existing-record/no-record-found')
+        .expect(302)
+        .expect('Location', '/duplicate-booking-prevention')
     })
 
     it('should display correct page heading', () => {

@@ -11,8 +11,10 @@ import {
   withMatchType,
   withBodyScanInfo,
 } from '../../data/__testutils/testObjects'
+import { createLockManager } from '../../data/__testutils/mocks'
 
 let app: Express
+const lockManager = createLockManager()
 const expectedArrivalsService = createMockExpectedArrivalsService()
 
 const arrivalAndSummaryDetails = {
@@ -21,7 +23,8 @@ const arrivalAndSummaryDetails = {
 }
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [] })
+  lockManager.isLocked.mockResolvedValue(false)
+  app = appWithAllRoutes({ services: { expectedArrivalsService, lockManager }, roles: [] })
 })
 
 afterEach(() => {
@@ -41,6 +44,13 @@ describe('GET /prisoner/:id/summary-with-record', () => {
       })
   })
 
+  it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
+    lockManager.isLocked.mockResolvedValue(true)
+    return request(app)
+      .get('/prisoners/1111-1111-1111-1111/summary-with-record')
+      .expect(302)
+      .expect('Location', '/duplicate-booking-prevention')
+  })
   it('should render summary-with-record page', () => {
     return request(app)
       .get('/prisoners/1111-1111-1111-1111/summary-with-record')
@@ -100,7 +110,7 @@ describe('GET /prisoner/:id/summary-with-record', () => {
   describe('DPS prisoner profile button', () => {
     it('should be displayed', () => {
       app = appWithAllRoutes({
-        services: { expectedArrivalsService },
+        services: { expectedArrivalsService, lockManager },
         roles: [Role.PRISON_RECEPTION, Role.ROLE_INACTIVE_BOOKINGS],
       })
 
@@ -115,7 +125,7 @@ describe('GET /prisoner/:id/summary-with-record', () => {
     })
     it('should not be displayed without Prison Reception role', () => {
       app = appWithAllRoutes({
-        services: { expectedArrivalsService },
+        services: { expectedArrivalsService, lockManager },
         roles: [Role.ROLE_INACTIVE_BOOKINGS],
       })
 
@@ -131,7 +141,7 @@ describe('GET /prisoner/:id/summary-with-record', () => {
 
     it('should not be present without Released Prisoner role', () => {
       app = appWithAllRoutes({
-        services: { expectedArrivalsService },
+        services: { expectedArrivalsService, lockManager },
         roles: [Role.PRISON_RECEPTION],
       })
 
@@ -149,7 +159,7 @@ describe('GET /prisoner/:id/summary-with-record', () => {
       arrivalAndSummaryDetails.summary.bodyScanStatus = 'OK_TO_SCAN'
 
       app = appWithAllRoutes({
-        services: { expectedArrivalsService },
+        services: { expectedArrivalsService, lockManager },
         roles: [Role.PRISON_RECEPTION],
       })
 
@@ -168,7 +178,7 @@ describe('GET /prisoner/:id/summary-with-record', () => {
     arrivalAndSummaryDetails.summary.bodyScanStatus = 'CLOSE_TO_LIMIT'
 
     app = appWithAllRoutes({
-      services: { expectedArrivalsService },
+      services: { expectedArrivalsService, lockManager },
       roles: [Role.PRISON_RECEPTION],
     })
 
@@ -186,7 +196,7 @@ describe('GET /prisoner/:id/summary-with-record', () => {
     arrivalAndSummaryDetails.summary.bodyScanStatus = 'DO_NOT_SCAN'
 
     app = appWithAllRoutes({
-      services: { expectedArrivalsService },
+      services: { expectedArrivalsService, lockManager },
       roles: [Role.PRISON_RECEPTION],
     })
 
