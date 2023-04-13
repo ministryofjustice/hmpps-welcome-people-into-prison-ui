@@ -52,7 +52,7 @@ describe('GET /recent-arrivals/search', () => {
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
         const $ = cheerio.load(res.text)
-        expect($('h1').text()).toContain('Prisoners who have arrived in the last 3 days')
+        expect($('h1').text()).toContain('People who have arrived in the last 3 days')
         expect($('.title-1').text()).toContain('Smith, Sam')
         expect($('#no-results-found').text()).toBe('')
       })

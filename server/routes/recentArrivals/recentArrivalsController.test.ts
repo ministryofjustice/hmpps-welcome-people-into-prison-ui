@@ -71,7 +71,7 @@ describe('GET /recent-arrivals', () => {
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
         const $ = cheerio.load(res.text)
-        expect($('h1').text()).toContain('Prisoners who have arrived in the last 3 days')
+        expect($('h1').text()).toContain('People who have arrived in the last 3 days')
         expect($('#date-1').text()).toBe(today.format('dddd D MMMM'))
         expect($('#date-2').text()).toBe(oneDayAgo.format('dddd D MMMM'))
         expect($('#date-3').text()).toBe(twoDaysAgo.format('dddd D MMMM'))
