@@ -118,13 +118,7 @@ export default [
     code: 'transfer',
     description: 'Transfer from another establishment',
     imprisonmentStatusCode: 'SENT',
-    secondLevelTitle: 'Where is the prisoner being transferred from?',
-    secondLevelValidationMessage: 'Select the type of transfer',
     movementReasons: [
-      {
-        description: 'Another establishment',
-        movementReasonCode: 'INT',
-      },
       {
         description: 'A foreign establishment',
         movementReasonCode: 'T',
