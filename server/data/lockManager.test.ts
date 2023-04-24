@@ -3,6 +3,7 @@ import { RedisClient } from './redisClient'
 
 const redisClient = {
   set: jest.fn(),
+  del: jest.fn(),
   connect: jest.fn(),
   isOpen: true,
 } as unknown as jest.Mocked<RedisClient>
@@ -52,6 +53,22 @@ describe('lockManager', () => {
       await lockManager.lock('some-lock-id', 10)
 
       expect(redisClient.connect).toHaveBeenCalledWith()
+    })
+
+    it('Can delete lock', async () => {
+      redisClient.del.mockResolvedValue(1)
+
+      const result = await lockManager.deleteLock('some-lock-id')
+
+      expect(result).toStrictEqual(true)
+    })
+
+    it('lock deletion not successful', async () => {
+      redisClient.del.mockResolvedValue(0)
+
+      const result = await lockManager.deleteLock('some-lock-id')
+
+      expect(result).toStrictEqual(false)
     })
   })
 })

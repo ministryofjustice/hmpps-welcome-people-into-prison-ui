@@ -30,7 +30,8 @@ export default function routes(services: Services): Router {
 
   const checkAnswersController = new CheckAnswersController(
     services.expectedArrivalsService,
-    services.imprisonmentStatusesService
+    services.imprisonmentStatusesService,
+    services.lockManager
   )
 
   const setLock = backTrackPrevention.setLock(services.lockManager, '/confirm-arrival/choose-prisoner')
