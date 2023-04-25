@@ -102,6 +102,18 @@ describe('/checkAnswers', () => {
         .expect('Location', '/feature-not-available')
     })
 
+    it('should delete lock when redirecting to /feature-not-available', () => {
+      expectedArrivalsService.confirmArrival.mockResolvedValue(null)
+
+      return request(app)
+        .post(`/prisoners/${arrivalId}/check-answers`)
+        .expect(() => {
+          expect(lockManager.deleteLock).toHaveBeenCalledWith(arrivalId)
+        })
+        .expect(302)
+        .expect('Location', '/feature-not-available')
+    })
+
     it('should redirect to authentication error page for non reception users', () => {
       app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [] })
       return request(app).post(`/prisoners/${arrivalId}/check-answers`).expect(302).expect('Location', '/autherror')

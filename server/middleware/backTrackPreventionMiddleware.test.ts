@@ -33,6 +33,14 @@ describe('caseloadCheck', () => {
         expect(next).not.toHaveBeenCalled()
         expect(res.redirect).toHaveBeenCalledWith('/some-where')
       })
+
+      test('does not set lock for unexpected-arrival', async () => {
+        req.params.id = 'unexpected-arrival'
+        await setLock(lockManager, '/some-where')(req, res, next)
+
+        expect(lockManager.lock).not.toHaveBeenCalled()
+        expect(next).toHaveBeenCalledWith()
+      })
     })
 
     describe('isLocked', () => {
