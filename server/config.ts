@@ -119,4 +119,5 @@ export default {
   showExpectedArrivalPrisonerSummary:
     get('SHOW_EXPECTED_ARRIVAL_PRISONER_SUMMARY', 'false', requiredInProduction) === 'true',
   showBreadCrumb: get('SHOW_BREADCRUMB', 'false', requiredInProduction) === 'true',
+  showRecentArrivals: get('SHOW_RECENT_ARRIVALS', 'false', requiredInProduction) === 'true',
 }
