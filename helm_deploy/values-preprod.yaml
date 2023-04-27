@@ -26,3 +26,4 @@ generic-service:
     SERVICE_IS_UNAVAILABLE: "false"
     SHOW_EXPECTED_ARRIVAL_PRISONER_SUMMARY: 'true'
     SHOW_BREADCRUMB: 'false'
+    SHOW_RECENT_ARRIVALS: 'true'

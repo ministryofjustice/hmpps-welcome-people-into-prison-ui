@@ -25,6 +25,7 @@ generic-service:
     SERVICE_IS_UNAVAILABLE: "false"
     SHOW_EXPECTED_ARRIVAL_PRISONER_SUMMARY: 'false'
     SHOW_BREADCRUMB: 'false'
+    SHOW_RECENT_ARRIVALS: 'false'
 
 generic-prometheus-alerts:
   targetApplication: hmpps-welcome-people-into-prison-ui

@@ -25,6 +25,7 @@ const recentArrivals = new Map([
 ])
 
 beforeEach(() => {
+  config.showRecentArrivals = true
   app = appWithAllRoutes({ services: { expectedArrivalsService }, roles: [Role.PRISON_RECEPTION] })
   expectedArrivalsService.getRecentArrivalsGroupedByDate.mockResolvedValue(recentArrivals)
 })
@@ -76,6 +77,11 @@ describe('GET /recent-arrivals', () => {
         expect($('#date-2').text()).toBe(oneDayAgo.format('dddd D MMMM'))
         expect($('#date-3').text()).toBe(twoDaysAgo.format('dddd D MMMM'))
       })
+  })
+
+  it('should redirect to /page-not-found when showRecentArrivals is set to false', () => {
+    config.showRecentArrivals = false
+    return request(app).get('/recent-arrivals').expect(302).expect('Location', '/page-not-found')
   })
 
   it('should call service method correctly', () => {
