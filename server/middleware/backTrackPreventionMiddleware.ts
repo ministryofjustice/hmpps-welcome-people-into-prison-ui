@@ -4,15 +4,17 @@ import type LockManager from '../data/lockManager'
 
 export function setLock(lockManager: LockManager, location: string): RequestHandler {
   return async (req, res, next) => {
-    const { id: moveId } = req.params
+    const { id } = req.params
 
-    const lockSuccessful = await lockManager.lock(moveId, 30)
+    if (id !== 'unexpected-arrival') {
+      const lockSuccessful = await lockManager.lock(id, 30)
 
-    if (!lockSuccessful) {
-      logger.warn(`Unable to set lock - double click? redirecting to: ${location}`)
-      return res.redirect(location)
+      if (!lockSuccessful) {
+        logger.warn(`Unable to set lock - double click? redirecting to: ${location}`)
+        return res.redirect(location)
+      }
+      logger.info(`Double-click prevention lock set for id: ${id}`)
     }
-    logger.info(`Double-click prevention lock set for moveId: ${moveId}`)
     return next()
   }
 }

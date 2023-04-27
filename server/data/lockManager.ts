@@ -30,4 +30,10 @@ export default class LockManager {
     const result = await this.client.get(`${this.prefix}${moveId}`)
     return Boolean(result)
   }
+
+  public async deleteLock(moveId: string): Promise<boolean> {
+    await this.ensureConnected()
+    const result = await this.client.del(`${this.prefix}${moveId}`)
+    return Boolean(result)
+  }
 }

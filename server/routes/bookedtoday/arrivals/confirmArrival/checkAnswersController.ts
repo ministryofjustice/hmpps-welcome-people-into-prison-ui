@@ -1,11 +1,14 @@
 import { RequestHandler } from 'express'
 import type { ImprisonmentStatusesService, ExpectedArrivalsService } from '../../../../services'
 import { State } from '../state'
+import type LockManager from '../../../../data/lockManager'
+import logger from '../../../../../logger'
 
 export default class CheckAnswersController {
   public constructor(
     private readonly expectedArrivalsService: ExpectedArrivalsService,
-    private readonly imprisonmentStatusesService: ImprisonmentStatusesService
+    private readonly imprisonmentStatusesService: ImprisonmentStatusesService,
+    private readonly lockManager: LockManager
   ) {}
 
   public view(): RequestHandler {
@@ -31,6 +34,14 @@ export default class CheckAnswersController {
       const arrivalResponse = await this.expectedArrivalsService.confirmArrival(activeCaseLoadId, username, id, arrival)
 
       if (!arrivalResponse) {
+        const lockDeleted = await this.lockManager.deleteLock(id)
+
+        if (lockDeleted) {
+          logger.info(`deletion of backtracking prevention lock for move id ${id} successful`)
+        } else {
+          logger.warn(`deletion of backtracking prevention lock for move id ${id} not successful`)
+        }
+
         return res.redirect('/feature-not-available')
       }
 
