@@ -4,6 +4,7 @@
 
 {% set pageTitle = "Summary of recent arrival" %}
 {% set hasBackLink = false %}
+{% set isFemalePrison = false %}
 
 {% set breadCrumbs = {
     enabled: true,
@@ -12,6 +13,11 @@
         title: 'Recent arrivals',
         href: '/recent-arrivals'
     }]} %}
+
+
+{% if user.activeCaseLoadId in femalePrisons %}
+    {% set isFemalePrison = true %}
+{% endif %}
 
 
 {% block content %}
@@ -90,7 +96,7 @@
                             </p>
                         </div>
                     {% endif %}
-                    {% if user.activeCaseLoadId !== 'STI' %}
+                    {% if not isFemalePrison %}
                         {{ summaryCard({
                             classes: "govuk-!-margin-bottom-6",
                             titleText: "X-ray body scan",
