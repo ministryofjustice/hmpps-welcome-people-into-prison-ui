@@ -5,6 +5,7 @@ import { appWithAllRoutes } from '../__testutils/appSetup'
 import { createMockExpectedArrivalsService } from '../../services/__testutils/mocks'
 import Role from '../../authentication/role'
 import { createPrisonerDetails, withBodyScanInfo } from '../../data/__testutils/testObjects'
+import config from '../../config'
 
 let app: Express
 const expectedArrivalsService = createMockExpectedArrivalsService()
@@ -42,6 +43,31 @@ describe('GET /recent-arrivals/:id/summary', () => {
         const $ = cheerio.load(res.text)
         expect($('h1').text()).toContain('Smith, Jim')
         expect($('.summary-card').text()).toContain('8 January 1973')
+        expect($('#body-scan').length).toEqual(1)
+      })
+  })
+
+  it('should not render body scan section for female prison', () => {
+    config.femalePrisons = ['ABC', 'XYZ']
+
+    app = appWithAllRoutes({
+      services: { expectedArrivalsService },
+      roles: [Role.PRISON_RECEPTION],
+      userSupplier: () => ({
+        token: 'token',
+        username: 'user1',
+        activeCaseLoadId: 'XYZ',
+        authSource: 'NOMIS',
+      }),
+    })
+
+    return request(app)
+      .get('/recent-arrivals/A1234AB/summary')
+      .expect(200)
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(res => {
+        const $ = cheerio.load(res.text)
+        expect($('#body-scan').length).toEqual(0)
       })
   })
 

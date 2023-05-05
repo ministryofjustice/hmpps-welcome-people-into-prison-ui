@@ -1,5 +1,5 @@
 {% macro summaryCard(params) %}
-    <section class="summary-card{%- if params.classes %} {{ params.classes }}{% endif %}">
+    <section {% if params.id %} id="{{params.id}}" {% endif %} class="summary-card{%- if params.classes %} {{ params.classes }}{% endif %}">
 
         {% if params.titleHtml or params.titleText %}
             <header class="summary-card__header">
