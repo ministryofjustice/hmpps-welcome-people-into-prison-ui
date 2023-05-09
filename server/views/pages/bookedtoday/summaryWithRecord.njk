@@ -4,7 +4,7 @@
 
 {% set pageTitle = "Summary for person booked to arrive" %}
 {% set hasBackLink = false %}
-
+{% set isFemalePrison = false %}
 {% set breadCrumbs = {
     enabled: true,
     pageTitle:  arrival.lastName + ", " + arrival.firstName,
@@ -12,6 +12,11 @@
         title: 'People booked to arrive today',
         href: '/confirm-arrival/choose-prisoner'
     }]} %}
+
+
+{% if user.activeCaseLoadId in femalePrisons %}
+    {% set isFemalePrison = true %}
+{% endif %}
 
 
 {% block content %}
@@ -96,8 +101,9 @@
                             </p>
                         </div>
                     {% endif %}
-                    {% if user.activeCaseLoadId !== 'STI' %}
+                    {% if not isFemalePrison %}
                         {{ summaryCard({
+                            id: "body-scan",
                             classes: "govuk-!-margin-bottom-6",
                             titleText: "X-ray body scan",
                             rows: [

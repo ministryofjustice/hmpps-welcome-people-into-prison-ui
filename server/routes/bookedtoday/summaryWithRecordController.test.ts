@@ -12,6 +12,7 @@ import {
   withBodyScanInfo,
 } from '../../data/__testutils/testObjects'
 import { createLockManager } from '../../data/__testutils/mocks'
+import config from '../../config'
 
 let app: Express
 const lockManager = createLockManager()
@@ -60,6 +61,31 @@ describe('GET /prisoner/:id/summary-with-record', () => {
         const $ = cheerio.load(res.text)
         expect($('h1').text()).toContain('Smith, Jim')
         expect($('.summary-card').text()).toContain('8 January 1973')
+        expect($('#body-scan').length).toEqual(1)
+      })
+  })
+
+  it('should not render body scan section for female prison', () => {
+    config.femalePrisons = ['ABC', 'XYZ']
+
+    app = appWithAllRoutes({
+      services: { expectedArrivalsService, lockManager },
+      roles: [],
+      userSupplier: () => ({
+        token: 'token',
+        username: 'user1',
+        activeCaseLoadId: 'XYZ',
+        authSource: 'NOMIS',
+      }),
+    })
+
+    return request(app)
+      .get('/prisoners/1111-1111-1111-1111/summary-with-record')
+      .expect(200)
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(res => {
+        const $ = cheerio.load(res.text)
+        expect($('#body-scan').length).toEqual(0)
       })
   })
 

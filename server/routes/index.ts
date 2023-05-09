@@ -2,6 +2,7 @@ import type { Router } from 'express'
 import type { Services } from '../services'
 
 import Routes from '../utils/routeBuilder'
+import HomeController from './homeController'
 import PrisonerController from './prisonerController'
 import temporaryAbsenceRoutes from './temporaryabsences'
 import bookedTodayRoutes from './bookedtoday'
@@ -10,9 +11,9 @@ import feedbackRoutes from './feedback'
 
 export default function routes(services: Services): Router {
   const prisonerController = new PrisonerController(services.expectedArrivalsService)
-
+  const homeController = new HomeController()
   return Routes.forAnyRole()
-    .get('/', (_, res) => res.render('pages/home'))
+    .get('/', homeController.view())
     .get('/prisoners/:prisonNumber/image', prisonerController.getImage())
     .get('/feature-not-available', (req, res) => res.render('pages/featureNotAvailable'))
     .get('/duplicate-booking-prevention', (req, res) =>

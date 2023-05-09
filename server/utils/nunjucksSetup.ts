@@ -102,6 +102,7 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addGlobal('showExpectedArrivalPrisonerSummary', config.showExpectedArrivalPrisonerSummary)
   njkEnv.addGlobal('showBreadCrumb', config.showBreadCrumb)
   njkEnv.addGlobal('showRecentArrivals', config.showRecentArrivals)
+  njkEnv.addGlobal('femalePrisons', config.femalePrisons)
 
   return njkEnv
 }
