@@ -1,12 +1,12 @@
 {% extends "../../partials/layout.njk" %}
 {% set hasBackLink = false %}
-{% set pageTitle = "This person has returned to prison" %}
+{% set pageTitle = "Body scan recorded" %}
 
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             {{ govukPanel({
-                titleText: 'Body scan recorded',
+                titleText: pageTitle,
                 html: "<strong>" + prisonerDetails.firstName | escape + " " + prisonerDetails.lastName | escape + "</strong><br>" + bodyScan.date | formatDate("dddd D MMMM") + "<br>" + bodyScan.reason | replace("_", " ") | capitalize + " - " + bodyScan.result | lower,
                 attributes: {
                     'data-qa': 'confirmation-banner'

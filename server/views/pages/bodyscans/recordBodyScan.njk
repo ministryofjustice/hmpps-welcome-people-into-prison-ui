@@ -33,7 +33,6 @@
                     }) }}
                 {% endif %}
 
-                <h2 class="govuk-heading-m">Date of body scan</h2>
                     {% set anotherDateHtml %}
                         {{ govukDateInput({
                             id: "another-date",
@@ -72,6 +71,12 @@
 
                 {{ govukRadios({
                     name: "userSelectedDate",
+                    fieldset: {
+                        legend: {
+                        text: "Date of body scan",
+                        classes: "govuk-fieldset__legend--m"
+                        }
+                    },
                     items: [
                         {
                             value: "today",
@@ -90,9 +95,14 @@
                     errorMessage: errors | findError("userSelectedDate")
                 }) }}
 
-                <h2 class="govuk-heading-m">Reason for body scan</h2>
                 {{ govukRadios({
                     name: "reason",
+                    fieldset: {
+                        legend: {
+                        text: "Reason for body scan",
+                        classes: "govuk-fieldset__legend--m"
+                        }
+                    },
                     items: [
                         {
                             value: "INTELLIGENCE",
@@ -114,15 +124,19 @@
                     errorMessage: errors | findError("reason")
                 }) }}
 
-
                 {{ govukDetails({
                     summaryText: "How to add more information about this body scan",
                     text: "Once you have recorded this body scan, you can add more information by creating a case note on their profile."
                 }) }}
 
-                <h2 class="govuk-heading-m">Result</h2>
                 {{ govukRadios({
                     name: "result",
+                    fieldset: {
+                        legend: {
+                        text: "Result",
+                        classes: "govuk-fieldset__legend--m"
+                        }
+                    },
                     items: [
                         {
                             value: "POSITIVE",
@@ -138,7 +152,6 @@
                     errorMessage: errors | findError("result")
                 }) }}
 
-
                 {{ govukDetails({
                     summaryText: "How to record an inconclusive scan",
                     text: "Inconclusive scans should be recorded as positive. You should then follow your local process for scanning the person again."
@@ -149,7 +162,6 @@
                     attributes: {"data-qa": "submit"},
                     type: "submit"
                 }) }}
-
             </form>
         </div>
     </div>
