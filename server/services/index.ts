@@ -31,7 +31,7 @@ export const services = () => {
     bodyScanInfoDecorator
   )
   const imprisonmentStatusesService = new ImprisonmentStatusesService(hmppsAuthClient, welcomeClientBuilder)
-  const transfersService = new TransfersService(hmppsAuthClient, welcomeClientBuilder)
+  const transfersService = new TransfersService(hmppsAuthClient, welcomeClientBuilder, bodyScanInfoDecorator)
   const prisonService = new PrisonService(hmppsAuthClient, welcomeClientBuilder)
 
   return {

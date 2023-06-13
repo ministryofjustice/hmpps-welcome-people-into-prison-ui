@@ -13,6 +13,7 @@ import type {
   PaginatedResponse,
 } from 'welcome'
 import type { BodyScanStatus } from 'body-scan'
+import { WithBodyScanInfo } from '../../services/bodyScanInfoDecorator'
 
 import type { NewArrival } from '../../routes/bookedtoday/arrivals/state'
 import type { User } from '../hmppsAuthClient'
@@ -165,6 +166,7 @@ export const createTransfer = ({
   pncNumber = '01/1234X',
   date = '2020-02-23',
   fromLocation = 'Kingston-upon-Hull Crown Court',
+  mainOffence = 'theft',
 } = {}): Transfer => ({
   firstName,
   lastName,
@@ -173,7 +175,24 @@ export const createTransfer = ({
   pncNumber,
   date,
   fromLocation,
+  mainOffence,
 })
+
+export const createTransferWithBodyScan = (): WithBodyScanInfo<Transfer> => {
+  return {
+    firstName: 'Sam',
+    lastName: 'Smith',
+    dateOfBirth: '1971-02-01',
+    prisonNumber: 'A1234AA',
+    pncNumber: '01/1234X',
+    date: '2020-02-23',
+    fromLocation: 'Kingston-upon-Hull Crown Court',
+    mainOffence: 'theft',
+    numberOfBodyScans: 0,
+    numberOfBodyScansRemaining: 116,
+    bodyScanStatus: 'OK_TO_SCAN',
+  }
+}
 
 export const createArrivalResponse = ({ prisonNumber = 'A1234AB', location = 'Reception' } = {}): ArrivalResponse => ({
   prisonNumber,

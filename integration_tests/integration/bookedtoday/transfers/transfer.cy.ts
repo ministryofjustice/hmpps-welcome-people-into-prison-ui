@@ -3,9 +3,10 @@ import Role from '../../../../server/authentication/role'
 import expectedArrivals from '../../../mockApis/responses/expectedArrivals'
 import ChoosePrisonerPage from '../../../pages/bookedtoday/choosePrisoner'
 import CheckTransferPage from '../../../pages/bookedtoday/transfers/checkTransfer'
+import SummaryTransferPage from '../../../pages/bookedtoday/transfers/summaryTransfer'
 import ConfirmTransferAddedToRollPage from '../../../pages/bookedtoday/transfers/confirmTransferAddedToRoll'
 
-const expectedArrival = expectedArrivals.prisonTransfer
+const { prisonTransfer } = expectedArrivals
 
 context('Confirm transfer added To roll', () => {
   beforeEach(() => {
@@ -18,20 +19,24 @@ context('Confirm transfer added To roll', () => {
       caseLoadId: 'MDI',
       arrivals: [],
     })
-    cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [expectedArrival] })
+    cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [prisonTransfer] })
     cy.task('stubTransfer', {
       caseLoadId: 'MDI',
-      prisonNumber: expectedArrival.prisonNumber,
-      transfer: expectedArrival,
+      prisonNumber: prisonTransfer.prisonNumber,
+      transfer: prisonTransfer,
     })
-    cy.task('stubConfirmTransfer', expectedArrival.prisonNumber)
+    cy.task('stubConfirmTransfer', prisonTransfer.prisonNumber)
     cy.task('stubRetrieveMultipleBodyScans', [])
+    cy.task('stubGetBodyScan', { prisonNumber: 'G0015GD', details: {} })
     cy.signIn()
   })
 
   it('Can confirm prison transfers', () => {
     {
       ChoosePrisonerPage.goTo().arrivalFrom('PRISON')(1).confirm().click()
+      const summaryTransferPage = Page.verifyOnPage(SummaryTransferPage)
+      summaryTransferPage.breadcrumbs().should('exist')
+      summaryTransferPage.confirmArrival().click()
       const checkTransferPage = Page.verifyOnPage(CheckTransferPage)
       checkTransferPage.choosePrisoner().click()
       Page.verifyOnPage(ChoosePrisonerPage)
@@ -39,6 +44,8 @@ context('Confirm transfer added To roll', () => {
 
     {
       ChoosePrisonerPage.goTo().arrivalFrom('PRISON')(1).confirm().click()
+      const summaryTransferPage = Page.verifyOnPage(SummaryTransferPage)
+      summaryTransferPage.confirmArrival().click()
       const checkTransferPage = Page.verifyOnPage(CheckTransferPage)
       checkTransferPage.addToRoll().click()
     }
@@ -50,7 +57,7 @@ context('Confirm transfer added To roll', () => {
 
     Page.verifyOnPage(ChoosePrisonerPage)
 
-    cy.task('getTransferConfirmationRequest', expectedArrival.prisonNumber).then(request => {
+    cy.task('getTransferConfirmationRequest', prisonTransfer.prisonNumber).then(request => {
       expect(request).to.deep.equal({ prisonId: 'MDI' })
     })
   })

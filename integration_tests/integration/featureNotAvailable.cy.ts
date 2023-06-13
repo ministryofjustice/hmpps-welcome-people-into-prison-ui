@@ -13,6 +13,7 @@ import TemporaryAbsencePage from '../pages/temporaryabsences/temporaryAbsences'
 import CheckTemporaryAbsencePage from '../pages/temporaryabsences/checkTemporaryAbsence'
 import PrisonerSummaryWithRecordPage from '../pages/bookedtoday/prisonerSummaryWithRecord'
 import bodyScans from '../mockApis/responses/bodyScans'
+import SummaryTransferPage from '../pages/bookedtoday/transfers/summaryTransfer'
 
 context('Feature not available', () => {
   beforeEach(() => {
@@ -105,9 +106,14 @@ context('Feature not available', () => {
       transfer: expectedArrival,
     })
     cy.task('stubConfirmTransferReturnsError', { arrivalId: expectedArrival.prisonNumber, status: 404 })
+    cy.task('stubPrisonerDetails', expectedArrivals.prisonerDetails)
+    cy.task('stubGetBodyScan', { prisonNumber: 'G0015GD', details: {} })
+    cy.task('stubPrisonerImage', { prisonerNumber: 'G0015GD', imageFile: '/placeholder-image.png' })
     cy.signIn()
 
     ChoosePrisonerPage.goTo().arrivalFrom('PRISON')(1).confirm().click()
+    const summaryTransferPage = Page.verifyOnPage(SummaryTransferPage)
+    summaryTransferPage.confirmArrival().click()
     const checkTransferPage = Page.verifyOnPage(CheckTransferPage)
     checkTransferPage.addToRoll().click()
     Page.verifyOnPage(FeatureNotAvailable)
