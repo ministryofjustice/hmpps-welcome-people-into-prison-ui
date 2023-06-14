@@ -34,7 +34,7 @@ context('Confirm transfer added To roll', () => {
   it('Can confirm prison transfers', () => {
     {
       ChoosePrisonerPage.goTo().arrivalFrom('PRISON')(1).confirm().click()
-      const summaryTransferPage = Page.verifyOnPage(SummaryTransferPage)
+      const summaryTransferPage = new SummaryTransferPage(`${prisonTransfer.lastName}, ${prisonTransfer.firstName}`)
       summaryTransferPage.breadcrumbs().should('exist')
       summaryTransferPage.confirmArrival().click()
       const checkTransferPage = Page.verifyOnPage(CheckTransferPage)
@@ -44,7 +44,7 @@ context('Confirm transfer added To roll', () => {
 
     {
       ChoosePrisonerPage.goTo().arrivalFrom('PRISON')(1).confirm().click()
-      const summaryTransferPage = Page.verifyOnPage(SummaryTransferPage)
+      const summaryTransferPage = new SummaryTransferPage(`${prisonTransfer.lastName}, ${prisonTransfer.firstName}`)
       summaryTransferPage.confirmArrival().click()
       const checkTransferPage = Page.verifyOnPage(CheckTransferPage)
       checkTransferPage.addToRoll().click()
