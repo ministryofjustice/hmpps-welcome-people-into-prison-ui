@@ -62,7 +62,7 @@ describe('checkCourtReturnController', () => {
         .get('/prisoners/12345-67890/check-court-return')
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(() => {
-          expect(expectedArrivalsService.getPrisonerDetailsForArrival).toHaveBeenCalledWith('12345-67890')
+          expect(expectedArrivalsService.getPrisonerDetailsForArrival).toHaveBeenCalledWith('user1', '12345-67890')
         })
     })
 

@@ -90,7 +90,7 @@ describe('GET /confirm-arrival/choose-prisoner', () => {
       .get('/confirm-arrival/choose-prisoner')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
-        expect(expectedArrivalsService.getArrivalsForToday).toHaveBeenCalledWith(user.activeCaseLoadId)
+        expect(expectedArrivalsService.getArrivalsForToday).toHaveBeenCalledWith('user1', user.activeCaseLoadId)
       })
   })
 
@@ -214,7 +214,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
     return request(app)
       .get('/confirm-arrival/choose-prisoner/aaa-111-222')
       .expect(res => {
-        expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('aaa-111-222')
+        expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('user1', 'aaa-111-222')
       })
   })
 

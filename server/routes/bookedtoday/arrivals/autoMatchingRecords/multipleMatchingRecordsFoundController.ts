@@ -8,8 +8,9 @@ export default class MultipleExistingRecordsFoundController {
   public view(): RequestHandler {
     return async (req: Request, res: Response) => {
       const { id } = req.params
+      const { username } = req.user
 
-      const arrival = await this.expectedArrivalsService.getArrival(id)
+      const arrival = await this.expectedArrivalsService.getArrival(username, id)
 
       return res.render('pages/bookedtoday/arrivals/autoMatchingRecords/multipleMatchingRecordsFound.njk', {
         arrival: {

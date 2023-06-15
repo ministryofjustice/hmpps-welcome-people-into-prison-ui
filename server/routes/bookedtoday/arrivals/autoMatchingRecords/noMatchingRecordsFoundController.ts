@@ -7,7 +7,8 @@ export default class NoMatchingRecordsFoundController {
   public view(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
-      const data = await this.expectedArrivalsService.getArrival(id)
+      const { username } = req.user
+      const data = await this.expectedArrivalsService.getArrival(username, id)
 
       return res.render('pages/bookedtoday/arrivals/autoMatchingRecords/noMatchingRecordsFound.njk', { data })
     }

@@ -5,8 +5,8 @@ import { SearchDetails, State } from '../../state'
 export default class SearchForExistingRecordController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
 
-  private async loadData(id: string, res: Response): Promise<SearchDetails> {
-    const arrival = await this.expectedArrivalsService.getArrival(id)
+  private async loadData(username: string, id: string, res: Response): Promise<SearchDetails> {
+    const arrival = await this.expectedArrivalsService.getArrival(username, id)
 
     const data = {
       firstName: arrival.firstName,
@@ -32,8 +32,9 @@ export default class SearchForExistingRecordController {
   public showSearch(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
+      const { username } = req.user
 
-      const data = State.searchDetails.get(req) || (await this.loadData(id, res))
+      const data = State.searchDetails.get(req) || (await this.loadData(username, id, res))
 
       res.render('pages/bookedtoday/arrivals/searchforexisting/search/searchForExistingRecord.njk', {
         data: { ...data, id },

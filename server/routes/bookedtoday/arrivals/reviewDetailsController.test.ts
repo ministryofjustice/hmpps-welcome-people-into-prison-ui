@@ -52,7 +52,7 @@ describe('GET /review-per-details', () => {
       .get('/prisoners/12345-67890/review-per-details')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
-        expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
+        expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('user1', '12345-67890')
       })
   })
 
