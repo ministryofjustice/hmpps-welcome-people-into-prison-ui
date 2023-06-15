@@ -41,7 +41,7 @@ describe('GET /prisoner/:id/summary-with-record', () => {
     return request(app)
       .get('/prisoners/1111-1111-1111-1111/summary-with-record')
       .expect(res => {
-        expect(expectedArrivalsService.getArrivalAndSummaryDetails).toHaveBeenCalledWith('1111-1111-1111-1111')
+        expect(expectedArrivalsService.getArrivalAndSummaryDetails).toHaveBeenCalledWith('user1', '1111-1111-1111-1111')
       })
   })
 

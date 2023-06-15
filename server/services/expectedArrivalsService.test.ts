@@ -24,6 +24,7 @@ import { MatchType } from './matchTypeDecorator'
 jest.mock('./raiseAnalyticsEvent')
 
 const token = 'some token'
+const username = 'user1'
 
 describe('Expected arrivals service', () => {
   const welcomeClient = createMockWelcomeClient()
@@ -87,7 +88,7 @@ describe('Expected arrivals service', () => {
 
     it('Retrieves expected arrivals sorted alphabetically by name', async () => {
       const today = moment()
-      const result = await service.getArrivalsForToday(res.locals.user.activeCaseLoadId, () => today)
+      const result = await service.getArrivalsForToday(username, res.locals.user.activeCaseLoadId, () => today)
 
       const arrival = (a: Parameters<typeof createArrival>[0]) => withMatchType(withBodyScanStatus(createArrival(a)))
 
@@ -112,7 +113,7 @@ describe('Expected arrivals service', () => {
     })
 
     it('WelcomeClientFactory is called with a token', async () => {
-      await service.getArrivalsForToday(res.locals.user.activeCaseLoadId)
+      await service.getArrivalsForToday(username, res.locals.user.activeCaseLoadId)
 
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       expect(WelcomeClientFactory).toBeCalledWith(token)
@@ -216,7 +217,7 @@ describe('Expected arrivals service', () => {
 
   describe('getArrival', () => {
     it('Calls upstream service correctly', async () => {
-      await service.getArrival('12345-67890')
+      await service.getArrival(username, '12345-67890')
 
       expect(WelcomeClientFactory).toBeCalledWith(token)
       expect(welcomeClient.getArrival).toBeCalledWith('12345-67890')
@@ -226,7 +227,7 @@ describe('Expected arrivals service', () => {
       const arrival = createArrival()
       welcomeClient.getArrival.mockResolvedValue(arrival)
 
-      const result = await service.getArrival('12345-67890')
+      const result = await service.getArrival(username, '12345-67890')
 
       expect(result).toStrictEqual({ ...arrival, matchType: MatchType.SINGLE_MATCH })
     })
@@ -236,7 +237,7 @@ describe('Expected arrivals service', () => {
     it('Calls upstream service correctly', async () => {
       const arrival = createArrival()
       welcomeClient.getArrival.mockResolvedValue(arrival)
-      const result = await service.getPrisonerDetailsForArrival('12345-67890')
+      const result = await service.getPrisonerDetailsForArrival(username, '12345-67890')
 
       expect(WelcomeClientFactory).toBeCalledWith(token)
       expect(welcomeClient.getArrival).toBeCalledWith('12345-67890')
@@ -252,7 +253,7 @@ describe('Expected arrivals service', () => {
       welcomeClient.getArrival.mockResolvedValue(arrival)
       welcomeClient.getPrisonerDetails.mockResolvedValue(createPrisonerDetails())
 
-      const result = await service.getArrivalAndSummaryDetails('12345-67890')
+      const result = await service.getArrivalAndSummaryDetails(username, '12345-67890')
 
       expect(WelcomeClientFactory).toBeCalledWith(token)
       expect(welcomeClient.getArrival).toBeCalledWith('12345-67890')
@@ -271,7 +272,6 @@ describe('Expected arrivals service', () => {
   })
 
   describe('confirm expected arrival', () => {
-    const username = 'Bob'
     const newArrival: NewArrival = createNewArrival()
 
     beforeEach(() => {
@@ -326,7 +326,6 @@ describe('Expected arrivals service', () => {
   })
 
   describe('confirm unexpected arrival', () => {
-    const username = 'Bob'
     const newArrival: NewArrival = createNewArrival({ expected: false })
 
     it('Calls hmppsAuth correctly', async () => {
@@ -378,9 +377,9 @@ describe('Expected arrivals service', () => {
 
   describe('confirmCourtReturn', () => {
     it('Calls upstream services correctly', async () => {
-      await service.confirmCourtReturn('user1', '12345-67890', 'MDI', 'A1234AA')
+      await service.confirmCourtReturn(username, '12345-67890', 'MDI', 'A1234AA')
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith('user1')
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith(username)
       expect(WelcomeClientFactory).toBeCalledWith(token)
       expect(welcomeClient.confirmCourtReturn).toBeCalledWith('12345-67890', 'MDI', 'A1234AA')
     })
@@ -388,7 +387,7 @@ describe('Expected arrivals service', () => {
     it('Should return null', async () => {
       welcomeClient.confirmCourtReturn.mockResolvedValue(null)
 
-      const result = await service.confirmCourtReturn('user1', '12345-67890', 'MDI', 'A1234AA')
+      const result = await service.confirmCourtReturn(username, '12345-67890', 'MDI', 'A1234AA')
       expect(result).toBe(null)
     })
   })

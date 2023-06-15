@@ -9,7 +9,8 @@ export default class ChoosePrisonerController {
   public view(): RequestHandler {
     return async (req, res) => {
       const { activeCaseLoadId } = res.locals.user
-      const expectedArrivals = await this.expectedArrivalsService.getArrivalsForToday(activeCaseLoadId)
+      const { username } = req.user
+      const expectedArrivals = await this.expectedArrivalsService.getArrivalsForToday(username, activeCaseLoadId)
       return res.render('pages/bookedtoday/choosePrisoner.njk', {
         expectedArrivals,
       })
@@ -19,9 +20,10 @@ export default class ChoosePrisonerController {
   public redirectToConfirm(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
+      const { username } = req.user
       State.searchDetails.clear(res)
       State.newArrival.clear(res)
-      const arrival = await this.expectedArrivalsService.getArrival(id)
+      const arrival = await this.expectedArrivalsService.getArrival(username, id)
 
       switch (arrival.matchType) {
         case MatchType.INSUFFICIENT_INFO:

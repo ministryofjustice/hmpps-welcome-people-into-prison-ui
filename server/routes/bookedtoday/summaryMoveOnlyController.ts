@@ -7,7 +7,8 @@ export default class SummaryMoveOnlyController {
   public view(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
-      const arrival = await this.expectedArrivalsService.getArrival(id)
+      const { username } = req.user
+      const arrival = await this.expectedArrivalsService.getArrival(username, id)
       return res.render('pages/bookedtoday/summaryMoveOnly.njk', { arrival })
     }
   }

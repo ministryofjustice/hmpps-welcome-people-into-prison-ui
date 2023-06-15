@@ -30,8 +30,8 @@ export default class ExpectedArrivalsService {
     private readonly matchTypeDecorator: MatchTypeDecorator
   ) {}
 
-  private async getExpectedArrivals(agencyId: string, now: Moment): Promise<Arrival[]> {
-    const token = await this.hmppsAuthClient.getSystemClientToken()
+  private async getExpectedArrivals(username: string, agencyId: string, now: Moment): Promise<Arrival[]> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(username)
     const welcomeClient = this.welcomeClientFactory(token)
     const expectedArrivals = await welcomeClient.getExpectedArrivals(agencyId, now)
     return expectedArrivals.sort(compareByFullName)
@@ -82,11 +82,12 @@ export default class ExpectedArrivalsService {
   }
 
   public async getArrivalsForToday(
+    username: string,
     agencyId: string,
     now = () => moment()
   ): Promise<Map<LocationType, DecoratedArrival[]>> {
     const [expectedArrivals, transfers] = await Promise.all([
-      this.getExpectedArrivals(agencyId, now()),
+      this.getExpectedArrivals(username, agencyId, now()),
       this.getTransfers(agencyId),
     ])
     const allArrivals = [...expectedArrivals, ...transfers]
@@ -101,14 +102,14 @@ export default class ExpectedArrivalsService {
     return this.welcomeClientFactory(token).getImage(prisonNumber)
   }
 
-  public async getArrival(id: string): Promise<WithMatchType<Arrival>> {
-    const token = await this.hmppsAuthClient.getSystemClientToken()
+  public async getArrival(username: string, id: string): Promise<WithMatchType<Arrival>> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(username)
     const arrival = await this.welcomeClientFactory(token).getArrival(id)
     return this.matchTypeDecorator.decorateSingle(arrival)
   }
 
-  public async getPrisonerDetailsForArrival(id: string): Promise<PotentialMatch> {
-    const token = await this.hmppsAuthClient.getSystemClientToken()
+  public async getPrisonerDetailsForArrival(username: string, id: string): Promise<PotentialMatch> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(username)
     const arrival = await this.welcomeClientFactory(token).getArrival(id)
     if (arrival.potentialMatches.length > 1) {
       logger.warn(`multiple matches for move: ${id}`)
@@ -116,8 +117,8 @@ export default class ExpectedArrivalsService {
     return arrival.potentialMatches[0]
   }
 
-  public async getArrivalAndSummaryDetails(id: string): Promise<ArrivalWithSummaryDetails> {
-    const arrival = await this.getArrival(id)
+  public async getArrivalAndSummaryDetails(username: string, id: string): Promise<ArrivalWithSummaryDetails> {
+    const arrival = await this.getArrival(username, id)
     const singleMatch = arrival.potentialMatches[0]
     const summary = await this.getPrisonerSummaryDetails(singleMatch.prisonNumber)
     return { arrival, summary }
@@ -133,7 +134,7 @@ export default class ExpectedArrivalsService {
     const welcomeClient = this.welcomeClientFactory(token)
 
     return arrival.expected
-      ? this.confirmExpectedArrival(welcomeClient, prisonId, id, arrival)
+      ? this.confirmExpectedArrival(welcomeClient, prisonId, id, arrival, username)
       : this.confirmUnexpectedArrival(welcomeClient, prisonId, arrival)
   }
 
@@ -141,9 +142,10 @@ export default class ExpectedArrivalsService {
     welcomeClient: WelcomeClient,
     prisonId: string,
     id: string,
-    arrival: NewArrival
+    arrival: NewArrival,
+    username: string
   ): Promise<ArrivalResponse | null> {
-    const data = await this.getArrival(id)
+    const data = await this.getArrival(username, id)
 
     const response = await welcomeClient.confirmExpectedArrival(id, {
       firstName: arrival.firstName,

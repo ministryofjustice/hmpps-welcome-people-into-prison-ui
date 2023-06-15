@@ -46,7 +46,7 @@ describe('possible records found', () => {
       return request(app)
         .get(`/prisoners/${arrival.id}/possible-records-found`)
         .expect(() => {
-          expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith(arrival.id)
+          expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('user1', arrival.id)
         })
     })
 

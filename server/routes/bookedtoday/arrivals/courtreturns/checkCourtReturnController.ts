@@ -10,8 +10,10 @@ export default class CheckCourtReturnController {
   public checkCourtReturn(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
-      const data = await this.expectedArrivalsService.getPrisonerDetailsForArrival(id)
-      const prisonerEscortRecord = await this.expectedArrivalsService.getArrival(id)
+      const { username } = req.user
+
+      const data = await this.expectedArrivalsService.getPrisonerDetailsForArrival(username, id)
+      const prisonerEscortRecord = await this.expectedArrivalsService.getArrival(username, id)
       return res.render('pages/bookedtoday/arrivals/courtreturns/checkCourtReturn.njk', {
         data,
         id,
@@ -25,8 +27,8 @@ export default class CheckCourtReturnController {
       const { id } = req.params
       const { username } = req.user
       const { activeCaseLoadId } = res.locals.user
-      const arrival = await this.expectedArrivalsService.getArrival(id)
-      const data = await this.expectedArrivalsService.getPrisonerDetailsForArrival(id)
+      const arrival = await this.expectedArrivalsService.getArrival(username, id)
+      const data = await this.expectedArrivalsService.getPrisonerDetailsForArrival(username, id)
 
       const arrivalResponse = await this.expectedArrivalsService.confirmCourtReturn(
         username,

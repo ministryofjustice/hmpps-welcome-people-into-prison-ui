@@ -9,8 +9,9 @@ export default class SummaryWithRecordController {
     return async (req, res) => {
       const { id } = req.params
       const { roles } = res.locals.user
+      const { username } = req.user
       const enableDpsLink = roles.includes(Role.PRISON_RECEPTION) && roles.includes(Role.ROLE_INACTIVE_BOOKINGS)
-      const data = await this.expectedArrivalsService.getArrivalAndSummaryDetails(id)
+      const data = await this.expectedArrivalsService.getArrivalAndSummaryDetails(username, id)
       return res.render('pages/bookedtoday/summaryWithRecord.njk', { ...data, enableDpsLink })
     }
   }

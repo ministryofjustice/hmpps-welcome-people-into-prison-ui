@@ -77,7 +77,7 @@ describe('GET /search-for-existing-record', () => {
       .get('/prisoners/12345-67890/search-for-existing-record')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(() => {
-        expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('12345-67890')
+        expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('user1', '12345-67890')
       })
   })
 

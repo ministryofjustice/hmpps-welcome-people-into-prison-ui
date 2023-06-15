@@ -104,7 +104,7 @@ describe('GET /confirm-arrival/choose-prisoner/:moveId/summary', () => {
       return request(app)
         .get('/confirm-arrival/choose-prisoner/aaa-111-222/summary')
         .expect(res => {
-          expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('aaa-111-222')
+          expect(expectedArrivalsService.getArrival).toHaveBeenCalledWith('user1', 'aaa-111-222')
         })
     })
 
