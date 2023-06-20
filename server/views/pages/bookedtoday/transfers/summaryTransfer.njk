@@ -1,0 +1,130 @@
+{% extends "../../../partials/layout.njk" %}
+{% from "components/summary-card.njk" import summaryCard %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = "Summary for person booked to arrive" %}
+{% set hasBackLink = false %}
+{% set firstName = transfer.firstName%}
+{% set lastName = transfer.lastName%}
+{% set prisonNumber = transfer.prisonNumber %}
+{% set isFemalePrison = false %}
+{% set breadCrumbs = {
+    enabled: true,
+    pageTitle:  lastName+ ", " + firstName,
+    data: [{
+        title: 'People booked to arrive today',
+        href: '/confirm-arrival/choose-prisoner'
+    }]} %}
+
+
+{% if user.activeCaseLoadId in femalePrisons %}
+    {% set isFemalePrison = true %}
+{% endif %}
+
+
+{% block content %}
+    <div class="govuk-!-margin-bottom-8">
+        <div class="govuk-body">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-one-half">
+                        <span class="govuk-caption-l">
+                            Prison number: {{ prisonNumber }} | PNC: {{ transfer.pncNumber }}
+                        </span>
+                    <h1 class="govuk-heading-l">{{ lastName}}, {{ firstName}}</h1>
+                </div>
+                <div class="govuk-grid-column-one-half">
+                    {% if(enableDpsLink) %}
+                        {{ govukButton({
+                            text: "View full prisoner profile",
+                            href: dpsUrl + "/save-backlink?service=welcome-people-into-prison&returnPath=/prisoners/" + prisonNumber + "/summary-transfer&redirectPath=/prisoner/" + prisonNumber,
+                            attributes: {'data-qa':'prisoner-profile'},
+                            classes: "govuk-button--secondary moj-button-menu__item govuk-!-margin-left-3 govuk-!-margin-right-0 float-right"
+                        }) }}
+                    {% endif %}
+                    {{ govukButton({
+                        text: "Confirm arrival",
+                        href: "/prisoners/" + prisonNumber +'/check-transfer',
+                        classes: "float-right",
+                        attributes: {'data-qa':'confirm-arrival'}
+                    }) }}
+                </div>
+            </div>
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full">
+                    <div class="govuk-inset-text govuk-!-margin-top-0">
+                        This summary contains information from the prison record.
+                    </div>
+                </div>
+            </div>
+            <div class='govuk-grid-row'>
+                <div class='govuk-grid-column-two-thirds'>
+                    {{ summaryCard({
+                        classes: "govuk-!-margin-bottom-6",
+                        titleText: "Booking overview",
+                        rows: [
+                            {
+                                key: { text: "Arrival status" },
+                                value: { html: "<strong class=\"govuk-tag govuk-tag--grey\">NOT ARRIVED</strong>" }
+                            },
+                            {
+                                key: { text: "Arriving from" },
+                                value: { text: transfer.fromLocation }
+                            },
+                            {
+                                
+                                key: { text: "Main offence" },
+                                value: {text: transfer.mainOffence | default("Not available", true)},
+                                dataQa:  "main-offence"
+
+                            }
+                        ]
+                    }) }}
+
+                    {{ summaryCard({
+                        classes: "govuk-!-margin-bottom-6",
+                        titleText: "Personal details",
+                        rows: [
+                            {
+                                key: {  text: "Name" },
+                                value: { text:  firstName + " " + lastName}
+                            },
+                            {
+                                key: {  text: "Date of birth" },
+                                value: { text: transfer.dateOfBirth | formatDate('D MMMM YYYY')}
+                            },
+                            {
+                                key: {  text: "Age" },
+                                value: { text: transfer.dateOfBirth | calculateAge + " years old"}
+                            }
+                        ]
+                    }) }}
+                    {% if not isFemalePrison %}
+                        {{ summaryCard({
+                            id: "body-scan",
+                            classes: "govuk-!-margin-bottom-6",
+                            titleText: "X-ray body scan",
+                            rows: [
+                                {
+                                    key: {  text: "Total number of scans", caption: "Since 1 January " + generateCurrentYear() },
+                                    value:  { text: transfer.numberOfBodyScans }
+                                }
+                            ]
+                        }) }}
+                    {% endif %}
+                </div>
+
+                <div class='govuk-grid-column-one-third'>
+                    <div class="profile-align-image">
+                        <img
+                            src="{{ '/prisoners/' + prisonNumber + '/image' }}"
+                            class="govuk-!-margin-bottom-8"
+                            width="160px"
+                            alt="Headshot of {{ lastName}}, {{ firstName}}"
+                            data-qa="prisoner-image"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

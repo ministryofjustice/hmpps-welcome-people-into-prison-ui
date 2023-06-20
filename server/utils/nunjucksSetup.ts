@@ -100,6 +100,7 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addGlobal('supportingMultitransactionsEnabled', config.supportingMultitransactionsEnabled)
   njkEnv.addGlobal('generateCurrentYear', generateCurrentYear)
   njkEnv.addGlobal('showExpectedArrivalPrisonerSummary', config.showExpectedArrivalPrisonerSummary)
+  njkEnv.addGlobal('showPrisonTransferSummary', config.showPrisonTransferSummary)
   njkEnv.addGlobal('showBreadCrumb', config.showBreadCrumb)
   njkEnv.addGlobal('showRecentArrivals', config.showRecentArrivals)
   njkEnv.addGlobal('femalePrisons', config.femalePrisons)

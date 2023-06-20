@@ -13,6 +13,7 @@ import TemporaryAbsencePage from '../pages/temporaryabsences/temporaryAbsences'
 import CheckTemporaryAbsencePage from '../pages/temporaryabsences/checkTemporaryAbsence'
 import PrisonerSummaryWithRecordPage from '../pages/bookedtoday/prisonerSummaryWithRecord'
 import bodyScans from '../mockApis/responses/bodyScans'
+import SummaryTransferPage from '../pages/bookedtoday/transfers/summaryTransfer'
 
 context('Feature not available', () => {
   beforeEach(() => {
@@ -92,22 +93,29 @@ context('Feature not available', () => {
   })
 
   it('Should display feature-not-available page when client error during prison transfer', () => {
-    const expectedArrival = expectedArrivals.prisonTransfer
+    const { prisonTransfer } = expectedArrivals
 
     cy.task('stubExpectedArrivals', {
       caseLoadId: 'MDI',
       arrivals: [],
     })
-    cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [expectedArrival] })
+    cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [prisonTransfer] })
     cy.task('stubTransfer', {
       caseLoadId: 'MDI',
-      prisonNumber: expectedArrival.prisonNumber,
-      transfer: expectedArrival,
+      prisonNumber: prisonTransfer.prisonNumber,
+      transfer: prisonTransfer,
     })
-    cy.task('stubConfirmTransferReturnsError', { arrivalId: expectedArrival.prisonNumber, status: 404 })
+    cy.task('stubConfirmTransferReturnsError', { arrivalId: prisonTransfer.prisonNumber, status: 404 })
+    cy.task('stubPrisonerDetails', expectedArrivals.prisonTransfer)
+    cy.task('stubGetBodyScan', { prisonNumber: 'G0015GD', details: {} })
+    cy.task('stubPrisonerImage', { prisonerNumber: 'G0015GD', imageFile: '/placeholder-image.png' })
     cy.signIn()
 
     ChoosePrisonerPage.goTo().arrivalFrom('PRISON')(1).confirm().click()
+    const summaryTransferPage = new SummaryTransferPage(
+      `${expectedArrivals.prisonTransfer.lastName}, ${expectedArrivals.prisonTransfer.firstName}`
+    )
+    summaryTransferPage.confirmArrival().click()
     const checkTransferPage = Page.verifyOnPage(CheckTransferPage)
     checkTransferPage.addToRoll().click()
     Page.verifyOnPage(FeatureNotAvailable)

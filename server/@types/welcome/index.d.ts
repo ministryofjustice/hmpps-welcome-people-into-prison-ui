@@ -89,6 +89,7 @@ declare module 'welcome' {
       pncNumber: string
       date: string
       fromLocation: string
+      mainOffence?: string
     }
     TemporaryAbsence: {
       firstName: string

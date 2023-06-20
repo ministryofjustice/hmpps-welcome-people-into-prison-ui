@@ -2,6 +2,8 @@ import type { Arrival } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
+import { LocationType } from 'welcome'
+import { DecoratedArrival } from '../../services/expectedArrivalsService'
 import { user, appWithAllRoutes, stubCookie } from '../__testutils/appSetup'
 import { expectSettingCookie } from '../__testutils/requestTestUtils'
 import config from '../../config'
@@ -13,9 +15,16 @@ import { createLockManager } from '../../data/__testutils/mocks'
 let app: Express
 const lockManager = createLockManager()
 const expectedArrivalsService = createMockExpectedArrivalsService()
+const transfers = new Map()
 
 beforeEach(() => {
   app = appWithAllRoutes({ services: { expectedArrivalsService, lockManager } })
+
+  transfers.set('PRISON', [
+    {
+      prisonNumber: 'A12345',
+    },
+  ])
 })
 
 afterEach(() => {
@@ -100,6 +109,44 @@ describe('GET /confirm-arrival/choose-prisoner', () => {
       .get('/confirm-arrival/choose-prisoner')
       .expect(500)
       .expect('Content-Type', 'text/html; charset=utf-8')
+  })
+
+  it('should set href in prison transfer to /summary-transfer', () => {
+    config.showPrisonTransferSummary = true
+    expectedArrivalsService.getArrivalsForToday.mockResolvedValue(transfers as Map<LocationType, DecoratedArrival[]>)
+
+    app = appWithAllRoutes({
+      userSupplier: () => ({ ...user, isReceptionUser: true }),
+      services: { expectedArrivalsService },
+    })
+
+    return request(app)
+      .get('/confirm-arrival/choose-prisoner')
+      .expect(200)
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(res => {
+        const $ = cheerio.load(res.text)
+        expect($('[data-qa=PRISON-title-1] a').attr('href')).toEqual('/prisoners/A12345/summary-transfer')
+      })
+  })
+
+  it('should set href in  prison transfer to /check-transfer', () => {
+    config.showPrisonTransferSummary = false
+    expectedArrivalsService.getArrivalsForToday.mockResolvedValue(transfers as Map<LocationType, DecoratedArrival[]>)
+
+    app = appWithAllRoutes({
+      userSupplier: () => ({ ...user, isReceptionUser: true }),
+      services: { expectedArrivalsService },
+    })
+
+    return request(app)
+      .get('/confirm-arrival/choose-prisoner')
+      .expect(200)
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .expect(res => {
+        const $ = cheerio.load(res.text)
+        expect($('[data-qa=PRISON-title-1] a').attr('href')).toEqual('/prisoners/A12345/check-transfer')
+      })
   })
 })
 

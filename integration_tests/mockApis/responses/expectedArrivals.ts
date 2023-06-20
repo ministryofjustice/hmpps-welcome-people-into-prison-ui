@@ -43,6 +43,17 @@ export default {
     fromLocation: 'Leeds',
     fromLocationType: 'PRISON',
   },
+  prisonerDetails: {
+    firstName: 'Karl',
+    lastName: 'Offender',
+    dateOfBirth: '1985-01-01',
+    prisonNumber: 'G0015GD',
+    pncNumber: '01/5678A',
+    croNumber: '01/234567',
+    sex: 'MALE',
+    arrivalType: 'TRANSFER',
+    arrivalTypeDescription: 'description',
+  },
   court: {
     current: {
       id: '00000-22222',
