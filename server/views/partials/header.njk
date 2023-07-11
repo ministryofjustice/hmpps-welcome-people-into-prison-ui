@@ -1,7 +1,7 @@
 {%- from "govuk/components/tag/macro.njk" import govukTag -%}
 {% if tagManagerContainerId %}
   <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{tagManagerContainerid}}{{ tagManagerEnvironment | safe }}"
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{tagManagerContainerId}}{{ tagManagerEnvironment | safe }}"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
 {% endif %}
