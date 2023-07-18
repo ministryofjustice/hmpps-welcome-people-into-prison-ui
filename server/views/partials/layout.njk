@@ -18,11 +18,6 @@
 
 {% block head %}
 
-    {% if googleAnalyticsId %}
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="{{ 'https://www.googletagmanager.com/gtag/js?id=' + googleAnalyticsId }}"></script>
-        <script src="/assets/js/googleAnalytics.js" id='google-analytics' data-analytics={{ googleAnalyticsId }}></script>
-    {% endif %}
 
     {% if tagManagerContainerId %}
         <!-- Google Tag Manager -->
