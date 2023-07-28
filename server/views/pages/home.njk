@@ -1,7 +1,8 @@
 {% extends "../partials/layout.njk" %}
 {% from "../components/card.njk" import card %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% set title = "Welcome people into prison" %}
+{% set pageTitle = "Welcome people into prison" %} 
+
 {% set feedbackBannerBackground = 'feedbackBannerBackground'%}
 {% set hasBackLink = false %}
 {% set isFemalePrison = false %}
@@ -20,7 +21,7 @@
             href: dpsUrl
         }) }}
 
-        <h1 class="govuk-heading-l govuk-!-margin-top-7">{{ title }}</h1>
+        <h1 class="govuk-heading-l govuk-!-margin-top-7">{{ pageTitle }}</h1>
     </div>
     <div class="homepage-content">
         <div class="govuk-width-container">

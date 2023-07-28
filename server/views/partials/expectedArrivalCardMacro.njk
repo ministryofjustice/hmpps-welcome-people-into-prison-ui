@@ -53,7 +53,7 @@
                 {% set hasPhoto = arrival.matchType in ['SINGLE_MATCH', 'COURT_RETURN'] %}
                 <img 
                   src="{{ '/prisoners/' + arrival.potentialMatches[0].prisonNumber + '/image' if hasPhoto else '/assets/images/placeholder-image.png' }}" class="app-card__image" 
-                  alt="{{ arrival.lastName + ', ' + arrival.firstName if hasPhoto else '' }}" data-qa="prisoner-image"/>
+                  alt="{{ arrival.lastName + ', ' + arrival.firstName if hasPhoto else 'No photo available' }}" data-qa="prisoner-image"/>
             </aside>
             <div class="app-card__content">
                 <header class="app-card__header">
@@ -85,7 +85,7 @@
     <div class='app-card__content'>
         <div class="app-card app-card--with-aside">
             <aside class="app-card__aside">
-                <img src="{{ '/prisoners/' + arrival.prisonNumber + '/image' if arrival.prisonNumber else '/assets/images/placeholder-image.png' }}" class="app-card__image" alt="{{ arrival.lastName }}, {{ arrival.firstName }}" data-qa="prisoner-image"/>
+              <img src="{{ '/prisoners/' + arrival.prisonNumber + '/image' if arrival.prisonNumber else '/assets/images/placeholder-image.png' }}" class="app-card__image" alt="{{ arrival.lastName }}, {{ arrival.firstName }}" data-qa="prisoner-image"/>
             </aside>
             <div class="app-card__content">
                 <header class="app-card__header">
