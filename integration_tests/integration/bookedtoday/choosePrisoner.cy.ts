@@ -118,7 +118,7 @@ context('Choose Prisoner', () => {
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage.prisonerImage(0).check({
       href: '/assets/images/placeholder-image.png',
-      alt: '',
+      alt: 'No photo available',
     })
   })
 
@@ -138,7 +138,7 @@ context('Choose Prisoner', () => {
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage.prisonerImage(0).check({
       href: '/assets/images/placeholder-image.png',
-      alt: '',
+      alt: 'No photo available',
     })
   })
 
