@@ -15,6 +15,7 @@
 {% from "../components/feedback-banner.njk" import feedbackBanner %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "./breadCrumb.njk" import breadCrumb %}
+{% from "govuk/components/skip-link/macro.njk" import govukSkipLink %}
 
 {% block head %}
 
@@ -71,6 +72,14 @@
 {% endblock %}
 
 {% block bodyStart %}
+{% endblock %}
+
+{% block skipLink %}
+    {{ govukSkipLink({
+    href: '#main-content',
+    text: 'Skip to main content',
+    classes: "skip-link"
+    }) }}
 {% endblock %}
 
 {% block beforeContent %}
