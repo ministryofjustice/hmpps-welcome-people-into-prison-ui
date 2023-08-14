@@ -14,6 +14,7 @@
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 {% from "../components/feedback-banner.njk" import feedbackBanner %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/skip-link/macro.njk" import govukSkipLink %}
 {% from "./breadCrumb.njk" import breadCrumb %}
 
 {% block head %}
@@ -65,6 +66,14 @@
         {% if errors.length %}Error:{% endif %} {{ pageTitle | default(applicationName) }}
     {% endblock %}
 </title>
+
+{% block skipLink %}
+    {{ govukSkipLink({
+    href: '#main-content',
+    text: 'Skip to main content',
+    classes: "skip-link"
+    }) }}
+{% endblock %}
 
 {% block header %}
     {% include "./header.njk" %}

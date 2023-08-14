@@ -11,7 +11,15 @@
     {% set isFemalePrison = true %}
 {% endif %}
 
-{% block content %}
+{% block skipLink %}
+    {{ govukSkipLink({
+    text: "Skip to main content",
+    href: "#homepage-content",
+    classes: "skip-link"
+    }) }}
+{% endblock %}
+
+{% block main %}
     <div class="govuk-width-container">      
         {{ govukBackLink({
             text: "Digital Prison Services",
@@ -19,54 +27,56 @@
             attributes: {'data-qa': 'dps-link'},
             href: dpsUrl
         }) }}
-    </div>
-    <div class="govuk-width-container">
         <h1 class="govuk-heading-l govuk-!-margin-top-7">{{ pageTitle }}</h1>
-        <h2 class="govuk-heading-m govuk-!-margin-top-7">Prepare for and confirm new arrivals</h2>
-            <ul class="govuk-grid-row card-group">
-                <li class="govuk-grid-column-one-third card-group__item">
-                    {{ card({
-                        "href": '/confirm-arrival/choose-prisoner',
-                        "clickable": "true",
-                        "heading": 'People booked to arrive today',
-                        "description": 'Confirm the arrival of prisoners arriving from court, a custody suite or another establishment.',
-                        "data-qa": "choose-prisoner"
-                    }) }}
-                </li>
-                <li class="govuk-grid-column-one-third card-group__item">
-                    {{ card({
-                        "href": '/prisoners-returning',
-                        "clickable": "true",
-                        "heading": 'People returning from temporary absence',
-                        "description": 'Confirm the return of prisoners out on temporary absence.',
-                        "data-qa": "return-from-temporary-absence"
-                    }) }}
-                </li>
-            </ul>
-        {% if showRecentArrivals %}
-            <h2 class="govuk-heading-m govuk-!-margin-top-7">Manage recent arrivals</h2>
+    </div>
+    <div class="homepage-content" id="homepage-content">
+        <div class="govuk-width-container">
+            <h2 class="govuk-heading-m govuk-!-margin-top-7">Prepare for and confirm new arrivals</h2>
                 <ul class="govuk-grid-row card-group">
-                        <li class="govuk-grid-column-one-third card-group__item">
-                            {% if isFemalePrison %}
-                                {{ card({
-                                    "href": '/recent-arrivals',
-                                    "clickable": "true",
-                                    "heading": 'Recent arrivals',
-                                    "description": 'Manage reception tasks for prisoners who have arrived within the last 3 days.',
-                                    "data-qa": "recent-arrivals"
-                                }) }}
-                            {% else %}
-                                {{ card({
-                                    "href": '/recent-arrivals',
-                                    "clickable": "true",
-                                    "heading": 'Recent arrivals',
-                                    "description": 'Record a body scan and add a case note for prisoners who have arrived within the last 3 days.',
-                                    "data-qa": "recent-arrivals"
-                                }) }}
-                            {% endif %}
-                        </li>
+                    <li class="govuk-grid-column-one-third card-group__item">
+                        {{ card({
+                            "href": '/confirm-arrival/choose-prisoner',
+                            "clickable": "true",
+                            "heading": 'People booked to arrive today',
+                            "description": 'Confirm the arrival of prisoners arriving from court, a custody suite or another establishment.',
+                            "data-qa": "choose-prisoner"
+                        }) }}
+                    </li>
+                    <li class="govuk-grid-column-one-third card-group__item">
+                        {{ card({
+                            "href": '/prisoners-returning',
+                            "clickable": "true",
+                            "heading": 'People returning from temporary absence',
+                            "description": 'Confirm the return of prisoners out on temporary absence.',
+                            "data-qa": "return-from-temporary-absence"
+                        }) }}
+                    </li>
                 </ul>
-        {% endif %}
+            {% if showRecentArrivals %}
+                <h2 class="govuk-heading-m govuk-!-margin-top-7">Manage recent arrivals</h2>
+                    <ul class="govuk-grid-row card-group">
+                            <li class="govuk-grid-column-one-third card-group__item">
+                                {% if isFemalePrison %}
+                                    {{ card({
+                                        "href": '/recent-arrivals',
+                                        "clickable": "true",
+                                        "heading": 'Recent arrivals',
+                                        "description": 'Manage reception tasks for prisoners who have arrived within the last 3 days.',
+                                        "data-qa": "recent-arrivals"
+                                    }) }}
+                                {% else %}
+                                    {{ card({
+                                        "href": '/recent-arrivals',
+                                        "clickable": "true",
+                                        "heading": 'Recent arrivals',
+                                        "description": 'Record a body scan and add a case note for prisoners who have arrived within the last 3 days.',
+                                        "data-qa": "recent-arrivals"
+                                    }) }}
+                                {% endif %}
+                            </li>
+                    </ul>
+            {% endif %}
+        </div>
     </div>
 {% endblock %}
 {% block pageScripts %}
