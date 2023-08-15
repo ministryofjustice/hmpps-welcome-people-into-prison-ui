@@ -37,6 +37,7 @@ export const DEFAULT_AGENT_CONFIG: AgentConfig = {
 
 export default {
   serviceIsUnvailable: process.env.SERVICE_IS_UNAVAILABLE === 'true',
+  serviceOutageBannerEnabled: get('SERVICE_OUTAGE_BANNER_ENABLED', 'false', requiredInProduction) === 'true',
   production,
   https: production,
   staticResourceCacheDuration: 20,
