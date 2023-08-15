@@ -4,6 +4,8 @@ generic-service:
 
   replicaCount: 4
 
+  serviceAccountName: hmpps-welcome-to-prison
+
   image:
     repository: quay.io/hmpps/hmpps-welcome-people-into-prison-ui
     tag: app_version    # override at deployment time
