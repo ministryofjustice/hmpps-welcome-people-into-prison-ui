@@ -39,29 +39,30 @@
                 <div class="govuk-grid-column-one-half column-width-60 border-left-grey govuk-!-padding-left-9 govuk-!-padding-right-0 ">
                         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
                         <div class="govuk-form-group {{ formGroupError }}" >
-                            <h2 class="govuk-heading-m">Select the correct existing record</h2> 
-                                <span class="govuk-error-message">
-                                <span class="govuk-visually-hidden">Error:</span>
-                                    {{ errorMessage }}
-                                </span>
                             <fieldset class="govuk-fieldset">
-                                {% for match in data.potentialMatches%}
-                                    <div class="govuk-radios">
-                                        <div class="govuk-radios__item govuk-!-padding-bottom-6">
-                                            <input class="govuk-radios__input" id="record-{{loop.index}}" name="prisonNumber" type="radio" value={{match.prisonNumber}}>
-                                            <label class="govuk-label govuk-radios__label govuk-!-padding-right-0 govuk-!-padding-top-0" for="record-{{loop.index}}">
-                                                <div class="prisoner-record-detail flex">
-                                                    {{ prisonerSummaryDetail(match, "matching-record-"+loop.index) }}
-                                                    <img src="{{ '/prisoners/' + match.prisonNumber + '/image' }}" 
-                                                        class="govuk-!-padding-bottom-3 prisoner-image govuk-!-margin-top-2" 
-                                                        alt="{{ match.lastName }}, {{ match.firstName }}" 
-                                                        data-qa="prisoner-image-{{ loop.index }}"
-                                                    />              
-                                                </div>
-                                            </label>
+                                <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                                    <h2 class="govuk-fieldset__heading">Select the correct existing record</h2>
+                                    <span class="govuk-error-message">
+                                    <span class="govuk-visually-hidden">Error:</span>
+                                        {{ errorMessage }}
+                                    </span>
+                                    {% for match in data.potentialMatches%}
+                                        <div class="govuk-radios">
+                                            <div class="govuk-radios__item govuk-!-padding-bottom-6">
+                                                <input class="govuk-radios__input" id="record-{{loop.index}}" name="prisonNumber" type="radio" value={{match.prisonNumber}}>
+                                                <label class="govuk-label govuk-radios__label govuk-!-padding-right-0 govuk-!-padding-top-0" for="record-{{loop.index}}">
+                                                    <div class="prisoner-record-detail flex">
+                                                        {{ prisonerSummaryDetail(match, "matching-record-"+loop.index) }}
+                                                        <img src="{{ '/prisoners/' + match.prisonNumber + '/image' }}" 
+                                                            class="govuk-!-padding-bottom-3 prisoner-image govuk-!-margin-top-2" 
+                                                            alt="{{ match.lastName }}, {{ match.firstName }}" 
+                                                            data-qa="prisoner-image-{{ loop.index }}"
+                                                        />              
+                                                    </div>
+                                                </label>
+                                            </div>
                                         </div>
-                                    </div>
-                                {% endfor %}
+                                    {% endfor %}
                             </fieldset>
                         </div>
                 </div> 

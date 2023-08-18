@@ -11,9 +11,8 @@
                 }) }}
             {% endif %}
             <span class="govuk-caption-xl">Confirm an arrival</span>
-            <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
             <form method="post">
-            <input type="hidden" name="_csrf" value="{{ csrfToken }}"/> {% call govukFieldset({ legend: {} }) %}
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}"/> {% call govukFieldset({ legend: {text: "Change this person's name", isPageHeading: true, classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-6"} }) %}
                 {{ govukInput({
                     label: { text: 'First names' },
                     id: "first-name",
