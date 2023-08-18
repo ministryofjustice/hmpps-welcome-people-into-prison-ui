@@ -13,8 +13,7 @@ let app: Express
 const temporaryAbsencesService = createMockTemporaryAbsencesService()
 const raiseAnalyticsEvent = jest.fn() as RaiseAnalyticsEvent
 
-const createApp = ({ breadcrumb }: { breadcrumb: boolean } = { breadcrumb: true }, roles = [Role.PRISON_RECEPTION]) => {
-  config.showBreadCrumb = breadcrumb
+const createApp = (roles = [Role.PRISON_RECEPTION]) => {
   return appWithAllRoutes({
     services: { temporaryAbsencesService, raiseAnalyticsEvent },
     roles,
@@ -37,21 +36,10 @@ afterEach(() => {
 
 describe('GET checkTemporaryAbsence', () => {
   it('should redirect to authentication error page for non reception users', () => {
-    return request(createApp({ breadcrumb: true }, []))
+    return request(createApp([]))
       .get('/prisoners/A1234AA/check-temporary-absence')
       .expect(302)
       .expect('Location', '/autherror')
-  })
-
-  it('should only display back navigation of the back link type', () => {
-    return request(createApp({ breadcrumb: false }))
-      .get('/prisoners-returning')
-      .expect('Content-Type', 'text/html; charset=utf-8')
-      .expect(res => {
-        const $ = cheerio.load(res.text)
-        expect($("[data-qa='back-link-navigation']").text()).toContain('Back')
-        expect($("[data-qa='back-link-navigation']")).toHaveLength(1)
-      })
   })
 
   it('should only display back navigation of the breadcrumb type', () => {

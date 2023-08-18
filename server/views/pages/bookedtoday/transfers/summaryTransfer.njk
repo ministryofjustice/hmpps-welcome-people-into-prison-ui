@@ -3,13 +3,11 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set pageTitle = "Summary for person booked to arrive" %}
-{% set hasBackLink = false %}
 {% set firstName = transfer.firstName%}
 {% set lastName = transfer.lastName%}
 {% set prisonNumber = transfer.prisonNumber %}
 {% set isFemalePrison = false %}
 {% set breadCrumbs = {
-    enabled: true,
     pageTitle:  lastName+ ", " + firstName,
     data: [{
         title: 'People booked to arrive today',

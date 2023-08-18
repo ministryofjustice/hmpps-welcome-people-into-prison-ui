@@ -3,17 +3,10 @@
 {% from  "../../components/arrival-search.njk" import arrivalSearch %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% set pageTitle = "People who have arrived in the last 3 days" %}
-
-{% if showBreadCrumb %}
-    {% set hasBackLink = false %}
-    {% set breadCrumbs = {
-        enabled: true,
-        pageTitle:  'Recent arrivals',
-        data: []} 
-    %}
-{% else %}
-    {% set hasBackLink = true %}
-{% endif %}
+{% set breadCrumbs = {
+    pageTitle:  'Recent arrivals',
+    data: []} 
+%}
 
 {% block content %}
     <div class="govuk-!-margin-bottom-8 govuk-body">

@@ -3,11 +3,8 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set pageTitle = "Summary of recent arrival" %}
-{% set hasBackLink = false %}
 {% set isFemalePrison = false %}
-
 {% set breadCrumbs = {
-    enabled: true,
     pageTitle:  arrival.lastName + ", " + arrival.firstName,
     data: [{
         title: 'Recent arrivals',

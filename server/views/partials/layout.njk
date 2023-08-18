@@ -83,14 +83,14 @@
 {% endblock %}
 
 {% block beforeContent %}
-    {% if hasBackLink !== false %}
+    {% if hasBackLink %}
         {{ govukBackLink({
             text: "Back",
             classes: "backLinkUrl",
             attributes: {'data-qa': 'back-link-navigation'},
             href: "#"
         }) }}
-    {% elif breadCrumbs.enabled === true %}
+    {% elif breadCrumbs %}
         {{ breadCrumb(breadCrumbs.pageTitle, breadCrumbs.data) }}
     {% endif %}
 {% endblock %}
