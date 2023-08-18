@@ -59,7 +59,7 @@ describe('GET /review-per-details/change-name', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         const $ = cheerio.load(res.text)
-        expect($('h1').text()).toContain("Change this person's name")
+        expect($('legend').text()).toContain("Change this person's name")
       })
   })
 
