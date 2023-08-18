@@ -37,7 +37,7 @@ export default abstract class Page {
   }
 
   checkOnPage(): void {
-    cy.get('h1').contains(this.title)
+    cy.get('h1').should('contain', this.title)
     if (this.backNavigationLink.hasBackLink !== false) {
       this.backNavigation().should('exist')
     }

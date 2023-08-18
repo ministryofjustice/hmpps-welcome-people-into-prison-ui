@@ -1,12 +1,10 @@
 {% extends "../../../../partials/layout.njk" %}
-
 {% set pageTitle = "What is their sex?" %}
 {% set hasBackLink = true %}
 
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-
             {% if errors.length %}
                 {{ govukErrorSummary({
                     titleText: "There is a problem",
@@ -14,10 +12,8 @@
                     attributes: { 'data-qa-errors': true }
                 }) }}
             {% endif %}
-
             <span class="govuk-caption-xl"
                     data-qa="prisoner-name">Confirm arrival of {{ data.firstName }} {{ data.lastName }}</span>
-            <h1 class="govuk-fieldset__legend--l govuk-!-margin-0">What is {{ data.firstName }} {{ data.lastName }}'s sex?</h1>
 
             {% if data.sex === 'TRANS' %}
                 {{ govukInsetText({
@@ -26,8 +22,7 @@
             {% endif %}
 
             <form method="post" action="/prisoners/{{ id }}/sex">
-                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}"/> {% call govukFieldset({ legend: {text: "What is " + data.firstName + " " + data.lastName + "'s sex?", isPageHeading: true, classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-0" } }) %}
                 {{ govukRadios({
                     name: "sex",
                     hint: {
@@ -45,14 +40,12 @@
                     ],
                     errorMessage: errors | findError("sex")
                 }) }}
-
-
+                {% endcall %}
                 {{ govukButton({
                     text: "Continue",
                     attributes: {"data-qa": "continue"},
                     type: "submit"
                 }) }}
-
             </form>
         </div>
     </div>
