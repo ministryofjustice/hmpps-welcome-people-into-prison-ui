@@ -64,13 +64,11 @@ describe('GET /prisoner/:id/summary-move-only', () => {
       .expect(res => {
         const $ = cheerio.load(res.text)
         expect($('[data-qa=back-link-navigation] li').length).toEqual(3)
-        expect($('[data-qa=back-link-navigation] li a').first().text()).toEqual('Home')
-        expect($('[data-qa=back-link-navigation] li a').first().attr('href')).toEqual('/')
-        expect($('[data-qa=back-link-navigation] li:nth-child(2) a').text()).toEqual('People booked to arrive today')
-        expect($('[data-qa=back-link-navigation] li:nth-child(2) a').attr('href')).toEqual(
-          '/confirm-arrival/choose-prisoner'
-        )
-        expect($('[data-qa=back-link-navigation] li').last().text()).toEqual('Smith, Jim')
+        expect($('[data-qa=back-link-navigation] li:nth-child(1) a').text()).toEqual('Digital Prison Services')
+        expect($('[data-qa=back-link-navigation] li:nth-child(2) a').text()).toEqual('Welcome people into prison')
+        expect($('[data-qa=back-link-navigation] li:nth-child(3) a').text()).toContain('People booked to arrive today')
+        expect($('[data-qa=back-link-navigation] li:nth-child(2) a').attr('href')).toEqual('/')
+        expect($('[data-qa=back-link-navigation] li:nth-child(3) a').attr('href')).toContain('/choose-prisoner')
       })
   })
 

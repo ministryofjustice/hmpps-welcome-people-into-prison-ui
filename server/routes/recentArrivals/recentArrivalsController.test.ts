@@ -45,9 +45,10 @@ describe('GET /recent-arrivals', () => {
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
         const $ = cheerio.load(res.text)
-        expect($("[data-qa='back-link-navigation']").text()).toContain('Home')
-        expect($("[data-qa='back-link-navigation']").text()).toContain('Recent arrivals')
-        expect($("[data-qa='back-link-navigation']")).toHaveLength(1)
+        expect($("[data-qa='back-link-navigation'] li")).toHaveLength(2)
+        expect($('[data-qa=back-link-navigation] li:nth-child(1) a').text()).toEqual('Digital Prison Services')
+        expect($('[data-qa=back-link-navigation] li:nth-child(2) a').text()).toEqual('Welcome people into prison')
+        expect($('[data-qa=back-link-navigation] li:nth-child(2) a').attr('href')).toEqual('/')
       })
   })
 
