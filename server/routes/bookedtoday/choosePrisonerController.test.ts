@@ -46,9 +46,10 @@ describe('GET /confirm-arrival/choose-prisoner', () => {
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
         const $ = cheerio.load(res.text)
-        expect($("[data-qa='back-link-navigation']").text()).toContain('Home')
-        expect($("[data-qa='back-link-navigation']").text()).toContain('People booked to arrive today')
-        expect($("[data-qa='back-link-navigation']")).toHaveLength(1)
+        expect($('[data-qa=back-link-navigation] li').length).toEqual(2)
+        expect($('[data-qa=back-link-navigation] li:nth-child(1) a').text()).toEqual('Digital Prison Services')
+        expect($('[data-qa=back-link-navigation] li:nth-child(2) a').text()).toEqual('Welcome people into prison')
+        expect($('[data-qa=back-link-navigation] li:nth-child(2) a').attr('href')).toEqual('/')
       })
   })
 
