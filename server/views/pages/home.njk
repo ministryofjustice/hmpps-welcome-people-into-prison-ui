@@ -1,12 +1,10 @@
 {% extends "../partials/layout.njk" %}
 {% from "../components/card.njk" import card %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 
 {% set pageTitle = "Welcome people into prison" %} 
 
 {% set feedbackBannerBackground = 'feedbackBannerBackground'%}
-{% set hasBackLink = false %}
 {% set isFemalePrison = false %}
 {% set serviceOutageHtml %}
 <p class="govuk-notification-banner__heading">
@@ -29,11 +27,10 @@
 
 {% block main %}
     <div class="govuk-width-container">      
-        {{ govukBackLink({
-            text: "Digital Prison Services",
-            classes: "backLinkUrl",
-            attributes: {'data-qa': 'dps-link'},
-            href: dpsUrl
+        {{ govukBreadcrumbs({
+            items: [
+                {text: "Digital Prison Services", attributes: {'data-qa': 'dps-link'}, href: dpsUrl}
+            ]
         }) }}
 
         {% if serviceOutageBannerEnabled %}
