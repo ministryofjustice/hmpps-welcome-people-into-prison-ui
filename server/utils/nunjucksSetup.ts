@@ -14,6 +14,9 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   app.locals.asset_path = '/assets/'
   app.locals.applicationName = 'Digital Prison Services'
 
+  // Set domain url on current environment
+  app.locals.domain = config.domain
+
   // Cachebusting version string
   if (production) {
     // Version only changes on reboot

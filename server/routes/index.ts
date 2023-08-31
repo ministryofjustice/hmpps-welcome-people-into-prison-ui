@@ -8,6 +8,7 @@ import temporaryAbsenceRoutes from './temporaryabsences'
 import bookedTodayRoutes from './bookedtoday'
 import recentArrivalsRoutes from './recentArrivals'
 import feedbackRoutes from './feedback'
+import footerRoutes from './footer'
 
 export default function routes(services: Services): Router {
   const prisonerController = new PrisonerController(services.expectedArrivalsService)
@@ -23,5 +24,6 @@ export default function routes(services: Services): Router {
     .use(temporaryAbsenceRoutes(services))
     .use(recentArrivalsRoutes(services))
     .use(feedbackRoutes(services))
+    .use(footerRoutes())
     .build()
 }
