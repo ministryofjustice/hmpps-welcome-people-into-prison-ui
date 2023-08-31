@@ -11,6 +11,13 @@
 
 {% include "../components/feedback-banner.njk" %}
 
-{{ 
-  govukFooter() 
-}}
+  {{ govukFooter({
+    meta: {
+      items: [
+        {
+          href: "/accessibility-statement",
+          text: "Accessibility statement"
+        }
+      ]
+    }
+  }) }}
