@@ -58,7 +58,7 @@
             <div class="app-card__content">
                 <header class="app-card__header">
                     <h2 class="app-card__title" data-qa="{{ moveType }}-title-{{ loopIndex }}">
-                        {% if user.isReceptionUser and showExpectedArrivalPrisonerSummary %}
+                        {% if showExpectedArrivalPrisonerSummary %}
                             <a
                                 href="/confirm-arrival/choose-prisoner/{{ arrival.id }}/summary"
                                 class="govuk-link govuk-link--no-visited-state"
@@ -90,21 +90,11 @@
             <div class="app-card__content">
                 <header class="app-card__header">
                     <h2 class="app-card__title" data-qa="PRISON-title-{{ loopIndex }}">
-                        {% if user.isReceptionUser and showPrisonTransferSummary %}
                             <a
                                 href="/prisoners/{{ arrival.prisonNumber }}/summary-transfer"
                                 class="govuk-link govuk-link--no-visited-state"
                                 data-qa="confirm-arrival">
                                 {{ arrival.lastName }}, {{ arrival.firstName }}</a>
-                        {% elif user.isReceptionUser %}
-                            <a
-                                href="/prisoners/{{ arrival.prisonNumber }}/check-transfer"
-                                class="govuk-link govuk-link--no-visited-state"
-                                data-qa="confirm-arrival">
-                                {{ arrival.lastName }}, {{ arrival.firstName }}</a>
-                        {% else %}
-                            {{ arrival.lastName }}, {{ arrival.firstName }}
-                        {% endif %}
                     </h2>
                 </header>
                 {{ expectedArrivalCardListContent(arrival, 'PRISON', loopIndex) }}

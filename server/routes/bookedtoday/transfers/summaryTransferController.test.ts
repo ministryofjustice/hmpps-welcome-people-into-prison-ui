@@ -20,7 +20,7 @@ beforeEach(() => {
 
   app = appWithAllRoutes({
     services: { transfersService, expectedArrivalsService },
-    roles: [Role.PRISON_RECEPTION],
+    roles: [],
   })
 
   transfersService.getTransfer.mockResolvedValue(createTransfer())
@@ -33,9 +33,12 @@ afterEach(() => {
 })
 
 describe('GET summaryTransfer', () => {
-  it('should redirect to authentication error page for non reception users', () => {
-    app = appWithAllRoutes({ roles: [] })
-    return request(app).get('/prisoners/A1234AA/summary-transfer').expect(302).expect('Location', '/autherror')
+  it('should render the summary transfer page', () => {
+    app = appWithAllRoutes({
+      services: { transfersService, expectedArrivalsService },
+      roles: [],
+    })
+    return request(app).get('/prisoners/A1234AA/summary-transfer').expect(200)
   })
 
   it('should call service methods correctly', () => {
@@ -47,8 +50,46 @@ describe('GET summaryTransfer', () => {
       })
   })
 
+  describe('Confirm arrival button', () => {
+    it('should be displayed', () => {
+      app = appWithAllRoutes({
+        services: { transfersService, expectedArrivalsService },
+        roles: [Role.PRISON_RECEPTION, Role.ROLE_INACTIVE_BOOKINGS],
+      })
+      return request(app)
+        .get('/prisoners/A1234AA/summary-transfer')
+        .expect(200)
+        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect(res => {
+          const $ = cheerio.load(res.text)
+          expect($('[data-qa=confirm-arrival]').length).toBe(1)
+          expect($('[data-qa=confirm-arrival]').attr('href')).toContain('/prisoners/A1234AA/check-transfer')
+        })
+    })
+
+    it('should not be displayed without reception role', () => {
+      app = appWithAllRoutes({
+        services: { transfersService, expectedArrivalsService },
+        roles: [Role.ROLE_INACTIVE_BOOKINGS],
+      })
+
+      return request(app)
+        .get('/prisoners/A1234AA/summary-transfer')
+        .expect(200)
+        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect(res => {
+          const $ = cheerio.load(res.text)
+          expect($('[data-qa=confirm-arrival]').length).toBe(0)
+        })
+    })
+  })
+
   describe('DPS prisoner profile button', () => {
     it('should be displayed', () => {
+      app = appWithAllRoutes({
+        services: { transfersService, expectedArrivalsService },
+        roles: [Role.PRISON_RECEPTION, Role.ROLE_INACTIVE_BOOKINGS],
+      })
       return request(app)
         .get('/prisoners/A1234AA/summary-transfer')
         .expect(200)
@@ -62,16 +103,32 @@ describe('GET summaryTransfer', () => {
         })
     })
 
-    it('should not be displayed without reception role', () => {
+    it('should not be displayed without Prison Reception role', () => {
       app = appWithAllRoutes({
         services: { transfersService, expectedArrivalsService },
-        roles: [],
+        roles: [Role.PRISON_RECEPTION],
       })
 
       return request(app)
         .get('/prisoners/A1234AA/summary-transfer')
-        .expect(302)
-        .expect('Content-Type', 'text/plain; charset=utf-8')
+        .expect(200)
+        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect(res => {
+          const $ = cheerio.load(res.text)
+          expect($('[data-qa=prisoner-profile]').length).toBe(0)
+        })
+    })
+
+    it('should not be displayed without Released prisoner viewing role', () => {
+      app = appWithAllRoutes({
+        services: { transfersService, expectedArrivalsService },
+        roles: [Role.ROLE_INACTIVE_BOOKINGS],
+      })
+
+      return request(app)
+        .get('/prisoners/A1234AA/summary-transfer')
+        .expect(200)
+        .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           const $ = cheerio.load(res.text)
           expect($('[data-qa=prisoner-profile]').length).toBe(0)

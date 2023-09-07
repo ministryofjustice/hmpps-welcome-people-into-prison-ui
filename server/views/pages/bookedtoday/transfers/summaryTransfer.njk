@@ -41,12 +41,14 @@
                             classes: "govuk-button--secondary moj-button-menu__item govuk-!-margin-left-3 govuk-!-margin-right-0 float-right"
                         }) }}
                     {% endif %}
-                    {{ govukButton({
-                        text: "Confirm arrival",
-                        href: "/prisoners/" + prisonNumber +'/check-transfer',
-                        classes: "float-right",
-                        attributes: {'data-qa':'confirm-arrival'}
-                    }) }}
+                    {% if(confirmArrivalEnabled) %}
+                        {{ govukButton({
+                            text: "Confirm arrival",
+                            href: "/prisoners/" + prisonNumber +'/check-transfer',
+                            classes: "float-right",
+                            attributes: {'data-qa':'confirm-arrival'}
+                        }) }}
+                    {% endif %}
                 </div>
             </div>
             <div class="govuk-grid-row">

@@ -196,6 +196,7 @@ context('Choose Prisoner', () => {
       isCurrentPrisoner: false,
       potentialMatches: [expectedArrivals.potentialMatch],
     })
+    cy.task('stubSignIn', [Role.PRISON_RECEPTION, Role.ROLE_INACTIVE_BOOKINGS])
     cy.task('stubExpectedArrivals', { caseLoadId: 'MDI', arrivals: [arrival] })
     cy.task('stubExpectedArrival', arrival)
     cy.task('stubPrisonerDetails', { ...expectedArrivals.potentialMatch, arrivalType: 'FROM_COURT' })
@@ -207,8 +208,8 @@ context('Choose Prisoner', () => {
     const prisonerSummaryWithRecordPage = new PrisonerSummaryWithRecordPage(`${lastName}, ${firstName}`)
     prisonerSummaryWithRecordPage.checkOnPage()
     prisonerSummaryWithRecordPage.breadcrumbs().should('exist')
+    prisonerSummaryWithRecordPage.prisonerProfile().should('exist')
     prisonerSummaryWithRecordPage.confirmArrival().click()
-
     Page.verifyOnPage(SingleMatchingRecordFoundPage)
   })
 
@@ -244,7 +245,8 @@ context('Choose Prisoner', () => {
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(1).confirm().click()
   })
-  it('No links shown if not a reception user', () => {
+
+  it('A none reception user is displayed pre-arrival profile links', () => {
     cy.task('stubExpectedArrivals', {
       caseLoadId: 'MDI',
       arrivals: [
@@ -257,9 +259,25 @@ context('Choose Prisoner', () => {
     cy.signIn()
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
 
-    choosePrisonerPage.arrivalFrom('PRISON')(1).confirm().should('not.exist')
-    choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(1).confirm().should('not.exist')
-    choosePrisonerPage.arrivalFrom('COURT')(1).confirm().should('not.exist')
+    choosePrisonerPage.arrivalFrom('PRISON')(1).confirm().should('exist')
+    choosePrisonerPage.arrivalFrom('CUSTODY_SUITE')(1).confirm().should('exist')
+    choosePrisonerPage.arrivalFrom('COURT')(1).confirm().should('exist')
+    choosePrisonerPage.manuallyConfirmArrival().should('not.exist')
+  })
+
+  it('A none reception user is not displayed manually confirm arrival link', () => {
+    cy.task('stubExpectedArrivals', {
+      caseLoadId: 'MDI',
+      arrivals: [
+        expectedArrivals.arrival({ fromLocationType: 'PRISON' }),
+        expectedArrivals.arrival({ fromLocationType: 'COURT' }),
+        expectedArrivals.arrival({ fromLocationType: 'CUSTODY_SUITE' }),
+      ],
+    })
+    cy.task('stubSignIn')
+    cy.signIn()
+    const choosePrisonerPage = ChoosePrisonerPage.goTo()
+
     choosePrisonerPage.manuallyConfirmArrival().should('not.exist')
   })
 

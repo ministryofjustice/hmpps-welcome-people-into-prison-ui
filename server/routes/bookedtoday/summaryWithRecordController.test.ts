@@ -200,39 +200,55 @@ describe('GET /prisoner/:id/summary-with-record', () => {
     })
   })
 
-  it("should not display the 'close to limit' scan compliance panel", () => {
-    arrivalAndSummaryDetails.summary.bodyScanStatus = 'CLOSE_TO_LIMIT'
+  describe('Confirm arrival button', () => {
+    it('should be displayed', () => {
+      app = appWithAllRoutes({
+        services: { expectedArrivalsService, lockManager },
+        roles: [Role.PRISON_RECEPTION, Role.ROLE_INACTIVE_BOOKINGS],
+      })
 
-    app = appWithAllRoutes({
-      services: { expectedArrivalsService, lockManager },
-      roles: [Role.PRISON_RECEPTION],
+      return request(app)
+        .get('/prisoners/1111-1111-1111-1111/summary-with-record')
+        .expect(200)
+        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect(res => {
+          const $ = cheerio.load(res.text)
+          expect($('[data-qa=confirm-arrival]').length).toBe(1)
+          expect($('[data-qa=confirm-arrival]').attr('href')).toContain(
+            '/confirm-arrival/choose-prisoner/1111-1111-1111-1111'
+          )
+        })
+    })
+    it('should not be displayed without Prison Reception role', () => {
+      app = appWithAllRoutes({
+        services: { expectedArrivalsService, lockManager },
+        roles: [Role.ROLE_INACTIVE_BOOKINGS],
+      })
+
+      return request(app)
+        .get('/prisoners/1111-1111-1111-1111/summary-with-record')
+        .expect(200)
+        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect(res => {
+          const $ = cheerio.load(res.text)
+          expect($('[data-qa=confirm-arrival]').length).toBe(0)
+        })
     })
 
-    return request(app)
-      .get('/prisoners/1111-1111-1111-1111/summary-with-record')
-      .expect(200)
-      .expect('Content-Type', 'text/html; charset=utf-8')
-      .expect(res => {
-        const $ = cheerio.load(res.text)
-        expect($('[data-qa="close-to-limit"]').length).toBe(1)
+    it('should not be present without Released Prisoner role', () => {
+      app = appWithAllRoutes({
+        services: { expectedArrivalsService, lockManager },
+        roles: [Role.PRISON_RECEPTION],
       })
-  })
 
-  it("should display the 'do not scan' compliance panel", () => {
-    arrivalAndSummaryDetails.summary.bodyScanStatus = 'DO_NOT_SCAN'
-
-    app = appWithAllRoutes({
-      services: { expectedArrivalsService, lockManager },
-      roles: [Role.PRISON_RECEPTION],
+      return request(app)
+        .get('/prisoners/1111-1111-1111-1111/summary-with-record')
+        .expect(200)
+        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect(res => {
+          const $ = cheerio.load(res.text)
+          expect($('[data-qa=confirm-arrival]').length).toBe(1)
+        })
     })
-
-    return request(app)
-      .get('/prisoners/1111-1111-1111-1111/summary-with-record')
-      .expect(200)
-      .expect('Content-Type', 'text/html; charset=utf-8')
-      .expect(res => {
-        const $ = cheerio.load(res.text)
-        expect($('[data-qa="do-not-scan"]').length).toBe(1)
-      })
   })
 })

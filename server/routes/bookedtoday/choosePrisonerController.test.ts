@@ -130,25 +130,6 @@ describe('GET /confirm-arrival/choose-prisoner', () => {
         expect($('[data-qa=PRISON-title-1] a').attr('href')).toEqual('/prisoners/A12345/summary-transfer')
       })
   })
-
-  it('should set href in  prison transfer to /check-transfer', () => {
-    config.showPrisonTransferSummary = false
-    expectedArrivalsService.getArrivalsForToday.mockResolvedValue(transfers as Map<LocationType, DecoratedArrival[]>)
-
-    app = appWithAllRoutes({
-      userSupplier: () => ({ ...user, isReceptionUser: true }),
-      services: { expectedArrivalsService },
-    })
-
-    return request(app)
-      .get('/confirm-arrival/choose-prisoner')
-      .expect(200)
-      .expect('Content-Type', 'text/html; charset=utf-8')
-      .expect(res => {
-        const $ = cheerio.load(res.text)
-        expect($('[data-qa=PRISON-title-1] a').attr('href')).toEqual('/prisoners/A12345/check-transfer')
-      })
-  })
 })
 
 describe('GET /confirm-arrival/choose-prisoner/:id', () => {
