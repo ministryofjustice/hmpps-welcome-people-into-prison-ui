@@ -106,7 +106,7 @@ describe('GET summaryTransfer', () => {
     it('should not be displayed without Prison Reception role', () => {
       app = appWithAllRoutes({
         services: { transfersService, expectedArrivalsService },
-        roles: [Role.PRISON_RECEPTION],
+        roles: [Role.ROLE_INACTIVE_BOOKINGS],
       })
 
       return request(app)
@@ -122,7 +122,7 @@ describe('GET summaryTransfer', () => {
     it('should not be displayed without Released prisoner viewing role', () => {
       app = appWithAllRoutes({
         services: { transfersService, expectedArrivalsService },
-        roles: [Role.ROLE_INACTIVE_BOOKINGS],
+        roles: [Role.PRISON_RECEPTION],
       })
 
       return request(app)
