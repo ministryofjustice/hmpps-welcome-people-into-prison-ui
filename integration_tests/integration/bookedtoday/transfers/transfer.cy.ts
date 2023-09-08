@@ -11,7 +11,7 @@ const { prisonTransfer } = expectedArrivals
 context('Confirm transfer added To roll', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn', [Role.PRISON_RECEPTION])
+    cy.task('stubSignIn', [Role.PRISON_RECEPTION, Role.ROLE_INACTIVE_BOOKINGS])
     cy.task('stubPrison', 'MDI')
     cy.task('stubAuthUser')
     cy.task('stubUserCaseLoads')
@@ -28,14 +28,16 @@ context('Confirm transfer added To roll', () => {
     cy.task('stubConfirmTransfer', prisonTransfer.prisonNumber)
     cy.task('stubRetrieveMultipleBodyScans', [])
     cy.task('stubGetBodyScan', { prisonNumber: 'G0015GD', details: {} })
-    cy.signIn()
   })
 
   it('Can confirm prison transfers', () => {
     {
+      cy.signIn()
+
       ChoosePrisonerPage.goTo().arrivalFrom('PRISON')(1).confirm().click()
       const summaryTransferPage = new SummaryTransferPage(`${prisonTransfer.lastName}, ${prisonTransfer.firstName}`)
       summaryTransferPage.breadcrumbs().should('exist')
+      summaryTransferPage.prisonerProfile().should('exist')
       summaryTransferPage.confirmArrival().click()
       const checkTransferPage = Page.verifyOnPage(CheckTransferPage)
       checkTransferPage.choosePrisoner().click()
@@ -60,5 +62,16 @@ context('Confirm transfer added To roll', () => {
     cy.task('getTransferConfirmationRequest', prisonTransfer.prisonNumber).then(request => {
       expect(request).to.deep.equal({ prisonId: 'MDI' })
     })
+  })
+
+  it('A non reception user cannot confirm a booking or view prisoner profile', () => {
+    cy.task('stubSignIn', [Role.ROLE_INACTIVE_BOOKINGS])
+    cy.signIn()
+
+    ChoosePrisonerPage.goTo().arrivalFrom('PRISON')(1).confirm().click()
+    const summaryTransferPage = new SummaryTransferPage(`${prisonTransfer.lastName}, ${prisonTransfer.firstName}`)
+    summaryTransferPage.breadcrumbs().should('exist')
+    summaryTransferPage.prisonerProfile().should('not.exist')
+    summaryTransferPage.confirmArrival().should('not.exist')
   })
 })

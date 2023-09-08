@@ -48,6 +48,7 @@ context('Is Single Match', () => {
     )
     prisonerSummaryWithRecordPage.checkOnPage()
     prisonerSummaryWithRecordPage.breadcrumbs().should('exist')
+    prisonerSummaryWithRecordPage.prisonerProfile().should('exist')
     prisonerSummaryWithRecordPage.confirmArrival().click()
 
     const singleMatchingRecordFoundPage = Page.verifyOnPage(SingleMatchingRecordFoundPage)
@@ -106,6 +107,20 @@ context('Is Single Match', () => {
         fromLocationId: 'MDI',
       })
     })
+  })
+
+  it('A non reception user cannot confirm a booking or view prisoner profile', () => {
+    cy.task('stubSignIn', [Role.ROLE_INACTIVE_BOOKINGS])
+    cy.task('stubExpectedArrival', expectedArrival)
+    cy.signIn()
+
+    ChoosePrisonerPage.goTo().arrivalFrom('COURT')(1).confirm().click()
+    const prisonerSummaryWithRecordPage = new PrisonerSummaryWithRecordPage(
+      `${expectedArrival.lastName}, ${expectedArrival.firstName}`
+    )
+    prisonerSummaryWithRecordPage.breadcrumbs().should('exist')
+    prisonerSummaryWithRecordPage.prisonerProfile().should('not.exist')
+    prisonerSummaryWithRecordPage.confirmArrival().should('not.exist')
   })
 
   it('Should allow navigation to search for alternative', () => {

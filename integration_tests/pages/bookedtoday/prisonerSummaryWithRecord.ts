@@ -8,4 +8,6 @@ export default class PrisonerSummaryWithRecordPage extends Page {
   breadcrumbs = (): PageElement => cy.get('[data-qa=back-link-navigation]')
 
   confirmArrival = (): PageElement => cy.get('[data-qa=confirm-arrival]')
+
+  prisonerProfile = (): PageElement => cy.get('[data-qa=prisoner-profile]')
 }

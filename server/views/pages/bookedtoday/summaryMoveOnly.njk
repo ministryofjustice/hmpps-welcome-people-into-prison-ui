@@ -27,12 +27,14 @@
                     <h1 class="govuk-heading-l">{{ arrival.lastName }}, {{ arrival.firstName }}</h1>
                 </div>
                 <div class="govuk-grid-column-one-half">
-                    {{ govukButton({
-                        text: "Confirm arrival",
-                        href: "/confirm-arrival/choose-prisoner/" + arrival.id,
-                        classes: "float-right",
-                        attributes: {'data-qa':'confirm-arrival'}
-                    }) }}
+                    {% if (confirmArrivalEnabled) %}
+                        {{ govukButton({
+                            text: "Confirm arrival",
+                            href: "/confirm-arrival/choose-prisoner/" + arrival.id,
+                            classes: "float-right",
+                            attributes: {'data-qa':'confirm-arrival'}
+                        }) }}
+                    {% endif %}
                 </div>
             </div>
             <div class="govuk-grid-row">
