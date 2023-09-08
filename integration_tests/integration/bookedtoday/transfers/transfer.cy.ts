@@ -65,7 +65,7 @@ context('Confirm transfer added To roll', () => {
   })
 
   it('A non reception user cannot confirm a booking or view prisoner profile', () => {
-    cy.task('stubSignIn', [Role.ROLE_INACTIVE_BOOKINGS])
+    cy.task('stubSignIn', [Role.ROLE_INACTIVE_BOOKINGS, Role.GLOBAL_SEARCH])
     cy.signIn()
 
     ChoosePrisonerPage.goTo().arrivalFrom('PRISON')(1).confirm().click()

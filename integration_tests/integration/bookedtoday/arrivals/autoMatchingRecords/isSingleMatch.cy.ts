@@ -110,7 +110,7 @@ context('Is Single Match', () => {
   })
 
   it('A non reception user cannot confirm a booking or view prisoner profile', () => {
-    cy.task('stubSignIn', [Role.ROLE_INACTIVE_BOOKINGS])
+    cy.task('stubSignIn', [Role.ROLE_INACTIVE_BOOKINGS, Role.GLOBAL_SEARCH])
     cy.task('stubExpectedArrival', expectedArrival)
     cy.signIn()
 

@@ -67,10 +67,10 @@ describe('GET summaryTransfer', () => {
         })
     })
 
-    it('should not be displayed without reception role', () => {
+    it('should not be displayed without Prison Reception role', () => {
       app = appWithAllRoutes({
         services: { transfersService, expectedArrivalsService },
-        roles: [Role.ROLE_INACTIVE_BOOKINGS],
+        roles: [Role.ROLE_INACTIVE_BOOKINGS, Role.GLOBAL_SEARCH],
       })
 
       return request(app)
@@ -85,7 +85,7 @@ describe('GET summaryTransfer', () => {
   })
 
   describe('DPS prisoner profile button', () => {
-    it('should be displayed', () => {
+    it('should be displayed with Prison Reception & Released Prisoner viewing role', () => {
       app = appWithAllRoutes({
         services: { transfersService, expectedArrivalsService },
         roles: [Role.PRISON_RECEPTION, Role.ROLE_INACTIVE_BOOKINGS],
@@ -103,26 +103,28 @@ describe('GET summaryTransfer', () => {
         })
     })
 
-    it('should not be displayed without Prison Reception role', () => {
+    it('should be displayed with Prison Reception & Global search role', () => {
       app = appWithAllRoutes({
         services: { transfersService, expectedArrivalsService },
-        roles: [Role.ROLE_INACTIVE_BOOKINGS],
+        roles: [Role.PRISON_RECEPTION, Role.GLOBAL_SEARCH],
       })
-
       return request(app)
         .get('/prisoners/A1234AA/summary-transfer')
         .expect(200)
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           const $ = cheerio.load(res.text)
-          expect($('[data-qa=prisoner-profile]').length).toBe(0)
+          expect($('[data-qa=prisoner-profile]').length).toBe(1)
+          expect($('[data-qa=prisoner-profile]').attr('href')).toContain(
+            '/save-backlink?service=welcome-people-into-prison&returnPath=/prisoners/A1234AA/summary-transfer&redirectPath=/prisoner/A1234AA'
+          )
         })
     })
 
-    it('should not be displayed without Released prisoner viewing role', () => {
+    it('should not be displayed without Prison Reception role', () => {
       app = appWithAllRoutes({
         services: { transfersService, expectedArrivalsService },
-        roles: [Role.PRISON_RECEPTION],
+        roles: [Role.ROLE_INACTIVE_BOOKINGS, Role.GLOBAL_SEARCH],
       })
 
       return request(app)

@@ -10,7 +10,9 @@ export default class SummaryWithRecordController {
       const { id } = req.params
       const { roles } = res.locals.user
       const { username } = req.user
-      const enableDpsLink = roles.includes(Role.PRISON_RECEPTION) && roles.includes(Role.ROLE_INACTIVE_BOOKINGS)
+      const enableDpsLink =
+        (roles.includes(Role.PRISON_RECEPTION) && roles.includes(Role.ROLE_INACTIVE_BOOKINGS)) ||
+        (roles.includes(Role.PRISON_RECEPTION) && roles.includes(Role.GLOBAL_SEARCH))
       const confirmArrivalEnabled = roles.includes(Role.PRISON_RECEPTION)
       const data = await this.expectedArrivalsService.getArrivalAndSummaryDetails(username, id)
       return res.render('pages/bookedtoday/summaryWithRecord.njk', { ...data, enableDpsLink, confirmArrivalEnabled })

@@ -11,7 +11,9 @@ export default class SummaryTransferController {
       const { prisonNumber } = req.params
       const { roles } = res.locals.user
       const transfer = await this.transfersService.getTransferWithBodyScanDetails(activeCaseLoadId, prisonNumber)
-      const enableDpsLink = roles.includes(Role.PRISON_RECEPTION) && roles.includes(Role.ROLE_INACTIVE_BOOKINGS)
+      const enableDpsLink =
+        (roles.includes(Role.PRISON_RECEPTION) && roles.includes(Role.ROLE_INACTIVE_BOOKINGS)) ||
+        (roles.includes(Role.PRISON_RECEPTION) && roles.includes(Role.GLOBAL_SEARCH))
       const confirmArrivalEnabled = roles.includes(Role.PRISON_RECEPTION)
       return res.render(`pages/bookedtoday/transfers/summaryTransfer.njk`, {
         transfer,
