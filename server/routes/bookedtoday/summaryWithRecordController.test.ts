@@ -134,7 +134,7 @@ describe('GET /prisoner/:id/summary-with-record', () => {
   })
 
   describe('DPS prisoner profile button', () => {
-    it('should be displayed', () => {
+    it('should be displayed with Prison Reception & Released Prisoner viewing role', () => {
       app = appWithAllRoutes({
         services: { expectedArrivalsService, lockManager },
         roles: [Role.PRISON_RECEPTION, Role.ROLE_INACTIVE_BOOKINGS],
@@ -149,10 +149,11 @@ describe('GET /prisoner/:id/summary-with-record', () => {
           expect($('[data-qa=prisoner-profile]').length).toBe(1)
         })
     })
-    it('should not be displayed without Prison Reception role', () => {
+
+    it('should be displayed with Prison Reception & Global search role', () => {
       app = appWithAllRoutes({
         services: { expectedArrivalsService, lockManager },
-        roles: [Role.ROLE_INACTIVE_BOOKINGS],
+        roles: [Role.PRISON_RECEPTION, Role.GLOBAL_SEARCH],
       })
 
       return request(app)
@@ -161,14 +162,14 @@ describe('GET /prisoner/:id/summary-with-record', () => {
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(res => {
           const $ = cheerio.load(res.text)
-          expect($('[data-qa=prisoner-profile]').length).toBe(0)
+          expect($('[data-qa=prisoner-profile]').length).toBe(1)
         })
     })
 
-    it('should not be present without Released Prisoner role', () => {
+    it('should not be displayed without Prison Reception role', () => {
       app = appWithAllRoutes({
         services: { expectedArrivalsService, lockManager },
-        roles: [Role.PRISON_RECEPTION],
+        roles: [Role.ROLE_INACTIVE_BOOKINGS, Role.GLOBAL_SEARCH],
       })
 
       return request(app)
@@ -222,7 +223,7 @@ describe('GET /prisoner/:id/summary-with-record', () => {
     it('should not be displayed without Prison Reception role', () => {
       app = appWithAllRoutes({
         services: { expectedArrivalsService, lockManager },
-        roles: [Role.ROLE_INACTIVE_BOOKINGS],
+        roles: [Role.ROLE_INACTIVE_BOOKINGS, Role.GLOBAL_SEARCH],
       })
 
       return request(app)
@@ -232,22 +233,6 @@ describe('GET /prisoner/:id/summary-with-record', () => {
         .expect(res => {
           const $ = cheerio.load(res.text)
           expect($('[data-qa=confirm-arrival]').length).toBe(0)
-        })
-    })
-
-    it('should not be present without Released Prisoner role', () => {
-      app = appWithAllRoutes({
-        services: { expectedArrivalsService, lockManager },
-        roles: [Role.PRISON_RECEPTION],
-      })
-
-      return request(app)
-        .get('/prisoners/1111-1111-1111-1111/summary-with-record')
-        .expect(200)
-        .expect('Content-Type', 'text/html; charset=utf-8')
-        .expect(res => {
-          const $ = cheerio.load(res.text)
-          expect($('[data-qa=confirm-arrival]').length).toBe(1)
         })
     })
   })
