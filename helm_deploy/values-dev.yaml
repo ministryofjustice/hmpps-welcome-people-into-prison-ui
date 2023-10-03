@@ -14,9 +14,11 @@ generic-service:
     INGRESS_URL: 'https://welcome-dev.prison.service.justice.gov.uk'
     HMPPS_AUTH_URL: 'https://sign-in-dev.hmpps.service.justice.gov.uk/auth'
     DPS_URL: 'https://digital-dev.prison.service.justice.gov.uk'
+    ENVIRONMENT_NAME: 'DEV'
     TOKEN_VERIFICATION_API_URL: 'https://token-verification-api-dev.prison.service.justice.gov.uk'
     WELCOME_API_URL: 'https://welcome-api-dev.prison.service.justice.gov.uk'
     # Body scan functionality is currently located in WPIP API
+    COMPONENT_API_URL: 'https://frontend-components-dev.hmpps.service.justice.gov.uk'
     BODYSCAN_API_URL: 'https://welcome-api-dev.prison.service.justice.gov.uk'
     HMPPS_COOKIE_NAME: hmpps-session-dev
     APP_HOSTNAME: welcome-dev.prison.service.justice.gov.uk

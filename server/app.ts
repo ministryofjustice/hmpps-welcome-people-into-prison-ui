@@ -10,9 +10,9 @@ import errorHandler from './errorHandler'
 import setUpCurrentUser from './middleware/setUpCurrentUser'
 import phaseNameSetup from './phaseNameSetup'
 
+import setUpWebSecurity from './middleware/setUpWebSecurity'
 import setUpWebSession from './middleware/setUpWebSession'
 import setUpStaticResources from './middleware/setUpStaticResources'
-import setUpWebSecurity from './middleware/setUpWebSecurity'
 import setUpAuthentication from './middleware/setUpAuthentication'
 import setUpHealthChecks from './middleware/setUpHealthChecks'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
@@ -20,6 +20,8 @@ import authorisationMiddleware from './middleware/authorisationMiddleware'
 import type { Services } from './services'
 import caseloadCheckMiddleware from './middleware/caseloadCheckMiddleware'
 import { BodyScanServices } from './bodyscan/services'
+import getFrontendComponents from './middleware/feComponentsMiddleware'
+import setUpEnvironmentName from './middleware/setUpEnvironmentName'
 
 export default function createApp(services: Services, bodyScanServices: BodyScanServices): express.Application {
   const app = express()
@@ -33,6 +35,7 @@ export default function createApp(services: Services, bodyScanServices: BodyScan
   app.use(setUpWebSession())
   app.use(setUpWebRequestParsing())
   app.use(setUpStaticResources())
+  setUpEnvironmentName(app)
   nunjucksSetup(app, path)
   phaseNameSetup(app, config.phaseName)
   app.use(setUpAuthentication())
@@ -46,6 +49,7 @@ export default function createApp(services: Services, bodyScanServices: BodyScan
       res.render('pages/serviceUnavailable.njk')
     })
   }
+  app.get('*', getFrontendComponents(services))
   app.use(wpipRoutes(services))
   app.use(bodyScanRoutes(bodyScanServices))
 
