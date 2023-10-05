@@ -9,9 +9,17 @@ import NotificationService from './notificationService'
 import { raiseAnalyticsEvent, type RaiseAnalyticsEvent } from './raiseAnalyticsEvent'
 import { BodyScanInfoDecorator } from './bodyScanInfoDecorator'
 import { MatchTypeDecorator } from './matchTypeDecorator'
+import FeComponentsService from './feComponentsService'
 
 export const services = () => {
-  const { hmppsAuthClient, welcomeClientBuilder, bodyScanClientBuilder, notifyClient, lockManager } = dataAccess()
+  const {
+    hmppsAuthClient,
+    welcomeClientBuilder,
+    bodyScanClientBuilder,
+    feComponentsClientBuilder,
+    notifyClient,
+    lockManager,
+  } = dataAccess()
 
   const bodyScanInfoDecorator = new BodyScanInfoDecorator(hmppsAuthClient, bodyScanClientBuilder)
   const matchTypeDecorator = new MatchTypeDecorator()
@@ -33,6 +41,7 @@ export const services = () => {
   const imprisonmentStatusesService = new ImprisonmentStatusesService(hmppsAuthClient, welcomeClientBuilder)
   const transfersService = new TransfersService(hmppsAuthClient, welcomeClientBuilder, bodyScanInfoDecorator)
   const prisonService = new PrisonService(hmppsAuthClient, welcomeClientBuilder)
+  const feComponentsService = new FeComponentsService(feComponentsClientBuilder)
 
   return {
     hmppsAuthClient,
@@ -45,6 +54,7 @@ export const services = () => {
     prisonService,
     raiseAnalyticsEvent,
     lockManager,
+    feComponentsService,
   }
 }
 
@@ -61,4 +71,5 @@ export {
   TransfersService,
   PrisonService,
   RaiseAnalyticsEvent,
+  FeComponentsService,
 }

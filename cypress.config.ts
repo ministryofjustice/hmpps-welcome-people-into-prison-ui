@@ -2,6 +2,8 @@ import { defineConfig } from 'cypress'
 
 import { resetStubs } from './integration_tests/mockApis/wiremock'
 
+import components from './integration_tests/mockApis/components'
+
 import auth from './integration_tests/mockApis/auth'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import welcome from './integration_tests/mockApis/welcome'
@@ -27,6 +29,10 @@ export default defineConfig({
 
         getSignInUrl: auth.getSignInUrl,
         stubSignIn: role => auth.stubSignIn(role),
+
+        // API header and footer components.
+        stubComponents: components.stubComponents,
+        stubComponentsFail: components.stubComponentsFail,
 
         stubAuthUser: auth.stubUser,
         stubAuthPing: auth.stubPing,

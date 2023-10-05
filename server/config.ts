@@ -43,6 +43,7 @@ export default {
   staticResourceCacheDuration: 20,
   phaseName: process.env.SYSTEM_PHASE,
   dpsUrl: get('DPS_URL', 'http://localhost:3000', requiredInProduction),
+  environmentName: get('ENVIRONMENT_NAME', ''),
   hostname: process.env.APP_HOSTNAME || os.hostname(),
   redis: {
     host: get('REDIS_HOST', 'localhost', requiredInProduction),
@@ -84,6 +85,14 @@ export default {
       timeout: {
         response: Number(get('WELCOME_API_TIMEOUT_RESPONSE', 5000)),
         deadline: Number(get('WELCOME_API_TIMEOUT_DEADLINE', 5000)),
+      },
+      agent: DEFAULT_AGENT_CONFIG,
+    },
+    frontendComponents: {
+      url: get('COMPONENT_API_URL', 'http://localhost:8082', requiredInProduction),
+      timeout: {
+        response: Number(get('COMPONENT_API_TIMEOUT_SECONDS', 2000)),
+        deadline: Number(get('COMPONENT_API_TIMEOUT_SECONDS', 2000)),
       },
       agent: DEFAULT_AGENT_CONFIG,
     },

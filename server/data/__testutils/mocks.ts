@@ -1,4 +1,4 @@
-import { WelcomeClient, HmppsAuthClient, BodyScanClient, LockManager } from '..'
+import { WelcomeClient, HmppsAuthClient, BodyScanClient, LockManager, FeComponentsClient } from '..'
 
 jest.mock('..')
 
@@ -9,3 +9,5 @@ export const createMockHmppsAuthClient = () => new HmppsAuthClient(null) as jest
 export const createMockBodyScanClient = () => new BodyScanClient(null) as jest.Mocked<BodyScanClient>
 
 export const createLockManager = () => new LockManager(null) as jest.Mocked<LockManager>
+
+export const createFeComponentsClient = () => new FeComponentsClient(null) as jest.Mocked<FeComponentsClient>

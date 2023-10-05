@@ -7,6 +7,7 @@ import config from '../../config'
 
 import wpipRoutes from '../index'
 import bodyScanRoutes from '../../bodyscan/routes'
+import getFrontendComponents from '../../middleware/feComponentsMiddleware'
 import nunjucksSetup from '../../utils/nunjucksSetup'
 import errorHandler from '../../errorHandler'
 import * as auth from '../../authentication/auth'
@@ -62,6 +63,7 @@ function appSetup(
   app.use(express.urlencoded({ extended: true }))
   app.use(wpipRoutes(services))
   app.use(bodyScanRoutes(bodyScanServices))
+  app.get('*', getFrontendComponents(services.feComponentsService))
   app.use((req, res, next) => next(createError(404, 'Not found')))
   app.use(errorHandler(production))
 

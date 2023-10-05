@@ -9,7 +9,7 @@ import type { UnsanitisedError } from '../sanitisedError'
 
 interface GetRequest {
   path?: string
-  query?: Record<string, string>
+  query?: Record<string, string> | string
   headers?: Record<string, string>
   responseType?: string
   raw?: boolean
