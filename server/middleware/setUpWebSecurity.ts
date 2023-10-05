@@ -25,6 +25,7 @@ export default function setUpWebSecurity(): Router {
   // This ensures only scripts we trust are loaded, and not anything injected into the
   // page by an attacker.
   const scriptSrc = [
+    "'self'",
     '*.googletagmanager.com',
     '*.google-analytics.com',
     (req: IncomingMessage, res: Response) => `'nonce-${res.locals.cspNonce}'`,
