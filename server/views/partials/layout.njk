@@ -120,7 +120,16 @@
     {% endblock %}
 {% endblock %}
 
+{% include "../components/feedback-banner.njk" %}
+
 {% block footer %}
+  {% if hasFeedbackBanner !== false %}
+    {{
+      feedbackBanner({
+        feedbackBannerAdditionalClasses: feedbackBannerBackground
+      })
+    }}
+  {% endif %}
   {% if feComponents.footer %}
     {{ feComponents.footer | safe }}
   {% else %}

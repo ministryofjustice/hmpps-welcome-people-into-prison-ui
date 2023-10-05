@@ -49,7 +49,7 @@ export default function createApp(services: Services, bodyScanServices: BodyScan
       res.render('pages/serviceUnavailable.njk')
     })
   }
-  app.get('*', getFrontendComponents(services))
+  app.get('*', getFrontendComponents(services.feComponentsService))
   app.use(wpipRoutes(services))
   app.use(bodyScanRoutes(bodyScanServices))
 

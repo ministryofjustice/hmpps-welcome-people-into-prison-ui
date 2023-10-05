@@ -1,8 +1,8 @@
 import type { RequestHandler } from 'express'
 import logger from '../../logger'
-import { Services } from '../services'
+import { FeComponentsService } from '../services'
 
-export default function getFrontendComponents({ feComponentsService }: Services): RequestHandler {
+export default function getFrontendComponents(feComponentsService: FeComponentsService): RequestHandler {
   return async (req, res, next) => {
     try {
       const { header, footer } = await feComponentsService.getFeComponents(['header', 'footer'], res.locals.user.token)

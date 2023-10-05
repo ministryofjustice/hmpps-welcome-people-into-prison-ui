@@ -21,7 +21,8 @@ export default class FeComponentsClient {
     userToken: string
   ): Promise<Record<T[number], Component>> {
     return this.restClient.get({
-      path: '/components?component=header&component=footer',
+      path: `/components`,
+      query: `component=${components.join('&component=')}`,
       headers: { 'x-user-token': userToken },
     }) as Promise<Record<T[number], Component>>
   }

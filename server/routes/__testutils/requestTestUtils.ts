@@ -20,7 +20,7 @@ type RequestParams = {
   baseUrl?: string
   path?: string
   hostname?: string
-  query?: Record<string, string>
+  query?: Record<string, string> | string
   signedCookies?: Record<string, CookieValues>
   errors?: ValidationError[]
 }
