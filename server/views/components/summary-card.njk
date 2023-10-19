@@ -18,7 +18,7 @@
             <div class="summary-card__body">
                 <dl class="govuk-summary-list">
                     {% for row in params.rows %}
-                        {% if row %}
+                        {% if row and (row.display == null or row.display) %}
                             <div class="govuk-summary-list__row" data-qa={{row.dataQa}}>
                                 <dt class="govuk-summary-list__key">
                                     {{ row.key.html | safe if row.key.html else row.key.text }}

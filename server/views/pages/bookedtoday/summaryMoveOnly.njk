@@ -57,6 +57,11 @@
                             {
                                 key: { text: "Arriving from" },
                                 value: { text: arrival.fromLocation }
+                            },
+                            {
+                                key: {  text: "Current Offence" },
+                                value: { text:  arrival.offence },
+                                display: arrival.offence != null
                             }
                         ]
                     }) }}
@@ -76,16 +81,6 @@
                             {
                                 key: {  text: "Age" },
                                 value: { text: arrival.dateOfBirth | calculateAge + " years old"}
-                            }
-                        ]
-                    }) }}
-                    {{ summaryCard({
-                        classes: "govuk-!-margin-bottom-6",
-                        titleText: "Offence Information",
-                        rows: [
-                            {
-                                key: {  text: "Current Offence" },
-                                value: { text:  arrival.offence }
                             }
                         ]
                     }) }}

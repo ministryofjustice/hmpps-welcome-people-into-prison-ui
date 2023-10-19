@@ -18,7 +18,11 @@ import {
   withMatchType,
 } from '../data/__testutils/testObjects'
 import { createMockHmppsAuthClient, createMockWelcomeClient } from '../data/__testutils/mocks'
-import { createMockBodyScanInfoDecorator, createMockMatchTypeDecorator } from './__testutils/mocks'
+import {
+  createMockBodyScanInfoDecorator,
+  createMockMatchTypeDecorator,
+  createMockOffenceInfoDecorator,
+} from './__testutils/mocks'
 import { MatchType } from './matchTypeDecorator'
 
 jest.mock('./raiseAnalyticsEvent')
@@ -31,6 +35,7 @@ describe('Expected arrivals service', () => {
   const hmppsAuthClient = createMockHmppsAuthClient()
   const bodyScanInfoDecorator = createMockBodyScanInfoDecorator()
   const matchTypeDecorator = createMockMatchTypeDecorator()
+  const offenceInfoDecorator = createMockOffenceInfoDecorator()
   let service: ExpectedArrivalsService
 
   const WelcomeClientFactory = jest.fn()
@@ -47,7 +52,8 @@ describe('Expected arrivals service', () => {
       WelcomeClientFactory,
       raiseAnalyticsEvent,
       bodyScanInfoDecorator,
-      matchTypeDecorator
+      matchTypeDecorator,
+      offenceInfoDecorator
     )
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
     bodyScanInfoDecorator.decorate.mockImplementation(as =>
@@ -63,6 +69,7 @@ describe('Expected arrivals service', () => {
     )
     matchTypeDecorator.decorate.mockImplementation(as => as.map(a => ({ ...a, matchType: MatchType.SINGLE_MATCH })))
     matchTypeDecorator.decorateSingle.mockImplementation(a => ({ ...a, matchType: MatchType.SINGLE_MATCH }))
+    offenceInfoDecorator.decorateSingle.mockImplementation(a => ({ ...a, offence: 'Burglary' }))
   })
 
   describe('getExpectedArrivals', () => {
@@ -70,7 +77,7 @@ describe('Expected arrivals service', () => {
       ...createTransfer(),
       isCurrentPrisoner: true,
       fromLocationType: 'PRISON',
-      offence: 'test Offence',
+      offence: 'test offence',
     }
 
     beforeEach(() => {

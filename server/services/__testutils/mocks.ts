@@ -8,13 +8,14 @@ import {
   UserService,
   NotificationService,
   MatchTypeDecorator,
+  OffenceInfoDecorator,
   FeComponentsService,
 } from '..'
 
 jest.mock('..')
 
 export const createMockExpectedArrivalsService = () =>
-  new ExpectedArrivalsService(null, null, null, null, null) as jest.Mocked<ExpectedArrivalsService>
+  new ExpectedArrivalsService(null, null, null, null, null, null) as jest.Mocked<ExpectedArrivalsService>
 
 export const createMockImprisonmentStatusesService = () =>
   new ImprisonmentStatusesService(null, null) as jest.Mocked<ImprisonmentStatusesService>
@@ -27,6 +28,8 @@ export const createMockBodyScanInfoDecorator = () =>
   new BodyScanInfoDecorator(null, null) as jest.Mocked<BodyScanInfoDecorator>
 
 export const createMockMatchTypeDecorator = () => new MatchTypeDecorator() as jest.Mocked<MatchTypeDecorator>
+
+export const createMockOffenceInfoDecorator = () => new OffenceInfoDecorator() as jest.Mocked<OffenceInfoDecorator>
 
 export const createMockTemporaryAbsencesService = () =>
   new TemporaryAbsencesService(null, null, null) as jest.Mocked<TemporaryAbsencesService>
