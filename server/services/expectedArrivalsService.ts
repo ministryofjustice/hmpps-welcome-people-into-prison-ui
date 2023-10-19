@@ -108,7 +108,6 @@ export default class ExpectedArrivalsService {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
     const arrival = await this.welcomeClientFactory(token).getArrival(id)
     const arrivalWithOffence = this.offenceInfoDecorator.decorateSingle(arrival)
-    logger.info(arrivalWithOffence)
     return this.matchTypeDecorator.decorateSingle(arrivalWithOffence)
   }
 
