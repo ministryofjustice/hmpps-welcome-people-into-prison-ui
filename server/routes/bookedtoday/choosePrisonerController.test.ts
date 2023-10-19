@@ -147,6 +147,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
       isCurrentPrisoner: true,
       fromLocationType: 'COURT',
       bodyScanStatus: 'CLOSE_TO_LIMIT',
+      offence: 'Robbery',
       matchType,
     } as WithMatchType<Arrival>)
 

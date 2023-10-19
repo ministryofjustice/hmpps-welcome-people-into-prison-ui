@@ -70,6 +70,7 @@ describe('Expected arrivals service', () => {
       ...createTransfer(),
       isCurrentPrisoner: true,
       fromLocationType: 'PRISON',
+      offence: 'test Offence',
     }
 
     beforeEach(() => {

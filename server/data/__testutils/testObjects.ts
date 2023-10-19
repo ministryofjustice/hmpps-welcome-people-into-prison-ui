@@ -58,6 +58,7 @@ export const createArrival = ({
   fromLocationId = 'REDCC',
   fromLocationType = 'COURT',
   isCurrentPrisoner = true,
+  offence = 'Burglary',
   potentialMatches = [createPotentialMatch()],
 }: Partial<Arrival> = {}): Arrival => ({
   id,
@@ -72,6 +73,7 @@ export const createArrival = ({
   fromLocationType,
   isCurrentPrisoner,
   potentialMatches,
+  offence,
 })
 
 export const createRecentArrival = ({

@@ -79,6 +79,16 @@
                             }
                         ]
                     }) }}
+                    {{ summaryCard({
+                        classes: "govuk-!-margin-bottom-6",
+                        titleText: "Offence Information",
+                        rows: [
+                            {
+                                key: {  text: "Current Offence" },
+                                value: { text:  arrival.offence }
+                            }
+                        ]
+                    }) }}
                 </div>
 
                 <div class='govuk-grid-column-one-third'>
