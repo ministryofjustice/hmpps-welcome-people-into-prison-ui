@@ -72,6 +72,7 @@ declare module 'welcome' {
       gender?: SexKeys
       potentialMatches?: PotentialMatch[]
       isCurrentPrisoner: boolean
+      offence: string
     }
     RecentArrival: {
       prisonNumber: string

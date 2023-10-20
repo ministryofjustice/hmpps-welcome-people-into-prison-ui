@@ -57,6 +57,11 @@
                             {
                                 key: { text: "Arriving from" },
                                 value: { text: arrival.fromLocation }
+                            },
+                            {
+                                key: {  text: "Current Offence" },
+                                value: { text:  arrival.offence },
+                                display: arrival.offence != null
                             }
                         ]
                     }) }}

@@ -16,6 +16,7 @@ import logger from '../../logger'
 import { RaiseAnalyticsEvent } from './raiseAnalyticsEvent'
 import { NewArrival } from '../routes/bookedtoday/arrivals/state'
 import type { BodyScanInfoDecorator, WithBodyScanStatus, WithBodyScanInfo } from './bodyScanInfoDecorator'
+import OffenceInfoDecorator from './offenceInfoDecorator'
 import type { MatchTypeDecorator, WithMatchType } from './matchTypeDecorator'
 
 export type DecoratedArrival = WithBodyScanStatus<Arrival> & WithMatchType<Arrival>
@@ -27,7 +28,8 @@ export default class ExpectedArrivalsService {
     private readonly welcomeClientFactory: RestClientBuilder<WelcomeClient>,
     private readonly raiseAnalyticsEvent: RaiseAnalyticsEvent,
     private readonly bodyScanDecorator: BodyScanInfoDecorator,
-    private readonly matchTypeDecorator: MatchTypeDecorator
+    private readonly matchTypeDecorator: MatchTypeDecorator,
+    private readonly offenceInfoDecorator: OffenceInfoDecorator
   ) {}
 
   private async getExpectedArrivals(username: string, agencyId: string, now: Moment): Promise<Arrival[]> {
@@ -105,7 +107,8 @@ export default class ExpectedArrivalsService {
   public async getArrival(username: string, id: string): Promise<WithMatchType<Arrival>> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
     const arrival = await this.welcomeClientFactory(token).getArrival(id)
-    return this.matchTypeDecorator.decorateSingle(arrival)
+    const arrivalWithOffence = this.offenceInfoDecorator.decorateSingle(arrival)
+    return this.matchTypeDecorator.decorateSingle(arrivalWithOffence)
   }
 
   public async getPrisonerDetailsForArrival(username: string, id: string): Promise<PotentialMatch> {
