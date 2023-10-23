@@ -182,6 +182,9 @@
   "overrides": {
     "cypress": {
       "tough-cookie": "4.1.3"
+    },
+    "jest-html-reporter": {
+      "@babel/traverse": "7.23.2"
     }
   }
 }
