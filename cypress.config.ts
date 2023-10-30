@@ -36,6 +36,7 @@ export default defineConfig({
 
         stubAuthUser: auth.stubUser,
         stubAuthPing: auth.stubPing,
+        stubManageUsersApiPing: auth.stubManageUsersPing,
 
         stubTokenVerificationPing: tokenVerification.stubPing,
 
