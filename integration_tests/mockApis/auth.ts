@@ -48,6 +48,17 @@ const ping = () =>
     },
   })
 
+const manageUsersApiPing = () =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/health/ping',
+    },
+    response: {
+      status: 200,
+    },
+  })
+
 const redirect = () =>
   stubFor({
     request: {
@@ -121,7 +132,7 @@ const stubUser = () =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/auth/api/user/me',
+      urlPattern: '/users/me',
     },
     response: {
       status: 200,
@@ -142,7 +153,7 @@ const stubUserRoles = () =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/auth/api/user/me/roles',
+      urlPattern: '/users/me/roles',
     },
     response: {
       status: 200,
@@ -156,6 +167,8 @@ const stubUserRoles = () =>
 export default {
   getSignInUrl,
   stubPing: (): Promise<[Response, Response]> => Promise.all([ping(), tokenVerification.stubPing()]),
+  stubManageUsersPing: (): Promise<[Response, Response]> =>
+    Promise.all([manageUsersApiPing(), tokenVerification.stubPing()]),
   stubSignIn: (roles: Role[]): Promise<[Response, Response, Response, Response, Response, Response]> =>
     Promise.all([favicon(), redirect(), signOut(), manageDetails(), token(roles), tokenVerification.stubVerifyToken()]),
   stubUser: (): Promise<[Response, Response]> => Promise.all([stubUser(), stubUserRoles()]),

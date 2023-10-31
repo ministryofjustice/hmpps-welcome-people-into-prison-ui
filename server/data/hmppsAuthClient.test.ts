@@ -13,10 +13,12 @@ const token = { access_token: 'token-1', expires_in: 300 }
 
 describe('hmppsAuthClient', () => {
   let fakeHmppsAuthApi: nock.Scope
+  let fakeManageUsersApi: nock.Scope
   let hmppsAuthClient: HmppsAuthClient
 
   beforeEach(() => {
     fakeHmppsAuthApi = nock(config.apis.hmppsAuth.url)
+    fakeManageUsersApi = nock(config.apis.hmppsManageUsersApi.url)
     hmppsAuthClient = new HmppsAuthClient(tokenStore)
   })
 
@@ -29,8 +31,8 @@ describe('hmppsAuthClient', () => {
     it('should return data from api', async () => {
       const response = { data: 'data' }
 
-      fakeHmppsAuthApi
-        .get('/api/user/me')
+      fakeManageUsersApi
+        .get('/users/me')
         .matchHeader('authorization', `Bearer ${token.access_token}`)
         .reply(200, response)
 
@@ -41,8 +43,8 @@ describe('hmppsAuthClient', () => {
 
   describe('getUserRoles', () => {
     it('should return data from api', async () => {
-      fakeHmppsAuthApi
-        .get('/api/user/me/roles')
+      fakeManageUsersApi
+        .get('/users/me/roles')
         .matchHeader('authorization', `Bearer ${token.access_token}`)
         .reply(200, [{ roleCode: 'role1' }, { roleCode: 'role2' }])
 
