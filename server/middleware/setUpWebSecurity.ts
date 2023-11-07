@@ -62,6 +62,7 @@ export default function setUpWebSecurity(): Router {
           styleSrc,
           imgSrc,
           fontSrc,
+          formAction: [`'self' ${config.dpsUrl}`],
           connectSrc: [
             "'self'",
             '*.googletagmanager.com',
