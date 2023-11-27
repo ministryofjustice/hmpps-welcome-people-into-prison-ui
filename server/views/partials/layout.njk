@@ -47,12 +47,6 @@
         {% endfor %}
     {% endif %} 
 
-    {% if feComponents.cssIncludes %}
-        {% for css in feComponents.cssIncludes %}
-            <link href="{{ css }}" nonce="{{ cspNonce }}" rel="stylesheet" />
-        {% endfor %}
-    {% endif %}
-
     <!--[if !IE 8]><!-->
     <link href="/assets/stylesheets/application.css?{{ version }}" rel="stylesheet" />
     <!--<![endif]-->
@@ -67,6 +61,13 @@
             integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
             crossorigin="anonymous"></script>
     <link href="https://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css" rel="stylesheet" crossorigin>
+
+    {% if feComponents.cssIncludes %}
+        {% for css in feComponents.cssIncludes %}
+            <link href="{{ css }}" nonce="{{ cspNonce }}" rel="stylesheet" />
+        {% endfor %}
+    {% endif %}
+
 
 {% endblock %}
 
@@ -109,12 +110,12 @@
 {% endblock %}
 
 {% block bodyEnd %}
-    {# Run JavaScript at end of the
+  {# Run JavaScript at end of the
   <body>, to avoid blocking the initial render. #}
-    <script src="/assets/govuk/all.js"></script>
-    <script src="/assets/govukFrontendInit.js"></script>
-    <script src="/assets/moj/all.js"></script>
-    {# Javascript block for individual pages #}
+  <script src="/assets/govuk/all.js"></script>
+  <script src="/assets/govukFrontendInit.js"></script>
+  <script src="/assets/moj/all.js"></script>
+  {# Javascript block for individual pages #}
     {% block pageScripts %}
         <script src="/assets/backLink.js"></script>
     {% endblock %}
