@@ -106,7 +106,7 @@
     "cookie-session": "^2.0.0",
     "csurf": "^1.11.0",
     "csv-parse": "^5.3.10",
-    "express": "^4.18.2",
+    "express": "^4.19.2",
     "express-session": "^1.17.3",
     "googleapis": "^110.0.0",
     "govuk-frontend": "^4.6.0",
@@ -187,7 +187,7 @@
       "@babel/traverse": "7.23.2"
     },
     "notifications-node-client": {
-      "axios": "1.6.7"
+      "axios": "1.6.8"
     }
   }
 }
