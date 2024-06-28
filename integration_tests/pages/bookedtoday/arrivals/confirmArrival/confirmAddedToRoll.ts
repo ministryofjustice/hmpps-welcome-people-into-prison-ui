@@ -46,7 +46,7 @@ export default class ConfirmAddedToRollPage extends Page {
       Page.checkLink(
         cy.get(`[data-qa=view-establishment-roll]`),
         'View establishment roll',
-        'https://digital-dev.prison.service.justice.gov.uk/establishment-roll'
+        'https://dps-dev.prison.service.justice.gov.uk/establishment-roll'
       ),
   })
 }
