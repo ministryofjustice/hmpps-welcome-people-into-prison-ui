@@ -1,7 +1,5 @@
 // Require app insights before anything else to allow for instrumentation of bunyan
 import '../server/utils/azureAppInsights'
-
-import moment from 'moment'
 import { HmppsAuthClient, WelcomeClient, type RestClientBuilder } from '../server/data'
 import { InMemoryTokenStore } from '../server/data/tokenStore'
 import EventsRetriever from './eventsRetriever'
@@ -17,7 +15,7 @@ const retriever = new EventsRetriever(hmppsAuthClient, welcomeClientBuilder)
 const pusher = new EventsPusher(config.eventPublishing.serviceAccountKey, config.eventPublishing.spreadsheetId)
 
 const job = async () => {
-  const events = await retriever.retrieveEventsForDay(moment())
+  const events = await retriever.retrieveEventsForPastYear()
   await pusher.pushEvents(events)
 }
 
