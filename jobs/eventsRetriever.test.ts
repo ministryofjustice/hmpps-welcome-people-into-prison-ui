@@ -20,7 +20,8 @@ describe('test', () => {
       Readable.from('a,b,c\n1,2,3\n4,5,6').pipe(writable)
     })
 
-    const events = await eventsRetriever.retrieveEventsForDay(moment('2021-07-01 09:01:01'))
+    const dataStartDate = moment().subtract(1, 'years').startOf('day')
+    const events = await eventsRetriever.retrieveEventsForPastYear()
 
     expect(events).toStrictEqual([
       ['1', '2', '3'],
@@ -28,11 +29,8 @@ describe('test', () => {
     ])
 
     const call = welcomeClient.getEventsCSV.mock.calls[0]
-
-    expect(
-      moment({ year: 2021, month: 6, day: 1, hour: 0, minute: 0, seconds: 0, milliseconds: 0 }).isSame(call[1])
-    ).toBe(true)
-    expect(call[2]).toBe(1)
+    expect(dataStartDate.isSame(call[1])).toBe(true)
+    expect(call[2]).toBe(365)
   })
 
   it('Handles no events', async () => {
@@ -41,7 +39,7 @@ describe('test', () => {
       Readable.from('a,b,c\n').pipe(writable)
     })
 
-    const events = await eventsRetriever.retrieveEventsForDay(moment('2021-07-01'))
+    const events = await eventsRetriever.retrieveEventsForPastYear()
     expect(events).toStrictEqual([])
   })
 })

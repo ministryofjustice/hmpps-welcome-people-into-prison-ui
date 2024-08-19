@@ -1,4 +1,4 @@
-import type { Moment } from 'moment'
+import moment from 'moment'
 import { parse } from 'csv-parse'
 import logger from '../logger'
 
@@ -10,7 +10,7 @@ export default class EventsRetriever {
     private readonly welcomeClientBuilder: RestClientBuilder<WelcomeClient>
   ) {}
 
-  async retrieveEventsForDay(day: Moment): Promise<string[][]> {
+  async retrieveEventsForPastYear(): Promise<string[][]> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const welcomeClient = this.welcomeClientBuilder(token)
     const parser = parse({
@@ -19,12 +19,14 @@ export default class EventsRetriever {
       from: 2,
     })
     const records: string[][] = []
-    welcomeClient.getEventsCSV(parser, day.startOf('day'), 1)
+    const dateOneYearAgo = moment().subtract(1, 'years').startOf('day')
+    welcomeClient.getEventsCSV(parser, dateOneYearAgo, 365)
+
     // eslint-disable-next-line no-restricted-syntax
     for await (const record of parser) {
       records.push(record)
     }
-    logger.info(`Retrieved ${records.length} events for ${day}`)
+    logger.info(`Retrieved ${records.length} events since ${dateOneYearAgo}`)
     return records
   }
 }
