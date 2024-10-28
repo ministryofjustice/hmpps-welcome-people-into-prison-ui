@@ -1,6 +1,6 @@
 import nock from 'nock'
 import moment from 'moment'
-import type { Arrival, ConfirmArrivalDetail, Prison, TemporaryAbsence, UserCaseLoad } from 'welcome'
+import type { Arrival, ConfirmArrivalDetail, TemporaryAbsence, UserCaseLoad } from 'welcome'
 import WelcomeClient from './welcomeClient'
 import config from '../config'
 import {
