@@ -285,20 +285,6 @@ describe('welcomeClient', () => {
     })
   })
 
-  describe('getPrison', () => {
-    const prison: Prison = {
-      description: 'Moorland (HMP & YOI)',
-    }
-    const prisonId = 'MDI'
-
-    it('should return data from api', async () => {
-      fakeWelcomeApi.get(`/prison/${prisonId}`).matchHeader('authorization', `Bearer ${token}`).reply(200, prison)
-
-      const output = await welcomeClient.getPrison(prisonId)
-      expect(output).toEqual(prison)
-    })
-  })
-
   describe('confirmExpectedArrival', () => {
     const detail: ConfirmArrivalDetail = {
       firstName: 'Jim',

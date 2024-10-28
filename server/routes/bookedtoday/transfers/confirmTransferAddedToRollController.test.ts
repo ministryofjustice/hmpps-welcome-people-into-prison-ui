@@ -15,7 +15,7 @@ beforeEach(() => {
   })
 
   prisonService.getPrison.mockResolvedValue({
-    description: 'Moorland (HMP & YOI)',
+    prisonName: 'Moorland (HMP & YOI)',
   })
 })
 

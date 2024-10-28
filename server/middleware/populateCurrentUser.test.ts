@@ -19,7 +19,7 @@ const userCaseLoads: UserCaseLoad[] = [
 
 userService.getUser = jest.fn().mockResolvedValue({})
 userService.getUserCaseLoads = jest.fn().mockResolvedValue(userCaseLoads)
-prisonService.getPrison = jest.fn().mockResolvedValue({ description: 'Moorland (HMP & YOI)' })
+prisonService.getPrison = jest.fn().mockResolvedValue({ prisonName: 'Moorland (HMP & YOI)' })
 
 describe('populateCurrentUser', () => {
   const req = {
@@ -44,7 +44,7 @@ describe('populateCurrentUser', () => {
   it('should store activeCaseLoad in response', async () => {
     const res = { locals: { user: {} } } as unknown as Response
     await populateCurrentUser(userService, prisonService)(req, res, next)
-    expect(res.locals.user.activeCaseLoad).toEqual({ description: 'Moorland (HMP & YOI)' })
+    expect(res.locals.user.activeCaseLoad).toEqual({ prisonName: 'Moorland (HMP & YOI)' })
   })
 
   it('should store userCaseloads in response', async () => {

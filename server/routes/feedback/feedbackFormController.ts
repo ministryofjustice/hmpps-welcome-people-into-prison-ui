@@ -28,12 +28,12 @@ export default class FeedbackController {
         return res.redirect(`/feedback`)
       }
 
-      const prison = await this.prisonService.getPrison(activeCaseLoadId)
+      const { prisonName } = await this.prisonService.getPrison(activeCaseLoadId)
 
       try {
         await this.notificationService.sendEmail({
           username,
-          prison: prison.description,
+          prison: prisonName,
           feedback,
           email: email || '(No email address provided)',
         })

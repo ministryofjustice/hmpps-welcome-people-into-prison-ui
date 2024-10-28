@@ -288,7 +288,7 @@ export const createNewArrival = ({
   expected,
 })
 
-export const createPrison = ({ description = 'Moorland (HMP & YOI)' } = {}): Prison => ({ description })
+export const createPrison = ({ prisonName = 'Moorland (HMP & YOI)' } = {}): Prison => ({ prisonName })
 
 export const createUserCaseLoad = ({
   caseLoadId = 'MDI',

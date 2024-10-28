@@ -21,7 +21,7 @@ describe('confirmCourtReturnAddedToRollController', () => {
     })
 
     prisonService.getPrison.mockResolvedValue({
-      description: 'Moorland (HMP & YOI)',
+      prisonName: 'Moorland (HMP & YOI)',
     })
 
     config.confirmEnabled = true

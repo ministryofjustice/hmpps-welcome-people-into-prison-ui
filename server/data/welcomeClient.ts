@@ -146,13 +146,6 @@ export default class WelcomeClient {
     }) as Promise<Readable>
   }
 
-  async getPrison(prisonId: string): Promise<Prison> {
-    logger.info(`welcomeApi: getPrison(${prisonId})`)
-    return this.restClient.get({
-      path: `/prison/${prisonId}`,
-    }) as Promise<Prison>
-  }
-
   async confirmExpectedArrival(id: string, detail: ConfirmArrivalDetail): Promise<ArrivalResponse | null> {
     logger.info(`welcomeApi: confirmExpectedArrival(${id})`)
     try {

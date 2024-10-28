@@ -1,20 +1,20 @@
 import PrisonService from './prisonService'
 import { createPrison } from '../data/__testutils/testObjects'
-import { createMockHmppsAuthClient, createMockWelcomeClient } from '../data/__testutils/mocks'
+import { createMockHmppsAuthClient, createMockPrisonRegisterClient } from '../data/__testutils/mocks'
 
 const token = 'some token'
 
 describe('Expected arrivals service', () => {
-  const welcomeClient = createMockWelcomeClient()
+  const prisonRegisterClient = createMockPrisonRegisterClient()
   const hmppsAuthClient = createMockHmppsAuthClient()
   let service: PrisonService
 
-  const WelcomeClientFactory = jest.fn()
+  const PrisonRegisterClientFactory = jest.fn()
 
   beforeEach(() => {
     jest.resetAllMocks()
-    WelcomeClientFactory.mockReturnValue(welcomeClient)
-    service = new PrisonService(hmppsAuthClient, WelcomeClientFactory)
+    PrisonRegisterClientFactory.mockReturnValue(prisonRegisterClient)
+    service = new PrisonService(hmppsAuthClient, PrisonRegisterClientFactory)
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
   })
 
@@ -22,14 +22,14 @@ describe('Expected arrivals service', () => {
     const prison = createPrison()
 
     beforeEach(() => {
-      welcomeClient.getPrison.mockResolvedValue(prison)
+      prisonRegisterClient.getPrison.mockResolvedValue(prison)
     })
 
     it('Calls upstream service correctly', async () => {
       await service.getPrison('MDI')
 
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.getPrison).toBeCalledWith('MDI')
+      expect(PrisonRegisterClientFactory).toBeCalledWith(token)
+      expect(prisonRegisterClient.getPrison).toBeCalledWith('MDI')
     })
 
     it('Should return correct data', async () => {
