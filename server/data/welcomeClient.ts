@@ -7,7 +7,6 @@ import type {
   PaginatedResponse,
   PotentialMatch,
   PotentialMatchCriteria,
-  Prison,
   PrisonerDetails,
   RecentArrival,
   TemporaryAbsence,
