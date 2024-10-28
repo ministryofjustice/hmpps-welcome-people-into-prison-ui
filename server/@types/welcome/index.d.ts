@@ -127,7 +127,7 @@ declare module 'welcome' {
       movementReasons: { description?: string; movementReasonCode: string }[]
     }
     Prison: {
-      description: string
+      prisonName: string
     }
     ArrivalResponse: {
       prisonNumber: string

@@ -6,7 +6,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             {{ govukPanel({
-                titleText: firstName + " " + lastName + " " + "has returned to " + prison.description,
+                titleText: firstName + " " + lastName + " " + "has returned to " + prison.prisonName,
                 html: "Prison number<br><strong>" + prisonNumber | escape + "</strong>",
                 attributes: {
                     'data-qa': 'confirmation-banner'

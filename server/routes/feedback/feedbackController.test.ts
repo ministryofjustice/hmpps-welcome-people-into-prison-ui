@@ -24,7 +24,7 @@ describe('feedbackController', () => {
     })
 
     prisonService.getPrison.mockResolvedValue({
-      description: 'Moorland (HMP & YOI)',
+      prisonName: 'Moorland (HMP & YOI)',
     })
     flashProvider.mockReturnValue([])
   })

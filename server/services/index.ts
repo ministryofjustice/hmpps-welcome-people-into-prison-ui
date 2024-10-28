@@ -16,6 +16,7 @@ export const services = () => {
   const {
     hmppsAuthClient,
     welcomeClientBuilder,
+    prisonRegisterClientBuilder,
     bodyScanClientBuilder,
     feComponentsClientBuilder,
     notifyClient,
@@ -43,7 +44,7 @@ export const services = () => {
   )
   const imprisonmentStatusesService = new ImprisonmentStatusesService(hmppsAuthClient, welcomeClientBuilder)
   const transfersService = new TransfersService(hmppsAuthClient, welcomeClientBuilder, bodyScanInfoDecorator)
-  const prisonService = new PrisonService(hmppsAuthClient, welcomeClientBuilder)
+  const prisonService = new PrisonService(hmppsAuthClient, prisonRegisterClientBuilder)
   const feComponentsService = new FeComponentsService(feComponentsClientBuilder)
 
   return {

@@ -7,7 +7,6 @@ import type {
   PaginatedResponse,
   PotentialMatch,
   PotentialMatchCriteria,
-  Prison,
   PrisonerDetails,
   RecentArrival,
   TemporaryAbsence,
@@ -144,13 +143,6 @@ export default class WelcomeClient {
     return this.restClient.stream({
       path: `/prisoners/${prisonNumber}/image`,
     }) as Promise<Readable>
-  }
-
-  async getPrison(prisonId: string): Promise<Prison> {
-    logger.info(`welcomeApi: getPrison(${prisonId})`)
-    return this.restClient.get({
-      path: `/prison/${prisonId}`,
-    }) as Promise<Prison>
   }
 
   async confirmExpectedArrival(id: string, detail: ConfirmArrivalDetail): Promise<ArrivalResponse | null> {

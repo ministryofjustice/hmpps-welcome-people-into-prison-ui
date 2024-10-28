@@ -7,6 +7,7 @@ import components from './integration_tests/mockApis/components'
 import auth from './integration_tests/mockApis/auth'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import welcome from './integration_tests/mockApis/welcome'
+import prisonRegister from './integration_tests/mockApis/prisonRegister'
 import bodyscan from './integration_tests/mockApis/bodyScan'
 
 export default defineConfig({
@@ -56,7 +57,6 @@ export default defineConfig({
         getTemporaryAbsenceConfirmationRequest: welcome.getTemporaryAbsenceConfirmationRequest,
         stubConfirmCourtReturn: welcome.stubConfirmCourtReturn,
         stubConfirmCourtReturnsError: welcome.stubConfirmCourtReturnsError,
-        stubPrison: welcome.stubPrison,
         stubPrisonerImage: welcome.stubPrisonerImage,
         stubMissingPrisonerImage: welcome.stubMissingPrisonerImage,
         stubCreateOffenderRecordAndBooking: ({ arrivalId, prisonNumber, location }) =>
@@ -72,6 +72,9 @@ export default defineConfig({
         getConfirmationRequest: welcome.getConfirmationRequest,
         getUnexpectedConfirmationRequest: welcome.getUnexpectedConfirmationRequest,
         getTransferConfirmationRequest: welcome.getTransferConfirmationRequest,
+
+        // prison register stubs
+        stubPrison: prisonRegister.stubPrison,
 
         // body-scan
         stubBodyScanApiPing: bodyscan.stubPing,

@@ -1,6 +1,6 @@
 import nock from 'nock'
 import moment from 'moment'
-import type { Arrival, ConfirmArrivalDetail, Prison, TemporaryAbsence, UserCaseLoad } from 'welcome'
+import type { Arrival, ConfirmArrivalDetail, TemporaryAbsence, UserCaseLoad } from 'welcome'
 import WelcomeClient from './welcomeClient'
 import config from '../config'
 import {
@@ -282,20 +282,6 @@ describe('welcomeClient', () => {
         .reply(500)
 
       await expect(welcomeClient.confirmCourtReturn(id, 'MDI', 'A1234AA')).rejects.toThrow('Internal Server Error')
-    })
-  })
-
-  describe('getPrison', () => {
-    const prison: Prison = {
-      description: 'Moorland (HMP & YOI)',
-    }
-    const prisonId = 'MDI'
-
-    it('should return data from api', async () => {
-      fakeWelcomeApi.get(`/prison/${prisonId}`).matchHeader('authorization', `Bearer ${token}`).reply(200, prison)
-
-      const output = await welcomeClient.getPrison(prisonId)
-      expect(output).toEqual(prison)
     })
   })
 

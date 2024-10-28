@@ -97,6 +97,14 @@ export default {
       },
       agent: DEFAULT_AGENT_CONFIG,
     },
+    prisonRegister: {
+      url: get('PRISON_REGISTER_API_URL', 'http://localhost:8100', requiredInProduction),
+      timeout: {
+        response: Number(get('PRISON_REGISTER_API_TIMEOUT_RESPONSE', 5000)),
+        deadline: Number(get('PRISON_REGISTER_API_TIMEOUT_DEADLINE', 5000)),
+      },
+      agent: DEFAULT_AGENT_CONFIG,
+    },
     frontendComponents: {
       url: get('COMPONENT_API_URL', 'http://localhost:8082', requiredInProduction),
       timeout: {

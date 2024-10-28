@@ -8,6 +8,7 @@ import HmppsAuthClient from './hmppsAuthClient'
 import { createRedisClient } from './redisClient'
 import { RedisTokenStore } from './tokenStore'
 import WelcomeClient from './welcomeClient'
+import PrisonRegisterClient from './prisonRegisterClient'
 import BodyScanClient from './bodyScanClient'
 import FeComponentsClient from './feComponentsClient'
 import notifyClient from './notifyClient'
@@ -25,6 +26,10 @@ export const dataAccess = () => {
     notifyClient,
     hmppsAuthClient: new HmppsAuthClient(new RedisTokenStore(redisClient)),
     welcomeClientBuilder: ((token: string) => new WelcomeClient(token)) as RestClientBuilder<WelcomeClient>,
+
+    prisonRegisterClientBuilder: ((token: string) =>
+      new PrisonRegisterClient(token)) as RestClientBuilder<PrisonRegisterClient>,
+
     bodyScanClientBuilder: ((token: string) => new BodyScanClient(token)) as RestClientBuilder<BodyScanClient>,
     feComponentsClientBuilder: ((token: string) =>
       new FeComponentsClient(token)) as RestClientBuilder<FeComponentsClient>,
@@ -33,4 +38,12 @@ export const dataAccess = () => {
 }
 export type DataAccess = ReturnType<typeof dataAccess>
 
-export { WelcomeClient, BodyScanClient, HmppsAuthClient, RestClientBuilder, LockManager, FeComponentsClient }
+export {
+  WelcomeClient,
+  PrisonRegisterClient,
+  BodyScanClient,
+  HmppsAuthClient,
+  RestClientBuilder,
+  LockManager,
+  FeComponentsClient,
+}
