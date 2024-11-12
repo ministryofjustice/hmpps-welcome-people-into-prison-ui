@@ -36,4 +36,4 @@ generic-service:
 
 generic-prometheus-alerts:
   targetApplication: hmpps-welcome-people-into-prison-ui
-  alertSeverity: hmpps-prisoner-cell-allocation-prod
+  alertSeverity: elp_alerts
