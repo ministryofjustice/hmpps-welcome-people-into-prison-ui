@@ -14,6 +14,7 @@ import setUpWebSecurity from './middleware/setUpWebSecurity'
 import setUpWebSession from './middleware/setUpWebSession'
 import setUpStaticResources from './middleware/setUpStaticResources'
 import setUpAuthentication from './middleware/setUpAuthentication'
+import setUpCsrf from './middleware/setUpCsrf'
 import setUpHealthChecks from './middleware/setUpHealthChecks'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
@@ -40,6 +41,7 @@ export default function createApp(services: Services, bodyScanServices: BodyScan
   phaseNameSetup(app, config.phaseName)
   app.use(setUpAuthentication())
   app.use(authorisationMiddleware())
+  app.use(setUpCsrf())
   app.use(setUpCurrentUser(services))
   app.use(caseloadCheckMiddleware(config.enabledPrisons))
   app.get('/page-not-found', (req, res) => res.render('pages/pageNotFound'))
