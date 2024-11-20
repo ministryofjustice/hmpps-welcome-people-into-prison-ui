@@ -14,7 +14,8 @@ export default function setUpHealthChecks(): Router {
     })
   })
 
-  router.get('/ping', (req, res) =>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  router.get('/ping', (req, res): any =>
     res.send({
       status: 'UP',
     })
