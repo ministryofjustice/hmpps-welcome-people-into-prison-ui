@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: wpip-ui-update-events
+  labels:
+    {{- include "wpipui.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.jobs.cronspec | quote }}
+  concurrencyPolicy: Replace
+  failedJobsHistoryLimit: 3
+  startingDeadlineSeconds: 300
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      # Tidy up all jobs after 4 days
+      ttlSecondsAfterFinished: 345600
+      template:
+        spec:
+          restartPolicy: Never
+          activeDeadlineSeconds: 240
+          containers:
+            - name: hmpps-welcome-people-into-prison-ui
+              image: {{ with index .Values "generic-service" }}{{ .image.repository }}:{{ .image.tag }}{{ end }}
+              imagePullPolicy: IfNotPresent
+              args:
+                - node
+                - dist/jobs/eventsJob
+{{ $context := index .Values "generic-service" }}{{- include "deployment.envs" $context | nindent 14 }}
