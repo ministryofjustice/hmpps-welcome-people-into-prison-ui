@@ -37,3 +37,6 @@ generic-service:
     SHOW_PRISON_TRANSFER_SUMMARY: 'true'
     SHOW_BREADCRUMB: 'true'
     SHOW_RECENT_ARRIVALS: 'true'
+
+generic-prometheus-alerts:
+  alertSeverity: digital-prison-service-dev
