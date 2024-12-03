@@ -9,7 +9,7 @@ import logger from '../../logger'
 const RedisStore = connectRedis(session)
 
 export default function setUpWebSession(): Router {
-  const client = createRedisClient({ legacyMode: true })
+  const client = createRedisClient({ legacyMode: false })
   client.connect().catch((err: Error) => logger.error(`Error connecting to Redis`, err))
 
   const router = express.Router()
