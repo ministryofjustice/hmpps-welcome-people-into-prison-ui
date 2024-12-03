@@ -20,7 +20,7 @@ buildAppInsightsClient()
 type RestClientBuilder<T> = (token: string) => T
 
 export const dataAccess = () => {
-  const redisClient = createRedisClient()
+  const redisClient = createRedisClient({ legacyMode: false })
   return {
     redisClient,
     notifyClient,
