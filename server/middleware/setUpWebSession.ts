@@ -20,8 +20,15 @@ export default function setUpWebSession(): Router {
   router.use(
     session({
       store,
-      name: 'hmpps-welcome-people-into-prison.session',
-      cookie: { secure: config.https, sameSite: 'lax', maxAge: config.session.expiryMinutes * 60 * 1000 },
+      name: config.session.name,
+      cookie: {
+        domain: config.session.domain,
+        httpOnly: true,
+        secure: config.https,
+        sameSite: 'lax',
+        maxAge: config.session.expiryMinutes * 60 * 1000,
+        signed: true,
+      },
       secret: config.session.secret,
       resave: false, // redis implements touch so shouldn't need this
       saveUninitialized: false,
