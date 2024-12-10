@@ -9,9 +9,8 @@ export default class MovementReasonsController {
     return async (req, res) => {
       const { id, imprisonmentStatus } = req.params
 
-      const { movementReasons, secondLevelTitle } = await this.imprisonmentStatusesService.getImprisonmentStatus(
-        imprisonmentStatus
-      )
+      const { movementReasons, secondLevelTitle } =
+        await this.imprisonmentStatusesService.getImprisonmentStatus(imprisonmentStatus)
 
       const data = State.newArrival.get(req)
 
@@ -35,9 +34,8 @@ export default class MovementReasonsController {
         return res.redirect(`/prisoners/${id}/imprisonment-status/${imprisonmentStatus}`)
       }
 
-      const selectedImprisonmentStatus = await this.imprisonmentStatusesService.getImprisonmentStatus(
-        imprisonmentStatus
-      )
+      const selectedImprisonmentStatus =
+        await this.imprisonmentStatusesService.getImprisonmentStatus(imprisonmentStatus)
 
       State.newArrival.update(req, res, {
         code: selectedImprisonmentStatus.code,

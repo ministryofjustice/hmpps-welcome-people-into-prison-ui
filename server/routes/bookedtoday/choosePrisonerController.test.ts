@@ -149,7 +149,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
       bodyScanStatus: 'CLOSE_TO_LIMIT',
       offence: 'Robbery',
       matchType,
-    } as WithMatchType<Arrival>)
+    }) as WithMatchType<Arrival>
 
   stubCookie(State.searchDetails, {
     firstName: 'James',

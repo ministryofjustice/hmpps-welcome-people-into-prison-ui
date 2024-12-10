@@ -13,7 +13,10 @@ export default class Routes {
     return new Routes(express.Router(), [role])
   }
 
-  private constructor(private readonly router: Router, private readonly authorisedRoles: Role[]) {}
+  private constructor(
+    private readonly router: Router,
+    private readonly authorisedRoles: Role[]
+  ) {}
 
   private wrap = (handlers: RequestHandler[]) => handlers.map(handler => asyncMiddleware(handler))
 
