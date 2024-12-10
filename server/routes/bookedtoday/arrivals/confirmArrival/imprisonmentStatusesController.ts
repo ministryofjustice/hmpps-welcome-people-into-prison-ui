@@ -29,9 +29,8 @@ export default class ImprisonmentStatusesController {
         return res.redirect(`/prisoners/${id}/imprisonment-status`)
       }
 
-      const selectedImprisonmentStatus = await this.imprisonmentStatusesService.getImprisonmentStatus(
-        imprisonmentStatus
-      )
+      const selectedImprisonmentStatus =
+        await this.imprisonmentStatusesService.getImprisonmentStatus(imprisonmentStatus)
 
       if (selectedImprisonmentStatus.movementReasons.length === 1) {
         State.newArrival.update(req, res, {

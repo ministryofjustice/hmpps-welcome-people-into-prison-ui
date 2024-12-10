@@ -53,7 +53,7 @@ export const mockRequest = ({
     path,
     hostname,
     errors,
-  } as unknown as jest.Mocked<Request>)
+  }) as unknown as jest.Mocked<Request>
 
 export const mockResponse = ({ locals = { context: {}, user: {} } }: ResponseParams): jest.Mocked<Response> =>
   ({
@@ -66,7 +66,7 @@ export const mockResponse = ({ locals = { context: {}, user: {} } }: ResponsePar
     render: jest.fn(),
     cookie: jest.fn(),
     clearCookie: jest.fn(),
-  } as unknown as jest.Mocked<Response>)
+  }) as unknown as jest.Mocked<Response>
 
 export const mockNext = (): jest.MockedFunction<NextFunction> => jest.fn()
 
