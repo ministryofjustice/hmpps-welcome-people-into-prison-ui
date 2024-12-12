@@ -11,7 +11,7 @@ describe('authorisationMiddlewareForUrl', () => {
     return {
       locals: {
         user: {
-          roles: [role] || null,
+          roles: role !== undefined ? [role] : [],
         },
       },
       redirect: (redirectUrl: string) => {
