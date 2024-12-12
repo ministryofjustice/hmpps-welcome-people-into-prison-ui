@@ -41,7 +41,10 @@ const isStatePresent =
   }
 
 export class StateOperations<T> {
-  constructor(public readonly cookieName: string, private readonly codec: Codec<T>) {}
+  constructor(
+    public readonly cookieName: string,
+    private readonly codec: Codec<T>
+  ) {}
 
   clear(res: Response) {
     clearState(this.cookieName)(res)

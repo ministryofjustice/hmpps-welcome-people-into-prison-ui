@@ -25,7 +25,7 @@ describe('GET /confirm-arrival/choose-prisoner/:moveId/summary', () => {
     ({
       id: '1111-2222-3333-4444',
       matchType,
-    } as WithMatchType<Arrival>)
+    }) as WithMatchType<Arrival>
 
   describe('Summary controller', () => {
     it('should redirect to /duplicate-booking-prevention if arrival already confirmed', () => {
