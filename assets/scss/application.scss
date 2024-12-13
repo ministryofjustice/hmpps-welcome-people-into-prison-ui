@@ -1,0 +1,22 @@
+$govuk-global-styles: true;
+$path: "/assets/images/";
+
+$moj-page-width: 1170px;
+$govuk-page-width: $moj-page-width;
+
+@import "govuk-frontend/dist/govuk/all";
+@import "@ministryofjustice/frontend/moj/all";
+
+@import './components/header-bar';
+@import './components/footer';
+@import './components/homepage';
+@import './components/movement-card';
+@import './components/card';
+@import './components/prisoner-profile-header';
+@import './components/prisoner-profile-image';
+@import './components/transfer-card';
+@import './components/check-records';
+@import './components/feedback-banner';
+@import './components/summary-card';
+@import './components/compliance-panel';
+@import './local';
