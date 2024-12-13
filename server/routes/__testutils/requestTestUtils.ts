@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import superAgent from 'superagent'
 import { NextFunction, Request, Response } from 'express'
 import { ValidationError } from '../../middleware/validationMiddleware'
@@ -72,7 +73,7 @@ export const mockNext = (): jest.MockedFunction<NextFunction> => jest.fn()
 
 export const expectSettingCookie = <T>(
   res: superAgent.Response,
-  stateOperations: StateOperations<T>
+  stateOperations: StateOperations<T>,
 ): jest.JestMatchers<T> => {
   const cookies = res.header['set-cookie'] as unknown as string[]
   const matchedCookie = cookies.find((c: string) => c.includes(stateOperations.cookieName))
@@ -88,7 +89,7 @@ export const stubRequestCookie = <T>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   signedCookiesProvider: jest.Mock<any, any>,
   stateOperations: StateOperations<T>,
-  value: T
+  value: T,
 ) => {
   signedCookiesProvider.mockReturnValue({
     [stateOperations.cookieName]: stateOperations.write(value),
@@ -100,12 +101,14 @@ export type ExpectedCookie<T> = [stateOperations: StateOperations<T>, value: T]
 export const stubRequestCookies = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   signedCookiesProvider: jest.Mock<any, any>,
-  cookies: ExpectedCookie<unknown>[]
+  cookies: ExpectedCookie<unknown>[],
 ) => {
   signedCookiesProvider.mockReturnValue(
     cookies.reduce((acc, [stateOperations, value]) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       acc[stateOperations.cookieName] = stateOperations.write(value)
       return acc
-    }, {})
+    }, {}),
   )
 }

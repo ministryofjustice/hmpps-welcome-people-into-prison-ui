@@ -175,7 +175,7 @@
     "sass": "^1.81.0",
     "supertest": "^6.3.3",
     "ts-jest": "^29.2.5",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.2"
   },
   "overrides": {
     "jest-html-reporter": {

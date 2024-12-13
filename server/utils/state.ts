@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { CookieOptions, NextFunction, Request, RequestHandler, Response } from 'express'
 import config from '../config'
 
@@ -43,7 +44,7 @@ const isStatePresent =
 export class StateOperations<T> {
   constructor(
     public readonly cookieName: string,
-    private readonly codec: Codec<T>
+    private readonly codec: Codec<T>,
   ) {}
 
   clear(res: Response) {
