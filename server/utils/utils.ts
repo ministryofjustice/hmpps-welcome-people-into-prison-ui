@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import moment from 'moment'
 
 interface Person {
@@ -56,7 +57,7 @@ export const compareByDescendingDateAndTime =
 
 export function assertHasStringValues<K extends keyof Record<string, unknown>>(
   obj: Record<string, unknown>,
-  keysToCheck: K[]
+  keysToCheck: K[],
 ): asserts obj is Record<K, string> {
   const matches = obj && typeof obj === 'object'
 
@@ -70,8 +71,9 @@ export function assertHasStringValues<K extends keyof Record<string, unknown>>(
 }
 
 export function assertHasOptionalStringValues<K extends string>(
-  obj: unknown,
-  keysToCheck: K[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  obj: any,
+  keysToCheck: K[],
 ): asserts obj is Record<K, string | undefined> {
   const matches = obj && typeof obj === 'object'
 
@@ -84,7 +86,8 @@ export function assertHasOptionalStringValues<K extends string>(
   }
 }
 
-export function trimObjectValues(obj: unknown): Record<string, string> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function trimObjectValues(obj: any): Record<string, string> {
   const isObject = obj && typeof obj === 'object'
 
   if (!isObject) {
@@ -94,10 +97,13 @@ export function trimObjectValues(obj: unknown): Record<string, string> {
   if (Object.values(obj).some(s => typeof s !== 'string' && s !== undefined)) {
     throw Error('Values present not all strings')
   }
-  return Object.keys(obj).reduce((acc, curr) => {
-    acc[curr] = obj[curr].trim()
-    return acc
-  }, {})
+  return Object.keys(obj).reduce(
+    (acc, curr) => {
+      acc[curr] = obj[curr].trim()
+      return acc
+    },
+    {} as Record<string, string>,
+  )
 }
 
 export const createDate = (day: string, month: string, year: string) =>
@@ -109,7 +115,7 @@ export const isPastDate = (day: string, month: string, year: string) => {
   const pastCheck = (d: string, m: string, y: string) => {
     const today = moment()
     return !moment(createDate(d, m, y)).isSameOrAfter(
-      createDate(today.format('DD'), today.format('MM'), today.format('YYYY'))
+      createDate(today.format('DD'), today.format('MM'), today.format('YYYY')),
     )
   }
   return !day || !month || !year || pastCheck(day, month, year)
@@ -119,7 +125,7 @@ export const isFutureDate = (day: string, month: string, year: string) => {
   const futureCheck = (d: unknown, m: unknown, y: unknown) => {
     const today = moment()
     return moment(createDate(d.toString(), m.toString(), y.toString())).isAfter(
-      createDate(today.format('DD'), today.format('MM'), today.format('YYYY'))
+      createDate(today.format('DD'), today.format('MM'), today.format('YYYY')),
     )
   }
   return !day || !month || !year || futureCheck(day, month, year)

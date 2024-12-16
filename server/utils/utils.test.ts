@@ -84,7 +84,9 @@ describe('groupBy', () => {
   })
 
   it('should handle null keys', () => {
-    expect(groupBy([1, 2], _ => null)).toEqual(new Map([[null, [1, 2]]]))
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    expect(groupBy([1, 2], () => null)).toEqual(new Map([[null, [1, 2]]]))
   })
 
   it('should handle lists with content', () => {
