@@ -20,7 +20,8 @@
     "security_audit": "npx audit-ci --config audit-ci.json",
     "int-test": "cypress run --config video=false",
     "int-test-ui": "cypress open",
-    "clean": "rm -rf dist build stylesheets"
+    "clean": "rm -rf dist node_modules",
+    "rebuild": "npm run clean && npm i && npm run build"
   },
   "engines": {
     "node": "^22",
@@ -86,7 +87,7 @@
     ]
   },
   "dependencies": {
-    "@ministryofjustice/frontend": "^3.1.0",
+    "@ministryofjustice/frontend": "^3.2.1",
     "agentkeepalive": "^4.5.0",
     "applicationinsights": "^2.9.6",
     "body-parser": "^1.20.3",
@@ -107,7 +108,7 @@
     "express-session": "^1.18.1",
     "glob": "^11.0.0",
     "googleapis": "^110.0.0",
-    "govuk-frontend": "^5.4.0",
+    "govuk-frontend": "^5.7.1",
     "helmet": "^8.0.0",
     "http-errors": "^2.0.0",
     "jquery": "^3.7.0",
