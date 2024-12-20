@@ -17,7 +17,8 @@ export default class EventsPusher {
   getCredentials = (serviceAccountKey: string): unknown => {
     try {
       return JSON.parse(serviceAccountKey)
-    } catch (e) {
+      // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+    } catch (_e) {
       // Deliberately obfuscate actual error as may contain creds/key
       throw new Error('An error occurred parsing creds')
     }
