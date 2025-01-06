@@ -9,7 +9,6 @@ import {
   NotificationService,
   MatchTypeDecorator,
   OffenceInfoDecorator,
-  FeComponentsService,
 } from '..'
 
 jest.mock('..')
@@ -37,5 +36,3 @@ export const createMockTemporaryAbsencesService = () =>
 export const createMockUserService = () => new UserService(null, null) as jest.Mocked<UserService>
 
 export const createMockNotificationService = () => new NotificationService(null) as jest.Mocked<NotificationService>
-
-export const createMockFeComponentService = () => new FeComponentsService(null) as jest.Mocked<FeComponentsService>

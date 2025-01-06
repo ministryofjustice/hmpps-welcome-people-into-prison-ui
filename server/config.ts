@@ -106,14 +106,6 @@ export default {
       },
       agent: DEFAULT_AGENT_CONFIG,
     },
-    frontendComponents: {
-      url: get('COMPONENT_API_URL', 'http://localhost:8082', requiredInProduction),
-      timeout: {
-        response: Number(get('COMPONENT_API_TIMEOUT_SECONDS', 2000)),
-        deadline: Number(get('COMPONENT_API_TIMEOUT_SECONDS', 2000)),
-      },
-      agent: DEFAULT_AGENT_CONFIG,
-    },
     bodyscan: {
       url: get('BODYSCAN_API_URL', 'http://localhost:8100', requiredInProduction),
       timeout: {
