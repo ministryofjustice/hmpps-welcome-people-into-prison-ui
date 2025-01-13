@@ -23,7 +23,8 @@
     "lint-fix": "eslint . --cache --max-warnings 0 --fix",
     "typecheck": "tsc && tsc -p integration_tests",
     "test": "jest",
-    "test:ci": "jest --maxWorkers=2",
+    "test-coverage": "jest --coverage",
+    "test:ci": "jest --maxWorkers=2 --coverage --coverageDirectory=coverage",
     "security_audit": "npx audit-ci --config audit-ci.json",
     "int-test": "cypress run --config video=false",
     "int-test-ui": "cypress open",
@@ -191,6 +192,14 @@
     "jest": {
       "jest-core": {
         "micromatch": "4.0.8"
+      },
+      "coverageThreshold": {
+        "global": {
+          "branches": 0,
+          "functions": 0,
+          "lines": 0,
+          "statements": 0
+        }
       }
     }
   }
