@@ -10,7 +10,7 @@ export default class EventsRetriever {
     private readonly welcomeClientBuilder: RestClientBuilder<WelcomeClient>
   ) {}
 
-  async retrieveEventsForPastYear(): Promise<string[][]> {
+  async retrieveEventsForPastSixMonths(): Promise<string[][]> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const welcomeClient = this.welcomeClientBuilder(token)
     const parser = parse({
@@ -19,14 +19,14 @@ export default class EventsRetriever {
       from: 2,
     })
     const records: string[][] = []
-    const dateOneYearAgo = moment().subtract(1, 'years').startOf('day')
-    welcomeClient.getEventsCSV(parser, dateOneYearAgo, 365)
+    const dateSixMonthsAgo = moment().subtract(6, 'months').startOf('day')
+    welcomeClient.getEventsCSV(parser, dateSixMonthsAgo, 183)
 
     // eslint-disable-next-line no-restricted-syntax
     for await (const record of parser) {
       records.push(record)
     }
-    logger.info(`Retrieved ${records.length} events since ${dateOneYearAgo}`)
+    logger.info(`Retrieved ${records.length} events since ${dateSixMonthsAgo}`)
     return records
   }
 }

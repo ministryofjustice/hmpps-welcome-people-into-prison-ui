@@ -15,7 +15,7 @@ const retriever = new EventsRetriever(hmppsAuthClient, welcomeClientBuilder)
 const pusher = new EventsPusher(config.eventPublishing.serviceAccountKey, config.eventPublishing.spreadsheetId)
 
 const job = async () => {
-  const events = await retriever.retrieveEventsForPastYear()
+  const events = await retriever.retrieveEventsForPastSixMonths()
   await pusher.pushEvents(events)
 }
 
