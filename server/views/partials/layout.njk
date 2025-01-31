@@ -41,11 +41,9 @@
         <!-- End Google Tag Manager -->
     {% endif %}
 
-    {% if feComponents.jsIncludes %}
-        {% for js in feComponents.jsIncludes %}
+    {% for js in feComponents.jsIncludes %}
         <script src="{{ js }}" nonce="{{ cspNonce }}"></script>
-        {% endfor %}
-    {% endif %} 
+    {% endfor %}
 
     <!--[if !IE 8]><!-->
     <link href="/assets/stylesheets/application.css?{{ version }}" rel="stylesheet" />
@@ -62,12 +60,9 @@
             crossorigin="anonymous"></script>
     <link href="https://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css" rel="stylesheet" crossorigin>
 
-    {% if feComponents.cssIncludes %}
-        {% for css in feComponents.cssIncludes %}
-            <link href="{{ css }}" nonce="{{ cspNonce }}" rel="stylesheet" />
-        {% endfor %}
-    {% endif %}
-
+    {% for css in feComponents.cssIncludes %}
+        <link href="{{ css }}" nonce="{{ cspNonce }}" rel="stylesheet" />
+    {% endfor %}
 
 {% endblock %}
 
@@ -86,11 +81,7 @@
 {% endblock %}
 
 {% block header %}
-  {% if feComponents.header %}
     {{ feComponents.header | safe }}
-  {% else %}
-    {% include "./header.njk" %}
-  {% endif %}
 {% endblock %}
 
 {% block bodyStart %}
@@ -131,9 +122,6 @@
       })
     }}
   {% endif %}
-  {% if feComponents.footer %}
-    {{ feComponents.footer | safe }}
-  {% else %}
-    {% include "./footer.njk" %}
-  {% endif %}
+
+  {{ feComponents.footer | safe }}
 {% endblock %}

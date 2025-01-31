@@ -10,7 +10,6 @@ import { raiseAnalyticsEvent, type RaiseAnalyticsEvent } from './raiseAnalyticsE
 import { BodyScanInfoDecorator } from './bodyScanInfoDecorator'
 import { MatchTypeDecorator } from './matchTypeDecorator'
 import OffenceInfoDecorator from './offenceInfoDecorator'
-import FeComponentsService from './feComponentsService'
 
 export const services = () => {
   const {
@@ -18,7 +17,6 @@ export const services = () => {
     welcomeClientBuilder,
     prisonRegisterClientBuilder,
     bodyScanClientBuilder,
-    feComponentsClientBuilder,
     notifyClient,
     lockManager,
   } = dataAccess()
@@ -45,7 +43,6 @@ export const services = () => {
   const imprisonmentStatusesService = new ImprisonmentStatusesService(hmppsAuthClient, welcomeClientBuilder)
   const transfersService = new TransfersService(hmppsAuthClient, welcomeClientBuilder, bodyScanInfoDecorator)
   const prisonService = new PrisonService(hmppsAuthClient, prisonRegisterClientBuilder)
-  const feComponentsService = new FeComponentsService(feComponentsClientBuilder)
 
   return {
     hmppsAuthClient,
@@ -58,7 +55,6 @@ export const services = () => {
     prisonService,
     raiseAnalyticsEvent,
     lockManager,
-    feComponentsService,
   }
 }
 
@@ -75,6 +71,5 @@ export {
   TransfersService,
   PrisonService,
   RaiseAnalyticsEvent,
-  FeComponentsService,
   OffenceInfoDecorator,
 }

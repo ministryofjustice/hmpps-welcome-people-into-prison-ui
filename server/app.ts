@@ -1,8 +1,9 @@
 import express from 'express'
 
 import path from 'path'
-
+import dpsComponents from '@ministryofjustice/hmpps-connect-dps-components'
 import config from './config'
+import logger from '../logger'
 import wpipRoutes from './routes'
 import bodyScanRoutes from './bodyscan/routes'
 import nunjucksSetup from './utils/nunjucksSetup'
@@ -21,7 +22,6 @@ import authorisationMiddleware from './middleware/authorisationMiddleware'
 import type { Services } from './services'
 import caseloadCheckMiddleware from './middleware/caseloadCheckMiddleware'
 import { BodyScanServices } from './bodyscan/services'
-import getFrontendComponents from './middleware/feComponentsMiddleware'
 import setUpEnvironmentName from './middleware/setUpEnvironmentName'
 
 export default function createApp(services: Services, bodyScanServices: BodyScanServices): express.Application {
@@ -51,7 +51,9 @@ export default function createApp(services: Services, bodyScanServices: BodyScan
       res.render('pages/serviceUnavailable.njk')
     })
   }
-  app.get('*', getFrontendComponents(services.feComponentsService))
+
+  app.get('*', dpsComponents.getPageComponents({ dpsUrl: config.newDpsUrl, logger }))
+
   app.use(wpipRoutes(services))
   app.use(bodyScanRoutes(bodyScanServices))
 
