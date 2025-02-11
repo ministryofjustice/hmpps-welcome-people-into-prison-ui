@@ -35,5 +35,4 @@ generic-service:
     SHOW_RECENT_ARRIVALS: 'true'
 
 generic-prometheus-alerts:
-  targetApplication: hmpps-welcome-people-into-prison-ui
-  alertSeverity: elp_alerts
+  alertSeverity: move-a-prisoner-alerts-prod
