@@ -119,7 +119,7 @@
     "jwt-decode": "^3.1.2",
     "moment": "^2.29.4",
     "nocache": "^3.0.4",
-    "notifications-node-client": "^8.0.0",
+    "notifications-node-client": "^8.2.1",
     "nunjucks": "^3.2.4",
     "passport": "^0.7.0",
     "passport-oauth2": "^1.8.0",
@@ -166,7 +166,7 @@
     "eslint-plugin-prettier": "^5.2.3",
     "husky": "^9.1.7",
     "jest": "^29.7.0",
-    "jest-html-reporter": "^3.10.2",
+    "jest-html-reporter": "^4.0.1",
     "jest-junit": "^16.0.0",
     "jsonwebtoken": "^9.0.2",
     "lint-staged": "^15.4.3",
@@ -180,12 +180,6 @@
     "typescript": "^5.7.3"
   },
   "overrides": {
-    "jest-html-reporter": {
-      "@babel/traverse": "7.23.2"
-    },
-    "notifications-node-client": {
-      "axios": "1.7.4"
-    },
     "superagent": {
       "formidable": "3.5.1"
     },
