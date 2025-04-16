@@ -23,6 +23,7 @@ generic-service:
     TOKEN_VERIFICATION_API_URL: 'https://token-verification-api-dev.prison.service.justice.gov.uk'
     WELCOME_API_URL: 'https://welcome-api-dev.prison.service.justice.gov.uk'
     PRISON_REGISTER_API_URL: 'https://prison-register-dev.hmpps.service.justice.gov.uk'
+    ESTABLISHMENT_ROLL_URL: 'https://prison-roll-count-dev.hmpps.service.justice.gov.uk'
     # Body scan functionality is currently located in WPIP API
     COMPONENT_API_URL: 'https://frontend-components-dev.hmpps.service.justice.gov.uk'
     BODYSCAN_API_URL: 'https://welcome-api-dev.prison.service.justice.gov.uk'

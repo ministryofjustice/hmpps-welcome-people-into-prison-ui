@@ -102,6 +102,7 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)
   njkEnv.addGlobal('dpsUrl', config.dpsUrl)
   njkEnv.addGlobal('newDpsUrl', config.newDpsUrl)
+  njkEnv.addGlobal('establishmentRollUrl', config.establishmentRollUrl)
   njkEnv.addGlobal('supportingMultitransactionsEnabled', config.supportingMultitransactionsEnabled)
   njkEnv.addGlobal('generateCurrentYear', generateCurrentYear)
   njkEnv.addGlobal('showExpectedArrivalPrisonerSummary', config.showExpectedArrivalPrisonerSummary)
