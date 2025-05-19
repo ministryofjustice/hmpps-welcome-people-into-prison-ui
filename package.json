@@ -180,6 +180,9 @@
     "typescript": "^5.8.3"
   },
   "overrides": {
+    "cheerio": {
+      "undici": "7.9.0"
+    },
     "superagent": {
       "formidable": "3.5.3"
     },
