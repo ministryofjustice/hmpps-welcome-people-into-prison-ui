@@ -4,6 +4,7 @@ import type {
   ArrivalResponse,
   ConfirmArrivalDetail,
   ImprisonmentStatus,
+  ManagementReportDefinition,
   PaginatedResponse,
   PotentialMatch,
   PotentialMatchCriteria,
@@ -211,5 +212,11 @@ export default class WelcomeClient {
       path: `/events?start-date=${date.format('YYYY-MM-DD')}${daysQP}`,
       headers: { Accept: 'text/csv' },
     })
+  }
+
+  public getManagementReportDefinitions(): Promise<ManagementReportDefinition[]> {
+    return this.restClient.get({
+      path: '/definitions',
+    }) as Promise<ManagementReportDefinition[]>
   }
 }

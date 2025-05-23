@@ -7,6 +7,7 @@ import PrisonerController from './prisonerController'
 import temporaryAbsenceRoutes from './temporaryabsences'
 import bookedTodayRoutes from './bookedtoday'
 import recentArrivalsRoutes from './recentArrivals'
+import { dprRouter } from './dpr'
 import feedbackRoutes from './feedback'
 import footerRoutes from './footer'
 
@@ -23,6 +24,7 @@ export default function routes(services: Services): Router {
     .use(bookedTodayRoutes(services))
     .use(temporaryAbsenceRoutes(services))
     .use(recentArrivalsRoutes(services))
+    .use(dprRouter(services))
     .use(feedbackRoutes(services))
     .use(footerRoutes())
     .build()
