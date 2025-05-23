@@ -1,4 +1,4 @@
-import { dataAccess } from '../data'
+import { dataAccess, WelcomeClient } from '../data'
 import UserService from './userService'
 import ExpectedArrivalsService from './expectedArrivalsService'
 import TemporaryAbsencesService from './temporaryAbsencesService'
@@ -10,6 +10,9 @@ import { raiseAnalyticsEvent, type RaiseAnalyticsEvent } from './raiseAnalyticsE
 import { BodyScanInfoDecorator } from './bodyScanInfoDecorator'
 import { MatchTypeDecorator } from './matchTypeDecorator'
 import OffenceInfoDecorator from './offenceInfoDecorator'
+import HmppsAuthClient from '../data/hmppsAuthClient'
+import { RedisTokenStore } from '../data/tokenStore'
+import { redisClient } from '../data/redisClient'
 
 export const services = () => {
   const {
@@ -20,6 +23,8 @@ export const services = () => {
     notifyClient,
     lockManager,
   } = dataAccess()
+
+  const authService = new HmppsAuthClient(new RedisTokenStore(redisClient))
 
   const bodyScanInfoDecorator = new BodyScanInfoDecorator(hmppsAuthClient, bodyScanClientBuilder)
   const matchTypeDecorator = new MatchTypeDecorator()
@@ -45,6 +50,7 @@ export const services = () => {
   const prisonService = new PrisonService(hmppsAuthClient, prisonRegisterClientBuilder)
 
   return {
+    authService,
     hmppsAuthClient,
     userService,
     notificationService,
