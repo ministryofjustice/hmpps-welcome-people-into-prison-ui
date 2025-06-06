@@ -91,7 +91,6 @@ context('Unexpected arrivals - Single matching record found', () => {
       locationName: 'Reception',
     })
     confirmAddedToRollPage.addCaseNote('G0014GM').exists()
-    confirmAddedToRollPage.updatePersonalDetails('G0014GM').exists()
     confirmAddedToRollPage.viewEstablishmentRoll().exists()
     confirmAddedToRollPage.addAnotherToRoll().click()
 
