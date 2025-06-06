@@ -14,6 +14,13 @@
             <p data-qa="confirmation-paragraph">{{ firstName }} {{ lastName }} is now part of the {{ prison.prisonName }} establishment roll.</p>
             <p data-qa="location-paragraph">Their location is {{ location }}.</p>
             <h2 class="govuk-heading-m">Add more information about this person</h2>
+            {% if editEnabled %}
+                <p class="govuk-!-margin-bottom-2">
+                    <a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ dpsUrl }}/save-backlink?service=welcome-people-into-prison&returnPath=/confirm-arrival/choose-prisoner&redirectPath=/prisoner/{{ prisonNumber }}/personal" data-qa="update-personal">
+                        Update personal details on their profile
+                    </a>
+                </p>
+            {% endif %}
             <p>
                 <a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ dpsUrl }}/save-backlink?service=welcome-people-into-prison&returnPath=/confirm-arrival/choose-prisoner&redirectPath=/prisoner/{{ prisonNumber }}/add-case-note" data-qa="add-case-note">
                     Add a case note on their profile

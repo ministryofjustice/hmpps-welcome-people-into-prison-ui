@@ -144,4 +144,8 @@ export default {
   showPrisonTransferSummary: get('SHOW_PRISON_TRANSFER_SUMMARY', 'false', requiredInProduction) === 'true',
   showBreadCrumb: get('SHOW_BREADCRUMB', 'false', requiredInProduction) === 'true',
   showRecentArrivals: get('SHOW_RECENT_ARRIVALS', 'false', requiredInProduction) === 'true',
+  featureToggles: {
+    editProfileEnabledFrom: get('EDIT_PROFILE_ENABLED_FROM', '2099-01-01T00:00:00'),
+    editProfileEnabledPrisons: get('EDIT_PROFILE_ENABLED_PRISONS', []),
+  },
 }
