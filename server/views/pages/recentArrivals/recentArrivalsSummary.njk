@@ -6,6 +6,7 @@
 {% set pageTitle = "Summary of recent arrival" %}
 {% set hasBackLink = false %}
 {% set isFemalePrison = false %}
+{% set personalDetailsUrl = dpsUrl + "/save-backlink?service=welcome-people-into-prison&returnPath=/recent-arrivals/" + arrival.prisonNumber + "/summary&redirectPath=/prisoner/" + arrival.prisonNumber + "/personal" %}
 
 {% set breadCrumbs = {
     enabled: true,
@@ -40,7 +41,7 @@
                     {% if editEnabled %}                    
                         {{ govukButton({
                             text: "Update personal details",
-                            href: dpsUrl + "/save-backlink?service=welcome-people-into-prison&returnPath=/recent-arrivals/" + arrival.prisonNumber + "/summary&redirectPath=/prisoner/" + arrival.prisonNumber + "/personal",
+                            href: personalDetailsUrl,
                             classes: "govuk-button--success float-right",
                             attributes: {'data-qa': 'update-personal-details-button'}
                         }) }}
@@ -63,7 +64,7 @@
                             title: "You can now update the prisoner profile",
                             showTitleAsHeading: true,
                             dismissible: false,
-                            html: 'Use DPS to <a href="' + dpsUrl + '/save-backlink?service=welcome-people-into-prison&returnPath=/recent-arrivals/' + arrival.prisonNumber + '/summary&redirectPath=/prisoner/' + arrival.prisonNumber + '/personal">add and edit personal details</a> on this person’s profile.'
+                            html: 'Use DPS to <a href="' + personalDetailsUrl +'">add and edit personal details</a> on this person’s profile.'
                         }) }}
                     {% endif %}
                     <div class="govuk-inset-text govuk-!-margin-top-0">
