@@ -89,6 +89,7 @@ context('Is Single Match', () => {
       locationName: 'Reception',
     })
     confirmAddedToRollPage.addCaseNote('A1234BC').exists()
+    confirmAddedToRollPage.updatePersonalDetails('A1234BC').exists()
     confirmAddedToRollPage.viewEstablishmentRoll().exists()
     confirmAddedToRollPage.addAnotherToRoll().click()
 

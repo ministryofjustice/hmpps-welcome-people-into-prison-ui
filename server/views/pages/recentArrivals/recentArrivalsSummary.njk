@@ -1,6 +1,7 @@
 {% extends "../../partials/layout.njk" %}
 {% from "components/summary-card.njk" import summaryCard %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "moj/components/alert/macro.njk" import mojAlert %}
 
 {% set pageTitle = "Summary of recent arrival" %}
 {% set hasBackLink = false %}
@@ -31,21 +32,40 @@
                 </div>
                 <div class="govuk-grid-column-one-half">
                     {{ govukButton({
-                        text: "View full prisoner profile",
-                        href: dpsUrl + "/save-backlink?service=welcome-people-into-prison&returnPath=/recent-arrivals/" + arrival.prisonNumber + "/summary&redirectPath=/prisoner/" + arrival.prisonNumber,
-                        classes: "govuk-button--secondary govuk-!-margin-left-3 float-right",
-                        attributes: {'data-qa':'dps-prisoner-profile-button'}
+                            text: "Add a case note",
+                            href: dpsUrl + "/save-backlink?service=welcome-people-into-prison&returnPath=/recent-arrivals/" + arrival.prisonNumber + "/summary&redirectPath=/prisoner/" + arrival.prisonNumber + "/add-case-note",
+                            classes: "govuk-button--secondary govuk-!-margin-left-3 float-right",
+                            attributes: {'data-qa': 'add-case-note-button'}
                     }) }}
-                    {{ govukButton({
-                        text: "Add a case note",
-                        href: dpsUrl + "/save-backlink?service=welcome-people-into-prison&returnPath=/recent-arrivals/" + arrival.prisonNumber + "/summary&redirectPath=/prisoner/" + arrival.prisonNumber + "/add-case-note",
-                        classes: "govuk-button--secondary float-right",
-                        attributes: {'data-qa': 'add-case-note-button'}
-                    }) }}
+                    {% if editEnabled %}                    
+                        {{ govukButton({
+                            text: "Update personal details",
+                            href: dpsUrl + "/save-backlink?service=welcome-people-into-prison&returnPath=/recent-arrivals/" + arrival.prisonNumber + "/summary&redirectPath=/prisoner/" + arrival.prisonNumber + "/personal",
+                            classes: "govuk-button--success float-right",
+                            attributes: {'data-qa': 'update-personal-details-button'}
+                        }) }}
+                    {% else %}
+                        {{ govukButton({
+                            text: "View full prisoner profile",
+                            href: dpsUrl + "/save-backlink?service=welcome-people-into-prison&returnPath=/recent-arrivals/" + arrival.prisonNumber + "/summary&redirectPath=/prisoner/" + arrival.prisonNumber,
+                            classes: "govuk-button--secondary float-right",
+                            attributes: {'data-qa':'dps-prisoner-profile-button'}
+                        }) }}
+                    {% endif %}
                 </div>
             </div>
+
             <div class="govuk-grid-row">
-                <div class="govuk-grid-column-full">
+                <div class="govuk-grid-column-two-thirds">
+                    {% if editEnabled %}
+                        {{ mojAlert({
+                            variant: "information",
+                            title: "You can now update the prisoner profile",
+                            showTitleAsHeading: true,
+                            dismissible: false,
+                            html: 'Use DPS to <a href="#">add and edit personal details</a> on this person’s profile.'
+                        }) }}
+                    {% endif %}
                     <div class="govuk-inset-text govuk-!-margin-top-0">
                         This summary contains information from the prison record.
                     </div>

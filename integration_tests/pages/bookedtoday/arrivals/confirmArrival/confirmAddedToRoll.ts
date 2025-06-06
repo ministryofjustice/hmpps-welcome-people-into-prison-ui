@@ -39,6 +39,15 @@ export default class ConfirmAddedToRollPage extends Page {
       ),
   })
 
+  updatePersonalDetails = (prisonNumber: string) => ({
+    exists: () =>
+      Page.checkLink(
+        cy.get(`[data-qa=update-personal]`),
+        'Update personal details on their profile',
+        `https://digital-dev.prison.service.justice.gov.uk/save-backlink?service=welcome-people-into-prison&returnPath=/confirm-arrival/choose-prisoner&redirectPath=/prisoner/${prisonNumber}/personal`
+      ),
+  })
+
   addAnotherToRoll = (): PageElement => cy.get(`[data-qa=add-another-to-roll]`)
 
   viewEstablishmentRoll = () => ({
