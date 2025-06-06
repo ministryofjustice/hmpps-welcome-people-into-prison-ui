@@ -63,7 +63,7 @@
                             title: "You can now update the prisoner profile",
                             showTitleAsHeading: true,
                             dismissible: false,
-                            html: 'Use DPS to <a href="#">add and edit personal details</a> on this person’s profile.'
+                            html: 'Use DPS to <a href="' + dpsUrl + '/save-backlink?service=welcome-people-into-prison&returnPath=/recent-arrivals/' + arrival.prisonNumber + '/summary&redirectPath=/prisoner/' + arrival.prisonNumber + '/personal">add and edit personal details</a> on this person’s profile.'
                         }) }}
                     {% endif %}
                     <div class="govuk-inset-text govuk-!-margin-top-0">
