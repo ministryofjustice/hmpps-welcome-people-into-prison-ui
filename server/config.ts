@@ -144,4 +144,5 @@ export default {
   showPrisonTransferSummary: get('SHOW_PRISON_TRANSFER_SUMMARY', 'false', requiredInProduction) === 'true',
   showBreadCrumb: get('SHOW_BREADCRUMB', 'false', requiredInProduction) === 'true',
   showRecentArrivals: get('SHOW_RECENT_ARRIVALS', 'false', requiredInProduction) === 'true',
+  loadReportDefinitionsOnStartup: get('LOAD_DPR_ON_STARTUP', 'false') === 'true',
 }

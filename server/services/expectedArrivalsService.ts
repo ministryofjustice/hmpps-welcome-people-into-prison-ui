@@ -7,6 +7,7 @@ import {
   PrisonerDetails,
   Sex,
   LocationType,
+  ManagementReportDefinition,
 } from 'welcome'
 import moment, { type Moment } from 'moment'
 import type { Readable } from 'stream'
@@ -225,5 +226,9 @@ export default class ExpectedArrivalsService {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const prisonerDetails = await this.welcomeClientFactory(token).getPrisonerDetails(prisonNumber)
     return this.bodyScanDecorator.decorateSingle(prisonerDetails)
+  }
+
+  public async getManagementReportDefinitions(token: string): Promise<ManagementReportDefinition[]> {
+    return this.welcomeClientFactory(token).getManagementReportDefinitions()
   }
 }
