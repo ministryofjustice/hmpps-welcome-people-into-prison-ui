@@ -14,7 +14,6 @@ export default class ConfirmAddedToRollController {
         return res.redirect('/page-not-found')
       }
       const { activeCaseLoadId } = res.locals.user
-      const editEnabled = editProfileEnabled(activeCaseLoadId)
       const prison = await this.prisonService.getPrison(activeCaseLoadId)
       State.newArrival.clear(res)
 
@@ -24,7 +23,7 @@ export default class ConfirmAddedToRollController {
         prison,
         prisonNumber,
         location,
-        editEnabled,
+        editEnabled: editProfileEnabled(activeCaseLoadId),
       })
     }
   }
