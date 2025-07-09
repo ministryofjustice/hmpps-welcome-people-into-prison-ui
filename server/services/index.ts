@@ -1,4 +1,4 @@
-import { dataAccess, WelcomeClient } from '../data'
+import { dataAccess } from '../data'
 import UserService from './userService'
 import ExpectedArrivalsService from './expectedArrivalsService'
 import TemporaryAbsencesService from './temporaryAbsencesService'

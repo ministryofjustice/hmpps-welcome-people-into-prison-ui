@@ -14,7 +14,9 @@ async function populateRoutes(
 ): Promise<ManagementReportDefinition[]> {
   const allDefinitions = await expectedArrivalsService.getManagementReportDefinitions(token)
   if (definitionsRoutesInitialised === false) {
+    // eslint-disable-next-line no-restricted-syntax
     for (const definition of allDefinitions) {
+      // eslint-disable-next-line no-restricted-syntax
       for (const variant of definition.variants) {
         router.get(
           `/management-reporting/${definition.id}-${variant.id}`,
