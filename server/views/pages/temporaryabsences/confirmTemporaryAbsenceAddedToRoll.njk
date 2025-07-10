@@ -17,7 +17,7 @@
             <h2 class="govuk-heading-m">Add more information about this person</h2>
             {% if editEnabled %}
                 <p class="govuk-!-margin-bottom-2">
-                    <a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ dpsUrl }}/save-backlink?service=welcome-people-into-prison&returnPath=/confirm-arrival/choose-prisoner&redirectPath=/prisoner/{{ prisonNumber }}/personal" data-qa="update-personal">
+                    <a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ dpsUrl }}/save-backlink?service=welcome-people-into-prison&backLinkText=Back to People returning from temporary absence&returnPath=/prisoners-returning&redirectPath=/prisoner/{{ prisonNumber }}/personal" data-qa="update-personal">
                         Update personal details on their profile
                     </a>
                 </p>
