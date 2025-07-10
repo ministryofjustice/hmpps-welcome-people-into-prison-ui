@@ -11,9 +11,10 @@ export default class PrisonerController {
   public getImage(): RequestHandler {
     return async (req, res) => {
       const { prisonNumber } = req.params
+      const { systemToken } = req.session
 
       await this.expectedArrivalsService
-        .getImage(prisonNumber)
+        .getImage(systemToken, prisonNumber)
         .then(data => {
           res.type('image/jpeg')
           data.pipe(res)

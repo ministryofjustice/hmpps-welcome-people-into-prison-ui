@@ -9,8 +9,8 @@ export default class MultipleExistingRecordsFoundController {
     return async (req: Request, res: Response) => {
       const { id } = req.params
       const searchData = State.searchDetails.get(req)
-
-      const potentialMatches = await this.expectedArrivalsService.getMatchingRecords(searchData)
+      const { systemToken } = req.session
+      const potentialMatches = await this.expectedArrivalsService.getMatchingRecords(systemToken, searchData)
 
       res.render('pages/bookedtoday/arrivals/searchforexisting/multipleExistingRecordsFound.njk', {
         arrival: {
@@ -29,6 +29,7 @@ export default class MultipleExistingRecordsFoundController {
   public submit(): RequestHandler {
     return async (req: Request, res: Response) => {
       const { id } = req.params
+      const { systemToken } = req.session
 
       if (req.errors) {
         req.flash('errors', req.body)
@@ -36,7 +37,7 @@ export default class MultipleExistingRecordsFoundController {
       }
 
       const { prisonNumber } = req.body
-      const selectedRecord = await this.expectedArrivalsService.getPrisonerDetails(prisonNumber)
+      const selectedRecord = await this.expectedArrivalsService.getPrisonerDetails(systemToken, prisonNumber)
 
       State.newArrival.set(res, { ...selectedRecord, expected: true })
 

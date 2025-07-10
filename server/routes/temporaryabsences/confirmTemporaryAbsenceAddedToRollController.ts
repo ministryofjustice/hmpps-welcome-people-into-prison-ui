@@ -7,10 +7,15 @@ export default class ConfirmTemporaryAbsenceAddedToRollController {
   public view(): RequestHandler {
     return async (req, res) => {
       const { prisonNumber } = req.params
-      const { activeCaseLoadId } = res.locals.user
-      const { firstName, lastName, location } = (req.flash('prisoner')?.[0] as Record<string, string>) || {}
+      const activeCaseLoadId = res.locals.user.activeCaseload.id
+      const { systemToken } = req.session
+      const flashItem = req.flash('prisoner')?.[0]
 
-      const prison = await this.prisonService.getPrison(activeCaseLoadId)
+      const { firstName, lastName, location } = flashItem
+        ? (JSON.parse(flashItem as unknown as string) as Record<string, string>)
+        : {}
+
+      const prison = await this.prisonService.getPrison(systemToken, activeCaseLoadId)
 
       if (!firstName || !lastName || !location) {
         return res.redirect('/page-not-found')

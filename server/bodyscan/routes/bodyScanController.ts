@@ -10,8 +10,9 @@ export default class BodyScanController {
     return async (req, res) => {
       const { prisonNumber } = req.params
       const today = moment().format('YYYY-MM-DD')
-      const prisonerDetails = await this.bodyScanService.getPrisonerDetails(prisonNumber)
-      const bodyScanInfo = await this.bodyScanService.retrieveBodyScanInfo(prisonNumber)
+      const { systemToken } = req.session
+      const prisonerDetails = await this.bodyScanService.getPrisonerDetails(systemToken, prisonNumber)
+      const bodyScanInfo = await this.bodyScanService.retrieveBodyScanInfo(systemToken, prisonNumber)
       return res.render('pages/bodyscans/recordBodyScan.njk', {
         errors: req.flash('errors'),
         today,
@@ -25,13 +26,14 @@ export default class BodyScanController {
   public submit(): RequestHandler {
     return async (req, res) => {
       const { prisonNumber } = req.params
+      const { systemToken } = req.session
       if (req.errors) {
         req.flash('input', req.body)
         return res.redirect(`/prisoners/${prisonNumber}/record-body-scan`)
       }
 
       const bodyScan = parseBodyScan(req.body)
-      await this.bodyScanService.addBodyScan(req.user.username, prisonNumber, bodyScan)
+      await this.bodyScanService.addBodyScan(systemToken, prisonNumber, bodyScan)
       req.flash('body-scan', bodyScan)
 
       return res.redirect(`/prisoners/${prisonNumber}/scan-confirmation`)

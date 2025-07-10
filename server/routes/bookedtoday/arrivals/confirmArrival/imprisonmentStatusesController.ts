@@ -8,7 +8,8 @@ export default class ImprisonmentStatusesController {
   public view(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
-      const imprisonmentStatuses = await this.imprisonmentStatusesService.getAllImprisonmentStatuses()
+      const { systemToken } = req.session
+      const imprisonmentStatuses = await this.imprisonmentStatusesService.getAllImprisonmentStatuses(systemToken)
       const data = State.newArrival.get(req)
 
       return res.render('pages/bookedtoday/arrivals/confirmArrival/imprisonmentStatus.njk', {
@@ -23,14 +24,17 @@ export default class ImprisonmentStatusesController {
   public assignStatus(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
+      const { systemToken } = req.session
       const { imprisonmentStatus } = req.body
 
       if (req.errors) {
         return res.redirect(`/prisoners/${id}/imprisonment-status`)
       }
 
-      const selectedImprisonmentStatus =
-        await this.imprisonmentStatusesService.getImprisonmentStatus(imprisonmentStatus)
+      const selectedImprisonmentStatus = await this.imprisonmentStatusesService.getImprisonmentStatus(
+        systemToken,
+        imprisonmentStatus,
+      )
 
       if (selectedImprisonmentStatus.movementReasons.length === 1) {
         State.newArrival.update(req, res, {

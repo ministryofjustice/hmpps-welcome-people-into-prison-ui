@@ -2,15 +2,27 @@ import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
 import { type TemporaryAbsence } from 'welcome'
+import express from 'express'
 import { appWithAllRoutes, user } from '../__testutils/appSetup'
 import Role from '../../authentication/role'
 import config from '../../config'
 import { withBodyScanStatus, createTemporaryAbsence } from '../../data/__testutils/testObjects'
 import type { WithBodyScanStatus } from '../../services/bodyScanInfoDecorator'
 import { createMockTemporaryAbsencesService } from '../../services/__testutils/mocks'
+import AuthService from '../../services/authService'
 
 let app: Express
 const temporaryAbsencesService = createMockTemporaryAbsencesService()
+
+const authService: Partial<AuthService> = {
+  getSystemClientToken: jest.fn().mockResolvedValue('some token'),
+}
+
+function mockSessionTokenMiddleware(req: express.Request, res: express.Response, next: express.NextFunction) {
+  if (!req.session) req.session = {} as any
+  req.session.systemToken = 'some token'
+  next()
+}
 
 const temporaryAbsences: WithBodyScanStatus<TemporaryAbsence>[] = [
   withBodyScanStatus(createTemporaryAbsence({})),
@@ -20,7 +32,16 @@ const temporaryAbsences: WithBodyScanStatus<TemporaryAbsence>[] = [
 ]
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { temporaryAbsencesService }, roles: [Role.PRISON_RECEPTION] })
+  const testApp = express()
+  testApp.use(mockSessionTokenMiddleware)
+  const mainApp = appWithAllRoutes({
+    services: { temporaryAbsencesService, authService: authService as AuthService },
+    roles: [Role.PRISON_RECEPTION],
+  })
+
+  testApp.use(mainApp)
+  app = testApp
+
   temporaryAbsencesService.getTemporaryAbsences.mockResolvedValue(temporaryAbsences)
 })
 

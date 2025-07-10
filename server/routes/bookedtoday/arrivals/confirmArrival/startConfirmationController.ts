@@ -14,14 +14,14 @@ const urls = {
 export default class StartConfirmationController {
   constructor(private readonly expectedArrivalService: ExpectedArrivalsService) {}
 
-  public async getRedirectLocation(id: string, arrival: NewArrival): Promise<string> {
+  public async getRedirectLocation(token: string, id: string, arrival: NewArrival): Promise<string> {
     const { prisonNumber } = arrival
 
     if (!prisonNumber) {
       return urls.sex({ id })
     }
 
-    const prisoner = await this.expectedArrivalService.getPrisonerDetails(arrival.prisonNumber)
+    const prisoner = await this.expectedArrivalService.getPrisonerDetails(token, arrival.prisonNumber)
     logger.info(`Movement type description for arrival: ${id}, is ${prisoner.arrivalTypeDescription}`)
 
     switch (prisoner.arrivalType) {
@@ -55,10 +55,10 @@ export default class StartConfirmationController {
   public redirect(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
-
+      const { systemToken } = req.session
       const data = State.newArrival.get(req)
 
-      const redirectLocation = await this.getRedirectLocation(id, data)
+      const redirectLocation = await this.getRedirectLocation(systemToken, id, data)
       logger.info(`Redirecting to: ${redirectLocation}`)
       return res.redirect(redirectLocation)
     }

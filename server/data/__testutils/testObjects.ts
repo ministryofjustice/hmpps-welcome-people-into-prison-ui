@@ -16,7 +16,6 @@ import type { BodyScanStatus } from 'body-scan'
 import { WithBodyScanInfo } from '../../services/bodyScanInfoDecorator'
 
 import type { NewArrival } from '../../routes/bookedtoday/arrivals/state'
-import type { User } from '../hmppsAuthClient'
 import { MatchType } from '../../services/matchTypeDecorator'
 
 export const withBodyScanStatus = <T>(
@@ -289,13 +288,3 @@ export const createNewArrival = ({
 })
 
 export const createPrison = ({ prisonName = 'Moorland (HMP & YOI)' } = {}): Prison => ({ prisonName })
-
-export const createUserCaseLoad = ({
-  caseLoadId = 'MDI',
-  description = 'Moorland (HMP & YOI)',
-} = {}): UserCaseLoad => ({
-  caseLoadId,
-  description,
-})
-
-export const createUser = ({ name = 'John Smith', activeCaseLoadId = 'MDI' } = {}): User => ({ name, activeCaseLoadId })

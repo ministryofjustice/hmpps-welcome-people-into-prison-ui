@@ -1,5 +1,5 @@
 import type { RequestHandler } from 'express'
-import type { ExpectedArrivalsService } from '../../services'
+import { ExpectedArrivalsService } from '../../services'
 import { State } from './arrivals/state'
 import { MatchType } from '../../services/matchTypeDecorator'
 
@@ -8,9 +8,9 @@ export default class ChoosePrisonerController {
 
   public view(): RequestHandler {
     return async (req, res) => {
-      const { activeCaseLoadId } = res.locals.user
-      const { username } = req.user
-      const expectedArrivals = await this.expectedArrivalsService.getArrivalsForToday(username, activeCaseLoadId)
+      const activeCaseLoadId = res.locals.user.activeCaseload.id
+      const { systemToken } = req.session
+      const expectedArrivals = await this.expectedArrivalsService.getArrivalsForToday(systemToken, activeCaseLoadId)
       return res.render('pages/bookedtoday/choosePrisoner.njk', {
         expectedArrivals,
       })
@@ -20,10 +20,10 @@ export default class ChoosePrisonerController {
   public redirectToConfirm(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
-      const { username } = req.user
+      const { systemToken } = req.session
       State.searchDetails.clear(res)
       State.newArrival.clear(res)
-      const arrival = await this.expectedArrivalsService.getArrival(username, id)
+      const arrival = await this.expectedArrivalsService.getArrival(systemToken, id)
 
       switch (arrival.matchType) {
         case MatchType.INSUFFICIENT_INFO:

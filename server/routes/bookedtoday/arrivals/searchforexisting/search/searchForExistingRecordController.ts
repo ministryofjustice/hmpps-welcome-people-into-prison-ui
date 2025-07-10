@@ -5,8 +5,8 @@ import { SearchDetails, State } from '../../state'
 export default class SearchForExistingRecordController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
 
-  private async loadData(username: string, id: string, res: Response): Promise<SearchDetails> {
-    const arrival = await this.expectedArrivalsService.getArrival(username, id)
+  private async loadData(token: string, id: string, res: Response): Promise<SearchDetails> {
+    const arrival = await this.expectedArrivalsService.getArrival(token, id)
 
     const data = {
       firstName: arrival.firstName,
@@ -32,9 +32,9 @@ export default class SearchForExistingRecordController {
   public showSearch(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
-      const { username } = req.user
+      const { systemToken } = req.session
 
-      const data = State.searchDetails.get(req) || (await this.loadData(username, id, res))
+      const data = State.searchDetails.get(req) || (await this.loadData(systemToken, id, res))
 
       res.render('pages/bookedtoday/arrivals/searchforexisting/search/searchForExistingRecord.njk', {
         data: { ...data, id },
@@ -45,8 +45,9 @@ export default class SearchForExistingRecordController {
   public submitSearch(): RequestHandler {
     return async (req: Request, res: Response) => {
       const { id } = req.params
+      const { systemToken } = req.session
       const searchData = State.searchDetails.get(req)
-      const potentialMatches = await this.expectedArrivalsService.getMatchingRecords(searchData)
+      const potentialMatches = await this.expectedArrivalsService.getMatchingRecords(systemToken, searchData)
 
       if (potentialMatches.length === 1) {
         const match = potentialMatches[0]

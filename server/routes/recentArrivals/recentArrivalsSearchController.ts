@@ -8,10 +8,12 @@ export default class RecentArrivalsSearchController {
   public showSearch(): RequestHandler {
     return async (req, res) => {
       const { searchQuery } = State.searchQuery.get(req)
-      const { activeCaseLoadId } = res.locals.user
+      const activeCaseLoadId = res.locals.user.activeCaseload.id
+      const { systemToken } = req.session
       const searchResults = await this.expectedArrivalsService.getRecentArrivalsSearchResults(
+        systemToken,
         activeCaseLoadId,
-        searchQuery
+        searchQuery,
       )
       return res.render('pages/recentArrivals/recentArrivalsSearch.njk', {
         searchResults,

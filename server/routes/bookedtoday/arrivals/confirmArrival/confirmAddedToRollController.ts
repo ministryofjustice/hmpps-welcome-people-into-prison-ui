@@ -7,13 +7,27 @@ export default class ConfirmAddedToRollController {
 
   public view(): RequestHandler {
     return async (req, res) => {
-      const { firstName, lastName, prisonNumber, location } =
-        (req.flash('arrivalResponse')?.[0] as Record<string, string>) || {}
+      const flashMessage = req.flash('arrivalResponse')?.[0]
+
+      if (typeof flashMessage !== 'string') return res.redirect('/page-not-found')
+
+      let arrivalData: Record<string, string> | null = null
+
+      try {
+        arrivalData = JSON.parse(flashMessage)
+      } catch {
+        return res.redirect('/page-not-found')
+      }
+
+      const { firstName, lastName, prisonNumber, location } = arrivalData
+
       if (!firstName || !lastName || !prisonNumber || !location) {
         return res.redirect('/page-not-found')
       }
-      const { activeCaseLoadId } = res.locals.user
-      const prison = await this.prisonService.getPrison(activeCaseLoadId)
+
+      const { systemToken } = req.session
+      const activeCaseLoadId = res.locals.user.activeCaseload.id
+      const prison = await this.prisonService.getPrison(systemToken, activeCaseLoadId)
       State.newArrival.clear(res)
       return res.render('pages/bookedtoday/arrivals/confirmArrival/confirmAddedToRoll.njk', {
         firstName,

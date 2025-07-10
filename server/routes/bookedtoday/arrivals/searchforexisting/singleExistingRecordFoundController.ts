@@ -18,7 +18,8 @@ export default class SingleExistingRecordFoundController {
     return async (req, res) => {
       const { id } = req.params
       const searchData = State.searchDetails.get(req)
-      const potentialMatches = await this.expectedArrivalsService.getMatchingRecords(searchData)
+      const { systemToken } = req.session
+      const potentialMatches = await this.expectedArrivalsService.getMatchingRecords(systemToken, searchData)
       const potentialMatch = this.validateSingleMatch(potentialMatches)
 
       return res.render('pages/bookedtoday/arrivals/searchforexisting/singleExistingRecordFound.njk', {
@@ -38,7 +39,8 @@ export default class SingleExistingRecordFoundController {
     return async (req, res) => {
       const { id } = req.params
       const searchData = State.searchDetails.get(req)
-      const potentialMatches = await this.expectedArrivalsService.getMatchingRecords(searchData)
+      const { systemToken } = req.session
+      const potentialMatches = await this.expectedArrivalsService.getMatchingRecords(systemToken, searchData)
       const potentialMatch = this.validateSingleMatch(potentialMatches)
 
       State.newArrival.set(res, {

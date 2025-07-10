@@ -7,9 +7,8 @@ export default class ReviewDetailsController {
   public constructor(private readonly expectedArrivalsService: ExpectedArrivalsService) {}
 
   private async loadData(id: string, req: Request, res: Response): Promise<NewArrival> {
-    const { username } = req.user
-
-    const arrival = await this.expectedArrivalsService.getArrival(username, id)
+    const { systemToken } = req.session
+    const arrival = await this.expectedArrivalsService.getArrival(systemToken, id)
 
     const data = {
       firstName: convertToTitleCase(arrival.firstName),

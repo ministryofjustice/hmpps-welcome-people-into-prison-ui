@@ -35,28 +35,28 @@ export default function routes(services: Services): Router {
       validationMiddleware(
         SearchForExistingRecordsValidation,
         SearchForExistingRecordsDateOfBirthValidation,
-        PrisonNumberValidation
+        PrisonNumberValidation,
       ),
-      searchForExistingRecordController.submit()
+      searchForExistingRecordController.submit(),
     )
     .get(`/manually-confirm-arrival/search-for-existing-record/no-record-found`, noMatchFoundController.view())
     .post(`/manually-confirm-arrival/search-for-existing-record/no-record-found`, noMatchFoundController.submit())
     .get(`/manually-confirm-arrival/search-for-existing-record/record-found`, singleMatchFoundController.view())
     .get(
       `/manually-confirm-arrival/search-for-existing-record/possible-records-found`,
-      multipleMatchesFoundController.view()
+      multipleMatchesFoundController.view(),
     )
     .post(
       `/manually-confirm-arrival/search-for-existing-record/possible-records-found`,
       validationMiddleware(MatchedRecordSelectionValidation),
-      multipleMatchesFoundController.submit()
+      multipleMatchesFoundController.submit(),
     )
 
     .get('/manually-confirm-arrival/add-personal-details', addPersonalDetailsController.view())
     .post(
       '/manually-confirm-arrival/add-personal-details',
       validationMiddleware(NameValidation, DateOfBirthValidation, SexValidation),
-      addPersonalDetailsController.submit()
+      addPersonalDetailsController.submit(),
     )
     .build()
 }

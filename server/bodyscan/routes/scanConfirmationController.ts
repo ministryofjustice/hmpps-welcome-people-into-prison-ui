@@ -8,12 +8,13 @@ export default class ScanConfirmationController {
     return async (req, res) => {
       const { prisonNumber } = req.params
       const bodyScan = req.flash('body-scan')?.[0] as Record<string, string>
+      const { systemToken } = req.session
 
       if (!bodyScan) {
         return res.redirect('/page-not-found')
       }
 
-      const prisonerDetails = await this.bodyScanService.getPrisonerDetails(prisonNumber)
+      const prisonerDetails = await this.bodyScanService.getPrisonerDetails(systemToken, prisonNumber)
       return res.render('pages/bodyscans/scanConfirmation.njk', {
         prisonNumber,
         prisonerDetails,

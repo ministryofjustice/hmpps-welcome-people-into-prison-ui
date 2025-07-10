@@ -5,7 +5,7 @@ import logger from '../../../logger'
 export default class FeedbackController {
   public constructor(
     private readonly notificationService: NotificationService,
-    private readonly prisonService: PrisonService
+    private readonly prisonService: PrisonService,
   ) {}
 
   public view(): RequestHandler {
@@ -20,15 +20,15 @@ export default class FeedbackController {
   public submit(): RequestHandler {
     return async (req, res) => {
       const { username } = req.user
-      const { activeCaseLoadId } = res.locals.user
+      const { systemToken } = req.session
+      const activeCaseLoadId = res.locals.user.activeCaseload.id
       const { feedback, email } = req.body
-
       if (req.errors) {
         req.flash('input', req.body)
         return res.redirect(`/feedback`)
       }
 
-      const { prisonName } = await this.prisonService.getPrison(activeCaseLoadId)
+      const { prisonName } = await this.prisonService.getPrison(systemToken, activeCaseLoadId)
 
       try {
         await this.notificationService.sendEmail({

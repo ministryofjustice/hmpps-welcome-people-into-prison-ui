@@ -1,4 +1,5 @@
 import os from 'os'
+import { AgentConfig } from '@ministryofjustice/hmpps-rest-client'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -27,15 +28,19 @@ export interface ApiConfig {
   }
 }
 
-export type AgentConfig = Readonly<ApiConfig['agent']>
+export type DefaultAgentConfig = Readonly<ApiConfig['agent']>
 
-export const DEFAULT_AGENT_CONFIG: AgentConfig = {
+export const DEFAULT_AGENT_CONFIG: DefaultAgentConfig = {
   maxSockets: 100,
   maxFreeSockets: 10,
   freeSocketTimeout: 30000,
 }
 
 export default {
+  buildNumber: get('BUILD_NUMBER', '1_0_0', requiredInProduction),
+  productId: get('PRODUCT_ID', 'UNASSIGNED', requiredInProduction),
+  gitRef: get('GIT_REF', 'xxxxxxxxxxxxxxxxxxx', requiredInProduction),
+  branchName: get('GIT_BRANCH', 'xxxxxxxxxxxxxxxxxxx', requiredInProduction),
   serviceIsUnvailable: process.env.SERVICE_IS_UNAVAILABLE === 'true',
   serviceOutageBannerEnabled: get('SERVICE_OUTAGE_BANNER_ENABLED', 'false', requiredInProduction) === 'true',
   production,
@@ -47,6 +52,7 @@ export default {
   establishmentRollUrl: get('ESTABLISHMENT_ROLL_URL', 'http://localhost:3000', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
   hostname: process.env.APP_HOSTNAME || os.hostname(),
+  ingressUrl: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   redis: {
     enabled: get('REDIS_ENABLED', 'false', requiredInProduction) === 'true',
     host: get('REDIS_HOST', 'localhost', requiredInProduction),
@@ -63,57 +69,73 @@ export default {
   apis: {
     hmppsAuth: {
       url: get('HMPPS_AUTH_URL', 'http://localhost:9090/auth', requiredInProduction),
+      healthPath: '/health/ping',
       externalUrl: get('HMPPS_AUTH_EXTERNAL_URL', get('HMPPS_AUTH_URL', 'http://localhost:9090/auth')),
       timeout: {
         response: Number(get('HMPPS_AUTH_TIMEOUT_RESPONSE', 10000)),
         deadline: Number(get('HMPPS_AUTH_TIMEOUT_DEADLINE', 10000)),
       },
-      agent: DEFAULT_AGENT_CONFIG,
+      agent: new AgentConfig(Number(get('HMPPS_AUTH_TIMEOUT_RESPONSE', 10000))),
       apiClientId: get('API_CLIENT_ID', 'clientid', requiredInProduction),
       apiClientSecret: get('API_CLIENT_SECRET', 'clientsecret', requiredInProduction),
       systemClientId: get('SYSTEM_CLIENT_ID', 'clientid', requiredInProduction),
       systemClientSecret: get('SYSTEM_CLIENT_SECRET', 'clientsecret', requiredInProduction),
     },
+    frontendComponents: {
+      url: get('COMPONENT_API_URL', 'http://localhost:8082', requiredInProduction),
+      healthPath: '/health',
+      timeout: {
+        response: Number(get('COMPONENT_API_TIMEOUT_SECONDS', 10000)),
+        deadline: Number(get('COMPONENT_API_TIMEOUT_SECONDS', 10000)),
+      },
+      agent: new AgentConfig(Number(get('COMPONENT_API_TIMEOUT_SECONDS', 10000))),
+      enabled: get('COMMON_COMPONENTS_ENABLED', 'true') === 'true',
+    },
     hmppsManageUsersApi: {
       url: get('HMPPS_MANAGE_USERS_API_URL', 'http://localhost:8081', requiredInProduction),
+      healthPath: '/health/ping',
       timeout: {
         response: Number(get('HMPPS_MANAGE_USERS_API_TIMEOUT_RESPONSE', 10000)),
         deadline: Number(get('HMPPS_MANAGE_USERS_API_TIMEOUT_DEADLINE', 10000)),
       },
-      agent: DEFAULT_AGENT_CONFIG,
+      agent: new AgentConfig(Number(get('COMPONENT_API_TIMEOUT_SECONDS', 10000))),
     },
     tokenVerification: {
       url: get('TOKEN_VERIFICATION_API_URL', 'http://localhost:8100', requiredInProduction),
+      healthPath: '/health/ping',
       timeout: {
         response: Number(get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000)),
         deadline: Number(get('TOKEN_VERIFICATION_API_TIMEOUT_DEADLINE', 5000)),
       },
-      agent: DEFAULT_AGENT_CONFIG,
+      agent: new AgentConfig(Number(get('COMPONENT_API_TIMEOUT_SECONDS', 10000))),
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
     },
     welcome: {
       url: get('WELCOME_API_URL', 'http://localhost:8100', requiredInProduction),
+      healthPath: '/health/ping',
       timeout: {
         response: Number(get('WELCOME_API_TIMEOUT_RESPONSE', 5000)),
         deadline: Number(get('WELCOME_API_TIMEOUT_DEADLINE', 5000)),
       },
-      agent: DEFAULT_AGENT_CONFIG,
+      agent: new AgentConfig(Number(get('COMPONENT_API_TIMEOUT_SECONDS', 10000))),
     },
     prisonRegister: {
       url: get('PRISON_REGISTER_API_URL', 'http://localhost:8100', requiredInProduction),
+      healthPath: '/health/ping',
       timeout: {
         response: Number(get('PRISON_REGISTER_API_TIMEOUT_RESPONSE', 5000)),
         deadline: Number(get('PRISON_REGISTER_API_TIMEOUT_DEADLINE', 5000)),
       },
-      agent: DEFAULT_AGENT_CONFIG,
+      agent: new AgentConfig(Number(get('COMPONENT_API_TIMEOUT_SECONDS', 10000))),
     },
     bodyscan: {
       url: get('BODYSCAN_API_URL', 'http://localhost:8100', requiredInProduction),
+      healthPath: '/health/ping',
       timeout: {
         response: Number(get('BODYSCAN_API_TIMEOUT_RESPONSE', 5000)),
         deadline: Number(get('BODYSCAN_API_API_TIMEOUT_DEADLINE', 5000)),
       },
-      agent: DEFAULT_AGENT_CONFIG,
+      agent: new AgentConfig(Number(get('COMPONENT_API_TIMEOUT_SECONDS', 10000))),
     },
   },
   notifications: {
@@ -141,6 +163,7 @@ export default {
   showExpectedArrivalPrisonerSummary:
     get('SHOW_EXPECTED_ARRIVAL_PRISONER_SUMMARY', 'false', requiredInProduction) === 'true',
 
+  loadReportDefinitionsOnStartup: get('LOAD_DPR_ON_STARTUP', 'false') === 'true',
   showPrisonTransferSummary: get('SHOW_PRISON_TRANSFER_SUMMARY', 'false', requiredInProduction) === 'true',
   showBreadCrumb: get('SHOW_BREADCRUMB', 'false', requiredInProduction) === 'true',
   showRecentArrivals: get('SHOW_RECENT_ARRIVALS', 'false', requiredInProduction) === 'true',

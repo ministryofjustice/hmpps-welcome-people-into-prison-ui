@@ -33,8 +33,9 @@ export default class SearchForExistingRecordsController {
       }
 
       const searchData = sanitiseSearchCriteria(req.body)
+      const { systemToken } = req.session
 
-      const potentialMatches = await this.expectedArrivalsService.getMatchingRecords(searchData)
+      const potentialMatches = await this.expectedArrivalsService.getMatchingRecords(systemToken, searchData)
       State.searchDetails.set(res, searchData)
 
       if (potentialMatches.length === 1) {

@@ -8,8 +8,9 @@ export default class MultipleExistingRecordsFoundController {
   public view(): RequestHandler {
     return async (req: Request, res: Response) => {
       const searchData = State.searchDetails.get(req)
+      const { systemToken } = req.session
 
-      const potentialMatches = await this.expectedArrivalsService.getMatchingRecords(searchData)
+      const potentialMatches = await this.expectedArrivalsService.getMatchingRecords(systemToken, searchData)
 
       res.render('pages/unexpectedArrivals/multipleExistingRecordsFound.njk', {
         arrival: {
@@ -31,9 +32,10 @@ export default class MultipleExistingRecordsFoundController {
         req.flash('errors', req.body)
         return res.redirect('/manually-confirm-arrival/search-for-existing-record/possible-records-found')
       }
-
+      const { username } = req.user
+      const token = await req.services.authService.getSystemClientToken(username)
       const { prisonNumber } = req.body
-      const selectedRecord = await this.expectedArrivalsService.getPrisonerDetails(prisonNumber)
+      const selectedRecord = await this.expectedArrivalsService.getPrisonerDetails(token, prisonNumber)
 
       State.newArrival.set(res, { ...selectedRecord, expected: false })
 

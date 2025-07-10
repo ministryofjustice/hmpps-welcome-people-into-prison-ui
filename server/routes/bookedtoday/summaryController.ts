@@ -8,9 +8,9 @@ export default class SummaryController {
   public redirectToSummary(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
-      const { username } = req.user
+      const { systemToken } = req.session
 
-      const arrival = await this.expectedArrivalsService.getArrival(username, id)
+      const arrival = await this.expectedArrivalsService.getArrival(systemToken, id)
       switch (arrival.matchType) {
         case MatchType.COURT_RETURN:
         case MatchType.SINGLE_MATCH:

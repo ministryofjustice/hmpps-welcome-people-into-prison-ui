@@ -8,7 +8,7 @@ import Role from '../../authentication/role'
 
 jest.mock('../services/bodyScanService')
 
-const bodyScanService = new BodyScanService(null, null) as jest.Mocked<BodyScanService>
+const bodyScanService = new BodyScanService(null) as jest.Mocked<BodyScanService>
 
 let app: Express
 

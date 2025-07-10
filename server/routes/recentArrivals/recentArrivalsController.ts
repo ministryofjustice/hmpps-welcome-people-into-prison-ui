@@ -9,8 +9,12 @@ export default class RecentArrivalsController {
   public view(): RequestHandler {
     return async (req, res) => {
       State.searchQuery.clear(res)
-      const { activeCaseLoadId } = res.locals.user
-      const recentArrivals = await this.expectedArrivalsService.getRecentArrivalsGroupedByDate(activeCaseLoadId)
+      const activeCaseLoadId = res.locals.user.activeCaseload.id
+      const { systemToken } = req.session
+      const recentArrivals = await this.expectedArrivalsService.getRecentArrivalsGroupedByDate(
+        systemToken,
+        activeCaseLoadId,
+      )
 
       if (config.showRecentArrivals === false) {
         return res.redirect('/page-not-found')

@@ -1,25 +1,19 @@
 import type { BodyScan, PrisonerDetails } from 'body-scan'
-import { HmppsAuthClient, RestClientBuilder } from '../../data'
+
 import type { BodyScanClient } from '../data'
 
 export default class BodyScanService {
-  constructor(
-    private readonly hmppsAuthClient: HmppsAuthClient,
-    private readonly bodyScanClientFactory: RestClientBuilder<BodyScanClient>
-  ) {}
+  constructor(private readonly bodyScanClient: BodyScanClient) {}
 
-  public async getPrisonerDetails(prisonNumber: string): Promise<PrisonerDetails> {
-    const token = await this.hmppsAuthClient.getSystemClientToken()
-    return this.bodyScanClientFactory(token).getPrisonerDetails(prisonNumber)
+  public async getPrisonerDetails(token: string, prisonNumber: string): Promise<PrisonerDetails> {
+    return this.bodyScanClient.getPrisonerDetails(token, { prisonNumber })
   }
 
-  public async addBodyScan(username: string, prisonNumber: string, bodyScan: BodyScan): Promise<void> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    await this.bodyScanClientFactory(token).addBodyScan(prisonNumber, bodyScan)
+  public async addBodyScan(token: string, prisonNumber: string, bodyScan: BodyScan): Promise<void> {
+    await this.bodyScanClient.addBodyScan(token, { prisonNumber }, bodyScan)
   }
 
-  public async retrieveBodyScanInfo(prisonNumber: string) {
-    const token = await this.hmppsAuthClient.getSystemClientToken()
-    return this.bodyScanClientFactory(token).getSingleBodyScanInfo(prisonNumber)
+  public async retrieveBodyScanInfo(token: string, prisonNumber: string) {
+    return this.bodyScanClient.getSingleBodyScanInfo(token, { prisonNumber })
   }
 }

@@ -1,11 +1,10 @@
-import { Services } from '../../services'
 import { dataAccess } from '../data'
 import BodyScanService from './bodyScanService'
 
-export const services = ({ hmppsAuthClient }: Services) => {
+export const services = () => {
   const { bodyScanClient } = dataAccess()
 
-  const bodyScanService = new BodyScanService(hmppsAuthClient, bodyScanClient)
+  const bodyScanService = new BodyScanService(bodyScanClient())
 
   return {
     bodyScanService,

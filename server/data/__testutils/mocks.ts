@@ -1,13 +1,39 @@
-import { WelcomeClient, PrisonRegisterClient, HmppsAuthClient, BodyScanClient, LockManager } from '..'
+import { WelcomeClient, PrisonRegisterClient, BodyScanClient, LockManager } from '..'
 
 jest.mock('..')
 
-export const createMockWelcomeClient = () => new WelcomeClient(null) as jest.Mocked<WelcomeClient>
+export const createMockWelcomeClient = (): jest.Mocked<WelcomeClient> => {
+  return {
+    getTransfer: jest.fn(),
+    getTransfers: jest.fn(),
+    confirmTransfer: jest.fn(),
+    getImprisonmentStatuses: jest.fn(),
+    getTemporaryAbsences: jest.fn(),
+    getTemporaryAbsence: jest.fn(),
+    confirmTemporaryAbsence: jest.fn(),
+    getExpectedArrivals: jest.fn(),
+    getRecentArrivals: jest.fn(),
+    getArrival: jest.fn(),
+    getPrisonerDetails: jest.fn(),
+    confirmExpectedArrival: jest.fn(),
+    confirmUnexpectedArrival: jest.fn(),
+    confirmCourtReturn: jest.fn(),
+    getMatchingRecords: jest.fn(),
+    getPrisonerSummaryDetails: jest.fn(),
 
-export const createMockPrisonRegisterClient = () => new PrisonRegisterClient(null) as jest.Mocked<PrisonRegisterClient>
+    get: jest.fn(),
+    post: jest.fn(),
+  } as unknown as jest.Mocked<WelcomeClient>
+}
 
-export const createMockHmppsAuthClient = () => new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
+export const createMockPrisonRegisterClient = () =>
+  new PrisonRegisterClient(null, null) as jest.Mocked<PrisonRegisterClient>
 
-export const createMockBodyScanClient = () => new BodyScanClient(null) as jest.Mocked<BodyScanClient>
+export const createMockBodyScanClient = (): jest.Mocked<BodyScanClient> => {
+  return {
+    getBodyScanInfo: jest.fn(),
+    getSingleBodyScanInfo: jest.fn(),
+  } as unknown as jest.Mocked<BodyScanClient>
+}
 
 export const createLockManager = () => new LockManager(null) as jest.Mocked<LockManager>

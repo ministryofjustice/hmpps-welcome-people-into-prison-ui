@@ -1,15 +1,32 @@
 import type { Express } from 'express'
 import { Readable } from 'stream'
 import request from 'supertest'
+import express from 'express'
 import { createMockExpectedArrivalsService } from '../services/__testutils/mocks'
 import { appWithAllRoutes } from './__testutils/appSetup'
+import AuthService from '../services/authService'
 
 let app: Express
 const expectedArrivalsService = createMockExpectedArrivalsService()
+const authService: Partial<AuthService> = {
+  getSystemClientToken: jest.fn().mockResolvedValue('some token'),
+}
 const image = {}
 
+function mockSessionTokenMiddleware(req: express.Request, res: express.Response, next: express.NextFunction) {
+  if (!req.session) req.session = {} as any
+  req.session.systemToken = 'some token'
+  next()
+}
+
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { expectedArrivalsService } })
+  const testApp = express()
+  testApp.use(mockSessionTokenMiddleware)
+
+  const mainApp = appWithAllRoutes({ services: { expectedArrivalsService, authService: authService as AuthService } })
+  testApp.use(mainApp)
+
+  app = testApp
 })
 
 afterEach(() => {
@@ -23,7 +40,7 @@ describe('GET /prisoners/prisonNumber/image', () => {
       .get('/prisoners/A12345/image')
       .expect('Content-Type', 'image/jpeg')
       .expect(res => {
-        expect(expectedArrivalsService.getImage).toHaveBeenCalledWith('A12345')
+        expect(expectedArrivalsService.getImage).toHaveBeenCalledWith('some token', 'A12345')
       })
   })
 

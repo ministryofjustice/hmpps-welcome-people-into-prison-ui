@@ -1,27 +1,23 @@
 import TemporaryAbsencesService from './temporaryAbsencesService'
 import { createTemporaryAbsence, withBodyScanStatus } from '../data/__testutils/testObjects'
-import { createMockHmppsAuthClient, createMockWelcomeClient } from '../data/__testutils/mocks'
+import { createMockWelcomeClient } from '../data/__testutils/mocks'
 import { createMockBodyScanInfoDecorator } from './__testutils/mocks'
 
 const token = 'some token'
 
 describe('Temporary absences service', () => {
   const welcomeClient = createMockWelcomeClient()
-  const hmppsAuthClient = createMockHmppsAuthClient()
+
   const bodyScanInfoDecorator = createMockBodyScanInfoDecorator()
   let service: TemporaryAbsencesService
-
-  const WelcomeClientFactory = jest.fn()
 
   const res = { locals: { user: { activeCaseLoadId: 'MDI' } } }
 
   beforeEach(() => {
     jest.resetAllMocks()
-    WelcomeClientFactory.mockReturnValue(welcomeClient)
-    service = new TemporaryAbsencesService(hmppsAuthClient, WelcomeClientFactory, bodyScanInfoDecorator)
-    hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
-    bodyScanInfoDecorator.decorate.mockImplementation(as =>
-      Promise.resolve(as.map(a => ({ ...a, bodyScanStatus: 'OK_TO_SCAN' })))
+    service = new TemporaryAbsencesService(welcomeClient, bodyScanInfoDecorator)
+    bodyScanInfoDecorator.decorate.mockImplementation((_token, arrivals) =>
+      Promise.resolve(arrivals.map(a => ({ ...a, bodyScanStatus: 'OK_TO_SCAN' }))),
     )
   })
 
@@ -36,7 +32,7 @@ describe('Temporary absences service', () => {
     })
 
     it('Retrieves temporary absences sorted alphabetically by name', async () => {
-      const result = await service.getTemporaryAbsences(res.locals.user.activeCaseLoadId)
+      const result = await service.getTemporaryAbsences(token, res.locals.user.activeCaseLoadId)
 
       expect(result).toStrictEqual([
         withBodyScanStatus(ant),
@@ -44,14 +40,9 @@ describe('Temporary absences service', () => {
         withBodyScanStatus(cat),
         withBodyScanStatus(dog),
       ])
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-      expect(welcomeClient.getTemporaryAbsences).toBeCalledWith(res.locals.user.activeCaseLoadId)
-    })
-
-    it('WelcomeClientFactory is called with a token', async () => {
-      await service.getTemporaryAbsences(res.locals.user.activeCaseLoadId)
-
-      expect(WelcomeClientFactory).toBeCalledWith(token)
+      expect(welcomeClient.getTemporaryAbsences).toHaveBeenCalledWith(token, {
+        agencyId: res.locals.user.activeCaseLoadId,
+      })
     })
   })
 
@@ -62,16 +53,15 @@ describe('Temporary absences service', () => {
       welcomeClient.getTemporaryAbsence.mockResolvedValue(temporaryAbsence)
     })
     it('Calls upstream service correctly', async () => {
-      await service.getTemporaryAbsence('G0013AB')
+      await service.getTemporaryAbsence(token, 'G0013AB')
 
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.getTemporaryAbsence).toBeCalledWith('G0013AB')
+      expect(welcomeClient.getTemporaryAbsence).toHaveBeenCalledWith(token, { prisonNumber: 'G0013AB' })
     })
 
     it('Should return correct data', async () => {
       welcomeClient.getTemporaryAbsence.mockResolvedValue(temporaryAbsence)
 
-      const result = await service.getTemporaryAbsence('G0013AB')
+      const result = await service.getTemporaryAbsence(token, 'G0013AB')
 
       expect(result).toStrictEqual(temporaryAbsence)
     })
@@ -79,25 +69,29 @@ describe('Temporary absences service', () => {
 
   describe('confirmTemporaryAbsence', () => {
     it('Calls upstream services correctly', async () => {
-      await service.confirmTemporaryAbsence('user1', 'G0015GD', 'MDI')
+      await service.confirmTemporaryAbsence(token, 'G0015GD', 'MDI')
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith('user1')
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.confirmTemporaryAbsence).toBeCalledWith('G0015GD', 'MDI', undefined)
+      expect(welcomeClient.confirmTemporaryAbsence).toHaveBeenCalledWith(
+        token,
+        { prisonNumber: 'G0015GD' },
+        { prisonId: 'MDI', arrivalId: undefined },
+      )
     })
 
     it('Calls upstream services correctly when arrivalId present', async () => {
-      await service.confirmTemporaryAbsence('user1', 'G0015GD', 'MDI', 'abc-123')
+      await service.confirmTemporaryAbsence(token, 'G0015GD', 'MDI', 'abc-123')
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith('user1')
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.confirmTemporaryAbsence).toBeCalledWith('G0015GD', 'MDI', 'abc-123')
+      expect(welcomeClient.confirmTemporaryAbsence).toHaveBeenCalledWith(
+        token,
+        { prisonNumber: 'G0015GD' },
+        { prisonId: 'MDI', arrivalId: 'abc-123' },
+      )
     })
 
     it('Should return null', async () => {
       welcomeClient.confirmTemporaryAbsence.mockResolvedValue(null)
 
-      const result = await service.confirmTemporaryAbsence('user1', 'G0015GD', 'MDI')
+      const result = await service.confirmTemporaryAbsence(token, 'G0015GD', 'MDI')
       expect(result).toBe(null)
     })
   })

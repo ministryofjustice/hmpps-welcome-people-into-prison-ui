@@ -9,8 +9,8 @@ export default class SingleMatchingRecordFoundController {
   public view(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
-      const { username } = req.user
-      const arrival = await this.expectedArrivalsService.getArrival(username, id)
+      const { systemToken } = req.session
+      const arrival = await this.expectedArrivalsService.getArrival(systemToken, id)
 
       const match = arrival.potentialMatches[0]
       State.newArrival.set(res, {

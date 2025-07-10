@@ -1,56 +1,40 @@
 import ImprisonmentStatusesService from './imprisonmentStatusesService'
 import { createImprisonmentStatuses } from '../data/__testutils/testObjects'
-import { createMockHmppsAuthClient, createMockWelcomeClient } from '../data/__testutils/mocks'
-
-const token = 'some token'
+import { createMockWelcomeClient } from '../data/__testutils/mocks'
 
 describe('Imprisonment statuses service', () => {
   const welcomeClient = createMockWelcomeClient()
-  const hmppsAuthClient = createMockHmppsAuthClient()
+  const token = 'some-token'
   let service: ImprisonmentStatusesService
 
-  const WelcomeClientFactory = jest.fn()
+  const WelcomeClient = jest.fn()
 
   const imprisonmentStatuses = createImprisonmentStatuses()
 
   beforeEach(() => {
     jest.resetAllMocks()
-    WelcomeClientFactory.mockReturnValue(welcomeClient)
-    service = new ImprisonmentStatusesService(hmppsAuthClient, WelcomeClientFactory)
-    hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
+    WelcomeClient.mockReturnValue(welcomeClient)
+    service = new ImprisonmentStatusesService(welcomeClient)
     welcomeClient.getImprisonmentStatuses.mockResolvedValue(imprisonmentStatuses)
   })
 
   describe('imprisonment statuses', () => {
     describe('getAllImprisonmentStatuses', () => {
-      it('WelcomeClientFactory is called with a token', async () => {
-        await service.getAllImprisonmentStatuses()
-
-        expect(WelcomeClientFactory).toBeCalledWith(token)
-      })
       it('Retrieves all imprisonment statuses', async () => {
-        const result = await service.getAllImprisonmentStatuses()
+        const result = await service.getAllImprisonmentStatuses(token)
 
-        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-        expect(welcomeClient.getImprisonmentStatuses).toBeCalled()
+        expect(welcomeClient.getImprisonmentStatuses).toHaveBeenCalled()
         expect(result).toStrictEqual(imprisonmentStatuses)
       })
     })
 
     describe('getImprisonmentStatus', () => {
-      it('WelcomeClientFactory is called with a token', async () => {
-        await service.getImprisonmentStatus('convicted-unsentenced')
-
-        expect(WelcomeClientFactory).toBeCalledWith(token)
-      })
-
       it('should return imprisonment status with single movement reason', async () => {
         const imprisonmentStatus = imprisonmentStatuses.find(s => s.code === 'convicted-unsentenced')
 
-        const result = await service.getImprisonmentStatus('convicted-unsentenced')
+        const result = await service.getImprisonmentStatus(token, 'convicted-unsentenced')
 
-        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-        expect(welcomeClient.getImprisonmentStatuses).toBeCalled()
+        expect(welcomeClient.getImprisonmentStatuses).toHaveBeenCalled()
         expect(result).toStrictEqual(imprisonmentStatus)
       })
     })
@@ -62,7 +46,7 @@ describe('Imprisonment statuses service', () => {
           imprisonmentStatus: 'JR',
           movementReasonCode: 'V',
         }
-        const result = await service.getReasonForImprisonment(statusAndReason)
+        const result = await service.getReasonForImprisonment(token, statusAndReason)
 
         expect(result).toStrictEqual('Convicted - waiting to be sentenced')
       })
@@ -72,7 +56,7 @@ describe('Imprisonment statuses service', () => {
           imprisonmentStatus: 'SENT',
           movementReasonCode: 'I',
         }
-        const result = await service.getReasonForImprisonment(statusAndReason)
+        const result = await service.getReasonForImprisonment(token, statusAndReason)
 
         expect(result).toStrictEqual('Sentenced - fixed length of time - Imprisonment without option of a fine')
       })

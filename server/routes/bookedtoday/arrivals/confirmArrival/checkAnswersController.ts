@@ -8,17 +8,18 @@ export default class CheckAnswersController {
   public constructor(
     private readonly expectedArrivalsService: ExpectedArrivalsService,
     private readonly imprisonmentStatusesService: ImprisonmentStatusesService,
-    private readonly lockManager: LockManager
+    private readonly lockManager: LockManager,
   ) {}
 
   public view(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
+      const { systemToken } = req.session
       const moveData = State.newArrival.get(req)
       const { code, imprisonmentStatus, movementReasonCode } = State.newArrival.get(req)
       const statusAndReason = { code, imprisonmentStatus, movementReasonCode }
 
-      const reasonImprisonment = await this.imprisonmentStatusesService.getReasonForImprisonment(statusAndReason)
+      const reasonImprisonment = await this.imprisonmentStatusesService.getReasonForImprisonment(systemToken, statusAndReason)
       const data = { reasonImprisonment, ...moveData }
       const pageToRender = data.prisonNumber ? 'checkAnswers' : 'checkAnswersForCreateNewRecord'
       return res.render(`pages/bookedtoday/arrivals/confirmArrival/${pageToRender}.njk`, { id, data })
@@ -28,10 +29,11 @@ export default class CheckAnswersController {
   public addToRoll(): RequestHandler {
     return async (req, res, next) => {
       const { id } = req.params
-      const { username, activeCaseLoadId } = res.locals.user
+      const activeCaseLoadId = res.locals.user.activeCaseload.id
+      const { systemToken } = req.session
       const arrival = State.newArrival.get(req)
 
-      const arrivalResponse = await this.expectedArrivalsService.confirmArrival(activeCaseLoadId, username, id, arrival)
+      const arrivalResponse = await this.expectedArrivalsService.confirmArrival(systemToken, activeCaseLoadId, id, arrival)
 
       if (!arrivalResponse) {
         const lockDeleted = await this.lockManager.deleteLock(id)

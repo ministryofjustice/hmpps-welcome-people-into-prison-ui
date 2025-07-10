@@ -1,55 +1,60 @@
-import {
-  RecentArrival,
+import type {
   Arrival,
   ArrivalResponse,
   PotentialMatchCriteria,
   PotentialMatch,
   PrisonerDetails,
-  Sex,
+  RecentArrival,
   LocationType,
+  Sex,
 } from 'welcome'
-import moment, { type Moment } from 'moment'
-import type { Readable } from 'stream'
+import moment, { Moment } from 'moment'
+import { Readable } from 'stream'
+import { logger } from 'bs-logger'
+import type { WelcomeClient } from '../data'
 import { groupBy, compareByFullName, compareByDescendingDateAndTime } from '../utils/utils'
-import type { RestClientBuilder, WelcomeClient, HmppsAuthClient } from '../data'
-import logger from '../../logger'
-import { RaiseAnalyticsEvent } from './raiseAnalyticsEvent'
-import { NewArrival } from '../routes/bookedtoday/arrivals/state'
-import type { BodyScanInfoDecorator, WithBodyScanStatus, WithBodyScanInfo } from './bodyScanInfoDecorator'
+import { BodyScanInfoDecorator, WithBodyScanInfo, WithBodyScanStatus } from './bodyScanInfoDecorator'
+import { MatchTypeDecorator, WithMatchType } from './matchTypeDecorator'
 import OffenceInfoDecorator from './offenceInfoDecorator'
-import type { MatchTypeDecorator, WithMatchType } from './matchTypeDecorator'
+import { NewArrival } from '../routes/bookedtoday/arrivals/state'
+import { RaiseAnalyticsEvent } from './raiseAnalyticsEvent'
 
 export type DecoratedArrival = WithBodyScanStatus<Arrival> & WithMatchType<Arrival>
 export type ArrivalWithSummaryDetails = { arrival: WithMatchType<Arrival>; summary: WithBodyScanInfo<PrisonerDetails> }
 
 export default class ExpectedArrivalsService {
   constructor(
-    private readonly hmppsAuthClient: HmppsAuthClient,
-    private readonly welcomeClientFactory: RestClientBuilder<WelcomeClient>,
+    private readonly welcomeClient: WelcomeClient,
     private readonly raiseAnalyticsEvent: RaiseAnalyticsEvent,
     private readonly bodyScanDecorator: BodyScanInfoDecorator,
     private readonly matchTypeDecorator: MatchTypeDecorator,
-    private readonly offenceInfoDecorator: OffenceInfoDecorator
+    private readonly offenceInfoDecorator: OffenceInfoDecorator,
   ) {}
 
-  private async getExpectedArrivals(username: string, agencyId: string, now: Moment): Promise<Arrival[]> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    const welcomeClient = this.welcomeClientFactory(token)
-    const expectedArrivals = await welcomeClient.getExpectedArrivals(agencyId, now)
+  private async getExpectedArrivals(token: string, agencyId: string, now: moment.Moment): Promise<Arrival[]> {
+    const expectedArrivals = await this.welcomeClient.getExpectedArrivals(token, {
+      agencyId,
+      date: now.toISOString(),
+    })
     return expectedArrivals.sort(compareByFullName)
   }
 
-  private async getRecentArrivals(agencyId: string, twoDaysAgo: Moment, today: Moment): Promise<RecentArrival[]> {
-    const token = await this.hmppsAuthClient.getSystemClientToken()
-    const welcomeClient = this.welcomeClientFactory(token)
-    const recentArrivals = await welcomeClient.getRecentArrivals(agencyId, twoDaysAgo, today)
+  private async getRecentArrivals(
+    token: string,
+    agencyId: string,
+    twoDaysAgo: Moment,
+    today: Moment,
+  ): Promise<RecentArrival[]> {
+    const recentArrivals = await this.welcomeClient.getRecentArrivals(token, {
+      prisonId: agencyId,
+      fromDate: twoDaysAgo.toISOString(),
+      toDate: today.toISOString(),
+    })
     return recentArrivals.content.sort(compareByDescendingDateAndTime(a => a.movementDateTime))
   }
 
-  private async getTransfers(agencyId: string): Promise<Arrival[]> {
-    const token = await this.hmppsAuthClient.getSystemClientToken()
-    const welcomeClient = this.welcomeClientFactory(token)
-    const transfers = await welcomeClient.getTransfers(agencyId)
+  private async getTransfers(token: string, agencyId: string): Promise<Arrival[]> {
+    const transfers = await this.welcomeClient.getTransfers(token, { agencyId })
     return transfers.map(transfer => ({ ...transfer, fromLocationType: 'PRISON' as const })).sort(compareByFullName)
   }
 
@@ -58,14 +63,15 @@ export default class ExpectedArrivalsService {
   }
 
   public async getRecentArrivalsGroupedByDate(
-    agencyId: string
+    token: string,
+    agencyId: string,
   ): Promise<Map<Moment, WithBodyScanStatus<RecentArrival>[]>> {
     const today = moment().startOf('day')
     const oneDayAgo = moment().subtract(1, 'days').startOf('day')
     const twoDaysAgo = moment().subtract(2, 'days').startOf('day')
 
-    const rawRecentArrivals = await this.getRecentArrivals(agencyId, twoDaysAgo, today)
-    const recentArrivals = await this.bodyScanDecorator.decorate(rawRecentArrivals)
+    const rawRecentArrivals = await this.getRecentArrivals(token, agencyId, twoDaysAgo, today)
+    const recentArrivals = await this.bodyScanDecorator.decorate(token, rawRecentArrivals)
     const mappedArrivals = new Map<Moment, WithBodyScanStatus<RecentArrival>[]>()
 
     mappedArrivals.set(today, recentArrivals.filter(this.isArrivalArrivedOnDay(today)))
@@ -74,156 +80,178 @@ export default class ExpectedArrivalsService {
     return mappedArrivals
   }
 
-  public async getRecentArrivalsSearchResults(agencyId: string, searchQuery: string): Promise<RecentArrival[]> {
-    const today = moment().startOf('day')
-    const twoDaysAgo = moment().subtract(2, 'days').startOf('day')
-    const token = await this.hmppsAuthClient.getSystemClientToken()
-    const welcomeClient = this.welcomeClientFactory(token)
-    const results = await welcomeClient.getRecentArrivals(agencyId, twoDaysAgo, today, searchQuery)
+  public async getRecentArrivalsSearchResults(
+    token: string,
+    agencyId: string,
+    searchQuery: string,
+  ): Promise<RecentArrival[]> {
+    const today = moment().startOf('day').toISOString()
+    const twoDaysAgo = moment().subtract(2, 'days').startOf('day').toISOString()
+    const results = await this.welcomeClient.getRecentArrivals(token, {
+      prisonId: agencyId,
+      fromDate: twoDaysAgo,
+      toDate: today,
+      query: searchQuery,
+    })
     return results.content
   }
 
   public async getArrivalsForToday(
-    username: string,
+    token: string,
     agencyId: string,
-    now = () => moment()
+    now = () => moment(),
   ): Promise<Map<LocationType, DecoratedArrival[]>> {
     const [expectedArrivals, transfers] = await Promise.all([
-      this.getExpectedArrivals(username, agencyId, now()),
-      this.getTransfers(agencyId),
+      this.getExpectedArrivals(token, agencyId, now()),
+      this.getTransfers(token, agencyId),
     ])
     const allArrivals = [...expectedArrivals, ...transfers]
-    const withBodyScan = await this.bodyScanDecorator.decorate(allArrivals)
+    const withBodyScan = await this.bodyScanDecorator.decorate(token, allArrivals)
     const withBodyScanAndMatchType = this.matchTypeDecorator.decorate(withBodyScan)
 
     return groupBy(withBodyScanAndMatchType, (arrival: DecoratedArrival) => arrival.fromLocationType)
   }
 
-  public async getImage(prisonNumber: string): Promise<Readable> {
-    const token = await this.hmppsAuthClient.getSystemClientToken()
-    return this.welcomeClientFactory(token).getImage(prisonNumber)
+  public async getImage(token: string, prisonNumber: string): Promise<Readable> {
+    return this.welcomeClient.getImage(token, { prisonNumber })
   }
 
-  public async getArrival(username: string, id: string): Promise<WithMatchType<Arrival>> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    const arrival = await this.welcomeClientFactory(token).getArrival(id)
+  public async getArrival(token: string, id: string): Promise<WithMatchType<Arrival>> {
+    const arrival = await this.welcomeClient.getArrival(token, { id })
     const arrivalWithOffence = this.offenceInfoDecorator.decorateSingle(arrival)
     return this.matchTypeDecorator.decorateSingle(arrivalWithOffence)
   }
 
-  public async getPrisonerDetailsForArrival(username: string, id: string): Promise<PotentialMatch> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    const arrival = await this.welcomeClientFactory(token).getArrival(id)
+  public async getPrisonerDetailsForArrival(token: string, id: string): Promise<PotentialMatch> {
+    const arrival = await this.welcomeClient.getArrival(token, { id })
     if (arrival.potentialMatches.length > 1) {
       logger.warn(`multiple matches for move: ${id}`)
     }
     return arrival.potentialMatches[0]
   }
 
-  public async getArrivalAndSummaryDetails(username: string, id: string): Promise<ArrivalWithSummaryDetails> {
-    const arrival = await this.getArrival(username, id)
+  public async getArrivalAndSummaryDetails(token: string, id: string): Promise<ArrivalWithSummaryDetails> {
+    const arrival = await this.getArrival(token, id)
     const singleMatch = arrival.potentialMatches[0]
-    const summary = await this.getPrisonerSummaryDetails(singleMatch.prisonNumber)
+    const summary = await this.getPrisonerSummaryDetails(token, singleMatch.prisonNumber)
     return { arrival, summary }
   }
 
   public async confirmArrival(
+    token: string,
     prisonId: string,
-    username: string,
     id: string,
-    arrival: NewArrival
+    arrival: NewArrival,
   ): Promise<ArrivalResponse | null> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    const welcomeClient = this.welcomeClientFactory(token)
-
     return arrival.expected
-      ? this.confirmExpectedArrival(welcomeClient, prisonId, id, arrival, username)
-      : this.confirmUnexpectedArrival(welcomeClient, prisonId, arrival)
+      ? this.confirmExpectedArrival(this.welcomeClient, token, prisonId, id, arrival)
+      : this.confirmUnexpectedArrival(this.welcomeClient, token, prisonId, arrival)
   }
 
   private async confirmExpectedArrival(
     welcomeClient: WelcomeClient,
+    token: string,
     prisonId: string,
     id: string,
     arrival: NewArrival,
-    username: string
   ): Promise<ArrivalResponse | null> {
-    const data = await this.getArrival(username, id)
+    try {
+      const data = await this.getArrival(token, id)
 
-    const response = await welcomeClient.confirmExpectedArrival(id, {
-      firstName: arrival.firstName,
-      lastName: arrival.lastName,
-      dateOfBirth: arrival.dateOfBirth,
-      sex: arrival.sex as Sex,
-      prisonId,
-      imprisonmentStatus: arrival.imprisonmentStatus,
-      movementReasonCode: arrival.movementReasonCode,
-      fromLocationId: data.fromLocationId,
-      prisonNumber: arrival.prisonNumber,
-    })
+      const response = await welcomeClient.confirmExpectedArrival(
+        token,
+        { id },
+        {
+          firstName: arrival.firstName,
+          lastName: arrival.lastName,
+          dateOfBirth: arrival.dateOfBirth,
+          sex: arrival.sex as Sex,
+          prisonId,
+          imprisonmentStatus: arrival.imprisonmentStatus,
+          movementReasonCode: arrival.movementReasonCode,
+          fromLocationId: data.fromLocationId,
+          prisonNumber: arrival.prisonNumber,
+        },
+      )
 
-    if (!response) {
-      return null
+      if (!response) {
+        return null
+      }
+
+      this.raiseAnalyticsEvent(
+        'Add to the establishment roll',
+        'Confirmed arrival',
+        `AgencyId: ${prisonId}, From: ${data.fromLocation}, Type: ${data.fromLocationType},`,
+      )
+
+      return response
+    } catch (error) {
+      if (error.status >= 400 && error.status < 500) {
+        return null
+      }
+      throw error
     }
-
-    this.raiseAnalyticsEvent(
-      'Add to the establishment roll',
-      'Confirmed arrival',
-      `AgencyId: ${prisonId}, From: ${data.fromLocation}, Type: ${data.fromLocationType},`
-    )
-
-    return response
   }
 
   private async confirmUnexpectedArrival(
     welcomeClient: WelcomeClient,
+    token: string,
     prisonId: string,
-    arrival: NewArrival
+    arrival: NewArrival,
   ): Promise<ArrivalResponse | null> {
-    const response = await welcomeClient.confirmUnexpectedArrival({
-      firstName: arrival.firstName,
-      lastName: arrival.lastName,
-      dateOfBirth: arrival.dateOfBirth,
-      sex: arrival.sex as Sex,
-      prisonId,
-      imprisonmentStatus: arrival.imprisonmentStatus,
-      movementReasonCode: arrival.movementReasonCode,
-      fromLocationId: undefined,
-      prisonNumber: arrival.prisonNumber,
-    })
+    try {
+      const response = await welcomeClient.confirmUnexpectedArrival(token, {
+        firstName: arrival.firstName,
+        lastName: arrival.lastName,
+        dateOfBirth: arrival.dateOfBirth,
+        sex: arrival.sex as Sex,
+        prisonId,
+        imprisonmentStatus: arrival.imprisonmentStatus,
+        movementReasonCode: arrival.movementReasonCode,
+        fromLocationId: undefined,
+        prisonNumber: arrival.prisonNumber,
+      })
 
-    if (!response) {
-      return null
+      if (!response) {
+        return null
+      }
+
+      this.raiseAnalyticsEvent('Add to the establishment roll', 'Confirmed unexpected arrival', `AgencyId: ${prisonId}`)
+
+      return response
+    } catch (error) {
+      if (error.status >= 400 && error.status < 500) {
+        return null
+      }
+      throw error
     }
-
-    this.raiseAnalyticsEvent('Add to the establishment roll', 'Confirmed unexpected arrival', `AgencyId: ${prisonId}`)
-
-    return response
   }
 
   public async confirmCourtReturn(
-    username: string,
+    token: string,
     id: string,
     prisonId: string,
-    prisonNumber: string
+    prisonNumber: string,
   ): Promise<ArrivalResponse | null> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    return this.welcomeClientFactory(token).confirmCourtReturn(id, prisonId, prisonNumber)
+    return this.welcomeClient.confirmCourtReturn(token, { id }, { prisonId, prisonNumber })
   }
 
-  public async getMatchingRecords(potentialMatchCriteria: PotentialMatchCriteria): Promise<PotentialMatch[]> {
-    const token = await this.hmppsAuthClient.getSystemClientToken()
-    return this.welcomeClientFactory(token).getMatchingRecords(potentialMatchCriteria)
+  public async getMatchingRecords(
+    token: string,
+    potentialMatchCriteria: PotentialMatchCriteria,
+  ): Promise<PotentialMatch[]> {
+    return this.welcomeClient.getMatchingRecords(token, potentialMatchCriteria)
   }
 
-  public async getPrisonerDetails(prisonNumber: string): Promise<PrisonerDetails> {
-    const token = await this.hmppsAuthClient.getSystemClientToken()
-    return this.welcomeClientFactory(token).getPrisonerDetails(prisonNumber)
+  public async getPrisonerDetails(token: string, prisonNumber: string): Promise<PrisonerDetails> {
+    return this.welcomeClient.getPrisonerDetails(token, { prisonNumber })
   }
 
-  public async getPrisonerSummaryDetails(prisonNumber: string): Promise<WithBodyScanInfo<PrisonerDetails>> {
-    const token = await this.hmppsAuthClient.getSystemClientToken()
-    const prisonerDetails = await this.welcomeClientFactory(token).getPrisonerDetails(prisonNumber)
-    return this.bodyScanDecorator.decorateSingle(prisonerDetails)
+  public async getPrisonerSummaryDetails(
+    token: string,
+    prisonNumber: string,
+  ): Promise<WithBodyScanInfo<PrisonerDetails>> {
+    const prisonerDetails = await this.welcomeClient.getPrisonerDetails(token, { prisonNumber })
+    return this.bodyScanDecorator.decorateSingle(token, prisonerDetails)
   }
 }

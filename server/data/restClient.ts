@@ -37,7 +37,7 @@ export default class RestClient {
   constructor(
     private readonly name: string,
     private readonly config: ApiConfig,
-    private readonly token: string
+    private readonly token: string,
   ) {
     this.agent = config.url.startsWith('https') ? new HttpsAgent(config.agent) : new Agent(config.agent)
   }
@@ -109,17 +109,17 @@ export default class RestClient {
   }
 
   public pipeIntoStream(stream: NodeJS.WritableStream, { path = null, headers = {} }: StreamRequest = {}) {
-    superagent
-      .get(`${this.apiUrl()}${path}`)
-      .agent(this.agent)
-      .auth(this.token, { type: 'bearer' })
-      .retry(2, (err, res) => {
-        if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
-        return undefined // retry handler only for logging retries, not to influence retry logic
-      })
-      .timeout(this.timeoutConfig())
-      .set(headers)
-      .pipe(stream)
+    // superagent
+    //   .get(`${this.apiUrl()}${path}`)
+    //   .agent(this.agent)
+    //   .auth(this.token, { type: 'bearer' })
+    //   .retry(2, (err, res) => {
+    //     if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
+    //     return undefined // retry handler only for logging retries, not to influence retry logic
+    //   })
+    //   .timeout(this.timeoutConfig())
+    //   .set(headers)
+    //   .pipe(stream)
   }
 
   async stream({ path = null, headers = {} }: StreamRequest = {}): Promise<unknown> {

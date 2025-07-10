@@ -4,16 +4,16 @@ import type { ExpectedArrivalsService, RaiseAnalyticsEvent } from '../../../../s
 export default class CheckCourtReturnController {
   public constructor(
     private readonly expectedArrivalsService: ExpectedArrivalsService,
-    private readonly raiseAnalyticsEvent: RaiseAnalyticsEvent
+    private readonly raiseAnalyticsEvent: RaiseAnalyticsEvent,
   ) {}
 
   public checkCourtReturn(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
-      const { username } = req.user
+      const { systemToken } = req.session
 
-      const data = await this.expectedArrivalsService.getPrisonerDetailsForArrival(username, id)
-      const prisonerEscortRecord = await this.expectedArrivalsService.getArrival(username, id)
+      const data = await this.expectedArrivalsService.getPrisonerDetailsForArrival(systemToken, id)
+      const prisonerEscortRecord = await this.expectedArrivalsService.getArrival(systemToken, id)
       return res.render('pages/bookedtoday/arrivals/courtreturns/checkCourtReturn.njk', {
         data,
         id,
@@ -25,16 +25,16 @@ export default class CheckCourtReturnController {
   public addToRoll(): RequestHandler {
     return async (req, res) => {
       const { id } = req.params
-      const { username } = req.user
-      const { activeCaseLoadId } = res.locals.user
-      const arrival = await this.expectedArrivalsService.getArrival(username, id)
-      const data = await this.expectedArrivalsService.getPrisonerDetailsForArrival(username, id)
+      const activeCaseLoadId = res.locals.user.activeCaseload.id
+      const { systemToken } = req.session
+      const arrival = await this.expectedArrivalsService.getArrival(systemToken, id)
+      const data = await this.expectedArrivalsService.getPrisonerDetailsForArrival(systemToken, id)
 
       const arrivalResponse = await this.expectedArrivalsService.confirmCourtReturn(
-        username,
+        systemToken,
         id,
         activeCaseLoadId,
-        data.prisonNumber
+        data.prisonNumber,
       )
 
       if (!arrivalResponse) {
@@ -51,7 +51,7 @@ export default class CheckCourtReturnController {
       this.raiseAnalyticsEvent(
         'Add to the establishment roll',
         'Confirmed court return returned',
-        `AgencyId: ${activeCaseLoadId}, From: ${arrival.fromLocation}, Type: ${arrival.fromLocationType},`
+        `AgencyId: ${activeCaseLoadId}, From: ${arrival.fromLocation}, Type: ${arrival.fromLocationType},`,
       )
 
       return res.redirect(`/prisoners/${id}/prisoner-returned-from-court`)

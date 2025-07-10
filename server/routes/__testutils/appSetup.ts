@@ -15,6 +15,8 @@ import Role from '../../authentication/role'
 import { StateOperations } from '../../utils/state'
 import { stubRequestCookie, stubRequestCookies, ExpectedCookie } from './requestTestUtils'
 import type { BodyScanServices } from '../../bodyscan/services'
+import { HmppsUser } from '../../interfaces/hmppsUser'
+import refreshSystemToken from '../../middleware/refreshSystemToken'
 
 export const user = {
   firstName: 'first',
@@ -41,7 +43,7 @@ function appSetup(
   bodyScanServices: BodyScanServices,
   production: boolean,
   userSupplier: () => Express.User,
-  roles: Role[]
+  roles: Role[],
 ): Express {
   const app = express()
 
@@ -54,11 +56,13 @@ function appSetup(
     req.user = userSupplier()
     req.flash = flashProvider
     req.signedCookies = signedCookiesProvider()
-    res.locals = {}
-    res.locals.user = { ...req.user, roles }
+    res.locals = {
+      user: { ...req.user } as HmppsUser,
+    }
     next()
   })
   app.use(express.json())
+  app.use(refreshSystemToken(services))
   app.use(express.urlencoded({ extended: true }))
   app.use(wpipRoutes(services))
   app.use(bodyScanRoutes(bodyScanServices))

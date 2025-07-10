@@ -1,41 +1,47 @@
+import { jest } from '@jest/globals'
 import PrisonService from './prisonService'
+import PrisonRegisterClient from '../data/prisonRegisterClient'
 import { createPrison } from '../data/__testutils/testObjects'
-import { createMockHmppsAuthClient, createMockPrisonRegisterClient } from '../data/__testutils/mocks'
 
-const token = 'some token'
+function deepMock(object: any, returnValue?: any): object | jest.Mock {
+  if (typeof object === 'object') {
+    return Object.fromEntries(Object.entries(object).map(([k, n]) => [k, deepMock(n, returnValue)]))
+  }
 
-describe('Expected arrivals service', () => {
-  const prisonRegisterClient = createMockPrisonRegisterClient()
-  const hmppsAuthClient = createMockHmppsAuthClient()
-  let service: PrisonService
+  if (typeof object === 'function') {
+    return jest.fn().mockReturnValue(returnValue)
+  }
 
-  const PrisonRegisterClientFactory = jest.fn()
+  return object
+}
+
+describe('PrisonService', () => {
+  const token = 'some-token'
+  const prisonId = 'MDI'
+  const prison = createPrison()
+
+  let prisonRegisterClient: jest.Mocked<PrisonRegisterClient>
+  let prisonService: PrisonService
 
   beforeEach(() => {
-    jest.resetAllMocks()
-    PrisonRegisterClientFactory.mockReturnValue(prisonRegisterClient)
-    service = new PrisonService(hmppsAuthClient, PrisonRegisterClientFactory)
-    hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
+    prisonRegisterClient = jest.mocked(new PrisonRegisterClient(null, null))
+    prisonRegisterClient.prisons = deepMock(prisonRegisterClient.prisons) as typeof prisonRegisterClient.prisons
+    prisonRegisterClient.prisons.getPrison.mockResolvedValue(prison)
+
+    prisonService = new PrisonService(prisonRegisterClient)
   })
 
   describe('getPrison', () => {
-    const prison = createPrison()
+    it('calls the correct API client function', async () => {
+      await prisonService.getPrison(token, prisonId)
 
-    beforeEach(() => {
-      prisonRegisterClient.getPrison.mockResolvedValue(prison)
+      expect(prisonRegisterClient.prisons.getPrison).toHaveBeenCalledWith(token, { prisonId })
     })
 
-    it('Calls upstream service correctly', async () => {
-      await service.getPrison('MDI')
+    it('returns the expected data', async () => {
+      const result = await prisonService.getPrison(token, prisonId)
 
-      expect(PrisonRegisterClientFactory).toBeCalledWith(token)
-      expect(prisonRegisterClient.getPrison).toBeCalledWith('MDI')
-    })
-
-    it('Should return correct data', async () => {
-      const result = await service.getPrison('MDI')
-
-      expect(result).toStrictEqual(prison)
+      expect(result).toEqual(prison)
     })
   })
 })

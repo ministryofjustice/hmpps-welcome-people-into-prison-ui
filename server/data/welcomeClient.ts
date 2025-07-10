@@ -11,203 +11,218 @@ import type {
   RecentArrival,
   TemporaryAbsence,
   Transfer,
-  UserCaseLoad,
 } from 'welcome'
 import type { Readable } from 'stream'
-import config, { ApiConfig } from '../config'
-import RestClient from './restClient'
+import { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
+import superagent from 'superagent'
+import config from '../config'
 import logger from '../../logger'
+import { ManagementReportDefinition } from '../@types/welcome/managementReportDefinition'
+import type { UnsanitisedError } from '../sanitisedError'
+import { RedisClient } from './redisClient'
+import BaseApiClient from './baseApiClient'
 
-export default class WelcomeClient {
-  restClient: RestClient
+interface StreamRequest {
+  path?: string
+  headers?: Record<string, string>
+  errorLogger?: (e: UnsanitisedError) => void
+}
 
-  constructor(token: string) {
-    this.restClient = new RestClient('welcomeClient', config.apis.welcome as ApiConfig, token)
+function pipeIntoStream(stream: NodeJS.WritableStream, { path = null, headers = {} }: StreamRequest = {}) {
+  superagent
+    .get(`${this.apiUrl()}${path}`)
+    .agent(this.agent)
+    .auth(this.token, { type: 'bearer' })
+    .retry(2, (err, res) => {
+      if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
+      return undefined // retry handler only for logging retries, not to influence retry logic
+    })
+    .timeout(this.timeoutConfig())
+    .set(headers)
+    .pipe(stream)
+}
+
+export default class WelcomeClient extends BaseApiClient {
+  constructor(
+    protected readonly redisClient: RedisClient,
+    authenticationClient: AuthenticationClient,
+  ) {
+    super('welcomeClient', redisClient, config.apis.welcome, authenticationClient)
   }
 
-  async getExpectedArrivals(agencyId: string, date: moment.Moment): Promise<Arrival[]> {
-    logger.info(`welcomeApi: getExpectedArrivals(${agencyId}, ${date})`)
-    return this.restClient.get({
-      path: `/prisons/${agencyId}/arrivals`,
-      query: { date: date.format('YYYY-MM-DD') },
-      timeout: 15000,
-      retryCount: 0,
-    }) as Promise<Arrival[]>
-  }
+  getExpectedArrivals: (token: string, params: { agencyId: string; date: string }) => Promise<Arrival[]> = this.apiCall<
+    Arrival[],
+    { agencyId: string; date: string }
+  >({
+    path: '/prisons/:agencyId/arrivals',
+    queryParams: ['date'],
+    requestType: 'get',
+    loggerMessage: params => `welcomeApi: getExpectedArrivals(agencyId=${params.agencyId}, date=${params.date}`,
+  })
 
-  async getArrival(id: string): Promise<Arrival> {
-    logger.info(`welcomeApi: getArrival(${id})`)
-    return this.restClient.get({
-      path: `/arrivals/${id}`,
-    }) as Promise<Arrival>
-  }
+  getArrival: (token: string, params: { id: string }) => Promise<Arrival> = this.apiCall<Arrival, { id: string }>({
+    path: '/arrivals/:agencyId',
+    queryParams: ['date'],
+    requestType: 'get',
+    loggerMessage: params => `welcomeApi: id=${params.id}`,
+  })
 
-  async getRecentArrivals(
-    prisonId: string,
-    fromDate: moment.Moment,
-    toDate: moment.Moment,
-    searchQuery?: string
-  ): Promise<PaginatedResponse<RecentArrival>> {
-    logger.info(`welcomeApi: getRecentArrivals(${prisonId})`)
-    return this.restClient.get({
-      path: `/prisons/${prisonId}/recent-arrivals`,
-      query: {
-        fromDate: fromDate.format('YYYY-MM-DD'),
-        toDate: toDate.format('YYYY-MM-DD'),
-        query: searchQuery,
-      },
-      timeout: 15000,
-      retryCount: 0,
-    }) as Promise<PaginatedResponse<RecentArrival>>
-  }
-
-  async confirmCourtReturn(id: string, prisonId: string, prisonNumber: string): Promise<ArrivalResponse | null> {
-    logger.info(`welcomeApi: confirmCourtReturn ${id})`)
-    try {
-      return (await this.restClient.post({
-        path: `/court-returns/${id}/confirm`,
-        data: { prisonId, prisonNumber },
-      })) as Promise<ArrivalResponse>
-    } catch (error) {
-      if (error.status >= 400 && error.status < 500) {
-        return null
-      }
-      throw error
+  getRecentArrivals: (
+    token: string,
+    parameters?: { prisonId: string; fromDate: string; toDate: string; query?: string },
+  ) => Promise<PaginatedResponse<RecentArrival>> = this.apiCall<
+    PaginatedResponse<RecentArrival>,
+    {
+      prisonId: string
+      fromDate: string
+      toDate: string
+      query?: string
     }
-  }
+  >({
+    path: '/prisons/:prisonId/recent-arrivals',
+    queryParams: ['fromDate', 'toDate', 'query'],
+    requestType: 'get',
+    loggerMessage: params =>
+      `welcomeApi: getRecentArrivals(prisonId=${params.prisonId}, fromDate=${params.fromDate}, toDate=${params.toDate}, query=${params.query})`,
+  })
 
-  async getTransfers(agencyId: string): Promise<Arrival[]> {
-    logger.info(`welcomeApi: getTransfers(${agencyId})`)
-    return this.restClient.get({
-      path: `/prisons/${agencyId}/transfers`,
-    }) as Promise<Arrival[]>
-  }
+  confirmCourtReturn: (
+    token: string,
+    params: { id: string },
+    data: { prisonId: string; prisonNumber: string },
+  ) => Promise<ArrivalResponse | null> = this.apiCall<
+    ArrivalResponse,
+    { id: string },
+    { prisonId: string; prisonNumber: string } | null
+  >({
+    path: '/court-returns/:id/confirm',
+    requestType: 'post',
+    loggerMessage: params => `welcomeApi: confirmCourtReturn(id=${params.id})`,
+  })
 
-  async getTransfer(agencyId: string, prisonNumber: string): Promise<Transfer> {
-    logger.info(`welcomeApi: getTransfer(${agencyId} ${prisonNumber})`)
-    return this.restClient.get({
-      path: `/prisons/${agencyId}/transfers/${prisonNumber}`,
-    }) as Promise<Transfer>
-  }
+  getTransfers: (token: string, params: { agencyId: string }) => Promise<Arrival[]> = this.apiCall<
+    Arrival[],
+    { agencyId: string }
+  >({
+    path: '/prisons/:agencyId/transfers',
+    requestType: 'get',
+    loggerMessage: params => `welcomeApi: getTransfers(agencyId=${params.agencyId})`,
+  })
 
-  async confirmTransfer(prisonNumber: string, prisonId: string, arrivalId?: string): Promise<ArrivalResponse | null> {
-    logger.info(`welcomeApi: confirmTransfer ${prisonNumber})`)
-    try {
-      return (await this.restClient.post({
-        path: `/transfers/${prisonNumber}/confirm`,
-        data: { prisonId, arrivalId },
-      })) as Promise<ArrivalResponse>
-    } catch (error) {
-      if (error.status >= 400 && error.status < 500) {
-        return null
-      }
-      throw error
-    }
-  }
+  getTransfer: (token: string, params: { agencyId: string; prisonNumber: string }) => Promise<Transfer> = this.apiCall<
+    Transfer,
+    { agencyId: string; prisonNumber: string }
+  >({
+    path: '/prisons/:agencyId/transfers/:prisonNumber',
+    requestType: 'get',
+    loggerMessage: params =>
+      `welcomeApi: getTransfer(agencyId=${params.agencyId}), prisonNumber=${params.prisonNumber}) `,
+  })
 
-  async getTemporaryAbsences(agencyId: string): Promise<TemporaryAbsence[]> {
-    logger.info(`welcomeApi: getTemporaryAbsences(${agencyId})`)
-    return this.restClient.get({
-      path: `/prison/${agencyId}/temporary-absences`,
-    }) as Promise<TemporaryAbsence[]>
-  }
+  confirmTransfer: (
+    token: string,
+    params: { prisonNumber: string },
+    data: { prisonId: string; arrivalId?: string },
+  ) => Promise<ArrivalResponse> = this.apiCall<
+    ArrivalResponse,
+    { prisonNumber: string },
+    { prisonId: string; arrivalId?: string }
+  >({
+    path: '/transfers/:prisonNumber/confirm',
+    requestType: 'post',
+    loggerMessage: (params, data) =>
+      `welcomeApi: confirmTransfer(prisonNumber=${params.prisonNumber}, prisonId=${data.prisonId}, arrivalId=${data.arrivalId})`,
+  })
 
-  async getTemporaryAbsence(prisonNumber: string): Promise<TemporaryAbsence> {
-    logger.info(`welcomeApi: getTemporaryAbsence(${prisonNumber})`)
-    return this.restClient.get({
-      path: `/temporary-absences/${prisonNumber}`,
-    }) as Promise<TemporaryAbsence>
-  }
+  getTemporaryAbsences: (token: string, params: { agencyId: string }) => Promise<TemporaryAbsence[]> = this.apiCall<
+    TemporaryAbsence[],
+    { agencyId: string }
+  >({
+    path: '/prison/:agencyId/temporary-absences',
+    requestType: 'get',
+    loggerMessage: params => `welcomeApi: getTemporaryAbsences(agencyId=${params.agencyId})`,
+  })
 
-  async confirmTemporaryAbsence(
-    prisonNumber: string,
-    prisonId: string,
-    arrivalId?: string
-  ): Promise<ArrivalResponse | null> {
-    logger.info(`welcomeApi: confirmTemporaryAbsence ${prisonNumber})`)
-    try {
-      return (await this.restClient.post({
-        path: `/temporary-absences/${prisonNumber}/confirm`,
-        data: { prisonId, arrivalId },
-      })) as Promise<ArrivalResponse>
-    } catch (error) {
-      if (error.status >= 400 && error.status < 500) {
-        return null
-      }
-      throw error
-    }
-  }
+  getTemporaryAbsence: (token: string, params: { prisonNumber: string }) => Promise<TemporaryAbsence> = this.apiCall<
+    TemporaryAbsence,
+    { prisonNumber: string }
+  >({
+    path: '/temporary-absences/:prisonNumber',
+    requestType: 'get',
+    loggerMessage: params => `welcomeApi: getTemporaryAbsence(prisonNumber=${params.prisonNumber})`,
+  })
 
-  async getImage(prisonNumber: string): Promise<Readable> {
-    logger.info(`welcomeApi: getImage(${prisonNumber})`)
-    return this.restClient.stream({
-      path: `/prisoners/${prisonNumber}/image`,
-    }) as Promise<Readable>
-  }
+  confirmTemporaryAbsence: (
+    token: string,
+    params: { prisonNumber: string },
+    data: { prisonId: string; arrivalId?: string },
+  ) => Promise<ArrivalResponse | null> = this.apiCall<
+    ArrivalResponse | null,
+    { prisonNumber: string },
+    { prisonId: string; arrivalId?: string }
+  >({
+    path: '/temporary-absences/:prisonNumber/confirm',
+    requestType: 'post',
+    loggerMessage: (params, data) =>
+      `welcomeApi: confirmTemporaryAbsence(prisonNumber=${params.prisonNumber}, prisonId=${data.prisonId}, arrivalId=${data.arrivalId})`,
+  })
 
-  async confirmExpectedArrival(id: string, detail: ConfirmArrivalDetail): Promise<ArrivalResponse | null> {
-    logger.info(`welcomeApi: confirmExpectedArrival(${id})`)
-    try {
-      return (await this.restClient.post({
-        path: `/arrivals/${id}/confirm`,
-        data: detail,
-      })) as Promise<ArrivalResponse>
-    } catch (error) {
-      if (error.status >= 400 && error.status < 500) {
-        return null
-      }
-      throw error
-    }
-  }
+  getImage: (token: string, params: { prisonNumber: string }) => Promise<Readable> = this.apiCall<
+    Readable,
+    { prisonNumber: string }
+  >({
+    path: '/prisoners/:prisonNumber/image',
+    requestType: 'get',
+    loggerMessage: params => `welcomeApi: getImage(${params.prisonNumber})`,
+  })
 
-  async confirmUnexpectedArrival(detail: ConfirmArrivalDetail): Promise<ArrivalResponse | null> {
-    logger.info(`welcomeApi: confirmUnexpectedArrival`)
-    try {
-      return (await this.restClient.post({
-        path: `/unexpected-arrivals/confirm`,
-        data: detail,
-      })) as Promise<ArrivalResponse>
-    } catch (error) {
-      if (error.status >= 400 && error.status < 500) {
-        return null
-      }
-      throw error
-    }
-  }
+  confirmExpectedArrival: (
+    token: string,
+    params: { id: string },
+    data: ConfirmArrivalDetail,
+  ) => Promise<ArrivalResponse | null> = this.apiCall<ArrivalResponse | null, { id: string }, ConfirmArrivalDetail>({
+    path: '/arrivals/:id/confirm',
+    requestType: 'post',
+    loggerMessage: ({ id }) => `welcomeApi: confirmExpectedArrival(${id})`,
+  })
 
-  async getImprisonmentStatuses(): Promise<ImprisonmentStatus[]> {
-    logger.info(`welcomeApi: getImprisonmentStatuses()`)
-    return this.restClient.get({
-      path: `/imprisonment-statuses`,
-    }) as Promise<ImprisonmentStatus[]>
-  }
+  confirmUnexpectedArrival: (token: string, detail: ConfirmArrivalDetail) => Promise<ArrivalResponse | null> =
+    this.apiCall<ArrivalResponse | null, ConfirmArrivalDetail>({
+      path: '/unexpected-arrivals/confirm',
+      requestType: 'post',
+      loggerMessage: () => 'welcomeApi: confirmUnexpectedArrival()',
+    })
 
-  async getUserCaseLoads(): Promise<UserCaseLoad[]> {
-    logger.info(`welcomeApi: getUserCaseLoads()`)
-    return this.restClient.get({
-      path: '/prison/users/me/caseLoads',
-    }) as Promise<UserCaseLoad[]>
-  }
+  getImprisonmentStatuses: (token: string) => Promise<ImprisonmentStatus[]> = this.apiCall<
+    ImprisonmentStatus[],
+    undefined
+  >({
+    path: '/imprisonment-statuses',
+    requestType: 'get',
+    loggerMessage: () => 'welcomeApi: getImprisonmentStatuses()',
+  })
 
-  async getMatchingRecords(matchCriteria: PotentialMatchCriteria): Promise<PotentialMatch[]> {
-    logger.info(`welcomeApi: match-prisoners`)
+  getMatchingRecords: (token: string, data: PotentialMatchCriteria) => Promise<PotentialMatch[]> = this.apiCall<
+    PotentialMatch[],
+    PotentialMatchCriteria
+  >({
+    path: '/match-prisoners',
+    requestType: 'post',
+    loggerMessage: data => `welcomeApi: match-prisoners ${JSON.stringify(data)}`,
+  })
 
-    return (await this.restClient.post({
-      path: '/match-prisoners',
-      data: matchCriteria,
-    })) as Promise<PotentialMatch[]>
-  }
-
-  async getPrisonerDetails(prisonNumber: string): Promise<PrisonerDetails> {
-    logger.info(`welcomeApi: getPrison(${prisonNumber})`)
-    return this.restClient.get({
-      path: `/prisoners/${prisonNumber}`,
-    }) as Promise<PrisonerDetails>
-  }
+  getPrisonerDetails: (token: string, params: { prisonNumber: string }) => Promise<PrisonerDetails> = this.apiCall<
+    PrisonerDetails,
+    { prisonNumber: string }
+  >({
+    path: '/prisoners/:prisonNumber',
+    requestType: 'get',
+    loggerMessage: params => `welcomeApi: getPrisonerDetails(prisonNumber=${params.prisonNumber})`,
+  })
 
   public getEventsCSV(stream: NodeJS.WritableStream, date: moment.Moment, days?: number): void {
     const daysQP = days ? `&days=${days}` : ''
-    this.restClient.pipeIntoStream(stream, {
+    pipeIntoStream(stream, {
       path: `/events?start-date=${date.format('YYYY-MM-DD')}${daysQP}`,
       headers: { Accept: 'text/csv' },
     })

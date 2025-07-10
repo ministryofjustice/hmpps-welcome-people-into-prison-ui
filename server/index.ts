@@ -3,7 +3,7 @@ import { services as wpipServicesBuilder } from './services'
 import { services as bodyScanServicesBuilder } from './bodyscan/services'
 
 const wpipServices = wpipServicesBuilder()
-const bodyScanServices = bodyScanServicesBuilder(wpipServices)
+const bodyScanServices = bodyScanServicesBuilder()
 
 const app = createApp(wpipServices, bodyScanServices)
 

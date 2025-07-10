@@ -1,15 +1,11 @@
 import { BodyScan } from 'body-scan'
-import { createMockHmppsAuthClient } from '../../data/__testutils/mocks'
 import { BodyScanClient } from '../data'
 import BodyScanService from './bodyScanService'
 
 jest.mock('../data')
 
-const token = 'some token'
-
 describe('Body scan service', () => {
   const bodyScanClient = new BodyScanClient(null) as jest.Mocked<BodyScanClient>
-  const hmppsAuthClient = createMockHmppsAuthClient()
   let service: BodyScanService
 
   const bodyScanClientFactory = jest.fn()
@@ -17,8 +13,7 @@ describe('Body scan service', () => {
   beforeEach(() => {
     jest.resetAllMocks()
     bodyScanClientFactory.mockReturnValue(bodyScanClient)
-    service = new BodyScanService(hmppsAuthClient, bodyScanClientFactory)
-    hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
+    service = new BodyScanService(bodyScanClient)
   })
 
   describe('get prisoner details', () => {
@@ -26,9 +21,6 @@ describe('Body scan service', () => {
       const prisonNumber = 'A1234BC'
 
       await service.getPrisonerDetails(prisonNumber)
-
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-      expect(bodyScanClientFactory).toBeCalledWith(token)
       expect(bodyScanClient.getPrisonerDetails).toBeCalledWith(prisonNumber)
     })
   })
@@ -38,10 +30,8 @@ describe('Body scan service', () => {
       const prisonNumber = 'A1234BC'
       const bodyScan: BodyScan = { date: '2020-02-20', reason: 'INTELLIGENCE', result: 'POSITIVE' }
 
-      await service.addBodyScan('user-1', prisonNumber, bodyScan)
+      await service.addBodyScan(prisonNumber, bodyScan)
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith('user-1')
-      expect(bodyScanClientFactory).toBeCalledWith(token)
       expect(bodyScanClient.addBodyScan).toBeCalledWith(prisonNumber, bodyScan)
     })
   })
@@ -52,8 +42,6 @@ describe('Body scan service', () => {
 
       await service.retrieveBodyScanInfo(prisonNumber)
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-      expect(bodyScanClientFactory).toBeCalledWith(token)
       expect(bodyScanClient.getSingleBodyScanInfo).toBeCalledWith(prisonNumber)
     })
   })

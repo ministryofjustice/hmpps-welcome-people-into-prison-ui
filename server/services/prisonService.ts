@@ -1,14 +1,10 @@
 import type { Prison } from 'welcome'
-import type { RestClientBuilder, PrisonRegisterClient, HmppsAuthClient } from '../data'
+import PrisonRegisterClient from '../data/prisonRegisterClient'
 
 export default class PrisonService {
-  constructor(
-    private readonly hmppsAuthClient: HmppsAuthClient,
-    private readonly prisonRegisterClientFactory: RestClientBuilder<PrisonRegisterClient>
-  ) {}
+  constructor(private readonly prisonRegisterApiClient: PrisonRegisterClient) {}
 
-  public async getPrison(activeCaseLoadId: string): Promise<Prison> {
-    const token = await this.hmppsAuthClient.getSystemClientToken()
-    return this.prisonRegisterClientFactory(token).getPrison(activeCaseLoadId)
+  public async getPrison(token: string, prisonId: string): Promise<Prison> {
+    return this.prisonRegisterApiClient.prisons.getPrison(token, { prisonId })
   }
 }

@@ -31,27 +31,27 @@ export default function routes(services: Services): Router {
       checkIsLocked,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       checkSearchDetailsPresent,
-      multipleMatchFoundController.view()
+      multipleMatchFoundController.view(),
     )
     .post(
       `${basePath}/possible-records-found`,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       checkSearchDetailsPresent,
       validationMiddleware(MatchedRecordSelectionValidation),
-      multipleMatchFoundController.submit()
+      multipleMatchFoundController.submit(),
     )
     .get(
       `${basePath}/record-found`,
       checkIsLocked,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       checkSearchDetailsPresent,
-      singleMatchFoundController.view()
+      singleMatchFoundController.view(),
     )
     .post(
       `${basePath}/record-found`,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       checkSearchDetailsPresent,
-      singleMatchFoundController.submit()
+      singleMatchFoundController.submit(),
     )
     .get(`${basePath}/no-record-found`, checkIsLocked, noMatchFoundController.view())
     .post(`${basePath}/no-record-found`, checkSearchDetailsPresent, noMatchFoundController.submit())

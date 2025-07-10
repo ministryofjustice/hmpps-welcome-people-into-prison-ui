@@ -3,16 +3,13 @@ import type { BodyScanInfo } from 'body-scan'
 import BodyScanClient from './bodyScanClient'
 import config from '../config'
 
-describe('bodyScanClient', () => {
-  let fakeBodyScanApi: nock.Scope
-  let bodyScanClint: BodyScanClient
-
+describe('BodyScanClient', () => {
+  let bodyScanClient: BodyScanClient
   const token = 'token-1'
 
   beforeEach(() => {
     config.apis.bodyscan.url = 'http://localhost:8080'
-    fakeBodyScanApi = nock(config.apis.bodyscan.url)
-    bodyScanClint = new BodyScanClient(token)
+    bodyScanClient = new BodyScanClient(null, null)
   })
 
   afterEach(() => {
@@ -22,23 +19,25 @@ describe('bodyScanClient', () => {
     }
     nock.abortPendingRequests()
     nock.cleanAll()
+    jest.resetAllMocks()
   })
 
   describe('getSingleBodyScanInfo', () => {
+    const prisonNumber = 'A1234AA'
     const bodyScanInfo: BodyScanInfo = {
-      prisonNumber: 'A1234AA',
+      prisonNumber,
       bodyScanStatus: 'CLOSE_TO_LIMIT',
       numberOfBodyScans: 110,
       numberOfBodyScansRemaining: 6,
     }
 
-    it('should return data from api', async () => {
-      fakeBodyScanApi
-        .get(`/body-scans/prisoners/A1234AA`)
+    it('should make a GET request to /body-scans/prisoners/:id and return data', async () => {
+      nock(config.apis.bodyscan.url)
+        .post(`/body-scans/prisoners/A1234AA`)
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, bodyScanInfo)
 
-      const info = await bodyScanClint.getSingleBodyScanInfo('A1234AA')
+      const info = await bodyScanClient.getSingleBodyScanInfo(token, { prisonNumber: 'A1234AA' })
       expect(info).toStrictEqual(bodyScanInfo)
     })
   })
@@ -51,13 +50,13 @@ describe('bodyScanClient', () => {
       numberOfBodyScansRemaining: 6,
     }
 
-    it('should return data from api', async () => {
-      fakeBodyScanApi
-        .post(`/body-scans/prisoners`, ['A1234AA'])
+    it('should make a POST request to /body-scans/prisoners and return array of data', async () => {
+      nock(config.apis.bodyscan.url)
+        .post(`/body-scans/prisoners`)
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, [bodyScanInfo])
 
-      const info = await bodyScanClint.getBodyScanInfo(['A1234AA'])
+      const info = await bodyScanClient.getBodyScanInfo(token, { prisonNumbers: ['A1234AA'] })
       expect(info).toStrictEqual([bodyScanInfo])
     })
   })

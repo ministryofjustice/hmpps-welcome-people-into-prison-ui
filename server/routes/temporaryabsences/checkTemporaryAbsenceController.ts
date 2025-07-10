@@ -4,14 +4,15 @@ import type { RaiseAnalyticsEvent, TemporaryAbsencesService } from '../../servic
 export default class CheckTemporaryAbsenceController {
   public constructor(
     private readonly temporaryAbsencesService: TemporaryAbsencesService,
-    private readonly raiseAnalyticsEvent: RaiseAnalyticsEvent
+    private readonly raiseAnalyticsEvent: RaiseAnalyticsEvent,
   ) {}
 
   public checkTemporaryAbsence(): RequestHandler {
     return async (req, res) => {
       const { arrivalId } = req.query
       const { prisonNumber } = req.params
-      const data = await this.temporaryAbsencesService.getTemporaryAbsence(prisonNumber)
+      const { systemToken } = req.session
+      const data = await this.temporaryAbsencesService.getTemporaryAbsence(systemToken, prisonNumber)
       return res.render('pages/temporaryabsences/checkTemporaryAbsence.njk', { data, arrivalId })
     }
   }
@@ -19,35 +20,43 @@ export default class CheckTemporaryAbsenceController {
   public addToRoll(): RequestHandler {
     return async (req, res) => {
       const { prisonNumber } = req.params
-      const { username } = req.user
       const { arrivalId } = req.body
-      const { activeCaseLoadId } = res.locals.user
-      const data = await this.temporaryAbsencesService.getTemporaryAbsence(prisonNumber)
+      const { systemToken } = req.session
+      const activeCaseLoadId = res.locals.user.activeCaseload.id
 
-      const arrivalResponse = await this.temporaryAbsencesService.confirmTemporaryAbsence(
-        username,
-        prisonNumber,
-        activeCaseLoadId,
-        arrivalId
-      )
+      try {
+        const data = await this.temporaryAbsencesService.getTemporaryAbsence(systemToken, prisonNumber)
 
-      if (!arrivalResponse) {
-        return res.redirect('/feature-not-available')
+        const arrivalResponse = await this.temporaryAbsencesService.confirmTemporaryAbsence(
+          systemToken,
+          prisonNumber,
+          activeCaseLoadId,
+          arrivalId,
+        )
+
+        if (!arrivalResponse) {
+          return res.redirect('/feature-not-available')
+        }
+
+        req.flash('prisoner', {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          location: arrivalResponse.location,
+        })
+
+        this.raiseAnalyticsEvent(
+          'Add to the establishment roll',
+          'Confirmed temporary absence returned',
+          `AgencyId: ${activeCaseLoadId}, Reason: ${data.reasonForAbsence}, Type: 'PRISON',`,
+        )
+
+        return res.redirect(`/prisoners/${prisonNumber}/prisoner-returned`)
+      } catch (error) {
+        if (error.status >= 400 && error.status < 500) {
+          return null
+        }
+        throw error
       }
-
-      req.flash('prisoner', {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        location: arrivalResponse.location,
-      })
-
-      this.raiseAnalyticsEvent(
-        'Add to the establishment roll',
-        'Confirmed temporary absence returned',
-        `AgencyId: ${activeCaseLoadId}, Reason: ${data.reasonForAbsence}, Type: 'PRISON',`
-      )
-
-      return res.redirect(`/prisoners/${prisonNumber}/prisoner-returned`)
     }
   }
 }

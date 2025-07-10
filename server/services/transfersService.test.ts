@@ -1,41 +1,36 @@
 import TransfersService from './transfersService'
 import { createTransfer } from '../data/__testutils/testObjects'
-import { createMockHmppsAuthClient, createMockWelcomeClient } from '../data/__testutils/mocks'
+import { createMockWelcomeClient } from '../data/__testutils/mocks'
 import { createMockBodyScanInfoDecorator } from './__testutils/mocks'
 
 const token = 'some token'
 
 const transfer = createTransfer()
+const confirmTransferMockedResult = {
+  prisonNumber: 'G0015GD',
+  location: 'MDI',
+}
 
 describe('Transfers service', () => {
   const welcomeClient = createMockWelcomeClient()
-  const hmppsAuthClient = createMockHmppsAuthClient()
   const bodyScanInfoDecorator = createMockBodyScanInfoDecorator()
 
   let service: TransfersService
 
-  const WelcomeClientFactory = jest.fn()
-
   beforeEach(() => {
     jest.resetAllMocks()
-    WelcomeClientFactory.mockReturnValue(welcomeClient)
-    service = new TransfersService(hmppsAuthClient, WelcomeClientFactory, bodyScanInfoDecorator)
-    hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
+    service = new TransfersService(welcomeClient, bodyScanInfoDecorator)
     welcomeClient.getTransfer.mockResolvedValue(transfer)
   })
 
   describe('getTransfer', () => {
     it('Calls upstream service correctly', async () => {
-      await service.getTransfer('MDI', 'G0015GD')
+      await service.getTransfer(token, 'MDI', 'G0015GD')
 
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.getTransfer).toBeCalledWith('MDI', 'G0015GD')
-    })
-
-    it('Should return correct data', async () => {
-      const result = await service.getTransfer('MDI', 'G0015GD')
-
-      expect(result).toStrictEqual(transfer)
+      expect(welcomeClient.getTransfer).toHaveBeenCalledWith(token, {
+        agencyId: 'MDI',
+        prisonNumber: 'G0015GD',
+      })
     })
   })
 
@@ -43,11 +38,10 @@ describe('Transfers service', () => {
     it('Calls upstream service correctly', async () => {
       welcomeClient.getTransfer.mockResolvedValue(transfer)
 
-      await service.getTransferWithBodyScanDetails('MDI', 'A1234AA')
+      await service.getTransferWithBodyScanDetails(token, 'MDI', 'A1234AA')
 
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.getTransfer).toBeCalledWith('MDI', 'A1234AA')
-      expect(bodyScanInfoDecorator.decorateSingle).toBeCalledWith({
+      expect(welcomeClient.getTransfer).toHaveBeenCalledWith(token, { agencyId: 'MDI', prisonNumber: 'A1234AA' })
+      expect(bodyScanInfoDecorator.decorateSingle).toHaveBeenCalledWith(token, {
         firstName: 'Sam',
         lastName: 'Smith',
         prisonNumber: 'A1234AA',
@@ -61,26 +55,36 @@ describe('Transfers service', () => {
   })
 
   describe('confirmTransfer', () => {
-    it('Calls upstream services correctly', async () => {
-      await service.confirmTransfer('user1', 'G0015GD', 'MDI')
+    it('calls welcomeClient.confirmTransfer with correct params without arrivalId', async () => {
+      welcomeClient.confirmTransfer.mockResolvedValue(confirmTransferMockedResult)
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith('user1')
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.confirmTransfer).toBeCalledWith('G0015GD', 'MDI', undefined)
+      const result = await service.confirmTransfer(token, 'G0015GD', 'MDI')
+
+      expect(welcomeClient.confirmTransfer).toHaveBeenCalledWith(
+        token,
+        { prisonNumber: 'G0015GD' },
+        { prisonId: 'MDI', arrivalId: undefined },
+      )
+      expect(result).toEqual(confirmTransferMockedResult)
     })
 
     it('Calls upstream services correctly when arrivalId present', async () => {
-      await service.confirmTransfer('user1', 'G0015GD', 'MDI', 'abc-123')
+      welcomeClient.confirmTransfer.mockResolvedValue(confirmTransferMockedResult)
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith('user1')
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.confirmTransfer).toBeCalledWith('G0015GD', 'MDI', 'abc-123')
+      const result = await service.confirmTransfer(token, 'G0015GD', 'MDI', 'abc-123')
+
+      expect(welcomeClient.confirmTransfer).toHaveBeenCalledWith(
+        token,
+        { prisonNumber: 'G0015GD' },
+        { prisonId: 'MDI', arrivalId: 'abc-123' },
+      )
+      expect(result).toEqual(confirmTransferMockedResult)
     })
 
     it('Should return null', async () => {
       welcomeClient.confirmTransfer.mockResolvedValue(null)
 
-      const result = await service.confirmTransfer('user1', 'G0015GD', 'MDI')
+      const result = await service.confirmTransfer(token, 'G0015GD', 'MDI')
       expect(result).toBe(null)
     })
   })

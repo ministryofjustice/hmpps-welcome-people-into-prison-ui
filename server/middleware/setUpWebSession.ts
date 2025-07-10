@@ -1,15 +1,15 @@
-import { v4 as uuidv4 } from 'uuid'
 import session, { MemoryStore, Store } from 'express-session'
 import { RedisStore } from 'connect-redis'
 import express, { Router } from 'express'
-import { redisClient } from '../data/redisClient'
+import { randomUUID } from 'crypto'
+import { createRedisClient } from '../data/redisClient'
 import config from '../config'
 import logger from '../../logger'
 
 export default function setUpWebSession(): Router {
   let store: Store
   if (config.redis.enabled) {
-    const client = redisClient
+    const client = createRedisClient()
     client.connect().catch((err: Error) => logger.error(`Error connecting to Redis`, err))
     store = new RedisStore({ client })
   } else {
@@ -20,20 +20,13 @@ export default function setUpWebSession(): Router {
   router.use(
     session({
       store,
-      name: config.session.name,
-      cookie: {
-        domain: config.session.domain,
-        httpOnly: true,
-        secure: config.https,
-        sameSite: 'lax',
-        maxAge: config.session.expiryMinutes * 60 * 1000,
-        signed: true,
-      },
+      name: 'hmpps-template-typescript.session',
+      cookie: { secure: config.https, sameSite: 'lax', maxAge: config.session.expiryMinutes * 60 * 1000 },
       secret: config.session.secret,
       resave: false, // redis implements touch so shouldn't need this
       saveUninitialized: false,
       rolling: true,
-    })
+    }),
   )
 
   // Update a value in the cookie so that the set-cookie will be sent.
@@ -46,7 +39,7 @@ export default function setUpWebSession(): Router {
   router.use((req, res, next) => {
     const headerName = 'X-Request-Id'
     const oldValue = req.get(headerName)
-    const id = oldValue === undefined ? uuidv4() : oldValue
+    const id = oldValue === undefined ? randomUUID() : oldValue
 
     res.set(headerName, id)
     req.id = id

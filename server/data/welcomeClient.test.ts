@@ -1,6 +1,7 @@
 import nock from 'nock'
 import moment from 'moment'
 import type { Arrival, ConfirmArrivalDetail, TemporaryAbsence, UserCaseLoad } from 'welcome'
+import { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import WelcomeClient from './welcomeClient'
 import config from '../config'
 import {
@@ -14,6 +15,9 @@ import {
   createTemporaryAbsence,
   createTransfer,
 } from './__testutils/testObjects'
+import { RedisClient } from './redisClient'
+import ManageUsersService from '../services/manageUsersService'
+import ManageUsersApiClient from './manageUsersApiClient'
 
 describe('welcomeClient', () => {
   let fakeWelcomeApi: nock.Scope
@@ -26,7 +30,11 @@ describe('welcomeClient', () => {
   beforeEach(() => {
     config.apis.welcome.url = 'http://localhost:8080'
     fakeWelcomeApi = nock(config.apis.welcome.url)
-    welcomeClient = new WelcomeClient(token)
+    const mockRedisClient = {} as RedisClient
+    const mockAuthClient = {
+      getSystemToken: jest.fn().mockResolvedValue('token-1'),
+    } as unknown as AuthenticationClient
+    welcomeClient = new WelcomeClient(mockRedisClient, mockAuthClient)
   })
 
   afterEach(() => {
@@ -40,13 +48,18 @@ describe('welcomeClient', () => {
 
   describe('getUserCaseLoads', () => {
     const userCaseLoads: UserCaseLoad[] = []
-    it('should return data from api', async () => {
-      fakeWelcomeApi
-        .get('/prison/users/me/caseLoads')
-        .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, userCaseLoads)
 
-      const output = await welcomeClient.getUserCaseLoads()
+    const mockManageUsersApiClient = {
+      users: {
+        me: {
+          getCaseloads: jest.fn().mockResolvedValue(userCaseLoads),
+        },
+      },
+    } as unknown as ManageUsersApiClient
+
+    it('should return data from api', async () => {
+      const manageUsersService = jest.mocked(new ManageUsersService(mockManageUsersApiClient))
+      const output = await manageUsersService.getUserCaseloads(token)
       expect(output).toEqual(userCaseLoads)
     })
   })
@@ -61,7 +74,10 @@ describe('welcomeClient', () => {
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, arrivals)
 
-      const output = await welcomeClient.getExpectedArrivals(activeCaseLoadId, date)
+      const output = await welcomeClient.getExpectedArrivals(token, {
+        agencyId: activeCaseLoadId,
+        date: date.format('YYYY-MM-DD'),
+      })
       expect(output).toEqual(arrivals)
     })
   })
@@ -92,7 +108,11 @@ describe('welcomeClient', () => {
 
       const fromDateMoment = moment().subtract(2, 'days')
       const toDateMoment = moment()
-      const output = await welcomeClient.getRecentArrivals(activeCaseLoadId, fromDateMoment, toDateMoment)
+      const output = await welcomeClient.getRecentArrivals(token, {
+        prisonId: activeCaseLoadId,
+        fromDate: fromDateMoment.format('YYYY-MM-DD'),
+        toDate: toDateMoment.format('YYYY-MM-DD'),
+      })
       expect(output).toEqual(recentArrivals)
     })
 
@@ -106,18 +126,23 @@ describe('welcomeClient', () => {
             content: [
               createRecentArrival({ firstName: 'John', lastName: 'Doe', movementDateTime: `${toDate}T13:15:00` }),
             ],
-          })
+          }),
         )
 
       const fromDateMoment = moment().subtract(2, 'days')
       const toDateMoment = moment()
-      const output = await welcomeClient.getRecentArrivals(activeCaseLoadId, fromDateMoment, toDateMoment, searchQuery)
+      const output = await welcomeClient.getRecentArrivals(token, {
+        prisonId: activeCaseLoadId,
+        fromDate: fromDateMoment.format('YYYY-MM-DD'),
+        toDate: toDateMoment.format('YYYY-MM-DD'),
+        query: searchQuery,
+      })
       expect(output).toEqual(
         createRecentArrivalResponse({
           content: [
             createRecentArrival({ firstName: 'John', lastName: 'Doe', movementDateTime: `${toDate}T13:15:00` }),
           ],
-        })
+        }),
       )
     })
   })
@@ -131,7 +156,7 @@ describe('welcomeClient', () => {
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, transfers)
 
-      const output = await welcomeClient.getTransfers(activeCaseLoadId)
+      const output = await welcomeClient.getTransfers(token, { agencyId: activeCaseLoadId })
       expect(output).toEqual(transfers)
     })
   })
@@ -146,7 +171,7 @@ describe('welcomeClient', () => {
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, transfer)
 
-      const output = await welcomeClient.getTransfer(activeCaseLoadId, prisonNumber)
+      const output = await welcomeClient.getTransfer(token, { agencyId: activeCaseLoadId, prisonNumber })
       expect(output).toEqual(transfer)
     })
   })
@@ -160,7 +185,7 @@ describe('welcomeClient', () => {
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, temporaryAbsences)
 
-      const output = await welcomeClient.getTemporaryAbsences(activeCaseLoadId)
+      const output = await welcomeClient.getTemporaryAbsences(token, { agencyId: activeCaseLoadId })
       expect(output).toEqual(temporaryAbsences)
     })
   })
@@ -174,7 +199,7 @@ describe('welcomeClient', () => {
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, temporaryAbsence)
 
-      const output = await welcomeClient.getTemporaryAbsence(prisonNumber)
+      const output = await welcomeClient.getTemporaryAbsence(token, { prisonNumber })
       expect(output).toEqual(temporaryAbsence)
     })
   })
@@ -188,19 +213,20 @@ describe('welcomeClient', () => {
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, arrivalResponse)
 
-      return expect(welcomeClient.confirmTemporaryAbsence(prisonNumber, 'MDI', 'abc-123')).resolves.toStrictEqual(
-        arrivalResponse
-      )
+      return expect(
+        welcomeClient.confirmTemporaryAbsence(token, { prisonNumber }, { prisonId: 'MDI', arrivalId: 'abc-123' }),
+      ).resolves.toStrictEqual(arrivalResponse)
     })
 
-    it('should return null', async () => {
+    it('should throw not found error', async () => {
       fakeWelcomeApi
         .post(`/temporary-absences/${prisonNumber}/confirm`, { prisonId: 'MDI' })
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(404)
 
-      const output = await welcomeClient.confirmTemporaryAbsence(prisonNumber, 'MDI')
-      return expect(output).toBe(null)
+      await expect(
+        welcomeClient.confirmTemporaryAbsence(token, { prisonNumber }, { prisonId: 'MDI' }),
+      ).rejects.toThrow('Not Found')
     })
 
     it('should throw server error', async () => {
@@ -209,7 +235,9 @@ describe('welcomeClient', () => {
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(500)
 
-      await expect(welcomeClient.confirmTemporaryAbsence(prisonNumber, 'MDI')).rejects.toThrow('Internal Server Error')
+      await expect(welcomeClient.confirmTemporaryAbsence(token, { prisonNumber }, { prisonId: 'MDI' })).rejects.toThrow(
+        'Internal Server Error',
+      )
     })
   })
 
@@ -221,19 +249,19 @@ describe('welcomeClient', () => {
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, arrivalResponse)
 
-      return expect(welcomeClient.confirmTransfer(prisonNumber, 'MDI', 'abc-123')).resolves.toStrictEqual(
-        arrivalResponse
-      )
+      return expect(
+        welcomeClient.confirmTransfer(token, { prisonNumber }, { prisonId: 'MDI', arrivalId: 'abc-123' }),
+      ).resolves.toStrictEqual(arrivalResponse)
     })
 
-    it('should return null', async () => {
+    it('should throw error on 404 Not Found', async () => {
       fakeWelcomeApi
-        .post(`/transfers/${prisonNumber}/confirm`)
+        .filteringRequestBody(() => '*')
+        .post(`/transfers/${prisonNumber}/confirm`, '*')
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(404)
 
-      const output = await welcomeClient.confirmTransfer(prisonNumber, 'MDI')
-      return expect(output).toBe(null)
+      await expect(welcomeClient.confirmTransfer(token, { prisonNumber }, { prisonId: 'MDI' })).rejects.toThrow('Not Found')
     })
 
     it('should throw server error', async () => {
@@ -242,7 +270,9 @@ describe('welcomeClient', () => {
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(500)
 
-      await expect(welcomeClient.confirmTransfer(prisonNumber, 'MDI')).rejects.toThrow('Internal Server Error')
+      await expect(welcomeClient.confirmTransfer(token, { prisonNumber }, { prisonId: 'MDI' })).rejects.toThrow(
+        'Internal Server Error',
+      )
     })
   })
 
@@ -251,7 +281,7 @@ describe('welcomeClient', () => {
     it('should return data from api', async () => {
       fakeWelcomeApi.get(`/arrivals/${id}`).matchHeader('authorization', `Bearer ${token}`).reply(200, arrival)
 
-      const output = await welcomeClient.getArrival(id)
+      const output = await welcomeClient.getArrival(token, id)
       expect(output).toEqual(arrival)
     })
   })
@@ -263,7 +293,9 @@ describe('welcomeClient', () => {
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, arrivalResponse)
 
-      return expect(welcomeClient.confirmCourtReturn(id, 'MDI', 'A1234AA')).resolves.toStrictEqual(arrivalResponse)
+      return expect(
+        welcomeClient.confirmCourtReturn(token, { id }, { prisonId: 'MDI', prisonNumber: 'A1234AA' }),
+      ).resolves.toStrictEqual(arrivalResponse)
     })
     it('should return null', async () => {
       fakeWelcomeApi
@@ -271,7 +303,7 @@ describe('welcomeClient', () => {
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(404)
 
-      const output = await welcomeClient.confirmCourtReturn(id, 'MDI', 'A1234AA')
+      const output = await welcomeClient.confirmCourtReturn(token, { id }, { prisonId: 'MDI', prisonNumber: 'A1234AA' })
       return expect(output).toBe(null)
     })
 
@@ -281,7 +313,9 @@ describe('welcomeClient', () => {
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(500)
 
-      await expect(welcomeClient.confirmCourtReturn(id, 'MDI', 'A1234AA')).rejects.toThrow('Internal Server Error')
+      await expect(
+        welcomeClient.confirmCourtReturn(token, { id }, { prisonId: 'MDI', prisonNumber: 'A1234AA' }),
+      ).rejects.toThrow('Internal Server Error')
     })
   })
 
@@ -303,21 +337,20 @@ describe('welcomeClient', () => {
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, arrivalResponse)
 
-      const output = await welcomeClient.confirmExpectedArrival(id, detail)
+      const output = await welcomeClient.confirmExpectedArrival(token, { id }, detail)
       expect(output).toEqual(arrivalResponse)
     })
 
-    it('should return null', async () => {
+    it('should throw error on 400 Bad Request', async () => {
       fakeWelcomeApi.post(`/arrivals/${id}/confirm`, detail).matchHeader('authorization', `Bearer ${token}`).reply(400)
 
-      const output = await welcomeClient.confirmExpectedArrival(id, detail)
-      return expect(output).toBe(null)
+      await expect(welcomeClient.confirmExpectedArrival(token, { id }, detail)).rejects.toThrow('Bad Request')
     })
 
     it('server error thrown', async () => {
       fakeWelcomeApi.post(`/arrivals/${id}/confirm`, detail).matchHeader('authorization', `Bearer ${token}`).reply(500)
 
-      await expect(welcomeClient.confirmExpectedArrival(id, detail)).rejects.toThrow('Internal Server Error')
+      await expect(welcomeClient.confirmExpectedArrival(token, { id }, detail)).rejects.toThrow('Internal Server Error')
     })
   })
 

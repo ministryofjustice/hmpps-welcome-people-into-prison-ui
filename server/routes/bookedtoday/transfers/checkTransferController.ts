@@ -4,32 +4,34 @@ import type { RaiseAnalyticsEvent, TransfersService } from '../../../services'
 export default class CheckTransferController {
   public constructor(
     private readonly transfersService: TransfersService,
-    private readonly raiseAnalyticsEvent: RaiseAnalyticsEvent
+    private readonly raiseAnalyticsEvent: RaiseAnalyticsEvent,
   ) {}
 
   public checkTransfer(): RequestHandler {
     return async (req, res) => {
-      const { activeCaseLoadId } = res.locals.user
+      const activeCaseLoadId = res.locals.user.activeCaseload.id
+      const { systemToken } = req.session
       const { arrivalId } = req.query
       const { prisonNumber } = req.params
-      const data = await this.transfersService.getTransfer(activeCaseLoadId, prisonNumber)
+      const data = await this.transfersService.getTransfer(systemToken, activeCaseLoadId, prisonNumber)
       return res.render('pages/bookedtoday/transfers/checkTransfer.njk', { data, arrivalId })
     }
   }
 
   public addToRoll(): RequestHandler {
     return async (req, res) => {
+      const activeCaseLoadId = res.locals.user.activeCaseload.id
+      const { systemToken } = req.session
       const { prisonNumber } = req.params
-      const { username } = req.user
       const { arrivalId } = req.body
-      const { activeCaseLoadId } = res.locals.user
-      const data = await this.transfersService.getTransfer(activeCaseLoadId, prisonNumber)
+
+      const data = await this.transfersService.getTransfer(systemToken, activeCaseLoadId, prisonNumber)
 
       const arrivalResponse = await this.transfersService.confirmTransfer(
-        username,
+        systemToken,
         prisonNumber,
         activeCaseLoadId,
-        arrivalId
+        arrivalId,
       )
 
       if (!arrivalResponse) {
@@ -45,7 +47,7 @@ export default class CheckTransferController {
       this.raiseAnalyticsEvent(
         'Add to the establishment roll',
         'Confirmed transfer',
-        `AgencyId: ${activeCaseLoadId}, From: ${data.fromLocation}, Type: 'PRISON',`
+        `AgencyId: ${activeCaseLoadId}, From: ${data.fromLocation}, Type: 'PRISON',`,
       )
 
       return res.redirect(`/prisoners/${prisonNumber}/confirm-transfer`)

@@ -1,23 +1,20 @@
-import { createMockBodyScanClient, createMockHmppsAuthClient } from '../data/__testutils/mocks'
+import { createMockBodyScanClient } from '../data/__testutils/mocks'
 import { createPrisonerDetails } from '../data/__testutils/testObjects'
 import { BodyScanInfoDecorator } from './bodyScanInfoDecorator'
 
 jest.mock('./raiseAnalyticsEvent')
 
-const token = 'some token'
-
-describe('BodyScanInfoDecorater', () => {
-  const hmppsAuthClient = createMockHmppsAuthClient()
+describe('BodyScanInfoDecorator', () => {
   const bodyScanClient = createMockBodyScanClient()
   let service: BodyScanInfoDecorator
 
-  const BodyScanClientFactory = jest.fn()
+  const BodyScanClient = jest.fn()
+  const token = 'some-token'
 
   beforeEach(() => {
     jest.resetAllMocks()
-    BodyScanClientFactory.mockReturnValue(bodyScanClient)
-    service = new BodyScanInfoDecorator(hmppsAuthClient, BodyScanClientFactory)
-    hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
+    BodyScanClient.mockReturnValue(bodyScanClient)
+    service = new BodyScanInfoDecorator(bodyScanClient)
   })
 
   describe('decorate', () => {
@@ -52,7 +49,7 @@ describe('BodyScanInfoDecorater', () => {
     })
 
     test('happy path', async () => {
-      const result = await service.decorate(arrivals)
+      const result = await service.decorate(token, arrivals)
 
       expect(result).toStrictEqual([
         { bodyScanStatus: 'OK_TO_SCAN', prisonNumber: 'A1234AA' },
@@ -61,11 +58,13 @@ describe('BodyScanInfoDecorater', () => {
         { bodyScanStatus: undefined, prisonNumber: 'A1234AD' },
       ])
 
-      expect(bodyScanClient.getBodyScanInfo).toHaveBeenCalledWith(['A1234AA', 'A1234AB', 'A1234AC', 'A1234AD'])
+      expect(bodyScanClient.getBodyScanInfo).toHaveBeenCalledWith(token, {
+        prisonNumbers: ['A1234AA', 'A1234AB', 'A1234AC', 'A1234AD'],
+      })
     })
 
     test('does not request body scans for things without prison numbers', async () => {
-      const result = await service.decorate([
+      const result = await service.decorate(token, [
         { prisonNumber: 'A1234AA' },
         { prisonNumber: undefined },
         { prisonNumber: 'A1234AC' },
@@ -79,7 +78,7 @@ describe('BodyScanInfoDecorater', () => {
         { bodyScanStatus: undefined, prisonNumber: undefined },
       ])
 
-      expect(bodyScanClient.getBodyScanInfo).toHaveBeenCalledWith(['A1234AA', 'A1234AC'])
+      expect(bodyScanClient.getBodyScanInfo).toHaveBeenCalledWith(token, { prisonNumbers: ['A1234AA', 'A1234AC'] })
     })
   })
 
@@ -92,7 +91,7 @@ describe('BodyScanInfoDecorater', () => {
         numberOfBodyScansRemaining: 106,
       })
 
-      const result = await service.decorateSingle(createPrisonerDetails())
+      const result = await service.decorateSingle(token, createPrisonerDetails())
 
       expect(result).toStrictEqual({
         numberOfBodyScans: 10,
@@ -108,7 +107,7 @@ describe('BodyScanInfoDecorater', () => {
         arrivalTypeDescription: 'description',
       })
 
-      expect(bodyScanClient.getSingleBodyScanInfo).toHaveBeenCalledWith('A1234AB')
+      expect(bodyScanClient.getSingleBodyScanInfo).toHaveBeenCalledWith(token, { prisonNumber: 'A1234AB' })
     })
   })
 })

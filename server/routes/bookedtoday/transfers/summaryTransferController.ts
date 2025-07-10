@@ -7,14 +7,16 @@ export default class SummaryTransferController {
 
   public summaryTransfer(): RequestHandler {
     return async (req, res) => {
-      const { activeCaseLoadId } = res.locals.user
+      const activeCaseLoadId = res.locals.user.activeCaseload.id
       const { prisonNumber } = req.params
-      const { roles } = res.locals.user
-      const transfer = await this.transfersService.getTransferWithBodyScanDetails(activeCaseLoadId, prisonNumber)
+      const { userRoles } = res.locals.user
+      const { systemToken } = req.session
+
+      const transfer = await this.transfersService.getTransferWithBodyScanDetails(systemToken, activeCaseLoadId, prisonNumber)
       const enableDpsLink =
-        (roles.includes(Role.PRISON_RECEPTION) && roles.includes(Role.ROLE_INACTIVE_BOOKINGS)) ||
-        (roles.includes(Role.PRISON_RECEPTION) && roles.includes(Role.GLOBAL_SEARCH))
-      const confirmArrivalEnabled = roles.includes(Role.PRISON_RECEPTION)
+        (userRoles.includes(Role.PRISON_RECEPTION) && userRoles.includes(Role.ROLE_INACTIVE_BOOKINGS)) ||
+        (userRoles.includes(Role.PRISON_RECEPTION) && userRoles.includes(Role.GLOBAL_SEARCH))
+      const confirmArrivalEnabled = userRoles.includes(Role.PRISON_RECEPTION)
       return res.render(`pages/bookedtoday/transfers/summaryTransfer.njk`, {
         transfer,
         enableDpsLink,

@@ -12,7 +12,7 @@ describe('bodyScanClient', () => {
   beforeEach(() => {
     config.apis.bodyscan.url = 'http://localhost:8080'
     fakeBodyScanApi = nock(config.apis.bodyscan.url)
-    bodyScanClint = new BodyScanClient(token)
+    bodyScanClint = new BodyScanClient(null)
   })
 
   afterEach(() => {
