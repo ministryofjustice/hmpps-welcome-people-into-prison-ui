@@ -1,6 +1,8 @@
 import hmppsConfig from '@ministryofjustice/eslint-config-hmpps'
 
-const config = hmppsConfig()
+const config = hmppsConfig({
+  extraIgnorePaths: ['assets', 'cypress.json', 'reporter-config.json'],
+})
 
 config.push({
   name: 'jquery',
