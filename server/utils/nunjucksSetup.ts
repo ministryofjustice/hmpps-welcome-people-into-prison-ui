@@ -113,8 +113,6 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     analytics: { googleAnalyticsId, tagManagerContainerId, tagManagerEnvironment },
   } = config
 
-  njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)
-
   // Digital Prison Reporting configuration
   setUpNunjucksFilters(njkEnv)
 
@@ -133,6 +131,7 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addGlobal('showRecentArrivals', config.showRecentArrivals)
   njkEnv.addGlobal('femalePrisons', config.femalePrisons)
   njkEnv.addGlobal('serviceOutageBannerEnabled', config.serviceOutageBannerEnabled)
+  njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)
 
   return njkEnv
 }
