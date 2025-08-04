@@ -1,4 +1,5 @@
 import moment from 'moment'
+// eslint-disable-next-line import/no-unresolved
 import { type Arrival } from 'welcome'
 import ExpectedArrivalsService from './expectedArrivalsService'
 import { NewArrival } from '../routes/bookedtoday/arrivals/state'
@@ -53,11 +54,11 @@ describe('Expected arrivals service', () => {
       raiseAnalyticsEvent,
       bodyScanInfoDecorator,
       matchTypeDecorator,
-      offenceInfoDecorator
+      offenceInfoDecorator,
     )
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
     bodyScanInfoDecorator.decorate.mockImplementation(as =>
-      Promise.resolve(as.map(a => ({ ...a, bodyScanStatus: 'OK_TO_SCAN' })))
+      Promise.resolve(as.map(a => ({ ...a, bodyScanStatus: 'OK_TO_SCAN' }))),
     )
     bodyScanInfoDecorator.decorateSingle.mockImplementation(as =>
       Promise.resolve({
@@ -65,7 +66,7 @@ describe('Expected arrivals service', () => {
         numberOfBodyScans: 0,
         numberOfBodyScansRemaining: 116,
         bodyScanStatus: 'OK_TO_SCAN',
-      })
+      }),
     )
     matchTypeDecorator.decorate.mockImplementation(as => as.map(a => ({ ...a, matchType: MatchType.SINGLE_MATCH })))
     matchTypeDecorator.decorateSingle.mockImplementation(a => ({ ...a, matchType: MatchType.SINGLE_MATCH }))
@@ -113,7 +114,7 @@ describe('Expected arrivals service', () => {
             ],
           ],
           ['OTHER', [arrival({ fromLocationType: 'OTHER' })]],
-        ])
+        ]),
       )
 
       expect(welcomeClient.getExpectedArrivals).toBeCalledWith(res.locals.user.activeCaseLoadId, today)
@@ -173,7 +174,7 @@ describe('Expected arrivals service', () => {
             ],
           ],
           [dateFrom, [withBodyScanStatus(createRecentArrival({ movementDateTime: `${twoDaysAgo}T18:20:00` }))]],
-        ])
+        ]),
       )
 
       expect(welcomeClient.getRecentArrivals).toBeCalledWith(res.locals.user.activeCaseLoadId, dateFrom, dateTo)
@@ -211,7 +212,7 @@ describe('Expected arrivals service', () => {
         res.locals.user.activeCaseLoadId,
         dateFrom,
         dateTo,
-        searchQuery
+        searchQuery,
       )
     })
 
@@ -320,7 +321,7 @@ describe('Expected arrivals service', () => {
       expect(raiseAnalyticsEvent).toBeCalledWith(
         'Add to the establishment roll',
         'Confirmed arrival',
-        'AgencyId: MDI, From: Reading Court, Type: COURT,'
+        'AgencyId: MDI, From: Reading Court, Type: COURT,',
       )
     })
 
@@ -369,7 +370,7 @@ describe('Expected arrivals service', () => {
       expect(raiseAnalyticsEvent).toBeCalledWith(
         'Add to the establishment roll',
         'Confirmed unexpected arrival',
-        'AgencyId: MDI'
+        'AgencyId: MDI',
       )
     })
 

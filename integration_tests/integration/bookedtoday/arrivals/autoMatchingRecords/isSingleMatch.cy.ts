@@ -44,7 +44,7 @@ context('Is Single Match', () => {
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
 
     const prisonerSummaryWithRecordPage = new PrisonerSummaryWithRecordPage(
-      `${expectedArrival.lastName}, ${expectedArrival.firstName}`
+      `${expectedArrival.lastName}, ${expectedArrival.firstName}`,
     )
     prisonerSummaryWithRecordPage.checkOnPage()
     prisonerSummaryWithRecordPage.breadcrumbs().should('exist')
@@ -116,7 +116,7 @@ context('Is Single Match', () => {
 
     ChoosePrisonerPage.goTo().arrivalFrom('COURT')(1).confirm().click()
     const prisonerSummaryWithRecordPage = new PrisonerSummaryWithRecordPage(
-      `${expectedArrival.lastName}, ${expectedArrival.firstName}`
+      `${expectedArrival.lastName}, ${expectedArrival.firstName}`,
     )
     prisonerSummaryWithRecordPage.breadcrumbs().should('exist')
     prisonerSummaryWithRecordPage.prisonerProfile().should('not.exist')
@@ -131,7 +131,7 @@ context('Is Single Match', () => {
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
 
     const prisonerSummaryWithRecordPage = new PrisonerSummaryWithRecordPage(
-      `${expectedArrival.lastName}, ${expectedArrival.firstName}`
+      `${expectedArrival.lastName}, ${expectedArrival.firstName}`,
     )
     prisonerSummaryWithRecordPage.checkOnPage()
     prisonerSummaryWithRecordPage.confirmArrival().click()
@@ -152,7 +152,7 @@ context('Is Single Match', () => {
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
 
     const prisonerSummaryWithRecordPage = new PrisonerSummaryWithRecordPage(
-      `${expectedArrival.lastName}, ${expectedArrival.firstName}`
+      `${expectedArrival.lastName}, ${expectedArrival.firstName}`,
     )
     prisonerSummaryWithRecordPage.checkOnPage()
     prisonerSummaryWithRecordPage.confirmArrival().click()
@@ -172,7 +172,7 @@ context('Is Single Match', () => {
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
 
     const prisonerSummaryWithRecordPage = new PrisonerSummaryWithRecordPage(
-      `${expectedArrival.lastName}, ${expectedArrival.firstName}`
+      `${expectedArrival.lastName}, ${expectedArrival.firstName}`,
     )
     prisonerSummaryWithRecordPage.checkOnPage()
     prisonerSummaryWithRecordPage.confirmArrival().click()

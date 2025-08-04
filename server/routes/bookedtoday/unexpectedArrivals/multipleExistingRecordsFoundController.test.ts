@@ -1,6 +1,7 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
+// eslint-disable-next-line import/no-unresolved
 import { PotentialMatch } from 'welcome'
 
 import { appWithAllRoutes, flashProvider, stubCookie } from '../../__testutils/appSetup'

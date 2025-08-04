@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import { Arrival } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'

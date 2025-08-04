@@ -41,19 +41,19 @@ export default function routes(services: Services): Router {
       routePrefix,
       checkIsLocked,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
-      searchForExistingRecordController.showSearch()
+      searchForExistingRecordController.showSearch(),
     )
     .get(
       `${routePrefix}/new`,
       checkIsLocked,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
-      searchForExistingRecordController.newSearch()
+      searchForExistingRecordController.newSearch(),
     )
     .post(
       `${routePrefix}`,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       checkSearchDetailsPresent,
-      searchForExistingRecordController.submitSearch()
+      searchForExistingRecordController.submitSearch(),
     )
 
     .get(
@@ -61,14 +61,14 @@ export default function routes(services: Services): Router {
       checkIsLocked,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       checkSearchDetailsPresent,
-      changeNameController.showChangeName()
+      changeNameController.showChangeName(),
     )
     .post(
       `${routePrefix}/change-name`,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       checkSearchDetailsPresent,
       validationMiddleware(NameValidator),
-      changeNameController.changeName()
+      changeNameController.changeName(),
     )
 
     .get(
@@ -76,14 +76,14 @@ export default function routes(services: Services): Router {
       checkIsLocked,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       checkSearchDetailsPresent,
-      changeDateOfBirthController.showChangeDateOfBirth()
+      changeDateOfBirthController.showChangeDateOfBirth(),
     )
     .post(
       `${routePrefix}/change-date-of-birth`,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       checkSearchDetailsPresent,
       validationMiddleware(DateOfBirthValidator),
-      changeDateOfBirthController.changeDateOfBirth()
+      changeDateOfBirthController.changeDateOfBirth(),
     )
 
     .get(
@@ -91,21 +91,21 @@ export default function routes(services: Services): Router {
       checkIsLocked,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       checkSearchDetailsPresent,
-      changePrisonNumberController.showChangePrisonNumber()
+      changePrisonNumberController.showChangePrisonNumber(),
     )
     .post(
       `${routePrefix}/change-prison-number`,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       checkSearchDetailsPresent,
       validationMiddleware(PrisonNumberValidator),
-      changePrisonNumberController.changePrisonNumber()
+      changePrisonNumberController.changePrisonNumber(),
     )
     .get(
       `${routePrefix}/remove-prison-number`,
       checkIsLocked,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       checkSearchDetailsPresent,
-      changePrisonNumberController.removePrisonNumber()
+      changePrisonNumberController.removePrisonNumber(),
     )
 
     .get(
@@ -113,20 +113,20 @@ export default function routes(services: Services): Router {
       checkIsLocked,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       checkSearchDetailsPresent,
-      changePncNumberController.showChangePncNumber()
+      changePncNumberController.showChangePncNumber(),
     )
     .post(
       `${routePrefix}/change-pnc-number`,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       checkSearchDetailsPresent,
-      changePncNumberController.changePncNumber()
+      changePncNumberController.changePncNumber(),
     )
     .get(
       `${routePrefix}/remove-pnc-number`,
       checkIsLocked,
       redirectIfDisabledMiddleware(config.confirmNoIdentifiersEnabled),
       checkSearchDetailsPresent,
-      changePncNumberController.removePncNumber()
+      changePncNumberController.removePncNumber(),
     )
 
     .build()

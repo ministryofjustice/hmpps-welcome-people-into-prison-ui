@@ -21,7 +21,7 @@ import { MatchType } from '../../services/matchTypeDecorator'
 
 export const withBodyScanStatus = <T>(
   t: T,
-  { bodyScanStatus = 'OK_TO_SCAN' }: { bodyScanStatus?: BodyScanStatus } = {}
+  { bodyScanStatus = 'OK_TO_SCAN' }: { bodyScanStatus?: BodyScanStatus } = {},
 ) => ({
   ...t,
   bodyScanStatus,
@@ -33,7 +33,7 @@ export const withBodyScanInfo = <T>(
     numberOfBodyScans = 0,
     numberOfBodyScansRemaining = 116,
     bodyScanStatus = 'OK_TO_SCAN',
-  }: { numberOfBodyScans?: number; numberOfBodyScansRemaining?: number; bodyScanStatus?: BodyScanStatus } = {}
+  }: { numberOfBodyScans?: number; numberOfBodyScansRemaining?: number; bodyScanStatus?: BodyScanStatus } = {},
 ) => ({
   ...t,
   numberOfBodyScans,

@@ -1,7 +1,7 @@
 import hmppsConfig from '@ministryofjustice/eslint-config-hmpps'
 
 const config = hmppsConfig({
-  extraIgnorePaths: ['assets', 'cypress.json', 'reporter-config.json'],
+  extraIgnorePaths: ['assets', 'reporter-config.json'],
 })
 
 config.push({
@@ -23,6 +23,12 @@ config.push({
   files: [`**/*.test.ts`],
   rules: {
     '@typescript-eslint/no-explicit-any': 0,
+  },
+})
+
+config.push({
+  rules: {
+    'import/no-unresolved': 'error',
   },
 })
 

@@ -19,12 +19,12 @@ export default function routes(services: Services): Router {
     .get(
       '/prisoners/:prisonNumber/check-transfer',
       redirectIfDisabledMiddleware(config.confirmEnabled),
-      checkTransferController.checkTransfer()
+      checkTransferController.checkTransfer(),
     )
     .post(
       '/prisoners/:prisonNumber/check-transfer',
       redirectIfDisabledMiddleware(config.confirmEnabled),
-      checkTransferController.addToRoll()
+      checkTransferController.addToRoll(),
     )
     .get('/prisoners/:prisonNumber/confirm-transfer', confirmTransferAddedToRollController.view())
     .build()

@@ -12,7 +12,7 @@ import * as backTrackPrevention from '../../../../middleware/backTrackPrevention
 export default function routes(services: Services): Router {
   const checkCourtReturnController = new CheckCourtReturnController(
     services.expectedArrivalsService,
-    services.raiseAnalyticsEvent
+    services.raiseAnalyticsEvent,
   )
   const confirmCourtReturnAddedToRollController = new ConfirmCourtReturnAddedToRollController(services.prisonService)
   const checkIsLocked = backTrackPrevention.isLocked(services.lockManager, '/duplicate-booking-prevention')
@@ -22,18 +22,18 @@ export default function routes(services: Services): Router {
       '/prisoners/:id/check-court-return',
       checkIsLocked,
       redirectIfDisabled(config.confirmCourtReturnEnabled),
-      checkCourtReturnController.checkCourtReturn()
+      checkCourtReturnController.checkCourtReturn(),
     )
     .post(
       '/prisoners/:id/check-court-return',
       redirectIfDisabled(config.confirmEnabled),
-      checkCourtReturnController.addToRoll()
+      checkCourtReturnController.addToRoll(),
     )
     .get(
       '/prisoners/:id/prisoner-returned-from-court',
       checkIsLocked,
       redirectIfDisabled(config.confirmEnabled),
-      confirmCourtReturnAddedToRollController.view()
+      confirmCourtReturnAddedToRollController.view(),
     )
     .build()
 }

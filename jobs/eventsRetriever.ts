@@ -7,7 +7,7 @@ import type { HmppsAuthClient, WelcomeClient, RestClientBuilder } from '../serve
 export default class EventsRetriever {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
-    private readonly welcomeClientBuilder: RestClientBuilder<WelcomeClient>
+    private readonly welcomeClientBuilder: RestClientBuilder<WelcomeClient>,
   ) {}
 
   async retrieveEventsForPastSixMonths(): Promise<string[][]> {
@@ -22,7 +22,6 @@ export default class EventsRetriever {
     const dateSixMonthsAgo = moment().subtract(6, 'months').startOf('day')
     welcomeClient.getEventsCSV(parser, dateSixMonthsAgo, 183)
 
-    // eslint-disable-next-line no-restricted-syntax
     for await (const record of parser) {
       records.push(record)
     }

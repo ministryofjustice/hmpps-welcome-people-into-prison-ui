@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import { BodyScan } from 'body-scan'
 import { createMockHmppsAuthClient } from '../../data/__testutils/mocks'
 import { BodyScanClient } from '../data'

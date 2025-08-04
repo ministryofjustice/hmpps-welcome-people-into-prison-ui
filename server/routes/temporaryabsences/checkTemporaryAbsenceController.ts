@@ -4,7 +4,7 @@ import type { RaiseAnalyticsEvent, TemporaryAbsencesService } from '../../servic
 export default class CheckTemporaryAbsenceController {
   public constructor(
     private readonly temporaryAbsencesService: TemporaryAbsencesService,
-    private readonly raiseAnalyticsEvent: RaiseAnalyticsEvent
+    private readonly raiseAnalyticsEvent: RaiseAnalyticsEvent,
   ) {}
 
   public checkTemporaryAbsence(): RequestHandler {
@@ -28,7 +28,7 @@ export default class CheckTemporaryAbsenceController {
         username,
         prisonNumber,
         activeCaseLoadId,
-        arrivalId
+        arrivalId,
       )
 
       if (!arrivalResponse) {
@@ -44,7 +44,7 @@ export default class CheckTemporaryAbsenceController {
       this.raiseAnalyticsEvent(
         'Add to the establishment roll',
         'Confirmed temporary absence returned',
-        `AgencyId: ${activeCaseLoadId}, Reason: ${data.reasonForAbsence}, Type: 'PRISON',`
+        `AgencyId: ${activeCaseLoadId}, Reason: ${data.reasonForAbsence}, Type: 'PRISON',`,
       )
 
       return res.redirect(`/prisoners/${prisonNumber}/prisoner-returned`)

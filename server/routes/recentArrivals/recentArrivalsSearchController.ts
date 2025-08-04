@@ -11,7 +11,7 @@ export default class RecentArrivalsSearchController {
       const { activeCaseLoadId } = res.locals.user
       const searchResults = await this.expectedArrivalsService.getRecentArrivalsSearchResults(
         activeCaseLoadId,
-        searchQuery
+        searchQuery,
       )
       return res.render('pages/recentArrivals/recentArrivalsSearch.njk', {
         searchResults,

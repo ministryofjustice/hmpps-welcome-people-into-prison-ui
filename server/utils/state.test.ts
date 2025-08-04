@@ -102,7 +102,7 @@ describe('state', () => {
           lastName: 'Smith',
           prisonId: 'MDI',
         },
-        cookieOptions
+        cookieOptions,
       )
     })
   })
@@ -132,7 +132,7 @@ describe('state', () => {
           lastName: 'Smith',
           prisonId: 'MDI',
         },
-        cookieOptions
+        cookieOptions,
       )
     })
   })

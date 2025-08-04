@@ -19,7 +19,7 @@ describe('MatchedRecordSelectionValidation', () => {
 
   it('Should return error if only DOB and prison number', () =>
     expect(
-      SearchForExistingRecordsValidation({ day: '02', month: '01', year: '2000', prisonNumber: 'A1234BC' })
+      SearchForExistingRecordsValidation({ day: '02', month: '01', year: '2000', prisonNumber: 'A1234BC' }),
     ).toEqual([
       {
         href: '#last-name',

@@ -106,7 +106,7 @@ describe('welcomeClient', () => {
             content: [
               createRecentArrival({ firstName: 'John', lastName: 'Doe', movementDateTime: `${toDate}T13:15:00` }),
             ],
-          })
+          }),
         )
 
       const fromDateMoment = moment().subtract(2, 'days')
@@ -117,7 +117,7 @@ describe('welcomeClient', () => {
           content: [
             createRecentArrival({ firstName: 'John', lastName: 'Doe', movementDateTime: `${toDate}T13:15:00` }),
           ],
-        })
+        }),
       )
     })
   })
@@ -189,7 +189,7 @@ describe('welcomeClient', () => {
         .reply(200, arrivalResponse)
 
       return expect(welcomeClient.confirmTemporaryAbsence(prisonNumber, 'MDI', 'abc-123')).resolves.toStrictEqual(
-        arrivalResponse
+        arrivalResponse,
       )
     })
 
@@ -222,7 +222,7 @@ describe('welcomeClient', () => {
         .reply(200, arrivalResponse)
 
       return expect(welcomeClient.confirmTransfer(prisonNumber, 'MDI', 'abc-123')).resolves.toStrictEqual(
-        arrivalResponse
+        arrivalResponse,
       )
     })
 

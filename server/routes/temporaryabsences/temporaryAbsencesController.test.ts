@@ -1,6 +1,7 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
+// eslint-disable-next-line import/no-unresolved
 import { type TemporaryAbsence } from 'welcome'
 import { appWithAllRoutes, user } from '../__testutils/appSetup'
 import Role from '../../authentication/role'

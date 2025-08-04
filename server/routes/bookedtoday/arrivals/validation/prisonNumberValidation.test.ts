@@ -17,6 +17,6 @@ describe('PrisonNumberValidation', () => {
           text: 'Enter a prison number in the correct format',
         },
       ])
-    }
+    },
   )
 })

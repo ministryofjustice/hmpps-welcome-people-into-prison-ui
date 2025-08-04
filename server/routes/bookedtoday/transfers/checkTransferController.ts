@@ -4,7 +4,7 @@ import type { RaiseAnalyticsEvent, TransfersService } from '../../../services'
 export default class CheckTransferController {
   public constructor(
     private readonly transfersService: TransfersService,
-    private readonly raiseAnalyticsEvent: RaiseAnalyticsEvent
+    private readonly raiseAnalyticsEvent: RaiseAnalyticsEvent,
   ) {}
 
   public checkTransfer(): RequestHandler {
@@ -29,7 +29,7 @@ export default class CheckTransferController {
         username,
         prisonNumber,
         activeCaseLoadId,
-        arrivalId
+        arrivalId,
       )
 
       if (!arrivalResponse) {
@@ -45,7 +45,7 @@ export default class CheckTransferController {
       this.raiseAnalyticsEvent(
         'Add to the establishment roll',
         'Confirmed transfer',
-        `AgencyId: ${activeCaseLoadId}, From: ${data.fromLocation}, Type: 'PRISON',`
+        `AgencyId: ${activeCaseLoadId}, From: ${data.fromLocation}, Type: 'PRISON',`,
       )
 
       return res.redirect(`/prisoners/${prisonNumber}/confirm-transfer`)

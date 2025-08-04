@@ -1,4 +1,5 @@
 import nock from 'nock'
+// eslint-disable-next-line import/no-unresolved
 import { BodyScan, BodyScanInfo, PrisonerDetails } from 'body-scan'
 import BodyScanClient from './bodyScanClient'
 import config from '../../config'

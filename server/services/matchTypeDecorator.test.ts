@@ -35,7 +35,7 @@ describe('MatchTypeDecorator', () => {
               arrivalType: 'FROM_COURT',
             }),
           ],
-        })
+        }),
       )
       expect(result).toBe(MatchType.COURT_RETURN)
     })
@@ -47,21 +47,25 @@ describe('MatchTypeDecorator', () => {
 
     test('no match - empty matches', async () => {
       const result = service.getMatchType(
-        arrival({ prisonNumber: 'A1234AA', pncNumber: '01/12345A', potentialMatches: [] })
+        arrival({ prisonNumber: 'A1234AA', pncNumber: '01/12345A', potentialMatches: [] }),
       )
       expect(result).toBe(MatchType.NO_MATCH)
     })
 
     test('single match', async () => {
       const result = service.getMatchType(
-        arrival({ prisonNumber: 'A1234AA', pncNumber: '01/12345A', potentialMatches: [potentialMatch] })
+        arrival({ prisonNumber: 'A1234AA', pncNumber: '01/12345A', potentialMatches: [potentialMatch] }),
       )
       expect(result).toBe(MatchType.SINGLE_MATCH)
     })
 
     test('mutiple potential matches', async () => {
       const result = service.getMatchType(
-        arrival({ prisonNumber: 'A1234AA', pncNumber: '01/12345A', potentialMatches: [potentialMatch, potentialMatch] })
+        arrival({
+          prisonNumber: 'A1234AA',
+          pncNumber: '01/12345A',
+          potentialMatches: [potentialMatch, potentialMatch],
+        }),
       )
       expect(result).toBe(MatchType.MULTIPLE_POTENTIAL_MATCHES)
     })

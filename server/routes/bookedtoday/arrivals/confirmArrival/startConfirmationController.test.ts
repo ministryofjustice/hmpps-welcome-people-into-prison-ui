@@ -50,7 +50,7 @@ describe('/start-confirmation', () => {
 
       it('should redirect to sex pages when NEW_BOOKING', () => {
         expectedArrivalsService.getPrisonerDetails.mockResolvedValue(
-          createPrisonerDetails({ arrivalType: 'NEW_BOOKING' })
+          createPrisonerDetails({ arrivalType: 'NEW_BOOKING' }),
         )
         return request(app)
           .get('/prisoners/12345-67890/start-confirmation')
@@ -60,7 +60,7 @@ describe('/start-confirmation', () => {
 
       it('should redirect to feature not available flow when FROM_COURT', () => {
         expectedArrivalsService.getPrisonerDetails.mockResolvedValue(
-          createPrisonerDetails({ arrivalType: 'FROM_COURT' })
+          createPrisonerDetails({ arrivalType: 'FROM_COURT' }),
         )
         return request(app)
           .get('/prisoners/12345-67890/start-confirmation')
@@ -71,7 +71,7 @@ describe('/start-confirmation', () => {
       it('should redirect to temporary absence flow when FROM_TEMPORARY_ABSENCE and arrival is unexpected', () => {
         stubCookie(State.newArrival, createNewArrival({ expected: false }))
         expectedArrivalsService.getPrisonerDetails.mockResolvedValue(
-          createPrisonerDetails({ arrivalType: 'FROM_TEMPORARY_ABSENCE' })
+          createPrisonerDetails({ arrivalType: 'FROM_TEMPORARY_ABSENCE' }),
         )
         return request(app)
           .get('/prisoners/12345-67890/start-confirmation')
@@ -81,7 +81,7 @@ describe('/start-confirmation', () => {
 
       it('should redirect to temporary absence with arrivalId flow when FROM_TEMPORARY_ABSENCE and arrival is expected', () => {
         expectedArrivalsService.getPrisonerDetails.mockResolvedValue(
-          createPrisonerDetails({ arrivalType: 'FROM_TEMPORARY_ABSENCE' })
+          createPrisonerDetails({ arrivalType: 'FROM_TEMPORARY_ABSENCE' }),
         )
         return request(app)
           .get('/prisoners/12345-67890/start-confirmation')
@@ -108,7 +108,7 @@ describe('/start-confirmation', () => {
 
       it('should redirect to feature not available when prisoner is currently in', () => {
         expectedArrivalsService.getPrisonerDetails.mockResolvedValue(
-          createPrisonerDetails({ arrivalType: 'CURRENTLY_IN' })
+          createPrisonerDetails({ arrivalType: 'CURRENTLY_IN' }),
         )
         return request(app)
           .get('/prisoners/12345-67890/start-confirmation')

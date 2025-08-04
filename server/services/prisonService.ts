@@ -4,7 +4,7 @@ import type { RestClientBuilder, PrisonRegisterClient, HmppsAuthClient } from '.
 export default class PrisonService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
-    private readonly prisonRegisterClientFactory: RestClientBuilder<PrisonRegisterClient>
+    private readonly prisonRegisterClientFactory: RestClientBuilder<PrisonRegisterClient>,
   ) {}
 
   public async getPrison(activeCaseLoadId: string): Promise<Prison> {

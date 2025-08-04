@@ -99,7 +99,7 @@ describe('POST addToRoll', () => {
         expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
           'Add to the establishment roll',
           'Confirmed transfer',
-          "AgencyId: MDI, From: Kingston-upon-Hull Crown Court, Type: 'PRISON',"
+          "AgencyId: MDI, From: Kingston-upon-Hull Crown Court, Type: 'PRISON',",
         )
       })
   })

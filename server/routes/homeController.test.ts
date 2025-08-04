@@ -28,7 +28,7 @@ describe('GET /', () => {
       .expect(res => {
         const $ = cheerio.load(res.text)
         expect($("[data-qa='recent-arrivals']").text()).toContain(
-          'Record a body scan and add a case note for prisoners who have arrived within the last 3 days.'
+          'Record a body scan and add a case note for prisoners who have arrived within the last 3 days.',
         )
       })
   })
@@ -54,7 +54,7 @@ describe('GET /', () => {
       .expect(res => {
         const $ = cheerio.load(res.text)
         expect($("[data-qa='recent-arrivals']").text()).toContain(
-          'Manage reception tasks for prisoners who have arrived within the last 3 days.'
+          'Manage reception tasks for prisoners who have arrived within the last 3 days.',
         )
       })
   })

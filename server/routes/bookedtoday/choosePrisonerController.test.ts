@@ -2,6 +2,7 @@ import type { Arrival } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
+// eslint-disable-next-line import/no-unresolved
 import { LocationType } from 'welcome'
 import { DecoratedArrival } from '../../services/expectedArrivalsService'
 import { user, appWithAllRoutes, stubCookie } from '../__testutils/appSetup'
@@ -164,7 +165,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
           matchType: MatchType.SINGLE_MATCH,
-        })
+        }),
       )
       return request(app)
         .get('/confirm-arrival/choose-prisoner/aaa-111-222')
@@ -178,7 +179,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
           matchType: MatchType.COURT_RETURN,
-        })
+        }),
       )
       return request(app)
         .get('/confirm-arrival/choose-prisoner/aaa-111-222')
@@ -190,7 +191,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
           matchType: MatchType.INSUFFICIENT_INFO,
-        })
+        }),
       )
       return request(app)
         .get('/confirm-arrival/choose-prisoner/aaa-111-222')
@@ -202,7 +203,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
           matchType: MatchType.SINGLE_MATCH,
-        })
+        }),
       )
       return request(app)
         .get('/confirm-arrival/choose-prisoner/aaa-111-222')
@@ -214,7 +215,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
           matchType: MatchType.MULTIPLE_POTENTIAL_MATCHES,
-        })
+        }),
       )
       return request(app)
         .get('/confirm-arrival/choose-prisoner/aaa-111-222')
@@ -226,7 +227,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
           matchType: MatchType.NO_MATCH,
-        })
+        }),
       )
       return request(app)
         .get('/confirm-arrival/choose-prisoner/aaa-111-222')
@@ -239,7 +240,7 @@ describe('GET /confirm-arrival/choose-prisoner/:id', () => {
     expectedArrivalsService.getArrival.mockResolvedValue(
       arrival({
         matchType: MatchType.SINGLE_MATCH,
-      })
+      }),
     )
     return request(app)
       .get('/confirm-arrival/choose-prisoner/aaa-111-222')

@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import { SexKeys } from 'welcome'
 import type { Express } from 'express'
 import request from 'supertest'
@@ -51,7 +52,7 @@ describe('/sex', () => {
             const $ = cheerio.load(res.text)
             expect($('legend').text()).toContain(`What is Jim Smith's sex?`)
           })
-      }
+      },
     )
 
     it.each([{ sex: 'MALE' }, { sex: 'M' }, { sex: 'FEMALE' }, { sex: 'F' }])(
@@ -63,7 +64,7 @@ describe('/sex', () => {
           .expect(302)
           .expect('Content-Type', 'text/plain; charset=utf-8')
           .expect('Location', '/prisoners/12345-67890/imprisonment-status')
-      }
+      },
     )
 
     it('contains additional hint for TRANS response', () => {
@@ -75,7 +76,7 @@ describe('/sex', () => {
         .expect(res => {
           const $ = cheerio.load(res.text)
           expect($('.govuk-inset-text').text()).toContain(
-            'Jim Smith was identified as transgender on their Person Escort Record. Their registered sex at birth is required to confirm their arrival into this establishment.'
+            'Jim Smith was identified as transgender on their Person Escort Record. Their registered sex at birth is required to confirm their arrival into this establishment.',
           )
         })
     })

@@ -14,7 +14,7 @@ export default function routes(services: Services): Router {
 
   const checkTemporaryAbsence = new CheckTemporaryAbsenceController(
     services.temporaryAbsencesService,
-    services.raiseAnalyticsEvent
+    services.raiseAnalyticsEvent,
   )
 
   const confirmTemporaryAbsenceAddedToRoll = new ConfirmTemporaryAbsenceAddedToRollController(services.prisonService)
@@ -26,17 +26,17 @@ export default function routes(services: Services): Router {
     .get(
       '/prisoners/:prisonNumber/check-temporary-absence',
       redirectIfDisabledMiddleware(config.confirmEnabled),
-      checkTemporaryAbsence.checkTemporaryAbsence()
+      checkTemporaryAbsence.checkTemporaryAbsence(),
     )
     .post(
       '/prisoners/:prisonNumber/check-temporary-absence',
       redirectIfDisabledMiddleware(config.confirmEnabled),
-      checkTemporaryAbsence.addToRoll()
+      checkTemporaryAbsence.addToRoll(),
     )
     .get(
       '/prisoners/:prisonNumber/prisoner-returned',
       redirectIfDisabledMiddleware(config.confirmEnabled),
-      confirmTemporaryAbsenceAddedToRoll.view()
+      confirmTemporaryAbsenceAddedToRoll.view(),
     )
     .build()
 }

@@ -41,7 +41,7 @@ function appSetup(
   bodyScanServices: BodyScanServices,
   production: boolean,
   userSupplier: () => Express.User,
-  roles: Role[]
+  roles: Role[],
 ): Express {
   const app = express()
 
