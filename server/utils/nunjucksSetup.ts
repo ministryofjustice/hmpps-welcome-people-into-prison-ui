@@ -2,7 +2,10 @@
 import nunjucks from 'nunjucks'
 import moment from 'moment'
 import express from 'express'
+import setUpNunjucksFilters from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/setUpNunjucksFilters'
 import * as pathModule from 'path'
+import fs from 'fs'
+import { logger } from 'bs-logger'
 import config from '../config'
 import { calculateAge, generateCurrentYear } from './utils'
 
@@ -29,6 +32,17 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     })
   }
 
+  let assetManifest: Record<string, string> = {}
+
+  try {
+    const assetMetadataPath = path.resolve(__dirname, '../../assets/manifest.json')
+    assetManifest = JSON.parse(fs.readFileSync(assetMetadataPath, 'utf8'))
+  } catch (e) {
+    if (process.env.NODE_ENV !== 'test') {
+      logger.error(e, 'Could not read asset manifest file')
+    }
+  }
+
   const njkEnv = nunjucks.configure(
     [
       path.join(__dirname, '../../server/views'),
@@ -37,11 +51,14 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
       'node_modules/@ministryofjustice/frontend/',
       'node_modules/@ministryofjustice/frontend/moj/components/',
       'node_modules/@ministryofjustice/hmpps-connect-dps-components/dist/assets/',
+      // Digital Prison Reporting
+      'node_modules/@ministryofjustice/hmpps-digital-prison-reporting-frontend/',
+      'node_modules/@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/components/',
     ],
     {
       autoescape: true,
       express: app,
-    }
+    },
   )
 
   njkEnv.addFilter('initialiseName', (fullName: string) => {
@@ -95,6 +112,11 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   const {
     analytics: { googleAnalyticsId, tagManagerContainerId, tagManagerEnvironment },
   } = config
+
+  njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)
+
+  // Digital Prison Reporting configuration
+  setUpNunjucksFilters(njkEnv)
 
   njkEnv.addGlobal('googleAnalyticsId', googleAnalyticsId)
   njkEnv.addGlobal('tagManagerContainerId', tagManagerContainerId)

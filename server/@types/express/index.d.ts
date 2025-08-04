@@ -5,6 +5,18 @@ declare module 'express-session' {
   interface SessionData {
     returnTo: string
     nowInMinutes: number
+    systemToken?: string
+  }
+}
+
+export declare module 'express-serve-static-core' {
+  interface Request {
+    session: {
+      destroy(arg0: () => void): void
+      nowInMinutes: number
+      returnTo: string
+      systemToken?: string
+    }
   }
 }
 
