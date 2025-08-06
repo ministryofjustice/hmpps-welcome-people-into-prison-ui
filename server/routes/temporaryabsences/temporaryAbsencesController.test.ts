@@ -1,7 +1,7 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
-import { type TemporaryAbsence } from 'welcome'
+import type { TemporaryAbsence } from 'welcome'
 import { appWithAllRoutes, user } from '../__testutils/appSetup'
 import Role from '../../authentication/role'
 import config from '../../config'

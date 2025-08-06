@@ -1,4 +1,4 @@
-import {
+import type {
   RecentArrival,
   Arrival,
   ArrivalResponse,
@@ -29,7 +29,7 @@ export default class ExpectedArrivalsService {
     private readonly raiseAnalyticsEvent: RaiseAnalyticsEvent,
     private readonly bodyScanDecorator: BodyScanInfoDecorator,
     private readonly matchTypeDecorator: MatchTypeDecorator,
-    private readonly offenceInfoDecorator: OffenceInfoDecorator
+    private readonly offenceInfoDecorator: OffenceInfoDecorator,
   ) {}
 
   private async getExpectedArrivals(username: string, agencyId: string, now: Moment): Promise<Arrival[]> {
@@ -58,7 +58,7 @@ export default class ExpectedArrivalsService {
   }
 
   public async getRecentArrivalsGroupedByDate(
-    agencyId: string
+    agencyId: string,
   ): Promise<Map<Moment, WithBodyScanStatus<RecentArrival>[]>> {
     const today = moment().startOf('day')
     const oneDayAgo = moment().subtract(1, 'days').startOf('day')
@@ -86,7 +86,7 @@ export default class ExpectedArrivalsService {
   public async getArrivalsForToday(
     username: string,
     agencyId: string,
-    now = () => moment()
+    now = () => moment(),
   ): Promise<Map<LocationType, DecoratedArrival[]>> {
     const [expectedArrivals, transfers] = await Promise.all([
       this.getExpectedArrivals(username, agencyId, now()),
@@ -131,7 +131,7 @@ export default class ExpectedArrivalsService {
     prisonId: string,
     username: string,
     id: string,
-    arrival: NewArrival
+    arrival: NewArrival,
   ): Promise<ArrivalResponse | null> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
     const welcomeClient = this.welcomeClientFactory(token)
@@ -146,7 +146,7 @@ export default class ExpectedArrivalsService {
     prisonId: string,
     id: string,
     arrival: NewArrival,
-    username: string
+    username: string,
   ): Promise<ArrivalResponse | null> {
     const data = await this.getArrival(username, id)
 
@@ -169,7 +169,7 @@ export default class ExpectedArrivalsService {
     this.raiseAnalyticsEvent(
       'Add to the establishment roll',
       'Confirmed arrival',
-      `AgencyId: ${prisonId}, From: ${data.fromLocation}, Type: ${data.fromLocationType},`
+      `AgencyId: ${prisonId}, From: ${data.fromLocation}, Type: ${data.fromLocationType},`,
     )
 
     return response
@@ -178,7 +178,7 @@ export default class ExpectedArrivalsService {
   private async confirmUnexpectedArrival(
     welcomeClient: WelcomeClient,
     prisonId: string,
-    arrival: NewArrival
+    arrival: NewArrival,
   ): Promise<ArrivalResponse | null> {
     const response = await welcomeClient.confirmUnexpectedArrival({
       firstName: arrival.firstName,
@@ -205,7 +205,7 @@ export default class ExpectedArrivalsService {
     username: string,
     id: string,
     prisonId: string,
-    prisonNumber: string
+    prisonNumber: string,
   ): Promise<ArrivalResponse | null> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
     return this.welcomeClientFactory(token).confirmCourtReturn(id, prisonId, prisonNumber)
