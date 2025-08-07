@@ -23,6 +23,7 @@ import type { Services } from './services'
 import caseloadCheckMiddleware from './middleware/caseloadCheckMiddleware'
 import { BodyScanServices } from './bodyscan/services'
 import setUpEnvironmentName from './middleware/setUpEnvironmentName'
+import refreshSystemToken from './middleware/refreshSystemToken'
 
 export default function createApp(services: Services, bodyScanServices: BodyScanServices): express.Application {
   const app = express()
@@ -41,6 +42,7 @@ export default function createApp(services: Services, bodyScanServices: BodyScan
   phaseNameSetup(app, config.phaseName)
   app.use(setUpAuthentication())
   app.use(authorisationMiddleware())
+  app.use(refreshSystemToken(services))
   app.use(setUpCsrf())
   app.use(setUpCurrentUser(services))
   app.use(caseloadCheckMiddleware(config.enabledPrisons))

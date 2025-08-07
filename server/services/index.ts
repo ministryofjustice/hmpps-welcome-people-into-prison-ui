@@ -10,6 +10,7 @@ import { raiseAnalyticsEvent, type RaiseAnalyticsEvent } from './raiseAnalyticsE
 import { BodyScanInfoDecorator } from './bodyScanInfoDecorator'
 import { MatchTypeDecorator } from './matchTypeDecorator'
 import OffenceInfoDecorator from './offenceInfoDecorator'
+import DprService from './dprService'
 
 export const services = () => {
   const {
@@ -33,16 +34,17 @@ export const services = () => {
     raiseAnalyticsEvent,
     bodyScanInfoDecorator,
     matchTypeDecorator,
-    offenceInfoDecorator
+    offenceInfoDecorator,
   )
   const temporaryAbsencesService = new TemporaryAbsencesService(
     hmppsAuthClient,
     welcomeClientBuilder,
-    bodyScanInfoDecorator
+    bodyScanInfoDecorator,
   )
   const imprisonmentStatusesService = new ImprisonmentStatusesService(hmppsAuthClient, welcomeClientBuilder)
   const transfersService = new TransfersService(hmppsAuthClient, welcomeClientBuilder, bodyScanInfoDecorator)
   const prisonService = new PrisonService(hmppsAuthClient, prisonRegisterClientBuilder)
+  const dprService = new DprService(hmppsAuthClient, welcomeClientBuilder)
 
   return {
     hmppsAuthClient,
@@ -55,6 +57,7 @@ export const services = () => {
     prisonService,
     raiseAnalyticsEvent,
     lockManager,
+    dprService,
   }
 }
 

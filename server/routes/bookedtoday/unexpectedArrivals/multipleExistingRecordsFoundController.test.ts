@@ -1,7 +1,7 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
-import { PotentialMatch } from 'welcome'
+import type { PotentialMatch } from 'welcome'
 
 import { appWithAllRoutes, flashProvider, stubCookie } from '../../__testutils/appSetup'
 

@@ -14,6 +14,7 @@ import type {
   UserCaseLoad,
 } from 'welcome'
 import type { Readable } from 'stream'
+import type { ManagementReportDefinition } from 'management-reporting'
 import config, { ApiConfig } from '../config'
 import RestClient from './restClient'
 import logger from '../../logger'
@@ -46,7 +47,7 @@ export default class WelcomeClient {
     prisonId: string,
     fromDate: moment.Moment,
     toDate: moment.Moment,
-    searchQuery?: string
+    searchQuery?: string,
   ): Promise<PaginatedResponse<RecentArrival>> {
     logger.info(`welcomeApi: getRecentArrivals(${prisonId})`)
     return this.restClient.get({
@@ -122,7 +123,7 @@ export default class WelcomeClient {
   async confirmTemporaryAbsence(
     prisonNumber: string,
     prisonId: string,
-    arrivalId?: string
+    arrivalId?: string,
   ): Promise<ArrivalResponse | null> {
     logger.info(`welcomeApi: confirmTemporaryAbsence ${prisonNumber})`)
     try {
@@ -203,6 +204,13 @@ export default class WelcomeClient {
     return this.restClient.get({
       path: `/prisoners/${prisonNumber}`,
     }) as Promise<PrisonerDetails>
+  }
+
+  async getManagementReportDefinitions(): Promise<ManagementReportDefinition[]> {
+    logger.info('welcomeApi: getManagementReportDefinitions()')
+    return this.restClient.get({
+      path: '/definitions',
+    }) as Promise<ManagementReportDefinition[]>
   }
 
   public getEventsCSV(stream: NodeJS.WritableStream, date: moment.Moment, days?: number): void {

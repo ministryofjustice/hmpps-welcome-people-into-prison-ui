@@ -32,7 +32,12 @@ export default function setUpWebSecurity(): Router {
     'code.jquery.com',
     "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='",
   ]
-  const styleSrc = ["'self'", (_req: Request, res: Response) => `'nonce-${res.locals.cspNonce}'`, 'code.jquery.com']
+  const styleSrc = [
+    "'self'",
+    'fonts.googleapis.com',
+    (_req: Request, res: Response) => `'nonce-${res.locals.cspNonce}'`,
+    'code.jquery.com',
+  ]
   const imgSrc = [
     "'self'",
     'data:',
@@ -43,7 +48,7 @@ export default function setUpWebSecurity(): Router {
     '*.google.com',
     'https://code.jquery.com',
   ]
-  const fontSrc = ["'self'"]
+  const fontSrc = ["'self'", 'fonts.gstatic.com']
 
   router.use(
     helmet({
@@ -70,7 +75,7 @@ export default function setUpWebSecurity(): Router {
         policy: 'strict-origin-when-cross-origin',
       },
       crossOriginEmbedderPolicy: false,
-    })
+    }),
   )
 
   router.use(cookieParser(config.session.secret))

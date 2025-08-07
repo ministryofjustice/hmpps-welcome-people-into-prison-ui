@@ -9,11 +9,11 @@ export default class HomePage extends Page {
 
   digitalPrisonServices = (): PageElement => cy.get('[data-qa=digital-prison-services]')
 
-  arrivalsTitle = (): PageElement => cy.get('[data-qa=choose-prisoner]')
+  arrivalsTitle = (): PageElement => cy.get('a').contains('People booked to arrive today')
 
-  returnFromTemporaryAbsenceTitle = (): PageElement => cy.get('[data-qa=return-from-temporary-absence]')
+  returnFromTemporaryAbsenceTitle = (): PageElement => cy.get('a').contains('People returning from temporary absence')
 
-  recentArrivalsTitle = (): PageElement => cy.get('[data-qa=recent-arrivals]')
+  recentArrivalsTitle = (): PageElement => cy.get('a').contains('Recent arrivals')
 
   dpsLink = (): PageElement => cy.get('[data-qa=dps-link]')
 
@@ -28,4 +28,6 @@ export default class HomePage extends Page {
   commonComponentsFooter = (): PageElement => cy.get('footer').contains('Common Components Footer')
 
   fallbackHeaderUserName = (): PageElement => cy.get('[data-qa=header-user-name]')
+
+  managementReportTitle = (): PageElement => cy.get('[data-qa=management-reporting]')
 }

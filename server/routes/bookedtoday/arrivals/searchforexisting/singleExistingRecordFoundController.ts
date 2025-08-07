@@ -1,5 +1,5 @@
 import type { RequestHandler } from 'express'
-import { PotentialMatch } from 'welcome'
+import type { PotentialMatch } from 'welcome'
 import { State } from '../state'
 import { ExpectedArrivalsService } from '../../../../services'
 import { convertToTitleCase } from '../../../../utils/utils'

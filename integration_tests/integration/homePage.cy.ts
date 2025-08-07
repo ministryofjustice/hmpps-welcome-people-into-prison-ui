@@ -41,6 +41,7 @@ context('A user can view the home page', () => {
     homePage.arrivalsTitle().contains('People booked to arrive today')
     homePage.returnFromTemporaryAbsenceTitle().contains('People returning from temporary absence')
     homePage.recentArrivalsTitle().contains('Recent arrivals')
+    homePage.managementReportTitle().should('not.exist')
   })
 
   it('A user is taken to the choose prisoner page', () => {

@@ -13,6 +13,7 @@ import {
   createRecentArrivalResponse,
   createTemporaryAbsence,
   createTransfer,
+  reportDefinition,
 } from './__testutils/testObjects'
 
 describe('welcomeClient', () => {
@@ -106,7 +107,7 @@ describe('welcomeClient', () => {
             content: [
               createRecentArrival({ firstName: 'John', lastName: 'Doe', movementDateTime: `${toDate}T13:15:00` }),
             ],
-          })
+          }),
         )
 
       const fromDateMoment = moment().subtract(2, 'days')
@@ -117,7 +118,7 @@ describe('welcomeClient', () => {
           content: [
             createRecentArrival({ firstName: 'John', lastName: 'Doe', movementDateTime: `${toDate}T13:15:00` }),
           ],
-        })
+        }),
       )
     })
   })
@@ -189,7 +190,7 @@ describe('welcomeClient', () => {
         .reply(200, arrivalResponse)
 
       return expect(welcomeClient.confirmTemporaryAbsence(prisonNumber, 'MDI', 'abc-123')).resolves.toStrictEqual(
-        arrivalResponse
+        arrivalResponse,
       )
     })
 
@@ -222,7 +223,7 @@ describe('welcomeClient', () => {
         .reply(200, arrivalResponse)
 
       return expect(welcomeClient.confirmTransfer(prisonNumber, 'MDI', 'abc-123')).resolves.toStrictEqual(
-        arrivalResponse
+        arrivalResponse,
       )
     })
 
@@ -376,6 +377,7 @@ describe('welcomeClient', () => {
       expect(output).toEqual(imprisonmentStatus)
     })
   })
+
   describe('matching records', () => {
     const criteria = createMatchCriteria()
 
@@ -399,6 +401,16 @@ describe('welcomeClient', () => {
 
       const output = await welcomeClient.getPrisonerDetails(prisonNumber)
       expect(output).toEqual(potentialMatch)
+    })
+  })
+
+  describe('getManagementReportDefinitions', () => {
+    it('should return data from api', async () => {
+      const mrd = reportDefinition()
+      fakeWelcomeApi.get('/definitions').matchHeader('authorization', `Bearer ${token}`).reply(200, mrd)
+
+      const output = await welcomeClient.getManagementReportDefinitions()
+      expect(output).toEqual(mrd)
     })
   })
 })

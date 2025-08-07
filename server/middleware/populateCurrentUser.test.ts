@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express'
+// eslint-disable-next-line import/no-unresolved
 import { UserCaseLoad } from 'welcome'
 import populateCurrentUser from './populateCurrentUser'
 import { createMockPrisonService, createMockUserService } from '../services/__testutils/mocks'

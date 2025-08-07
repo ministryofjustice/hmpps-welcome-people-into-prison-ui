@@ -1,0 +1,31 @@
+{% extends "partials/layout.njk" %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+
+{% set title = "View management report" %}
+
+{% set breadCrumbs = {
+  enabled: true,
+  pageTitle:  lastName+ ", " + firstName,
+  data: [
+    {
+      text: "Digital Prison Services",
+      href: dpsUrl
+    },
+    {
+      title: 'Welcome people into prison',
+      href: '/'
+    },
+    {
+      text: "Management reporting",
+      href: "/management-reporting"
+    }
+  ]
+} %}
+
+{% block pageStylesheets %}
+  <link href="{{ "/assets/css/dpr.css" | assetMap }}" rel="stylesheet" />
+{% endblock %}
+
+{% block pageJavascript %}
+  <script type="module" src="{{ "/assets/js/dpr.js" | assetMap }}"></script>
+{% endblock %}
