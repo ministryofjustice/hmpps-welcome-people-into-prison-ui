@@ -1,6 +1,7 @@
 {% extends "../../partials/layout.njk" %}
 {% from "../../components/prisoner-summary-detail.njk" import prisonerSummaryDetail %}
 {% from "../../components/prisoner-search-detail.njk" import prisonerSearchDetail %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% set pageTitle = "Possible existing records have been found" %}
 
@@ -67,21 +68,23 @@
                         </fieldset>
                     </div>
                 </div> 
-                <details class="govuk-details govuk-!-margin-bottom-4">
-                    <summary class="govuk-details__summary">
-                        <span class="govuk-details__summary-text" id="create_new_details_reveal">If you cannot find the correct record
-                        </span>
-                    </summary>
-                    <div class="govuk-details__text">
-                        <p>If you cannot find an existing record for this person, you'll need to <a class="govuk-link govuk-link--no-visited-state" href="/manually-confirm-arrival/add-personal-details">create a new record</a>.</p>
-                    </div>
-                </details>
-                {{ govukButton({
-                    classes: "govuk-button govuk-!-margin-bottom-6",
-                    text: "Continue",
-                    type: "submit",
-                    attributes: {'data-qa': 'continue'}
-                }) }}
+                <div class="govuk-grid-column-full">
+                    <details class="govuk-details govuk-!-margin-bottom-4">
+                        <summary class="govuk-details__summary">
+                            <span class="govuk-details__summary-text" id="create_new_details_reveal">If you cannot find the correct record
+                            </span>
+                        </summary>
+                        <div class="govuk-details__text">
+                            <p>If you cannot find an existing record for this person, you'll need to <a class="govuk-link govuk-link--no-visited-state" href="/manually-confirm-arrival/add-personal-details">create a new record</a>.</p>
+                        </div>
+                    </details>
+                    {{ govukButton({
+                        classes: "govuk-button govuk-!-margin-bottom-6",
+                        text: "Continue",
+                        type: "submit",
+                        attributes: {'data-qa': 'continue'}
+                    }) }}
+                </div>
             </form>
         </div> 
     </div>
