@@ -14,7 +14,7 @@
                 }) }}
             {% endif %}
 
-            <h1 class="govuk-fieldset__legend--l govuk-!-margin-top-0 govuk-!-margin-bottom-6" data-qa="record-body-scan-title">Record an X-ray body scan for {{ prisonerDetails.firstName }} {{ prisonerDetails.lastName }}</h1>
+            <h1 class="govuk-heading-l govuk-fieldset__legend--l govuk-!-margin-top-0 govuk-!-margin-bottom-6" data-qa="record-body-scan-title">Record an X-ray body scan for {{ prisonerDetails.firstName }} {{ prisonerDetails.lastName }}</h1>
 
             <form method="post" action="/prisoners/{{ prisonerDetails.prisonNumber }}/record-body-scan">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
