@@ -165,8 +165,8 @@
     "@typescript-eslint/parser": "^8.38.0",
     "audit-ci": "^6.6.1",
     "concurrently": "^9.2.0",
-    "cypress": "^13.16.1",
-    "cypress-multi-reporters": "^1.6.3",
+    "cypress": "^14.5.4",
+    "cypress-multi-reporters": "^2.0.5",
     "dotenv": "^16.5.0",
     "esbuild": "^0.25.4",
     "esbuild-plugin-clean": "^1.0.1",
@@ -197,6 +197,9 @@
     "typescript": "^5.8.3"
   },
   "overrides": {
+    "cypress": {
+      "tmp": "0.2.4"
+    },
     "cheerio": {
       "undici": "7.9.0"
     },

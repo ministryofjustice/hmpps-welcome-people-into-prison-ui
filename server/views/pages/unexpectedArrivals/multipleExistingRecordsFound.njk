@@ -1,6 +1,7 @@
 {% extends "../../partials/layout.njk" %}
 {% from "../../components/prisoner-summary-detail.njk" import prisonerSummaryDetail %}
 {% from "../../components/prisoner-search-detail.njk" import prisonerSearchDetail %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% set pageTitle = "Possible existing records have been found" %}
 
@@ -66,9 +67,9 @@
                             {% endfor %}
                         </fieldset>
                     </div>
-                </div>
-                    <div class="govuk-grid-column-full">
-                        <details class="govuk-details govuk-!-margin-bottom-4">
+                </div> 
+                <div class="govuk-grid-column-full">
+                    <details class="govuk-details govuk-!-margin-bottom-4">
                         <summary class="govuk-details__summary">
                             <span class="govuk-details__summary-text" id="create_new_details_reveal">If you cannot find the correct record
                             </span>
