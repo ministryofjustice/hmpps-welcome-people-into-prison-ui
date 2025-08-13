@@ -1,4 +1,4 @@
-import jwtDecode from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 import { RequestHandler } from 'express'
 
 import logger from '../../logger'
@@ -18,6 +18,7 @@ export default function authorisationMiddleware(authorisedRoles: string[] = []):
       res.locals.user = {
         roles,
         isReceptionUser: roles.includes(Role.PRISON_RECEPTION),
+        isReportUser: roles.includes(Role.REPORT_USER),
         ...res.locals.user,
       }
       return next()

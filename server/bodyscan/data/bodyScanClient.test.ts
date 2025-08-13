@@ -1,5 +1,5 @@
 import nock from 'nock'
-import { BodyScan, BodyScanInfo, PrisonerDetails } from 'body-scan'
+import type { BodyScan, BodyScanInfo, PrisonerDetails } from 'body-scan'
 import BodyScanClient from './bodyScanClient'
 import config from '../../config'
 
