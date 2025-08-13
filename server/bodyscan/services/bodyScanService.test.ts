@@ -1,4 +1,4 @@
-import { BodyScan } from 'body-scan'
+import type { BodyScan } from 'body-scan'
 import { createMockHmppsAuthClient } from '../../data/__testutils/mocks'
 import { BodyScanClient } from '../data'
 import BodyScanService from './bodyScanService'

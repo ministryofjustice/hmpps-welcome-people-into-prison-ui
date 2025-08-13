@@ -1,4 +1,4 @@
-import { UserCaseLoad } from 'welcome'
+import type { UserCaseLoad } from 'welcome'
 import { convertToTitleCase } from '../utils/utils'
 import type { RestClientBuilder, WelcomeClient, HmppsAuthClient } from '../data'
 
@@ -11,7 +11,7 @@ interface UserDetails {
 export default class UserService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
-    private readonly welcomeClientFactory: RestClientBuilder<WelcomeClient>
+    private readonly welcomeClientFactory: RestClientBuilder<WelcomeClient>,
   ) {}
 
   async getUser(token: string): Promise<UserDetails> {

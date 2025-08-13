@@ -13,14 +13,15 @@ export default function setUpStaticResources(): Router {
   //  Static Resources Configuration
   const cacheControl = { maxAge: config.staticResourceCacheDuration * 1000 }
   ;[
-    '/assets',
-    '/assets/images',
-    '/assets/stylesheets',
-    '/assets/js',
-    '/node_modules/govuk-frontend/govuk/assets',
-    '/node_modules/govuk-frontend',
+    '/dist/assets',
+    '/node_modules/govuk-frontend/dist/govuk/assets',
+    '/node_modules/govuk-frontend/dist',
+    '/node_modules/govuk-frontend/dist/govuk',
     '/node_modules/@ministryofjustice/frontend/moj/assets',
+    '/node_modules/@ministryofjustice/frontend/moj',
     '/node_modules/@ministryofjustice/frontend',
+    '/node_modules/@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/assets',
+    '/node_modules/@ministryofjustice/hmpps-digital-prison-reporting-frontend',
     '/node_modules/jquery/dist',
   ].forEach(dir => {
     router.use('/assets', express.static(path.join(process.cwd(), dir), cacheControl))

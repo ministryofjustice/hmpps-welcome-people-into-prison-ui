@@ -13,6 +13,7 @@ import type {
   PaginatedResponse,
 } from 'welcome'
 import type { BodyScanStatus } from 'body-scan'
+import type { ManagementReportDefinition } from 'management-reporting'
 import { WithBodyScanInfo } from '../../services/bodyScanInfoDecorator'
 
 import type { NewArrival } from '../../routes/bookedtoday/arrivals/state'
@@ -21,7 +22,7 @@ import { MatchType } from '../../services/matchTypeDecorator'
 
 export const withBodyScanStatus = <T>(
   t: T,
-  { bodyScanStatus = 'OK_TO_SCAN' }: { bodyScanStatus?: BodyScanStatus } = {}
+  { bodyScanStatus = 'OK_TO_SCAN' }: { bodyScanStatus?: BodyScanStatus } = {},
 ) => ({
   ...t,
   bodyScanStatus,
@@ -33,7 +34,7 @@ export const withBodyScanInfo = <T>(
     numberOfBodyScans = 0,
     numberOfBodyScansRemaining = 116,
     bodyScanStatus = 'OK_TO_SCAN',
-  }: { numberOfBodyScans?: number; numberOfBodyScansRemaining?: number; bodyScanStatus?: BodyScanStatus } = {}
+  }: { numberOfBodyScans?: number; numberOfBodyScansRemaining?: number; bodyScanStatus?: BodyScanStatus } = {},
 ) => ({
   ...t,
   numberOfBodyScans,
@@ -299,3 +300,21 @@ export const createUserCaseLoad = ({
 })
 
 export const createUser = ({ name = 'John Smith', activeCaseLoadId = 'MDI' } = {}): User => ({ name, activeCaseLoadId })
+
+export const reportDefinition = (): ManagementReportDefinition[] => {
+  return [
+    {
+      id: 'transactions',
+      name: 'Transactions for WPIP',
+      description: 'List of confirmed arrivals in WPIP',
+      variants: [
+        {
+          id: 'arrivals',
+          name: 'Transactions for WPIP',
+          description: 'Details each confirmed arrival that has occurred in a prison',
+        },
+      ],
+      authorised: true,
+    },
+  ]
+}
