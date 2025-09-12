@@ -6,7 +6,7 @@ generic-service:
   serviceAccountName: hmpps-welcome-to-prison
 
   image:
-    repository: quay.io/hmpps/hmpps-welcome-people-into-prison-ui
+    repository: ghcr.io/ministryofjustice/hmpps-welcome-people-into-prison-ui
     tag: app_version # override at deployment time
     port: 3000
 
