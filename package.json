@@ -198,7 +198,7 @@
   },
   "overrides": {
     "cypress": {
-      "tmp": "0.2.4"
+      "tmp": "0.2.5"
     },
     "cheerio": {
       "undici": "7.9.0"
