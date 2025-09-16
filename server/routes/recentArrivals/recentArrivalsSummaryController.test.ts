@@ -112,7 +112,7 @@ describe('GET /recent-arrivals/:id/summary', () => {
 
     it('should render only Prison Number when only Prison Number is given', () => {
       expectedArrivalsService.getPrisonerSummaryDetails.mockResolvedValue(
-        withBodyScanInfo(createPrisonerDetails({ pncNumber: null }))
+        withBodyScanInfo(createPrisonerDetails({ pncNumber: null })),
       )
 
       return request(app)
@@ -134,7 +134,7 @@ describe('GET /recent-arrivals/:id/summary', () => {
       .expect(res => {
         const $ = cheerio.load(res.text)
         expect($('[data-qa=add-case-note-button]').attr('href')).toContain(
-          '/save-backlink?service=welcome-people-into-prison&returnPath=/recent-arrivals/A1234AB/summary&redirectPath=/prisoner/A1234AB/add-case-note'
+          '/save-backlink?service=welcome-people-into-prison&returnPath=/recent-arrivals/A1234AB/summary&redirectPath=/prisoner/A1234AB/add-case-note',
         )
       })
   })
@@ -147,7 +147,7 @@ describe('GET /recent-arrivals/:id/summary', () => {
       .expect(res => {
         const $ = cheerio.load(res.text)
         expect($('[data-qa=dps-prisoner-profile-button]').attr('href')).toContain(
-          '/save-backlink?service=welcome-people-into-prison&returnPath=/recent-arrivals/A1234AB/summary&redirectPath=/prisoner/A1234AB'
+          '/save-backlink?service=welcome-people-into-prison&returnPath=/recent-arrivals/A1234AB/summary&redirectPath=/prisoner/A1234AB',
         )
       })
   })

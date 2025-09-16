@@ -10,7 +10,7 @@ export type StatusAndReasons = {
 export default class ImprisonmentStatusesService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
-    private readonly welcomeClientFactory: RestClientBuilder<WelcomeClient>
+    private readonly welcomeClientFactory: RestClientBuilder<WelcomeClient>,
   ) {}
 
   public async getAllImprisonmentStatuses(): Promise<ImprisonmentStatus[]> {
@@ -30,7 +30,7 @@ export default class ImprisonmentStatusesService {
       return `${imprisonmentStatus.description}`
     }
     const movementReason = imprisonmentStatus.movementReasons.find(
-      r => r.movementReasonCode === statusAndReason.movementReasonCode
+      r => r.movementReasonCode === statusAndReason.movementReasonCode,
     )
     return `${imprisonmentStatus.description} - ${movementReason.description}`
   }

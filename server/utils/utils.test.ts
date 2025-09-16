@@ -64,7 +64,7 @@ describe('trimObjectValues', () => {
 
   it('Should throw if object contains non-strings but can handle undefined values', () => {
     expect(() => trimObjectValues({ name: 'Bob', age: 10, role: undefined })).toThrowError(
-      'Values present not all strings'
+      'Values present not all strings',
     )
   })
 })
@@ -91,7 +91,7 @@ describe('groupBy', () => {
 
   it('should handle lists with content', () => {
     expect(groupBy([1, 2, 3, 4, 5], i => (i % 2 === 0 ? 'even' : 'odd'))).toEqual(
-      new Map(Object.entries({ odd: [1, 3, 5], even: [2, 4] }))
+      new Map(Object.entries({ odd: [1, 3, 5], even: [2, 4] })),
     )
   })
 })
@@ -103,7 +103,7 @@ describe('associateBy', () => {
 
   it('should handle lists with content', () => {
     expect(associateBy(['Aaa', 'Bbb', 'Ccc'], i => i.charAt(0))).toEqual(
-      new Map(Object.entries({ A: 'Aaa', B: 'Bbb', C: 'Ccc' }))
+      new Map(Object.entries({ A: 'Aaa', B: 'Bbb', C: 'Ccc' })),
     )
   })
 })
@@ -119,8 +119,8 @@ describe('compareByFullName', () => {
         {
           firstName: 'Sam',
           lastName: 'Adams',
-        }
-      )
+        },
+      ),
     ).toEqual(1)
 
     expect(
@@ -132,8 +132,8 @@ describe('compareByFullName', () => {
         {
           firstName: 'John',
           lastName: 'Doe',
-        }
-      )
+        },
+      ),
     ).toEqual(-1)
   })
 
@@ -147,8 +147,8 @@ describe('compareByFullName', () => {
         {
           firstName: 'John',
           lastName: 'Doe',
-        }
-      )
+        },
+      ),
     ).toEqual(1)
 
     expect(
@@ -160,8 +160,8 @@ describe('compareByFullName', () => {
         {
           firstName: 'Sam',
           lastName: 'Doe',
-        }
-      )
+        },
+      ),
     ).toEqual(-1)
   })
 
@@ -175,8 +175,8 @@ describe('compareByFullName', () => {
         {
           firstName: 'John',
           lastName: 'Doe',
-        }
-      )
+        },
+      ),
     ).toEqual(0)
   })
 
@@ -196,8 +196,8 @@ describe('compareByFullName', () => {
           dateOfBirth: '1971-01-01',
           prisonNumber: 'G0013AB',
           reasonForAbsence: 'Hospital appointment',
-        }
-      )
+        },
+      ),
     ).toEqual(1)
 
     expect(
@@ -221,8 +221,8 @@ describe('compareByFullName', () => {
           date: '2021-09-01',
           fromLocation: 'Leeds',
           moveType: 'PRISON_TRANSFER',
-        }
-      )
+        },
+      ),
     ).toEqual(-1)
   })
 })
@@ -236,8 +236,8 @@ describe('compareByDescendingDateAndTime', () => {
         },
         {
           movementDateTime: '2022-05-17T07:07:59',
-        }
-      )
+        },
+      ),
     ).toBeLessThan(0)
 
     expect(
@@ -247,8 +247,8 @@ describe('compareByDescendingDateAndTime', () => {
         },
         {
           movementDateTime: '2022-05-18T13:08:00',
-        }
-      )
+        },
+      ),
     ).toBeGreaterThan(0)
   })
 
@@ -260,8 +260,8 @@ describe('compareByDescendingDateAndTime', () => {
         },
         {
           movementDateTime: '2022-05-18T14:13:27',
-        }
-      )
+        },
+      ),
     ).toEqual(0)
   })
 })

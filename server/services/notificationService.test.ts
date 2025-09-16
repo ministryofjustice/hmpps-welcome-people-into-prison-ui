@@ -40,7 +40,7 @@ describe('Notification service', () => {
             email: 'a.user@email',
           },
           reference: null,
-        }
+        },
       )
     })
   })

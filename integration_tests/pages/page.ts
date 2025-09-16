@@ -31,7 +31,7 @@ export default abstract class Page {
   constructor(
     private readonly title: string,
     private readonly backNavigationLink: BackLink = { hasBackLink: true },
-    private readonly feedbackBannerLink: FeedbackBanner = { hasFeedbackBanner: true }
+    private readonly feedbackBannerLink: FeedbackBanner = { hasFeedbackBanner: true },
   ) {
     this.checkOnPage()
   }

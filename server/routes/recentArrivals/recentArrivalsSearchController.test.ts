@@ -38,7 +38,7 @@ describe('GET /recent-arrivals/search', () => {
       .expect(res => {
         expect(expectedArrivalsService.getRecentArrivalsSearchResults).toHaveBeenCalledWith(
           user.activeCaseLoadId,
-          'Smith'
+          'Smith',
         )
       })
   })

@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import moment from 'moment'
 
 interface Person {
