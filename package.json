@@ -204,7 +204,7 @@
       "undici": "7.9.0"
     },
     "superagent": {
-      "formidable": "3.5.3"
+      "formidable": "3.5.4"
     },
     "jest": {
       "jest-core": {
