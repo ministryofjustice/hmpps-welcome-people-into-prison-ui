@@ -1,6 +1,5 @@
 # hmpps-welcome-people-into-prison-ui
 
-[![CircleCI](https://circleci.com/gh/ministryofjustice/hmpps-welcome-people-into-prison-ui/tree/main.svg?style=svg)](https://circleci.com/gh/ministryofjustice/hmpps-welcome-people-into-prison-ui)
 [![Known Vulnerabilities](https://snyk.io/test/github/ministryofjustice/hmpps-welcome-people-into-prison-ui/badge.svg)](https://snyk.io/test/github/ministryofjustice/hmpps-welcome-people-into-prison-ui)
 
 ## Running the app
