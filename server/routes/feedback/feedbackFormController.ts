@@ -5,7 +5,7 @@ import logger from '../../../logger'
 export default class FeedbackController {
   public constructor(
     private readonly notificationService: NotificationService,
-    private readonly prisonService: PrisonService
+    private readonly prisonService: PrisonService,
   ) {}
 
   public view(): RequestHandler {

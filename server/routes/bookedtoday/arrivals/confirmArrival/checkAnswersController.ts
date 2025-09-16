@@ -8,7 +8,7 @@ export default class CheckAnswersController {
   public constructor(
     private readonly expectedArrivalsService: ExpectedArrivalsService,
     private readonly imprisonmentStatusesService: ImprisonmentStatusesService,
-    private readonly lockManager: LockManager
+    private readonly lockManager: LockManager,
   ) {}
 
   public view(): RequestHandler {

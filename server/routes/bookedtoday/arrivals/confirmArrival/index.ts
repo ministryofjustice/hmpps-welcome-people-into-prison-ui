@@ -31,7 +31,7 @@ export default function routes(services: Services): Router {
   const checkAnswersController = new CheckAnswersController(
     services.expectedArrivalsService,
     services.imprisonmentStatusesService,
-    services.lockManager
+    services.lockManager,
   )
 
   const setLock = backTrackPrevention.setLock(services.lockManager, '/confirm-arrival/choose-prisoner')
@@ -47,32 +47,32 @@ export default function routes(services: Services): Router {
     .post(
       '/prisoners/:id/imprisonment-status',
       validationMiddleware(imprisonmentStatusesValidation),
-      imprisonmentStatusesController.assignStatus()
+      imprisonmentStatusesController.assignStatus(),
     )
     .get(
       '/prisoners/:id/imprisonment-status/:imprisonmentStatus',
       checkIsLocked,
       checkNewArrivalPresent,
-      movementReasonsController.view()
+      movementReasonsController.view(),
     )
     .post(
       '/prisoners/:id/imprisonment-status/:imprisonmentStatus',
       validationMiddleware(movementReasonsValidation(services.imprisonmentStatusesService)),
-      movementReasonsController.assignReason()
+      movementReasonsController.assignReason(),
     )
     .get(
       '/prisoners/:id/check-answers',
       checkIsLocked,
       checkNewArrivalPresent,
       redirectIfDisabledMiddleware(config.confirmEnabled),
-      checkAnswersController.view()
+      checkAnswersController.view(),
     )
     .post(
       '/prisoners/:id/check-answers',
       checkNewArrivalPresent,
       redirectIfDisabledMiddleware(config.confirmEnabled),
       setLock,
-      checkAnswersController.addToRoll()
+      checkAnswersController.addToRoll(),
     )
     .get('/prisoners/:id/confirmation', confirmAddedToRollController.view())
     .build()

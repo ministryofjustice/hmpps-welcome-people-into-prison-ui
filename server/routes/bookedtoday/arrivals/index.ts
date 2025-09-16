@@ -39,26 +39,26 @@ export default function routes(services: Services): Router {
       '/prisoners/:id/review-per-details/change-name',
       checkNewArrivalPresent,
       checkIsLocked,
-      reviewDetailsChangeNameController.showChangeName()
+      reviewDetailsChangeNameController.showChangeName(),
     )
     .post(
       '/prisoners/:id/review-per-details/change-name',
       checkNewArrivalPresent,
       validationMiddleware(NameValidator),
-      reviewDetailsChangeNameController.changeName()
+      reviewDetailsChangeNameController.changeName(),
     )
 
     .get(
       '/prisoners/:id/review-per-details/change-date-of-birth',
       checkNewArrivalPresent,
       checkIsLocked,
-      reviewDetailsChangeDateOfBirthController.showChangeDateOfBirth()
+      reviewDetailsChangeDateOfBirthController.showChangeDateOfBirth(),
     )
     .post(
       '/prisoners/:id/review-per-details/change-date-of-birth',
       checkNewArrivalPresent,
       validationMiddleware(DateOfBirthValidator),
-      reviewDetailsChangeDateOfBirthController.changeDateOfBirth()
+      reviewDetailsChangeDateOfBirthController.changeDateOfBirth(),
     )
 
     .use(searchForExistingRecordRoutes(services))

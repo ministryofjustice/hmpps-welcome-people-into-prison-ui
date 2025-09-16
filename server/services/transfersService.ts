@@ -6,7 +6,7 @@ export default class TransfersService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
     private readonly welcomeClientFactory: RestClientBuilder<WelcomeClient>,
-    private readonly bodyScanInfoDecorator: BodyScanInfoDecorator
+    private readonly bodyScanInfoDecorator: BodyScanInfoDecorator,
   ) {}
 
   public async getTransfer(agencyId: string, prisonNumber: string): Promise<Transfer> {
@@ -17,7 +17,7 @@ export default class TransfersService {
 
   public async getTransferWithBodyScanDetails(
     agencyId: string,
-    prisonNumber: string
+    prisonNumber: string,
   ): Promise<WithBodyScanInfo<Transfer>> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const welcomeClient = this.welcomeClientFactory(token)
@@ -29,7 +29,7 @@ export default class TransfersService {
     username: string,
     prisonNumber: string,
     prisonId: string,
-    arrivalId?: string
+    arrivalId?: string,
   ): Promise<ArrivalResponse | null> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
     return this.welcomeClientFactory(token).confirmTransfer(prisonNumber, prisonId, arrivalId)

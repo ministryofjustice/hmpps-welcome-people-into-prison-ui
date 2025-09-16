@@ -47,7 +47,7 @@ context('Feature not available', () => {
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
 
     const prisonerSummaryWithRecordPage = new PrisonerSummaryWithRecordPage(
-      `${expectedArrival.lastName}, ${expectedArrival.firstName}`
+      `${expectedArrival.lastName}, ${expectedArrival.firstName}`,
     )
     prisonerSummaryWithRecordPage.checkOnPage()
     prisonerSummaryWithRecordPage.breadcrumbs().should('exist')
@@ -80,7 +80,7 @@ context('Feature not available', () => {
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
 
     const prisonerSummaryWithRecordPage = new PrisonerSummaryWithRecordPage(
-      `${expectedArrival.lastName}, ${expectedArrival.firstName}`
+      `${expectedArrival.lastName}, ${expectedArrival.firstName}`,
     )
     prisonerSummaryWithRecordPage.checkOnPage()
     prisonerSummaryWithRecordPage.breadcrumbs().should('exist')
@@ -113,7 +113,7 @@ context('Feature not available', () => {
 
     ChoosePrisonerPage.goTo().arrivalFrom('PRISON')(1).confirm().click()
     const summaryTransferPage = new SummaryTransferPage(
-      `${expectedArrivals.prisonTransfer.lastName}, ${expectedArrivals.prisonTransfer.firstName}`
+      `${expectedArrivals.prisonTransfer.lastName}, ${expectedArrivals.prisonTransfer.firstName}`,
     )
     summaryTransferPage.confirmArrival().click()
     const checkTransferPage = Page.verifyOnPage(CheckTransferPage)

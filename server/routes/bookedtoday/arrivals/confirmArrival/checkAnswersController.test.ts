@@ -31,7 +31,7 @@ beforeEach(() => {
   config.confirmEnabled = true
   expectedArrivalsService.confirmArrival.mockResolvedValue(arrivalResponse)
   imprisonmentStatusesService.getReasonForImprisonment.mockResolvedValue(
-    'Sentenced - fixed length of time - Extended sentence for public protection'
+    'Sentenced - fixed length of time - Extended sentence for public protection',
   )
   lockManager.lock.mockResolvedValue(true)
   lockManager.isLocked.mockResolvedValue(false)
@@ -129,7 +129,7 @@ describe('/checkAnswers', () => {
             'MDI',
             user.username,
             arrivalId,
-            newArrival
+            newArrival,
           )
         })
     })

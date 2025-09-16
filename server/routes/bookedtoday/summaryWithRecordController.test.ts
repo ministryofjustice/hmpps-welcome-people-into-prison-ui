@@ -102,7 +102,7 @@ describe('GET /prisoner/:id/summary-with-record', () => {
         expect($('[data-qa=back-link-navigation] li').last().text()).toContain('People booked to arrive today')
         expect($('[data-qa=back-link-navigation] li:nth-child(2) a').attr('href')).toEqual('/')
         expect($('[data-qa=back-link-navigation] li:nth-child(3) a').attr('href')).toEqual(
-          '/confirm-arrival/choose-prisoner'
+          '/confirm-arrival/choose-prisoner',
         )
       })
   })
@@ -216,7 +216,7 @@ describe('GET /prisoner/:id/summary-with-record', () => {
           const $ = cheerio.load(res.text)
           expect($('[data-qa=confirm-arrival]').length).toBe(1)
           expect($('[data-qa=confirm-arrival]').attr('href')).toContain(
-            '/confirm-arrival/choose-prisoner/1111-1111-1111-1111'
+            '/confirm-arrival/choose-prisoner/1111-1111-1111-1111',
           )
         })
     })

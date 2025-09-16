@@ -4,7 +4,7 @@ import type { ExpectedArrivalsService, RaiseAnalyticsEvent } from '../../../../s
 export default class CheckCourtReturnController {
   public constructor(
     private readonly expectedArrivalsService: ExpectedArrivalsService,
-    private readonly raiseAnalyticsEvent: RaiseAnalyticsEvent
+    private readonly raiseAnalyticsEvent: RaiseAnalyticsEvent,
   ) {}
 
   public checkCourtReturn(): RequestHandler {
@@ -34,7 +34,7 @@ export default class CheckCourtReturnController {
         username,
         id,
         activeCaseLoadId,
-        data.prisonNumber
+        data.prisonNumber,
       )
 
       if (!arrivalResponse) {
@@ -51,7 +51,7 @@ export default class CheckCourtReturnController {
       this.raiseAnalyticsEvent(
         'Add to the establishment roll',
         'Confirmed court return returned',
-        `AgencyId: ${activeCaseLoadId}, From: ${arrival.fromLocation}, Type: ${arrival.fromLocationType},`
+        `AgencyId: ${activeCaseLoadId}, From: ${arrival.fromLocation}, Type: ${arrival.fromLocationType},`,
       )
 
       return res.redirect(`/prisoners/${id}/prisoner-returned-from-court`)

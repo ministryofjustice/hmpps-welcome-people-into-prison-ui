@@ -98,7 +98,7 @@ describe('GET summaryTransfer', () => {
           const $ = cheerio.load(res.text)
           expect($('[data-qa=prisoner-profile]').length).toBe(1)
           expect($('[data-qa=prisoner-profile]').attr('href')).toContain(
-            '/save-backlink?service=welcome-people-into-prison&returnPath=/prisoners/A1234AA/summary-transfer&redirectPath=/prisoner/A1234AA'
+            '/save-backlink?service=welcome-people-into-prison&returnPath=/prisoners/A1234AA/summary-transfer&redirectPath=/prisoner/A1234AA',
           )
         })
     })
@@ -116,7 +116,7 @@ describe('GET summaryTransfer', () => {
           const $ = cheerio.load(res.text)
           expect($('[data-qa=prisoner-profile]').length).toBe(1)
           expect($('[data-qa=prisoner-profile]').attr('href')).toContain(
-            '/save-backlink?service=welcome-people-into-prison&returnPath=/prisoners/A1234AA/summary-transfer&redirectPath=/prisoner/A1234AA'
+            '/save-backlink?service=welcome-people-into-prison&returnPath=/prisoners/A1234AA/summary-transfer&redirectPath=/prisoner/A1234AA',
           )
         })
     })

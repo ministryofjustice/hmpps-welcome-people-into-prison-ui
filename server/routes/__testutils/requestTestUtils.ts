@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import superAgent from 'superagent'
 import { NextFunction, Request, Response } from 'express'
 import { ValidationError } from '../../middleware/validationMiddleware'

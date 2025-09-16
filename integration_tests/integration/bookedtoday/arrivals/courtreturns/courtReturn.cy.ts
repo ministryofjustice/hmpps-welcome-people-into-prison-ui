@@ -35,7 +35,7 @@ context('Confirm court return added To roll', () => {
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
     const prisonerSummaryWithRecordPage = new PrisonerSummaryWithRecordPage(
-      `${expectedArrival.lastName}, ${expectedArrival.firstName}`
+      `${expectedArrival.lastName}, ${expectedArrival.firstName}`,
     )
     prisonerSummaryWithRecordPage.checkOnPage()
     prisonerSummaryWithRecordPage.confirmArrival().click()
@@ -48,7 +48,7 @@ context('Confirm court return added To roll', () => {
     const choosePrisonerPage = ChoosePrisonerPage.goTo()
     choosePrisonerPage.arrivalFrom('COURT')(1).confirm().click()
     const prisonerSummaryWithRecordPage = new PrisonerSummaryWithRecordPage(
-      `${expectedArrival.lastName}, ${expectedArrival.firstName}`
+      `${expectedArrival.lastName}, ${expectedArrival.firstName}`,
     )
     prisonerSummaryWithRecordPage.checkOnPage()
     prisonerSummaryWithRecordPage.confirmArrival().click()

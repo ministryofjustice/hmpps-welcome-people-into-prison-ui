@@ -10,7 +10,7 @@ export default class ConfirmTransferAddedToRollPage extends Page {
       Page.checkLink(
         cy.get(`[data-qa=add-case-note]`),
         'Add a case note on their profile',
-        `https://digital-dev.prison.service.justice.gov.uk/save-backlink?service=welcome-people-into-prison&returnPath=/confirm-arrival/choose-prisoner&redirectPath=/prisoner/${prisonNumber}/add-case-note`
+        `https://digital-dev.prison.service.justice.gov.uk/save-backlink?service=welcome-people-into-prison&returnPath=/confirm-arrival/choose-prisoner&redirectPath=/prisoner/${prisonNumber}/add-case-note`,
       ),
   })
 
@@ -21,7 +21,7 @@ export default class ConfirmTransferAddedToRollPage extends Page {
       Page.checkLink(
         cy.get(`[data-qa=view-establishment-roll]`),
         'View establishment roll',
-        'https://dps-dev.prison.service.justice.gov.uk/establishment-roll'
+        'https://dps-dev.prison.service.justice.gov.uk/establishment-roll',
       ),
   })
 }

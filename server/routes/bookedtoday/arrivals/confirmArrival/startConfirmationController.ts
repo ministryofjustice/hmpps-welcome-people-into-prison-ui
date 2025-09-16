@@ -45,7 +45,7 @@ export default class StartConfirmationController {
       case 'UNKNOWN':
       default: {
         logger.error(
-          `Unexpected arrival type for arrival: ${id}, type: ${prisoner.arrivalType}:${prisoner.arrivalTypeDescription}`
+          `Unexpected arrival type for arrival: ${id}, type: ${prisoner.arrivalType}:${prisoner.arrivalTypeDescription}`,
         )
         return urls.featureNotAvailable({})
       }

@@ -33,7 +33,7 @@ describe('parseBodyScan', () => {
           year: '2020',
           reason: 'INTELLIGENCE',
           result: 'POSITIVE',
-        })
+        }),
       ).toThrowError('huh? is not one of today,another-date')
     })
 
@@ -46,7 +46,7 @@ describe('parseBodyScan', () => {
           year: '2020',
           reason: 'int',
           result: 'POSITIVE',
-        })
+        }),
       ).toThrowError('int is not one of INTELLIGENCE,REASONABLE_SUSPICION')
     })
 
@@ -59,7 +59,7 @@ describe('parseBodyScan', () => {
           year: '2020',
           reason: 'INTELLIGENCE',
           result: 'pos',
-        })
+        }),
       ).toThrowError('pos is not one of POSITIVE,NEGATIVE')
     })
   })

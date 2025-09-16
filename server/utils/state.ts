@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { CookieOptions, NextFunction, Request, RequestHandler, Response } from 'express'
 import config from '../config'
 

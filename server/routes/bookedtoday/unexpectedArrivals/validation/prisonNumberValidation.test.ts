@@ -17,6 +17,6 @@ describe('PrisonNumberValidation', () => {
           text: 'Enter a prison number using 7 characters in the format A1234AA',
         },
       ])
-    }
+    },
   )
 })

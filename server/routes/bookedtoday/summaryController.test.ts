@@ -39,7 +39,7 @@ describe('GET /confirm-arrival/choose-prisoner/:moveId/summary', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
           matchType: MatchType.COURT_RETURN,
-        })
+        }),
       )
       return request(app)
         .get('/confirm-arrival/choose-prisoner/aaa-111-222/summary')
@@ -51,7 +51,7 @@ describe('GET /confirm-arrival/choose-prisoner/:moveId/summary', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
           matchType: MatchType.SINGLE_MATCH,
-        })
+        }),
       )
       return request(app)
         .get('/confirm-arrival/choose-prisoner/aaa-111-222/summary')
@@ -63,7 +63,7 @@ describe('GET /confirm-arrival/choose-prisoner/:moveId/summary', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
           matchType: MatchType.MULTIPLE_POTENTIAL_MATCHES,
-        })
+        }),
       )
       return request(app)
         .get('/confirm-arrival/choose-prisoner/aaa-111-222/summary')
@@ -75,7 +75,7 @@ describe('GET /confirm-arrival/choose-prisoner/:moveId/summary', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
           matchType: MatchType.NO_MATCH,
-        })
+        }),
       )
       return request(app)
         .get('/confirm-arrival/choose-prisoner/aaa-111-222/summary')
@@ -87,7 +87,7 @@ describe('GET /confirm-arrival/choose-prisoner/:moveId/summary', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
           matchType: MatchType.INSUFFICIENT_INFO,
-        })
+        }),
       )
       return request(app)
         .get('/confirm-arrival/choose-prisoner/aaa-111-222/summary')
@@ -99,7 +99,7 @@ describe('GET /confirm-arrival/choose-prisoner/:moveId/summary', () => {
       expectedArrivalsService.getArrival.mockResolvedValue(
         arrival({
           matchType: MatchType.SINGLE_MATCH,
-        })
+        }),
       )
       return request(app)
         .get('/confirm-arrival/choose-prisoner/aaa-111-222/summary')

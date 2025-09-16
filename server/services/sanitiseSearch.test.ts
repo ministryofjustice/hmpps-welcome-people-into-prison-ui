@@ -55,7 +55,7 @@ describe('Sanitise for search', () => {
         day: '3',
         month: '2',
         year: '2020',
-      })
+      }),
     ).toStrictEqual({
       firstName: 'Bob',
       lastName: 'Smith',

@@ -32,7 +32,7 @@ export default function routes(services: Services): Router {
     .get(
       '/prisoners/:prisonNumber/summary-transfer',
       redirectIfDisabledMiddleware(config.confirmEnabled),
-      summaryTransferController.summaryTransfer()
+      summaryTransferController.summaryTransfer(),
     )
     .get('/prisoners/:id/summary-with-record', checkIsLocked, summaryWithRecordController.view())
     .get('/prisoners/:id/summary-move-only', checkIsLocked, summaryMoveOnlyController.view())

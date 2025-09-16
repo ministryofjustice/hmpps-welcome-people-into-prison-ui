@@ -25,7 +25,7 @@ export default function routes(services: Services): Router {
     .post(
       '/prisoners/:id/possible-records-found',
       validate(MatchedRecordSelectionValidation),
-      mulitipleMatchController.submit()
+      mulitipleMatchController.submit(),
     )
     .build()
 }

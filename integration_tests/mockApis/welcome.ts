@@ -284,7 +284,7 @@ export default {
           'Content-Type': 'image/jpeg',
         },
         base64Body: Buffer.from(fs.readFileSync(path.join(__dirname, `../images/${prisoner.imageFile}`))).toString(
-          'base64'
+          'base64',
         ),
       },
     })
@@ -332,7 +332,7 @@ export default {
   stubCreateOffenderRecordAndBooking: (
     arrivalId: string,
     prisonNumber = 'A1234BC',
-    location = 'Reception'
+    location = 'Reception',
   ): SuperAgentRequest => {
     return stubFor({
       request: {

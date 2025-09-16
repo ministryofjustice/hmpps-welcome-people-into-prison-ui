@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import express, { RequestHandler, Router } from 'express'
 import Role from '../authentication/role'
 import asyncMiddleware from '../middleware/asyncMiddleware'
@@ -15,7 +14,7 @@ export default class Routes {
 
   private constructor(
     private readonly router: Router,
-    private readonly authorisedRoles: Role[]
+    private readonly authorisedRoles: Role[],
   ) {}
 
   private wrap = (handlers: RequestHandler[]) => handlers.map(handler => asyncMiddleware(handler))

@@ -15,7 +15,7 @@ export type WithBodyScanInfo<T extends HasPrisonNumber> = T & {
 export class BodyScanInfoDecorator {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
-    private readonly bodyScanClientFactory: RestClientBuilder<BodyScanClient>
+    private readonly bodyScanClientFactory: RestClientBuilder<BodyScanClient>,
   ) {}
 
   public async decorate<T extends HasPrisonNumber>(items: T[]): Promise<WithBodyScanStatus<T>[]> {
@@ -29,7 +29,7 @@ export class BodyScanInfoDecorator {
   public async decorateSingle<T extends HasPrisonNumber>(item: T): Promise<WithBodyScanInfo<T>> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const { numberOfBodyScans, numberOfBodyScansRemaining, bodyScanStatus } = await this.bodyScanClientFactory(
-      token
+      token,
     ).getSingleBodyScanInfo(item.prisonNumber)
     return { ...item, numberOfBodyScans, numberOfBodyScansRemaining, bodyScanStatus }
   }

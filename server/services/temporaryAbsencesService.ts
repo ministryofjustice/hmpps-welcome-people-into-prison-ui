@@ -7,7 +7,7 @@ export default class TemporaryAbsencesService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
     private readonly welcomeClientFactory: RestClientBuilder<WelcomeClient>,
-    private readonly bodyScanInfoDecorator: BodyScanInfoDecorator
+    private readonly bodyScanInfoDecorator: BodyScanInfoDecorator,
   ) {}
 
   public async getTemporaryAbsences(agencyId: string): Promise<WithBodyScanStatus<TemporaryAbsence>[]> {
@@ -26,7 +26,7 @@ export default class TemporaryAbsencesService {
     username: string,
     prisonNumber: string,
     agencyId: string,
-    arrivalId?: string
+    arrivalId?: string,
   ): Promise<ArrivalResponse | null> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
     return this.welcomeClientFactory(token).confirmTemporaryAbsence(prisonNumber, agencyId, arrivalId)

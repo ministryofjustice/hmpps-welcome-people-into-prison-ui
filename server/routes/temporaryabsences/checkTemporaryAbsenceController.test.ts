@@ -104,7 +104,7 @@ describe('POST addToRoll', () => {
           'user1',
           'A1234AA',
           'MDI',
-          undefined
+          undefined,
         )
       })
   })
@@ -119,7 +119,7 @@ describe('POST addToRoll', () => {
           'user1',
           'A1234AA',
           'MDI',
-          'abc-123'
+          'abc-123',
         )
       })
   })
@@ -143,7 +143,7 @@ describe('POST addToRoll', () => {
         expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
           'Add to the establishment roll',
           'Confirmed temporary absence returned',
-          "AgencyId: MDI, Reason: Hospital appointment, Type: 'PRISON',"
+          "AgencyId: MDI, Reason: Hospital appointment, Type: 'PRISON',",
         )
       })
   })
