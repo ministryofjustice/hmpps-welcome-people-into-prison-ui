@@ -212,12 +212,4 @@ export default class WelcomeClient {
       path: '/definitions',
     }) as Promise<ManagementReportDefinition[]>
   }
-
-  public getEventsCSV(stream: NodeJS.WritableStream, date: moment.Moment, days?: number): void {
-    const daysQP = days ? `&days=${days}` : ''
-    this.restClient.pipeIntoStream(stream, {
-      path: `/events?start-date=${date.format('YYYY-MM-DD')}${daysQP}`,
-      headers: { Accept: 'text/csv' },
-    })
-  }
 }
