@@ -35,7 +35,7 @@ generic-service:
     SHOW_BREADCRUMB: 'true'
     SHOW_RECENT_ARRIVALS: 'true'
     EDIT_PROFILE_ENABLED_FROM: "2025-07-30T02:00:00"
-    EDIT_PROFILE_ENABLED_PRISONS: "HEI"
+    EDIT_PROFILE_ENABLED_PRISONS: "HEI,NMI,LCI"
 
 generic-prometheus-alerts:
   alertSeverity: move-a-prisoner-alerts-prod
