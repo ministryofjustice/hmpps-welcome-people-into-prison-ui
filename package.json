@@ -94,7 +94,7 @@
     ]
   },
   "dependencies": {
-    "@ministryofjustice/frontend": "^5.2.1",
+    "@ministryofjustice/frontend": "^7.1.0",
     "@ministryofjustice/hmpps-connect-dps-components": "^2.2.0",
     "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "^4.13.0",
     "agentkeepalive": "^4.6.0",
