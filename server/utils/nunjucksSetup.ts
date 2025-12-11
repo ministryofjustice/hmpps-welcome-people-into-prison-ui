@@ -2,6 +2,7 @@
 import nunjucks from 'nunjucks'
 import moment from 'moment'
 import express from 'express'
+// eslint-disable-next-line import/no-named-as-default
 import setUpNunjucksFilters from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/setUpNunjucksFilters'
 import * as pathModule from 'path'
 import fs from 'fs'

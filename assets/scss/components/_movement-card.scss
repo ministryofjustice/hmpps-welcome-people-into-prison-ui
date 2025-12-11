@@ -17,7 +17,7 @@ $_image-width: 90px;
   width: 100%;
   margin: govuk-spacing(2) 0 0;
 
-  @include mq ($from: desktop) {
+  @include govuk-media-query($from: desktop) {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-gap: govuk-spacing(3);
@@ -28,7 +28,7 @@ $_image-width: 90px;
   & + & {
     margin-top: govuk-spacing(2);
 
-    @include mq ($from: desktop) {
+    @include govuk-media-query($from: desktop) {
       margin-top: 0;
     }
   }

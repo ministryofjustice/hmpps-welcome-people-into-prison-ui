@@ -3,4 +3,5 @@ $govuk-suppressed-warnings: 'ie8', 'govuk-typography-scale-14', 'legacy-organisa
 
 @import 'govuk-frontend/dist/govuk';
 @import '@ministryofjustice/frontend/moj/all';
+@import 'govuk-frontend/dist/govuk/tools/all';
 @import '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/all';
