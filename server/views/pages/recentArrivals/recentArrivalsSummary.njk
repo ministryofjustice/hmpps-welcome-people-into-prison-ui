@@ -6,7 +6,7 @@
 {% set pageTitle = "Summary of recent arrival" %}
 {% set hasBackLink = false %}
 {% set isFemalePrison = false %}
-{% set personalDetailsUrl = dpsUrl + "/save-backlink?service=welcome-people-into-prison&backLinkText=Back to Recent arrivals&returnPath=/recent-arrivals&redirectPath=/prisoner/" + arrival.prisonNumber + "/personal" %}
+{% set personalDetailsUrl = profileUrl + "/save-backlink?service=welcome-people-into-prison&backLinkText=Back to Recent arrivals&returnPath=/recent-arrivals&redirectPath=/prisoner/" + arrival.prisonNumber + "/personal" %}
 
 {% set breadCrumbs = {
     enabled: true,
@@ -34,7 +34,7 @@
                 <div class="govuk-grid-column-one-half">
                     {{ govukButton({
                             text: "Add a case note",
-                            href: dpsUrl + "/save-backlink?service=welcome-people-into-prison&returnPath=/recent-arrivals/" + arrival.prisonNumber + "/summary&redirectPath=/prisoner/" + arrival.prisonNumber + "/add-case-note",
+                            href: profileUrl + "/save-backlink?service=welcome-people-into-prison&returnPath=/recent-arrivals/" + arrival.prisonNumber + "/summary&redirectPath=/prisoner/" + arrival.prisonNumber + "/add-case-note",
                             classes: "govuk-button--secondary govuk-!-margin-left-3 float-right",
                             attributes: {'data-qa': 'add-case-note-button'}
                     }) }}

@@ -44,6 +44,7 @@ export default {
   phaseName: process.env.SYSTEM_PHASE,
   dpsUrl: get('DPS_URL', 'http://localhost:3000', requiredInProduction),
   newDpsUrl: get('NEW_DPS_URL', 'http://localhost:3000', requiredInProduction),
+  profileUrl: get('PROFILE_URL', 'http://localhost:3000', requiredInProduction),
   establishmentRollUrl: get('ESTABLISHMENT_ROLL_URL', 'http://localhost:3000', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
   hostname: process.env.APP_HOSTNAME || os.hostname(),
