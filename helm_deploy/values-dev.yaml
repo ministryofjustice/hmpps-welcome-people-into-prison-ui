@@ -19,6 +19,7 @@ generic-service:
     HMPPS_MANAGE_USERS_API_URL: https://manage-users-api-dev.hmpps.service.justice.gov.uk
     DPS_URL: 'https://digital-dev.prison.service.justice.gov.uk'
     NEW_DPS_URL: 'https://dps-dev.prison.service.justice.gov.uk'
+    PROFILE_URL: 'https://prisoner-dev.digital.prison.service.justice.gov.uk'
     ENVIRONMENT_NAME: 'DEV'
     TOKEN_VERIFICATION_API_URL: 'https://token-verification-api-dev.prison.service.justice.gov.uk'
     WELCOME_API_URL: 'https://welcome-api-dev.prison.service.justice.gov.uk'
