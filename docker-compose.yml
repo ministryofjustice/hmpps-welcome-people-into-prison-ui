@@ -5,17 +5,17 @@ services:
     image: 'redis:7.4'
     networks:
       - hmpps
-    container_name: redis 
+    container_name: redis
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     ports:
       - '6379:6379'
 
   hmpps-auth:
-    image: quay.io/hmpps/hmpps-auth:latest
+    image: ghcr.io/ministryofjustice/hmpps-auth:latest
     networks:
       - hmpps
-    container_name: hmpps-auth 
+    container_name: hmpps-auth
     ports:
       - "9090:8080"
     healthcheck:
