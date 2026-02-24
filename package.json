@@ -195,7 +195,7 @@
       "tmp": "0.2.5"
     },
     "cheerio": {
-      "undici": "7.16.0"
+      "undici": "7.18.2"
     },
     "superagent": {
       "formidable": "3.5.4"
