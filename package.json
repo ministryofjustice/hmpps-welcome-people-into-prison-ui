@@ -100,7 +100,7 @@
     "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "^4.32.1",
     "agentkeepalive": "^4.6.0",
     "applicationinsights": "^2.9.8",
-    "body-parser": "^1.20.4",
+    "body-parser": "^2.2.2",
     "bs-logger": "^0.2.6",
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",
