@@ -189,7 +189,9 @@
     "typescript": "^5.9.3"
   },
   "overrides": {
-    "minimatch": "3.1.4",
+    "diff": "8.0.3",
+    "minimatch": "10.2.3",
+    "serialize-javascript": "7.0.4",
     "cypress": {
       "tmp": "0.2.5"
     },
