@@ -134,7 +134,7 @@
     "superagent": "^10.3.0",
     "universal-analytics": "^0.5.3",
     "url-value-parser": "^2.2.0",
-    "uuid": "^11.1.0"
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
@@ -162,7 +162,6 @@
     "@types/superagent": "^4.1.24",
     "@types/supertest": "^2.0.16",
     "@types/universal-analytics": "^0.4.8",
-    "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "@typescript-eslint/parser": "^8.56.1",
     "audit-ci": "^7.1.0",
