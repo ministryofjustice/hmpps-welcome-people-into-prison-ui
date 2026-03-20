@@ -193,8 +193,9 @@
     "cypress": {
       "tmp": "0.2.5"
     },
-    "cheerio": {
-      "undici": "7.18.2"
+    "cypress-multi-reporters": {
+      "serialize-javascript": "7.0.4",
+      "diff": "8.0.3"
     },
     "superagent": {
       "formidable": "3.5.4"
