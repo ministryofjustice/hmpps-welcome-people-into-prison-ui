@@ -117,7 +117,7 @@
     "express": "^4.22.1",
     "express-session": "^1.19.0",
     "glob": "^11.1.0",
-    "googleapis": "^110.0.0",
+    "googleapis": "^171.4.0",
     "govuk-frontend": "^5.14.0",
     "helmet": "^8.1.0",
     "http-errors": "^2.0.1",
