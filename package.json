@@ -199,6 +199,9 @@
     "superagent": {
       "formidable": "3.5.4"
     },
+    "nunjucks": {
+      "chokidar" : "5.0.0"
+    },
     "jest": {
       "jest-core": {
         "micromatch": "4.0.8"
