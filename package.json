@@ -192,7 +192,7 @@
     "@types/express-serve-static-core": "4.19.8",
     "axios": ">=1.16.0",
     "serialize-javascript": ">=7.0.5",
-    "undici": ">=8.1.0",
+    "undici": ">=8.2.0",
     "cypress": {
       "tmp": "0.2.5"
     },
