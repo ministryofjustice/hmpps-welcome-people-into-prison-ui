@@ -34,7 +34,7 @@ describe('parseBodyScan', () => {
           reason: 'INTELLIGENCE',
           result: 'POSITIVE',
         }),
-      ).toThrowError('huh? is not one of today,another-date')
+      ).toThrow('huh? is not one of today,another-date')
     })
 
     test('invalid reason', () => {
@@ -47,7 +47,7 @@ describe('parseBodyScan', () => {
           reason: 'int',
           result: 'POSITIVE',
         }),
-      ).toThrowError('int is not one of INTELLIGENCE,REASONABLE_SUSPICION')
+      ).toThrow('int is not one of INTELLIGENCE,REASONABLE_SUSPICION')
     })
 
     test('invalid result', () => {
@@ -60,7 +60,7 @@ describe('parseBodyScan', () => {
           reason: 'INTELLIGENCE',
           result: 'pos',
         }),
-      ).toThrowError('pos is not one of POSITIVE,NEGATIVE')
+      ).toThrow('pos is not one of POSITIVE,NEGATIVE')
     })
   })
 })

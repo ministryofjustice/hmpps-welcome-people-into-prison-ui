@@ -28,8 +28,8 @@ describe('Expected arrivals service', () => {
     it('Calls upstream service correctly', async () => {
       await service.getPrison('MDI')
 
-      expect(PrisonRegisterClientFactory).toBeCalledWith(token)
-      expect(prisonRegisterClient.getPrison).toBeCalledWith('MDI')
+      expect(PrisonRegisterClientFactory).toHaveBeenCalledWith(token)
+      expect(prisonRegisterClient.getPrison).toHaveBeenCalledWith('MDI')
     })
 
     it('Should return correct data', async () => {

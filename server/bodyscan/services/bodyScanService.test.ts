@@ -27,9 +27,9 @@ describe('Body scan service', () => {
 
       await service.getPrisonerDetails(prisonNumber)
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-      expect(bodyScanClientFactory).toBeCalledWith(token)
-      expect(bodyScanClient.getPrisonerDetails).toBeCalledWith(prisonNumber)
+      expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalled()
+      expect(bodyScanClientFactory).toHaveBeenCalledWith(token)
+      expect(bodyScanClient.getPrisonerDetails).toHaveBeenCalledWith(prisonNumber)
     })
   })
 
@@ -40,9 +40,9 @@ describe('Body scan service', () => {
 
       await service.addBodyScan('user-1', prisonNumber, bodyScan)
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith('user-1')
-      expect(bodyScanClientFactory).toBeCalledWith(token)
-      expect(bodyScanClient.addBodyScan).toBeCalledWith(prisonNumber, bodyScan)
+      expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalledWith('user-1')
+      expect(bodyScanClientFactory).toHaveBeenCalledWith(token)
+      expect(bodyScanClient.addBodyScan).toHaveBeenCalledWith(prisonNumber, bodyScan)
     })
   })
 
@@ -52,9 +52,9 @@ describe('Body scan service', () => {
 
       await service.retrieveBodyScanInfo(prisonNumber)
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-      expect(bodyScanClientFactory).toBeCalledWith(token)
-      expect(bodyScanClient.getSingleBodyScanInfo).toBeCalledWith(prisonNumber)
+      expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalled()
+      expect(bodyScanClientFactory).toHaveBeenCalledWith(token)
+      expect(bodyScanClient.getSingleBodyScanInfo).toHaveBeenCalledWith(prisonNumber)
     })
   })
 })

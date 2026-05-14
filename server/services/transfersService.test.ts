@@ -28,8 +28,8 @@ describe('Transfers service', () => {
     it('Calls upstream service correctly', async () => {
       await service.getTransfer('MDI', 'G0015GD')
 
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.getTransfer).toBeCalledWith('MDI', 'G0015GD')
+      expect(WelcomeClientFactory).toHaveBeenCalledWith(token)
+      expect(welcomeClient.getTransfer).toHaveBeenCalledWith('MDI', 'G0015GD')
     })
 
     it('Should return correct data', async () => {
@@ -45,9 +45,9 @@ describe('Transfers service', () => {
 
       await service.getTransferWithBodyScanDetails('MDI', 'A1234AA')
 
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.getTransfer).toBeCalledWith('MDI', 'A1234AA')
-      expect(bodyScanInfoDecorator.decorateSingle).toBeCalledWith({
+      expect(WelcomeClientFactory).toHaveBeenCalledWith(token)
+      expect(welcomeClient.getTransfer).toHaveBeenCalledWith('MDI', 'A1234AA')
+      expect(bodyScanInfoDecorator.decorateSingle).toHaveBeenCalledWith({
         firstName: 'Sam',
         lastName: 'Smith',
         prisonNumber: 'A1234AA',
@@ -64,17 +64,17 @@ describe('Transfers service', () => {
     it('Calls upstream services correctly', async () => {
       await service.confirmTransfer('user1', 'G0015GD', 'MDI')
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith('user1')
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.confirmTransfer).toBeCalledWith('G0015GD', 'MDI', undefined)
+      expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalledWith('user1')
+      expect(WelcomeClientFactory).toHaveBeenCalledWith(token)
+      expect(welcomeClient.confirmTransfer).toHaveBeenCalledWith('G0015GD', 'MDI', undefined)
     })
 
     it('Calls upstream services correctly when arrivalId present', async () => {
       await service.confirmTransfer('user1', 'G0015GD', 'MDI', 'abc-123')
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith('user1')
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.confirmTransfer).toBeCalledWith('G0015GD', 'MDI', 'abc-123')
+      expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalledWith('user1')
+      expect(WelcomeClientFactory).toHaveBeenCalledWith(token)
+      expect(welcomeClient.confirmTransfer).toHaveBeenCalledWith('G0015GD', 'MDI', 'abc-123')
     })
 
     it('Should return null', async () => {

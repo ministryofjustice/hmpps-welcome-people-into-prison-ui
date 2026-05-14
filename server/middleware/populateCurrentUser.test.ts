@@ -58,6 +58,6 @@ describe('populateCurrentUser', () => {
     userService.getUser.mockRejectedValue(new Error('an error'))
     const res = { locals: { user: {} } } as unknown as Response
     await populateCurrentUser(userService, prisonService)(req, res, next)
-    expect(next).toBeCalledWith(new Error('an error'))
+    expect(next).toHaveBeenCalledWith(new Error('an error'))
   })
 })

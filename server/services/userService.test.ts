@@ -46,8 +46,8 @@ describe('User service', () => {
     it('Calls upstream service correctly', async () => {
       await service.getUserCaseLoads(token)
 
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.getUserCaseLoads).toBeCalledWith()
+      expect(WelcomeClientFactory).toHaveBeenCalledWith(token)
+      expect(welcomeClient.getUserCaseLoads).toHaveBeenCalledWith()
     })
 
     it('Should return correct data', async () => {

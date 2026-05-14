@@ -36,7 +36,7 @@ describe('state', () => {
 
       fixture.clear(res)
 
-      expect(res.clearCookie).toBeCalledWith('test', cookieOptions)
+      expect(res.clearCookie).toHaveBeenCalledWith('test', cookieOptions)
     })
   })
 
@@ -81,7 +81,7 @@ describe('state', () => {
         },
       } as unknown as Request
 
-      expect(() => fixture.get(req)).toThrowError('Missing or invalid keys: lastName')
+      expect(() => fixture.get(req)).toThrow('Missing or invalid keys: lastName')
     })
   })
 
