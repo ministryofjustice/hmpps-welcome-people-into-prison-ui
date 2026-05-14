@@ -189,6 +189,7 @@
     "typescript": "^5.9.3"
   },
   "overrides": {
+    "diff":"9.0.0",
     "@types/express-serve-static-core": "4.19.8",
     "axios": ">=1.16.0",
     "serialize-javascript": ">=7.0.5",
