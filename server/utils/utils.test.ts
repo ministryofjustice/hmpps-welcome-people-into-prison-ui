@@ -59,13 +59,11 @@ describe('trimObjectValues', () => {
   })
 
   it('Should throw if input is not an object', () => {
-    expect(() => trimObjectValues(123)).toThrowError('Not a record')
+    expect(() => trimObjectValues(123)).toThrow('Not a record')
   })
 
   it('Should throw if object contains non-strings but can handle undefined values', () => {
-    expect(() => trimObjectValues({ name: 'Bob', age: 10, role: undefined })).toThrowError(
-      'Values present not all strings',
-    )
+    expect(() => trimObjectValues({ name: 'Bob', age: 10, role: undefined })).toThrow('Values present not all strings')
   })
 })
 
@@ -286,19 +284,19 @@ describe('assertHasStringValues', () => {
   it('Has less than required fields', () => {
     const record: Record<string, unknown> = { name: 'Jo' }
 
-    expect(() => assertHasStringValues(record, ['name', 'role'])).toThrowError('Missing or invalid keys: role')
+    expect(() => assertHasStringValues(record, ['name', 'role'])).toThrow('Missing or invalid keys: role')
   })
 
   it('Has no required fields', () => {
     const record: Record<string, unknown> = {}
 
-    expect(() => assertHasStringValues(record, ['name', 'role'])).toThrowError('Missing or invalid keys: name,role')
+    expect(() => assertHasStringValues(record, ['name', 'role'])).toThrow('Missing or invalid keys: name,role')
   })
 
   it('Is null', () => {
     const record: Record<string, unknown> = null
 
-    expect(() => assertHasStringValues(record, ['name', 'role'])).toThrowError('Not a record')
+    expect(() => assertHasStringValues(record, ['name', 'role'])).toThrow('Not a record')
   })
 
   it('Has empty fields', () => {
@@ -312,19 +310,19 @@ describe('assertHasStringValues', () => {
   it('Has non-string fields', () => {
     const record: Record<string, unknown> = { name: 1, role: true }
 
-    expect(() => assertHasStringValues(record, ['name', 'role'])).toThrowError('Missing or invalid keys: name,role')
+    expect(() => assertHasStringValues(record, ['name', 'role'])).toThrow('Missing or invalid keys: name,role')
   })
 
   it('Has null fields', () => {
     const record: Record<string, unknown> = { name: null, role: 'true' }
 
-    expect(() => assertHasStringValues(record, ['name', 'role'])).toThrowError('Missing or invalid keys: name')
+    expect(() => assertHasStringValues(record, ['name', 'role'])).toThrow('Missing or invalid keys: name')
   })
 
   it('Has undefined fields', () => {
     const record: Record<string, unknown> = { name: undefined, role: 'true' }
 
-    expect(() => assertHasStringValues(record, ['name', 'role'])).toThrowError('Missing or invalid keys: name')
+    expect(() => assertHasStringValues(record, ['name', 'role'])).toThrow('Missing or invalid keys: name')
   })
 })
 
@@ -368,13 +366,13 @@ describe('assertHasOptionalStringValues', () => {
   it('Has non-string fields', () => {
     const record: Record<string, unknown> = { name: 1, role: true }
 
-    expect(() => assertHasOptionalStringValues(record, ['name', 'role'])).toThrowError('Non string keys: name,role')
+    expect(() => assertHasOptionalStringValues(record, ['name', 'role'])).toThrow('Non string keys: name,role')
   })
 
   it('is null', () => {
     const record: Record<string, unknown> = null
 
-    expect(() => assertHasOptionalStringValues(record, ['name', 'role'])).toThrowError('Not a record')
+    expect(() => assertHasOptionalStringValues(record, ['name', 'role'])).toThrow('Not a record')
   })
 })
 

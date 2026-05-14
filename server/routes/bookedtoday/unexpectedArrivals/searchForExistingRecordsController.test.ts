@@ -81,7 +81,7 @@ describe('Unexpected arrivals - search for existing records', () => {
         .expect(200)
         .expect('Content-Type', /html/)
         .expect(res => {
-          expect(flash).toBeCalledTimes(2)
+          expect(flash).toHaveBeenCalledTimes(2)
         })
     })
   })
@@ -190,7 +190,7 @@ describe('Unexpected arrivals - search for existing records', () => {
         .post('/manually-confirm-arrival/search-for-existing-record')
         .send(searchInputDetails)
         .expect(() => {
-          expect(State.State.newArrival.clear).toBeCalledTimes(1)
+          expect(State.State.newArrival.clear).toHaveBeenCalledTimes(1)
         })
     })
   })

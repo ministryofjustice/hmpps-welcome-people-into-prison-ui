@@ -116,15 +116,15 @@ describe('Expected arrivals service', () => {
         ]),
       )
 
-      expect(welcomeClient.getExpectedArrivals).toBeCalledWith(res.locals.user.activeCaseLoadId, today)
-      expect(welcomeClient.getTransfers).toBeCalledWith(res.locals.user.activeCaseLoadId)
+      expect(welcomeClient.getExpectedArrivals).toHaveBeenCalledWith(res.locals.user.activeCaseLoadId, today)
+      expect(welcomeClient.getTransfers).toHaveBeenCalledWith(res.locals.user.activeCaseLoadId)
     })
 
     it('WelcomeClientFactory is called with a token', async () => {
       await service.getArrivalsForToday(username, res.locals.user.activeCaseLoadId)
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-      expect(WelcomeClientFactory).toBeCalledWith(token)
+      expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalled()
+      expect(WelcomeClientFactory).toHaveBeenCalledWith(token)
     })
   })
 
@@ -176,14 +176,14 @@ describe('Expected arrivals service', () => {
         ]),
       )
 
-      expect(welcomeClient.getRecentArrivals).toBeCalledWith(res.locals.user.activeCaseLoadId, dateFrom, dateTo)
+      expect(welcomeClient.getRecentArrivals).toHaveBeenCalledWith(res.locals.user.activeCaseLoadId, dateFrom, dateTo)
     })
 
     it('WelcomeClientFactory is called with a token', async () => {
       await service.getRecentArrivalsGroupedByDate(res.locals.user.activeCaseLoadId)
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-      expect(WelcomeClientFactory).toBeCalledWith(token)
+      expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalled()
+      expect(WelcomeClientFactory).toHaveBeenCalledWith(token)
     })
   })
 
@@ -207,7 +207,7 @@ describe('Expected arrivals service', () => {
 
       expect(result).toStrictEqual([result1, result2, result3])
 
-      expect(welcomeClient.getRecentArrivals).toBeCalledWith(
+      expect(welcomeClient.getRecentArrivals).toHaveBeenCalledWith(
         res.locals.user.activeCaseLoadId,
         dateFrom,
         dateTo,
@@ -218,8 +218,8 @@ describe('Expected arrivals service', () => {
     it('WelcomeClientFactory is called with a token', async () => {
       await service.getRecentArrivalsSearchResults(res.locals.user.activeCaseLoadId, searchQuery)
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-      expect(WelcomeClientFactory).toBeCalledWith(token)
+      expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalled()
+      expect(WelcomeClientFactory).toHaveBeenCalledWith(token)
     })
   })
 
@@ -227,8 +227,8 @@ describe('Expected arrivals service', () => {
     it('Calls upstream service correctly', async () => {
       await service.getArrival(username, '12345-67890')
 
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.getArrival).toBeCalledWith('12345-67890')
+      expect(WelcomeClientFactory).toHaveBeenCalledWith(token)
+      expect(welcomeClient.getArrival).toHaveBeenCalledWith('12345-67890')
     })
 
     it('Returns response of client', async () => {
@@ -247,8 +247,8 @@ describe('Expected arrivals service', () => {
       welcomeClient.getArrival.mockResolvedValue(arrival)
       const result = await service.getPrisonerDetailsForArrival(username, '12345-67890')
 
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.getArrival).toBeCalledWith('12345-67890')
+      expect(WelcomeClientFactory).toHaveBeenCalledWith(token)
+      expect(welcomeClient.getArrival).toHaveBeenCalledWith('12345-67890')
       expect(result).toStrictEqual(createPotentialMatch(arrival.potentialMatches[0]))
     })
   })
@@ -263,9 +263,9 @@ describe('Expected arrivals service', () => {
 
       const result = await service.getArrivalAndSummaryDetails(username, '12345-67890')
 
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.getArrival).toBeCalledWith('12345-67890')
-      expect(welcomeClient.getPrisonerDetails).toBeCalledWith('A1234AB')
+      expect(WelcomeClientFactory).toHaveBeenCalledWith(token)
+      expect(welcomeClient.getArrival).toHaveBeenCalledWith('12345-67890')
+      expect(welcomeClient.getPrisonerDetails).toHaveBeenCalledWith('A1234AB')
 
       expect(result).toStrictEqual({
         arrival: withMatchType(arrival),
@@ -289,8 +289,8 @@ describe('Expected arrivals service', () => {
     it('Calls hmppsAuth correctly', async () => {
       await service.confirmArrival('MDI', username, '12345-67890', newArrival)
 
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith(username)
+      expect(WelcomeClientFactory).toHaveBeenCalledWith(token)
+      expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalledWith(username)
     })
 
     it('Calls welcome api correctly', async () => {
@@ -299,7 +299,7 @@ describe('Expected arrivals service', () => {
       const response = await service.confirmArrival('MDI', username, '12345-67890', newArrival)
 
       expect(response).toStrictEqual({ location: 'AA-1', prisonNumber: 'A1234AA' })
-      expect(welcomeClient.confirmExpectedArrival).toBeCalledWith('12345-67890', {
+      expect(welcomeClient.confirmExpectedArrival).toHaveBeenCalledWith('12345-67890', {
         firstName: 'Jim',
         lastName: 'Smith',
         dateOfBirth: '1973-01-08',
@@ -317,7 +317,7 @@ describe('Expected arrivals service', () => {
 
       await service.confirmArrival('MDI', username, '12345-67890', newArrival)
 
-      expect(raiseAnalyticsEvent).toBeCalledWith(
+      expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
         'Add to the establishment roll',
         'Confirmed arrival',
         'AgencyId: MDI, From: Reading Court, Type: COURT,',
@@ -339,8 +339,8 @@ describe('Expected arrivals service', () => {
     it('Calls hmppsAuth correctly', async () => {
       await service.confirmArrival('MDI', username, '12345-67890', newArrival)
 
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith(username)
+      expect(WelcomeClientFactory).toHaveBeenCalledWith(token)
+      expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalledWith(username)
     })
 
     it('Calls welcome api correctly', async () => {
@@ -349,7 +349,7 @@ describe('Expected arrivals service', () => {
       const response = await service.confirmArrival('MDI', username, '12345-67890', newArrival)
 
       expect(response).toStrictEqual(arrivalResponse)
-      expect(welcomeClient.confirmUnexpectedArrival).toBeCalledWith({
+      expect(welcomeClient.confirmUnexpectedArrival).toHaveBeenCalledWith({
         firstName: 'Jim',
         lastName: 'Smith',
         dateOfBirth: '1973-01-08',
@@ -366,7 +366,7 @@ describe('Expected arrivals service', () => {
 
       await service.confirmArrival('MDI', username, '12345-67890', newArrival)
 
-      expect(raiseAnalyticsEvent).toBeCalledWith(
+      expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
         'Add to the establishment roll',
         'Confirmed unexpected arrival',
         'AgencyId: MDI',
@@ -387,9 +387,9 @@ describe('Expected arrivals service', () => {
     it('Calls upstream services correctly', async () => {
       await service.confirmCourtReturn(username, '12345-67890', 'MDI', 'A1234AA')
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith(username)
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.confirmCourtReturn).toBeCalledWith('12345-67890', 'MDI', 'A1234AA')
+      expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalledWith(username)
+      expect(WelcomeClientFactory).toHaveBeenCalledWith(token)
+      expect(welcomeClient.confirmCourtReturn).toHaveBeenCalledWith('12345-67890', 'MDI', 'A1234AA')
     })
 
     it('Should return null', async () => {
@@ -406,9 +406,9 @@ describe('Expected arrivals service', () => {
 
       await service.getMatchingRecords(criteria)
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.getMatchingRecords).toBeCalledWith(criteria)
+      expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalled()
+      expect(WelcomeClientFactory).toHaveBeenCalledWith(token)
+      expect(welcomeClient.getMatchingRecords).toHaveBeenCalledWith(criteria)
     })
   })
 
@@ -418,9 +418,9 @@ describe('Expected arrivals service', () => {
 
       await service.getPrisonerDetails(prisonNumber)
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.getPrisonerDetails).toBeCalledWith(prisonNumber)
+      expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalled()
+      expect(WelcomeClientFactory).toHaveBeenCalledWith(token)
+      expect(welcomeClient.getPrisonerDetails).toHaveBeenCalledWith(prisonNumber)
     })
   })
 
@@ -430,9 +430,9 @@ describe('Expected arrivals service', () => {
 
       await service.getPrisonerSummaryDetails(prisonNumber)
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.getPrisonerDetails).toBeCalledWith(prisonNumber)
+      expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalled()
+      expect(WelcomeClientFactory).toHaveBeenCalledWith(token)
+      expect(welcomeClient.getPrisonerDetails).toHaveBeenCalledWith(prisonNumber)
     })
 
     it('Returns response of client', async () => {

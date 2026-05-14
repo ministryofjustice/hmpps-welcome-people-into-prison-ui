@@ -26,13 +26,13 @@ describe('Imprisonment statuses service', () => {
       it('WelcomeClientFactory is called with a token', async () => {
         await service.getAllImprisonmentStatuses()
 
-        expect(WelcomeClientFactory).toBeCalledWith(token)
+        expect(WelcomeClientFactory).toHaveBeenCalledWith(token)
       })
       it('Retrieves all imprisonment statuses', async () => {
         const result = await service.getAllImprisonmentStatuses()
 
-        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-        expect(welcomeClient.getImprisonmentStatuses).toBeCalled()
+        expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalled()
+        expect(welcomeClient.getImprisonmentStatuses).toHaveBeenCalled()
         expect(result).toStrictEqual(imprisonmentStatuses)
       })
     })
@@ -41,7 +41,7 @@ describe('Imprisonment statuses service', () => {
       it('WelcomeClientFactory is called with a token', async () => {
         await service.getImprisonmentStatus('convicted-unsentenced')
 
-        expect(WelcomeClientFactory).toBeCalledWith(token)
+        expect(WelcomeClientFactory).toHaveBeenCalledWith(token)
       })
 
       it('should return imprisonment status with single movement reason', async () => {
@@ -49,8 +49,8 @@ describe('Imprisonment statuses service', () => {
 
         const result = await service.getImprisonmentStatus('convicted-unsentenced')
 
-        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-        expect(welcomeClient.getImprisonmentStatuses).toBeCalled()
+        expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalled()
+        expect(welcomeClient.getImprisonmentStatuses).toHaveBeenCalled()
         expect(result).toStrictEqual(imprisonmentStatus)
       })
     })

@@ -44,14 +44,14 @@ describe('Temporary absences service', () => {
         withBodyScanStatus(cat),
         withBodyScanStatus(dog),
       ])
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-      expect(welcomeClient.getTemporaryAbsences).toBeCalledWith(res.locals.user.activeCaseLoadId)
+      expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalled()
+      expect(welcomeClient.getTemporaryAbsences).toHaveBeenCalledWith(res.locals.user.activeCaseLoadId)
     })
 
     it('WelcomeClientFactory is called with a token', async () => {
       await service.getTemporaryAbsences(res.locals.user.activeCaseLoadId)
 
-      expect(WelcomeClientFactory).toBeCalledWith(token)
+      expect(WelcomeClientFactory).toHaveBeenCalledWith(token)
     })
   })
 
@@ -64,8 +64,8 @@ describe('Temporary absences service', () => {
     it('Calls upstream service correctly', async () => {
       await service.getTemporaryAbsence('G0013AB')
 
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.getTemporaryAbsence).toBeCalledWith('G0013AB')
+      expect(WelcomeClientFactory).toHaveBeenCalledWith(token)
+      expect(welcomeClient.getTemporaryAbsence).toHaveBeenCalledWith('G0013AB')
     })
 
     it('Should return correct data', async () => {
@@ -81,17 +81,17 @@ describe('Temporary absences service', () => {
     it('Calls upstream services correctly', async () => {
       await service.confirmTemporaryAbsence('user1', 'G0015GD', 'MDI')
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith('user1')
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.confirmTemporaryAbsence).toBeCalledWith('G0015GD', 'MDI', undefined)
+      expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalledWith('user1')
+      expect(WelcomeClientFactory).toHaveBeenCalledWith(token)
+      expect(welcomeClient.confirmTemporaryAbsence).toHaveBeenCalledWith('G0015GD', 'MDI', undefined)
     })
 
     it('Calls upstream services correctly when arrivalId present', async () => {
       await service.confirmTemporaryAbsence('user1', 'G0015GD', 'MDI', 'abc-123')
 
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalledWith('user1')
-      expect(WelcomeClientFactory).toBeCalledWith(token)
-      expect(welcomeClient.confirmTemporaryAbsence).toBeCalledWith('G0015GD', 'MDI', 'abc-123')
+      expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalledWith('user1')
+      expect(WelcomeClientFactory).toHaveBeenCalledWith(token)
+      expect(welcomeClient.confirmTemporaryAbsence).toHaveBeenCalledWith('G0015GD', 'MDI', 'abc-123')
     })
 
     it('Should return null', async () => {
