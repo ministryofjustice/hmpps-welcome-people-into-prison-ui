@@ -160,7 +160,7 @@
     "@types/passport": "^1.0.17",
     "@types/passport-oauth2": "^1.8.0",
     "@types/superagent": "^8.1.9",
-    "@types/supertest": "^2.0.16",
+    "@types/supertest": "^7.2.0",
     "@types/universal-analytics": "^0.4.8",
     "@typescript-eslint/eslint-plugin": "8.59.3",
     "@typescript-eslint/parser": "8.59.3",
@@ -184,7 +184,7 @@
     "nodemon": "^3.1.14",
     "prettier": "^3.8.3",
     "sass": "^1.99.0",
-    "supertest": "^6.3.4",
+    "supertest": "^7.2.2",
     "ts-jest": "^29.4.9",
     "typescript": "^5.9.3"
   },
