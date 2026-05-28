@@ -195,7 +195,7 @@
     "serialize-javascript": ">=7.0.5",
     "undici": ">=8.2.0",
     "cypress": {
-      "tmp": "0.2.5"
+      "tmp": "0.2.6"
     },
     "superagent": {
       "formidable": "3.5.4"
