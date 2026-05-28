@@ -132,7 +132,7 @@
     "redis": "^4.7.1",
     "static-path": "^0.0.4",
     "superagent": "^10.3.0",
-    "universal-analytics": "^0.5.3",
+    "universal-analytics": "0.5.3",
     "url-value-parser": "^2.2.0",
     "uuid": "^14.0.0"
   },
@@ -195,7 +195,7 @@
     "serialize-javascript": ">=7.0.5",
     "undici": ">=8.3.0",
     "cypress": {
-      "tmp": "0.2.5"
+      "tmp": "0.2.7"
     },
     "superagent": {
       "formidable": "3.5.4"
