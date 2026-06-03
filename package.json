@@ -162,11 +162,11 @@
     "@types/superagent": "^8.1.10",
     "@types/supertest": "^7.2.0",
     "@types/universal-analytics": "^0.4.8",
-    "@typescript-eslint/eslint-plugin": "8.59.4",
-    "@typescript-eslint/parser": "8.59.4",
+    "@typescript-eslint/eslint-plugin": "8.60.0",
+    "@typescript-eslint/parser": "8.60.0",
     "audit-ci": "^7.1.0",
     "concurrently": "^9.2.1",
-    "cypress": "15.15.0",
+    "cypress": "15.16.0",
     "cypress-multi-reporters": "^2.0.5",
     "dotenv": "^17.4.2",
     "esbuild": "^0.28.0",
@@ -189,7 +189,7 @@
     "typescript": "^5.9.3"
   },
   "overrides": {
-    "diff":"9.0.0",
+    "diff": "9.0.0",
     "@types/express-serve-static-core": "4.19.8",
     "axios": ">=1.16.1",
     "serialize-javascript": ">=7.0.5",
