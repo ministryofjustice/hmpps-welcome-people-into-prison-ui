@@ -100,9 +100,9 @@
   "dependencies": {
     "@ministryofjustice/frontend": "^5.2.1",
     "@ministryofjustice/hmpps-connect-dps-components": "^2.2.0",
-    "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "^4.32.1",
+    "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "^6.7.0",
     "agentkeepalive": "^4.6.0",
-    "applicationinsights": "^2.9.8",
+    "applicationinsights": "^3.15.0",
     "body-parser": "^2.2.2",
     "bs-logger": "^0.2.6",
     "bunyan": "^1.8.15",
