@@ -14,6 +14,7 @@ import DprService from './dprService'
 
 export const services = () => {
   const {
+    applicationInfo,
     hmppsAuthClient,
     welcomeClientBuilder,
     prisonRegisterClientBuilder,
@@ -47,6 +48,7 @@ export const services = () => {
   const dprService = new DprService(hmppsAuthClient, welcomeClientBuilder)
 
   return {
+    applicationInfo,
     hmppsAuthClient,
     userService,
     notificationService,

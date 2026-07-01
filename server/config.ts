@@ -38,6 +38,10 @@ export const DEFAULT_AGENT_CONFIG: AgentConfig = {
 export default {
   serviceIsUnvailable: process.env.SERVICE_IS_UNAVAILABLE === 'true',
   serviceOutageBannerEnabled: get('SERVICE_OUTAGE_BANNER_ENABLED', 'false', requiredInProduction) === 'true',
+  buildNumber: get('BUILD_NUMBER', '1_0_0', requiredInProduction),
+  productId: get('PRODUCT_ID', 'UNASSIGNED', requiredInProduction),
+  gitRef: get('GIT_REF', 'xxxxxxxxxxxxxxxxxxx', requiredInProduction),
+  branchName: get('GIT_BRANCH', 'xxxxxxxxxxxxxxxxxxx', requiredInProduction),
   production,
   https: production,
   staticResourceCacheDuration: 20,
@@ -64,6 +68,7 @@ export default {
   apis: {
     hmppsAuth: {
       url: get('HMPPS_AUTH_URL', 'http://localhost:9090/auth', requiredInProduction),
+      healthPath: '/health/ping',
       externalUrl: get('HMPPS_AUTH_EXTERNAL_URL', get('HMPPS_AUTH_URL', 'http://localhost:9090/auth')),
       timeout: {
         response: Number(get('HMPPS_AUTH_TIMEOUT_RESPONSE', 10000)),
@@ -77,6 +82,7 @@ export default {
     },
     hmppsManageUsersApi: {
       url: get('HMPPS_MANAGE_USERS_API_URL', 'http://localhost:8081', requiredInProduction),
+      healthPath: '/health/ping',
       timeout: {
         response: Number(get('HMPPS_MANAGE_USERS_API_TIMEOUT_RESPONSE', 10000)),
         deadline: Number(get('HMPPS_MANAGE_USERS_API_TIMEOUT_DEADLINE', 10000)),
@@ -85,6 +91,7 @@ export default {
     },
     tokenVerification: {
       url: get('TOKEN_VERIFICATION_API_URL', 'http://localhost:8100', requiredInProduction),
+      healthPath: '/health/ping',
       timeout: {
         response: Number(get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000)),
         deadline: Number(get('TOKEN_VERIFICATION_API_TIMEOUT_DEADLINE', 5000)),
@@ -94,6 +101,7 @@ export default {
     },
     welcome: {
       url: get('WELCOME_API_URL', 'http://localhost:8100', requiredInProduction),
+      healthPath: '/health/ping',
       timeout: {
         response: Number(get('WELCOME_API_TIMEOUT_RESPONSE', 5000)),
         deadline: Number(get('WELCOME_API_TIMEOUT_DEADLINE', 5000)),
@@ -102,6 +110,7 @@ export default {
     },
     prisonRegister: {
       url: get('PRISON_REGISTER_API_URL', 'http://localhost:8100', requiredInProduction),
+      healthPath: '/health/ping',
       timeout: {
         response: Number(get('PRISON_REGISTER_API_TIMEOUT_RESPONSE', 5000)),
         deadline: Number(get('PRISON_REGISTER_API_TIMEOUT_DEADLINE', 5000)),
@@ -110,6 +119,7 @@ export default {
     },
     bodyscan: {
       url: get('BODYSCAN_API_URL', 'http://localhost:8100', requiredInProduction),
+      healthPath: '/health/ping',
       timeout: {
         response: Number(get('BODYSCAN_API_TIMEOUT_RESPONSE', 5000)),
         deadline: Number(get('BODYSCAN_API_API_TIMEOUT_DEADLINE', 5000)),

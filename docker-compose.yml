@@ -25,7 +25,12 @@ services:
       - APPLICATION_AUTHENTICATION_UI_ALLOWLIST=0.0.0.0/0
 
   app:
-    build: .
+    build:
+      context: .
+      args:
+        BUILD_NUMBER: local
+        GIT_REF: local
+        GIT_BRANCH: local
     networks:
       - hmpps
     depends_on: [redis]
