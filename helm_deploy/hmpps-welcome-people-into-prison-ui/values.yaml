@@ -1,5 +1,6 @@
 generic-service:
   nameOverride: hmpps-welcome-people-into-prison-ui
+  productId: 'DPS046' # productId for the product that this belongs too
 
   replicaCount: 4
 
