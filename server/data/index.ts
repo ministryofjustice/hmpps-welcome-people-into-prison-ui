@@ -11,7 +11,9 @@ import PrisonRegisterClient from './prisonRegisterClient'
 import BodyScanClient from './bodyScanClient'
 import notifyClient from './notifyClient'
 import LockManager from './lockManager'
+import applicationInfoSupplier from '../applicationInfo'
 
+const applicationInfo = applicationInfoSupplier()
 initialiseAppInsights()
 buildAppInsightsClient()
 
@@ -20,6 +22,7 @@ type RestClientBuilder<T> = (token: string) => T
 export const dataAccess = () => {
   const redisClient = createRedisClient()
   return {
+    applicationInfo,
     redisClient,
     notifyClient,
     hmppsAuthClient: new HmppsAuthClient(new RedisTokenStore(redisClient)),

@@ -166,9 +166,8 @@ const stubUserRoles = () =>
 
 export default {
   getSignInUrl,
-  stubPing: (): Promise<[Response, Response]> => Promise.all([ping(), tokenVerification.stubPing()]),
-  stubManageUsersPing: (): Promise<[Response, Response]> =>
-    Promise.all([manageUsersApiPing(), tokenVerification.stubPing()]),
+  stubPing: (): Promise<Response> => ping(),
+  stubManageUsersPing: (): Promise<Response> => manageUsersApiPing(),
   stubSignIn: (roles: Role[]): Promise<[Response, Response, Response, Response, Response, Response]> =>
     Promise.all([favicon(), redirect(), signOut(), manageDetails(), token(roles), tokenVerification.stubVerifyToken()]),
   stubUser: (): Promise<[Response, Response]> => Promise.all([stubUser(), stubUserRoles()]),

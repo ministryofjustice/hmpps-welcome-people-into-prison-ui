@@ -74,6 +74,7 @@ export default defineConfig({
 
         // prison register stubs
         stubPrison: prisonRegister.stubPrison,
+        stubPrisonRegisterApiPing: prisonRegister.stubPing,
 
         // body-scan
         stubBodyScanApiPing: bodyscan.stubPing,
