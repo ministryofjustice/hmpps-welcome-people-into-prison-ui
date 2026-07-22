@@ -7,6 +7,7 @@ import { State } from '../state'
 import {
   createImprisonmentStatuses,
   createNewArrival,
+  statusWithFromLocation,
   statusWithManyReasons,
   statusWithSingleReason,
 } from '../../../../data/__testutils/testObjects'
@@ -110,6 +111,25 @@ describe('/imprisonment-status', () => {
             code: statusWithSingleReason.code,
             imprisonmentStatus: statusWithSingleReason.imprisonmentStatusCode,
             movementReasonCode: statusWithSingleReason.movementReasons[0].movementReasonCode,
+          })
+        })
+    })
+
+    it('should store the from location when the status has a fixed one', () => {
+      imprisonmentStatusesService.getImprisonmentStatus.mockResolvedValue(statusWithFromLocation)
+
+      return request(app)
+        .post('/prisoners/12345-67890/imprisonment-status')
+        .send({ imprisonmentStatus: statusWithFromLocation.code })
+        .expect(302)
+        .expect(res => {
+          expectSettingCookie(res, State.newArrival).toStrictEqual({
+            ...newArrival,
+            expected: 'true',
+            code: statusWithFromLocation.code,
+            imprisonmentStatus: statusWithFromLocation.imprisonmentStatusCode,
+            movementReasonCode: statusWithFromLocation.movementReasons[0].movementReasonCode,
+            fromLocationId: 'FORGN',
           })
         })
     })

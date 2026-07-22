@@ -12,6 +12,7 @@ export type NewArrival = {
   code?: string
   imprisonmentStatus?: string
   movementReasonCode?: string
+  fromLocationId?: string
   expected: boolean
 }
 
@@ -27,6 +28,7 @@ export const NewArrivalCodec: Codec<NewArrival> = {
     ...(value.code !== undefined && { code: value.code }),
     ...(value.imprisonmentStatus !== undefined && { imprisonmentStatus: value.imprisonmentStatus }),
     ...(value.movementReasonCode !== undefined && { movementReasonCode: value.movementReasonCode }),
+    ...(value.fromLocationId !== undefined && { fromLocationId: value.fromLocationId }),
   }),
 
   read(record: Record<string, unknown>): NewArrival {
@@ -38,6 +40,7 @@ export const NewArrivalCodec: Codec<NewArrival> = {
       'code',
       'imprisonmentStatus',
       'movementReasonCode',
+      'fromLocationId',
     ])
 
     return {
@@ -51,6 +54,7 @@ export const NewArrivalCodec: Codec<NewArrival> = {
       code: record.code,
       imprisonmentStatus: record.imprisonmentStatus,
       movementReasonCode: record.movementReasonCode,
+      fromLocationId: record.fromLocationId,
     }
   },
 }

@@ -126,6 +126,17 @@ export default [
     ],
   },
   {
+    code: 'repatriation',
+    description: 'Repatriated to this country',
+    imprisonmentStatusCode: 'SENT',
+    fromLocationId: 'FORGN',
+    movementReasons: [
+      {
+        movementReasonCode: 'I',
+      },
+    ],
+  },
+  {
     code: 'temporary-stay',
     description: 'Temporary stay enroute to another establishment',
     imprisonmentStatusCode: 'SENT',

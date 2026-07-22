@@ -238,10 +238,18 @@ export const createImprisonmentStatuses = (): ImprisonmentStatus[] => [
       { description: 'Partly suspended sentence', movementReasonCode: 'P' },
     ],
   },
+  {
+    code: 'repatriation',
+    description: 'Repatriated to this country',
+    imprisonmentStatusCode: 'SENT',
+    fromLocationId: 'FORGN',
+    movementReasons: [{ movementReasonCode: 'I' }],
+  },
 ]
 
 export const statusWithSingleReason = createImprisonmentStatuses().find(s => s.code === 'on-remand')
 export const statusWithManyReasons = createImprisonmentStatuses().find(s => s.code === 'determinate-sentence')
+export const statusWithFromLocation = createImprisonmentStatuses().find(s => s.code === 'repatriation')
 
 export const createMatchCriteria = (): PotentialMatchCriteria => ({
   firstName: 'James',
@@ -278,7 +286,7 @@ export const createNewArrival = ({
   movementReasonCode = 'N',
   prisonNumber = 'A1234AA',
   expected = true,
-} = {}): NewArrival => ({
+}: Partial<NewArrival> = {}): NewArrival => ({
   firstName,
   lastName,
   dateOfBirth,
