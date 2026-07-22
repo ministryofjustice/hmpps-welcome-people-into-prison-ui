@@ -1,4 +1,5 @@
 import { RequestHandler } from 'express'
+import { telemetry } from '@ministryofjustice/hmpps-azure-telemetry'
 import logger from '../../logger'
 import type { UserService, PrisonService } from '../services'
 import config from '../config'
@@ -22,6 +23,12 @@ export default function populateCurrentUser(userService: UserService, prisonServ
             activeCaseLoad,
             userCaseLoads,
           }
+
+          telemetry.setSpanAttributes({
+            username: res.locals.user.username,
+            activeCaseLoadId: res.locals.user.activeCaseLoadId,
+            isReceptionUser: res.locals.user.isReceptionUser,
+          })
         } else {
           logger.info('No user available')
         }
