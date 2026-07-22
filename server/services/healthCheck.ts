@@ -29,19 +29,16 @@ function addAppInfo(result: HealthCheckResult): HealthCheckResult {
   const buildInfo = {
     uptime: process.uptime(),
     build: buildInformation,
-    version: buildInformation && buildInformation.buildNumber,
+    version: buildInformation.buildNumber,
   }
 
   return { ...result, ...buildInfo }
 }
 
 function getBuild() {
-  try {
-    // eslint-disable-next-line import/no-unresolved,global-require, @typescript-eslint/no-require-imports
-    return require('../../build-info.json')
-    // eslint-disable-next-line  @typescript-eslint/no-unused-vars
-  } catch (_ex) {
-    return null
+  return {
+    buildNumber: config.buildNumber,
+    gitRef: config.gitRef,
   }
 }
 
