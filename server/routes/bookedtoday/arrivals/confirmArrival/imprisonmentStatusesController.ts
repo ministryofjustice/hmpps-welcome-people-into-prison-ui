@@ -37,6 +37,7 @@ export default class ImprisonmentStatusesController {
           code: selectedImprisonmentStatus.code,
           imprisonmentStatus: selectedImprisonmentStatus.imprisonmentStatusCode,
           movementReasonCode: selectedImprisonmentStatus.movementReasons[0].movementReasonCode,
+          fromLocationId: selectedImprisonmentStatus.fromLocationId,
         })
 
         return res.redirect(`/prisoners/${id}/check-answers`)

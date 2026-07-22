@@ -13,6 +13,7 @@ describe('NewArrivalCodec', () => {
       code: 'on remand',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',
+      fromLocationId: 'FORGN',
       expected: 'true',
     })
 
@@ -26,6 +27,7 @@ describe('NewArrivalCodec', () => {
       code: 'on remand',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',
+      fromLocationId: 'FORGN',
       expected: true,
     })
   })
@@ -41,6 +43,7 @@ describe('NewArrivalCodec', () => {
       code: 'on remand',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',
+      fromLocationId: 'FORGN',
       expected: 'false',
     })
 
@@ -54,6 +57,7 @@ describe('NewArrivalCodec', () => {
       code: 'on remand',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',
+      fromLocationId: 'FORGN',
       expected: false,
     })
   })
@@ -77,6 +81,7 @@ describe('NewArrivalCodec', () => {
       code: undefined,
       imprisonmentStatus: undefined,
       movementReasonCode: undefined,
+      fromLocationId: undefined,
     })
   })
 
@@ -91,6 +96,7 @@ describe('NewArrivalCodec', () => {
       code: 'on remand',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',
+      fromLocationId: 'FORGN',
       expected: true,
     })
 
@@ -104,6 +110,7 @@ describe('NewArrivalCodec', () => {
       code: 'on remand',
       imprisonmentStatus: 'RX',
       movementReasonCode: 'N',
+      fromLocationId: 'FORGN',
       expected: 'true',
     })
   })

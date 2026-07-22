@@ -158,7 +158,9 @@ export default class ExpectedArrivalsService {
       prisonId,
       imprisonmentStatus: arrival.imprisonmentStatus,
       movementReasonCode: arrival.movementReasonCode,
-      fromLocationId: data.fromLocationId,
+      // The move's own origin is the more accurate record, so it wins over any
+      // fixed origin the selected imprisonment status carries
+      fromLocationId: data.fromLocationId ?? arrival.fromLocationId,
       prisonNumber: arrival.prisonNumber,
     })
 
@@ -188,7 +190,7 @@ export default class ExpectedArrivalsService {
       prisonId,
       imprisonmentStatus: arrival.imprisonmentStatus,
       movementReasonCode: arrival.movementReasonCode,
-      fromLocationId: undefined,
+      fromLocationId: arrival.fromLocationId,
       prisonNumber: arrival.prisonNumber,
     })
 

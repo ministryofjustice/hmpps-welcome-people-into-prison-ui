@@ -312,6 +312,29 @@ describe('Expected arrivals service', () => {
       })
     })
 
+    it("prefers the move's own from location over the one fixed by the imprisonment status", async () => {
+      welcomeClient.confirmExpectedArrival.mockResolvedValue({ prisonNumber: 'A1234AA', location: 'AA-1' })
+
+      await service.confirmArrival('MDI', username, '12345-67890', { ...newArrival, fromLocationId: 'FORGN' })
+
+      expect(welcomeClient.confirmExpectedArrival).toBeCalledWith(
+        '12345-67890',
+        expect.objectContaining({ fromLocationId: 'REDCC' }),
+      )
+    })
+
+    it('falls back to the from location fixed by the imprisonment status', async () => {
+      welcomeClient.getArrival.mockResolvedValue({ ...createArrival(), fromLocationId: undefined })
+      welcomeClient.confirmExpectedArrival.mockResolvedValue({ prisonNumber: 'A1234AA', location: 'AA-1' })
+
+      await service.confirmArrival('MDI', username, '12345-67890', { ...newArrival, fromLocationId: 'FORGN' })
+
+      expect(welcomeClient.confirmExpectedArrival).toBeCalledWith(
+        '12345-67890',
+        expect.objectContaining({ fromLocationId: 'FORGN' }),
+      )
+    })
+
     it('raises event when confirmation was successful', async () => {
       welcomeClient.confirmExpectedArrival.mockResolvedValue({ prisonNumber: 'A1234AA', location: 'AA-1' })
 
@@ -359,6 +382,16 @@ describe('Expected arrivals service', () => {
         movementReasonCode: 'N',
         prisonNumber: 'A1234AA',
       })
+    })
+
+    it('sends the from location fixed by the imprisonment status', async () => {
+      welcomeClient.confirmUnexpectedArrival.mockResolvedValue(arrivalResponse)
+
+      await service.confirmArrival('MDI', username, '12345-67890', { ...newArrival, fromLocationId: 'FORGN' })
+
+      expect(welcomeClient.confirmUnexpectedArrival).toBeCalledWith(
+        expect.objectContaining({ fromLocationId: 'FORGN' }),
+      )
     })
 
     it('raises event when confirmation was successful', async () => {

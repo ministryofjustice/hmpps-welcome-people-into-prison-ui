@@ -124,6 +124,7 @@ declare module 'welcome' {
       imprisonmentStatusCode: string
       secondLevelTitle?: string
       secondLevelValidationMessage?: string
+      fromLocationId?: string
       movementReasons: { description?: string; movementReasonCode: string }[]
     }
     Prison: {
