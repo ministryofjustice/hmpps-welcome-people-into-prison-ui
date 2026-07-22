@@ -46,6 +46,9 @@
     "transformIgnorePatterns": [
       "node_modules/(?!(uuid)/)"
     ],
+    "moduleNameMapper": {
+      "^@ministryofjustice/hmpps-azure-telemetry$": "<rootDir>/server/data/__testutils/hmppsAzureTelemetry.mock.ts"
+    },
     "collectCoverageFrom": [
       "server/**/*.{ts,js,jsx,mjs}"
     ],
@@ -98,11 +101,11 @@
   },
   "dependencies": {
     "@ministryofjustice/frontend": "^5.2.1",
+    "@ministryofjustice/hmpps-azure-telemetry": "1.0.2",
     "@ministryofjustice/hmpps-connect-dps-components": "^2.2.0",
     "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "^4.32.1",
     "@ministryofjustice/hmpps-monitoring": "^2.1.0",
     "agentkeepalive": "^4.6.0",
-    "applicationinsights": "^2.9.8",
     "body-parser": "^2.3.0",
     "bs-logger": "^0.2.6",
     "bunyan": "^1.8.15",

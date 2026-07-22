@@ -1,8 +1,3 @@
-/*
- * Do appinsights first as it does some magic instrumentation work, i.e. it affects other 'require's
- * In particular, applicationinsights automatically collects bunyan logs
- */
-import { initialiseAppInsights, buildAppInsightsClient } from '../utils/azureAppInsights'
 import HmppsAuthClient from './hmppsAuthClient'
 import { createRedisClient } from './redisClient'
 import { RedisTokenStore } from './tokenStore'
@@ -14,8 +9,6 @@ import LockManager from './lockManager'
 import applicationInfoSupplier from '../applicationInfo'
 
 const applicationInfo = applicationInfoSupplier()
-initialiseAppInsights()
-buildAppInsightsClient()
 
 type RestClientBuilder<T> = (token: string) => T
 
