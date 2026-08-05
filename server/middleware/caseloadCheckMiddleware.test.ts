@@ -17,6 +17,13 @@ describe('caseloadCheck', () => {
     expect(next).toHaveBeenCalled()
   })
 
+  test('should call next for any caseload when all prisons are enabled', () => {
+    res.locals.user = { activeCaseLoadId: 'MDI' }
+
+    caseloadCheck(['*'])(req, res, next)
+    expect(next).toHaveBeenCalled()
+  })
+
   test('should redirect to auth error page', () => {
     res.locals.user = { activeCaseLoadId: 'MDI' }
 
@@ -29,6 +36,14 @@ describe('caseloadCheck', () => {
     res.locals = {}
 
     caseloadCheck(['NMI', 'RNI'])(req, res, next)
+    expect(next).not.toHaveBeenCalled()
+    expect(res.redirect).toHaveBeenCalledWith('/authError')
+  })
+
+  test('handles when user is not present and all prisons are enabled', () => {
+    res.locals = {}
+
+    caseloadCheck(['*'])(req, res, next)
     expect(next).not.toHaveBeenCalled()
     expect(res.redirect).toHaveBeenCalledWith('/authError')
   })
