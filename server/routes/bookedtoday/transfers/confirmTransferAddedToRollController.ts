@@ -1,6 +1,5 @@
 import type { RequestHandler } from 'express'
 import type { PrisonService } from '../../../services'
-import editProfileEnabled from '../../../utils/featureToggles'
 
 export default class ConfirmTransferAddedToRollController {
   public constructor(private readonly prisonService: PrisonService) {}
@@ -23,7 +22,6 @@ export default class ConfirmTransferAddedToRollController {
         prisonNumber,
         prison,
         location,
-        editEnabled: editProfileEnabled(activeCaseLoadId),
       })
     }
   }
