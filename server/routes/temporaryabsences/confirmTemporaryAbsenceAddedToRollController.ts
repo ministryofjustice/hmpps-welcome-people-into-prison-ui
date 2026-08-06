@@ -1,6 +1,5 @@
 import { RequestHandler } from 'express'
 import type { PrisonService } from '../../services'
-import editProfileEnabled from '../../utils/featureToggles'
 
 export default class ConfirmTemporaryAbsenceAddedToRollController {
   public constructor(private readonly prisonService: PrisonService) {}
@@ -23,7 +22,6 @@ export default class ConfirmTemporaryAbsenceAddedToRollController {
         prisonNumber,
         prison,
         location,
-        editEnabled: editProfileEnabled(activeCaseLoadId),
       })
     }
   }

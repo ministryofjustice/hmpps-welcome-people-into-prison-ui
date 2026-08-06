@@ -1,7 +1,6 @@
 import { RequestHandler } from 'express'
 import type { PrisonService } from '../../../../services'
 import { State } from '../state'
-import editProfileEnabled from '../../../../utils/featureToggles'
 
 export default class ConfirmAddedToRollController {
   public constructor(private readonly prisonService: PrisonService) {}
@@ -23,7 +22,6 @@ export default class ConfirmAddedToRollController {
         prison,
         prisonNumber,
         location,
-        editEnabled: editProfileEnabled(activeCaseLoadId),
       })
     }
   }

@@ -44,5 +44,3 @@ generic-service:
     SHOW_RECENT_ARRIVALS: 'true'
     # '*' enables the service for every prison
     ENABLED_PRISONS: '*'
-    EDIT_PROFILE_ENABLED_FROM: "2025-06-01T00:00:00"
-    EDIT_PROFILE_ENABLED_PRISONS: "STI,KMI,HEI,NMI,LCI"
