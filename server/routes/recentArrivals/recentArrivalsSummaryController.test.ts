@@ -139,15 +139,15 @@ describe('GET /recent-arrivals/:id/summary', () => {
       })
   })
 
-  it('should generate correct link to prisoner profile on dps', () => {
+  it('should generate correct link to update personal details', () => {
     return request(app)
       .get('/recent-arrivals/A1234AB/summary')
       .expect(200)
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
         const $ = cheerio.load(res.text)
-        expect($('[data-qa=dps-prisoner-profile-button]').attr('href')).toContain(
-          '/save-backlink?service=welcome-people-into-prison&returnPath=/recent-arrivals/A1234AB/summary&redirectPath=/prisoner/A1234AB',
+        expect($('[data-qa=update-personal-details-button]').attr('href')).toContain(
+          '/save-backlink?service=welcome-people-into-prison&backLinkText=Back to Recent arrivals&returnPath=/recent-arrivals&redirectPath=/prisoner/A1234AB/personal',
         )
       })
   })
