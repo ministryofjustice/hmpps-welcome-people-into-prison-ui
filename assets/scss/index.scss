@@ -1,22 +1,20 @@
-$govuk-global-styles: true;
-$path: "/assets/images/";
+@use "@ministryofjustice/frontend/moj/all" as * with (
+	$govuk-global-styles: true,
+	$moj-assets-path: "/assets/",
+	$moj-page-width: 1170px,
+);
+@use "govuk-frontend/dist/govuk";
 
-$moj-page-width: 1170px;
-$govuk-page-width: $moj-page-width;
-
-@import "govuk-frontend/dist/govuk/index";
-@import "@ministryofjustice/frontend/moj/all";
-@import 'node_modules/@ministryofjustice/hmpps-connect-dps-components/dist/assets/footer';
-@import 'node_modules/@ministryofjustice/hmpps-connect-dps-components/dist/assets/header-bar';
-
-@import './components/homepage';
-@import './components/movement-card';
-@import './components/card';
-@import './components/prisoner-profile-header';
-@import './components/prisoner-profile-image';
-@import './components/transfer-card';
-@import './components/check-records';
-@import './components/feedback-banner';
-@import './components/summary-card';
-@import './components/compliance-panel';
-@import './overrides/local';
+@use './vendor/hmpps-connect-dps-footer';
+@use './vendor/hmpps-connect-dps-header-bar';
+@use './components/homepage';
+@use './components/movement-card';
+@use './components/card';
+@use './components/transfer-card';
+@use './components/check-records';
+@use './components/prisoner-profile-header';
+@use './components/prisoner-profile-image';
+@use './components/feedback-banner';
+@use './components/summary-card';
+@use './components/compliance-panel';
+@use './overrides/local';

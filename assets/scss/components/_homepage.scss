@@ -1,3 +1,5 @@
+@use "@ministryofjustice/frontend/moj/all" as *;
+
 .homepage {
     &-content {
       padding: govuk-spacing(6) 0;
