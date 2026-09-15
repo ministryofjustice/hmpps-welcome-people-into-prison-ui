@@ -61,6 +61,17 @@
                         {% elif temporaryAbsence.bodyScanStatus === 'CLOSE_TO_LIMIT' %}
                             {{ closeToScanLimit(temporaryAbsence.numberOfBodyScansRemaining) }}
                         {% endif %}
+                        {% if temporaryAbsence.relevantAlerts and temporaryAbsence.relevantAlerts.length %}
+                            <ul class="govuk-list govuk-!-margin-top-1">
+                                {% for alert in temporaryAbsence.relevantAlerts %}
+                                    <li>
+                                        <div class="dps-alert-status dps-alert-status--security">
+                                            {{ alert.codeDescription }}
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
                     </div>
                 </dl>
             </div>

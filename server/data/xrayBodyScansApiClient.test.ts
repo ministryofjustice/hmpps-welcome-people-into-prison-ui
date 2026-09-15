@@ -38,11 +38,13 @@ describe('xrayBodyScansApiClient', () => {
       atScanLimit: false,
       fromScanDate: '2026-09-10',
       toScanDate: '2026-09-15',
+      relevantAlerts: [],
     }
 
     it('should return data from api', async () => {
       fakeXrayBodyScansApi
         .get(`/prisoner/A1234AA/scan/summary`)
+        .query({ includeAlerts: 'true' })
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, scanSummary)
 
@@ -67,6 +69,7 @@ describe('xrayBodyScansApiClient', () => {
         atScanLimit: false,
         fromScanDate: '2026-09-10',
         toScanDate: '2026-09-15',
+        relevantAlerts: [],
       },
       {
         prisonerNumber: 'B5678BB',
@@ -82,12 +85,13 @@ describe('xrayBodyScansApiClient', () => {
         atScanLimit: true,
         fromScanDate: '2026-09-10',
         toScanDate: '2026-09-15',
+        relevantAlerts: [],
       },
     ]
 
     it('should return data from api', async () => {
       fakeXrayBodyScansApi
-        .post(`/bulk/summary`, { prisonerNumbers: ['A1234AA', 'B5678BB'] })
+        .post(`/bulk/summary`, { prisonerNumbers: ['A1234AA', 'B5678BB'], includeAlerts: true })
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, scanSummaries)
 

@@ -1,15 +1,20 @@
 import type { BodyScanStatus } from 'body-scan'
 import type { HmppsAuthClient, RestClientBuilder, XrayBodyScansApiClient } from '../data'
+import type { AlertResponse } from '../data/xrayBodyScansApiClient'
 import { associateBy } from '../utils/utils'
 
 type HasPrisonNumber = { prisonNumber: string }
 
-export type WithBodyScanStatus<T extends HasPrisonNumber> = T & { bodyScanStatus: BodyScanStatus }
+export type WithBodyScanStatus<T extends HasPrisonNumber> = T & {
+  bodyScanStatus: BodyScanStatus
+  relevantAlerts: AlertResponse[]
+}
 
 export type WithBodyScanInfo<T extends HasPrisonNumber> = T & {
   numberOfBodyScans: number
   numberOfBodyScansRemaining: number
   bodyScanStatus: BodyScanStatus
+  relevantAlerts: AlertResponse[]
 }
 
 function toBodyScanStatus(atScanLimit: boolean, nearingScanLimit: boolean): BodyScanStatus {
@@ -31,7 +36,11 @@ export class BodyScanInfoDecorator {
     const prisonNumberToSummary = associateBy(summaries, s => s.prisonerNumber)
     return items.map(i => {
       const summary = prisonNumberToSummary.get(i.prisonNumber)
-      return { ...i, bodyScanStatus: (summary ? toBodyScanStatus(summary.atScanLimit, summary.nearingScanLimit) : undefined) as BodyScanStatus }
+      return {
+        ...i,
+        bodyScanStatus: (summary ? toBodyScanStatus(summary.atScanLimit, summary.nearingScanLimit) : undefined) as BodyScanStatus,
+        relevantAlerts: summary?.relevantAlerts ?? [],
+      }
     })
   }
 
@@ -43,6 +52,7 @@ export class BodyScanInfoDecorator {
       numberOfBodyScans: summary.totalCount,
       numberOfBodyScansRemaining: summary.remainingScans,
       bodyScanStatus: toBodyScanStatus(summary.atScanLimit, summary.nearingScanLimit),
+      relevantAlerts: summary.relevantAlerts ?? [],
     }
   }
 }

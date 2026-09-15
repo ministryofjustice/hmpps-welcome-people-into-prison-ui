@@ -1,5 +1,6 @@
 import moment from 'moment'
 import type { Arrival } from 'welcome'
+import type { AlertResponse } from '../data/xrayBodyScansApiClient'
 import ExpectedArrivalsService from './expectedArrivalsService'
 import { NewArrival } from '../routes/bookedtoday/arrivals/state'
 import { raiseAnalyticsEvent } from './raiseAnalyticsEvent'
@@ -57,7 +58,7 @@ describe('Expected arrivals service', () => {
     )
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
     bodyScanInfoDecorator.decorate.mockImplementation(as =>
-      Promise.resolve(as.map(a => ({ ...a, bodyScanStatus: 'OK_TO_SCAN' }))),
+      Promise.resolve(as.map(a => ({ ...a, bodyScanStatus: 'OK_TO_SCAN' as const, relevantAlerts: [] as AlertResponse[] }))),
     )
     bodyScanInfoDecorator.decorateSingle.mockImplementation(as =>
       Promise.resolve({
@@ -65,6 +66,7 @@ describe('Expected arrivals service', () => {
         numberOfBodyScans: 0,
         numberOfBodyScansRemaining: 116,
         bodyScanStatus: 'OK_TO_SCAN',
+        relevantAlerts: [],
       }),
     )
     matchTypeDecorator.decorate.mockImplementation(as => as.map(a => ({ ...a, matchType: MatchType.SINGLE_MATCH })))
@@ -479,6 +481,7 @@ describe('Expected arrivals service', () => {
         numberOfBodyScans: 0,
         numberOfBodyScansRemaining: 116,
         bodyScanStatus: 'OK_TO_SCAN',
+        relevantAlerts: [],
       })
     })
   })

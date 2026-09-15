@@ -2,6 +2,14 @@ import config, { ApiConfig } from '../config'
 import RestClient from './restClient'
 import logger from '../../logger'
 
+export interface AlertResponse {
+  id: string
+  type: string
+  typeDescription: string
+  code: string
+  codeDescription: string
+}
+
 export interface ScanSummaryResponse {
   prisonerNumber: string
   nomisCount: number
@@ -16,6 +24,7 @@ export interface ScanSummaryResponse {
   atScanLimit: boolean
   fromScanDate: string
   toScanDate: string
+  relevantAlerts: AlertResponse[]
 }
 
 export default class XrayBodyScansApiClient {
@@ -29,6 +38,7 @@ export default class XrayBodyScansApiClient {
     logger.info(`xrayBodyScansApiClient: getScanSummary(${prisonerNumber})`)
     return this.restClient.get({
       path: `/prisoner/${encodeURIComponent(prisonerNumber)}/scan/summary`,
+      query: { includeAlerts: 'true' },
     }) as Promise<ScanSummaryResponse>
   }
 
@@ -36,7 +46,7 @@ export default class XrayBodyScansApiClient {
     logger.info(`xrayBodyScansApiClient: getBulkScanSummary(${prisonerNumbers})`)
     return this.restClient.post({
       path: `/bulk/summary`,
-      data: { prisonerNumbers },
+      data: { prisonerNumbers, includeAlerts: true },
     }) as Promise<ScanSummaryResponse[]>
   }
 }

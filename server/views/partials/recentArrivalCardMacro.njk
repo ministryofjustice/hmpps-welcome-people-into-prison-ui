@@ -43,6 +43,17 @@
             {% elif arrival.bodyScanStatus === 'CLOSE_TO_LIMIT' %}
                 {{ closeToScanLimit(arrival.numberOfBodyScansRemaining) }}
             {% endif %}
+            {% if arrival.relevantAlerts and arrival.relevantAlerts.length %}
+                <ul class="govuk-list govuk-!-margin-top-1">
+                    {% for alert in arrival.relevantAlerts %}
+                        <li>
+                            <div class="dps-alert-status dps-alert-status--security">
+                                {{ alert.codeDescription }}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
         </div>
     </dl>
 {% endmacro %}

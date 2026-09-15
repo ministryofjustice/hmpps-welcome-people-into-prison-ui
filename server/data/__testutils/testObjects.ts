@@ -15,6 +15,7 @@ import type {
 import type { BodyScanStatus } from 'body-scan'
 import type { ManagementReportDefinition } from 'management-reporting'
 import { WithBodyScanInfo } from '../../services/bodyScanInfoDecorator'
+import type { AlertResponse } from '../xrayBodyScansApiClient'
 
 import type { NewArrival } from '../../routes/bookedtoday/arrivals/state'
 import type { User } from '../hmppsAuthClient'
@@ -26,6 +27,7 @@ export const withBodyScanStatus = <T>(
 ) => ({
   ...t,
   bodyScanStatus,
+  relevantAlerts: [] as AlertResponse[],
 })
 
 export const withBodyScanInfo = <T>(
@@ -40,6 +42,7 @@ export const withBodyScanInfo = <T>(
   numberOfBodyScans,
   numberOfBodyScansRemaining,
   bodyScanStatus,
+  relevantAlerts: [] as AlertResponse[],
 })
 
 export const withMatchType = <T>(t: T, { matchType = MatchType.SINGLE_MATCH } = {}) => ({
@@ -205,6 +208,7 @@ export const createTransferWithBodyScan = ({
   numberOfBodyScans,
   numberOfBodyScansRemaining,
   bodyScanStatus,
+  relevantAlerts: [] as AlertResponse[],
 })
 
 export const createArrivalResponse = ({ prisonNumber = 'A1234AB', location = 'Reception' } = {}): ArrivalResponse => ({

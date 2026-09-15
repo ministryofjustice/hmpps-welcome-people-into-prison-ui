@@ -89,3 +89,22 @@ $_image-width: 90px;
   color: govuk-colour("orange");
   font-weight: bold;
 }
+
+.dps-alert-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid;
+  padding: 5px 10px;
+  text-align: center;
+  line-height: 1;
+  user-select: none;
+  border-radius: 5px;
+  @include govuk-font($size: 16);
+  color: govuk-colour("black");
+  background-color: govuk-colour("white");
+
+  &--security {
+    border-color: #003078;
+  }
+}

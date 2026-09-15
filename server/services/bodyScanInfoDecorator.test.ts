@@ -24,6 +24,7 @@ const scanSummary = (
   atScanLimit: false,
   fromScanDate: '2026-01-01',
   toScanDate: '2026-09-15',
+  relevantAlerts: [],
   ...overrides,
 })
 
@@ -61,10 +62,10 @@ describe('BodyScanInfoDecorater', () => {
       const result = await service.decorate(arrivals)
 
       expect(result).toStrictEqual([
-        { bodyScanStatus: 'OK_TO_SCAN', prisonNumber: 'A1234AA' },
-        { bodyScanStatus: 'DO_NOT_SCAN', prisonNumber: 'A1234AB' },
-        { bodyScanStatus: 'CLOSE_TO_LIMIT', prisonNumber: 'A1234AC' },
-        { bodyScanStatus: undefined, prisonNumber: 'A1234AD' },
+        { bodyScanStatus: 'OK_TO_SCAN', prisonNumber: 'A1234AA', relevantAlerts: [] },
+        { bodyScanStatus: 'DO_NOT_SCAN', prisonNumber: 'A1234AB', relevantAlerts: [] },
+        { bodyScanStatus: 'CLOSE_TO_LIMIT', prisonNumber: 'A1234AC', relevantAlerts: [] },
+        { bodyScanStatus: undefined, prisonNumber: 'A1234AD', relevantAlerts: [] },
       ])
 
       expect(xrayBodyScansApiClient.getBulkScanSummary).toHaveBeenCalledWith(['A1234AA', 'A1234AB', 'A1234AC', 'A1234AD'])
@@ -84,10 +85,10 @@ describe('BodyScanInfoDecorater', () => {
       ])
 
       expect(result).toStrictEqual([
-        { bodyScanStatus: 'OK_TO_SCAN', prisonNumber: 'A1234AA' },
-        { bodyScanStatus: undefined, prisonNumber: undefined },
-        { bodyScanStatus: 'CLOSE_TO_LIMIT', prisonNumber: 'A1234AC' },
-        { bodyScanStatus: undefined, prisonNumber: undefined },
+        { bodyScanStatus: 'OK_TO_SCAN', prisonNumber: 'A1234AA', relevantAlerts: [] },
+        { bodyScanStatus: undefined, prisonNumber: undefined, relevantAlerts: [] },
+        { bodyScanStatus: 'CLOSE_TO_LIMIT', prisonNumber: 'A1234AC', relevantAlerts: [] },
+        { bodyScanStatus: undefined, prisonNumber: undefined, relevantAlerts: [] },
       ])
 
       expect(xrayBodyScansApiClient.getBulkScanSummary).toHaveBeenCalledWith(['A1234AA', 'A1234AC'])
@@ -106,6 +107,7 @@ describe('BodyScanInfoDecorater', () => {
         numberOfBodyScans: 10,
         numberOfBodyScansRemaining: 106,
         bodyScanStatus: 'OK_TO_SCAN',
+        relevantAlerts: [],
         firstName: 'Jim',
         lastName: 'Smith',
         dateOfBirth: '1973-01-08',

@@ -94,7 +94,8 @@ export default class ExpectedArrivalsService {
     ])
     const allArrivals = [...expectedArrivals, ...transfers]
     const withBodyScan = await this.bodyScanDecorator.decorate(allArrivals)
-    const withBodyScanAndMatchType = this.matchTypeDecorator.decorate(withBodyScan)
+    const withBodyScanPatched = withBodyScan
+    const withBodyScanAndMatchType = this.matchTypeDecorator.decorate(withBodyScanPatched)
 
     return groupBy(withBodyScanAndMatchType, (arrival: DecoratedArrival) => arrival.fromLocationType)
   }
