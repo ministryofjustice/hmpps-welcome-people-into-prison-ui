@@ -78,3 +78,14 @@ $_image-width: 90px;
   padding-bottom: 0;
   border-color: $govuk-error-colour;
 }
+
+.app-inset-text--warning {
+  padding-top: 0;
+  padding-bottom: 0;
+  border-color: govuk-colour("orange");
+}
+
+.app-warning-text {
+  color: govuk-colour("orange");
+  font-weight: bold;
+}

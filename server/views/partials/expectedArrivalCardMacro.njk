@@ -1,4 +1,5 @@
 {% from "../components/do-not-scan.njk" import doNotScan %}
+{% from "../components/close-to-scan-limit.njk" import closeToScanLimit %}
 
 {% macro expectedArrivalCardListContent(arrival, moveType, loopIndex) %}
     <dl class="app-card__meta-list" data-qa="arrival-{{moveType}}-{{loopIndex}}" >
@@ -41,6 +42,8 @@
         <div class="app-card__meta-list-item">
             {% if arrival.bodyScanStatus === 'DO_NOT_SCAN' %}
                 {{ doNotScan() }}
+            {% elif arrival.bodyScanStatus === 'CLOSE_TO_LIMIT' %}
+                {{ closeToScanLimit(arrival.numberOfBodyScansRemaining) }}
             {% endif %}
         </div>
     </dl>
