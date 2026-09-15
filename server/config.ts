@@ -126,6 +126,15 @@ export default {
       },
       agent: DEFAULT_AGENT_CONFIG,
     },
+    xrayBodyScansApi: {
+      url: get('XRAY_BODY_SCANS_API_URL', 'http://localhost:8100', requiredInProduction),
+      healthPath: '/health/ping',
+      timeout: {
+        response: Number(get('XRAY_BODY_SCANS_API_TIMEOUT_RESPONSE', 5000)),
+        deadline: Number(get('XRAY_BODY_SCANS_API_TIMEOUT_DEADLINE', 5000)),
+      },
+      agent: DEFAULT_AGENT_CONFIG,
+    },
   },
   notifications: {
     notifyKey: get('NOTIFY_API_KEY', ''),
