@@ -18,12 +18,12 @@ export const services = () => {
     hmppsAuthClient,
     welcomeClientBuilder,
     prisonRegisterClientBuilder,
-    bodyScanClientBuilder,
+    xrayBodyScansApiClientBuilder,
     notifyClient,
     lockManager,
   } = dataAccess()
 
-  const bodyScanInfoDecorator = new BodyScanInfoDecorator(hmppsAuthClient, bodyScanClientBuilder)
+  const bodyScanInfoDecorator = new BodyScanInfoDecorator(hmppsAuthClient, xrayBodyScansApiClientBuilder)
   const matchTypeDecorator = new MatchTypeDecorator()
   const offenceInfoDecorator = new OffenceInfoDecorator()
 
