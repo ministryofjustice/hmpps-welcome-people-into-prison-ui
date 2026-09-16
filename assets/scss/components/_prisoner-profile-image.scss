@@ -1,3 +1,5 @@
+@use "@ministryofjustice/frontend/moj/all" as *;
+
 .profile-align-image {
     @include govuk-media-query($from: desktop) {
       text-align: right;

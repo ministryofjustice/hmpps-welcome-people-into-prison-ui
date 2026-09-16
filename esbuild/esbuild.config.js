@@ -64,8 +64,17 @@ const main = () => {
   }
 
   const args = process.argv
+  const buildAssetsOnly = args.includes('--build-assets')
+
   if (args.includes('--build')) {
     Promise.all([buildApp(buildConfig), buildAssets(buildConfig)]).catch(e => {
+      process.stderr.write(`${e}\n`)
+      process.exit(1)
+    })
+  }
+
+  if (buildAssetsOnly) {
+    buildAssets(buildConfig).catch(e => {
       process.stderr.write(`${e}\n`)
       process.exit(1)
     })
@@ -98,10 +107,12 @@ const main = () => {
     )
 
     // App
-    chokidar.watch(['server/**/*'], { ...chokidarOptions, ignored: ['**/*.test.ts'] }).on(
-      'all',
-      debounce(() => buildApp(buildConfig).catch(e => process.stderr.write(`${e}\n`))),
-    )
+    if (!buildAssetsOnly) {
+      chokidar.watch(['server/**/*'], { ...chokidarOptions, ignored: ['**/*.test.ts'] }).on(
+        'all',
+        debounce(() => buildApp(buildConfig).catch(e => process.stderr.write(`${e}\n`))),
+      )
+    }
   }
 }
 

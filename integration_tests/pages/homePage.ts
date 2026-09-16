@@ -25,7 +25,7 @@ export default class HomePage extends Page {
 
   commonComponentsHeader = (): PageElement => cy.get('header').contains('Common Components Header')
 
-  commonComponentsFooter = (): PageElement => cy.get('footer').contains('Common Components Footer')
+  commonComponentsFooter = (): PageElement => cy.contains('footer', 'Common Components Footer')
 
   fallbackHeaderUserName = (): PageElement => cy.get('[data-qa=header-user-name]')
 

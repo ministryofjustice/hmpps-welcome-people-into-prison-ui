@@ -40,7 +40,7 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     assetManifest = JSON.parse(fs.readFileSync(assetMetadataPath, 'utf8'))
   } catch (e) {
     if (process.env.NODE_ENV !== 'test') {
-      logger.error(e, 'Could not read asset manifest file')
+      logger.error('Could not read asset manifest file', e)
     }
   }
 
@@ -48,7 +48,8 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     [
       path.join(__dirname, '../../server/views'),
       'node_modules/govuk-frontend/dist',
-      'node_modules/govuk-frontend/dist/components/',
+      'node_modules/govuk-frontend/dist/govuk',
+      'node_modules/govuk-frontend/dist/govuk/components/',
       'node_modules/@ministryofjustice/frontend/',
       'node_modules/@ministryofjustice/frontend/moj/components/',
       'node_modules/@ministryofjustice/hmpps-connect-dps-components/dist/assets/',
