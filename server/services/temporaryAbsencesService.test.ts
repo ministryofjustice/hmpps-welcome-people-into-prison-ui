@@ -22,7 +22,7 @@ describe('Temporary absences service', () => {
     service = new TemporaryAbsencesService(hmppsAuthClient, WelcomeClientFactory, bodyScanInfoDecorator)
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
     bodyScanInfoDecorator.decorate.mockImplementation(as =>
-      Promise.resolve(as.map(a => ({ ...a, bodyScanStatus: 'OK_TO_SCAN' as const, relevantAlerts: [] as AlertResponse[] }))),
+      Promise.resolve(as.map(a => ({ ...a, bodyScanStatus: 'OK_TO_SCAN' as const, relevantAlerts: [] as AlertResponse[], latestScan: null, nomisCount: 0 }))),
     )
   })
 

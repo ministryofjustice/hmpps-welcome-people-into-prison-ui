@@ -10,6 +10,13 @@ export interface AlertResponse {
   codeDescription: string
 }
 
+export interface LatestScan {
+  source: 'DPS' | 'NOMIS'
+  scanDate: string | null
+  outcomeDescription?: string
+  scanDetails?: string | null
+}
+
 export interface ScanSummaryResponse {
   prisonerNumber: string
   nomisCount: number
@@ -25,6 +32,7 @@ export interface ScanSummaryResponse {
   fromScanDate: string
   toScanDate: string
   relevantAlerts: AlertResponse[]
+  latestScan: LatestScan | null
 }
 
 export default class XrayBodyScansApiClient {
@@ -38,7 +46,7 @@ export default class XrayBodyScansApiClient {
     logger.info(`xrayBodyScansApiClient: getScanSummary(${prisonerNumber})`)
     return this.restClient.get({
       path: `/prisoner/${encodeURIComponent(prisonerNumber)}/scan/summary`,
-      query: { includeAlerts: 'true' },
+      query: { includeAlerts: 'true', includeLatestScan: 'true' },
     }) as Promise<ScanSummaryResponse>
   }
 

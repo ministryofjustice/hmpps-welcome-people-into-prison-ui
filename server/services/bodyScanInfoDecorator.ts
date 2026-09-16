@@ -1,6 +1,6 @@
 import type { BodyScanStatus } from 'body-scan'
 import type { HmppsAuthClient, RestClientBuilder, XrayBodyScansApiClient } from '../data'
-import type { AlertResponse } from '../data/xrayBodyScansApiClient'
+import type { AlertResponse, LatestScan } from '../data/xrayBodyScansApiClient'
 import { associateBy } from '../utils/utils'
 
 type HasPrisonNumber = { prisonNumber: string }
@@ -13,8 +13,10 @@ export type WithBodyScanStatus<T extends HasPrisonNumber> = T & {
 export type WithBodyScanInfo<T extends HasPrisonNumber> = T & {
   numberOfBodyScans: number
   numberOfBodyScansRemaining: number
+  nomisCount: number
   bodyScanStatus: BodyScanStatus
   relevantAlerts: AlertResponse[]
+  latestScan: LatestScan | null
 }
 
 function toBodyScanStatus(atScanLimit: boolean, nearingScanLimit: boolean): BodyScanStatus {
@@ -51,8 +53,10 @@ export class BodyScanInfoDecorator {
       ...item,
       numberOfBodyScans: summary.totalCount,
       numberOfBodyScansRemaining: summary.remainingScans,
+      nomisCount: summary.nomisCount,
       bodyScanStatus: toBodyScanStatus(summary.atScanLimit, summary.nearingScanLimit),
       relevantAlerts: summary.relevantAlerts ?? [],
+      latestScan: summary.latestScan ?? null,
     }
   }
 }

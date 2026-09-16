@@ -25,6 +25,7 @@ const scanSummary = (
   fromScanDate: '2026-01-01',
   toScanDate: '2026-09-15',
   relevantAlerts: [],
+  latestScan: null,
   ...overrides,
 })
 
@@ -106,8 +107,10 @@ describe('BodyScanInfoDecorater', () => {
       expect(result).toStrictEqual({
         numberOfBodyScans: 10,
         numberOfBodyScansRemaining: 106,
+        nomisCount: 0,
         bodyScanStatus: 'OK_TO_SCAN',
         relevantAlerts: [],
+        latestScan: null,
         firstName: 'Jim',
         lastName: 'Smith',
         dateOfBirth: '1973-01-08',

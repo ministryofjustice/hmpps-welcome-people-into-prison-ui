@@ -39,12 +39,13 @@ describe('xrayBodyScansApiClient', () => {
       fromScanDate: '2026-09-10',
       toScanDate: '2026-09-15',
       relevantAlerts: [],
+      latestScan: null,
     }
 
     it('should return data from api', async () => {
       fakeXrayBodyScansApi
         .get(`/prisoner/A1234AA/scan/summary`)
-        .query({ includeAlerts: 'true' })
+        .query({ includeAlerts: 'true', includeLatestScan: 'true' })
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, scanSummary)
 
@@ -70,6 +71,7 @@ describe('xrayBodyScansApiClient', () => {
         fromScanDate: '2026-09-10',
         toScanDate: '2026-09-15',
         relevantAlerts: [],
+        latestScan: null,
       },
       {
         prisonerNumber: 'B5678BB',
@@ -86,6 +88,7 @@ describe('xrayBodyScansApiClient', () => {
         fromScanDate: '2026-09-10',
         toScanDate: '2026-09-15',
         relevantAlerts: [],
+        latestScan: null,
       },
     ]
 

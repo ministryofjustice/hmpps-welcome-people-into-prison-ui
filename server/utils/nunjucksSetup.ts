@@ -131,6 +131,8 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addGlobal('showPrisonTransferSummary', config.showPrisonTransferSummary)
   njkEnv.addGlobal('showBreadCrumb', config.showBreadCrumb)
   njkEnv.addGlobal('showRecentArrivals', config.showRecentArrivals)
+  njkEnv.addGlobal('newXRayBodyScansIntegrationEnabled', config.newXRayBodyScansIntegrationEnabled)
+  njkEnv.addGlobal('xrayBodyScansUiUrl', config.xrayBodyScansUiUrl)
   njkEnv.addGlobal('femalePrisons', config.femalePrisons)
   njkEnv.addGlobal('serviceOutageBannerEnabled', config.serviceOutageBannerEnabled)
   njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)

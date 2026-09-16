@@ -142,6 +142,7 @@ export default {
     feedbackTemplateId: 'b753ee4e-f0fe-4788-b252-ac28631555f6',
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
+  xrayBodyScansUiUrl: get('X_RAY_BODY_SCANS_UI_URL', 'http://localhost:3001', requiredInProduction),
   analytics: {
     googleAnalyticsId: get('GOOGLE_ANALYTICS_ID', ''),
     tagManagerContainerId: get('TAG_MANAGER_CONTAINER_ID', ''),
@@ -165,4 +166,5 @@ export default {
   showBreadCrumb: get('SHOW_BREADCRUMB', 'false', requiredInProduction) === 'true',
   showRecentArrivals: get('SHOW_RECENT_ARRIVALS', 'false', requiredInProduction) === 'true',
   loadReportDefinitionsOnStartup: get('LOAD_DPR_ON_STARTUP', 'false') === 'true',
+  newXRayBodyScansIntegrationEnabled: get('NEW_XRAY_BODY_SCANS_INTEGRATION_ENABLED', 'false', requiredInProduction) === 'true',
 }
