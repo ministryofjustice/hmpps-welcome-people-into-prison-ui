@@ -169,7 +169,7 @@
     "@typescript-eslint/parser": "8.67.0",
     "audit-ci": "^7.1.0",
     "concurrently": "^10.0.5",
-    "cypress": "15.20.1",
+    "cypress": "16.0.0",
     "cypress-multi-reporters": "^2.0.5",
     "dotenv": "^17.4.2",
     "esbuild": "^0.28.2",
