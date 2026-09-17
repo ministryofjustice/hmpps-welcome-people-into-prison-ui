@@ -65,7 +65,7 @@ export default class ExpectedArrivalsService {
     const twoDaysAgo = moment().subtract(2, 'days').startOf('day')
 
     const rawRecentArrivals = await this.getRecentArrivals(agencyId, twoDaysAgo, today)
-    const recentArrivals = await this.bodyScanDecorator.decorate(rawRecentArrivals)
+    const recentArrivals = await this.bodyScanDecorator.decorate(rawRecentArrivals, agencyId)
     const mappedArrivals = new Map<Moment, WithBodyScanStatus<RecentArrival>[]>()
 
     mappedArrivals.set(today, recentArrivals.filter(this.isArrivalArrivedOnDay(today)))
@@ -93,8 +93,9 @@ export default class ExpectedArrivalsService {
       this.getTransfers(agencyId),
     ])
     const allArrivals = [...expectedArrivals, ...transfers]
-    const withBodyScan = await this.bodyScanDecorator.decorate(allArrivals)
-    const withBodyScanAndMatchType = this.matchTypeDecorator.decorate(withBodyScan)
+    const withBodyScan = await this.bodyScanDecorator.decorate(allArrivals, agencyId)
+    const withBodyScanPatched = withBodyScan
+    const withBodyScanAndMatchType = this.matchTypeDecorator.decorate(withBodyScanPatched)
 
     return groupBy(withBodyScanAndMatchType, (arrival: DecoratedArrival) => arrival.fromLocationType)
   }
@@ -120,10 +121,14 @@ export default class ExpectedArrivalsService {
     return arrival.potentialMatches[0]
   }
 
-  public async getArrivalAndSummaryDetails(username: string, id: string): Promise<ArrivalWithSummaryDetails> {
+  public async getArrivalAndSummaryDetails(
+    username: string,
+    id: string,
+    activeCaseLoadId: string,
+  ): Promise<ArrivalWithSummaryDetails> {
     const arrival = await this.getArrival(username, id)
     const singleMatch = arrival.potentialMatches[0]
-    const summary = await this.getPrisonerSummaryDetails(singleMatch.prisonNumber)
+    const summary = await this.getPrisonerSummaryDetails(singleMatch.prisonNumber, activeCaseLoadId)
     return { arrival, summary }
   }
 
@@ -223,9 +228,12 @@ export default class ExpectedArrivalsService {
     return this.welcomeClientFactory(token).getPrisonerDetails(prisonNumber)
   }
 
-  public async getPrisonerSummaryDetails(prisonNumber: string): Promise<WithBodyScanInfo<PrisonerDetails>> {
+  public async getPrisonerSummaryDetails(
+    prisonNumber: string,
+    activeCaseLoadId: string,
+  ): Promise<WithBodyScanInfo<PrisonerDetails>> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const prisonerDetails = await this.welcomeClientFactory(token).getPrisonerDetails(prisonNumber)
-    return this.bodyScanDecorator.decorateSingle(prisonerDetails)
+    return this.bodyScanDecorator.decorateSingle(prisonerDetails, activeCaseLoadId)
   }
 }

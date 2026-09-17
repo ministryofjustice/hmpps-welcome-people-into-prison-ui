@@ -9,6 +9,7 @@ import fs from 'fs'
 import { logger } from 'bs-logger'
 import config from '../config'
 import { calculateAge, generateCurrentYear } from './utils'
+import newXRayBodyScansEnabled from './featureToggles'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -131,6 +132,8 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addGlobal('showPrisonTransferSummary', config.showPrisonTransferSummary)
   njkEnv.addGlobal('showBreadCrumb', config.showBreadCrumb)
   njkEnv.addGlobal('showRecentArrivals', config.showRecentArrivals)
+  njkEnv.addGlobal('xrayBodyScansUiUrl', config.xrayBodyScansUiUrl)
+  njkEnv.addGlobal('newXRayBodyScansEnabled', newXRayBodyScansEnabled)
   njkEnv.addGlobal('femalePrisons', config.femalePrisons)
   njkEnv.addGlobal('serviceOutageBannerEnabled', config.serviceOutageBannerEnabled)
   njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)

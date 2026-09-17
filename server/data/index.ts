@@ -9,6 +9,7 @@ import { RedisTokenStore } from './tokenStore'
 import WelcomeClient from './welcomeClient'
 import PrisonRegisterClient from './prisonRegisterClient'
 import BodyScanClient from './bodyScanClient'
+import XrayBodyScansApiClient from './xrayBodyScansApiClient'
 import notifyClient from './notifyClient'
 import LockManager from './lockManager'
 import applicationInfoSupplier from '../applicationInfo'
@@ -32,9 +33,19 @@ export const dataAccess = () => {
       new PrisonRegisterClient(token)) as RestClientBuilder<PrisonRegisterClient>,
 
     bodyScanClientBuilder: ((token: string) => new BodyScanClient(token)) as RestClientBuilder<BodyScanClient>,
+    xrayBodyScansApiClientBuilder: ((token: string) =>
+      new XrayBodyScansApiClient(token)) as RestClientBuilder<XrayBodyScansApiClient>,
     lockManager: new LockManager(redisClient),
   }
 }
 export type DataAccess = ReturnType<typeof dataAccess>
 
-export { WelcomeClient, PrisonRegisterClient, BodyScanClient, HmppsAuthClient, RestClientBuilder, LockManager }
+export {
+  WelcomeClient,
+  PrisonRegisterClient,
+  BodyScanClient,
+  XrayBodyScansApiClient,
+  HmppsAuthClient,
+  RestClientBuilder,
+  LockManager,
+}
