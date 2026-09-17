@@ -1,6 +1,6 @@
 import { addMinutes, formatISO, subMinutes } from 'date-fns'
 import config from '../config'
-import { newXRayBodyScansEnabled } from './featureToggles'
+import newXRayBodyScansEnabled from './featureToggles'
 
 describe('featureToggles', () => {
   describe('newXRayBodyScansEnabled', () => {

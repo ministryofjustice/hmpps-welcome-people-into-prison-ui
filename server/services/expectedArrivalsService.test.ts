@@ -58,7 +58,15 @@ describe('Expected arrivals service', () => {
     )
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
     bodyScanInfoDecorator.decorate.mockImplementation(as =>
-      Promise.resolve(as.map(a => ({ ...a, bodyScanStatus: 'OK_TO_SCAN' as const, relevantAlerts: [] as AlertResponse[], latestScan: null as LatestScan | null, nomisCount: 0 }))),
+      Promise.resolve(
+        as.map(a => ({
+          ...a,
+          bodyScanStatus: 'OK_TO_SCAN' as const,
+          relevantAlerts: [] as AlertResponse[],
+          latestScan: null as LatestScan | null,
+          nomisCount: 0,
+        })),
+      ),
     )
     bodyScanInfoDecorator.decorateSingle.mockImplementation(as =>
       Promise.resolve({

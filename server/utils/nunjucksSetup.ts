@@ -9,7 +9,7 @@ import fs from 'fs'
 import { logger } from 'bs-logger'
 import config from '../config'
 import { calculateAge, generateCurrentYear } from './utils'
-import { newXRayBodyScansEnabled } from './featureToggles'
+import newXRayBodyScansEnabled from './featureToggles'
 
 const production = process.env.NODE_ENV === 'production'
 

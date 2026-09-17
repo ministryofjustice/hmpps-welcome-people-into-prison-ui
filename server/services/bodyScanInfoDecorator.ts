@@ -2,7 +2,7 @@ import type { BodyScanStatus } from 'body-scan'
 import type { HmppsAuthClient, RestClientBuilder, BodyScanClient, XrayBodyScansApiClient } from '../data'
 import type { AlertResponse, LatestScan } from '../data/xrayBodyScansApiClient'
 import { associateBy } from '../utils/utils'
-import { newXRayBodyScansEnabled } from '../utils/featureToggles'
+import newXRayBodyScansEnabled from '../utils/featureToggles'
 
 type HasPrisonNumber = { prisonNumber: string }
 
@@ -49,7 +49,9 @@ export class BodyScanInfoDecorator {
         const summary = prisonNumberToSummary.get(i.prisonNumber)
         return {
           ...i,
-          bodyScanStatus: (summary ? toBodyScanStatus(summary.atScanLimit, summary.nearingScanLimit) : undefined) as BodyScanStatus,
+          bodyScanStatus: (summary
+            ? toBodyScanStatus(summary.atScanLimit, summary.nearingScanLimit)
+            : undefined) as BodyScanStatus,
           relevantAlerts: summary?.relevantAlerts ?? [],
           latestScan: summary?.latestScan ?? null,
           nomisCount: summary?.nomisCount ?? 0,
@@ -87,8 +89,9 @@ export class BodyScanInfoDecorator {
       }
     }
 
-    const { numberOfBodyScans, numberOfBodyScansRemaining, bodyScanStatus } =
-      await this.bodyScanClientFactory(token).getSingleBodyScanInfo(item.prisonNumber)
+    const { numberOfBodyScans, numberOfBodyScansRemaining, bodyScanStatus } = await this.bodyScanClientFactory(
+      token,
+    ).getSingleBodyScanInfo(item.prisonNumber)
     return {
       ...item,
       numberOfBodyScans,
