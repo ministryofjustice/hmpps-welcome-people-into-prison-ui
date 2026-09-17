@@ -39,11 +39,11 @@
         </div>
         <div class="app-card__meta-list-item">
             {% if arrival.bodyScanStatus === 'DO_NOT_SCAN' %}
-                {{ doNotScan() }}
-            {% elif arrival.bodyScanStatus === 'CLOSE_TO_LIMIT' %}
+                {{ doNotScan(user.activeCaseLoadId) }}
+            {% elif arrival.bodyScanStatus === 'CLOSE_TO_LIMIT' and newXRayBodyScansEnabled(user.activeCaseLoadId) %}
                 {{ closeToScanLimit(arrival.numberOfBodyScansRemaining) }}
             {% endif %}
-            {% if arrival.relevantAlerts and arrival.relevantAlerts.length %}
+            {% if newXRayBodyScansEnabled(user.activeCaseLoadId) and arrival.relevantAlerts and arrival.relevantAlerts.length %}
                 <ul class="govuk-list govuk-!-margin-top-1">
                     {% for alert in arrival.relevantAlerts %}
                         <li>

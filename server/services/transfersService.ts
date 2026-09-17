@@ -22,7 +22,7 @@ export default class TransfersService {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const welcomeClient = this.welcomeClientFactory(token)
     const transfer = await welcomeClient.getTransfer(agencyId, prisonNumber)
-    return this.bodyScanInfoDecorator.decorateSingle(transfer)
+    return this.bodyScanInfoDecorator.decorateSingle(transfer, agencyId)
   }
 
   public async confirmTransfer(

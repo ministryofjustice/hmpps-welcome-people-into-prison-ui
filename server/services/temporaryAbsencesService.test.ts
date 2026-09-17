@@ -1,5 +1,5 @@
 import TemporaryAbsencesService from './temporaryAbsencesService'
-import type { AlertResponse } from '../data/xrayBodyScansApiClient'
+import type { AlertResponse, LatestScan } from '../data/xrayBodyScansApiClient'
 import { createTemporaryAbsence, withBodyScanStatus } from '../data/__testutils/testObjects'
 import { createMockHmppsAuthClient, createMockWelcomeClient } from '../data/__testutils/mocks'
 import { createMockBodyScanInfoDecorator } from './__testutils/mocks'
@@ -22,7 +22,7 @@ describe('Temporary absences service', () => {
     service = new TemporaryAbsencesService(hmppsAuthClient, WelcomeClientFactory, bodyScanInfoDecorator)
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
     bodyScanInfoDecorator.decorate.mockImplementation(as =>
-      Promise.resolve(as.map(a => ({ ...a, bodyScanStatus: 'OK_TO_SCAN' as const, relevantAlerts: [] as AlertResponse[], latestScan: null, nomisCount: 0 }))),
+      Promise.resolve(as.map(a => ({ ...a, bodyScanStatus: 'OK_TO_SCAN' as const, relevantAlerts: [] as AlertResponse[], latestScan: null as LatestScan | null, nomisCount: 0 }))),
     )
   })
 

@@ -24,7 +24,7 @@ export const createMockPrisonService = () => new PrisonService(null, null) as je
 export const createMockTransfersService = () => new TransfersService(null, null, null) as jest.Mocked<TransfersService>
 
 export const createMockBodyScanInfoDecorator = () =>
-  new BodyScanInfoDecorator(null, null) as jest.Mocked<BodyScanInfoDecorator>
+  new BodyScanInfoDecorator(null, null, null) as jest.Mocked<BodyScanInfoDecorator>
 
 export const createMockMatchTypeDecorator = () => new MatchTypeDecorator() as jest.Mocked<MatchTypeDecorator>
 

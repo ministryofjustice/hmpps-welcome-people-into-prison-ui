@@ -166,5 +166,8 @@ export default {
   showBreadCrumb: get('SHOW_BREADCRUMB', 'false', requiredInProduction) === 'true',
   showRecentArrivals: get('SHOW_RECENT_ARRIVALS', 'false', requiredInProduction) === 'true',
   loadReportDefinitionsOnStartup: get('LOAD_DPR_ON_STARTUP', 'false') === 'true',
-  newXRayBodyScansIntegrationEnabled: get('NEW_XRAY_BODY_SCANS_INTEGRATION_ENABLED', 'false', requiredInProduction) === 'true',
+  featureToggles: {
+    newXRayBodyScansEnabledFrom: get('NEW_XRAY_BODY_SCANS_ENABLED_FROM', '2099-01-01T00:00:00'),
+    newXRayBodyScansEnabledPrisons: get('NEW_XRAY_BODY_SCANS_ENABLED_PRISONS', []),
+  },
 }

@@ -1,10 +1,19 @@
-{% macro doNotScan() %}
+{% macro doNotScan(activeCaseLoadId) %}
 <div data-qa="do-not-scan" class="govuk-inset-text govuk-!-margin-top-0 govuk-!-font-size-16 app-inset-text--narrow-border app-inset-text--important">
-    <dt class="app-card__meta-list-key govuk-error-message govuk-!-margin-bottom-0 govuk-!-font-size-16">
-        Scan limit reached
-    </dt>
-    <dd class="app-card__meta-list-value">
-        No more X-ray body scans allowed this year
-    </dd>
+    {% if newXRayBodyScansEnabled(activeCaseLoadId) %}
+        <dt class="app-card__meta-list-key govuk-error-message govuk-!-margin-bottom-0 govuk-!-font-size-16">
+            Scan limit reached
+        </dt>
+        <dd class="app-card__meta-list-value">
+            No more X-ray body scans allowed this year
+        </dd>
+    {% else %}
+        <dt class="app-card__meta-list-key">
+            Do not scan
+        </dt>
+        <dd class="app-card__meta-list-value">
+            Annual body scan limit reached
+        </dd>
+    {% endif %}
 </div>
 {% endmacro %}

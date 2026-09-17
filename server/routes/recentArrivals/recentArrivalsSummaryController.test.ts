@@ -30,7 +30,7 @@ describe('GET /recent-arrivals/:id/summary', () => {
     return request(app)
       .get('/recent-arrivals/A1234AB/summary')
       .expect(res => {
-        expect(expectedArrivalsService.getPrisonerSummaryDetails).toHaveBeenCalledWith('A1234AB')
+        expect(expectedArrivalsService.getPrisonerSummaryDetails).toHaveBeenCalledWith('A1234AB', expect.any(String))
       })
   })
 
