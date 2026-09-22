@@ -120,7 +120,11 @@ export default class ExpectedArrivalsService {
     return arrival.potentialMatches[0]
   }
 
-  public async getArrivalAndSummaryDetails(username: string, id: string, activeCaseLoadId: string): Promise<ArrivalWithSummaryDetails> {
+  public async getArrivalAndSummaryDetails(
+    username: string,
+    id: string,
+    activeCaseLoadId: string,
+  ): Promise<ArrivalWithSummaryDetails> {
     const arrival = await this.getArrival(username, id)
     const singleMatch = arrival.potentialMatches[0]
     const summary = await this.getPrisonerSummaryDetails(singleMatch.prisonNumber, activeCaseLoadId)
@@ -223,7 +227,10 @@ export default class ExpectedArrivalsService {
     return this.welcomeClientFactory(token).getPrisonerDetails(prisonNumber)
   }
 
-  public async getPrisonerSummaryDetails(prisonNumber: string, activeCaseLoadId: string): Promise<WithBodyScanInfo<PrisonerDetails>> {
+  public async getPrisonerSummaryDetails(
+    prisonNumber: string,
+    activeCaseLoadId: string,
+  ): Promise<WithBodyScanInfo<PrisonerDetails>> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const prisonerDetails = await this.welcomeClientFactory(token).getPrisonerDetails(prisonNumber)
     return this.bodyScanDecorator.decorateSingle(prisonerDetails, activeCaseLoadId)

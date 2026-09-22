@@ -65,12 +65,15 @@ describe('BodyScanInfoDecorater', () => {
     })
 
     test('does not request body scans for things without prison numbers', async () => {
-      const result = await service.decorate([
-        { prisonNumber: 'A1234AA' },
-        { prisonNumber: undefined },
-        { prisonNumber: 'A1234AC' },
-        { prisonNumber: undefined },
-      ], 'MDI')
+      const result = await service.decorate(
+        [
+          { prisonNumber: 'A1234AA' },
+          { prisonNumber: undefined },
+          { prisonNumber: 'A1234AC' },
+          { prisonNumber: undefined },
+        ],
+        'MDI',
+      )
 
       expect(result).toStrictEqual([
         { bodyScanStatus: 'OK_TO_SCAN', prisonNumber: 'A1234AA' },

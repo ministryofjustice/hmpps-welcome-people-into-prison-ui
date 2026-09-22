@@ -145,7 +145,7 @@ export default {
       agent: DEFAULT_AGENT_CONFIG,
     },
   },
-  xrayBodyScansUiUrl: get('X_RAY_BODY_SCANS_UI_URL', 'http://localhost:3001', requiredInProduction),
+  xrayBodyScansUiUrl: get('XRAY_BODY_SCANS_UI_URL', 'http://localhost:3001', requiredInProduction),
   notifications: {
     notifyKey: get('NOTIFY_API_KEY', ''),
     feedbackEmail: get('FEEDBACK_EMAIL', ''),

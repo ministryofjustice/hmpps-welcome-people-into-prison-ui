@@ -23,10 +23,7 @@ context('A user can view all recent arrivals', () => {
     cy.task('stubUserCaseLoads')
     cy.task('stubRecentArrivals', { caseLoadId: 'MDI', recentArrivals })
     cy.task('stubMissingPrisonerImage')
-    cy.task('stubBulkGetXrayBodyScans', [
-      xrayBodyScans.doNotScan('A1234AB'),
-      xrayBodyScans.okToScan('G0015GF'),
-    ])
+    cy.task('stubBulkGetXrayBodyScans', [xrayBodyScans.doNotScan('A1234AB'), xrayBodyScans.okToScan('G0015GF')])
     cy.task('stubPrisonerDetails', recentArrival)
   })
 
@@ -156,7 +153,6 @@ context('A user can view all recent arrivals', () => {
       .should('contain.text', 'Scan limit reached')
       .and('contain.text', 'No more scans allowed this year')
   })
-
 })
 
 context('A user with XRBS permissions can view scan links', () => {

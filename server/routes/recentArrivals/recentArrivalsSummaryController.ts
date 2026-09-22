@@ -31,7 +31,7 @@ export default class RecentArrivalsSummaryController {
 
         return res.render('pages/recentArrivals/recentArrivalsSummary.njk', { arrival, prisonerPermissions })
       }
-      
+
       return res.render('pages/recentArrivals/recentArrivalsSummary.njk', { arrival })
     }
   }
