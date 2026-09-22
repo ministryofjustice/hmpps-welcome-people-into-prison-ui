@@ -32,7 +32,7 @@
   },
   "engines": {
     "node": "^24",
-    "npm": "^11"
+    "npm": "11 || 12"
   },
   "jest": {
     "transform": {
@@ -97,9 +97,9 @@
     ]
   },
   "dependencies": {
-    "@ministryofjustice/frontend": "^5.2.1",
+    "@ministryofjustice/frontend": "^11.0.1",
     "@ministryofjustice/hmpps-connect-dps-components": "^2.2.0",
-    "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "^4.32.1",
+    "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "9.2.3",
     "@ministryofjustice/hmpps-monitoring": "^2.1.0",
     "agentkeepalive": "^4.6.0",
     "applicationinsights": "^2.9.8",
@@ -121,12 +121,12 @@
     "express-session": "^1.19.0",
     "glob": "^13.0.6",
     "googleapis": "178.1.1",
-    "govuk-frontend": "^5.14.0",
+    "govuk-frontend": "^6.5.1",
     "helmet": "^8.3.0",
     "http-errors": "^2.0.1",
     "jquery": "^3.7.1",
     "jwt-decode": "^4.0.0",
-    "moment": "^2.31.0",
+    "moment": "2.31.0",
     "nocache": "^4.0.0",
     "notifications-node-client": "^8.5.0",
     "nunjucks": "^3.2.4",
@@ -193,26 +193,14 @@
     "typescript": "^5.9.3"
   },
   "overrides": {
-    "diff": "9.0.0",
+    "@opentelemetry/core": "^2.11.0",
     "@types/express-serve-static-core": "4.19.9",
     "axios": ">=1.20.0",
-    "serialize-javascript": ">=7.1.1",
-    "undici": ">=8.10.2",
-    "shell-quote": ">=1.10.0",
     "brace-expansion": ">=5.0.12",
-    "json-2-csv": ">=5.6.0",
-    "qs": ">=6.16.0",
-    "@opentelemetry/core": "^2.11.0",
-    "tar": "^7.5.22",
     "cypress": {
       "tmp": "0.2.7"
     },
-    "superagent": {
-      "formidable": "3.5.4"
-    },
-    "nunjucks": {
-      "chokidar": "5.0.0"
-    },
+    "diff": "9.0.0",
     "jest": {
       "jest-core": {
         "micromatch": "4.0.8"
@@ -225,6 +213,19 @@
           "statements": 0
         }
       }
-    }
+    },
+    "json-2-csv": ">=5.6.0",
+    "moment": "2.31.0",
+    "nunjucks": {
+      "chokidar": "5.0.0"
+    },
+    "qs": ">=6.16.0",
+    "serialize-javascript": ">=7.1.1",
+    "shell-quote": ">=1.10.0",
+    "superagent": {
+      "formidable": "3.5.4"
+    },
+    "tar": "^7.5.22",
+    "undici": ">=8.10.2"
   }
 }
