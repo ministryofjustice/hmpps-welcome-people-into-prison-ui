@@ -153,6 +153,19 @@ context('A user can view all recent arrivals', () => {
       .should('contain.text', 'Scan limit reached')
       .and('contain.text', 'No more scans allowed this year')
   })
+
+  it('Should display legacy NOMIS count info when nomisCount is greater than zero', () => {
+    cy.task('stubGetXrayBodyScan', xrayBodyScans.withNomisCount(recentArrival.prisonNumber))
+    cy.task('stubGetPrisoner', recentArrival.prisonNumber)
+
+    cy.signIn()
+    const recentArrivalsPage = RecentArrivalsPage.goTo()
+    recentArrivalsPage.recentArrivals(1, today).name().click()
+
+    const prisonerSummaryPage = new PrisonerSummaryPage(`${recentArrival.lastName}, ${recentArrival.firstName}`)
+    prisonerSummaryPage.checkOnPage()
+    cy.get('#body-scan').should('contain.text', 'Scan total includes DPS and legacy records')
+  })
 })
 
 context('XRBS scan card links', () => {
@@ -208,10 +221,7 @@ context('XRBS scan card links', () => {
       prisonerSummaryPage.checkOnPage()
       prisonerSummaryPage.xrayAtLimitText().should('contain.text', 'Scan limit reached')
       cy.get('a').contains('Check body scan details').should('have.attr', 'href').and('include', '/x-ray-body-scans')
-      cy.get('a')
-        .contains('Record an X-ray body scan')
-        .should('have.attr', 'href')
-        .and('include', '/record-body-scan')
+      cy.get('a').contains('Record a new scan').should('have.attr', 'href').and('include', '/record-body-scan')
     })
   })
 })
