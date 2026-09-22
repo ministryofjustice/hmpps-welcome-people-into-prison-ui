@@ -155,30 +155,63 @@ context('A user can view all recent arrivals', () => {
   })
 })
 
-context('A user with XRBS permissions can view scan links', () => {
-  beforeEach(() => {
-    cy.task('reset')
-    cy.task('stubSignIn', ['ROLE_PRISON_RECEPTION', 'ROLE_PRISON', 'ROLE_DPS_APPLICATION_DEVELOPER'] as never)
-    cy.task('stubPrison', 'MDI')
-    cy.task('stubAuthUser')
-    cy.task('stubUserCaseLoads')
-    cy.task('stubRecentArrivals', { caseLoadId: 'MDI', recentArrivals })
-    cy.task('stubMissingPrisonerImage')
-    cy.task('stubBulkGetXrayBodyScans', [xrayBodyScans.doNotScan(recentArrival.prisonNumber)])
-    cy.task('stubPrisonerDetails', recentArrival)
-    cy.task('stubGetXrayBodyScan', xrayBodyScans.doNotScan(recentArrival.prisonNumber))
-    cy.task('stubGetPrisoner', recentArrival.prisonNumber)
-    cy.signIn()
-  })
-
-  it('Should display scan links when user has read and edit permissions', () => {
+context('XRBS scan card links', () => {
+  const navigateToSummary = () => {
     const recentArrivalsPage = RecentArrivalsPage.goTo()
     recentArrivalsPage.recentArrivals(1, today).name().click()
+    return new PrisonerSummaryPage(`${recentArrival.lastName}, ${recentArrival.firstName}`)
+  }
 
-    const prisonerSummaryPage = new PrisonerSummaryPage(`${recentArrival.lastName}, ${recentArrival.firstName}`)
-    prisonerSummaryPage.checkOnPage()
-    prisonerSummaryPage.xrayAtLimitText().should('contain.text', 'Scan limit reached')
-    cy.get('a').contains('Check body scan details').should('exist')
-    cy.get('a').contains('Record a new scan').should('exist')
+  context('when user has XRBS permissions', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', ['ROLE_PRISON_RECEPTION', 'ROLE_PRISON', 'ROLE_DPS_APPLICATION_DEVELOPER'] as never)
+      cy.task('stubPrison', 'MDI')
+      cy.task('stubAuthUser')
+      cy.task('stubUserCaseLoads')
+      cy.task('stubRecentArrivals', { caseLoadId: 'MDI', recentArrivals })
+      cy.task('stubMissingPrisonerImage')
+      cy.task('stubBulkGetXrayBodyScans', [xrayBodyScans.doNotScan(recentArrival.prisonNumber)])
+      cy.task('stubPrisonerDetails', recentArrival)
+      cy.task('stubGetXrayBodyScan', xrayBodyScans.doNotScan(recentArrival.prisonNumber))
+      cy.task('stubGetPrisoner', recentArrival.prisonNumber)
+      cy.signIn()
+    })
+
+    it('Should display XRBS scan links', () => {
+      const prisonerSummaryPage = navigateToSummary()
+      prisonerSummaryPage.checkOnPage()
+      prisonerSummaryPage.xrayAtLimitText().should('contain.text', 'Scan limit reached')
+      cy.get('a').contains('Check body scan details').should('have.attr', 'href').and('include', '/scan-overview')
+      cy.get('a').contains('Record a new scan').should('have.attr', 'href').and('include', '/record-scan')
+    })
+  })
+
+  context('when user does not have XRBS permissions', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', [Role.PRISON_RECEPTION])
+      cy.task('stubPrison', 'MDI')
+      cy.task('stubAuthUser')
+      cy.task('stubUserCaseLoads')
+      cy.task('stubRecentArrivals', { caseLoadId: 'MDI', recentArrivals })
+      cy.task('stubMissingPrisonerImage')
+      cy.task('stubBulkGetXrayBodyScans', [xrayBodyScans.doNotScan(recentArrival.prisonNumber)])
+      cy.task('stubPrisonerDetails', recentArrival)
+      cy.task('stubGetXrayBodyScan', xrayBodyScans.doNotScan(recentArrival.prisonNumber))
+      cy.task('stubGetPrisoner', recentArrival.prisonNumber)
+      cy.signIn()
+    })
+
+    it('Should display fallback scan links', () => {
+      const prisonerSummaryPage = navigateToSummary()
+      prisonerSummaryPage.checkOnPage()
+      prisonerSummaryPage.xrayAtLimitText().should('contain.text', 'Scan limit reached')
+      cy.get('a').contains('Check body scan details').should('have.attr', 'href').and('include', '/x-ray-body-scans')
+      cy.get('a')
+        .contains('Record an X-ray body scan')
+        .should('have.attr', 'href')
+        .and('include', '/record-body-scan')
+    })
   })
 })
