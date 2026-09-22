@@ -1,9 +1,16 @@
 declare module '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/setUpNunjucksFilters' {
-  export { default } from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/src/dpr/setUpNunjucksFilters'
+  import type { Request } from 'express'
+
+  type NunjucksEnvironment = {
+    addFilter: (...args: unknown[]) => unknown
+  }
+
+  const setUpNunjucksFilters: (nunjucksEnv: NunjucksEnvironment, req?: Request) => void
+  export default setUpNunjucksFilters
 }
 
 declare module '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/components/report-list/utils' {
-  import type { RequestHandler } from 'express'
+  import type { Request, RequestHandler } from 'express'
 
   interface ReportListRequestHandlerOptions {
     title: string
@@ -12,7 +19,7 @@ declare module '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/c
     apiUrl: string
     apiTimeout: number
     layoutTemplate: string
-    tokenProvider: (req: Express.Request) => string
+    tokenProvider: (req: Request) => string
   }
 
   interface ReportListUtilsModule {
