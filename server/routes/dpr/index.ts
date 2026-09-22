@@ -1,6 +1,4 @@
-import { Request, Router } from 'express'
-// eslint-disable-next-line import/no-unresolved
-import ReportListUtils from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/components/report-list/utils'
+import { Request, RequestHandler, Router } from 'express'
 import type { ManagementReportDefinition } from 'management-reporting'
 import type { ResponseError } from 'superagent'
 import config from '../../config'
@@ -8,6 +6,39 @@ import { Services } from '../../services'
 import DprService from '../../services/dprService'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 import Role from '../../authentication/role'
+
+interface ReportListRequestHandlerOptions {
+  title: string
+  definitionName: string
+  variantName: string
+  apiUrl: string
+  apiTimeout: number
+  layoutTemplate: string
+  tokenProvider: (req: Request) => string
+}
+
+interface ReportListUtilsModule {
+  createReportListRequestHandler: (options: ReportListRequestHandlerOptions) => RequestHandler
+}
+
+const getReportListUtils = (): ReportListUtilsModule => {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-dynamic-require
+    const mod = require('@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/components/report-list/utils') as {
+      default?: ReportListUtilsModule
+    }
+
+    return mod.default ?? mod
+  } catch {
+    return {
+      createReportListRequestHandler: () => (_req, res) => {
+        res.status(501).send('Management report list is unavailable in this build.')
+      },
+    }
+  }
+}
+
+const ReportListUtils = getReportListUtils()
 
 let definitionsRoutesInitialised: boolean = false
 
