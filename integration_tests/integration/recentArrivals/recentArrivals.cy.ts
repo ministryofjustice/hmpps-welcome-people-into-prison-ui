@@ -123,6 +123,7 @@ context('A user can view all recent arrivals', () => {
   })
 
   it('Should display correct message when body scan count is close to limit', () => {
+    cy.task('stubBulkGetXrayBodyScans', [xrayBodyScans.closeToLimit(recentArrival.prisonNumber)])
     cy.task('stubGetXrayBodyScan', xrayBodyScans.closeToLimit(recentArrival.prisonNumber))
     cy.task('stubGetPrisoner', recentArrival.prisonNumber)
 
@@ -152,6 +153,18 @@ context('A user can view all recent arrivals', () => {
       .xrayAtLimitText()
       .should('contain.text', 'Scan limit reached')
       .and('contain.text', 'No more scans allowed this year')
+  })
+
+  it('Should display relevant alerts on the arrivals list card', () => {
+    cy.task('stubBulkGetXrayBodyScans', [
+      xrayBodyScans.withAlert(recentArrival.prisonNumber),
+      xrayBodyScans.okToScan('A1234AB'),
+    ])
+
+    cy.signIn()
+    const recentArrivalsPage = RecentArrivalsPage.goTo()
+    recentArrivalsPage.recentArrivals(1, today).doNotScan().should('not.exist')
+    cy.get('.dps-alert-status--security').should('contain.text', 'Internal secretor')
   })
 
   it('Should display legacy NOMIS count info when nomisCount is greater than zero', () => {
