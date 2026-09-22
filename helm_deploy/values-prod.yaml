@@ -35,6 +35,11 @@ generic-service:
     SHOW_PRISON_TRANSFER_SUMMARY: 'false'
     SHOW_BREADCRUMB: 'true'
     SHOW_RECENT_ARRIVALS: 'true'
+    XRAY_BODY_SCANS_API_URL: 'https://x-ray-body-scans.hmpps.service.justice.gov.uk'
+    X_RAY_BODY_SCANS_UI_URL: 'https://x-ray-body-scans.hmpps.service.justice.gov.uk'
+    PRISONER_SEARCH_API_URL: 'https://prisoner-search.prison.service.justice.gov.uk'
+    NEW_XRAY_BODY_SCANS_ENABLED_FROM: '2099-01-01T00:00:00'
+    NEW_XRAY_BODY_SCANS_ENABLED_PRISONS: ''
 
 generic-prometheus-alerts:
   alertSeverity: move-a-prisoner-alerts-prod

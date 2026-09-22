@@ -1,3 +1,5 @@
+import { PermissionsService } from '@ministryofjustice/hmpps-prison-permissions-lib'
+import config from '../config'
 import { dataAccess } from '../data'
 import UserService from './userService'
 import ExpectedArrivalsService from './expectedArrivalsService'
@@ -19,11 +21,18 @@ export const services = () => {
     welcomeClientBuilder,
     prisonRegisterClientBuilder,
     bodyScanClientBuilder,
+    xrayBodyScansApiClientBuilder,
+    authenticationClient,
     notifyClient,
     lockManager,
   } = dataAccess()
 
-  const bodyScanInfoDecorator = new BodyScanInfoDecorator(hmppsAuthClient, bodyScanClientBuilder)
+  const prisonPermissionsService = PermissionsService.create({
+    prisonerSearchConfig: config.apis.prisonerSearch,
+    authenticationClient,
+  })
+
+  const bodyScanInfoDecorator = new BodyScanInfoDecorator(hmppsAuthClient, bodyScanClientBuilder, xrayBodyScansApiClientBuilder)
   const matchTypeDecorator = new MatchTypeDecorator()
   const offenceInfoDecorator = new OffenceInfoDecorator()
 
@@ -50,6 +59,7 @@ export const services = () => {
   return {
     applicationInfo,
     hmppsAuthClient,
+    prisonPermissionsService,
     userService,
     notificationService,
     expectedArrivalsService,

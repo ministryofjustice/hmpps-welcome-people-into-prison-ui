@@ -121,6 +121,7 @@ const token = (roles: Role[]) =>
         access_token: createToken(roles),
         token_type: 'bearer',
         user_name: 'USER1',
+        auth_source: 'nomis',
         expires_in: 599,
         scope: 'read',
         internalUser: true,

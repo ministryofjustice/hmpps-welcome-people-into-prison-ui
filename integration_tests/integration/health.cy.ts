@@ -7,6 +7,8 @@ context('Healthcheck', () => {
       cy.task('stubManageUsersApiPing')
       cy.task('stubWelcomeApiPing')
       cy.task('stubBodyScanApiPing')
+      cy.task('stubXrayBodyScansApiPing')
+      cy.task('stubPrisonerSearchPing')
       cy.task('stubPrisonRegisterApiPing')
     })
 
@@ -27,6 +29,8 @@ context('Healthcheck', () => {
       cy.task('stubManageUsersApiPing')
       cy.task('stubWelcomeApiPing')
       cy.task('stubBodyScanApiPing')
+      cy.task('stubXrayBodyScansApiPing')
+      cy.task('stubPrisonerSearchPing')
       cy.task('stubPrisonRegisterApiPing')
     })
 

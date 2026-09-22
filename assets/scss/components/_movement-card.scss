@@ -78,3 +78,33 @@ $_image-width: 90px;
   padding-bottom: 0;
   border-color: $govuk-error-colour;
 }
+
+.app-inset-text--warning {
+  padding-top: 0;
+  padding-bottom: 0;
+  border-color: govuk-colour("orange");
+}
+
+.app-warning-text {
+  color: govuk-colour("orange");
+  font-weight: bold;
+}
+
+.dps-alert-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid;
+  padding: 5px 10px;
+  text-align: center;
+  line-height: 1;
+  user-select: none;
+  border-radius: 5px;
+  @include govuk-font($size: 16);
+  color: govuk-colour("black");
+  background-color: govuk-colour("white");
+
+  &--security {
+    border-color: #003078;
+  }
+}

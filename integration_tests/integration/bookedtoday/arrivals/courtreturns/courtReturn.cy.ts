@@ -5,7 +5,7 @@ import ChoosePrisonerPage from '../../../../pages/bookedtoday/choosePrisoner'
 import ConfirmCourtReturnAddedToRollPage from '../../../../pages/bookedtoday/arrivals/courtreturns/confirmCourtReturnAddedToRoll'
 import CheckCourtReturnPage from '../../../../pages/bookedtoday/arrivals/courtreturns/checkCourtReturn'
 import PrisonerSummaryWithRecordPage from '../../../../pages/bookedtoday/prisonerSummaryWithRecord'
-import bodyScans from '../../../../mockApis/responses/bodyScans'
+import xrayBodyScans from '../../../../mockApis/responses/xrayBodyScans'
 
 const expectedArrival = expectedArrivals.court.current
 const prisonRecordDetails = expectedArrival.potentialMatches[0]
@@ -24,8 +24,8 @@ context('Confirm court return added To roll', () => {
     })
     cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [] })
     cy.task('stubConfirmCourtReturn', expectedArrival.id)
-    cy.task('stubRetrieveMultipleBodyScans', [])
-    cy.task('stubGetBodyScan', bodyScans.okToScan())
+    cy.task('stubBulkGetXrayBodyScans', [])
+    cy.task('stubGetXrayBodyScan', xrayBodyScans.okToScan())
     cy.task('stubPrisonerDetails', { ...prisonRecordDetails, arrivalType: 'NEW_BOOKING' })
 
     cy.signIn()

@@ -2,6 +2,7 @@ import ChoosePrisonerPage from '../../../../pages/bookedtoday/choosePrisoner'
 import Page from '../../../../pages/page'
 import Role from '../../../../../server/authentication/role'
 import expectedArrivals from '../../../../mockApis/responses/expectedArrivals'
+import xrayBodyScans from '../../../../mockApis/responses/xrayBodyScans'
 import MultipleMatchingRecordsPage from '../../../../pages/bookedtoday/arrivals/autoMatchingRecords/multipleMatchingRecordsFound'
 import ImprisonmentStatusPage from '../../../../pages/bookedtoday/arrivals/confirmArrival/imprisonmentStatus'
 import MovementReasonsPage from '../../../../pages/bookedtoday/arrivals/confirmArrival/movementReasons'
@@ -52,7 +53,8 @@ context('Arrival matches multiple records', () => {
     cy.task('stubExpectedArrival', arrival)
     cy.task('stubImprisonmentStatus')
     cy.task('stubPrisonerDetails', { ...arrival.potentialMatches[1], arrivalType: 'NEW_BOOKING' })
-    cy.task('stubRetrieveMultipleBodyScans', [])
+    cy.task('stubBulkGetXrayBodyScans', [])
+    cy.task('stubGetXrayBodyScan', xrayBodyScans.okToScan())
     cy.signIn()
 
     const choosePrisonerPage = ChoosePrisonerPage.goTo()

@@ -1,6 +1,7 @@
 import Page from '../../../pages/page'
 import Role from '../../../../server/authentication/role'
 import expectedArrivals from '../../../mockApis/responses/expectedArrivals'
+import xrayBodyScans from '../../../mockApis/responses/xrayBodyScans'
 import ChoosePrisonerPage from '../../../pages/bookedtoday/choosePrisoner'
 import CheckTransferPage from '../../../pages/bookedtoday/transfers/checkTransfer'
 import SummaryTransferPage from '../../../pages/bookedtoday/transfers/summaryTransfer'
@@ -26,8 +27,8 @@ context('Confirm transfer added To roll', () => {
       transfer: prisonTransfer,
     })
     cy.task('stubConfirmTransfer', prisonTransfer.prisonNumber)
-    cy.task('stubRetrieveMultipleBodyScans', [])
-    cy.task('stubGetBodyScan', { prisonNumber: 'G0015GD', details: {} })
+    cy.task('stubBulkGetXrayBodyScans', [])
+    cy.task('stubGetXrayBodyScan', xrayBodyScans.okToScan('G0015GD'))
   })
 
   it('Can confirm prison transfers', () => {

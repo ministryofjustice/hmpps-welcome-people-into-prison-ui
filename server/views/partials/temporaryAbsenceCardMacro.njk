@@ -1,4 +1,5 @@
 {% from "../components/do-not-scan.njk" import doNotScan %}
+{% from "../components/close-to-scan-limit.njk" import closeToScanLimit %}
 
 {% macro temporaryAbsenceCard(temporaryAbsence, loopIndex, user) %}
     <div class='app-card-wrapper'>
@@ -56,7 +57,20 @@
                     </div>
                     <div class="app-card__meta-list-item">
                         {% if temporaryAbsence.bodyScanStatus === 'DO_NOT_SCAN' %}
-                            {{ doNotScan() }}
+                            {{ doNotScan(user.activeCaseLoadId) }}
+                        {% elif temporaryAbsence.bodyScanStatus === 'CLOSE_TO_LIMIT' and newXRayBodyScansEnabled(user.activeCaseLoadId) %}
+                            {{ closeToScanLimit(temporaryAbsence.numberOfBodyScansRemaining) }}
+                        {% endif %}
+                        {% if newXRayBodyScansEnabled(user.activeCaseLoadId) and temporaryAbsence.relevantAlerts and temporaryAbsence.relevantAlerts.length %}
+                            <ul class="govuk-list govuk-!-margin-top-1">
+                                {% for alert in temporaryAbsence.relevantAlerts %}
+                                    <li>
+                                        <div class="dps-alert-status dps-alert-status--security">
+                                            {{ alert.codeDescription }}
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
                         {% endif %}
                     </div>
                 </dl>

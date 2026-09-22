@@ -9,6 +9,8 @@ import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import welcome from './integration_tests/mockApis/welcome'
 import prisonRegister from './integration_tests/mockApis/prisonRegister'
 import bodyscan from './integration_tests/mockApis/bodyScan'
+import xrayBodyScansApi from './integration_tests/mockApis/xrayBodyScansApi'
+import prisonerSearch from './integration_tests/mockApis/prisonerSearch'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -78,6 +80,11 @@ export default defineConfig({
 
         // body-scan
         stubBodyScanApiPing: bodyscan.stubPing,
+        stubXrayBodyScansApiPing: xrayBodyScansApi.stubPing,
+        stubGetXrayBodyScan: xrayBodyScansApi.stubGetBodyScan,
+        stubBulkGetXrayBodyScans: xrayBodyScansApi.stubBulkGetBodyScans,
+        stubPrisonerSearchPing: prisonerSearch.stubPing,
+        stubGetPrisoner: prisonerSearch.stubGetPrisoner,
         stubSubmitBodyScan: bodyscan.stubSubmitBodyScan,
         stubRetrieveBodyScanRequest: bodyscan.stubRetrieveBodyScanRequest,
         stubBodyScanPrisonerDetails: bodyscan.stubBodyScanPrisonerDetails,

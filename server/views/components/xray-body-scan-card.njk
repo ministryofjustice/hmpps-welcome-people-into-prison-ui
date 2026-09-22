@@ -1,0 +1,60 @@
+{% from "components/xray-body-scan-count.njk" import xrayBodyScanCount %}
+
+{% macro xrayBodyScanCard(arrival, prisonerPermissions) %}
+<div class="govuk-summary-card govuk-!-margin-bottom-6" id="body-scan">
+    <div class="govuk-summary-card__title-wrapper">
+        <h2 class="govuk-summary-card__title">X-ray body scans</h2>
+    </div>
+    <div class="govuk-summary-card__content">
+        <div class="xray-body-scan-card__columns">
+            <div class="xray-body-scan-card__column">
+                <h3 class="govuk-heading-s govuk-!-margin-bottom-1">
+                    Scans in {{ generateCurrentYear() }}
+                </h3>
+                {{ xrayBodyScanCount(arrival) }}
+                {% if arrival.nomisCount > 0 %}
+                    <p class="govuk-!-margin-top-3 govuk-!-font-size-16 hmpps-secondary-text">
+                        Scan total includes DPS and legacy records<span class="govuk-visually-hidden">.</span>
+                    </p>
+                {% endif %}
+            </div>
+            <div class="xray-body-scan-card__column">
+                {% if arrival.latestScan and arrival.latestScan.scanDate %}
+                    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Last scan date</h3>
+                    <p class="govuk-!-margin-bottom-1">
+                        {{ arrival.latestScan.scanDate | formatDate('D MMMM YYYY') }}
+                    </p>
+                    {% if arrival.latestScan.outcomeDescription %}
+                        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Result</h3>
+                        <p class="govuk-!-margin-bottom-1">
+                            {{ arrival.latestScan.outcomeDescription }}
+                        </p>
+                    {% elif arrival.latestScan.scanDetails %}
+                        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Result</h3>
+                        <p class="govuk-!-margin-bottom-1">
+                            {{ arrival.latestScan.scanDetails }}
+                        </p>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        {% if arrival.relevantAlerts and arrival.relevantAlerts.length %}
+            <ul class="govuk-list govuk-!-margin-top-2">
+                {% for alert in arrival.relevantAlerts %}
+                    <li>
+                        <div class="dps-alert-status dps-alert-status--security">
+                            {{ alert.codeDescription }}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% if isGranted(XRayBodyScansPermission.read_scans, prisonerPermissions) %}
+            <a href="{{ xrayBodyScansUiUrl }}/prisoner/{{ arrival.prisonNumber }}/scan-overview">Check body scan details</a>
+        {% endif %}
+        {% if isGranted(XRayBodyScansPermission.edit_scans, prisonerPermissions) %}
+            <a href="{{ xrayBodyScansUiUrl }}/prisoner/{{ arrival.prisonNumber }}/record-scan" class="govuk-!-margin-left-3">Record a new scan</a>
+        {% endif %}
+    </div>
+</div>
+{% endmacro %}

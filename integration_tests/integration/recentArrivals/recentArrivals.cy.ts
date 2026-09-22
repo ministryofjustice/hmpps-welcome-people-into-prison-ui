@@ -5,7 +5,7 @@ import RecentArrivalsPage from '../../pages/recentArrivals/recentArrivals'
 import RecentArrivalsSearchPage from '../../pages/recentArrivals/recentArrivalsSearch'
 import PrisonerSummaryPage from '../../pages/recentArrivals/prisonerSummary'
 import recentArrivalsResponse from '../../mockApis/responses/recentArrivals'
-import bodyScans from '../../mockApis/responses/bodyScans'
+import xrayBodyScans from '../../mockApis/responses/xrayBodyScans'
 
 const today = moment().format('YYYY-MM-DD')
 const oneDayAgo = moment().subtract(1, 'days').format('YYYY-MM-DD')
@@ -23,13 +23,9 @@ context('A user can view all recent arrivals', () => {
     cy.task('stubUserCaseLoads')
     cy.task('stubRecentArrivals', { caseLoadId: 'MDI', recentArrivals })
     cy.task('stubMissingPrisonerImage')
-    cy.task('stubRetrieveMultipleBodyScans', [
-      {
-        prisonNumber: 'A1234AB',
-        bodyScanStatus: 'DO_NOT_SCAN',
-        numberOfBodyScans: 120,
-      },
-      { prisonNumber: 'G0015GF', bodyScanStatus: 'OK_TO_SCAN', numberOfBodyScans: 1 },
+    cy.task('stubBulkGetXrayBodyScans', [
+      xrayBodyScans.doNotScan('A1234AB'),
+      xrayBodyScans.okToScan('G0015GF'),
     ])
     cy.task('stubPrisonerDetails', recentArrival)
   })
@@ -114,10 +110,8 @@ context('A user can view all recent arrivals', () => {
   })
 
   it('Should display prisoner summary page', () => {
-    cy.task('stubGetBodyScan', {
-      prisonNumber: recentArrival.prisonNumber,
-      details: bodyScans.okToScan(),
-    })
+    cy.task('stubGetXrayBodyScan', xrayBodyScans.okToScan(recentArrival.prisonNumber))
+    cy.task('stubGetPrisoner', recentArrival.prisonNumber)
 
     cy.task('stubPrisonerDetails', {
       details: recentArrival,
@@ -132,10 +126,8 @@ context('A user can view all recent arrivals', () => {
   })
 
   it('Should display correct message when body scan count is close to limit', () => {
-    cy.task('stubGetBodyScan', {
-      prisonNumber: recentArrival.prisonNumber,
-      details: bodyScans.closeToLimit(recentArrival.prisonNumber),
-    })
+    cy.task('stubGetXrayBodyScan', xrayBodyScans.closeToLimit(recentArrival.prisonNumber))
+    cy.task('stubGetPrisoner', recentArrival.prisonNumber)
 
     cy.signIn()
     const recentArrivalsPage = RecentArrivalsPage.goTo()
@@ -144,15 +136,14 @@ context('A user can view all recent arrivals', () => {
     const prisonerSummaryPage = new PrisonerSummaryPage(`${recentArrival.lastName}, ${recentArrival.firstName}`)
 
     prisonerSummaryPage
-      .compliancePanelText()
-      .should('contain.text', 'John Doe can only be scanned 1 more times this year')
+      .xrayNearingLimitText()
+      .should('contain.text', 'Near scan limit')
+      .and('contain.text', '2 scans left this year')
   })
 
   it('Should display correct message when body scan count limit reached', () => {
-    cy.task('stubGetBodyScan', {
-      prisonNumber: recentArrival.prisonNumber,
-      details: bodyScans.doNotScan(),
-    })
+    cy.task('stubGetXrayBodyScan', xrayBodyScans.doNotScan(recentArrival.prisonNumber))
+    cy.task('stubGetPrisoner', recentArrival.prisonNumber)
 
     cy.signIn()
     const recentArrivalsPage = RecentArrivalsPage.goTo()
@@ -160,6 +151,38 @@ context('A user can view all recent arrivals', () => {
 
     const prisonerSummaryPage = new PrisonerSummaryPage(`${recentArrival.lastName}, ${recentArrival.firstName}`)
 
-    prisonerSummaryPage.compliancePanelText().should('contain.text', 'Do not scan')
+    prisonerSummaryPage
+      .xrayAtLimitText()
+      .should('contain.text', 'Scan limit reached')
+      .and('contain.text', 'No more scans allowed this year')
+  })
+
+})
+
+context('A user with XRBS permissions can view scan links', () => {
+  beforeEach(() => {
+    cy.task('reset')
+    cy.task('stubSignIn', ['ROLE_PRISON_RECEPTION', 'ROLE_PRISON', 'ROLE_DPS_APPLICATION_DEVELOPER'] as never)
+    cy.task('stubPrison', 'MDI')
+    cy.task('stubAuthUser')
+    cy.task('stubUserCaseLoads')
+    cy.task('stubRecentArrivals', { caseLoadId: 'MDI', recentArrivals })
+    cy.task('stubMissingPrisonerImage')
+    cy.task('stubBulkGetXrayBodyScans', [xrayBodyScans.doNotScan(recentArrival.prisonNumber)])
+    cy.task('stubPrisonerDetails', recentArrival)
+    cy.task('stubGetXrayBodyScan', xrayBodyScans.doNotScan(recentArrival.prisonNumber))
+    cy.task('stubGetPrisoner', recentArrival.prisonNumber)
+    cy.signIn()
+  })
+
+  it('Should display scan links when user has read and edit permissions', () => {
+    const recentArrivalsPage = RecentArrivalsPage.goTo()
+    recentArrivalsPage.recentArrivals(1, today).name().click()
+
+    const prisonerSummaryPage = new PrisonerSummaryPage(`${recentArrival.lastName}, ${recentArrival.firstName}`)
+    prisonerSummaryPage.checkOnPage()
+    prisonerSummaryPage.xrayAtLimitText().should('contain.text', 'Scan limit reached')
+    cy.get('a').contains('Check body scan details').should('exist')
+    cy.get('a').contains('Record a new scan').should('exist')
   })
 })

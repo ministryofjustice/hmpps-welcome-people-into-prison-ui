@@ -12,7 +12,7 @@ import temporaryAbsences from '../mockApis/responses/temporaryAbsences'
 import TemporaryAbsencePage from '../pages/temporaryabsences/temporaryAbsences'
 import CheckTemporaryAbsencePage from '../pages/temporaryabsences/checkTemporaryAbsence'
 import PrisonerSummaryWithRecordPage from '../pages/bookedtoday/prisonerSummaryWithRecord'
-import bodyScans from '../mockApis/responses/bodyScans'
+import xrayBodyScans from '../mockApis/responses/xrayBodyScans'
 import SummaryTransferPage from '../pages/bookedtoday/transfers/summaryTransfer'
 
 context('Feature not available', () => {
@@ -24,8 +24,8 @@ context('Feature not available', () => {
     cy.task('stubMissingPrisonerImage')
     cy.task('stubPrison', 'MDI')
     cy.task('stubImprisonmentStatus')
-    cy.task('stubRetrieveMultipleBodyScans', [])
-    cy.task('stubGetBodyScan', bodyScans.okToScan())
+    cy.task('stubBulkGetXrayBodyScans', [])
+    cy.task('stubGetXrayBodyScan', xrayBodyScans.okToScan())
   })
 
   it('Should display feature-not-available page when client error during confirmation of new prisoner from court', () => {
@@ -107,7 +107,7 @@ context('Feature not available', () => {
     })
     cy.task('stubConfirmTransferReturnsError', { arrivalId: prisonTransfer.prisonNumber, status: 404 })
     cy.task('stubPrisonerDetails', expectedArrivals.prisonTransfer)
-    cy.task('stubGetBodyScan', { prisonNumber: 'G0015GD', details: {} })
+    cy.task('stubGetXrayBodyScan', xrayBodyScans.okToScan('G0015GD'))
     cy.task('stubPrisonerImage', { prisonerNumber: 'G0015GD', imageFile: '/placeholder-image.png' })
     cy.signIn()
 

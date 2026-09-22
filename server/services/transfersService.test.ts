@@ -56,7 +56,7 @@ describe('Transfers service', () => {
         dateOfBirth: '1971-02-01',
         fromLocation: 'Kingston-upon-Hull Crown Court',
         mainOffence: 'theft',
-      })
+      }, 'MDI')
     })
   })
 

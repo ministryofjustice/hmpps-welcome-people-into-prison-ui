@@ -10,7 +10,7 @@ import MovementReasonsPage from '../../../../pages/bookedtoday/arrivals/confirmA
 import SearchForExistingPage from '../../../../pages/bookedtoday/arrivals/searchforexisting/search/searchForExisting'
 import ReviewDetailsPage from '../../../../pages/bookedtoday/arrivals/reviewDetails'
 import PrisonerSummaryWithRecordPage from '../../../../pages/bookedtoday/prisonerSummaryWithRecord'
-import bodyScans from '../../../../mockApis/responses/bodyScans'
+import xrayBodyScans from '../../../../mockApis/responses/xrayBodyScans'
 
 const expectedArrival = expectedArrivals.arrival({
   fromLocationType: 'COURT',
@@ -31,9 +31,9 @@ context('Is Single Match', () => {
     cy.task('stubMissingPrisonerImage')
     cy.task('stubPrison', 'MDI')
     cy.task('stubImprisonmentStatus')
-    cy.task('stubRetrieveMultipleBodyScans', [])
+    cy.task('stubBulkGetXrayBodyScans', [])
     cy.task('stubPrisonerDetails', { ...prisonRecordDetails, arrivalType: 'NEW_BOOKING' })
-    cy.task('stubGetBodyScan', bodyScans.doNotScan())
+    cy.task('stubGetXrayBodyScan', xrayBodyScans.doNotScan())
   })
 
   it('Can confirm single record match', () => {

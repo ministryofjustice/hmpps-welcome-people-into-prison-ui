@@ -16,7 +16,7 @@ describe('BodyScanInfoDecorater', () => {
   beforeEach(() => {
     jest.resetAllMocks()
     BodyScanClientFactory.mockReturnValue(bodyScanClient)
-    service = new BodyScanInfoDecorator(hmppsAuthClient, BodyScanClientFactory)
+    service = new BodyScanInfoDecorator(hmppsAuthClient, BodyScanClientFactory, null as never)
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
   })
 
@@ -52,7 +52,7 @@ describe('BodyScanInfoDecorater', () => {
     })
 
     test('happy path', async () => {
-      const result = await service.decorate(arrivals)
+      const result = await service.decorate(arrivals, 'MDI')
 
       expect(result).toStrictEqual([
         { bodyScanStatus: 'OK_TO_SCAN', prisonNumber: 'A1234AA' },
@@ -70,7 +70,7 @@ describe('BodyScanInfoDecorater', () => {
         { prisonNumber: undefined },
         { prisonNumber: 'A1234AC' },
         { prisonNumber: undefined },
-      ])
+      ], 'MDI')
 
       expect(result).toStrictEqual([
         { bodyScanStatus: 'OK_TO_SCAN', prisonNumber: 'A1234AA' },
@@ -92,7 +92,7 @@ describe('BodyScanInfoDecorater', () => {
         numberOfBodyScansRemaining: 106,
       })
 
-      const result = await service.decorateSingle(createPrisonerDetails())
+      const result = await service.decorateSingle(createPrisonerDetails(), 'MDI')
 
       expect(result).toStrictEqual({
         numberOfBodyScans: 10,
