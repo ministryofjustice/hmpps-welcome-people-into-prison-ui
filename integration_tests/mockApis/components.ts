@@ -1,6 +1,5 @@
 import { stubFor } from './wiremock'
 
-
 const stubComponents = () =>
   stubFor({
     request: {
