@@ -35,10 +35,7 @@ const stubComponentsFail = () =>
     response: {
       status: 500,
       headers: {
-        'Content-Type': 'application/json',
-      },
-      jsonBody: {
-        message: 'Component service unavailable',
+        'Content-Type': 'application/json;charset=UTF-8',
       },
     },
   })
