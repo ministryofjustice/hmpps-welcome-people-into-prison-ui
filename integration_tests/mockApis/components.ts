@@ -5,7 +5,12 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/components/components\\?component=header&component=footer',
+        urlPath: '/components/components',
+        queryParameters: {
+          component: {
+            equalTo: 'footer',
+          },
+        },
       },
       response: {
         status: 200,
@@ -31,7 +36,12 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/components/components\\?component=header&component=footer',
+        urlPath: '/components/components',
+        queryParameters: {
+          component: {
+            equalTo: 'footer',
+          },
+        },
       },
       response: {
         status: 500,
