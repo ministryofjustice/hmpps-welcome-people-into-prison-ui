@@ -13,7 +13,7 @@ const getMatchingRequests = body => superagent.post(`${url}/requests/find`).send
 const resetStubs = (): Promise<Array<Response>> =>
   Promise.all([superagent.delete(`${url}/mappings`), superagent.delete(`${url}/requests`), resetRedisDb()])
 
-export const stubPing = (urlPrefix: string, httpStatus = 200): SuperAgentRequest =>
+export const stubPing = async (urlPrefix: string, httpStatus = 200): Promise<SuperAgentRequest> =>
   stubFor({
     request: {
       method: 'GET',

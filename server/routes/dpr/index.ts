@@ -1,5 +1,4 @@
 import { Request, Router } from 'express'
-import ReportListUtils from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/components/report-list/utils'
 import type { ManagementReportDefinition } from 'management-reporting'
 import type { ResponseError } from 'superagent'
 import config from '../../config'
@@ -7,6 +6,7 @@ import { Services } from '../../services'
 import DprService from '../../services/dprService'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 import Role from '../../authentication/role'
+import ReportListUtils from '../../utils/reportListUtils'
 
 let definitionsRoutesInitialised: boolean = false
 

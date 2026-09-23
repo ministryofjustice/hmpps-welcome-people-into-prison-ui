@@ -2,13 +2,12 @@
 import nunjucks from 'nunjucks'
 import moment from 'moment'
 import express from 'express'
-// eslint-disable-next-line import/no-named-as-default
-import setUpNunjucksFilters from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/setUpNunjucksFilters'
 import * as pathModule from 'path'
-import fs from 'fs'
 import { logger } from 'bs-logger'
+import fs from 'fs'
 import config from '../config'
 import { calculateAge, generateCurrentYear } from './utils'
+import setUpNunjucksFilters from './setUpNunjucksFilters'
 
 const production = process.env.NODE_ENV === 'production'
 
