@@ -13,15 +13,6 @@ const stubFor = async (mapping: Record<string, unknown>): Promise<SuperAgentRequ
   return null
 }
 
-export const stubForComponents = async (response: Record<string, unknown>): Promise<SuperAgentRequest> =>
-  stubFor({
-    request: {
-      method: 'GET',
-      urlPattern: '/components/components\\?component=header&component=footer',
-    },
-    response,
-  })
-
 const getRequests = (): SuperAgentRequest => superagent.get(`${url}/requests`)
 
 const getMatchingRequests = body => superagent.post(`${url}/requests/find`).send(body)
