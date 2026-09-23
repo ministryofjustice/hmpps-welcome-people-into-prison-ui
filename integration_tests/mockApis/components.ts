@@ -16,13 +16,13 @@ const stubComponents = () =>
       jsonBody: {
         header: {
           html: '<header><h1>Common Components Header</h1></header>',
-          javascript: ['/common-components/header.js'],
-          css: ['/common-components/header.css'],
+          javascript: [],
+          css: [],
         },
         footer: {
           html: '<footer><h1>Common Components Footer</h1></footer>',
-          javascript: ['/common-components/footer.js'],
-          css: ['/common-components/footer.css'],
+          javascript: [],
+          css: [],
         },
       },
     },
