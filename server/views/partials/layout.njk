@@ -113,11 +113,9 @@
     }}
   {% endif %}
 
-    {% block footer %}
-        {% if feComponents.footer %}
-            {{ feComponents.footer | safe }}
-        {% else %}
-            {% include "./footer.njk" %}
-        {% endif %}
-    {% endblock %}
+    {% if feComponents.footer %}
+        {{ feComponents.footer | safe }}
+    {% else %}
+        {% include "./footer.njk" %}
+    {% endif %}
 {% endblock %}
