@@ -1,6 +1,6 @@
 import { stubFor } from './wiremock'
 
-const componentsUrl = '/components'
+const componentsUrl = '/components/components\\?component=header&component=footer'
 
 const stubComponents = () =>
   stubFor({
