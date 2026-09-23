@@ -1,12 +1,17 @@
 import { stubFor } from './wiremock'
 
-const componentsUrl = '/components/components\\?component=header&component=footer'
+const componentsUrl = '/components/components'
 
 const stubComponents = () =>
   stubFor({
     request: {
       method: 'GET',
       urlPath: componentsUrl,
+      queryParameters: {
+        component: {
+          matches: '^(header&component=footer|footer&component=header)$',
+        },
+      },
     },
     response: {
       status: 200,
