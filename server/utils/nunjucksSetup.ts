@@ -3,24 +3,11 @@ import nunjucks from 'nunjucks'
 import moment from 'moment'
 import express from 'express'
 import * as pathModule from 'path'
-
-type SetUpNunjucksFilters = (env: nunjucks.Environment) => void
-
-let setUpNunjucksFilters: SetUpNunjucksFilters | undefined
-
-try {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-dynamic-require
-  const mod = require('@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/setUpNunjucksFilters') as {
-    default?: SetUpNunjucksFilters
-  }
-  setUpNunjucksFilters = mod.default ?? (mod as SetUpNunjucksFilters)
-} catch {
-  setUpNunjucksFilters = undefined
-}
-import fs from 'fs'
 import { logger } from 'bs-logger'
+import fs from 'fs'
 import config from '../config'
 import { calculateAge, generateCurrentYear } from './utils'
+import setUpNunjucksFilters from './setUpNunjucksFilters'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -127,9 +114,7 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   } = config
 
   // Digital Prison Reporting configuration
-  if (setUpNunjucksFilters) {
-    setUpNunjucksFilters(njkEnv)
-  }
+  setUpNunjucksFilters(njkEnv)
 
   njkEnv.addGlobal('googleAnalyticsId', googleAnalyticsId)
   njkEnv.addGlobal('tagManagerContainerId', tagManagerContainerId)

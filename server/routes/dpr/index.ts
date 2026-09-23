@@ -1,4 +1,4 @@
-import { Request, RequestHandler, Router } from 'express'
+import { Request, Router } from 'express'
 import type { ManagementReportDefinition } from 'management-reporting'
 import type { ResponseError } from 'superagent'
 import config from '../../config'
@@ -6,40 +6,7 @@ import { Services } from '../../services'
 import DprService from '../../services/dprService'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 import Role from '../../authentication/role'
-
-interface ReportListRequestHandlerOptions {
-  title: string
-  definitionName: string
-  variantName: string
-  apiUrl: string
-  apiTimeout: number
-  layoutTemplate: string
-  tokenProvider: (req: Request) => string
-}
-
-interface ReportListUtilsModule {
-  createReportListRequestHandler: (options: ReportListRequestHandlerOptions) => RequestHandler
-}
-
-type ReportListUtilsExport = ReportListUtilsModule & {
-  default?: ReportListUtilsModule
-}
-
-const getReportListUtils = (): ReportListUtilsModule => {
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-dynamic-require
-    const mod = require('@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/components/report-list/utils') as ReportListUtilsExport
-    return mod.default ?? mod
-  } catch {
-    return {
-      createReportListRequestHandler: () => (_req, res) => {
-        res.status(501).send('Management report list is unavailable in this build.')
-      },
-    }
-  }
-}
-
-const ReportListUtils = getReportListUtils()
+import ReportListUtils from '../../utils/reportListUtils'
 
 let definitionsRoutesInitialised: boolean = false
 
