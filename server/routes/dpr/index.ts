@@ -21,13 +21,14 @@ interface ReportListUtilsModule {
   createReportListRequestHandler: (options: ReportListRequestHandlerOptions) => RequestHandler
 }
 
+type ReportListUtilsExport = ReportListUtilsModule & {
+  default?: ReportListUtilsModule
+}
+
 const getReportListUtils = (): ReportListUtilsModule => {
   try {
     // eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-dynamic-require
-    const mod = require('@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/components/report-list/utils') as {
-      default?: ReportListUtilsModule
-    }
-
+    const mod = require('@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/components/report-list/utils') as ReportListUtilsExport
     return mod.default ?? mod
   } catch {
     return {

@@ -4,14 +4,16 @@ import moment from 'moment'
 import express from 'express'
 import * as pathModule from 'path'
 
-let setUpNunjucksFilters: ((env: nunjucks.Environment) => void) | undefined
+type SetUpNunjucksFilters = (env: nunjucks.Environment) => void
+
+let setUpNunjucksFilters: SetUpNunjucksFilters | undefined
 
 try {
   // eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-dynamic-require
   const mod = require('@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/setUpNunjucksFilters') as {
-    default?: (env: nunjucks.Environment) => void
+    default?: SetUpNunjucksFilters
   }
-  setUpNunjucksFilters = mod.default ?? mod
+  setUpNunjucksFilters = mod.default ?? (mod as SetUpNunjucksFilters)
 } catch {
   setUpNunjucksFilters = undefined
 }
