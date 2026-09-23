@@ -10,12 +10,7 @@ export const stubForComponents = (response: Record<string, unknown>): SuperAgent
   stubFor({
     request: {
       method: 'GET',
-      urlPath: '/components/components',
-      queryParameters: {
-        component: {
-          matches: 'header.*footer|footer.*header',
-        },
-      },
+      urlPattern: '/components/components\\?component=header&component=footer',
     },
     response,
   })
