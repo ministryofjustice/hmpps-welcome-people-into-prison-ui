@@ -1,17 +1,8 @@
-import { stubFor } from './wiremock'
+import { stubForComponents } from './wiremock'
 
 export default {
   stubComponents: () => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPath: '/components/components',
-        queryParameters: {
-          component: {
-            equalTo: 'footer',
-          },
-        },
-      },
+    return stubForComponents({
       response: {
         status: 200,
         headers: {
@@ -33,16 +24,7 @@ export default {
     })
   },
   stubComponentsFail: () => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPath: '/components/components',
-        queryParameters: {
-          component: {
-            equalTo: 'footer',
-          },
-        },
-      },
+    return stubForComponents({
       response: {
         status: 500,
         headers: {

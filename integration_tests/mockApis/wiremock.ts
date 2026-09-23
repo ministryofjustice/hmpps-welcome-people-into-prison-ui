@@ -6,6 +6,20 @@ const url = 'http://localhost:9091/__admin'
 const stubFor = (mapping: Record<string, unknown>): SuperAgentRequest =>
   superagent.post(`${url}/mappings`).send(mapping)
 
+export const stubForComponents = (response: Record<string, unknown>): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPath: '/components/components',
+      queryParameters: {
+        component: {
+          matches: 'header.*footer|footer.*header',
+        },
+      },
+    },
+    response,
+  })
+
 const getRequests = (): SuperAgentRequest => superagent.get(`${url}/requests`)
 
 const getMatchingRequests = body => superagent.post(`${url}/requests/find`).send(body)
