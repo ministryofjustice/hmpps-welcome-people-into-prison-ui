@@ -9,7 +9,7 @@ const stubComponents = () =>
       urlPath: componentsUrl,
       queryParameters: {
         component: {
-          matches: '(header.*footer|footer.*header)$',
+          matches: '.*',
         },
       },
     },
