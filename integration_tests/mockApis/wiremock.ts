@@ -3,10 +3,17 @@ import resetRedisDb from './redis'
 
 const url = 'http://localhost:9091/__admin'
 
-const stubFor = (mapping: Record<string, unknown>): SuperAgentRequest =>
-  superagent.post(`${url}/mappings`).send(mapping)
+const stubFor = async (mapping: Record<string, unknown>): Promise<SuperAgentRequest> => {
+  const response = await superagent.post(`${url}/mappings`).send(mapping)
 
-export const stubForComponents = (response: Record<string, unknown>): SuperAgentRequest =>
+  if (response.status >= 400) {
+    throw new Error(`WireMock rejected mapping (${response.status}): ${JSON.stringify(response.body)}`)
+  }
+
+  return null
+}
+
+export const stubForComponents = async (response: Record<string, unknown>): Promise<SuperAgentRequest> =>
   stubFor({
     request: {
       method: 'GET',
@@ -22,7 +29,7 @@ const getMatchingRequests = body => superagent.post(`${url}/requests/find`).send
 const resetStubs = (): Promise<Array<Response>> =>
   Promise.all([superagent.delete(`${url}/mappings`), superagent.delete(`${url}/requests`), resetRedisDb()])
 
-export const stubPing = (urlPrefix: string, httpStatus = 200): SuperAgentRequest =>
+export const stubPing = async (urlPrefix: string, httpStatus = 200): Promise<SuperAgentRequest> =>
   stubFor({
     request: {
       method: 'GET',
