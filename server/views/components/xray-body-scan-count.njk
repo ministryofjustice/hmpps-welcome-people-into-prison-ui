@@ -3,7 +3,7 @@
 {% set nearingLimit = arrival.bodyScanStatus === 'CLOSE_TO_LIMIT' %}
 <div class="xray-body-scan-count {% if atLimit %}xray-body-scan-count--at-limit{% elif nearingLimit %}xray-body-scan-count--nearing-limit{% endif %}">
     <div class="xray-body-scan-count__number">
-        {% set countDescription = arrival.numberOfBodyScans + ' scans this year' if arrival.numberOfBodyScans > 0 else 'No scans recorded' %}
+        {% set countDescription = arrival.numberOfBodyScans + (' scan this year' if arrival.numberOfBodyScans === 1 else ' scans this year') if arrival.numberOfBodyScans > 0 else 'No scans recorded' %}
         <span aria-label="{{ countDescription }}">{{ arrival.numberOfBodyScans if arrival.numberOfBodyScans else 0 }}</span>
     </div>
     {% if atLimit %}
@@ -11,7 +11,7 @@
         No more scans allowed this year<span class="govuk-visually-hidden">.</span>
     {% elif nearingLimit %}
         <strong class="xray-body-scan-count__limit-warning">Near scan limit</strong>
-        {{ arrival.numberOfBodyScansRemaining }} scans left this year<span class="govuk-visually-hidden">.</span>
+        {{ arrival.numberOfBodyScansRemaining }} {{ 'scan' if arrival.numberOfBodyScansRemaining === 1 else 'scans' }} left this year<span class="govuk-visually-hidden">.</span>
     {% elif not arrival.numberOfBodyScans %}
         <span aria-hidden="true">No scans recorded</span>
     {% endif %}

@@ -51,12 +51,12 @@
         {% endif %}
         {% set wpipReturnPath = '/recent-arrivals/' + arrival.prisonNumber + '/summary' %}
         {% if isGranted(XRayBodyScansPermission.read_scans, prisonerPermissions) %}
-            <a href="{{ xrayBodyScansUiUrl }}/prisoner/{{ arrival.prisonNumber }}/scan-overview?wpipReturnPath={{ wpipReturnPath }}">Check body scan details</a>
+            <a href="{{ xrayBodyScansUiUrl }}/prisoner/{{ arrival.prisonNumber }}/scan-overview?wpipReturnPath={{ wpipReturnPath | urlencode }}">Check body scan details</a>
         {% else %}
             <a href="{{ profileUrl }}/prisoner/{{ arrival.prisonNumber }}/x-ray-body-scans">Check body scan details</a>
         {% endif %}
         {% if isGranted(XRayBodyScansPermission.edit_scans, prisonerPermissions) %}
-            <a href="{{ xrayBodyScansUiUrl }}/prisoner/{{ arrival.prisonNumber }}/record-scan?wpipReturnPath={{ wpipReturnPath }}" class="govuk-!-margin-left-4">Record a new scan</a>
+            <a href="{{ xrayBodyScansUiUrl }}/prisoner/{{ arrival.prisonNumber }}/record-scan?wpipReturnPath={{ wpipReturnPath | urlencode }}" class="govuk-!-margin-left-4">Record a new scan</a>
         {% else %}
             <a href="/prisoners/{{ arrival.prisonNumber }}/record-body-scan" class="govuk-!-margin-left-4" data-qa="record-body-scan">Record a new scan</a>
         {% endif %}
