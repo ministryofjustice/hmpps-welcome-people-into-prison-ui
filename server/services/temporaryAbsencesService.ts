@@ -13,7 +13,7 @@ export default class TemporaryAbsencesService {
   public async getTemporaryAbsences(agencyId: string): Promise<WithBodyScanStatus<TemporaryAbsence>[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const temporaryAbsencesRaw = await this.welcomeClientFactory(token).getTemporaryAbsences(agencyId)
-    const temporaryAbsences = await this.bodyScanInfoDecorator.decorate(temporaryAbsencesRaw)
+    const temporaryAbsences = await this.bodyScanInfoDecorator.decorate(temporaryAbsencesRaw, agencyId)
     return temporaryAbsences.sort(compareByFullName)
   }
 

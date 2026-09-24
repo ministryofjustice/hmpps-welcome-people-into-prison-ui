@@ -1,0 +1,52 @@
+.xray-body-scan-count {
+  border-left: $govuk-border-width solid govuk-colour("mid-grey");
+  padding-left: $govuk-border-width-wide;
+  @include govuk-responsive-margin(2, 'bottom');
+
+  .xray-body-scan-count__number,
+  .xray-body-scan-count__limit-warning {
+    display: block;
+  }
+
+  @include govuk-font($size: 16);
+
+  .xray-body-scan-count__number {
+    @include govuk-font($size: 36);
+  }
+}
+
+.xray-body-scan-count--nearing-limit {
+  border-left-color: govuk-colour("orange");
+
+  .xray-body-scan-count__number,
+  .xray-body-scan-count__limit-warning {
+    color: govuk-colour("orange");
+  }
+}
+
+.xray-body-scan-count--at-limit {
+  border-left-color: govuk-colour("red");
+
+  .xray-body-scan-count__number,
+  .xray-body-scan-count__limit-warning {
+    color: govuk-colour("red");
+  }
+}
+
+.xray-body-scan-card__columns {
+  margin: 0 #{-$govuk-gutter-half};
+
+  @include govuk-media-query($from: tablet) {
+    display: flex;
+  }
+}
+
+.xray-body-scan-card__column {
+  box-sizing: border-box;
+  padding: 0 $govuk-gutter-half;
+
+  @include govuk-media-query($from: tablet) {
+    flex-grow: 1;
+    width: 50%;
+  }
+}

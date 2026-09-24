@@ -261,7 +261,7 @@ describe('Expected arrivals service', () => {
       welcomeClient.getArrival.mockResolvedValue(arrival)
       welcomeClient.getPrisonerDetails.mockResolvedValue(createPrisonerDetails())
 
-      const result = await service.getArrivalAndSummaryDetails(username, '12345-67890')
+      const result = await service.getArrivalAndSummaryDetails(username, '12345-67890', 'MDI')
 
       expect(WelcomeClientFactory).toBeCalledWith(token)
       expect(welcomeClient.getArrival).toBeCalledWith('12345-67890')
@@ -461,7 +461,7 @@ describe('Expected arrivals service', () => {
     it('calls upstream service with correct args', async () => {
       const prisonNumber = 'A1234AB'
 
-      await service.getPrisonerSummaryDetails(prisonNumber)
+      await service.getPrisonerSummaryDetails(prisonNumber, 'MDI')
 
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       expect(WelcomeClientFactory).toBeCalledWith(token)
@@ -472,7 +472,7 @@ describe('Expected arrivals service', () => {
       const prisonerSummaryDetails = createPrisonerDetails()
       welcomeClient.getPrisonerDetails.mockResolvedValue(prisonerSummaryDetails)
 
-      const result = await service.getPrisonerSummaryDetails('A1234AB')
+      const result = await service.getPrisonerSummaryDetails('A1234AB', 'MDI')
 
       expect(result).toStrictEqual({
         ...prisonerSummaryDetails,

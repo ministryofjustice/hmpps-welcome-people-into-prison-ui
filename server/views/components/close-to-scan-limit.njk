@@ -1,0 +1,10 @@
+{% macro closeToScanLimit(numberOfBodyScansRemaining) %}
+<div data-qa="close-to-scan-limit" class="govuk-inset-text govuk-!-margin-top-0 govuk-!-font-size-16 app-inset-text--narrow-border app-inset-text--warning">
+    <dt class="app-card__meta-list-key app-warning-text">
+        Near the scan limit
+    </dt>
+    <dd class="app-card__meta-list-value">
+        {{ numberOfBodyScansRemaining }} X-ray body scans left this year
+    </dd>
+</div>
+{% endmacro %}
