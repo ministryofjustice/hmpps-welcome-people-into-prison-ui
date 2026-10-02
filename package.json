@@ -197,7 +197,7 @@
   "overrides": {
     "diff": "9.0.0",
     "@types/express-serve-static-core": "4.19.9",
-    "axios": ">=1.19.0",
+    "axios": ">=1.20.0",
     "serialize-javascript": ">=7.1.0",
     "undici": ">=8.10.0",
     "shell-quote": ">=1.10.0",
