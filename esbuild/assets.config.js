@@ -47,20 +47,6 @@ const buildAssets = buildConfig => {
           Object.fromEntries(Object.entries(entries).map(paths => paths.map(p => p.replace(/^dist\//, '/')))),
       }),
       sassPlugin({
-        filter: /[/\\]dpr\.scss$/,
-        quietDeps: true,
-        // DPR's legacy styles require its own GOV.UK and MOJ frontend versions.
-        loadPaths: [
-          path.join(process.cwd(), 'node_modules/@ministryofjustice/hmpps-digital-prison-reporting-frontend'),
-          path.join(
-            process.cwd(),
-            'node_modules/@ministryofjustice/hmpps-digital-prison-reporting-frontend/node_modules',
-          ),
-          process.cwd(),
-          path.join(process.cwd(), 'node_modules'),
-        ],
-      }),
-      sassPlugin({
         quietDeps: true,
         loadPaths: [process.cwd(), path.join(process.cwd(), 'node_modules')],
       }),
