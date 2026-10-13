@@ -66,7 +66,7 @@ describe('GET /prisoners-returning', () => {
       .get('/prisoners-returning')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
-        expect(temporaryAbsencesService.getTemporaryAbsences).toHaveBeenCalledWith(user.activeCaseLoadId)
+        expect(temporaryAbsencesService.getTemporaryAbsences).toHaveBeenCalledWith(user.username, user.activeCaseLoadId)
       })
   })
 

@@ -12,8 +12,12 @@ export default class RecentArrivalsSummaryController {
   public view(): RequestHandler {
     return async (req, res) => {
       const { prisonNumber } = req.params
-      const { activeCaseLoadId } = res.locals.user
-      const arrival = await this.expectedArrivalsService.getPrisonerSummaryDetails(prisonNumber, activeCaseLoadId)
+      const { username, activeCaseLoadId } = res.locals.user
+      const arrival = await this.expectedArrivalsService.getPrisonerSummaryDetails(
+        prisonNumber,
+        username,
+        activeCaseLoadId,
+      )
 
       if (newXRayBodyScansEnabled(activeCaseLoadId)) {
         const prisoner = await this.prisonPermissionsService.getPrisonerDetails(prisonNumber)

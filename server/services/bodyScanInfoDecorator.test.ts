@@ -52,7 +52,7 @@ describe('BodyScanInfoDecorater', () => {
     })
 
     test('happy path', async () => {
-      const result = await service.decorate(arrivals, 'MDI')
+      const result = await service.decorate(arrivals, 'username', 'MDI')
 
       expect(result).toStrictEqual([
         { bodyScanStatus: 'OK_TO_SCAN', prisonNumber: 'A1234AA' },
@@ -72,6 +72,7 @@ describe('BodyScanInfoDecorater', () => {
           { prisonNumber: 'A1234AC' },
           { prisonNumber: undefined },
         ],
+        'username',
         'MDI',
       )
 
@@ -95,7 +96,7 @@ describe('BodyScanInfoDecorater', () => {
         numberOfBodyScansRemaining: 106,
       })
 
-      const result = await service.decorateSingle(createPrisonerDetails(), 'MDI')
+      const result = await service.decorateSingle(createPrisonerDetails(), 'username', 'MDI')
 
       expect(result).toStrictEqual({
         numberOfBodyScans: 10,
