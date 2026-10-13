@@ -42,7 +42,7 @@ describe('Expected arrivals service', () => {
 
   const arrivalResponse = createArrivalResponse()
 
-  const res = { locals: { user: { activeCaseLoadId: 'MDI' } } }
+  const res = { locals: { user: { username: 'username', activeCaseLoadId: 'MDI' } } }
 
   beforeEach(() => {
     jest.resetAllMocks()
@@ -152,7 +152,10 @@ describe('Expected arrivals service', () => {
       const dateTo = moment().startOf('day')
       const middleDate = moment().subtract(1, 'days').startOf('day')
       const dateFrom = moment().subtract(2, 'days').startOf('day')
-      const result = await service.getRecentArrivalsGroupedByDate(res.locals.user.activeCaseLoadId)
+      const result = await service.getRecentArrivalsGroupedByDate(
+        res.locals.user.username,
+        res.locals.user.activeCaseLoadId,
+      )
 
       expect(result).toStrictEqual(
         new Map([
@@ -180,7 +183,7 @@ describe('Expected arrivals service', () => {
     })
 
     it('WelcomeClientFactory is called with a token', async () => {
-      await service.getRecentArrivalsGroupedByDate(res.locals.user.activeCaseLoadId)
+      await service.getRecentArrivalsGroupedByDate(res.locals.user.username, res.locals.user.activeCaseLoadId)
 
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       expect(WelcomeClientFactory).toBeCalledWith(token)
@@ -461,7 +464,7 @@ describe('Expected arrivals service', () => {
     it('calls upstream service with correct args', async () => {
       const prisonNumber = 'A1234AB'
 
-      await service.getPrisonerSummaryDetails(prisonNumber, 'MDI')
+      await service.getPrisonerSummaryDetails(prisonNumber, 'username', 'MDI')
 
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       expect(WelcomeClientFactory).toBeCalledWith(token)
@@ -472,7 +475,7 @@ describe('Expected arrivals service', () => {
       const prisonerSummaryDetails = createPrisonerDetails()
       welcomeClient.getPrisonerDetails.mockResolvedValue(prisonerSummaryDetails)
 
-      const result = await service.getPrisonerSummaryDetails('A1234AB', 'MDI')
+      const result = await service.getPrisonerSummaryDetails('A1234AB', 'username', 'MDI')
 
       expect(result).toStrictEqual({
         ...prisonerSummaryDetails,

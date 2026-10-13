@@ -46,7 +46,7 @@ describe('GET summaryTransfer', () => {
       .get('/prisoners/A1234AA/summary-transfer')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(() => {
-        expect(transfersService.getTransferWithBodyScanDetails).toHaveBeenCalledWith('MDI', 'A1234AA')
+        expect(transfersService.getTransferWithBodyScanDetails).toHaveBeenCalledWith('user1', 'MDI', 'A1234AA')
       })
   })
 
