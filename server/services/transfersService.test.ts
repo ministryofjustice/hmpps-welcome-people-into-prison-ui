@@ -43,7 +43,7 @@ describe('Transfers service', () => {
     it('Calls upstream service correctly', async () => {
       welcomeClient.getTransfer.mockResolvedValue(transfer)
 
-      await service.getTransferWithBodyScanDetails('MDI', 'A1234AA')
+      await service.getTransferWithBodyScanDetails('username', 'MDI', 'A1234AA')
 
       expect(WelcomeClientFactory).toBeCalledWith(token)
       expect(welcomeClient.getTransfer).toBeCalledWith('MDI', 'A1234AA')
@@ -58,6 +58,7 @@ describe('Transfers service', () => {
           fromLocation: 'Kingston-upon-Hull Crown Court',
           mainOffence: 'theft',
         },
+        'username',
         'MDI',
       )
     })

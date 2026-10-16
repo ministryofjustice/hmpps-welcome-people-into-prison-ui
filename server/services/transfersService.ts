@@ -16,13 +16,14 @@ export default class TransfersService {
   }
 
   public async getTransferWithBodyScanDetails(
+    username: string,
     agencyId: string,
     prisonNumber: string,
   ): Promise<WithBodyScanInfo<Transfer>> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     const welcomeClient = this.welcomeClientFactory(token)
     const transfer = await welcomeClient.getTransfer(agencyId, prisonNumber)
-    return this.bodyScanInfoDecorator.decorateSingle(transfer, agencyId)
+    return this.bodyScanInfoDecorator.decorateSingle(transfer, username, agencyId)
   }
 
   public async confirmTransfer(

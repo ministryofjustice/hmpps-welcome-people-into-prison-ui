@@ -32,9 +32,10 @@ export class BodyScanInfoDecorator {
 
   public async decorate<T extends HasPrisonNumber>(
     items: T[],
+    username: string,
     activeCaseLoadId: string,
   ): Promise<WithBodyScanInfo<T>[]> {
-    const token = await this.hmppsAuthClient.getSystemClientToken()
+    const token = await this.hmppsAuthClient.getSystemClientToken(username)
     const prisonNumbers = items.map(i => i.prisonNumber).filter(Boolean)
 
     if (newXRayBodyScansEnabled(activeCaseLoadId)) {
@@ -69,9 +70,10 @@ export class BodyScanInfoDecorator {
 
   public async decorateSingle<T extends HasPrisonNumber>(
     item: T,
+    username: string,
     activeCaseLoadId: string,
   ): Promise<WithBodyScanInfo<T>> {
-    const token = await this.hmppsAuthClient.getSystemClientToken()
+    const token = await this.hmppsAuthClient.getSystemClientToken(username)
 
     if (newXRayBodyScansEnabled(activeCaseLoadId)) {
       const summary = await this.xrayBodyScansApiClientFactory(token).getScanSummary(item.prisonNumber)
