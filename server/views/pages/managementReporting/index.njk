@@ -25,7 +25,7 @@
 
             {% for variant in definition.variants %}
               <h3 class="govuk-heading-s"><a id="{{ definition.id }}-{{ variant.id }}"
-                                             href="/management-reporting/{{ definition.id }}-{{ variant.id }}"
+                                             href="/dpr/view-report/sync/report/{{ definition.id | urlencode }}/{{ variant.id | urlencode }}/load-report"
                                              class="govuk-link"> {{ variant.name }} </a></h3>
               <p class="govuk-body">{{ variant.description }}</p>
 

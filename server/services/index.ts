@@ -1,4 +1,5 @@
 import { PermissionsService } from '@ministryofjustice/hmpps-prison-permissions-lib'
+import { createDprServices } from '@ministryofjustice/hmpps-digital-prison-reporting-frontend'
 import config from '../config'
 import { dataAccess } from '../data'
 import UserService from './userService'
@@ -25,6 +26,7 @@ export const services = () => {
     authenticationClient,
     notifyClient,
     lockManager,
+    dprClients,
   } = dataAccess()
 
   const prisonPermissionsService = PermissionsService.create({
@@ -74,6 +76,7 @@ export const services = () => {
     raiseAnalyticsEvent,
     lockManager,
     dprService,
+    dprServices: createDprServices(dprClients),
   }
 }
 
