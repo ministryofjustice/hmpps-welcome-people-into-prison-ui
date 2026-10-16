@@ -2,8 +2,6 @@
 import nunjucks from 'nunjucks'
 import moment from 'moment'
 import express from 'express'
-// eslint-disable-next-line import/no-named-as-default
-import setUpNunjucksFilters from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/setUpNunjucksFilters'
 import { setupNunjucksPermissions } from '@ministryofjustice/hmpps-prison-permissions-lib'
 import * as pathModule from 'path'
 import fs from 'fs'
@@ -115,9 +113,6 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   const {
     analytics: { googleAnalyticsId, tagManagerContainerId, tagManagerEnvironment },
   } = config
-
-  // Digital Prison Reporting configuration
-  setUpNunjucksFilters(njkEnv)
 
   njkEnv.addGlobal('googleAnalyticsId', googleAnalyticsId)
   njkEnv.addGlobal('tagManagerContainerId', tagManagerContainerId)

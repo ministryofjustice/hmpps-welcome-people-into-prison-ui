@@ -1,58 +1,59 @@
 import { Request, Router } from 'express'
-import ReportListUtils from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/components/report-list/utils'
-import type { ManagementReportDefinition } from 'management-reporting'
+import {
+  DprUser,
+  routes as reportingRoutes,
+  setUpDprResources,
+} from '@ministryofjustice/hmpps-digital-prison-reporting-frontend'
+import type { Environment } from 'nunjucks'
 import type { ResponseError } from 'superagent'
-import config from '../../config'
-import { Services } from '../../services'
-import DprService from '../../services/dprService'
+import type { Services } from '../../services'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 import Role from '../../authentication/role'
 
-let definitionsRoutesInitialised: boolean = false
-
-async function populateRoutes(
-  dprService: DprService,
-  token: string,
-  router: Router,
-): Promise<ManagementReportDefinition[]> {
-  const allDefinitions = await dprService.getManagementReportDefinitions(token)
-  if (definitionsRoutesInitialised === false) {
-    for (const definition of allDefinitions) {
-      for (const variant of definition.variants) {
-        router.get(
-          `/management-reporting/${definition.id}-${variant.id}`,
-          protectRoute(),
-          ReportListUtils.createReportListRequestHandler({
-            title: variant.name,
-            definitionName: definition.id,
-            variantName: variant.id,
-            apiUrl: config.apis.welcome.url,
-            apiTimeout: config.apis.welcome.timeout.deadline,
-            layoutTemplate: 'partials/dprLayout.njk',
-            tokenProvider: (req: Request) => {
-              return req.session.systemToken
-            },
-          }),
-        )
-      }
-    }
-    definitionsRoutesInitialised = true
-  }
-  return allDefinitions
-}
-
-// eslint-disable-next-line import/prefer-default-export
 export function dprRouter(router: Router, services: Services): Router {
-  if (config.loadReportDefinitionsOnStartup === true && definitionsRoutesInitialised === false) {
-    services.hmppsAuthClient.getSystemClientToken().then(token => populateRoutes(services.dprService, token, router))
-  }
-
-  router.get('/management-reporting', protectRoute(), async (req, res) => {
-    const definitions = await populateRoutes(services.dprService, req.session.systemToken, router)
-    res.render('pages/managementReporting/index.njk', { definitions })
-  })
+  router.get(
+    '/management-reporting',
+    protectRoute(),
+    asyncMiddleware(async (req, res) => {
+      const definitions = await services.dprService.getManagementReportDefinitions(getSystemToken(req))
+      res.render('pages/managementReporting/index.njk', { definitions })
+    }),
+  )
 
   return router
+}
+
+export function dprReportingRouter(services: Services, env: Environment): Router {
+  const router = Router()
+  const layoutPath = 'partials/dprLayout.njk'
+
+  router.use(
+    '/dpr',
+    protectRoute(),
+    (req, res, next) => {
+      const user = new DprUser()
+      user.id = res.locals.user.username
+      user.token = getSystemToken(req)
+      user.activeCaseLoadId = res.locals.user.activeCaseLoadId
+      user.displayName = res.locals.user.displayName
+      res.locals.dprUser = user
+      next()
+    },
+    setUpDprResources(services.dprServices, layoutPath, env),
+  )
+  router.use(reportingRoutes({ services: services.dprServices, layoutPath }))
+
+  return router
+}
+
+function getSystemToken(req: Request): string {
+  const token = req.session.systemToken
+  if (!token) {
+    const error: ResponseError = new Error('Missing system token')
+    error.status = 401
+    throw error
+  }
+  return token
 }
 
 function protectRoute() {
