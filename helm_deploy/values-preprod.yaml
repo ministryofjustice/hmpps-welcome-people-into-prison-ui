@@ -42,5 +42,5 @@ generic-service:
     XRAY_BODY_SCANS_API_URL: 'https://x-ray-body-scans-api-preprod.hmpps.service.justice.gov.uk'
     XRAY_BODY_SCANS_UI_URL: 'https://x-ray-body-scans-preprod.hmpps.service.justice.gov.uk'
     PRISONER_SEARCH_API_URL: 'https://prisoner-search-preprod.prison.service.justice.gov.uk'
-    NEW_XRAY_BODY_SCANS_ENABLED_FROM: '2099-01-01T00:00:00'
-    NEW_XRAY_BODY_SCANS_ENABLED_PRISONS: ''
+    NEW_XRAY_BODY_SCANS_ENABLED_FROM: '2026-10-19T13:00:00'
+    NEW_XRAY_BODY_SCANS_ENABLED_PRISONS: 'LCI,WDI'
