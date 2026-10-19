@@ -41,7 +41,7 @@ $xray-body-scans-at-limit-colour: #982828;
 }
 
 .xray-body-scan-card__columns {
-  margin: 0 #{-$govuk-gutter-half};
+  margin: 0 #{-$govuk-gutter-half} #{$govuk-gutter-half};
 
   @include govuk-media-query($from: tablet) {
     display: flex;

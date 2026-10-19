@@ -22,11 +22,6 @@
                     Scans in {{ generateCurrentYear() }}
                 </h3>
                 {{ xrayBodyScanCount(arrival) }}
-                {% if arrival.nomisCount > 0 %}
-                    <p class="govuk-!-margin-top-3 govuk-!-font-size-16 hmpps-secondary-text">
-                        Scan total includes DPS and legacy records<span class="govuk-visually-hidden">.</span>
-                    </p>
-                {% endif %}
             </div>
             <div class="xray-body-scan-card__column">
                 {% if arrival.latestScan and arrival.latestScan.scanDate %}
@@ -48,6 +43,12 @@
                 {% endif %}
             </div>
         </div>
+
+        {% if arrival.nomisCount > 0 %}
+            <p class="govuk-!-margin-bottom-3 govuk-!-font-size-16 hmpps-secondary-text">
+                Scan total includes DPS and legacy records<span class="govuk-visually-hidden">.</span>
+            </p>
+        {% endif %}
 
         {% if isGranted(XRayBodyScansPermission.read_scans, prisonerPermissions) %}
             <a href="{{ xrayBodyScansUiUrl }}/prisoner/{{ arrival.prisonNumber }}/scan-overview?wpipReturnPath={{ wpipReturnPath }}" class="govuk-link govuk-link--no-visited-state">Check body scan details</a>
