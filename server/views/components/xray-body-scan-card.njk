@@ -27,7 +27,7 @@
                 {% if arrival.latestScan and arrival.latestScan.scanDate %}
                     <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Last scan date</h3>
                     <p class="govuk-!-margin-bottom-1">
-                        {{ arrival.latestScan.scanDate | formatDate('D MMMM YYYY') }}
+                        {{ arrival.latestScan.scanDate | formatDate('DD/MM/YYYY') }}
                     </p>
                     {% if arrival.latestScan.outcomeDescription %}
                         <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Result</h3>
