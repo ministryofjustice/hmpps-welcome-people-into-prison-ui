@@ -57,3 +57,14 @@ $xray-body-scans-at-limit-colour: #982828;
     width: 50%;
   }
 }
+
+.xray-body-scan-card__summary {
+  @include govuk-media-query($from: tablet) {
+    display: flex;
+    flex-direction: column;
+
+    .xray-body-scan-count {
+      flex-grow: 1;
+    }
+  }
+}
