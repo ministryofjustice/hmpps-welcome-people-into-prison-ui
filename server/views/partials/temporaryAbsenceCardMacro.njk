@@ -1,6 +1,6 @@
 {% from "components/do-not-scan.njk" import doNotScan %}
-{% from "components/close-to-scan-limit.njk" import closeToScanLimit %}
 {% from "components/xray-body-scan-alerts.njk" import xrayBodyScanAlerts %}
+{% from "components/xray-body-scan-warning.njk" import xrayBodyScanWarning %}
 
 {% macro temporaryAbsenceCard(temporaryAbsence, loopIndex, user) %}
     <div class='app-card-wrapper'>
@@ -57,13 +57,11 @@
                         </dd>
                     </div>
                     <div class="app-card__meta-list-item">
-                        {% if temporaryAbsence.bodyScanStatus === 'DO_NOT_SCAN' %}
-                            {{ doNotScan(user.activeCaseLoadId) }}
-                        {% elif temporaryAbsence.bodyScanStatus === 'CLOSE_TO_LIMIT' and newXRayBodyScansEnabled(user.activeCaseLoadId) %}
-                            {{ closeToScanLimit(temporaryAbsence.numberOfBodyScansRemaining) }}
-                        {% endif %}
                         {% if newXRayBodyScansEnabled(user.activeCaseLoadId) %}
+                            {{ xrayBodyScanWarning(temporaryAbsence) }}
                             {{ xrayBodyScanAlerts(temporaryAbsence.relevantAlerts) }}
+                        {% elif temporaryAbsence.bodyScanStatus === 'DO_NOT_SCAN' %}
+                            {{ doNotScan() }}
                         {% endif %}
                     </div>
                 </dl>

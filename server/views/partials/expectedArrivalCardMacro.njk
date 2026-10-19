@@ -1,6 +1,6 @@
 {% from "components/do-not-scan.njk" import doNotScan %}
-{% from "components/close-to-scan-limit.njk" import closeToScanLimit %}
 {% from "components/xray-body-scan-alerts.njk" import xrayBodyScanAlerts %}
+{% from "components/xray-body-scan-warning.njk" import xrayBodyScanWarning %}
 
 {% macro expectedArrivalCardListContent(arrival, moveType, loopIndex) %}
     <dl class="app-card__meta-list" data-qa="arrival-{{moveType}}-{{loopIndex}}" >
@@ -41,13 +41,11 @@
           {% endif %}
         </div>
         <div class="app-card__meta-list-item">
-            {% if arrival.bodyScanStatus === 'DO_NOT_SCAN' %}
-                {{ doNotScan(user.activeCaseLoadId) }}
-            {% elif arrival.bodyScanStatus === 'CLOSE_TO_LIMIT' and newXRayBodyScansEnabled(user.activeCaseLoadId) %}
-                {{ closeToScanLimit(arrival.numberOfBodyScansRemaining) }}
-            {% endif %}
             {% if newXRayBodyScansEnabled(user.activeCaseLoadId) %}
+                {{ xrayBodyScanWarning(arrival) }}
                 {{ xrayBodyScanAlerts(arrival.relevantAlerts) }}
+            {% elif arrival.bodyScanStatus === 'DO_NOT_SCAN' %}
+                {{ doNotScan() }}
             {% endif %}
         </div>
     </dl>
