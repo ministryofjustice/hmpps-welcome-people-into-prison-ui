@@ -1,12 +1,13 @@
-{% from "../components/do-not-scan.njk" import doNotScan %}
-{% from "../components/close-to-scan-limit.njk" import closeToScanLimit %}
+{% from "components/do-not-scan.njk" import doNotScan %}
+{% from "components/close-to-scan-limit.njk" import closeToScanLimit %}
+{% from "components/xray-body-scan-alerts.njk" import xrayBodyScanAlerts %}
 
 {% macro temporaryAbsenceCard(temporaryAbsence, loopIndex, user) %}
     <div class='app-card-wrapper'>
         <div class="app-card app-card--with-aside">
             <aside class="app-card__aside">
                 <img
-                    src= "/prisoners/{{temporaryAbsence.prisonNumber}}/image" 
+                    src= "/prisoners/{{temporaryAbsence.prisonNumber}}/image"
                     class="app-card__image"
                     alt="Headshot of {{ temporaryAbsence.lastName }}, {{ temporaryAbsence.firstName }}"
                     data-qa="prisoner-image"
@@ -61,16 +62,8 @@
                         {% elif temporaryAbsence.bodyScanStatus === 'CLOSE_TO_LIMIT' and newXRayBodyScansEnabled(user.activeCaseLoadId) %}
                             {{ closeToScanLimit(temporaryAbsence.numberOfBodyScansRemaining) }}
                         {% endif %}
-                        {% if newXRayBodyScansEnabled(user.activeCaseLoadId) and temporaryAbsence.relevantAlerts and temporaryAbsence.relevantAlerts.length %}
-                            <ul class="govuk-list govuk-!-margin-top-1">
-                                {% for alert in temporaryAbsence.relevantAlerts %}
-                                    <li>
-                                        <div class="dps-alert-status dps-alert-status--security">
-                                            {{ alert.codeDescription }}
-                                        </div>
-                                    </li>
-                                {% endfor %}
-                            </ul>
+                        {% if newXRayBodyScansEnabled(user.activeCaseLoadId) %}
+                            {{ xrayBodyScanAlerts(temporaryAbsence.relevantAlerts) }}
                         {% endif %}
                     </div>
                 </dl>

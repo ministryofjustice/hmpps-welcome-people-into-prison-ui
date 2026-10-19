@@ -1,0 +1,13 @@
+{% macro xrayBodyScanAlerts(relevantAlerts) %}
+    {% if relevantAlerts and relevantAlerts.length %}
+        <ul class="govuk-list govuk-!-margin-top-1">
+            {% for alert in relevantAlerts %}
+                <li>
+                    <div class="dps-alert-status dps-alert-status--security">
+                        {{ alert.codeDescription }}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endmacro %}

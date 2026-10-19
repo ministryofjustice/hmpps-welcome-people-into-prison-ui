@@ -1,5 +1,6 @@
-{% from "../components/do-not-scan.njk" import doNotScan %}
-{% from "../components/close-to-scan-limit.njk" import closeToScanLimit %}
+{% from "components/do-not-scan.njk" import doNotScan %}
+{% from "components/close-to-scan-limit.njk" import closeToScanLimit %}
+{% from "components/xray-body-scan-alerts.njk" import xrayBodyScanAlerts %}
 
 {% macro expectedArrivalCardListContent(arrival, moveType, loopIndex) %}
     <dl class="app-card__meta-list" data-qa="arrival-{{moveType}}-{{loopIndex}}" >
@@ -45,16 +46,8 @@
             {% elif arrival.bodyScanStatus === 'CLOSE_TO_LIMIT' and newXRayBodyScansEnabled(user.activeCaseLoadId) %}
                 {{ closeToScanLimit(arrival.numberOfBodyScansRemaining) }}
             {% endif %}
-            {% if newXRayBodyScansEnabled(user.activeCaseLoadId) and arrival.relevantAlerts and arrival.relevantAlerts.length %}
-                <ul class="govuk-list govuk-!-margin-top-1">
-                    {% for alert in arrival.relevantAlerts %}
-                        <li>
-                            <div class="dps-alert-status dps-alert-status--security">
-                                {{ alert.codeDescription }}
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
+            {% if newXRayBodyScansEnabled(user.activeCaseLoadId) %}
+                {{ xrayBodyScanAlerts(arrival.relevantAlerts) }}
             {% endif %}
         </div>
     </dl>
@@ -65,8 +58,8 @@
         <div class="app-card app-card--with-aside">
             <aside class="app-card__aside">
                 {% set hasPhoto = arrival.matchType in ['SINGLE_MATCH', 'COURT_RETURN'] %}
-                <img 
-                  src="{{ '/prisoners/' + arrival.potentialMatches[0].prisonNumber + '/image' if hasPhoto else '/assets/images/placeholder-image.png' }}" class="app-card__image" 
+                <img
+                  src="{{ '/prisoners/' + arrival.potentialMatches[0].prisonNumber + '/image' if hasPhoto else '/assets/images/placeholder-image.png' }}" class="app-card__image"
                   alt="{{ arrival.lastName + ', ' + arrival.firstName if hasPhoto else 'No photo available' }}" data-qa="prisoner-image"/>
             </aside>
             <div class="app-card__content">

@@ -1,5 +1,6 @@
-{% from "../components/do-not-scan.njk" import doNotScan %}
-{% from "../components/close-to-scan-limit.njk" import closeToScanLimit %}
+{% from "components/do-not-scan.njk" import doNotScan %}
+{% from "components/close-to-scan-limit.njk" import closeToScanLimit %}
+{% from "components/xray-body-scan-alerts.njk" import xrayBodyScanAlerts %}
 
 {% macro recentArrivalCardListContent(arrival, loopIndex, date) %}
     <dl class="app-card__meta-list" data-qa="recent-arrival-{{date}}-{{loopIndex}}">
@@ -43,16 +44,8 @@
             {% elif arrival.bodyScanStatus === 'CLOSE_TO_LIMIT' and newXRayBodyScansEnabled(user.activeCaseLoadId) %}
                 {{ closeToScanLimit(arrival.numberOfBodyScansRemaining) }}
             {% endif %}
-            {% if newXRayBodyScansEnabled(user.activeCaseLoadId) and arrival.relevantAlerts and arrival.relevantAlerts.length %}
-                <ul class="govuk-list govuk-!-margin-top-1">
-                    {% for alert in arrival.relevantAlerts %}
-                        <li>
-                            <div class="dps-alert-status dps-alert-status--security">
-                                {{ alert.codeDescription }}
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
+            {% if newXRayBodyScansEnabled(user.activeCaseLoadId) %}
+                {{ xrayBodyScanAlerts(arrival.relevantAlerts) }}
             {% endif %}
         </div>
     </dl>
