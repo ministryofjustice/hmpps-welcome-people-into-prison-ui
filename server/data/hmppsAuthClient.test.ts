@@ -28,8 +28,12 @@ describe('hmppsAuthClient', () => {
   })
 
   describe('getUser', () => {
-    it('should return data from api', async () => {
-      const response = { data: 'data' }
+    it('returns and maps data from the api', async () => {
+      const response = {
+        name: 'John Smith',
+        uuid: '11111111-1111-1111-1111-111111111111',
+        activeCaseLoadId: 'MDI',
+      }
 
       fakeManageUsersApi
         .get('/users/me')
@@ -37,7 +41,11 @@ describe('hmppsAuthClient', () => {
         .reply(200, response)
 
       const output = await hmppsAuthClient.getUser(token.access_token)
-      expect(output).toEqual(response)
+      expect(output).toEqual({
+        name: response.name,
+        userUuid: response.uuid,
+        activeCaseLoadId: response.activeCaseLoadId,
+      })
     })
   })
 

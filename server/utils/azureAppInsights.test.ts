@@ -1,10 +1,12 @@
 import { DataTelemetry, EnvelopeTelemetry } from 'applicationinsights/out/Declarations/Contracts'
 import { addUserDataToRequests, ContextObject } from './azureAppInsights'
+import { UUID } from 'crypto'
 
 const user = {
   activeCaseLoadId: 'LII',
   isReceptionUser: true,
   username: 'test-user',
+  userUuid: '11111111-1111-1111-1111-111111111111' as UUID,
 }
 
 const createEnvelope = (properties: Record<string, string | boolean>, baseType = 'RequestData') =>
@@ -15,13 +17,14 @@ const createEnvelope = (properties: Record<string, string | boolean>, baseType =
     } as DataTelemetry,
   }) as EnvelopeTelemetry
 
-const createContext = (username: string, activeCaseLoadId: string, isReceptionUser: boolean) =>
+const createContext = (username: string, userUuid: UUID, activeCaseLoadId: string, isReceptionUser: boolean) =>
   ({
     'http.ServerRequest': {
       res: {
         locals: {
           user: {
             username,
+            userUuid,
             activeCaseLoadId,
             isReceptionUser,
           },
@@ -30,7 +33,7 @@ const createContext = (username: string, activeCaseLoadId: string, isReceptionUs
     },
   }) as ContextObject
 
-const context = createContext(user.username, user.activeCaseLoadId, user.isReceptionUser)
+const context = createContext(user.username, user.userUuid, user.activeCaseLoadId, user.isReceptionUser)
 
 describe('azureAppInsights', () => {
   describe('addUserDataToRequests', () => {
