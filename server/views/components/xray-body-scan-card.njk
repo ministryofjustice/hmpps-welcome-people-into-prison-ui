@@ -1,11 +1,21 @@
 {% from "components/xray-body-scan-count.njk" import xrayBodyScanCount %}
 
 {% macro xrayBodyScanCard(arrival, prisonerPermissions) %}
-<div class="govuk-summary-card govuk-!-margin-bottom-6" id="body-scan">
-    <div class="govuk-summary-card__title-wrapper">
-        <h2 class="govuk-summary-card__title">X-ray body scans</h2>
-    </div>
-    <div class="govuk-summary-card__content">
+{% set wpipReturnPath %}/recent-arrivals/{{ arrival.prisonNumber }}/summary{% endset %}
+{% set wpipReturnPath = wpipReturnPath | urlencode %}
+
+<section class="summary-card govuk-!-margin-bottom-6" id="body-scan">
+    <header class="summary-card__header">
+        <h2 class="summary-card__title">X-ray body scans</h2>
+        <div class="app-summary-card__actions">
+            {% if isGranted(XRayBodyScansPermission.edit_scans, prisonerPermissions) %}
+                <a href="{{ xrayBodyScansUiUrl }}/prisoner/{{ arrival.prisonNumber }}/record-scan?wpipReturnPath={{ wpipReturnPath }}" class="govuk-link govuk-link--no-visited-state">Record a new scan</a>
+            {% else %}
+                <a href="/prisoners/{{ arrival.prisonNumber }}/record-body-scan" class="govuk-link govuk-link--no-visited-state" data-qa="record-body-scan">Record a new scan</a>
+            {% endif %}
+        </div>
+    </header>
+    <div class="summary-card__body">
         <div class="xray-body-scan-card__columns">
             <div class="xray-body-scan-card__column">
                 <h3 class="govuk-heading-s govuk-!-margin-bottom-1">
@@ -38,17 +48,12 @@
                 {% endif %}
             </div>
         </div>
-        {% set wpipReturnPath = '/recent-arrivals/' + arrival.prisonNumber + '/summary' %}
+
         {% if isGranted(XRayBodyScansPermission.read_scans, prisonerPermissions) %}
-            <a href="{{ xrayBodyScansUiUrl }}/prisoner/{{ arrival.prisonNumber }}/scan-overview?wpipReturnPath={{ wpipReturnPath | urlencode }}">Check body scan details</a>
+            <a href="{{ xrayBodyScansUiUrl }}/prisoner/{{ arrival.prisonNumber }}/scan-overview?wpipReturnPath={{ wpipReturnPath }}" class="govuk-link govuk-link--no-visited-state">Check body scan details</a>
         {% else %}
-            <a href="{{ profileUrl }}/prisoner/{{ arrival.prisonNumber }}/x-ray-body-scans">Check body scan details</a>
-        {% endif %}
-        {% if isGranted(XRayBodyScansPermission.edit_scans, prisonerPermissions) %}
-            <a href="{{ xrayBodyScansUiUrl }}/prisoner/{{ arrival.prisonNumber }}/record-scan?wpipReturnPath={{ wpipReturnPath | urlencode }}" class="govuk-!-margin-left-4">Record a new scan</a>
-        {% else %}
-            <a href="/prisoners/{{ arrival.prisonNumber }}/record-body-scan" class="govuk-!-margin-left-4" data-qa="record-body-scan">Record a new scan</a>
+            <a href="{{ profileUrl }}/prisoner/{{ arrival.prisonNumber }}/x-ray-body-scans" class="govuk-link govuk-link--no-visited-state">Check body scan details</a>
         {% endif %}
     </div>
-</div>
+</section>
 {% endmacro %}
