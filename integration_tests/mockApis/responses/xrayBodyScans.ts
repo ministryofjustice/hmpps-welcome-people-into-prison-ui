@@ -49,11 +49,18 @@ export default {
     toScanDate: '2026-12-31',
     relevantAlerts: [
       {
-        id: '1',
-        type: 'XRBS',
+        id: '44ed8220-a899-4847-93de-95e1ffae2997',
+        type: 'X',
         typeDescription: 'Security',
         code: 'XIS',
-        codeDescription: 'Internal secretor',
+        codeDescription: 'Internal Secretor',
+      },
+      {
+        id: '5a2d75f1-25ff-43b6-96a2-cf8d82e2e14e',
+        type: 'X',
+        typeDescription: 'Security',
+        code: 'XXRAY',
+        codeDescription: 'Do Not X-Ray Body Scan',
       },
     ],
     latestScan: { source: 'DPS', scanDate: '2026-09-01', outcomeDescription: 'Negative', scanDetails: null },

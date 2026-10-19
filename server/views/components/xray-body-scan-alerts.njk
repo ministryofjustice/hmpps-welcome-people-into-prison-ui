@@ -4,7 +4,13 @@
             {% for alert in relevantAlerts %}
                 <li>
                     <div class="dps-alert-status dps-alert-status--{{ alert.type }}">
-                        {{ alert.codeDescription }}
+                        {% if alert.code == 'XIS' %}
+                            Internal secretor
+                        {% elseif alert.code == 'XXRAY' %}
+                            Do not X-ray body scan
+                        {% else %}
+                            {{ alert.codeDescription }}
+                        {% endif %}
                     </div>
                 </li>
             {% endfor %}
