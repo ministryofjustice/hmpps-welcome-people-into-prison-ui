@@ -310,7 +310,7 @@ export const createUserCaseLoad = ({
 
 export const createUser = ({
   name = 'John Smith',
-  userUuid = '11111111-1111-1111-1111-111111111111' as UUID,
+  userUuid = '12345-12345-12345-12345-12345' as UUID,
   activeCaseLoadId = 'MDI',
 } = {}): User => ({ name, userUuid, activeCaseLoadId })
 
