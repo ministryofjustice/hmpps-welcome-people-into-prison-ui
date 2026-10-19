@@ -1,6 +1,6 @@
 import { DataTelemetry, EnvelopeTelemetry } from 'applicationinsights/out/Declarations/Contracts'
-import { addUserDataToRequests, ContextObject } from './azureAppInsights'
 import { UUID } from 'crypto'
+import { addUserDataToRequests, ContextObject } from './azureAppInsights'
 
 const user = {
   activeCaseLoadId: 'LII',
