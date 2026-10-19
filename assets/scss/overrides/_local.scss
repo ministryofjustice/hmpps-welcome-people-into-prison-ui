@@ -10,6 +10,12 @@
   display: flex;
 }
 
+.hmpps-secondary-text {
+  // change to govuk-functional-colour(secondary-text) once govuk-frontend is upgraded to v6
+  // slightly similar to "dark-grey" when using v5
+  color: #484949;
+}
+
 .border-left-grey {
   border-left: 2px solid $govuk-border-colour;
 }

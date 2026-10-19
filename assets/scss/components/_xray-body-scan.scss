@@ -1,5 +1,12 @@
+// change to govuk-functional-colour(border) once govuk-frontend is upgraded to v6
+$xray-body-scans-generic-colour:  #cecece;
+// change to govuk-colour(orange, $variant: "shade-25") once govuk-frontend is upgraded to v6
+$xray-body-scans-nearing-limit-colour:  #b7592a;
+// change to govuk-colour(red, $variant: "shade-25") once govuk-frontend is upgraded to v6
+$xray-body-scans-at-limit-colour: #982828;
+
 .xray-body-scan-count {
-  border-left: $govuk-border-width solid govuk-colour("mid-grey");
+  border-left: $govuk-border-width solid $xray-body-scans-generic-colour;
   padding-left: $govuk-border-width-wide;
   @include govuk-responsive-margin(2, 'bottom');
 
@@ -16,25 +23,25 @@
 }
 
 .xray-body-scan-count--nearing-limit {
-  border-left-color: govuk-colour("orange");
+  border-left-color: $xray-body-scans-nearing-limit-colour;
 
   .xray-body-scan-count__number,
   .xray-body-scan-count__limit-warning {
-    color: govuk-colour("orange");
+    color: $xray-body-scans-nearing-limit-colour;
   }
 }
 
 .xray-body-scan-count--at-limit {
-  border-left-color: govuk-colour("red");
+  border-left-color: $xray-body-scans-at-limit-colour;
 
   .xray-body-scan-count__number,
   .xray-body-scan-count__limit-warning {
-    color: govuk-colour("red");
+    color: $xray-body-scans-at-limit-colour;
   }
 }
 
 .xray-body-scan-card__columns {
-  margin: 0 #{-$govuk-gutter-half};
+  margin: 0 #{-$govuk-gutter-half} #{$govuk-gutter-half};
 
   @include govuk-media-query($from: tablet) {
     display: flex;
@@ -48,5 +55,16 @@
   @include govuk-media-query($from: tablet) {
     flex-grow: 1;
     width: 50%;
+  }
+}
+
+.xray-body-scan-card__summary {
+  @include govuk-media-query($from: tablet) {
+    display: flex;
+    flex-direction: column;
+
+    .xray-body-scan-count {
+      flex-grow: 1;
+    }
   }
 }

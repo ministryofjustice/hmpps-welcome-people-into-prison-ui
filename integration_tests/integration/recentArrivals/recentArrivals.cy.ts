@@ -164,7 +164,8 @@ context('A user can view all recent arrivals', () => {
     cy.signIn()
     const recentArrivalsPage = RecentArrivalsPage.goTo()
     recentArrivalsPage.recentArrivals(1, today).doNotScan().should('not.exist')
-    cy.get('.dps-alert-status--security').should('contain.text', 'Internal secretor')
+    cy.get('.dps-alert-status').should('contain.text', 'Internal secretor')
+    cy.get('.dps-alert-status').should('contain.text', 'Do not X-ray body scan')
   })
 
   it('Should display legacy NOMIS count info when nomisCount is greater than zero', () => {
