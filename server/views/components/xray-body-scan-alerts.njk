@@ -3,7 +3,7 @@
         <ul class="govuk-list govuk-!-margin-top-1">
             {% for alert in relevantAlerts %}
                 <li>
-                    <div class="dps-alert-status dps-alert-status--security">
+                    <div class="dps-alert-status dps-alert-status--{{ alert.type }}">
                         {{ alert.codeDescription }}
                     </div>
                 </li>

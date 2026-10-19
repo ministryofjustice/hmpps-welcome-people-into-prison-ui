@@ -12,11 +12,13 @@
   color: govuk-colour("black");
   background-color: govuk-colour("white");
 
-  &--security {
+  // security
+  &--X {
     border-color: #003078;
   }
 
-  &--medical {
+  // medical
+  &--M {
     border-color: #5190c8;
   }
 }
