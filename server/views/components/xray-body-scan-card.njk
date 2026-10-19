@@ -1,5 +1,4 @@
 {% from "components/xray-body-scan-count.njk" import xrayBodyScanCount %}
-{% from "components/xray-body-scan-alerts.njk" import xrayBodyScanAlerts %}
 
 {% macro xrayBodyScanCard(arrival, prisonerPermissions) %}
 <div class="govuk-summary-card govuk-!-margin-bottom-6" id="body-scan">
@@ -39,7 +38,6 @@
                 {% endif %}
             </div>
         </div>
-        {{ xrayBodyScanAlerts(arrival.relevantAlerts) }}
         {% set wpipReturnPath = '/recent-arrivals/' + arrival.prisonNumber + '/summary' %}
         {% if isGranted(XRayBodyScansPermission.read_scans, prisonerPermissions) %}
             <a href="{{ xrayBodyScansUiUrl }}/prisoner/{{ arrival.prisonNumber }}/scan-overview?wpipReturnPath={{ wpipReturnPath | urlencode }}">Check body scan details</a>
