@@ -34,11 +34,6 @@
                         <p class="govuk-!-margin-bottom-1">
                             {{ arrival.latestScan.outcomeDescription }}
                         </p>
-                    {% elif arrival.latestScan.scanDetails %}
-                        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Result</h3>
-                        <p class="govuk-!-margin-bottom-1">
-                            {{ arrival.latestScan.scanDetails }}
-                        </p>
                     {% endif %}
                 {% endif %}
             </div>
