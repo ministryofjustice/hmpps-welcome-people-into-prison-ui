@@ -6,7 +6,7 @@ const user = {
   activeCaseLoadId: 'LII',
   isReceptionUser: true,
   username: 'test-user',
-  userUuid: '11111111-1111-1111-1111-111111111111' as UUID,
+  userUuid: '12345-12345-12345-12345-12345' as UUID,
 }
 
 const createEnvelope = (properties: Record<string, string | boolean>, baseType = 'RequestData') =>

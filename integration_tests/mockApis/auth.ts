@@ -143,7 +143,7 @@ const stubUser = () =>
       jsonBody: {
         staffId: 231232,
         username: 'USER1',
-        uuid: '11111111-1111-1111-1111-111111111111',
+        uuid: '11111-11111-11111-11111-11111',
         active: true,
         name: 'john smith',
         activeCaseLoadId: 'MDI',

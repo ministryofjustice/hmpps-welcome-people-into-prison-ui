@@ -31,7 +31,7 @@ describe('hmppsAuthClient', () => {
     it('returns and maps data from the api', async () => {
       const response = {
         name: 'John Smith',
-        uuid: '11111111-1111-1111-1111-111111111111',
+        uuid: '12345-12345-12345-12345-12345',
         activeCaseLoadId: 'MDI',
       }
 
