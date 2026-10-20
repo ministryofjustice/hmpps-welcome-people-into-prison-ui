@@ -14,6 +14,7 @@ import type {
 } from 'welcome'
 import type { BodyScanStatus } from 'body-scan'
 import type { ManagementReportDefinition } from 'management-reporting'
+import { UUID } from 'crypto'
 import { WithBodyScanInfo } from '../../services/bodyScanInfoDecorator'
 
 import type { NewArrival } from '../../routes/bookedtoday/arrivals/state'
@@ -307,7 +308,11 @@ export const createUserCaseLoad = ({
   description,
 })
 
-export const createUser = ({ name = 'John Smith', activeCaseLoadId = 'MDI' } = {}): User => ({ name, activeCaseLoadId })
+export const createUser = ({
+  name = 'John Smith',
+  userUuid = '12345-12345-12345-12345-12345' as UUID,
+  activeCaseLoadId = 'MDI',
+} = {}): User => ({ name, userUuid, activeCaseLoadId })
 
 export const reportDefinition = (): ManagementReportDefinition[] => {
   return [
