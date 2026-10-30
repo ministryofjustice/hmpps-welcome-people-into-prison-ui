@@ -14,7 +14,7 @@ The app requires:
 * hmpps-auth - for authentication
 * redis - session store and token caching
 
-### Runing the app for development
+### Running the app for development
 
 To start the main services excluding the example typescript template app:
 
@@ -28,7 +28,7 @@ And then, to build the assets and start the app with nodemon:
 
 ### Management reporting
 
-Management reporting uses DPRand the welcome API. The report list remains at `/management-reporting`,
+Management reporting uses DPR and the welcome API. The report list remains at `/management-reporting`,
 with reports linked through to `/dpr/view-report/sync/report/:reportId/:variantId/load-report`.
 
 ### Run linter
