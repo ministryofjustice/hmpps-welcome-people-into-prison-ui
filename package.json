@@ -108,7 +108,7 @@
     "@ministryofjustice/hmpps-prison-permissions-lib": "5.3.0",
     "agentkeepalive": "^4.6.0",
     "applicationinsights": "^2.9.8",
-    "body-parser": "^2.3.0",
+    "body-parser": "^2.4.0",
     "bs-logger": "^0.2.6",
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",
@@ -202,15 +202,20 @@
     "@types/express-serve-static-core": "4.19.9",
     "axios": ">=1.20.0",
     "serialize-javascript": ">=7.1.2",
-    "undici": ">=8.11.2",
+    "undici": ">=8.12.2",
     "shell-quote": ">=1.12.0",
     "brace-expansion": ">=5.0.12",
     "json-2-csv": ">=5.6.0",
-    "qs": ">=6.16.0",
+    "qs": ">=6.16.1",
     "@opentelemetry/core": "^2.11.0",
     "tar": "^7.5.22",
+    "follow-redirects": "^1.16.1",
+    "body-parser": "^2.4.0",
     "cypress": {
       "tmp": "0.2.7"
+    },
+    "express" : {
+      "body-parser": "^1.20.9"
     },
     "superagent": {
       "formidable": "3.5.4"
