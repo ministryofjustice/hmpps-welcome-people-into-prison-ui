@@ -40,6 +40,3 @@ generic-service:
     PRISONER_SEARCH_API_URL: 'https://prisoner-search.prison.service.justice.gov.uk'
     NEW_XRAY_BODY_SCANS_ENABLED_FROM: '2026-10-20T11:00:00'
     NEW_XRAY_BODY_SCANS_ENABLED_PRISONS: 'LCI,WDI'
-
-generic-prometheus-alerts:
-  alertSeverity: move-a-prisoner-alerts-prod
