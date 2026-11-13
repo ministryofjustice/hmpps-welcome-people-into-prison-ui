@@ -158,6 +158,7 @@ describe('Management reporting routes', () => {
       matrixtimeseriesChartsEnabled: false,
       bartimeseriesChartsEnabled: false,
       linetimeseriesChartsEnabled: false,
+      boxPlotChartsEnabled: false,
     })
     jest.spyOn(services.dprServices.reportingService, 'getDefinitions').mockResolvedValue([])
     jest.spyOn(services.dprServices.reportingService, 'getDefinitionSummary').mockImplementation(
