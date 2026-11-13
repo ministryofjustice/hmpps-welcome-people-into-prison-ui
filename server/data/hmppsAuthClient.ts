@@ -1,5 +1,6 @@
 import superagent from 'superagent'
 import querystring from 'querystring'
+import { UUID } from 'crypto'
 import type { TokenStore } from './tokenStore'
 
 import logger from '../../logger'
@@ -34,6 +35,7 @@ function getSystemClientTokenFromHmppsAuth(username?: string): Promise<superagen
 
 export interface User {
   name: string
+  userUuid: UUID
   activeCaseLoadId: string
 }
 
@@ -48,9 +50,15 @@ export default class HmppsAuthClient {
     return new RestClient('HMPPS manage users API', config.apis.hmppsManageUsersApi, token)
   }
 
-  getUser(token: string): Promise<User> {
+  async getUser(token: string): Promise<User> {
     logger.info(`Getting user details: calling HMPPS manage users API`)
-    return this.restClient(token).get({ path: '/users/me' }) as Promise<User>
+
+    const { uuid: userUuid, ...user } = (await this.restClient(token).get({ path: '/users/me' })) as {
+      name: string
+      uuid: UUID
+      activeCaseLoadId: string
+    }
+    return { userUuid, ...user }
   }
 
   getUserRoles(token: string): Promise<string[]> {

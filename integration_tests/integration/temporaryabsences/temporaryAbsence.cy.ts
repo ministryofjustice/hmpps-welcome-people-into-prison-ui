@@ -19,7 +19,7 @@ context('Confirm temporary absence added', () => {
       temporaryAbsence: temporaryAbsences[0],
     })
     cy.task('stubConfirmTemporaryAbsence', temporaryAbsences[0].prisonNumber)
-    cy.task('stubRetrieveMultipleBodyScans', [])
+    cy.task('stubBulkGetXrayBodyScans', [])
     cy.signIn()
   })
 

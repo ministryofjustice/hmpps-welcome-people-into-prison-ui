@@ -43,20 +43,24 @@ describe('Transfers service', () => {
     it('Calls upstream service correctly', async () => {
       welcomeClient.getTransfer.mockResolvedValue(transfer)
 
-      await service.getTransferWithBodyScanDetails('MDI', 'A1234AA')
+      await service.getTransferWithBodyScanDetails('username', 'MDI', 'A1234AA')
 
       expect(WelcomeClientFactory).toBeCalledWith(token)
       expect(welcomeClient.getTransfer).toBeCalledWith('MDI', 'A1234AA')
-      expect(bodyScanInfoDecorator.decorateSingle).toBeCalledWith({
-        firstName: 'Sam',
-        lastName: 'Smith',
-        prisonNumber: 'A1234AA',
-        pncNumber: '01/1234X',
-        date: '2020-02-23',
-        dateOfBirth: '1971-02-01',
-        fromLocation: 'Kingston-upon-Hull Crown Court',
-        mainOffence: 'theft',
-      })
+      expect(bodyScanInfoDecorator.decorateSingle).toBeCalledWith(
+        {
+          firstName: 'Sam',
+          lastName: 'Smith',
+          prisonNumber: 'A1234AA',
+          pncNumber: '01/1234X',
+          date: '2020-02-23',
+          dateOfBirth: '1971-02-01',
+          fromLocation: 'Kingston-upon-Hull Crown Court',
+          mainOffence: 'theft',
+        },
+        'username',
+        'MDI',
+      )
     })
   })
 

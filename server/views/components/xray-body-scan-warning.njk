@@ -1,0 +1,15 @@
+{% macro xrayBodyScanWarning(arrival) %}
+    {% set atLimit = arrival.bodyScanStatus === 'DO_NOT_SCAN' %}
+    {% set nearingLimit = arrival.bodyScanStatus === 'CLOSE_TO_LIMIT' %}
+    {% if atLimit or nearingLimit %}
+        <div class="xray-body-scan-count {% if atLimit %}xray-body-scan-count--at-limit{% elif nearingLimit %}xray-body-scan-count--nearing-limit{% endif %}" data-qa="{% if atLimit %}do-not-scan{% elif nearingLimit %}close-to-scan-limit{% endif %}">
+            {% if atLimit %}
+                <strong class="xray-body-scan-count__limit-warning">Scan limit reached</strong>
+                No more X-ray body scans allowed this year<span class="govuk-visually-hidden">.</span>
+            {% elif nearingLimit %}
+                <strong class="xray-body-scan-count__limit-warning">Near scan limit</strong>
+                {{ arrival.numberOfBodyScansRemaining }} X-ray body {{ 'scan' if arrival.numberOfBodyScansRemaining == 1 else 'scans' }} left this year<span class="govuk-visually-hidden">.</span>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endmacro %}

@@ -10,7 +10,10 @@ export default function routes(services: Services): Router {
   const recentArrivals = new RecentArrivalsController(services.expectedArrivalsService)
   const recentArrivalsSearch = new RecentArrivalsSearchController(services.expectedArrivalsService)
   const checkSearchQueryPresent = State.searchQuery.ensurePresent('/recent-arrivals')
-  const recentArrivalsSummaryController = new RecentArrivalsSummaryController(services.expectedArrivalsService)
+  const recentArrivalsSummaryController = new RecentArrivalsSummaryController(
+    services.expectedArrivalsService,
+    services.prisonPermissionsService,
+  )
 
   return Routes.forAnyRole()
     .get('/recent-arrivals', recentArrivals.view())

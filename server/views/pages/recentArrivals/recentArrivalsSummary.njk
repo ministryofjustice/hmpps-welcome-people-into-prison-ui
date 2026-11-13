@@ -1,6 +1,7 @@
 {% extends "../../partials/layout.njk" %}
 {% from "components/summary-card.njk" import summaryCard %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "components/xray-body-scan-card.njk" import xrayBodyScanCard %}
 
 {% set pageTitle = "Summary of recent arrival" %}
 {% set hasBackLink = false %}
@@ -84,34 +85,38 @@
                             }
                         ]
                     }) }}
-                    {% if arrival.bodyScanStatus === 'DO_NOT_SCAN' %}
-                        <div class="compliance-panel compliance-panel--red">
-                            <p class="govuk-!-margin-bottom-0 govuk-!-font-weight-bold" data-qa="compliance-panel-text">
-                                Do not scan – annual body scan limit reached
-                            </p>
-                        </div>
-                    {% elif arrival.bodyScanStatus === 'CLOSE_TO_LIMIT'  %}
-                        <div class="compliance-panel">
-                            <p class="govuk-!-margin-bottom-0 govuk-!-font-weight-bold" data-qa="compliance-panel-text">
-                                {{ arrival.firstName }} {{ arrival.lastName }} can only be scanned {{ arrival.numberOfBodyScansRemaining }} more times this year
-                            </p>
-                        </div>
-                    {% endif %}
                     {% if not isFemalePrison %}
-                        {{ summaryCard({
-                            id: "body-scan",
-                            classes: "govuk-!-margin-bottom-6",
-                            titleText: "X-ray body scan",
-                            action: { href: "/prisoners/" + arrival.prisonNumber + "/record-body-scan", 
-                                    text: "Record an X-ray body scan", 
-                                    attributes: { 'data-qa': 'record-body-scan' } },
-                            rows: [
-                                {
-                                    key: {  text: "Total number of scans", caption: "Since 1 January " + generateCurrentYear() },
-                                    value:  { text: arrival.numberOfBodyScans }
-                                }
-                            ]
-                        }) }}
+                        {% if newXRayBodyScansEnabled(user.activeCaseLoadId) %}
+                            {{ xrayBodyScanCard(arrival, prisonerPermissions) }}
+                        {% else %}
+                            {% if arrival.bodyScanStatus === 'DO_NOT_SCAN' %}
+                                <div class="compliance-panel compliance-panel--red">
+                                    <p class="govuk-!-margin-bottom-0 govuk-!-font-weight-bold" data-qa="compliance-panel-text">
+                                        Do not scan – annual body scan limit reached
+                                    </p>
+                                </div>
+                            {% elif arrival.bodyScanStatus === 'CLOSE_TO_LIMIT' %}
+                                <div class="compliance-panel">
+                                    <p class="govuk-!-margin-bottom-0 govuk-!-font-weight-bold" data-qa="compliance-panel-text">
+                                        {{ arrival.firstName }} {{ arrival.lastName }} can only be scanned {{ arrival.numberOfBodyScansRemaining }} more times this year
+                                    </p>
+                                </div>
+                            {% endif %}
+                            {{ summaryCard({
+                                id: "body-scan",
+                                classes: "govuk-!-margin-bottom-6",
+                                titleText: "X-ray body scan",
+                                action: { href: "/prisoners/" + arrival.prisonNumber + "/record-body-scan",
+                                        text: "Record an X-ray body scan",
+                                        attributes: { 'data-qa': 'record-body-scan' } },
+                                rows: [
+                                    {
+                                        key: { text: "Total number of scans", caption: "Since 1 January " + generateCurrentYear() },
+                                        value: { text: arrival.numberOfBodyScans }
+                                    }
+                                ]
+                            }) }}
+                        {% endif %}
                     {% endif %}
                 </div>
 

@@ -90,7 +90,10 @@ describe('GET /recent-arrivals', () => {
       .get('/recent-arrivals')
       .expect('Content-Type', 'text/html; charset=utf-8')
       .expect(res => {
-        expect(expectedArrivalsService.getRecentArrivalsGroupedByDate).toHaveBeenCalledWith(user.activeCaseLoadId)
+        expect(expectedArrivalsService.getRecentArrivalsGroupedByDate).toHaveBeenCalledWith(
+          user.username,
+          user.activeCaseLoadId,
+        )
       })
   })
 

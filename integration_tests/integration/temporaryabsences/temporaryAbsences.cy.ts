@@ -3,6 +3,7 @@ import Role from '../../../server/authentication/role'
 import TemporaryAbsencesPage from '../../pages/temporaryabsences/temporaryAbsences'
 import CheckTemporaryAbsencePage from '../../pages/temporaryabsences/checkTemporaryAbsence'
 import temporaryAbsences from '../../mockApis/responses/temporaryAbsences'
+import xrayBodyScans from '../../mockApis/responses/xrayBodyScans'
 
 context('A user can view all current temporary absences', () => {
   beforeEach(() => {
@@ -18,27 +19,11 @@ context('A user can view all current temporary absences', () => {
       temporaryAbsence: temporaryAbsences[0],
     })
     cy.task('stubMissingPrisonerImage')
-    cy.task('stubRetrieveMultipleBodyScans', [
-      {
-        prisonNumber: 'G0013AB',
-        bodyScanStatus: 'DO_NOT_SCAN',
-        numberOfBodyScans: 120,
-      },
-      {
-        prisonNumber: 'G0015GD',
-        bodyScanStatus: 'CLOSE_TO_LIMIT',
-        numberOfBodyScans: 114,
-      },
-      {
-        prisonNumber: 'G0016GD',
-        bodyScanStatus: 'DO_NOT_SCAN',
-        numberOfBodyScans: 121,
-      },
-      {
-        prisonNumber: 'G0012HK',
-        bodyScanStatus: 'OK_TO_SCAN',
-        numberOfBodyScans: 10,
-      },
+    cy.task('stubBulkGetXrayBodyScans', [
+      xrayBodyScans.doNotScan('G0013AB'),
+      xrayBodyScans.closeToLimit('G0015GD'),
+      xrayBodyScans.doNotScan('G0016GD'),
+      xrayBodyScans.okToScan('G0012HK'),
     ])
   })
 

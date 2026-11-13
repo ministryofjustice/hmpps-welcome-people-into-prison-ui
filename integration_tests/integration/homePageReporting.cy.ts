@@ -21,7 +21,7 @@ context('A user can view the home page with management reporting', () => {
     cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [expectedArrivals.prisonTransfer] })
     cy.task('stubTemporaryAbsences', 'MDI')
     cy.task('stubMissingPrisonerImage')
-    cy.task('stubRetrieveMultipleBodyScans', [])
+    cy.task('stubBulkGetXrayBodyScans', [])
 
     cy.signIn()
   })

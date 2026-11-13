@@ -29,6 +29,18 @@ describe('tokenStore', () => {
       expect(redisClient.get).toHaveBeenCalledWith('systemToken:user-1')
     })
 
+    it('Decodes a token returned as a buffer', async () => {
+      redisClient.get.mockResolvedValue(Buffer.from('token-1'))
+
+      await expect(tokenStore.getToken('user-1')).resolves.toBe('token-1')
+    })
+
+    it('Preserves a missing token', async () => {
+      redisClient.get.mockResolvedValue(null)
+
+      await expect(tokenStore.getToken('user-1')).resolves.toBeNull()
+    })
+
     it('Connects when no connection calling getToken', async () => {
       ;(redisClient as unknown as Record<string, boolean>).isOpen = false
 

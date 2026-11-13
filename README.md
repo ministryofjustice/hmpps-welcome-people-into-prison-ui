@@ -3,20 +3,20 @@
 [![Known Vulnerabilities](https://snyk.io/test/github/ministryofjustice/hmpps-welcome-people-into-prison-ui/badge.svg)](https://snyk.io/test/github/ministryofjustice/hmpps-welcome-people-into-prison-ui)
 
 ## Running the app
-The easiest way to run the app is to use docker compose to create the service and all dependencies. 
+The easiest way to run the app is to use docker compose to create the service and all dependencies.
 
 `docker-compose pull`
 
 `docker-compose up`
 
 ### Dependencies
-The app requires: 
+The app requires:
 * hmpps-auth - for authentication
 * redis - session store and token caching
 
 ### Runing the app for development
 
-To start the main services excluding the example typescript template app: 
+To start the main services excluding the example typescript template app:
 
 `docker-compose up`
 
@@ -25,6 +25,11 @@ Install dependencies using `npm install`, ensuring you are using >= `Node v16.x`
 And then, to build the assets and start the app with nodemon:
 
 `npm run start:dev`
+
+### Management reporting
+
+Management reporting uses DPRand the welcome API. The report list remains at `/management-reporting`,
+with reports linked through to `/dpr/view-report/sync/report/:reportId/:variantId/load-report`.
 
 ### Run linter
 
@@ -55,7 +60,7 @@ Then run the server in test mode by:
 And then either, run tests in headless mode with:
 
 `npm run int-test`
- 
+
 Or run tests with the cypress UI:
 
 `npm run int-test-ui`
@@ -67,5 +72,5 @@ The template project has implemented some scheduled checks to ensure that key de
 If these are not desired in the cloned project, remove references to `check_outdated` job from `.circleci/config.yml`
 
 #### Phase Name Banner
-To show the phase name banner add the environment variable ``` SYSTEM_PHASE=ENV_NAME ```. 
+To show the phase name banner add the environment variable ``` SYSTEM_PHASE=ENV_NAME ```.
 This will trigger the banner to become visible showing the given name.

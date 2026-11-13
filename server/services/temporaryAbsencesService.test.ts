@@ -13,7 +13,7 @@ describe('Temporary absences service', () => {
 
   const WelcomeClientFactory = jest.fn()
 
-  const res = { locals: { user: { activeCaseLoadId: 'MDI' } } }
+  const res = { locals: { user: { username: 'username', activeCaseLoadId: 'MDI' } } }
 
   beforeEach(() => {
     jest.resetAllMocks()
@@ -36,7 +36,7 @@ describe('Temporary absences service', () => {
     })
 
     it('Retrieves temporary absences sorted alphabetically by name', async () => {
-      const result = await service.getTemporaryAbsences(res.locals.user.activeCaseLoadId)
+      const result = await service.getTemporaryAbsences(res.locals.user.username, res.locals.user.activeCaseLoadId)
 
       expect(result).toStrictEqual([
         withBodyScanStatus(ant),
@@ -49,7 +49,7 @@ describe('Temporary absences service', () => {
     })
 
     it('WelcomeClientFactory is called with a token', async () => {
-      await service.getTemporaryAbsences(res.locals.user.activeCaseLoadId)
+      await service.getTemporaryAbsences(res.locals.user.username, res.locals.user.activeCaseLoadId)
 
       expect(WelcomeClientFactory).toBeCalledWith(token)
     })

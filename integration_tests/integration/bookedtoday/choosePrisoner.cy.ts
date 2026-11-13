@@ -9,7 +9,7 @@ import NoMatchingRecordsFoundPage from '../../pages/bookedtoday/arrivals/autoMat
 import ReviewDetailsPage from '../../pages/bookedtoday/arrivals/reviewDetails'
 import PrisonerSummaryWithRecordPage from '../../pages/bookedtoday/prisonerSummaryWithRecord'
 import PrisonerSummaryMoveOnlyPage from '../../pages/bookedtoday/prisonerSummaryMoveOnly'
-import bodyScans from '../../mockApis/responses/bodyScans'
+import xrayBodyScans from '../../mockApis/responses/xrayBodyScans'
 
 context('Choose Prisoner', () => {
   beforeEach(() => {
@@ -20,8 +20,8 @@ context('Choose Prisoner', () => {
     cy.task('stubUserCaseLoads')
     cy.task('stubTransfers', { caseLoadId: 'MDI', transfers: [expectedArrivals.prisonTransfer] })
     cy.task('stubMissingPrisonerImage')
-    cy.task('stubRetrieveMultipleBodyScans', [])
-    cy.task('stubGetBodyScan', bodyScans.okToScan())
+    cy.task('stubBulkGetXrayBodyScans', [])
+    cy.task('stubGetXrayBodyScan', xrayBodyScans.okToScan())
   })
 
   it("Should display available prisoner info and the 'manually confirm' link", () => {
@@ -297,32 +297,12 @@ context('Choose Prisoner', () => {
     const transfer1 = { ...expectedArrivals.prisonTransfer, prisonNumber: 'A1234AD' }
     const transfer2 = { ...expectedArrivals.prisonTransfer, prisonNumber: 'A1234AE' }
 
-    cy.task('stubRetrieveMultipleBodyScans', [
-      {
-        prisonNumber: 'A1234AA',
-        bodyScanStatus: 'DO_NOT_SCAN',
-        numberOfBodyScans: 120,
-      },
-      {
-        prisonNumber: 'A1234AB',
-        bodyScanStatus: 'CLOSE_TO_LIMIT',
-        numberOfBodyScans: 114,
-      },
-      {
-        prisonNumber: 'A1234AC',
-        bodyScanStatus: 'OK_TO_SCAN',
-        numberOfBodyScans: 10,
-      },
-      {
-        prisonNumber: 'A1234AD',
-        bodyScanStatus: 'OK_TO_SCAN',
-        numberOfBodyScans: 43,
-      },
-      {
-        prisonNumber: 'A1234AE',
-        bodyScanStatus: 'DO_NOT_SCAN',
-        numberOfBodyScans: 170,
-      },
+    cy.task('stubBulkGetXrayBodyScans', [
+      xrayBodyScans.doNotScan('A1234AA'),
+      xrayBodyScans.closeToLimit('A1234AB'),
+      xrayBodyScans.okToScan('A1234AC'),
+      xrayBodyScans.okToScan('A1234AD'),
+      xrayBodyScans.doNotScan('A1234AE'),
     ])
 
     cy.task('stubExpectedArrivals', {

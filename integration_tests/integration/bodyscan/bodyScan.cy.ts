@@ -4,6 +4,7 @@ import BodyScanPage from '../../pages/bodyscan/bodyScan'
 import expectedArrivals from '../../mockApis/responses/expectedArrivals'
 import BodyScanConfirmation from '../../pages/bodyscan/bodyScanConfirmation'
 import bodyScans from '../../mockApis/responses/bodyScans'
+import xrayBodyScans from '../../mockApis/responses/xrayBodyScans'
 import PrisonerSummaryPage from '../../pages/recentArrivals/prisonerSummary'
 
 const arrival = expectedArrivals.potentialMatch
@@ -100,11 +101,14 @@ context('A user can record a body scan', () => {
 
     cy.task('stubPrisonerDetails', arrival)
     cy.task('stubSubmitBodyScan', { prisonNumber: arrival.prisonNumber })
+    cy.task('stubGetXrayBodyScan', xrayBodyScans.okToScan(arrival.prisonNumber))
+    cy.task('stubGetPrisoner', arrival.prisonNumber)
 
     const bodyScanPage = BodyScanPage.goTo(arrival.prisonNumber)
     bodyScanPage.userSelectedDate('today').click()
     bodyScanPage.reason('INTELLIGENCE').click()
     bodyScanPage.result('POSITIVE').click()
+
     bodyScanPage.submit().click()
 
     const bodyScanConfirmation = Page.verifyOnPage(BodyScanConfirmation)

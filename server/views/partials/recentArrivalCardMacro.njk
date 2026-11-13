@@ -1,4 +1,6 @@
-{% from "../components/do-not-scan.njk" import doNotScan %}
+{% from "components/do-not-scan.njk" import doNotScan %}
+{% from "components/xray-body-scan-alerts.njk" import xrayBodyScanAlerts %}
+{% from "components/xray-body-scan-warning.njk" import xrayBodyScanWarning %}
 
 {% macro recentArrivalCardListContent(arrival, loopIndex, date) %}
     <dl class="app-card__meta-list" data-qa="recent-arrival-{{date}}-{{loopIndex}}">
@@ -37,7 +39,10 @@
             {% endif %}
         </div>
         <div class="app-card__meta-list-item">
-            {% if arrival.bodyScanStatus === 'DO_NOT_SCAN' %}
+            {% if newXRayBodyScansEnabled(user.activeCaseLoadId) %}
+                {{ xrayBodyScanWarning(arrival) }}
+                {{ xrayBodyScanAlerts(arrival.relevantAlerts) }}
+            {% elif arrival.bodyScanStatus === 'DO_NOT_SCAN' %}
                 {{ doNotScan() }}
             {% endif %}
         </div>

@@ -126,7 +126,26 @@ export default {
       },
       agent: DEFAULT_AGENT_CONFIG,
     },
+    xrayBodyScansApi: {
+      url: get('XRAY_BODY_SCANS_API_URL', 'http://localhost:8100', requiredInProduction),
+      healthPath: '/health/ping',
+      timeout: {
+        response: Number(get('XRAY_BODY_SCANS_API_TIMEOUT_RESPONSE', 5000)),
+        deadline: Number(get('XRAY_BODY_SCANS_API_TIMEOUT_DEADLINE', 5000)),
+      },
+      agent: DEFAULT_AGENT_CONFIG,
+    },
+    prisonerSearch: {
+      url: get('PRISONER_SEARCH_API_URL', 'http://localhost:8100', requiredInProduction),
+      healthPath: '/health/ping',
+      timeout: {
+        response: Number(get('PRISONER_SEARCH_API_TIMEOUT_RESPONSE', 5000)),
+        deadline: Number(get('PRISONER_SEARCH_API_TIMEOUT_DEADLINE', 5000)),
+      },
+      agent: DEFAULT_AGENT_CONFIG,
+    },
   },
+  xrayBodyScansUiUrl: get('XRAY_BODY_SCANS_UI_URL', 'http://localhost:3001', requiredInProduction),
   notifications: {
     notifyKey: get('NOTIFY_API_KEY', ''),
     feedbackEmail: get('FEEDBACK_EMAIL', ''),
@@ -156,4 +175,8 @@ export default {
   showBreadCrumb: get('SHOW_BREADCRUMB', 'false', requiredInProduction) === 'true',
   showRecentArrivals: get('SHOW_RECENT_ARRIVALS', 'false', requiredInProduction) === 'true',
   loadReportDefinitionsOnStartup: get('LOAD_DPR_ON_STARTUP', 'false') === 'true',
+  featureToggles: {
+    newXRayBodyScansEnabledFrom: get('NEW_XRAY_BODY_SCANS_ENABLED_FROM', '2099-01-01T00:00:00'),
+    newXRayBodyScansEnabledPrisons: get('NEW_XRAY_BODY_SCANS_ENABLED_PRISONS', []),
+  },
 }

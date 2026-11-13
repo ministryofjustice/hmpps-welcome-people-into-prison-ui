@@ -6,8 +6,8 @@ export default class TemporaryAbsencesController {
 
   public view(): RequestHandler {
     return async (req, res) => {
-      const { activeCaseLoadId } = res.locals.user
-      const temporaryAbsences = await this.temporaryAbsencesService.getTemporaryAbsences(activeCaseLoadId)
+      const { username, activeCaseLoadId } = res.locals.user
+      const temporaryAbsences = await this.temporaryAbsencesService.getTemporaryAbsences(username, activeCaseLoadId)
       return res.render('pages/temporaryabsences/temporaryAbsences.njk', {
         temporaryAbsences,
       })

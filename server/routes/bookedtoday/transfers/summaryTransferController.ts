@@ -7,10 +7,14 @@ export default class SummaryTransferController {
 
   public summaryTransfer(): RequestHandler {
     return async (req, res) => {
-      const { activeCaseLoadId } = res.locals.user
+      const { username, activeCaseLoadId } = res.locals.user
       const { prisonNumber } = req.params
       const { roles } = res.locals.user
-      const transfer = await this.transfersService.getTransferWithBodyScanDetails(activeCaseLoadId, prisonNumber)
+      const transfer = await this.transfersService.getTransferWithBodyScanDetails(
+        username,
+        activeCaseLoadId,
+        prisonNumber,
+      )
       const enableDpsLink =
         (roles.includes(Role.PRISON_RECEPTION) && roles.includes(Role.ROLE_INACTIVE_BOOKINGS)) ||
         (roles.includes(Role.PRISON_RECEPTION) && roles.includes(Role.GLOBAL_SEARCH))

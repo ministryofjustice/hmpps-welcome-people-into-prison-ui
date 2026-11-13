@@ -1,11 +1,13 @@
-{% from "../components/do-not-scan.njk" import doNotScan %}
+{% from "components/do-not-scan.njk" import doNotScan %}
+{% from "components/xray-body-scan-alerts.njk" import xrayBodyScanAlerts %}
+{% from "components/xray-body-scan-warning.njk" import xrayBodyScanWarning %}
 
 {% macro temporaryAbsenceCard(temporaryAbsence, loopIndex, user) %}
     <div class='app-card-wrapper'>
         <div class="app-card app-card--with-aside">
             <aside class="app-card__aside">
                 <img
-                    src= "/prisoners/{{temporaryAbsence.prisonNumber}}/image" 
+                    src= "/prisoners/{{temporaryAbsence.prisonNumber}}/image"
                     class="app-card__image"
                     alt="Headshot of {{ temporaryAbsence.lastName }}, {{ temporaryAbsence.firstName }}"
                     data-qa="prisoner-image"
@@ -55,7 +57,10 @@
                         </dd>
                     </div>
                     <div class="app-card__meta-list-item">
-                        {% if temporaryAbsence.bodyScanStatus === 'DO_NOT_SCAN' %}
+                        {% if newXRayBodyScansEnabled(user.activeCaseLoadId) %}
+                            {{ xrayBodyScanWarning(temporaryAbsence) }}
+                            {{ xrayBodyScanAlerts(temporaryAbsence.relevantAlerts) }}
+                        {% elif temporaryAbsence.bodyScanStatus === 'DO_NOT_SCAN' %}
                             {{ doNotScan() }}
                         {% endif %}
                     </div>

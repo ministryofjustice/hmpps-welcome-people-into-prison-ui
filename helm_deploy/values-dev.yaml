@@ -42,5 +42,10 @@ generic-service:
     SHOW_PRISON_TRANSFER_SUMMARY: 'true'
     SHOW_BREADCRUMB: 'true'
     SHOW_RECENT_ARRIVALS: 'true'
+    XRAY_BODY_SCANS_API_URL: 'https://x-ray-body-scans-api-dev.hmpps.service.justice.gov.uk'
+    XRAY_BODY_SCANS_UI_URL: 'https://x-ray-body-scans-dev.hmpps.service.justice.gov.uk'
+    PRISONER_SEARCH_API_URL: 'https://prisoner-search-dev.prison.service.justice.gov.uk'
+    NEW_XRAY_BODY_SCANS_ENABLED_FROM: '2026-01-01T00:00:00'
+    NEW_XRAY_BODY_SCANS_ENABLED_PRISONS: '***'
     # '*' enables the service for every prison
     ENABLED_PRISONS: '*'

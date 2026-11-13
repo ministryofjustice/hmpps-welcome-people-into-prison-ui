@@ -5,6 +5,7 @@ import dpsComponents from '@ministryofjustice/hmpps-connect-dps-components'
 import config from './config'
 import logger from '../logger'
 import wpipRoutes from './routes'
+import { dprReportingRouter } from './routes/dpr'
 import bodyScanRoutes from './bodyscan/routes'
 import nunjucksSetup from './utils/nunjucksSetup'
 import errorHandler from './errorHandler'
@@ -38,7 +39,7 @@ export default function createApp(services: Services, bodyScanServices: BodyScan
   app.use(setUpWebRequestParsing())
   app.use(setUpStaticResources())
   setUpEnvironmentName(app)
-  nunjucksSetup(app, path)
+  const nunjucksEnvironment = nunjucksSetup(app, path)
   phaseNameSetup(app, config.phaseName)
   app.use(setUpAuthentication())
   app.use(authorisationMiddleware())
@@ -57,6 +58,7 @@ export default function createApp(services: Services, bodyScanServices: BodyScan
   app.get('*', dpsComponents.getPageComponents({ dpsUrl: config.newDpsUrl, logger }))
 
   app.use(wpipRoutes(services))
+  app.use(dprReportingRouter(services, nunjucksEnvironment))
   app.use(bodyScanRoutes(bodyScanServices))
 
   app.use((req, res, next) => next(res.redirect('/page-not-found')))
