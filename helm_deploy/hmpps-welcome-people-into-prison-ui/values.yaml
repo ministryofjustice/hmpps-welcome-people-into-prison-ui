@@ -67,7 +67,6 @@ generic-service:
 
 generic-prometheus-alerts:
   targetApplication: hmpps-welcome-people-into-prison-ui
-  alertSeverity: move-a-prisoner-alerts-nonprod
 
 jobs:
   cronspec: "59 * * * *"

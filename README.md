@@ -68,6 +68,11 @@ Or run tests with the cypress UI:
 
 ### Dependency Checks
 
+Moment must remain at version 2.31.0 or higher to address CVE-2026-17495.
+The `moment` override uses the application's dependency range for all copies, including
+MOJ frontend packages whose peer dependencies still pin the vulnerable version 2.30.1.
+Remove the override only once upstream peer dependencies accept the patched version.
+
 The template project has implemented some scheduled checks to ensure that key dependencies are kept up to date.
 If these are not desired in the cloned project, remove references to `check_outdated` job from `.circleci/config.yml`
 
