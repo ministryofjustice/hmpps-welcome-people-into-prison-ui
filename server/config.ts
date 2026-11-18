@@ -176,7 +176,10 @@ export default {
   showRecentArrivals: get('SHOW_RECENT_ARRIVALS', 'false', requiredInProduction) === 'true',
   loadReportDefinitionsOnStartup: get('LOAD_DPR_ON_STARTUP', 'false') === 'true',
   featureToggles: {
-    newXRayBodyScansEnabledFrom: get('NEW_XRAY_BODY_SCANS_ENABLED_FROM', '2099-01-01T00:00:00'),
-    newXRayBodyScansEnabledPrisons: get('NEW_XRAY_BODY_SCANS_ENABLED_PRISONS', []),
+    newXRayBodyScans: {
+      enabledPrisons: get('NEW_XRAY_BODY_SCANS_ENABLED_PRISONS', []) as string[],
+      enabledPrisonsByDate: get('NEW_XRAY_BODY_SCANS_ENABLED_PRISONS_BY_DATE', []) as string[],
+      enabledPrisonsFrom: get('NEW_XRAY_BODY_SCANS_ENABLED_FROM', '2099-01-01T00:00:00'),
+    },
   },
 }
